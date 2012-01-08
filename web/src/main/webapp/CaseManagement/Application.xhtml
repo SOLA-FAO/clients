@@ -1,0 +1,189 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+ /*
+ * SOLA - http://www.flossola.org/
+ *
+ * Copyright (C) 2011 FAO
+ *
+ * SOLA is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published
+ * by the Free Software Foundation; either version 2 of the License,
+ * or (at your option) any later version.
+ *
+ * SOLA is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with SOLA; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
+ */ 
+ -->
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../Templates/MainTemplate.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns="http://www.w3.org/1999/xhtml">
+
+   
+    <ui:define name="content">
+        
+            <div id="contents">
+           <br />
+           <h2>#{msg.applications}: #{msg.lodge}</h2>
+
+        <h:form>
+
+            <div id="extLodge">
+               <div id="dealing">
+                <table width="100%" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td align="left"> #{msg.date}: </td>
+                        <td align="left" >#{app.currentDate}</td>
+                        <td align="left"> #{msg.status}: </td>
+                        <td align="left" > #{msg.lodgedDealing} </td>
+                    </tr>
+                    <tr>
+                        <td align="left">#{msg.lodgingAgent}: </td>
+                <td>
+
+                   <h:selectOneMenu  id="lstAgents" style="width: 300px; background-color: #ffffff;" value="#{app.selectedAgent}">
+                    <f:selectItems value="#{app.agents}" var="ag" itemValue="#{ag.id}" itemLabel="#{ag.name}">
+                    </f:selectItems>
+                   </h:selectOneMenu>
+                    <h:button alt="#{msg.seeAgents}" value="#{msg.agents}" onclick="window.open('Agents.xhtml','mywindow','width=600,height=600')" />
+                 </td>
+                        <td align="left">#{msg.staffMember}: </td>
+            <td align="left" >${app.userName}</td>
+
+            </tr>
+            </table>
+            </div>
+
+            <div id="contacts" style="border: 1px #168d65 solid;">
+            <table width="100%" cellspacing="0" cellpadding="3">
+                <caption><b> #{msg.contactInfo}</b></caption>
+               <tr>
+                   <td align="left"><b>#{msg.name}: </b></td>
+
+		    <td align="left"><h:inputText id="txtContactName" styleClass="inputText" value="#{app.contactPerson.name}" /></td>
+
+                    <td align="right" nowrap="yes"><b>#{msg.lastName}: </b></td>
+
+		    <td align="left"><h:inputText id="txtContactLastName" styleClass="inputText" value="#{app.contactPerson.lastName}" /></td>
+
+                    <td align="right"><b>#{msg.contactInfo}: </b></td>
+
+                    <td align="left"><h:inputText id="txtContactAddress" styleClass="inputText" value="#{app.contactAddress.description}" /></td>
+
+               </tr>
+	       <tr>
+
+                   <td align="left"><b>#{msg.phone}: </b></td>
+
+		      <td align="left"><h:inputText id="txtContactPhone"  styleClass="inputText" value="#{app.contactPerson.phone}" /></td>
+
+                      <td align="right"><b>#{msg.fax}: </b></td>
+
+		      <td align="left"><h:inputText id="txtContactFax"  styleClass="inputText" value="#{app.contactPerson.fax}" /></td>
+                
+                      <td align="right"><b>#{msg.email}: </b></td>
+
+                      <td align="left"><h:inputText id="txtContactEmail"  styleClass="inputText" value="#{app.contactPerson.email}" /></td>
+		</tr>
+	        <tr>
+
+                    <td  align="left" COLSPAN="6"><b>#{msg.preferredWays}: </b></td>
+               </tr>
+	        <tr>
+		       <td COLSPAN="6" align="left"><h:selectOneRadio id="rdCommunicationWays" value="#{app.communicationWay}" layout="lineDirection">
+		                <f:selectItems value="#{app.communicationWays}" var="w" itemValue="#{w}" itemLabel="#{w}" />
+		            </h:selectOneRadio>
+                       </td>
+		 </tr>
+            </table>
+            </div>
+
+
+<div id="services">
+ <table style="border: 1px #168d65 solid;"  cellspacing="0" cellpadding="2">
+     <tr>  <td align="right">
+            
+            <table width="500px" cellspacing="0" cellpadding="0">
+                <tr><td align="left"><h4>#{msg.services}: </h4></td></tr>
+                <tr>
+                    <td>
+
+                    <h:selectOneListbox id="lstServices" size="14" style="width: 500px" value="#{app.servicesValue}">
+                        <f:selectItems value="#{app.services}" var="srv" itemLabel="#{srv.displayValue}" itemValue="#{srv.code}" />
+                    </h:selectOneListbox>
+                    </td>
+                </tr>
+            </table>
+           
+          </td>
+         <td align="left">
+           
+
+
+             <h:commandButton  style="WIDTH: 80px;" styleClass="btnInt" value="#{msg.add}"  action="#{app.addService}" />
+            <br />
+            <h:commandButton  style="WIDTH: 80px;" styleClass="btnInt" value="#{msg.remove}" action="#{app.removeService}" />
+           
+          </td>
+         <td align="right">
+           
+            <table width="500px" cellspacing="0" cellpadding="0">
+                <tr><td align="left"><h4>#{msg.selectedServices}:</h4></td></tr>
+
+                <tr>
+                    <td>
+
+                        <h:selectOneListbox id="lstSelectedServices" size="14" style="width: 500px" value="#{app.selectedServicesValue}">
+                            <f:selectItems value="#{app.selectedServices}" var="srv" itemLabel="#{srv.displayValue}" itemValue="#{srv.code}" />
+                        </h:selectOneListbox>
+                        </td>
+
+                </tr>
+            </table>
+           
+           </td>
+           <td align="left">
+           
+
+               <h:commandButton style="WIDTH: 80px;" styleClass="btnInt"  value="#{msg.up}" action="#{app.moveServiceUp}" />
+            <br />
+            <h:commandButton style="WIDTH: 80px;" styleClass="btnInt"  value="#{msg.down}" action="#{app.moveServiceDown}" />
+            
+          </td> 
+     </tr>
+     <tr>
+         <td align="center" colspan="4">
+          
+
+             <h:commandButton action="#{app.cancel}" styleClass="btnInt" value="#{msg.cancel}l" />
+             <h:commandButton action="#{app.submit}" styleClass="btnInt" value="#{msg.lodge}" onclick="return confirm('You are about to lodge application. Do you want to proceed?')" />
+          
+          </td>
+        </tr>
+     </table>
+</div>
+
+
+          </div>
+
+           
+            <table>
+            <tr><td>
+            <h:messages errorStyle="color:red;" />
+            </td></tr>
+            </table>
+           
+        </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>

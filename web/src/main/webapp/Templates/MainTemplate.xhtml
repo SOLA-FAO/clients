@@ -1,0 +1,123 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+ /*
+ * SOLA - http://www.flossola.org/
+ *
+ * Copyright (C) 2011 FAO
+ *
+ * SOLA is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published
+ * by the Free Software Foundation; either version 2 of the License,
+ * or (at your option) any later version.
+ *
+ * SOLA is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with SOLA; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
+ */ 
+ -->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <f:view locale="#{localeBean.locale}">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link href="/solaweb/CSS/default.css" rel="stylesheet" type="text/css" />
+        <link href="/solaweb/CSS/cssLayout.css" rel="stylesheet" type="text/css" />
+        <link href="/solaweb/CSS/menu_style.css"  rel="stylesheet"  type="text/css" />
+        <link href="/solaweb/CSS/internal.css"  rel="stylesheet"  type="text/css" />
+        <title>Floss Sola</title>
+    </h:head>
+     
+    <h:body>
+        <h:form>
+            <h:selectOneMenu style="z-index: 9999;position: absolute;right: 10px; top: 5px;" value="#{localeBean.language}" onchange="submit()">
+                    <f:selectItem itemValue="en" itemLabel="English" />
+                    <f:selectItem itemValue="it" itemLabel="Italiano" />
+                    <f:selectItem itemValue="ru" itemLabel="Русский" />
+            </h:selectOneMenu>
+        </h:form>
+        
+       <div id="container">
+           <table width="100%">
+                <tr>
+                    <td>
+                        <div id="navleft" class="coll">
+                        <table>
+                          <tr><td align="right">
+                            <ul class="menu">
+                            <li class="top"><a href="/solaweb/index.xhtml" class="top_link"><span>Home</span></a>
+                            </li>
+                            </ul>
+                           </td></tr>
+                        </table>
+                       </div>
+                    </td>
+                    <td>
+                       
+                    </td>
+                </tr>
+            </table>
+          
+         <div id="band" >
+          <div id="logo"><img src="/solaweb/Images/SolaLogo.png"/></div>
+          <div id="written"><img src="/solaweb/Images/scrittabianca.png"/></div>
+          <div id="nav" class="coll">
+            <table>
+              <tr>
+                  <td align="right">#{msg.user}: </td>
+                <td align="left">#{homePage.userName}</td>
+               </tr>
+            </table>
+           </div>
+         </div>
+
+        <div id="content" class="center_content">
+
+         <div id="field">
+            <ul class="menu">
+                <li class="top"><a href="#" class="top_link"><span>#{msg.applications}</span></a>
+                            <ul class="sub">
+                                <li><a href="/solaweb/CaseManagement/Agents.xhtml">#{msg.agents}</a></li>
+                                <li><a href="/solaweb/CaseManagement/Application.xhtml">#{msg.lodge}</a></li>
+                                <li><a href="#">#{msg.view}</a></li>
+                                <li><a href="#">#{msg.sampleMenu}</a></li>
+                                    <li><a href="#">#{msg.sampleMenu}</a></li>
+                            </ul>
+                    </li>
+                <li class="top"><a href="#" class="top_link"><span>#{msg.rights}</span></a>
+                    </li>
+                <li class="top"><a href="#" class="top_link"><span>#{msg.reports}</span></a>
+                    </li>
+                <li class="top"><a href="#" class="top_link"><span>#{msg.maps}</span></a>
+                            <ul class="sub">
+                                <li><a href="/solaweb/CaseManagement/MapViewer.xhtml">#{msg.viewer}</a></li>
+                                <li><a href="#">#{msg.sampleMenu}</a></li>
+                                <li><a href="#">#{msg.sampleMenu}</a></li>
+                            </ul>
+                    </li>
+                    <li   class="logout"><a href="#" class="top_link"><span>#{msg.help}</span></a></li>
+                    <li   class="logout"><a href="/solaweb/Login/Login.xhtml" class="top_link"><span>#{msg.logout}</span></a></li>
+
+            </ul>
+            </div>
+
+
+            <ui:insert name="content">Content</ui:insert>
+
+      
+       </div>
+      
+       </div>
+
+
+    </h:body>
+</f:view>
+</html>

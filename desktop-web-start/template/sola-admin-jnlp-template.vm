@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp
+    spec="$jnlpspec"
+    codebase="$$codebase"
+    context="$$context"
+    href="$$name"
+    version="Alpha Release">
+  <information>
+    <title>SOLA Admin Web Start</title>
+#if($project.Organization.Name)
+    <vendor>$project.Organization.Name</vendor>
+#end
+#if($project.Url)
+    <homepage href="$project.Url"/>
+#end
+#if($project.Description)
+    <description>$project.Description</description>
+#end
+<icon href="../Images/Floss.jpg" width="40" height="26"/>
+    <icon kind="shortcut" href="../Images/Floss.jpg" width="40" height="26"/>
+    <!--icon kind="splash" href="../Images/splash.png" width="413" height="314"/-->
+    <shortcut><desktop/></shortcut>
+#if($offlineAllowed)
+    <offline-allowed/>
+#end
+  </information>
+#if($allPermissions)
+  <security>
+     <all-permissions/>
+  </security>
+#end
+  <resources>
+    <j2se version="1.7+"/>
+    ## The following properties identify the location of the SOLA Web Services and are used by the SOLA Desktop
+    ## in preference to the properties file compiled into the jar. Note the $$context is replaced by the 
+    ## webstart-jnlp-servlet with the context root of the SOLA Desktop Web Start web site. 
+    ## Any new web services added to SOLA will also need an appropriate property added here. 
+    <property name="SOLA_WS_CASE_MANAGEMENT_SERVICE_URL" value="$$context/webservices/casemanagement-service?wsdl"/>
+    <property name="SOLA_WS_REFERENCE_DATA_SERVICE_URL" value="$$context/webservices/referencedata-service?wsdl"/>
+    <property name="SOLA_WS_ADMIN_SERVICE_URL" value="$$context/webservices/admin-service?wsdl"/>
+    <property name="SOLA_WS_CADASTRE_SERVICE_URL" value="$$context/webservices/cadastre-service?wsdl"/>
+    <property name="SOLA_WS_SEARCH_SERVICE_URL" value="$$context/webservices/search-service?wsdl"/>
+    <property name="SOLA_WS_DIGITAL_ARCHIVE_URL" value="$$context/webservices/digitalarchive-service?wsdl"/>
+    <property name="SOLA_WS_SPATIAL_SERVICE_URL" value="$$context/webservices/spatial-service?wsdl"/>
+    <property name="SOLA_WS_ADMINISTRATIVE_SERVICE_URL" value="$$context/webservices/administrative-service?wsdl"/>
+     $dependencies
+  </resources>
+  <application-desc main-class="$mainClass"/>
+</jnlp>
+

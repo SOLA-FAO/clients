@@ -1,0 +1,121 @@
+/*
+ * SOLA - http://www.flossola.org/
+ *
+ * Copyright (C) 2011 FAO
+ *
+ * SOLA is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published
+ * by the Free Software Foundation; either version 2 of the License,
+ * or (at your option) any later version.
+ *
+ * SOLA is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with SOLA; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
+ */
+body {
+    background-image: url(../Images/mapbg2.png);
+    font-size: 12px;
+    font-family: Verdana, "Verdana CE",  Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;  
+}
+
+body.trouble {
+    background-image: none;
+    background-color: #FFFFE9;
+    font-size: 12px;
+    font-family: Verdana, "Verdana CE",  Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;  
+}
+h1 {
+    font-family: Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
+    border-bottom: 1px solid #AFAFAF; 
+    font-size:  16px;
+    font-weight: bold;
+    margin: 0px;
+    padding: 0px;
+    color: #D20005;
+}
+
+h2 {
+    font-family: Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
+    font-size:  14px;
+    font-weight: bold;
+    margin: 0px;
+    padding: 0px;
+    color: #D20005;
+}
+
+h3 {
+    font-family: Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
+    font-size:  14px;
+    font-weight: bold;
+    font-variant: small-caps;
+    margin: 0px;
+    padding: 0px;
+    color: #FF6600;
+}
+
+a:link, a:visited {
+  color: #045491;
+  font-weight : bold;
+  text-decoration: underline;
+}
+
+a:link:hover, a:visited:hover  {
+  color: #045491;
+  font-weight : bold;
+  text-decoration : underline;
+}
+
+a.navele:link, a.navele:visited {
+  color: #FF6600;
+  font-weight : bold;
+  text-decoration : underline;
+}
+
+ul {
+color: #000000;
+text-transform: none;
+text-decoration: none;
+text-indent: 10px;
+text-align: justify;
+list-style-position: inside;
+list-style-image: url(../Images/arrow.gif);
+padding: 6px;
+margin: 2px;
+}
+
+ul.navlist {
+color: #FF6600;
+text-transform: none;
+text-decoration: none;
+text-indent: 10px;
+text-align: justify;
+list-style-position: inside;
+list-style-image: url(../Images/arrow.gif);
+padding: 6px;
+margin: 2px;
+line-height: 30px;
+}
+
+#navigation {
+	position:absolute;
+	width:120px;
+	top:120px;
+        left:10px;
+	height:100%;
+        visibility: visible;
+	background-color: #FFF7A9;
+}
+#issues {
+        width: 80%;
+	position:absolute;
+	top:170px;
+        left:150px;
+	height:100%;
+        visibility: visible;
+}

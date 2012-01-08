@@ -1,0 +1,66 @@
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>sola-clients-swing</artifactId>
+        <groupId>org.sola.clients</groupId>
+        <version>alpha</version>
+    </parent>
+    <groupId>org.sola.clients.swing</groupId>
+    <artifactId>sola-gis</artifactId>
+    <version>alpha</version>
+    <packaging>jar</packaging>
+    <name>Clients Gis</name>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.sola.clients.swing</groupId>
+            <artifactId>sola-geotools-ui</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.sola.common</groupId>
+            <artifactId>sola-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.sola.common</groupId>
+            <artifactId>sola-messaging</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.metro</groupId>
+            <artifactId>webservices-rt</artifactId>
+            <version>2.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.sola.services.boundary</groupId>
+            <artifactId>sola-web-service-clients</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.sola.clients.swing</groupId>
+            <artifactId>clients-swing-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.sola.clients</groupId>
+            <artifactId>clients-beans</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+    <repositories>
+        <repository>
+            <id>jboss-public-repository-group</id>
+            <name>JBoss Public Maven Repository Group</name>
+            <url>https://repository.jboss.org/nexus/content/groups/public</url>
+        </repository>
+    </repositories>
+</project>

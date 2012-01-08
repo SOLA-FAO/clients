@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lodgmentReport1" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" backcolor="#43A771" fontName="Times New Roman" fontSize="50" isBold="true" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<style name="Row" mode="Transparent">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style backcolor="#E6DAC3"/>
+		</conditionalStyle>
+	</style>
+	<queryString>
+		<![CDATA[SELECT count (a.id) TotCat,
+  d.display_value  Category,
+  ((count (a.id)::float)/
+ ( SELECT count (*) 
+FROM 
+  public.application a1, 
+  public.party b1, 
+  public.service c1, 
+  public.request_type d1
+WHERE 
+  a1.agent_id = b1.id AND
+  c1.application_id = a1.id AND
+  c1.request_type_code = d1.code
+  AND cast( to_char(a1.lodging_datetime, 'yyyymmdd') as  int) between 20110501 and 20110531
+ ) *100 )::numeric(4,2) Perc,
+( (count (a.id)::float)/
+ (20110531-20110501)):: numeric(4,2) Avg,
+(count(a.id)-1) TotReq,
+(((count (a.id)-1)::float)/
+(count (a.id))*100)::numeric(4,2) PercReq
+FROM 
+  public.application a, 
+  public.party b, 
+  public.service c, 
+  public.request_type d
+WHERE 
+  a.agent_id = b.id AND
+  c.application_id = a.id AND
+  c.request_type_code = d.code
+  AND cast( to_char(a.lodging_datetime, 'yyyymmdd') as  int) between 20110501 and 20110531
+group by 
+  d.display_value;]]>
+	</queryString>
+	<field name="totcat" class="java.lang.Long"/>
+	<field name="category" class="java.lang.String"/>
+	<field name="perc" class="java.math.BigDecimal"/>
+	<field name="avg" class="java.math.BigDecimal"/>
+	<field name="totreq" class="java.lang.Long"/>
+	<field name="percreq" class="java.math.BigDecimal"/>
+	<variable name="perc_SUM" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{perc}]]></variableExpression>
+	</variable>
+	<variable name="percreq_SUM" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{percreq}]]></variableExpression>
+	</variable>
+	<group name="Group1" isStartNewPage="true" isReprintHeaderOnEachPage="true">
+		<groupHeader>
+			<band height="9"/>
+		</groupHeader>
+		<groupFooter>
+			<band height="10"/>
+		</groupFooter>
+	</group>
+	<group name="Group2" isStartNewPage="true" isReprintHeaderOnEachPage="true">
+		<groupExpression><![CDATA[(int)($V{REPORT_COUNT}/10)]]></groupExpression>
+		<groupHeader>
+			<band height="30">
+				<textField>
+					<reportElement style="SubTitle" x="0" y="4" width="77" height="20"/>
+					<textElement>
+						<font size="16" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Type"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="SubTitle" x="101" y="4" width="101" height="20"/>
+					<textElement textAlignment="Right">
+						<font size="16" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Total"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="SubTitle" x="240" y="4" width="111" height="20"/>
+					<textElement textAlignment="Right">
+						<font size="16" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Percentage"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="SubTitle" x="368" y="4" width="101" height="20"/>
+					<textElement textAlignment="Right">
+						<font size="16" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Average"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="SubTitle" x="481" y="4" width="167" height="20"/>
+					<textElement textAlignment="Right">
+						<font size="16" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Total Requisitions"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="SubTitle" x="652" y="4" width="111" height="20"/>
+					<textElement textAlignment="Right">
+						<font size="16" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Percentage"]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="136" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="198" y="0" width="454" height="62" forecolor="#4DA771"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" pdfFontName="Times-Roman"/>
+				</textElement>
+				<text><![CDATA[Lodgment Report]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="SubTitle" x="303" y="62" width="236" height="22" forecolor="#487343"/>
+				<textElement>
+					<font fontName="Arial" pdfFontName="Times-Roman"/>
+				</textElement>
+				<text><![CDATA[Land Registration Section]]></text>
+			</staticText>
+			<image>
+				<reportElement x="1" y="1" width="186" height="135"/>
+				<imageExpression class="java.lang.String"><![CDATA["resources\\splashnew.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="51" splitType="Stretch">
+			<staticText>
+				<reportElement style="Column header" x="0" y="0" width="240" height="15" forecolor="#736343"/>
+				<textElement/>
+				<text><![CDATA[From may 01 2011   To may 31 2011]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="15" width="802" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="16" width="802" height="24" forecolor="#B89F7D" backcolor="#F2EBDF"/>
+				<rectangle>
+					<reportElement mode="Opaque" x="21" y="0" width="36" height="24" backcolor="#4DA771"/>
+					<graphicElement>
+						<pen lineWidth="0.0"/>
+					</graphicElement>
+				</rectangle>
+				<textField>
+					<reportElement style="SubTitle" mode="Opaque" x="68" y="0" width="712" height="24" printWhenGroupChanges="Group1" forecolor="#4DA771" backcolor="#F2EBDF"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Dealing Categories"]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="27" splitType="Stretch">
+			<textField>
+				<reportElement x="1" y="7" width="76" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{category}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="101" y="7" width="97" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.Long"><![CDATA[$F{totcat}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0.00" isBlankWhenNull="false">
+				<reportElement x="369" y="7" width="100" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{avg}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Auto" pattern="#,##0.00%">
+				<reportElement x="240" y="7" width="100" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.Double"><![CDATA[new Double( $F{perc}.doubleValue() / $V{perc_SUM}.doubleValue() )]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="481" y="7" width="167" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.Long"><![CDATA[$F{totreq}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Auto" pattern="#,##0.00%">
+				<reportElement x="663" y="7" width="100" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.Double"><![CDATA[new Double( $F{percreq}.doubleValue() / $V{percreq_SUM}.doubleValue() )]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="6" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="802" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="46" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="1" y="18" width="801" height="28" printWhenGroupChanges="Group1" forecolor="#D0B48E" backcolor="#F2EBDF"/>
+				<textField evaluationTime="Report">
+					<reportElement style="Column header" x="739" y="1" width="40" height="20" forecolor="#736343"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Column header" x="651" y="1" width="80" height="20" forecolor="#736343"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				</textField>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement style="Column header" x="22" y="1" width="141" height="20" forecolor="#736343"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+				<image>
+					<reportElement x="246" y="0" width="401" height="28"/>
+					<imageExpression class="java.lang.String"><![CDATA["resources\\scritta_green.png"]]></imageExpression>
+				</image>
+			</frame>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

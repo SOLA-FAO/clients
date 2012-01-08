@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+ /*
+ * SOLA - http://www.flossola.org/
+ *
+ * Copyright (C) 2011 FAO
+ *
+ * SOLA is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published
+ * by the Free Software Foundation; either version 2 of the License,
+ * or (at your option) any later version.
+ *
+ * SOLA is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with SOLA; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
+ */ 
+ -->
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../Templates/MainTemplate.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:c="http://java.sun.com/jsp/jstl/core">
+    
+    <ui:define name="content">
+
+            <div id="contents">
+             <BR />  <BR />
+             <h2>Application receipt</h2>
+
+
+            <h:form>
+            
+            <p></p>
+            #{msg.applicationLodged}
+            <p></p>
+            <table cellspacing="0" cellpadding="5" style="background-color: white;">
+                <tr>
+                    <td colspan="2">
+                      <hr />
+                    <strong><i>#{msg.applicationInfo}:</i></strong><br />
+                  </td>
+             </tr>
+              <tr>
+                  <td><strong>ID:</strong> </td><td><h:outputText value="#{appReceipt.application.id}" /> </td>
+             </tr>
+             <tr>
+                 <td><strong>#{msg.date}:</strong> </td><td><h:outputText value="#{appReceipt.appDate}" /></td>
+            </tr>
+             <tr>
+                 <td><strong>#{msg.agent}:</strong> </td><td><h:outputText value="#{appReceipt.agent.name}" /></td>
+            </tr>
+             <tr>
+                  <td><strong>#{msg.contactPerson}:</strong> </td><td><h:outputText value="#{appReceipt.contactPerson.name} #{appReceipt.contactPerson.lastName}" /></td>
+            </tr>
+             <tr>
+                  <td><strong>#{msg.contactPersonAddr}:</strong> </td><td><h:outputText value="#{appReceipt.contactPersonAddress.description}" /></td>
+            </tr>
+             <tr>
+                 <td colspan="2"><strong>#{msg.services}:</strong></td>
+            </tr>
+             <tr>
+                 <td colspan="2">
+                      <ol>
+                        <c:forEach var="service" items="#{appReceipt.services}" varStatus="rowCounter">
+                            <li> ${service.displayValue}</li>
+                        </c:forEach>
+                    </ol>
+                  </td>
+            </tr>
+             <tr>
+                 <td colspan="2">
+                     <hr />
+                      <h:commandButton value="#{msg.print}" onclick="alert('Printing receipt...');return false;" />
+                      <h:commandButton value="#{msg.lodgeNew}" action="Application.xhtml" />
+                    <h:commandButton value="Home" action="../index.xhtml" />
+                   </td>
+              </tr>
+            </table>
+            </h:form>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>
+
+   

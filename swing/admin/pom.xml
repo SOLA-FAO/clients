@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>sola-clients-swing</artifactId>
+        <groupId>org.sola.clients</groupId>
+        <version>alpha</version>
+    </parent>
+    
+    <groupId>org.sola.clients.swing</groupId>
+    <!-- Updated artifactId from sola-admin as this is the same as the artifactId used for the 
+    Admin EJB. Duplicate artifactIds cause failure of the Colver QA builds. 
+    See  https://jira.atlassian.com/browse/CLOV-1026 -->
+    <artifactId>sola-desktop-admin</artifactId>
+    <packaging>jar</packaging>
+    <version>alpha</version>
+    <name>Clients Admin</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    
+    <licenses>        
+        <license>            
+            <name>BSD3-Clause</name>            
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>            
+            <distribution>repo</distribution>            
+            <comments>A business-friendly OSS license</comments>        
+        </license>    
+    </licenses>
+    
+    <dependencies>
+        <dependency>
+            <groupId>org.sola.clients.swing</groupId>
+            <artifactId>clients-swing-ui</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+                <dependency>
+            <groupId>net.sf.dozer</groupId>
+            <artifactId>dozer</artifactId>
+            <version>5.3.2</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.2</version>
+            <scope>test</scope>
+        </dependency>
+        
+    </dependencies>
+</project>

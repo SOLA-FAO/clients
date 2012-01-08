@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="Templates/MainTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html">
+    
+    <ui:define name="content">
+        <iframe style="border: none;" height="800" width="800" src="http://168.202.32.13:8585/geoexplorer/viewer#maps/1"></iframe>
+        <br />
+        <h:form>
+        <h:outputLink value="index.xhtml">go home</h:outputLink>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

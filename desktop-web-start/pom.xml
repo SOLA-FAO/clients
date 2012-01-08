@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>sola-clients</artifactId>
+        <groupId>org.sola</groupId>
+        <version>alpha</version>
+    </parent>
+
+    <groupId>org.sola.clients</groupId>
+    <artifactId>sola-desktop-web-start</artifactId>
+    <version>alpha</version>
+    <packaging>war</packaging>
+
+    <name>Clients Desktop Web Start</name>
+
+    <properties>
+        <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-web-api</artifactId>
+            <version>6.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.mojo.webstart</groupId>
+            <artifactId>webstart-jnlp-servlet</artifactId>
+            <version>1.0-6.0-02_ea_b02</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.2</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                    <compilerArguments>
+                        <endorseddirs>${endorsed.dir}</endorseddirs>
+                    </compilerArguments>
+                </configuration>
+            </plugin>
+            <plugin>
+                <!-- Use webstart plugin to create the jnlp package, and sign and compress the
+                jar files. Both the SOLA Desktop and the SOLA Admin applications are packaged
+                together for easy deployment. These could be packaged separately if necessary. --> 
+                <groupId>org.codehaus.mojo.webstart</groupId>
+                <artifactId>webstart-maven-plugin</artifactId>
+                <version>1.0-beta-2</version>
+                <executions>
+                    <execution>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>jnlp-download-servlet</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <outputDirectoryName>webstart</outputDirectoryName>  
+                    <templateDirectory>${project.basedir}/template</templateDirectory>
+                    <libPath>lib</libPath>
+                    <!-- pack200 has some bugs that should have been fixed. 
+                    See jira.codehaus.org/browse/MWEBSTART-159 for details.
+                    Note that the jnlp-download-servlet can also host gzip
+                    compressed files, but given the target JRE is Java 7, 
+                    it is not necessary to host both pack200 and gzip files.-->
+                    <pack200>true</pack200>
+                    <jnlpFiles>
+                        <jnlpFile>
+                            <!-- JNLP file for the SOLA Desktop application -->
+                            <outputFilename>sola-desktop.jnlp</outputFilename>
+                            <templateFilename>sola-desktop-jnlp-template.vm</templateFilename>
+                            <jarResources>
+                                <jarResource>
+                                    <groupId>${project.groupId}.swing</groupId>
+                                    <artifactId>sola-desktop</artifactId>
+                                    <version>${project.version}</version>
+                                    <mainClass>org.sola.clients.swing.desktop.DesktopApplication</mainClass> 
+                                </jarResource>
+                            </jarResources>
+                        </jnlpFile> 
+                        <jnlpFile>
+                            <!-- JNLP file for the SOLA Admin application -->
+                            <outputFilename>sola-admin.jnlp</outputFilename>
+                            <templateFilename>sola-admin-jnlp-template.vm</templateFilename>
+                            <jarResources>
+                                <jarResource>
+                                    <groupId>${project.groupId}.swing</groupId>
+                                    <artifactId>sola-desktop-admin</artifactId>
+                                    <version>${project.version}</version>
+                                    <mainClass>org.sola.clients.swing.admin.AdminApplication</mainClass> 
+                                </jarResource>
+                            </jarResources>
+                        </jnlpFile>
+                    </jnlpFiles>
+                    <unsignAlreadySignedJars>true</unsignAlreadySignedJars>
+                    <!-- Digital singing is required for Web Start deployment. To speed up the
+                    build in order to test the index.jsp web page, this section can be commented out -->
+                    <sign>
+                        <keystore>${basedir}/sola.jks</keystore>
+                        <alias>sola</alias>
+                        <storepass>FLOSS2011</storepass>
+                        <keypass>FLOSS2011</keypass>
+                    </sign>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.1.1</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                    
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.1</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${endorsed.dir}</outputDirectory>
+                            <silent>true</silent>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>javax</groupId>
+                                    <artifactId>javaee-endorsed-api</artifactId>
+                                    <version>6.0</version>
+                                    <type>jar</type>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <finalName>desktop-web-start</finalName>
+    </build>
+
+</project>

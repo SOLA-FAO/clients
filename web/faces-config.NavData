@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scene Scope="Project" version="2">
+    <Scope Scope="Faces Configuration Only"/>
+    <Scope Scope="Project">
+        <Node id="index.xhtml" x="400" y="150" zoom="true"/>
+        <Node id="CaseManagement/MapViewer.xhtml" x="650" y="150" zoom="true"/>
+        <Node id="Login/Login.xhtml" x="650" y="300" zoom="true"/>
+        <Node id="Templates/MainTemplate.xhtml" x="400" y="450" zoom="true"/>
+        <Node id="Errors/Error.xhtml" x="150" y="150" zoom="true"/>
+        <Node id="CaseManagement/Receipt.xhtml" x="400" y="300" zoom="true"/>
+        <Node id="map.xhtml" x="900" y="150" zoom="true"/>
+        <Node id="CaseManagement/Agents.xhtml" x="150" y="450" zoom="true"/>
+        <Node id="CaseManagement/Application.xhtml" x="150" y="300" zoom="true"/>
+    </Scope>
+    <Scope Scope="All Faces Configurations"/>
+</Scene>

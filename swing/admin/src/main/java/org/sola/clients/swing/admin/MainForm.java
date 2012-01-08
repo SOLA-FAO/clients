@@ -1,0 +1,446 @@
+/**
+ * ******************************************************************************************
+ * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ *
+ *    1. Redistributions of source code must retain the above copyright notice,this list
+ *       of conditions and the following disclaimer.
+ *    2. Redistributions in binary form must reproduce the above copyright notice,this list
+ *       of conditions and the following disclaimer in the documentation and/or other
+ *       materials provided with the distribution.
+ *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
+ *       promote products derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+ * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
+ * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * *********************************************************************************************
+ */
+package org.sola.clients.swing.admin;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import org.jdesktop.application.Action;
+import org.sola.clients.beans.AbstractCodeBean;
+import org.sola.clients.beans.referencedata.BaUnitTypeBean;
+import org.sola.clients.beans.referencedata.CommunicationTypeBean;
+import org.sola.clients.beans.referencedata.GenderTypeBean;
+import org.sola.clients.beans.referencedata.IdTypeBean;
+import org.sola.clients.beans.referencedata.MortgageTypeBean;
+import org.sola.clients.beans.referencedata.PartyRoleTypeBean;
+import org.sola.clients.beans.referencedata.PartyTypeBean;
+import org.sola.clients.beans.referencedata.RequestTypeBean;
+import org.sola.clients.beans.referencedata.RrrGroupTypeBean;
+import org.sola.clients.beans.referencedata.RrrTypeActionBean;
+import org.sola.clients.beans.referencedata.RrrTypeBean;
+import org.sola.clients.beans.referencedata.ServiceActionTypeBean;
+import org.sola.clients.beans.referencedata.ServiceStatusTypeBean;
+import org.sola.clients.beans.referencedata.SourceTypeBean;
+import org.sola.clients.beans.security.SecurityBean;
+import org.sola.clients.swing.admin.referencedata.ReferenceDataManagementPanel;
+import org.sola.clients.swing.admin.security.GroupsManagementPanel;
+import org.sola.clients.swing.admin.security.RolesManagementPanel;
+import org.sola.clients.swing.admin.security.UsersManagementPanel;
+import org.sola.common.RolesConstants;
+
+/**
+ * Main form of the Admin application.
+ */
+public class MainForm extends javax.swing.JFrame {
+
+    private ResourceBundle resourceBundle;
+        
+    /** Creates new form MainForm */
+    public MainForm() {
+        initComponents();
+        resourceBundle = ResourceBundle.getBundle("org/sola/clients/swing/admin/Bundle"); 
+        
+        URL imgURL = this.getClass().getResource("/images/common/admin.png");
+        this.setIconImage(new ImageIcon(imgURL).getImage());
+        lblUserName.setText(SecurityBean.getCurrentUser().getUserName());
+        customizeForm();
+    }
+
+    /** Customizes main form regarding user access rights. */
+    private void customizeForm(){
+        boolean hasSecurityRole = SecurityBean.isInRole(RolesConstants.ADMIN_MANAGE_SECURITY);
+        boolean hasRefdataRole = SecurityBean.isInRole(RolesConstants.ADMIN_MANAGE_REFDATA);
+        boolean hasSettingsRole = SecurityBean.isInRole(RolesConstants.ADMIN_MANAGE_SETTINGS);
+        
+        btnRoles.getAction().setEnabled(hasSecurityRole);
+        btnUsers.getAction().setEnabled(hasSecurityRole);
+        btnGroups.getAction().setEnabled(hasSecurityRole);
+        
+        btnSystemSettings.getAction().setEnabled(hasSettingsRole);
+        btnGISSettings.getAction().setEnabled(hasSettingsRole);
+        btnLanguage.getAction().setEnabled(hasSettingsRole);
+    }
+    
+    /** Opens reference data management panel for different reference data type.*/
+    private <T extends AbstractCodeBean> void openReferenceDataPanel(
+            Class<T> refDataClass, String headerTitle){
+        ReferenceDataManagementPanel panel = new ReferenceDataManagementPanel(refDataClass, headerTitle);
+        mainScrollPane.setViewportView(panel);
+    }
+    
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        mainToolbar = new javax.swing.JToolBar();
+        btnRoles = new javax.swing.JButton();
+        btnGroups = new javax.swing.JButton();
+        btnUsers = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JToolBar.Separator();
+        btnLanguage = new javax.swing.JButton();
+        jSeparator2 = new javax.swing.JToolBar.Separator();
+        btnSystemSettings = new javax.swing.JButton();
+        btnGISSettings = new javax.swing.JButton();
+        mainPanel = new javax.swing.JPanel();
+        mainScrollPane = new javax.swing.JScrollPane();
+        statusPanel = new javax.swing.JPanel();
+        taskPanel1 = new org.sola.clients.swing.common.tasks.TaskPanel();
+        jLabel1 = new javax.swing.JLabel();
+        lblUserName = new javax.swing.JLabel();
+        mainMenu = new javax.swing.JMenuBar();
+        menuFile = new javax.swing.JMenu();
+        menuExit = new javax.swing.JMenuItem();
+        menuSecurity = new javax.swing.JMenu();
+        menuRoles = new javax.swing.JMenuItem();
+        menuGroups = new javax.swing.JMenuItem();
+        menuUsers = new javax.swing.JMenuItem();
+        menuHelp = new javax.swing.JMenu();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/admin/Bundle"); // NOI18N
+        setTitle(bundle.getString("MainForm.title")); // NOI18N
+
+        mainToolbar.setFloatable(false);
+        mainToolbar.setRollover(true);
+        mainToolbar.setName("mainToolbar"); // NOI18N
+
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(MainForm.class, this);
+        btnRoles.setAction(actionMap.get("manageRoles")); // NOI18N
+        btnRoles.setText(bundle.getString("MainForm.btnRoles.text")); // NOI18N
+        btnRoles.setFocusable(false);
+        btnRoles.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnRoles.setName("btnRoles"); // NOI18N
+        btnRoles.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        mainToolbar.add(btnRoles);
+
+        btnGroups.setAction(actionMap.get("manageGroups")); // NOI18N
+        btnGroups.setText(bundle.getString("MainForm.btnGroups.text")); // NOI18N
+        btnGroups.setFocusable(false);
+        btnGroups.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnGroups.setName("btnGroups"); // NOI18N
+        btnGroups.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        mainToolbar.add(btnGroups);
+
+        btnUsers.setAction(actionMap.get("manageUsers")); // NOI18N
+        btnUsers.setText(bundle.getString("MainForm.btnUsers.text")); // NOI18N
+        btnUsers.setFocusable(false);
+        btnUsers.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnUsers.setName("btnUsers"); // NOI18N
+        btnUsers.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        mainToolbar.add(btnUsers);
+
+        jSeparator1.setName("jSeparator1"); // NOI18N
+        mainToolbar.add(jSeparator1);
+
+        btnLanguage.setAction(actionMap.get("manageLanguages")); // NOI18N
+        btnLanguage.setText(bundle.getString("MainForm.btnLanguage.text")); // NOI18N
+        btnLanguage.setFocusable(false);
+        btnLanguage.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnLanguage.setName("btnLanguage"); // NOI18N
+        btnLanguage.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        mainToolbar.add(btnLanguage);
+
+        jSeparator2.setName("jSeparator2"); // NOI18N
+        mainToolbar.add(jSeparator2);
+
+        btnSystemSettings.setAction(actionMap.get("manageSystemSettings")); // NOI18N
+        btnSystemSettings.setText(bundle.getString("MainForm.btnSystemSettings.text")); // NOI18N
+        btnSystemSettings.setFocusable(false);
+        btnSystemSettings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnSystemSettings.setName("btnSystemSettings"); // NOI18N
+        btnSystemSettings.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        mainToolbar.add(btnSystemSettings);
+
+        btnGISSettings.setAction(actionMap.get("manageGisSettings")); // NOI18N
+        btnGISSettings.setText(bundle.getString("MainForm.btnGISSettings.text")); // NOI18N
+        btnGISSettings.setFocusable(false);
+        btnGISSettings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnGISSettings.setName("btnGISSettings"); // NOI18N
+        btnGISSettings.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        mainToolbar.add(btnGISSettings);
+
+        mainPanel.setName("mainPanel"); // NOI18N
+
+        mainScrollPane.setName("mainScrollPane"); // NOI18N
+
+        javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
+        mainPanel.setLayout(mainPanelLayout);
+        mainPanelLayout.setHorizontalGroup(
+            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(mainScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 868, Short.MAX_VALUE)
+        );
+        mainPanelLayout.setVerticalGroup(
+            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(mainScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE)
+        );
+
+        statusPanel.setName("statusPanel"); // NOI18N
+
+        taskPanel1.setName("taskPanel1"); // NOI18N
+
+        jLabel1.setText(bundle.getString("MainForm.jLabel1.text")); // NOI18N
+        jLabel1.setName("jLabel1"); // NOI18N
+
+        lblUserName.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblUserName.setText(bundle.getString("MainForm.lblUserName.text")); // NOI18N
+        lblUserName.setName("lblUserName"); // NOI18N
+
+        javax.swing.GroupLayout statusPanelLayout = new javax.swing.GroupLayout(statusPanel);
+        statusPanel.setLayout(statusPanelLayout);
+        statusPanelLayout.setHorizontalGroup(
+            statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(statusPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblUserName, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 218, Short.MAX_VALUE)
+                .addComponent(taskPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        statusPanelLayout.setVerticalGroup(
+            statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(statusPanelLayout.createSequentialGroup()
+                .addGroup(statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(taskPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(lblUserName)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        mainMenu.setName("mainMenu"); // NOI18N
+
+        menuFile.setText(bundle.getString("MainForm.menuFile.text")); // NOI18N
+        menuFile.setName("menuFile"); // NOI18N
+
+        menuExit.setAction(actionMap.get("exit")); // NOI18N
+        menuExit.setText(bundle.getString("MainForm.menuExit.text")); // NOI18N
+        menuExit.setName("menuExit"); // NOI18N
+        menuFile.add(menuExit);
+
+        mainMenu.add(menuFile);
+
+        menuSecurity.setText(bundle.getString("MainForm.menuSecurity.text")); // NOI18N
+        menuSecurity.setName("menuSecurity"); // NOI18N
+
+        menuRoles.setAction(actionMap.get("manageRoles")); // NOI18N
+        menuRoles.setText(bundle.getString("MainForm.menuRoles.text")); // NOI18N
+        menuRoles.setName("menuRoles"); // NOI18N
+        menuSecurity.add(menuRoles);
+
+        menuGroups.setAction(actionMap.get("manageGroups")); // NOI18N
+        menuGroups.setText(bundle.getString("MainForm.menuGroups.text")); // NOI18N
+        menuGroups.setName("menuGroups"); // NOI18N
+        menuSecurity.add(menuGroups);
+
+        menuUsers.setAction(actionMap.get("manageUsers")); // NOI18N
+        menuUsers.setText(bundle.getString("MainForm.menuUsers.text")); // NOI18N
+        menuUsers.setName("menuUsers"); // NOI18N
+        menuSecurity.add(menuUsers);
+
+        mainMenu.add(menuSecurity);
+
+        menuHelp.setText(bundle.getString("MainForm.menuHelp.text")); // NOI18N
+        menuHelp.setName("menuHelp"); // NOI18N
+        mainMenu.add(menuHelp);
+
+        setJMenuBar(mainMenu);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(mainToolbar, javax.swing.GroupLayout.DEFAULT_SIZE, 868, Short.MAX_VALUE)
+            .addComponent(statusPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(mainToolbar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(statusPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    /** Opens roles management panel. */
+    @Action
+    public void manageRoles() {
+        RolesManagementPanel panel = new RolesManagementPanel();
+        mainScrollPane.setViewportView(panel);
+    }
+
+    /** Opens groups management panel. */
+    @Action
+    public void manageGroups() {
+        GroupsManagementPanel groupManagementPanel = new GroupsManagementPanel();
+        mainScrollPane.setViewportView(groupManagementPanel);
+    }
+
+    /** Opens users management panel. */
+    @Action
+    public void manageUsers() {
+        UsersManagementPanel panel = new UsersManagementPanel();
+        mainScrollPane.setViewportView(panel);
+    }
+
+    @Action
+    public void manageLanguages() {
+        JOptionPane.showMessageDialog(this, "Not yet implemented.");
+    }
+
+    @Action
+    public void manageSystemSettings() {
+        JOptionPane.showMessageDialog(this, "Not yet implemented.");
+    }
+
+    @Action
+    public void manageGisSettings() {
+        JOptionPane.showMessageDialog(this, "Not yet implemented.");
+    }
+
+    @Action
+    public void manageCommunicationTypes() {
+        openReferenceDataPanel(CommunicationTypeBean.class, 
+                resourceBundle.getString("MainForm.menuCommunicationType.text"));
+    }
+
+    @Action
+    public void manageBAUnitType() {
+        openReferenceDataPanel(BaUnitTypeBean.class, 
+                resourceBundle.getString("MainForm.menuBaUnitType.text"));
+    }
+
+    @Action
+    public void manageIdTypes() {
+        openReferenceDataPanel(IdTypeBean.class, 
+                resourceBundle.getString("MainForm.menuIdTypes.text"));
+    }
+
+    @Action
+    public void manageGender() {
+        openReferenceDataPanel(GenderTypeBean.class, 
+                resourceBundle.getString("MainForm.menuGenders.text"));
+    }
+
+    @Action
+    public void managePartyRoleTypes() {
+        openReferenceDataPanel(PartyRoleTypeBean.class, 
+                resourceBundle.getString("MainForm.menuPartyRoleType.text"));
+    }
+
+    @Action
+    public void managePartyTypes() {
+        openReferenceDataPanel(PartyTypeBean.class, 
+                resourceBundle.getString("MainForm.menuPartyType.text"));
+    }
+
+    @Action
+    public void manageMortgageTypes() {
+        openReferenceDataPanel(MortgageTypeBean.class, 
+                resourceBundle.getString("MainForm.menuMortgageTypes.text"));
+    }
+
+    @Action
+    public void manageRrrGroupTypes() {
+        openReferenceDataPanel(RrrGroupTypeBean.class, 
+                resourceBundle.getString("MainForm.menuRrrGroupTypes.text"));
+    }
+
+    @Action
+    public void manageRrrTypes() {
+        openReferenceDataPanel(RrrTypeBean.class, 
+                resourceBundle.getString("MainForm.menuRrrTypes.text"));
+    }
+
+    @Action
+    public void manageSourceTypes() {
+        openReferenceDataPanel(SourceTypeBean.class, 
+                resourceBundle.getString("MainForm.menuSourceTypes.text"));
+    }
+
+    @Action
+    public void manageRequestTypes() {
+        openReferenceDataPanel(RequestTypeBean.class, 
+                resourceBundle.getString("MainForm.menuRequestTypes.text"));
+    }
+
+    @Action
+    public void manageRrrTypeActions() {
+        openReferenceDataPanel(RrrTypeActionBean.class, 
+                resourceBundle.getString("MainForm.menuRrrTypeActions.text"));
+    }
+
+    @Action
+    public void manageServiceActionTypes() {
+        openReferenceDataPanel(ServiceActionTypeBean.class, 
+                resourceBundle.getString("MainForm.menuServiceActionTypes.text"));
+    }
+
+    @Action
+    public void manageServiceStatusTypes() {
+        openReferenceDataPanel(ServiceStatusTypeBean.class, 
+                resourceBundle.getString("MainForm.menuServiceStatusTypes.text"));
+    }
+
+    @Action
+    public void exit() {
+        System.exit(0);
+    }
+    
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnGISSettings;
+    private javax.swing.JButton btnGroups;
+    private javax.swing.JButton btnLanguage;
+    private javax.swing.JButton btnRoles;
+    private javax.swing.JButton btnSystemSettings;
+    private javax.swing.JButton btnUsers;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JToolBar.Separator jSeparator1;
+    private javax.swing.JToolBar.Separator jSeparator2;
+    private javax.swing.JLabel lblUserName;
+    private javax.swing.JMenuBar mainMenu;
+    private javax.swing.JPanel mainPanel;
+    private javax.swing.JScrollPane mainScrollPane;
+    private javax.swing.JToolBar mainToolbar;
+    private javax.swing.JMenuItem menuExit;
+    private javax.swing.JMenu menuFile;
+    private javax.swing.JMenuItem menuGroups;
+    private javax.swing.JMenu menuHelp;
+    private javax.swing.JMenuItem menuRoles;
+    private javax.swing.JMenu menuSecurity;
+    private javax.swing.JMenuItem menuUsers;
+    private javax.swing.JPanel statusPanel;
+    private org.sola.clients.swing.common.tasks.TaskPanel taskPanel1;
+    // End of variables declaration//GEN-END:variables
+}

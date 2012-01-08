@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>sola-main</artifactId>
+        <groupId>org.sola</groupId>
+        <version>alpha</version>
+    </parent>
+    <groupId>org.sola</groupId>
+    <artifactId>sola-clients</artifactId>
+    <packaging>pom</packaging>
+    <version>alpha</version>
+    <name>Clients POM</name>
+    <modules>
+        <module>swing</module>
+        <module>../common/help</module>
+        <module>beans</module>
+        <module>reports</module>
+  </modules>
+</project>
