@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -32,6 +32,8 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.sola.clients.beans.controls.SolaList;
 import org.sola.clients.beans.converters.TypeConverters;
+import org.sola.clients.beans.validation.Localized;
+import org.sola.common.messaging.ClientMessage;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.EntityAction;
 import org.sola.webservices.transferobjects.security.UserTO;
@@ -48,10 +50,10 @@ public class UserBean extends UserSummaryBean {
     public static final String USERNAME_PROPERTY = "userName";
     public static final String ACTIVE_PROPERTY = "active";
     
-    @NotEmpty(message="Fill in username.")
+    @NotEmpty(message=ClientMessage.CHECK_NOTNULL_USERNAME, payload=Localized.class)
     private String userName;
     private boolean active;
-    @Size(min=1, message="Select at least 1 group.")
+    @Size(min=1, message=ClientMessage.CHECK_MIN_USERGROUP, payload=Localized.class)
     private SolaList<UserGroupBean> userGroups;
     private SolaList<RoleBean> roles;
     

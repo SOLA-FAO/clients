@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -29,6 +29,8 @@ package org.sola.clients.beans.address;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.sola.clients.beans.AbstractIdBean;
+import org.sola.clients.beans.validation.Localized;
+import org.sola.common.messaging.ClientMessage;
 import org.sola.webservices.transferobjects.casemanagement.AddressTO;
 
 /** 
@@ -40,7 +42,7 @@ public class AddressBean extends AbstractIdBean {
     public static final String DESCRIPTION_PROPERTY = "description";
     public static final String EXT_ADDRESS_ID_PROPERTY = "extAddressId";
     
-    @NotEmpty(message="Fill in address.")
+    @NotEmpty(message= ClientMessage.CHECK_NOTNULL_ADDRESS, payload=Localized.class)
     private String description;
     private String extAddressId;
     

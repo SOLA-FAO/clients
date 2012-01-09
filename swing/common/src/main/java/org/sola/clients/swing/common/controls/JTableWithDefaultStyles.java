@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -30,6 +30,7 @@ package org.sola.clients.swing.common.controls;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
+import java.awt.Font;
 import java.util.Locale;
 import javax.swing.JTable;
 import javax.swing.JViewport;
@@ -51,50 +52,53 @@ public class JTableWithDefaultStyles extends JTable {
     public JTableWithDefaultStyles() {
         this.setAutoCreateRowSorter(true);
 
-        defaultBackground = new Color(226, 244, 224);
-        oddRowColor=new Color(236,247,235);
-        this.setSelectionBackground(new java.awt.Color(185, 227, 185));
-        this.setSelectionForeground(new java.awt.Color(0, 102, 51));
-        this.setGridColor(new java.awt.Color(166, 212, 150));
+//        defaultBackground = new Color(226, 244, 224);
+//        oddRowColor=new Color(236,247,235);
+//        this.setSelectionBackground(new java.awt.Color(185, 227, 185));
+//        this.setSelectionForeground(new java.awt.Color(0, 102, 51));
+//        this.setGridColor(new java.awt.Color(166, 212, 150));
 
         
         
-//        Object newFirstRow = "Table.alternateRowColor";
-//        Color newFRColor =  UIManager.getColor(newFirstRow);
-//        defaultBackground = newFRColor;  
-//      
-////        Object newSecondRow = "Table.background";
-//        Object newSecondRow = "PasswordField.background";
-//        Color newSRColor =  UIManager.getColor(newSecondRow);
-//        oddRowColor=newSRColor;
-////        
-////        
-//////        Object newSelectedRow = "Table[Enabled+Selected].textBackground";
-//        Object newSelectedRow = "List.background";
-//        Color newSelColor =  UIManager.getColor(newSelectedRow);
-////        this.setSelectionBackground( UIManager.getColor(newSelectedRow));
-//        this.setSelectionBackground(newSelColor);
-////        
-//////        Object newSelForecolor = "TableSelForeColor";
-//        Object newSelForecolor = "List.foreground";
-//        Color newSelFore =  UIManager.getColor(newSelForecolor);
-//////        this.setSelectionForeground( UIManager.getColor(newSelForecolor));
-//        this.setSelectionForeground(newSelFore);
-//        this.setGridColor(newSelFore);
-////
-////        
-////        
-//////        Object newGridcolor = "TableGridColor";
-//          Object newGrid = "Table.dropLineColor";
-//          Color newGridColor =  UIManager.getColor(newGrid);
-////        this.setGridColor(UIManager.getColor(newGridcolor));
-//          this.setGridColor(newSelFore);
+        Object newFirstRow = "Table.alternateRowColor";
+        Color newFRColor =  UIManager.getColor(newFirstRow);
+        defaultBackground = newFRColor;  
+      
+//        Object newSecondRow = "Table.background";
+        Object newSecondRow = "PasswordField.background";
+        Color newSRColor =  UIManager.getColor(newSecondRow);
+        oddRowColor=newSRColor;
 //        
 //        
+////        Object newSelectedRow = "Table[Enabled+Selected].textBackground";
+        Object newSelectedRow = "List.background";
+        Color newSelColor =  UIManager.getColor(newSelectedRow);
+//        this.setSelectionBackground( UIManager.getColor(newSelectedRow));
+        this.setSelectionBackground(newSelColor);
+//        
+////        Object newSelForecolor = "TableSelForeColor";
+        Object newSelForecolor = "List.foreground";
+        Color newSelFore =  UIManager.getColor(newSelForecolor);
+////        this.setSelectionForeground( UIManager.getColor(newSelForecolor));
+        this.setSelectionForeground(newSelFore);
+        this.setGridColor(newSelFore);
+//
+//        
+//        
+////        Object newGridcolor = "TableGridColor";
+          Object newGrid = "Table.dropLineColor";
+          Color newGridColor =  UIManager.getColor(newGrid);
+//        this.setGridColor(UIManager.getColor(newGridcolor));
+          this.setGridColor(newSelFore);
+        
+        
         scrollPaneBackgroundColor = Color.WHITE;
         super.setBackground(defaultBackground);
         this.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-        this.setFont(new java.awt.Font("Tahoma", 0, 12));
+//        this.setFont(new java.awt.Font("Tahoma", 0, 12));
+        Object tableFont = "Table.font";
+        Font newTableFont = UIManager.getFont(tableFont);
+        this.setFont(newTableFont);
         this.setShowGrid(true);
         this.setRowSelectionAllowed(true);
         this.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);

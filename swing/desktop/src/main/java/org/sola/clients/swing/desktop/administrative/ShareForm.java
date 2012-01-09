@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -36,6 +36,7 @@ import org.sola.clients.beans.administrative.RrrShareBean;
 import org.sola.clients.swing.desktop.party.PartyForm;
 import org.sola.clients.swing.ui.party.PartyPanel;
 import org.sola.clients.beans.party.PartySummaryBean;
+import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.ui.renderers.FormattersFactory;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -49,7 +50,7 @@ public class ShareForm extends javax.swing.JDialog {
 
         @Override
         public void propertyChange(PropertyChangeEvent evt) {
-            if (evt.getPropertyName().equals(PartyPanel.SELECTED_PARTY)
+            if (evt.getPropertyName().equals(PartyPanel.UPDATED_PARTY)
                     && evt.getNewValue() != null) {
                 rrrShareBean.addOrUpdateRightholder((PartySummaryBean) evt.getNewValue());
                 tableOwners.clearSelection();
@@ -68,7 +69,8 @@ public class ShareForm extends javax.swing.JDialog {
         this.setIconImage(new ImageIcon(ShareForm.class.getResource("/images/sola/logo_icon.jpg")).getImage());
     
         initComponents();
-
+        
+        customizeComponents();
         customizeForm(rrrAction);
         customizeOwnersButtons(null);
     }
@@ -87,7 +89,28 @@ public class ShareForm extends javax.swing.JDialog {
             this.rrrShareBean = rrrShareBean.copy();
         }
     }
-
+     
+       /** Applies customization of component L&F. */
+    private void customizeComponents() {
+   
+//    BUTTONS   
+    LafManager.getInstance().setBtnProperties(btnAddOwner);
+    LafManager.getInstance().setBtnProperties(btnEditOwner);
+    LafManager.getInstance().setBtnProperties(btnRemoveOwner);
+    LafManager.getInstance().setBtnProperties(btnViewOwner);
+    LafManager.getInstance().setBtnProperties(btnSave);
+    
+    
+//    LABELS    
+    LafManager.getInstance().setLabProperties(jLabel1);
+    LafManager.getInstance().setLabProperties(jLabel2);
+    
+//    FORMATTED TXT
+    LafManager.getInstance().setFormattedTxtProperties(txtDenominator);
+    LafManager.getInstance().setFormattedTxtProperties(txtNominator);
+    
+    }
+    
     private void customizeForm(RrrBean.RRR_ACTION rrrAction) {
         if (rrrAction == RrrBean.RRR_ACTION.NEW) {
             btnSave.setText("Create");
@@ -133,7 +156,7 @@ public class ShareForm extends javax.swing.JDialog {
         }
 
         RightHolderFormListener listener = new RightHolderFormListener();
-        partyForm.addPropertyChangeListener(PartyPanel.SELECTED_PARTY, listener);
+        partyForm.addPropertyChangeListener(PartyPanel.UPDATED_PARTY, listener);
         partyForm.setLocationRelativeTo(this);
         partyForm.setVisible(true);
     }

@@ -49,6 +49,7 @@
     <Component class="org.sola.clients.swing.ui.source.DocumentSeachPanel" name="documentSeachPanel1">
       <Properties>
         <Property name="name" type="java.lang.String" value="documentSeachPanel1" noResource="true"/>
+        <Property name="showPrintButton" type="boolean" value="false"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="btnOk">

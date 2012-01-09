@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -28,9 +28,15 @@
 package org.sola.clients.swing.ui.referencedata;
 
 import org.sola.clients.beans.AbstractCodeBean;
+import org.sola.clients.beans.referencedata.RequestCategoryTypeListBean;
 import org.sola.clients.beans.referencedata.RequestTypeBean;
+import org.sola.clients.beans.referencedata.RrrTypeActionListBean;
+import org.sola.clients.beans.referencedata.RrrTypeListBean;
+import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.ui.renderers.FormattersFactory;
 import org.sola.clients.swing.ui.renderers.TableCellTextAreaRenderer;
+import org.sola.common.messaging.ClientMessage;
+import org.sola.common.messaging.MessageUtility;
 import org.sola.webservices.transferobjects.referencedata.RequestTypeTO;
 
 /**
@@ -38,16 +44,89 @@ import org.sola.webservices.transferobjects.referencedata.RequestTypeTO;
  */
 public class RequestTypePanel extends javax.swing.JPanel {
 
-    public static final String SAVED_REQUEST_TYPE_PROPERTY = "RequestTypeSaved";
-    public static final String CREATED_REQUEST_TYPE_PROPERTY = "RequestTypeCreated";
-    
-    private String saveEventToFire = SAVED_REQUEST_TYPE_PROPERTY;
+    public static final String SAVED_REFDATA_PROPERTY = "RefdataSaved";
+    public static final String CREATED_REFDATA_PROPERTY = "RefdataCreated";
+    public static final String CANCEL_ACTION_PROPERTY = "Cancel";
+    private String saveEventToFire = SAVED_REFDATA_PROPERTY;
     private RequestTypeBean requestTypeBean;
+    private boolean closeOnSave;
+    private boolean closeOnCreate;
 
     /** Creates new form RequestTypePanel */
     public RequestTypePanel() {
         initComponents();
+        customizeComponents();
         setupRequestTypeBean(null);
+    }
+    
+    
+     /** Applies customization of component L&F. */
+    private void customizeComponents() {
+    
+//    BUTTONS   
+    LafManager.getInstance().setBtnProperties(btnCancel);
+    LafManager.getInstance().setBtnProperties(btnOk);
+      
+//    COMBOBOXES
+    LafManager.getInstance().setCmbProperties(cbxCategory);
+    LafManager.getInstance().setCmbProperties(cbxRrrAction);
+    LafManager.getInstance().setCmbProperties(cbxRrrType);
+    
+    
+//    LABELS    
+    LafManager.getInstance().setLabProperties(jLabel1);
+    LafManager.getInstance().setLabProperties(jLabel2);
+    LafManager.getInstance().setLabProperties(jLabel3);
+    LafManager.getInstance().setLabProperties(jLabel4);
+    LafManager.getInstance().setLabProperties(jLabel5);
+    LafManager.getInstance().setLabProperties(jLabel6);
+    LafManager.getInstance().setLabProperties(jLabel7);
+    LafManager.getInstance().setLabProperties(jLabel8);
+    LafManager.getInstance().setLabProperties(jLabel9);
+    LafManager.getInstance().setLabProperties(jLabel10);
+    LafManager.getInstance().setLabProperties(jLabel11);
+    LafManager.getInstance().setLabProperties(jLabel12);
+    LafManager.getInstance().setLabProperties(jLabel13);
+    LafManager.getInstance().setLabProperties(jLabel14);
+   
+//    TXT FIELDS
+    
+    LafManager.getInstance().setTxtProperties(txtCode);
+    LafManager.getInstance().setTxtProperties(txtNotation);
+    LafManager.getInstance().setTxtProperties(txtSatus);
+    
+//    FORMATTED TXT
+    
+    LafManager.getInstance().setFormattedTxtProperties(txtAreaFee);
+    LafManager.getInstance().setFormattedTxtProperties(txtBaseFee);
+    LafManager.getInstance().setFormattedTxtProperties(txtCompleteDays);
+    LafManager.getInstance().setFormattedTxtProperties(txtRequiredPropObjects);
+    LafManager.getInstance().setFormattedTxtProperties(txtValueBaseFee);
+   
+//    TABBED PANELS
+     LafManager.getInstance().setTabProperties(tabsPanel);
+   
+    }
+    
+    private RrrTypeListBean createRrrTypes() {
+        if (rrrTypes == null) {
+            rrrTypes = new RrrTypeListBean(true);
+        }
+        return rrrTypes;
+    }
+
+    private RequestCategoryTypeListBean createRequestCategoryTypes() {
+        if (requestCategoryTypes == null) {
+            requestCategoryTypes = new RequestCategoryTypeListBean(true);
+        }
+        return requestCategoryTypes;
+    }
+
+    private RrrTypeActionListBean createRrrTypeActions() {
+        if (rrrTypeActions == null) {
+            rrrTypeActions = new RrrTypeActionListBean(true);
+        }
+        return rrrTypeActions;
     }
 
     public RequestTypeBean getRequestTypeBean() {
@@ -56,35 +135,88 @@ public class RequestTypePanel extends javax.swing.JPanel {
 
     public void setRequestTypeBean(RequestTypeBean requestTypeBean) {
         this.requestTypeBean = requestTypeBean;
+        setupRequestTypeBean(requestTypeBean);
+    }
+
+    public boolean isCloseOnCreate() {
+        return closeOnCreate;
+    }
+
+    public void setCloseOnCreate(boolean closeOnCreate) {
+        this.closeOnCreate = closeOnCreate;
+        setButtonOkCaption();
+    }
+
+    public boolean isCloseOnSave() {
+        return closeOnSave;
+    }
+
+    public void setCloseOnSave(boolean closeOnSave) {
+        this.closeOnSave = closeOnSave;
+        setButtonOkCaption();
+    }
+    
+    /** Assigns OK button text label. */
+    private void setButtonOkCaption() {
+        try {
+            if (saveEventToFire.equals(SAVED_REFDATA_PROPERTY)) {
+                if (closeOnSave) {
+                    btnOk.setText(MessageUtility.getLocalizedMessage(
+                            ClientMessage.GENERAL_LABELS_SAVE_AND_CLOSE).getMessage());
+                } else {
+                    btnOk.setText(MessageUtility.getLocalizedMessage(
+                            ClientMessage.GENERAL_LABELS_SAVE).getMessage());
+                }
+            } else {
+                if (closeOnCreate) {
+                    btnOk.setText(MessageUtility.getLocalizedMessage(
+                            ClientMessage.GENERAL_LABELS_CREATE_AND_CLOSE).getMessage());
+                } else {
+                    btnOk.setText(MessageUtility.getLocalizedMessage(
+                            ClientMessage.GENERAL_LABELS_CREATE).getMessage());
+                }
+            }
+        } catch (Exception e) {
+        }
     }
 
     /** Setup reference data bean object, used to bind data on the form. */
     private void setupRequestTypeBean(RequestTypeBean requestTypeBean) {
         txtCode.setEnabled(requestTypeBean == null);
+        tabsPanel.setSelectedIndex(0);
 
         if (requestTypeBean != null) {
             this.requestTypeBean = requestTypeBean;
-            saveEventToFire = SAVED_REQUEST_TYPE_PROPERTY;
+            saveEventToFire = SAVED_REFDATA_PROPERTY;
         } else {
             this.requestTypeBean = new RequestTypeBean();
-            saveEventToFire = CREATED_REQUEST_TYPE_PROPERTY;
+            cbxCategory.setSelectedIndex(0);
+            cbxRrrAction.setSelectedIndex(0);
+            cbxRrrType.setSelectedIndex(0);
+            saveEventToFire = CREATED_REFDATA_PROPERTY;
         }
 
         descriptionValues.loadLocalizedValues(this.requestTypeBean.getDescription());
         displayValues.loadLocalizedValues(this.requestTypeBean.getDisplayValue());
+        sourceTypeHelpers.setSourceTypeCodes(this.requestTypeBean.getSourceTypeCodes());
+        setButtonOkCaption();
         firePropertyChange("requestTypeBean", null, this.requestTypeBean);
     }
 
     /** Calls saving procedure of request type data object. */
-    public void save(){
+    public void save() {
         requestTypeBean.setDisplayValue(displayValues.buildMultilingualString());
         requestTypeBean.setDescription(descriptionValues.buildMultilingualString());
-        if(requestTypeBean.validate(true).size()<1){
+        if (requestTypeBean.validate(true).size() < 1) {
             AbstractCodeBean.saveRefData(requestTypeBean, RequestTypeTO.class);
             firePropertyChange(saveEventToFire, false, true);
+
+            if (saveEventToFire.equals(CREATED_REFDATA_PROPERTY) && !closeOnCreate) {
+                setupRequestTypeBean(null);
+            }
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -92,10 +224,15 @@ public class RequestTypePanel extends javax.swing.JPanel {
 
         displayValues = new org.sola.clients.beans.system.LocalizedValuesListBean();
         descriptionValues = new org.sola.clients.beans.system.LocalizedValuesListBean();
-        requestCategoryTypes = new org.sola.clients.beans.referencedata.RequestCategoryTypeListBean();
-        rrrTypes = new org.sola.clients.beans.referencedata.RrrTypeListBean();
-        rrrTypeActions = new org.sola.clients.beans.referencedata.RrrTypeActionListBean();
+        requestCategoryTypes = createRequestCategoryTypes();
+        rrrTypes = createRrrTypes();
+        rrrTypeActions = createRrrTypeActions();
         sourceTypeHelpers = new org.sola.clients.beans.referencedata.SourceTypeHelperListBean();
+        jPanel18 = new javax.swing.JPanel();
+        btnOk = new javax.swing.JButton();
+        btnCancel = new javax.swing.JButton();
+        tabsPanel = new javax.swing.JTabbedPane();
+        jPanel19 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         txtCode = new javax.swing.JTextField();
@@ -118,24 +255,25 @@ public class RequestTypePanel extends javax.swing.JPanel {
         jPanel11 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         txtCompleteDays = new javax.swing.JFormattedTextField();
+        jPanel15 = new javax.swing.JPanel();
+        jLabel10 = new javax.swing.JLabel();
+        txtRequiredPropObjects = new javax.swing.JFormattedTextField();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tableDisplayValue = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
+        jPanel20 = new javax.swing.JPanel();
+        jPanel14 = new javax.swing.JPanel();
+        txtNotation = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
         jPanel13 = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
         cbxRrrType = new javax.swing.JComboBox();
         jPanel12 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
         cbxRrrAction = new javax.swing.JComboBox();
-        jPanel15 = new javax.swing.JPanel();
-        jLabel10 = new javax.swing.JLabel();
-        txtRequiredPropObjects = new javax.swing.JFormattedTextField();
-        jPanel14 = new javax.swing.JPanel();
-        txtNotation = new javax.swing.JTextField();
-        jLabel11 = new javax.swing.JLabel();
         jPanel17 = new javax.swing.JPanel();
-        jPanel6 = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tableDisplayValue = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
         jPanel16 = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -145,10 +283,52 @@ public class RequestTypePanel extends javax.swing.JPanel {
         tableDescriptions = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
         jLabel4 = new javax.swing.JLabel();
 
-        setMinimumSize(new java.awt.Dimension(644, 570));
+        setMinimumSize(new java.awt.Dimension(604, 405));
+
+        jPanel18.setName("jPanel18"); // NOI18N
+
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/referencedata/Bundle"); // NOI18N
+        btnOk.setText(bundle.getString("RequestTypePanel.btnOk.text")); // NOI18N
+        btnOk.setName("btnOk"); // NOI18N
+        btnOk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOkActionPerformed(evt);
+            }
+        });
+
+        btnCancel.setText(bundle.getString("RequestTypePanel.btnCancel.text")); // NOI18N
+        btnCancel.setName("btnCancel"); // NOI18N
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel18Layout = new javax.swing.GroupLayout(jPanel18);
+        jPanel18.setLayout(jPanel18Layout);
+        jPanel18Layout.setHorizontalGroup(
+            jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel18Layout.createSequentialGroup()
+                .addContainerGap(401, Short.MAX_VALUE)
+                .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        jPanel18Layout.setVerticalGroup(
+            jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel18Layout.createSequentialGroup()
+                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnOk)
+                    .addComponent(btnCancel))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        tabsPanel.setName("tabsPanel"); // NOI18N
+
+        jPanel19.setName("jPanel19"); // NOI18N
 
         jPanel5.setName("jPanel5"); // NOI18N
-        jPanel5.setLayout(new java.awt.GridLayout(4, 3, 15, 0));
+        jPanel5.setLayout(new java.awt.GridLayout(3, 3, 15, 0));
 
         jPanel3.setName("jPanel3"); // NOI18N
 
@@ -161,7 +341,6 @@ public class RequestTypePanel extends javax.swing.JPanel {
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/referencedata/Bundle"); // NOI18N
         jLabel1.setText(bundle.getString("RequestTypePanel.jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
 
@@ -171,8 +350,8 @@ public class RequestTypePanel extends javax.swing.JPanel {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addContainerGap(158, Short.MAX_VALUE))
-            .addComponent(txtCode, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
+                .addContainerGap(137, Short.MAX_VALUE))
+            .addComponent(txtCode, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -198,7 +377,7 @@ public class RequestTypePanel extends javax.swing.JPanel {
         org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${requestCategoryTypes}");
         org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, requestCategoryTypes, eLProperty, cbxCategory);
         bindingGroup.addBinding(jComboBoxBinding);
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${requestTypeBean.requestCategoryType}"), cbxCategory, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${requestTypeBean.requestCategory}"), cbxCategory, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
@@ -207,8 +386,8 @@ public class RequestTypePanel extends javax.swing.JPanel {
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addComponent(jLabel5)
-                .addContainerGap(137, Short.MAX_VALUE))
-            .addComponent(cbxCategory, 0, 204, Short.MAX_VALUE)
+                .addContainerGap(116, Short.MAX_VALUE))
+            .addComponent(cbxCategory, 0, 183, Short.MAX_VALUE)
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -241,8 +420,8 @@ public class RequestTypePanel extends javax.swing.JPanel {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(jLabel2)
-                .addContainerGap(156, Short.MAX_VALUE))
-            .addComponent(txtSatus, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
+                .addContainerGap(135, Short.MAX_VALUE))
+            .addComponent(txtSatus, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -277,8 +456,8 @@ public class RequestTypePanel extends javax.swing.JPanel {
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addComponent(jLabel7)
-                .addContainerGap(139, Short.MAX_VALUE))
-            .addComponent(txtBaseFee, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
+                .addContainerGap(118, Short.MAX_VALUE))
+            .addComponent(txtBaseFee, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -313,8 +492,8 @@ public class RequestTypePanel extends javax.swing.JPanel {
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addComponent(jLabel8)
-                .addContainerGap(110, Short.MAX_VALUE))
-            .addComponent(txtAreaFee, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
+                .addContainerGap(89, Short.MAX_VALUE))
+            .addComponent(txtAreaFee, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -349,8 +528,8 @@ public class RequestTypePanel extends javax.swing.JPanel {
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel10Layout.createSequentialGroup()
                 .addComponent(jLabel9)
-                .addContainerGap(105, Short.MAX_VALUE))
-            .addComponent(txtValueBaseFee, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
+                .addContainerGap(84, Short.MAX_VALUE))
+            .addComponent(txtValueBaseFee, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -385,8 +564,8 @@ public class RequestTypePanel extends javax.swing.JPanel {
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel11Layout.createSequentialGroup()
                 .addComponent(jLabel6)
-                .addContainerGap(66, Short.MAX_VALUE))
-            .addComponent(txtCompleteDays, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
+                .addContainerGap(45, Short.MAX_VALUE))
+            .addComponent(txtCompleteDays, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -398,76 +577,6 @@ public class RequestTypePanel extends javax.swing.JPanel {
         );
 
         jPanel5.add(jPanel11);
-
-        jPanel13.setName("jPanel13"); // NOI18N
-
-        jLabel12.setFont(new java.awt.Font("Tahoma", 0, 12));
-        jLabel12.setText(bundle.getString("RequestTypePanel.jLabel12.text")); // NOI18N
-        jLabel12.setName("jLabel12"); // NOI18N
-
-        cbxRrrType.setName("cbxRrrType"); // NOI18N
-        cbxRrrType.setNextFocusableComponent(cbxRrrAction);
-
-        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${rrrTypeBeanList}");
-        jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrTypes, eLProperty, cbxRrrType);
-        bindingGroup.addBinding(jComboBoxBinding);
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${requestTypeBean.rrrType}"), cbxRrrType, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
-
-        javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
-        jPanel13.setLayout(jPanel13Layout);
-        jPanel13Layout.setHorizontalGroup(
-            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel13Layout.createSequentialGroup()
-                .addComponent(jLabel12)
-                .addContainerGap(156, Short.MAX_VALUE))
-            .addComponent(cbxRrrType, 0, 204, Short.MAX_VALUE)
-        );
-        jPanel13Layout.setVerticalGroup(
-            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel13Layout.createSequentialGroup()
-                .addComponent(jLabel12)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbxRrrType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(12, Short.MAX_VALUE))
-        );
-
-        jPanel5.add(jPanel13);
-
-        jPanel12.setName("jPanel12"); // NOI18N
-
-        jLabel13.setFont(new java.awt.Font("Tahoma", 0, 12));
-        jLabel13.setText(bundle.getString("RequestTypePanel.jLabel13.text")); // NOI18N
-        jLabel13.setName("jLabel13"); // NOI18N
-
-        cbxRrrAction.setName("cbxRrrAction"); // NOI18N
-        cbxRrrAction.setNextFocusableComponent(txtRequiredPropObjects);
-
-        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${rrrTypeActions}");
-        jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrTypeActions, eLProperty, cbxRrrAction);
-        bindingGroup.addBinding(jComboBoxBinding);
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${requestTypeBean.rrrTypeAction}"), cbxRrrAction, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
-
-        javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
-        jPanel12.setLayout(jPanel12Layout);
-        jPanel12Layout.setHorizontalGroup(
-            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel12Layout.createSequentialGroup()
-                .addComponent(jLabel13)
-                .addContainerGap(148, Short.MAX_VALUE))
-            .addComponent(cbxRrrAction, 0, 204, Short.MAX_VALUE)
-        );
-        jPanel12Layout.setVerticalGroup(
-            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel12Layout.createSequentialGroup()
-                .addComponent(jLabel13)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbxRrrAction, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(12, Short.MAX_VALUE))
-        );
-
-        jPanel5.add(jPanel12);
 
         jPanel15.setName("jPanel15"); // NOI18N
 
@@ -491,8 +600,8 @@ public class RequestTypePanel extends javax.swing.JPanel {
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel15Layout.createSequentialGroup()
                 .addComponent(jLabel10)
-                .addContainerGap(51, Short.MAX_VALUE))
-            .addComponent(txtRequiredPropObjects, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
+                .addContainerGap(30, Short.MAX_VALUE))
+            .addComponent(txtRequiredPropObjects, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
         );
         jPanel15Layout.setVerticalGroup(
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -504,43 +613,6 @@ public class RequestTypePanel extends javax.swing.JPanel {
         );
 
         jPanel5.add(jPanel15);
-
-        jPanel14.setName("jPanel14"); // NOI18N
-
-        txtNotation.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtNotation.setName("txtNotation"); // NOI18N
-        txtNotation.setNextFocusableComponent(tableDisplayValue);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${requestTypeBean.notationTemplate}"), txtNotation, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        jLabel11.setFont(new java.awt.Font("Tahoma", 0, 12));
-        jLabel11.setText(bundle.getString("RequestTypePanel.jLabel11.text")); // NOI18N
-        jLabel11.setName("jLabel11"); // NOI18N
-
-        javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
-        jPanel14.setLayout(jPanel14Layout);
-        jPanel14Layout.setHorizontalGroup(
-            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel14Layout.createSequentialGroup()
-                .addComponent(jLabel11)
-                .addContainerGap(540, Short.MAX_VALUE))
-            .addComponent(txtNotation, javax.swing.GroupLayout.DEFAULT_SIZE, 644, Short.MAX_VALUE)
-        );
-        jPanel14Layout.setVerticalGroup(
-            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel14Layout.createSequentialGroup()
-                .addComponent(jLabel11)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtNotation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jPanel17.setName("jPanel17"); // NOI18N
-        jPanel17.setLayout(new java.awt.GridLayout(2, 1, 0, 15));
-
-        jPanel6.setName("jPanel6"); // NOI18N
-        jPanel6.setLayout(new java.awt.GridLayout(1, 2, 15, 15));
 
         jPanel1.setName("jPanel1"); // NOI18N
 
@@ -577,22 +649,152 @@ public class RequestTypePanel extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel3)
-                .addContainerGap(223, Short.MAX_VALUE))
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 314, Short.MAX_VALUE)
+                .addContainerGap(488, Short.MAX_VALUE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 579, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE))
         );
 
-        jPanel6.add(jPanel1);
+        javax.swing.GroupLayout jPanel19Layout = new javax.swing.GroupLayout(jPanel19);
+        jPanel19.setLayout(jPanel19Layout);
+        jPanel19Layout.setHorizontalGroup(
+            jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel19Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 579, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel19Layout.setVerticalGroup(
+            jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel19Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        tabsPanel.addTab(bundle.getString("RequestTypePanel.jPanel19.TabConstraints.tabTitle"), jPanel19); // NOI18N
+
+        jPanel20.setName("jPanel20"); // NOI18N
+
+        jPanel14.setName("jPanel14"); // NOI18N
+
+        txtNotation.setFont(new java.awt.Font("Tahoma", 0, 12));
+        txtNotation.setName("txtNotation"); // NOI18N
+        txtNotation.setNextFocusableComponent(tableDisplayValue);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${requestTypeBean.notationTemplate}"), txtNotation, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        jLabel11.setFont(new java.awt.Font("Tahoma", 0, 12));
+        jLabel11.setText(bundle.getString("RequestTypePanel.jLabel11.text")); // NOI18N
+        jLabel11.setName("jLabel11"); // NOI18N
+
+        javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
+        jPanel14.setLayout(jPanel14Layout);
+        jPanel14Layout.setHorizontalGroup(
+            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel14Layout.createSequentialGroup()
+                .addComponent(jLabel11)
+                .addContainerGap(475, Short.MAX_VALUE))
+            .addComponent(txtNotation, javax.swing.GroupLayout.DEFAULT_SIZE, 579, Short.MAX_VALUE)
+        );
+        jPanel14Layout.setVerticalGroup(
+            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel14Layout.createSequentialGroup()
+                .addComponent(jLabel11)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtNotation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel6.setName("jPanel6"); // NOI18N
+        jPanel6.setLayout(new java.awt.GridLayout(1, 2, 15, 0));
+
+        jPanel13.setName("jPanel13"); // NOI18N
+
+        jLabel12.setFont(new java.awt.Font("Tahoma", 0, 12));
+        jLabel12.setText(bundle.getString("RequestTypePanel.jLabel12.text")); // NOI18N
+        jLabel12.setName("jLabel12"); // NOI18N
+
+        cbxRrrType.setName("cbxRrrType"); // NOI18N
+        cbxRrrType.setNextFocusableComponent(cbxRrrAction);
+
+        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${rrrTypeBeanList}");
+        jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrTypes, eLProperty, cbxRrrType);
+        bindingGroup.addBinding(jComboBoxBinding);
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${requestTypeBean.rrrType}"), cbxRrrType, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
+        jPanel13.setLayout(jPanel13Layout);
+        jPanel13Layout.setHorizontalGroup(
+            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel13Layout.createSequentialGroup()
+                .addComponent(jLabel12)
+                .addContainerGap(234, Short.MAX_VALUE))
+            .addComponent(cbxRrrType, 0, 282, Short.MAX_VALUE)
+        );
+        jPanel13Layout.setVerticalGroup(
+            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel13Layout.createSequentialGroup()
+                .addComponent(jLabel12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbxRrrType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(12, Short.MAX_VALUE))
+        );
+
+        jPanel6.add(jPanel13);
+
+        jPanel12.setName("jPanel12"); // NOI18N
+
+        jLabel13.setFont(new java.awt.Font("Tahoma", 0, 12));
+        jLabel13.setText(bundle.getString("RequestTypePanel.jLabel13.text")); // NOI18N
+        jLabel13.setName("jLabel13"); // NOI18N
+
+        cbxRrrAction.setName("cbxRrrAction"); // NOI18N
+        cbxRrrAction.setNextFocusableComponent(txtRequiredPropObjects);
+
+        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${rrrTypeActions}");
+        jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrTypeActions, eLProperty, cbxRrrAction);
+        bindingGroup.addBinding(jComboBoxBinding);
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${requestTypeBean.rrrTypeAction}"), cbxRrrAction, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
+        jPanel12.setLayout(jPanel12Layout);
+        jPanel12Layout.setHorizontalGroup(
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel12Layout.createSequentialGroup()
+                .addComponent(jLabel13)
+                .addContainerGap(226, Short.MAX_VALUE))
+            .addComponent(cbxRrrAction, 0, 282, Short.MAX_VALUE)
+        );
+        jPanel12Layout.setVerticalGroup(
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel12Layout.createSequentialGroup()
+                .addComponent(jLabel13)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbxRrrAction, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(12, Short.MAX_VALUE))
+        );
+
+        jPanel6.add(jPanel12);
+
+        jPanel17.setName("jPanel17"); // NOI18N
+        jPanel17.setLayout(new java.awt.GridLayout(1, 2, 15, 0));
 
         jPanel16.setName("jPanel16"); // NOI18N
 
-        jLabel14.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel14.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel14.setText(bundle.getString("RequestTypePanel.jLabel14.text")); // NOI18N
         jLabel14.setName("jLabel14"); // NOI18N
 
@@ -624,20 +826,18 @@ public class RequestTypePanel extends javax.swing.JPanel {
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel16Layout.createSequentialGroup()
                 .addComponent(jLabel14)
-                .addContainerGap(219, Short.MAX_VALUE))
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 314, Short.MAX_VALUE)
+                .addContainerGap(187, Short.MAX_VALUE))
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
         );
         jPanel16Layout.setVerticalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel16Layout.createSequentialGroup()
                 .addComponent(jLabel14)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE))
         );
 
-        jPanel6.add(jPanel16);
-
-        jPanel17.add(jPanel6);
+        jPanel17.add(jPanel16);
 
         jPanel2.setName("jPanel2"); // NOI18N
 
@@ -657,8 +857,8 @@ public class RequestTypePanel extends javax.swing.JPanel {
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();
         jScrollPane2.setViewportView(tableDescriptions);
-        tableDescriptions.getColumnModel().getColumn(0).setPreferredWidth(150);
-        tableDescriptions.getColumnModel().getColumn(0).setMaxWidth(200);
+        tableDescriptions.getColumnModel().getColumn(0).setPreferredWidth(120);
+        tableDescriptions.getColumnModel().getColumn(0).setMaxWidth(120);
         tableDescriptions.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("RequestTypePanel.tableDescriptions.columnModel.title0_1")); // NOI18N
         tableDescriptions.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("RequestTypePanel.tableDescriptions.columnModel.title1_1")); // NOI18N
         tableDescriptions.getColumnModel().getColumn(1).setCellRenderer(new TableCellTextAreaRenderer());
@@ -673,40 +873,73 @@ public class RequestTypePanel extends javax.swing.JPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jLabel4)
-                .addContainerGap(575, Short.MAX_VALUE))
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 644, Short.MAX_VALUE)
+                .addContainerGap(213, Short.MAX_VALUE))
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE))
         );
 
         jPanel17.add(jPanel2);
+
+        javax.swing.GroupLayout jPanel20Layout = new javax.swing.GroupLayout(jPanel20);
+        jPanel20.setLayout(jPanel20Layout);
+        jPanel20Layout.setHorizontalGroup(
+            jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel20Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, 579, Short.MAX_VALUE)
+                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 579, Short.MAX_VALUE)
+                    .addComponent(jPanel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel20Layout.setVerticalGroup(
+            jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel20Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        tabsPanel.addTab(bundle.getString("RequestTypePanel.jPanel20.TabConstraints.tabTitle"), jPanel20); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 644, Short.MAX_VALUE)
-            .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(tabsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 604, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(tabsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
+        save();
+    }//GEN-LAST:event_btnOkActionPerformed
+
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        firePropertyChange(CANCEL_ACTION_PROPERTY, false, true);
+    }//GEN-LAST:event_btnCancelActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCancel;
+    private javax.swing.JButton btnOk;
     private javax.swing.JComboBox cbxCategory;
     private javax.swing.JComboBox cbxRrrAction;
     private javax.swing.JComboBox cbxRrrType;
@@ -735,7 +968,10 @@ public class RequestTypePanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel17;
+    private javax.swing.JPanel jPanel18;
+    private javax.swing.JPanel jPanel19;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel20;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
@@ -753,6 +989,7 @@ public class RequestTypePanel extends javax.swing.JPanel {
     private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tableDescriptions;
     private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tableDisplayValue;
     private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tableSources;
+    private javax.swing.JTabbedPane tabsPanel;
     private javax.swing.JFormattedTextField txtAreaFee;
     private javax.swing.JFormattedTextField txtBaseFee;
     private javax.swing.JTextField txtCode;

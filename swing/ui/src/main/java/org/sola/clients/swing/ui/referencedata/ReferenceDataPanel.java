@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -28,6 +28,7 @@
 package org.sola.clients.swing.ui.referencedata;
 
 import org.sola.clients.beans.AbstractCodeBean;
+import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.ui.renderers.TableCellTextAreaRenderer;
 import org.sola.webservices.transferobjects.AbstractCodeTO;
 
@@ -48,7 +49,20 @@ public class ReferenceDataPanel extends javax.swing.JPanel {
     /** Default constructor. */
     public ReferenceDataPanel() {
         initComponents();
-
+        customizeComponents();
+    }
+     /** Applies customization of component L&F. */
+    private void customizeComponents() {
+  
+//    LABELS    
+    LafManager.getInstance().setLabProperties(jLabel1);
+    LafManager.getInstance().setLabProperties(jLabel2);
+    LafManager.getInstance().setLabProperties(jLabel3);
+    LafManager.getInstance().setLabProperties(jLabel4);
+    
+//    TXT FIELDS
+    LafManager.getInstance().setTxtProperties(txtCode);
+    LafManager.getInstance().setTxtProperties(txtStatus);
     }
 
     /** 
@@ -269,7 +283,7 @@ public class ReferenceDataPanel extends javax.swing.JPanel {
         tableDescription.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("ReferenceDataPanel.tableDescription.columnModel.title1_1")); // NOI18N
         tableDescription.getColumnModel().getColumn(1).setCellRenderer(new TableCellTextAreaRenderer());
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel2.setText(bundle.getString("ReferenceDataPanel.jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
 

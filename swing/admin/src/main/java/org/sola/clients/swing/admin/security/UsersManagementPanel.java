@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -35,6 +35,7 @@ import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.beans.security.UserBean;
 import org.sola.clients.beans.security.UserSearchAdvancedResultBean;
 import org.sola.clients.beans.security.UserSearchAdvancedResultListBean;
+import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.common.config.ConfigurationManager;
 import org.sola.clients.swing.ui.renderers.TableCellTextAreaRenderer;
 import org.sola.clients.swing.ui.security.UserPanel;
@@ -74,7 +75,7 @@ public class UsersManagementPanel extends javax.swing.JPanel {
     /** Creates new form UsersManagementPanel */
     public UsersManagementPanel() {
         initComponents();
-
+        customizeComponents();
         resourceBundle = ResourceBundle.getBundle("org/sola/clients/swing/admin/security/Bundle");
         showUsers();
         groupsList.loadGroups(true);
@@ -92,7 +93,35 @@ public class UsersManagementPanel extends javax.swing.JPanel {
         });
         customizeUserButtons(null);
     }
-
+    
+      /** Applies customization of component L&F. */
+    private void customizeComponents() {
+    //    BUTTONS   
+     LafManager.getInstance().setBtnProperties(btnAddUser);
+     LafManager.getInstance().setBtnProperties(btnEditUser);
+     LafManager.getInstance().setBtnProperties(btnRemoveUser);
+     LafManager.getInstance().setBtnProperties(btnChangePassword);
+     LafManager.getInstance().setBtnProperties(btnClosePasswordPanel);
+     LafManager.getInstance().setBtnProperties(btnSearch);
+     LafManager.getInstance().setBtnProperties(btnSetPassword);
+    
+    //    COMBOBOXES
+    LafManager.getInstance().setCmbProperties(comboGroups);
+   
+   
+//    LABELS    
+    LafManager.getInstance().setLabProperties(jLabel1);
+    LafManager.getInstance().setLabProperties(jLabel2);
+    LafManager.getInstance().setLabProperties(jLabel3);
+    LafManager.getInstance().setLabProperties(jLabel4);
+    
+//    TXT FIELDS
+    LafManager.getInstance().setTxtProperties(txtFirstName);
+    LafManager.getInstance().setTxtProperties(txtLastName);
+    LafManager.getInstance().setTxtProperties(txtUsername);
+        
+    }
+    
     /** 
      * Enables or disables user management buttons, depending on selection in 
      * the groups table and user rights. 

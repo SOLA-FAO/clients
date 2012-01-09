@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -38,12 +38,14 @@ import org.geotools.geometry.jts.JTS;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.sola.clients.swing.gis.Messaging;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
-import org.sola.clients.swing.gis.mapactions.LocateApplicationRemove;
-import org.sola.clients.swing.gis.tools.LocateApplicationTool;
+import org.sola.clients.swing.gis.mapaction.LocateApplicationRemove;
+import org.sola.clients.swing.gis.tool.LocateApplicationTool;
+import org.sola.common.messaging.GisMessage;
+import org.sola.common.messaging.MessageUtility;
 
 /**
  *
- * @author Manoku
+ * @author Elton Manoku
  */
 public final class ControlsBundleForApplicationLocation extends SolaControlsBundle {
 
@@ -70,9 +72,9 @@ public final class ControlsBundleForApplicationLocation extends SolaControlsBund
             wkbReader = new WKBReader();
 
         } catch (Exception ex) {
-            Messaging.getInstance().show("gis.controlbundleforapplication.error.setup");
+            Messaging.getInstance().show(GisMessage.GENERAL_CONTROLBUNDLEAPP_ERROR);
             org.sola.common.logging.LogUtility.log(
-                    "gis.controlbundleforapplication.error.setup", ex);
+                    GisMessage.GENERAL_CONTROLBUNDLEAPP_ERROR, ex);
         }
     }
 
@@ -101,10 +103,9 @@ public final class ControlsBundleForApplicationLocation extends SolaControlsBund
                 envelope.expandBy(2000);
                 this.getMap().setDisplayArea(envelope);
             } catch (Exception ex) {
-                Messaging.getInstance().show(
-                        "gis.applicationlocation.setlocation.error");
+                Messaging.getInstance().show(GisMessage.LOCATE_ERROR_APPLICATION);
                 org.sola.common.logging.LogUtility.log(
-                        "gis.applicationlocation.setlocation.error", ex);
+                        GisMessage.LOCATE_ERROR_APPLICATION, ex);
             }
         }else{
             this.locationTool.setLocationGeometry(null);

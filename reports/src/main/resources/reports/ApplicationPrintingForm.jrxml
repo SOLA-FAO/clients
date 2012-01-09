@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Application printing form" pageWidth="595" pageHeight="842" columnWidth="548" leftMargin="27" rightMargin="20" topMargin="24" bottomMargin="20" resourceBundle="org.sola.clients.reports.locale.LodgementReport">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="378"/>
 	<subDataset name="dataset2">
 		<field name="serviceName" class="java.lang.String">
 			<fieldDescription><![CDATA[requestType.displayValue]]></fieldDescription>
@@ -170,7 +170,7 @@
 	</columnHeader>
 	<detail>
 		<band height="681" splitType="Immediate">
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="116" y="19" width="439" height="20"/>
 				<textElement>
 					<font fontName="SansSerif" size="12" isBold="true"/>
@@ -184,7 +184,7 @@
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanArrayDataSource($F{serviceList}.toArray())]]></dataSourceExpression>
 					</datasetRun>
 					<jr:listContents height="20" width="544">
-						<textField isStretchWithOverflow="true">
+						<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 							<reportElement positionType="Float" x="23" y="0" width="521" height="20"/>
 							<textElement>
 								<font fontName="SansSerif" size="12" isBold="true"/>
@@ -260,14 +260,14 @@
 			<line>
 				<reportElement x="11" y="237" width="529" height="1"/>
 			</line>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="116" y="44" width="439" height="20"/>
 				<textElement>
 					<font fontName="SansSerif" size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{name} + " " + $F{lastName}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="116" y="69" width="439" height="20"/>
 				<textElement>
 					<font fontName="SansSerif" size="12" isBold="true"/>
@@ -318,7 +318,7 @@
 							</textElement>
 							<textFieldExpression class="java.lang.Integer"><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
 						</textField>
-						<textField pattern="" isBlankWhenNull="false">
+						<textField pattern="" isBlankWhenNull="true">
 							<reportElement positionType="Float" mode="Transparent" x="23" y="1" width="521" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
 							<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 								<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -357,7 +357,7 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{operator}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement positionType="FixRelativeToBottom" x="100" y="541" width="197" height="20"/>
 				<textElement>
 					<font fontName="SansSerif" size="12" isBold="false" isItalic="true" isUnderline="false"/>
@@ -432,7 +432,7 @@
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanArrayDataSource($F{propertyList}.toArray())]]></dataSourceExpression>
 					</datasetRun>
 					<jr:listContents height="20" width="529">
-						<textField pattern="" isBlankWhenNull="false">
+						<textField pattern="" isBlankWhenNull="true">
 							<reportElement positionType="Float" mode="Transparent" x="23" y="0" width="444" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
 							<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 								<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -467,7 +467,7 @@
 					<printWhenExpression><![CDATA[$P{WHICH_CALLER}.equals( "R" )]]></printWhenExpression>
 				</reportElement>
 			</line>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="116" y="167" width="439" height="20"/>
 				<textElement>
 					<font size="12" isBold="true"/>

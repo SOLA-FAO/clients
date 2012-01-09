@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -37,7 +37,7 @@ import java.util.List;
 
 /**
  *
- * @author manoku
+ * @author Elton Manoku
  */
 public class CadastreObjectBean implements Serializable {
     private String id = "";
@@ -109,5 +109,10 @@ public class CadastreObjectBean implements Serializable {
         int hash = 3;
         hash = 13 * hash + (this.id != null ? this.id.hashCode() : 0);
         return hash;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s / %s",this.nameFirstpart, this.nameLastpart);
     }
 }

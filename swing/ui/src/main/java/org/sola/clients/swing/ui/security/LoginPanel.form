@@ -83,7 +83,7 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
                   <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="777" max="32767" attributes="0"/>
+                  <EmptySpace pref="839" max="32767" attributes="0"/>
               </Group>
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
@@ -93,7 +93,7 @@
                       <Component id="jSeparator2" alignment="0" pref="491" max="32767" attributes="1"/>
                       <Component id="jPanel3" alignment="0" max="32767" attributes="1"/>
                   </Group>
-                  <EmptySpace pref="635" max="32767" attributes="0"/>
+                  <EmptySpace pref="807" max="32767" attributes="0"/>
               </Group>
               <Component id="jPanel2" min="-2" max="-2" attributes="1"/>
           </Group>
@@ -150,6 +150,7 @@
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="createLanguageCombobox()"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="languageCombobox.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JSeparator" name="jSeparator3">
@@ -233,6 +234,9 @@
           <Events>
             <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtUserPasswordKeyPressed"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="txtUserPassword.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));&#xa;txtUserPassword.setHorizontalAlignment(JTextField.LEADING);"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JSeparator" name="jSeparator2">
           <Properties>
@@ -336,6 +340,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnLoginActionPerformed"/>
           </Events>
           <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="btnLogin.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));"/>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
           </AuxValues>
         </Component>

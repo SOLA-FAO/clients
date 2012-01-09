@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -31,11 +31,11 @@ import java.awt.ComponentOrientation;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import org.jdesktop.application.Action;
-import org.sola.clients.swing.desktop.application.ApplicationAssignmentForm;
+import org.sola.clients.swing.desktop.application.ApplicationAssignmentPanel;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationSummaryBean;
 import org.sola.clients.swing.ui.renderers.DateTimeRenderer;
-import org.sola.clients.swing.ui.renderers.ServicesListRenderer;
+import org.sola.clients.swing.ui.renderers.CellDelimitedListRenderer;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 import java.util.Locale;
@@ -44,7 +44,9 @@ import org.sola.clients.swing.desktop.application.ApplicationForm;
 import org.sola.clients.beans.application.ApplicationSearchResultBean;
 import org.sola.clients.beans.application.ApplicationSearchResultsListBean;
 import org.sola.clients.beans.security.SecurityBean;
+import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.common.tasks.TaskManager;
+import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.common.RolesConstants;
 
 /** 
@@ -53,25 +55,40 @@ import org.sola.common.RolesConstants;
  */
 public class DashBoardPanel extends javax.swing.JPanel {
 
-    private ApplicationAssignmentForm applicationAssignmentForm;
+    private class AssignmentPanelListener implements PropertyChangeListener {
+
+        @Override
+        public void propertyChange(PropertyChangeEvent e) {
+            if (e.getPropertyName().equals(ApplicationBean.ASSIGNEE_ID_PROPERTY)) {
+                if (contentPanel != null && contentPanel.isPanelOpened(contentPanel.CARD_APPASSIGNMENT)) {
+                    contentPanel.closePanel(contentPanel.CARD_APPASSIGNMENT);
+                }
+                refreshApplications();
+            }
+        }
+    }
     private ApplicationForm applicationForm;
-    private java.awt.Frame mainForm;
+    private MainContentPanel contentPanel;
+    private AssignmentPanelListener assignmentPanelListener;
 
     /** 
      * Panel constructor.
      * @param mainForm Parent form.
      */
-    public DashBoardPanel(java.awt.Frame mainForm) {
-        this.mainForm = mainForm;
+    public DashBoardPanel(MainContentPanel contentPanel) {
+        this.contentPanel = contentPanel;
+        assignmentPanelListener = new AssignmentPanelListener();
         initComponents();
         postInit();
     }
 
     /** Runs post initialization tasks to add listeners. */
     private void postInit() {
+
+        customizeComponents();
         btnRefreshAssigned.getAction().setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_VIEW_APPS));
         btnRefreshUnassigned.getAction().setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_VIEW_APPS));
-        
+
         refreshApplications();
         customizeAssignedAppButtons(null);
         customizeUnassignedAppButtons(null);
@@ -97,6 +114,22 @@ public class DashBoardPanel extends javax.swing.JPanel {
         });
     }
 
+    /** Applies customization of component L&F. */
+    private void customizeComponents() {
+
+//    BUTTONS   
+        LafManager.getInstance().setBtnProperties(btnAssignApplication);
+        LafManager.getInstance().setBtnProperties(btnOpenAssignedApplication);
+        LafManager.getInstance().setBtnProperties(btnOpenUnassignedApplication);
+        LafManager.getInstance().setBtnProperties(btnRefreshAssigned);
+        LafManager.getInstance().setBtnProperties(btnRefreshUnassigned);
+        LafManager.getInstance().setBtnProperties(btnUnassignApplication);
+
+//    LABELS    
+        LafManager.getInstance().setLabProperties(jLabel1);
+        LafManager.getInstance().setLabProperties(jLabel2);
+    }
+
     /** Enables or disables toolbar buttons for assigned applications list, . */
     private void customizeAssignedAppButtons(ApplicationSearchResultBean app) {
         boolean isUnassignEnabled = true;
@@ -115,7 +148,7 @@ public class DashBoardPanel extends javax.swing.JPanel {
         }
 
         btnUnassignApplication.getAction().setEnabled(isUnassignEnabled);
-        btnEditAssignedApplication.getAction().setEnabled(isEditEnabled);
+        btnOpenAssignedApplication.getAction().setEnabled(isEditEnabled);
     }
 
     /** Enables or disables toolbar buttons for unassigned applications list. */
@@ -127,17 +160,17 @@ public class DashBoardPanel extends javax.swing.JPanel {
             isAssignEnabled = false;
             isEditEnabled = false;
         } else {
-            if(SecurityBean.isInRole(RolesConstants.APPLICATION_UNASSIGN_FROM_YOURSELF) ||
-                    SecurityBean.isInRole(RolesConstants.APPLICATION_UNASSIGN_FROM_OTHERS)){
+            if (SecurityBean.isInRole(RolesConstants.APPLICATION_UNASSIGN_FROM_YOURSELF)
+                    || SecurityBean.isInRole(RolesConstants.APPLICATION_UNASSIGN_FROM_OTHERS)) {
                 isAssignEnabled = true;
-            }else{
+            } else {
                 isAssignEnabled = false;
             }
             isEditEnabled = SecurityBean.isInRole(RolesConstants.APPLICATION_EDIT_APPS);
         }
-        
+
         btnAssignApplication.getAction().setEnabled(isAssignEnabled);
-        btnEditUnassignedApplication.getAction().setEnabled(isEditEnabled);
+        btnOpenUnassignedApplication.getAction().setEnabled(isEditEnabled);
     }
 
     /** 
@@ -154,23 +187,15 @@ public class DashBoardPanel extends javax.swing.JPanel {
             return;
         }
 
-        if (applicationAssignmentForm != null) {
-            applicationAssignmentForm.dispose();
-        }
-
-        PropertyChangeListener listener = new PropertyChangeListener() {
-
-            @Override
-            public void propertyChange(PropertyChangeEvent e) {
-                refreshApplications();
+        if (contentPanel != null) {
+            if (contentPanel.isPanelOpened(contentPanel.CARD_APPASSIGNMENT)) {
+                contentPanel.closePanel(contentPanel.CARD_APPASSIGNMENT);
             }
-        };
-
-        applicationAssignmentForm = new ApplicationAssignmentForm(mainForm, true, appBean.getId());
-        applicationAssignmentForm.setLocationRelativeTo(mainForm);
-        applicationAssignmentForm.addPropertyChangeListener(ApplicationBean.ASSIGNEE_ID_PROPERTY, listener);
-        DesktopApplication.getApplication().show(applicationAssignmentForm);
-        applicationAssignmentForm.removePropertyChangeListener(ApplicationBean.ASSIGNEE_ID_PROPERTY, listener);
+            ApplicationAssignmentPanel panel = new ApplicationAssignmentPanel(appBean.getId());
+            panel.addPropertyChangeListener(ApplicationBean.ASSIGNEE_ID_PROPERTY, assignmentPanelListener);
+            contentPanel.addPanel(panel, contentPanel.CARD_APPASSIGNMENT);
+            contentPanel.showPanel(contentPanel.CARD_APPASSIGNMENT);
+        }
     }
 
     /** 
@@ -200,7 +225,6 @@ public class DashBoardPanel extends javax.swing.JPanel {
                 };
 
                 applicationForm = new ApplicationForm(appBean.getId());
-                applicationForm.setLocationRelativeTo(mainForm);
                 applicationForm.addPropertyChangeListener(ApplicationBean.APPLICATION_PROPERTY, listener);
 
                 DesktopApplication.getApplication().show(applicationForm);
@@ -219,28 +243,32 @@ public class DashBoardPanel extends javax.swing.JPanel {
         unassignedAppListBean = new org.sola.clients.beans.application.ApplicationSearchResultsListBean();
         popUpUnassignedApplications = new javax.swing.JPopupMenu();
         menuAssignApplication = new javax.swing.JMenuItem();
-        menuEditUnassignedApplication = new javax.swing.JMenuItem();
+        menuOpenUnassignedApplication = new javax.swing.JMenuItem();
         menuRefreshUnassignApplication = new javax.swing.JMenuItem();
         popUpAssignedApplications = new javax.swing.JPopupMenu();
         menuUnassignApplication = new javax.swing.JMenuItem();
-        menuEditAssignedApplication = new javax.swing.JMenuItem();
+        menuOpenAssignedApplication = new javax.swing.JMenuItem();
         menuRefreshAssignApplication = new javax.swing.JMenuItem();
-        inprogressScrollPanel = new javax.swing.JScrollPane();
-        tbAssigned = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
+        jPanel3 = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
         unassignedScrollPanel = new javax.swing.JScrollPane();
         tbUnassigned = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
         tbUnassignedApplications = new javax.swing.JToolBar();
         jLabel1 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JToolBar.Separator();
         btnAssignApplication = new javax.swing.JButton();
-        btnEditUnassignedApplication = new javax.swing.JButton();
+        btnOpenUnassignedApplication = new javax.swing.JButton();
         btnRefreshUnassigned = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
         tbAssignedApplications = new javax.swing.JToolBar();
         jLabel2 = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JToolBar.Separator();
         btnUnassignApplication = new javax.swing.JButton();
-        btnEditAssignedApplication = new javax.swing.JButton();
+        btnOpenAssignedApplication = new javax.swing.JButton();
         btnRefreshAssigned = new javax.swing.JButton();
+        inprogressScrollPanel = new javax.swing.JScrollPane();
+        tbAssigned = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
+        headerPanel1 = new org.sola.clients.swing.ui.HeaderPanel();
 
         popUpUnassignedApplications.setName("popUpUnassignedApplications"); // NOI18N
 
@@ -251,10 +279,10 @@ public class DashBoardPanel extends javax.swing.JPanel {
         menuAssignApplication.setName("menuAssignApplication"); // NOI18N
         popUpUnassignedApplications.add(menuAssignApplication);
 
-        menuEditUnassignedApplication.setAction(actionMap.get("editUnassignedApplication")); // NOI18N
-        menuEditUnassignedApplication.setText(bundle.getString("DashBoardPanel.menuEditUnassignedApplication.text")); // NOI18N
-        menuEditUnassignedApplication.setName("menuEditUnassignedApplication"); // NOI18N
-        popUpUnassignedApplications.add(menuEditUnassignedApplication);
+        menuOpenUnassignedApplication.setAction(actionMap.get("editUnassignedApplication")); // NOI18N
+        menuOpenUnassignedApplication.setLabel(bundle.getString("DashBoardPanel.menuOpenUnassignedApplication.label")); // NOI18N
+        menuOpenUnassignedApplication.setName("menuOpenUnassignedApplication"); // NOI18N
+        popUpUnassignedApplications.add(menuOpenUnassignedApplication);
 
         menuRefreshUnassignApplication.setAction(actionMap.get("refreshUnassignedApplications")); // NOI18N
         menuRefreshUnassignApplication.setText(bundle.getString("DashBoardPanel.menuRefreshUnassignApplication.text")); // NOI18N
@@ -269,11 +297,11 @@ public class DashBoardPanel extends javax.swing.JPanel {
         menuUnassignApplication.setName("menuUnassignApplication"); // NOI18N
         popUpAssignedApplications.add(menuUnassignApplication);
 
-        menuEditAssignedApplication.setAction(actionMap.get("editAssignedApplication")); // NOI18N
-        menuEditAssignedApplication.setText(bundle.getString("DashBoardPanel.menuEditAssignedApplication.text")); // NOI18N
-        menuEditAssignedApplication.setToolTipText(bundle.getString("DashBoardPanel.menuEditAssignedApplication.toolTipText")); // NOI18N
-        menuEditAssignedApplication.setName("menuEditAssignedApplication"); // NOI18N
-        popUpAssignedApplications.add(menuEditAssignedApplication);
+        menuOpenAssignedApplication.setAction(actionMap.get("editAssignedApplication")); // NOI18N
+        menuOpenAssignedApplication.setText(bundle.getString("DashBoardPanel.menuOpenAssignedApplication.text")); // NOI18N
+        menuOpenAssignedApplication.setToolTipText(bundle.getString("DashBoardPanel.menuOpenAssignedApplication.toolTipText")); // NOI18N
+        menuOpenAssignedApplication.setName("menuOpenAssignedApplication"); // NOI18N
+        popUpAssignedApplications.add(menuOpenAssignedApplication);
 
         menuRefreshAssignApplication.setAction(actionMap.get("refreshUnassignedApplications")); // NOI18N
         menuRefreshAssignApplication.setText(bundle.getString("DashBoardPanel.menuRefreshAssignApplication.text")); // NOI18N
@@ -281,70 +309,13 @@ public class DashBoardPanel extends javax.swing.JPanel {
         menuRefreshAssignApplication.setName("menuRefreshAssignApplication"); // NOI18N
         popUpAssignedApplications.add(menuRefreshAssignApplication);
 
-        setMinimumSize(new java.awt.Dimension(100, 500));
+        setMinimumSize(new java.awt.Dimension(354, 249));
         setName("Form"); // NOI18N
 
-        inprogressScrollPanel.setName("inprogressScrollPanel"); // NOI18N
-        inprogressScrollPanel.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
+        jPanel3.setName("jPanel3"); // NOI18N
+        jPanel3.setLayout(new java.awt.GridLayout(2, 1, 0, 20));
 
-        tbAssigned.setComponentPopupMenu(popUpAssignedApplications);
-        tbAssigned.setGridColor(new java.awt.Color(135, 127, 115));
-        tbAssigned.setName("tbAssigned"); // NOI18N
-        tbAssigned.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        tbAssigned.setShowVerticalLines(false);
-
-        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${applicationSearchResultsList}");
-        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, assignedAppListBean, eLProperty, tbAssigned);
-        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${nr}"));
-        columnBinding.setColumnName("Nr");
-        columnBinding.setColumnClass(String.class);
-        columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${lodgingDatetime}"));
-        columnBinding.setColumnName("Lodging Datetime");
-        columnBinding.setColumnClass(java.util.Date.class);
-        columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${expectedCompletionDate}"));
-        columnBinding.setColumnName("Expected Completion Date");
-        columnBinding.setColumnClass(java.util.Date.class);
-        columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${serviceList}"));
-        columnBinding.setColumnName("Service List");
-        columnBinding.setColumnClass(String.class);
-        columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${agent}"));
-        columnBinding.setColumnName("Agent");
-        columnBinding.setColumnClass(String.class);
-        columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${assigneeName}"));
-        columnBinding.setColumnName("Assignee Name");
-        columnBinding.setColumnClass(String.class);
-        columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${status}"));
-        columnBinding.setColumnName("Status");
-        columnBinding.setColumnClass(String.class);
-        columnBinding.setEditable(false);
-        bindingGroup.addBinding(jTableBinding);
-        jTableBinding.bind();org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, assignedAppListBean, org.jdesktop.beansbinding.ELProperty.create("${selectedApplication}"), tbAssigned, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
-        bindingGroup.addBinding(binding);
-
-        tbAssigned.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tbAssignedMouseClicked(evt);
-            }
-        });
-        inprogressScrollPanel.setViewportView(tbAssigned);
-        tbAssigned.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-        tbAssigned.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("DashBoardPanel.tbAssigned.columnModel.title0")); // NOI18N
-        tbAssigned.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("DashBoardPanel.tbAssigned.columnModel.title1")); // NOI18N
-        tbAssigned.getColumnModel().getColumn(1).setCellRenderer(new DateTimeRenderer());
-        tbAssigned.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("DashBoardPanel.tbAssigned.columnModel.title2")); // NOI18N
-        tbAssigned.getColumnModel().getColumn(2).setCellRenderer(new DateTimeRenderer());
-        tbAssigned.getColumnModel().getColumn(3).setMinWidth(180);
-        tbAssigned.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("DashBoard.tbAssigned.columnModel.title6")); // NOI18N
-        tbAssigned.getColumnModel().getColumn(3).setCellRenderer(new ServicesListRenderer());
-        tbAssigned.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("DashBoard.tbAssigned.columnModel.title3")); // NOI18N
-        tbAssigned.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("DashBoardPanel.tbAssigned.columnModel.title5")); // NOI18N
-        tbAssigned.getColumnModel().getColumn(6).setHeaderValue(bundle.getString("DashBoard.tbAssigned.columnModel.title4")); // NOI18N
+        jPanel1.setName("jPanel1"); // NOI18N
 
         unassignedScrollPanel.setName("unassignedScrollPanel"); // NOI18N
         unassignedScrollPanel.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
@@ -355,9 +326,9 @@ public class DashBoardPanel extends javax.swing.JPanel {
         tbUnassigned.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tbUnassigned.setShowVerticalLines(false);
 
-        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${applicationSearchResultsList}");
-        jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, unassignedAppListBean, eLProperty, tbUnassigned);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${nr}"));
+        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${applicationSearchResultsList}");
+        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, unassignedAppListBean, eLProperty, tbUnassigned);
+        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${nr}"));
         columnBinding.setColumnName("Nr");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
@@ -387,7 +358,7 @@ public class DashBoardPanel extends javax.swing.JPanel {
         columnBinding.setEditable(false);
         jTableBinding.setSourceNullValue("");
         bindingGroup.addBinding(jTableBinding);
-        jTableBinding.bind();binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, unassignedAppListBean, org.jdesktop.beansbinding.ELProperty.create("${selectedApplication}"), tbUnassigned, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
+        jTableBinding.bind();org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, unassignedAppListBean, org.jdesktop.beansbinding.ELProperty.create("${selectedApplication}"), tbUnassigned, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
         bindingGroup.addBinding(binding);
 
         tbUnassigned.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -404,7 +375,7 @@ public class DashBoardPanel extends javax.swing.JPanel {
         tbUnassigned.getColumnModel().getColumn(2).setCellRenderer(new DateTimeRenderer());
         tbUnassigned.getColumnModel().getColumn(3).setMinWidth(180);
         tbUnassigned.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("DashBoard.tbUnassigned.columnModel.title2_1")); // NOI18N
-        tbUnassigned.getColumnModel().getColumn(3).setCellRenderer(new ServicesListRenderer());
+        tbUnassigned.getColumnModel().getColumn(3).setCellRenderer(new org.sola.clients.swing.ui.renderers.CellDelimitedListRenderer());
         tbUnassigned.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("DashBoard.tbUnassigned.columnModel.title2")); // NOI18N
         tbUnassigned.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("DashBoard.tbUnassigned.columnModel.title4")); // NOI18N
         tbUnassigned.getColumnModel().getColumn(6).setHeaderValue(bundle.getString("DashBoardPanel.tbUnassigned.columnModel.title6")); // NOI18N
@@ -422,7 +393,7 @@ public class DashBoardPanel extends javax.swing.JPanel {
         tbUnassignedApplications.add(jSeparator1);
 
         btnAssignApplication.setAction(actionMap.get("assignApplication")); // NOI18N
-        btnAssignApplication.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnAssignApplication.setFont(new java.awt.Font("Arial", 0, 12));
         btnAssignApplication.setText(bundle.getString("DashBoardPanel.btnAssignApplication.text")); // NOI18N
         btnAssignApplication.setFocusable(false);
         btnAssignApplication.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -430,14 +401,14 @@ public class DashBoardPanel extends javax.swing.JPanel {
         btnAssignApplication.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         tbUnassignedApplications.add(btnAssignApplication);
 
-        btnEditUnassignedApplication.setAction(actionMap.get("editUnassignedApplication")); // NOI18N
-        btnEditUnassignedApplication.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btnEditUnassignedApplication.setText(bundle.getString("DashBoardPanel.btnEditUnassignedApplication.text")); // NOI18N
-        btnEditUnassignedApplication.setFocusable(false);
-        btnEditUnassignedApplication.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnEditUnassignedApplication.setName("btnEditUnassignedApplication"); // NOI18N
-        btnEditUnassignedApplication.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        tbUnassignedApplications.add(btnEditUnassignedApplication);
+        btnOpenUnassignedApplication.setAction(actionMap.get("editUnassignedApplication")); // NOI18N
+        btnOpenUnassignedApplication.setFont(new java.awt.Font("Arial", 0, 12));
+        btnOpenUnassignedApplication.setText(bundle.getString("DashBoardPanel.btnOpenUnassignedApplication.text")); // NOI18N
+        btnOpenUnassignedApplication.setFocusable(false);
+        btnOpenUnassignedApplication.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnOpenUnassignedApplication.setName("btnOpenUnassignedApplication"); // NOI18N
+        btnOpenUnassignedApplication.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        tbUnassignedApplications.add(btnOpenUnassignedApplication);
 
         btnRefreshUnassigned.setAction(actionMap.get("refreshUnassignedApplications")); // NOI18N
         btnRefreshUnassigned.setFont(new java.awt.Font("Arial", 0, 12));
@@ -447,6 +418,25 @@ public class DashBoardPanel extends javax.swing.JPanel {
         btnRefreshUnassigned.setName("btnRefreshUnassigned"); // NOI18N
         btnRefreshUnassigned.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         tbUnassignedApplications.add(btnRefreshUnassigned);
+
+        org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(tbUnassignedApplications, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 563, Short.MAX_VALUE)
+            .add(unassignedScrollPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 563, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel1Layout.createSequentialGroup()
+                .add(tbUnassignedApplications, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(unassignedScrollPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE))
+        );
+
+        jPanel3.add(jPanel1);
+
+        jPanel2.setName("jPanel2"); // NOI18N
 
         tbAssignedApplications.setFloatable(false);
         tbAssignedApplications.setRollover(true);
@@ -468,13 +458,14 @@ public class DashBoardPanel extends javax.swing.JPanel {
         btnUnassignApplication.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         tbAssignedApplications.add(btnUnassignApplication);
 
-        btnEditAssignedApplication.setAction(actionMap.get("editAssignedApplication")); // NOI18N
-        btnEditAssignedApplication.setFont(new java.awt.Font("Arial", 0, 12));
-        btnEditAssignedApplication.setFocusable(false);
-        btnEditAssignedApplication.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnEditAssignedApplication.setName("btnEditAssignedApplication"); // NOI18N
-        btnEditAssignedApplication.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        tbAssignedApplications.add(btnEditAssignedApplication);
+        btnOpenAssignedApplication.setAction(actionMap.get("editAssignedApplication")); // NOI18N
+        btnOpenAssignedApplication.setFont(new java.awt.Font("Arial", 0, 12));
+        btnOpenAssignedApplication.setText(bundle.getString("DashBoardPanel.btnOpenAssignedApplication.text")); // NOI18N
+        btnOpenAssignedApplication.setFocusable(false);
+        btnOpenAssignedApplication.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnOpenAssignedApplication.setName("btnOpenAssignedApplication"); // NOI18N
+        btnOpenAssignedApplication.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        tbAssignedApplications.add(btnOpenAssignedApplication);
 
         btnRefreshAssigned.setAction(actionMap.get("refreshAssignedApplications")); // NOI18N
         btnRefreshAssigned.setFont(new java.awt.Font("Arial", 0, 12));
@@ -484,30 +475,104 @@ public class DashBoardPanel extends javax.swing.JPanel {
         btnRefreshAssigned.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         tbAssignedApplications.add(btnRefreshAssigned);
 
+        inprogressScrollPanel.setName("inprogressScrollPanel"); // NOI18N
+        inprogressScrollPanel.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
+
+        tbAssigned.setComponentPopupMenu(popUpAssignedApplications);
+        tbAssigned.setGridColor(new java.awt.Color(135, 127, 115));
+        tbAssigned.setName("tbAssigned"); // NOI18N
+        tbAssigned.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tbAssigned.setShowVerticalLines(false);
+
+        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${applicationSearchResultsList}");
+        jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, assignedAppListBean, eLProperty, tbAssigned);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${nr}"));
+        columnBinding.setColumnName("Nr");
+        columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${lodgingDatetime}"));
+        columnBinding.setColumnName("Lodging Datetime");
+        columnBinding.setColumnClass(java.util.Date.class);
+        columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${expectedCompletionDate}"));
+        columnBinding.setColumnName("Expected Completion Date");
+        columnBinding.setColumnClass(java.util.Date.class);
+        columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${serviceList}"));
+        columnBinding.setColumnName("Service List");
+        columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${agent}"));
+        columnBinding.setColumnName("Agent");
+        columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${assigneeName}"));
+        columnBinding.setColumnName("Assignee Name");
+        columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${status}"));
+        columnBinding.setColumnName("Status");
+        columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
+        bindingGroup.addBinding(jTableBinding);
+        jTableBinding.bind();binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, assignedAppListBean, org.jdesktop.beansbinding.ELProperty.create("${selectedApplication}"), tbAssigned, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
+        bindingGroup.addBinding(binding);
+
+        tbAssigned.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbAssignedMouseClicked(evt);
+            }
+        });
+        inprogressScrollPanel.setViewportView(tbAssigned);
+        tbAssigned.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        tbAssigned.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("DashBoardPanel.tbAssigned.columnModel.title0")); // NOI18N
+        tbAssigned.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("DashBoardPanel.tbAssigned.columnModel.title1")); // NOI18N
+        tbAssigned.getColumnModel().getColumn(1).setCellRenderer(new DateTimeRenderer());
+        tbAssigned.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("DashBoardPanel.tbAssigned.columnModel.title2")); // NOI18N
+        tbAssigned.getColumnModel().getColumn(2).setCellRenderer(new DateTimeRenderer());
+        tbAssigned.getColumnModel().getColumn(3).setMinWidth(180);
+        tbAssigned.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("DashBoard.tbAssigned.columnModel.title6")); // NOI18N
+        tbAssigned.getColumnModel().getColumn(3).setCellRenderer(new org.sola.clients.swing.ui.renderers.CellDelimitedListRenderer());
+        tbAssigned.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("DashBoard.tbAssigned.columnModel.title3")); // NOI18N
+        tbAssigned.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("DashBoardPanel.tbAssigned.columnModel.title5")); // NOI18N
+        tbAssigned.getColumnModel().getColumn(6).setHeaderValue(bundle.getString("DashBoard.tbAssigned.columnModel.title4")); // NOI18N
+
+        org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(tbAssignedApplications, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 563, Short.MAX_VALUE)
+            .add(inprogressScrollPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 563, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel2Layout.createSequentialGroup()
+                .add(tbAssignedApplications, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(inprogressScrollPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE))
+        );
+
+        jPanel3.add(jPanel2);
+
+        headerPanel1.setName("headerPanel1"); // NOI18N
+        headerPanel1.setTitleText(bundle.getString("DashBoardPanel.headerPanel1.titleText")); // NOI18N
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, inprogressScrollPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 984, Short.MAX_VALUE)
-                    .add(tbUnassignedApplications, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 984, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, tbAssignedApplications, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 984, Short.MAX_VALUE)
-                    .add(unassignedScrollPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 984, Short.MAX_VALUE))
+            .add(headerPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 583, Short.MAX_VALUE)
+            .add(layout.createSequentialGroup()
+                .add(10, 10, 10)
+                .add(jPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 563, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
-                .add(11, 11, 11)
-                .add(tbUnassignedApplications, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(headerPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(unassignedScrollPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 226, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(15, 15, 15)
-                .add(tbAssignedApplications, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(inprogressScrollPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
+                .add(jPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 359, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -515,13 +580,13 @@ public class DashBoardPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tbUnassignedMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbUnassignedMouseClicked
-        if (evt.getClickCount() == 2 && btnEditUnassignedApplication.getAction().isEnabled()) {
+        if (evt.getClickCount() == 2 && btnOpenUnassignedApplication.getAction().isEnabled()) {
             editUnassignedApplication();
         }
     }//GEN-LAST:event_tbUnassignedMouseClicked
 
     private void tbAssignedMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbAssignedMouseClicked
-        if (evt.getClickCount() == 2 && btnEditAssignedApplication.getAction().isEnabled()) {
+        if (evt.getClickCount() == 2 && btnOpenAssignedApplication.getAction().isEnabled()) {
             openApplication(assignedAppListBean.getSelectedApplication());
         }
     }//GEN-LAST:event_tbAssignedMouseClicked
@@ -582,19 +647,23 @@ public class DashBoardPanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.sola.clients.beans.application.ApplicationSearchResultsListBean assignedAppListBean;
     private javax.swing.JButton btnAssignApplication;
-    private javax.swing.JButton btnEditAssignedApplication;
-    private javax.swing.JButton btnEditUnassignedApplication;
+    private javax.swing.JButton btnOpenAssignedApplication;
+    private javax.swing.JButton btnOpenUnassignedApplication;
     private javax.swing.JButton btnRefreshAssigned;
     private javax.swing.JButton btnRefreshUnassigned;
     private javax.swing.JButton btnUnassignApplication;
+    private org.sola.clients.swing.ui.HeaderPanel headerPanel1;
     private javax.swing.JScrollPane inprogressScrollPanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JMenuItem menuAssignApplication;
-    private javax.swing.JMenuItem menuEditAssignedApplication;
-    private javax.swing.JMenuItem menuEditUnassignedApplication;
+    private javax.swing.JMenuItem menuOpenAssignedApplication;
+    private javax.swing.JMenuItem menuOpenUnassignedApplication;
     private javax.swing.JMenuItem menuRefreshAssignApplication;
     private javax.swing.JMenuItem menuRefreshUnassignApplication;
     private javax.swing.JMenuItem menuUnassignApplication;

@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -54,7 +54,7 @@ import org.sola.clients.swing.ui.security.LoginForm;
  */
 public class LoginPanel extends javax.swing.JPanel {
     
-    public static final String LOGIN_RESULT = "LoginResult";
+    public static final String LOGIN_RESULT = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/security/Bundle_en_US").getString("LOGINRESULT");
     private Application application;
     protected JRadioButton previousButton;
     
@@ -86,7 +86,11 @@ public class LoginPanel extends javax.swing.JPanel {
     /** Default constructor. */
     public LoginPanel() {
         initComponents();
+        customizeComponents();
         jPanel3.setVisible(false);
+        txtUsername.requestFocus();
+        
+       
 //             System.out.println("this.accessibleContext.toString()= "+this.accessibleContext.toString());
   
     }
@@ -98,15 +102,44 @@ public class LoginPanel extends javax.swing.JPanel {
     public LoginPanel(Application application) {
         this.application = application;
         initComponents();
+        customizeComponents();
         jPanel3.setVisible(false);
         txtUsername.requestFocus();
+        
         
         // TODO: REMOVE IN RELEASE!!!
         //txtUsername.setText("test");
        // txtUserPassword.setText("test");
 //        System.out.println("this.accessibleContext.toString()= "+this.accessibleContext.toString());
     }
+    
+     /** Applies customization of component L&F. */
+    private void customizeComponents() {
+  
+//    BUTTONS   
+    LafManager.getInstance().setBtnProperties(btnLogin);
+    
+    
+//    LABELS    
+    LafManager.getInstance().setLabProperties(jLabel1);
+    LafManager.getInstance().setLabProperties(labDescDown);
+    LafManager.getInstance().setLabProperties(labDescUp);
+    LafManager.getInstance().setLabProperties(labPassword);
+    LafManager.getInstance().setLabProperties(labUser);
+    LafManager.getInstance().setLabProperties(labWelcome);
+    labWelcome.setFont(labWelcome.getFont().deriveFont(labWelcome.getFont().getStyle() | java.awt.Font.BOLD, labWelcome.getFont().getSize()+4));
+    
+    
+//    TXT FIELDS
+    LafManager.getInstance().setTxtProperties(txtUsername);
+   
 
+//    FORMATTED PASSWORDFIELD
+    LafManager.getInstance().setPassProperties(txtUserPassword);
+    
+    }
+    
+    
     /** Calls authentication procedure. */
     private void login() {
         Task t = new Task(application) {
@@ -186,8 +219,7 @@ public class LoginPanel extends javax.swing.JPanel {
     /** Explicitely sets focus on user name text field.*/
     public void setUserNameFocus() {
         txtUsername.requestFocus();
-        // TODO: REMOVE IN RELEASE!!!
-        btnLogin.requestFocus();
+         this.getRootPane().setDefaultButton(btnLogin);
     }
     
       /** Sets the backgroundpanel. */
@@ -219,7 +251,7 @@ public class LoginPanel extends javax.swing.JPanel {
       
 //        loginform.jPanel1.setBackground(UIManager.getColor(psswdFont));
       } catch (Exception evt) {
-        JOptionPane.showMessageDialog(null, "setLookAndFeel didn't work: " + evt, "UI Failure",
+        JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/security/Bundle_en_US").getString("SETLOOKANDFEEL DIDN'T WORK: ") + evt, java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/security/Bundle_en_US").getString("UI FAILURE"),
             JOptionPane.INFORMATION_MESSAGE);
         previousButton.setSelected(true); // reset the GUI to agree
       }
@@ -271,6 +303,7 @@ public class LoginPanel extends javax.swing.JPanel {
         jLabel1.setName("jLabel1"); // NOI18N
 
         languageCombobox.setName("languageCombobox"); // NOI18N
+        languageCombobox.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
 
         jSeparator3.setName("jSeparator3"); // NOI18N
 
@@ -314,6 +347,8 @@ public class LoginPanel extends javax.swing.JPanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, securityBean, org.jdesktop.beansbinding.ELProperty.create("${userPassword}"), txtUserPassword, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
+        txtUserPassword.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
+        txtUserPassword.setHorizontalAlignment(JTextField.LEADING);
         txtUserPassword.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtUserPasswordKeyPressed(evt);
@@ -372,6 +407,7 @@ public class LoginPanel extends javax.swing.JPanel {
 
         btnLogin.setText(bundle.getString("LoginPanel.btnLogin.text")); // NOI18N
         btnLogin.setName("btnLogin"); // NOI18N
+        btnLogin.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
         btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLoginActionPerformed(evt);

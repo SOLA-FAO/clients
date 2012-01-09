@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -40,12 +40,17 @@ import org.sola.clients.beans.AbstractCodeBean;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.beans.referencedata.BaUnitTypeBean;
+import org.sola.clients.beans.referencedata.BrSeverityTypeBean;
+import org.sola.clients.beans.referencedata.BrTechnicalTypeBean;
+import org.sola.clients.beans.referencedata.BrValidationTargetTypeBean;
 import org.sola.clients.beans.referencedata.CommunicationTypeBean;
 import org.sola.clients.beans.referencedata.GenderTypeBean;
 import org.sola.clients.beans.referencedata.IdTypeBean;
 import org.sola.clients.beans.referencedata.MortgageTypeBean;
 import org.sola.clients.beans.referencedata.PartyRoleTypeBean;
 import org.sola.clients.beans.referencedata.PartyTypeBean;
+import org.sola.clients.beans.referencedata.RegistrationStatusTypeBean;
+import org.sola.clients.beans.referencedata.RequestCategoryTypeBean;
 import org.sola.clients.beans.referencedata.RequestTypeBean;
 import org.sola.clients.beans.referencedata.RrrGroupTypeBean;
 import org.sola.clients.beans.referencedata.RrrTypeActionBean;
@@ -54,6 +59,7 @@ import org.sola.clients.beans.referencedata.ServiceActionTypeBean;
 import org.sola.clients.beans.referencedata.ServiceStatusTypeBean;
 import org.sola.clients.beans.referencedata.SourceBaUnitRelationTypeBean;
 import org.sola.clients.beans.referencedata.SourceTypeBean;
+import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.ui.referencedata.ReferenceDataPanel;
 import org.sola.clients.swing.ui.renderers.TableCellTextAreaRenderer;
 import org.sola.common.messaging.ClientMessage;
@@ -62,11 +68,17 @@ import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.AbstractCodeTO;
 import org.sola.webservices.transferobjects.EntityAction;
 import org.sola.webservices.transferobjects.referencedata.BaUnitTypeTO;
+import org.sola.webservices.transferobjects.referencedata.BrSeverityTypeTO;
+import org.sola.webservices.transferobjects.referencedata.BrTechnicalTypeTO;
+import org.sola.webservices.transferobjects.referencedata.BrValidationTargetTypeTO;
 import org.sola.webservices.transferobjects.referencedata.CommunicationTypeTO;
 import org.sola.webservices.transferobjects.referencedata.GenderTypeTO;
 import org.sola.webservices.transferobjects.referencedata.IdTypeTO;
 import org.sola.webservices.transferobjects.referencedata.MortgageTypeTO;
 import org.sola.webservices.transferobjects.referencedata.PartyRoleTypeTO;
+import org.sola.webservices.transferobjects.referencedata.PartyTypeTO;
+import org.sola.webservices.transferobjects.referencedata.RegistrationStatusTypeTO;
+import org.sola.webservices.transferobjects.referencedata.RequestCategoryTypeTO;
 import org.sola.webservices.transferobjects.referencedata.RequestTypeTO;
 import org.sola.webservices.transferobjects.referencedata.RrrGroupTypeTO;
 import org.sola.webservices.transferobjects.referencedata.RrrTypeActionTO;
@@ -91,16 +103,21 @@ public class ReferenceDataManagementPanel extends javax.swing.JPanel {
 
                 if (evt.getPropertyName().equals(ReferenceDataPanel.CREATED_REFDATA_PROPERTY)) {
                     pnlRefData.setReferenceDataBean(null);
-                    MessageUtility.displayMessage(ClientMessage.ADMIN_USER_CREATED);
+                    MessageUtility.displayMessage(ClientMessage.ADMIN_REFDATA_CREATED, new String[]{headerTitle});
                 } else if (evt.getPropertyName().equals(ReferenceDataPanel.SAVED_REFDATA_PROPERTY)) {
-                    MessageUtility.displayMessage(ClientMessage.ADMIN_USER_SAVED);
+                    MessageUtility.displayMessage(ClientMessage.ADMIN_OBJECT_SAVED);
                     pnlRefData.setReferenceDataBean(null);
                     showRefDataList();
                     initRefDataList();
                 }
             }
+            if (evt.getPropertyName().equals(ReferenceDataPanel.CANCEL_ACTION_PROPERTY)) {
+                showRefDataList();
+                initRefDataList();
+            }
         }
     }
+    
     public static final String SELECTED_REF_DATA = "selectedRefData";
     private Class<? extends AbstractCodeBean> refDataClass;
     private Class<? extends AbstractCodeTO> refDataTOClass;
@@ -117,8 +134,25 @@ public class ReferenceDataManagementPanel extends javax.swing.JPanel {
     /** Default panel constructor. */
     public ReferenceDataManagementPanel() {
         initComponents();
+        customizeComponents();
+    }
+    
+    
+    
+    
+     /** Applies customization of component L&F. */
+    private void customizeComponents() {
+     
+//    BUTTONS   
+    LafManager.getInstance().setBtnProperties( btnAddRefData);
+    LafManager.getInstance().setBtnProperties(btnClose);
+    LafManager.getInstance().setBtnProperties(btnEditRefData);
+    LafManager.getInstance().setBtnProperties(btnOK);
+    LafManager.getInstance().setBtnProperties(btnRemoveRefData);
+    
     }
 
+    
     /** 
      * Creates new instance of panel with predefined parameters.
      * @param refDataClass Type of reference data to load.
@@ -134,8 +168,10 @@ public class ReferenceDataManagementPanel extends javax.swing.JPanel {
 
         initComponents();
 
-        pnlRefData.addPropertyChangeListener(new ReferenceDataPanelListener());
-
+        ReferenceDataPanelListener listener = new ReferenceDataPanelListener();
+        pnlRefData.addPropertyChangeListener(listener);
+        pnlRequestType.addPropertyChangeListener(listener);
+        pnlRrrType.addPropertyChangeListener(listener);
         this.addPropertyChangeListener(new PropertyChangeListener() {
 
             @Override
@@ -188,12 +224,16 @@ public class ReferenceDataManagementPanel extends javax.swing.JPanel {
     private void showRefDataList() {
         pnlRefDataList.setVisible(true);
         pnlRefDataManagement.setVisible(false);
+        pnlRequestType.setVisible(false);
+        pnlRrrType.setVisible(false);
         pnlHeader.setTitleText(headerTitle);
     }
 
     /** Shows the panel with selected reference data object. */
     private void showRefData(AbstractCodeBean refDataBean) {
         pnlRefDataList.setVisible(false);
+        pnlRequestType.setVisible(false);
+        pnlRrrType.setVisible(false);
         pnlRefData.setReferenceDataBean(refDataBean);
         pnlRefDataManagement.setVisible(true);
         if (refDataBean != null) {
@@ -205,109 +245,149 @@ public class ReferenceDataManagementPanel extends javax.swing.JPanel {
         }
     }
 
+    /** Shows request type panel. */
+    private void showRequestTypePanel(RequestTypeBean requestTypeBean) {
+        pnlRefDataList.setVisible(false);
+        pnlRefDataManagement.setVisible(false);
+        pnlRrrType.setVisible(false);
+        pnlRequestType.setVisible(true);
+        pnlRequestType.setRequestTypeBean(requestTypeBean);
+
+        if (requestTypeBean != null) {
+            pnlHeader.setTitleText(MessageFormat.format("{0} - {1}", headerTitle,
+                    requestTypeBean.getTranslatedDisplayValue()));
+        } else {
+            pnlHeader.setTitleText(MessageFormat.format("{0} - {1}", headerTitle,
+                    resourceBundle.getString("ReferenceDataManagementPanel.NewItem.text")));
+        }
+    }
+
+    /** Shows RrrType panel. */
+    private void showRrrTypePanel(RrrTypeBean rrrTypeBean) {
+        pnlRefDataList.setVisible(false);
+        pnlRefDataManagement.setVisible(false);
+        pnlRequestType.setVisible(false);
+        pnlRrrType.setVisible(true);
+        pnlRrrType.setRrrTypeBean(rrrTypeBean);
+
+        if (rrrTypeBean != null) {
+            pnlHeader.setTitleText(MessageFormat.format("{0} - {1}", headerTitle,
+                    rrrTypeBean.getTranslatedDisplayValue()));
+        } else {
+            pnlHeader.setTitleText(MessageFormat.format("{0} - {1}", headerTitle,
+                    resourceBundle.getString("ReferenceDataManagementPanel.NewItem.text")));
+        }
+    }
+
     /** Loads reference data list, related to provided reference data type.*/
     public final void initRefDataList() {
         createRefDataList();
         // PARTY
         if (refDataClass == CommunicationTypeBean.class) {
-            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance()
-                    .getReferenceDataService().getCommunicationTypes(null),
+            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance().getReferenceDataService().getCommunicationTypes(null),
                     CommunicationTypeBean.class, (List) refDataList);
             CacheManager.remove(CacheManager.COMMUNICATION_TYPES_KEY);
             refDataTOClass = CommunicationTypeTO.class;
         } else if (refDataClass == IdTypeBean.class) {
-            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance()
-                    .getReferenceDataService().getIdTypes(null),
+            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance().getReferenceDataService().getIdTypes(null),
                     IdTypeBean.class, (List) refDataList);
             CacheManager.remove(CacheManager.ID_TYPE_CODES_KEY);
             refDataTOClass = IdTypeTO.class;
         } else if (refDataClass == GenderTypeBean.class) {
-            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance()
-                    .getReferenceDataService().getGenderTypes(null),
+            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance().getReferenceDataService().getGenderTypes(null),
                     GenderTypeBean.class, (List) refDataList);
             CacheManager.remove(CacheManager.GENDER_TYPES_KEY);
             refDataTOClass = GenderTypeTO.class;
         } else if (refDataClass == PartyTypeBean.class) {
-            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance()
-                    .getReferenceDataService().getPartyTypes(null),
+            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance().getReferenceDataService().getPartyTypes(null),
                     PartyTypeBean.class, (List) refDataList);
             CacheManager.remove(CacheManager.PARTY_TYPE_CODES_KEY);
-            refDataTOClass = BaUnitTypeTO.class;
+            refDataTOClass = PartyTypeTO.class;
         } else if (refDataClass == PartyRoleTypeBean.class) {
-            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance()
-                    .getReferenceDataService().getPartyRoles(null),
+            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance().getReferenceDataService().getPartyRoles(null),
                     PartyRoleTypeBean.class, (List) refDataList);
             CacheManager.remove(CacheManager.PARTY_ROLE_TYPE_CODES_KEY);
             refDataTOClass = PartyRoleTypeTO.class;
-        }
-        
-        // ADMINISTRATIVE
+        } // ADMINISTRATIVE
         else if (refDataClass == BaUnitTypeBean.class) {
-            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance()
-                    .getReferenceDataService().getBaUnitTypes(null),
+            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance().getReferenceDataService().getBaUnitTypes(null),
                     BaUnitTypeBean.class, (List) refDataList);
             CacheManager.remove(CacheManager.BA_UNIT_TYPE_CODES_KEY);
             refDataTOClass = BaUnitTypeTO.class;
         } else if (refDataClass == MortgageTypeBean.class) {
-            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance()
-                    .getReferenceDataService().getMortgageTypes(null),
+            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance().getReferenceDataService().getMortgageTypes(null),
                     MortgageTypeBean.class, (List) refDataList);
             CacheManager.remove(CacheManager.MORTGAGE_TYPE_CODES_KEY);
             refDataTOClass = MortgageTypeTO.class;
         } else if (refDataClass == RrrGroupTypeBean.class) {
-            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance()
-                    .getReferenceDataService().getRrrGroupTypes(null),
+            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance().getReferenceDataService().getRrrGroupTypes(null),
                     RrrGroupTypeBean.class, (List) refDataList);
             CacheManager.remove(CacheManager.RRR_GROUP_TYPE_CODES_KEY);
             refDataTOClass = RrrGroupTypeTO.class;
         } else if (refDataClass == RrrTypeBean.class) {
-            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance()
-                    .getReferenceDataService().getRrrTypes(null),
+            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance().getReferenceDataService().getRrrTypes(null),
                     RrrTypeBean.class, (List) refDataList);
             CacheManager.remove(CacheManager.RRR_TYPE_CODES_KEY);
             refDataTOClass = RrrTypeTO.class;
         } else if (refDataClass == SourceBaUnitRelationTypeBean.class) {
-            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance()
-                    .getReferenceDataService().getSourceBaUnitRelationTypes(null),
+            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance().getReferenceDataService().getSourceBaUnitRelationTypes(null),
                     SourceBaUnitRelationTypeBean.class, (List) refDataList);
             CacheManager.remove(CacheManager.SOURCE_BA_UNIT_RELATION_TYPE_CODES_KEY);
             refDataTOClass = SourceBaUnitRelationTypeTO.class;
-        }
-        
-        // SOURCE
+        } // SOURCE
         else if (refDataClass == SourceTypeBean.class) {
-            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance()
-                    .getReferenceDataService().getSourceTypes(null),
+            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance().getReferenceDataService().getSourceTypes(null),
                     SourceTypeBean.class, (List) refDataList);
             CacheManager.remove(CacheManager.SOURCE_TYPES_KEY);
             refDataTOClass = SourceTypeTO.class;
-        } 
-        
-        // APPLICATION
+        } // APPLICATION
         else if (refDataClass == RrrTypeActionBean.class) {
-            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance()
-                    .getReferenceDataService().getRrrTypeActions(null),
+            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance().getReferenceDataService().getRrrTypeActions(null),
                     RrrTypeActionBean.class, (List) refDataList);
             CacheManager.remove(CacheManager.RRR_TYPE_ACTIONS_KEY);
             refDataTOClass = RrrTypeActionTO.class;
         } else if (refDataClass == ServiceStatusTypeBean.class) {
-            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance()
-                    .getReferenceDataService().getServiceStatusTypes(null),
+            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance().getReferenceDataService().getServiceStatusTypes(null),
                     ServiceStatusTypeBean.class, (List) refDataList);
             CacheManager.remove(CacheManager.SERVICE_STATUS_TYPE_CODES_KEY);
             refDataTOClass = ServiceStatusTypeTO.class;
         } else if (refDataClass == ServiceActionTypeBean.class) {
-            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance()
-                    .getReferenceDataService().getServiceActionTypes(null),
+            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance().getReferenceDataService().getServiceActionTypes(null),
                     ServiceActionTypeBean.class, (List) refDataList);
             CacheManager.remove(CacheManager.SERVICE_ACTION_TYPE_CODES_KEY);
             refDataTOClass = ServiceActionTypeTO.class;
         } else if (refDataClass == RequestTypeBean.class) {
-            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance()
-                    .getReferenceDataService().getRequestTypes(null),
+            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance().getReferenceDataService().getRequestTypes(null),
                     RequestTypeBean.class, (List) refDataList);
             CacheManager.remove(CacheManager.REQUEST_TYPES_KEY);
             refDataTOClass = RequestTypeTO.class;
+        } else if (refDataClass == RequestCategoryTypeBean.class) {
+            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance().getReferenceDataService().getRequestCategoryTypes(null),
+                    RequestCategoryTypeBean.class, (List) refDataList);
+            CacheManager.remove(CacheManager.REQUEST_CATEGORY_TYPE_KEY);
+            refDataTOClass = RequestCategoryTypeTO.class;
+        } // SYSTEM
+        else if (refDataClass == BrSeverityTypeBean.class) {
+            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance().getReferenceDataService().getBrSeverityTypes(null),
+                    BrSeverityTypeBean.class, (List) refDataList);
+            CacheManager.remove(CacheManager.BR_SEVERITY_TYPE_KEY);
+            refDataTOClass = BrSeverityTypeTO.class;
+        } else if (refDataClass == BrValidationTargetTypeBean.class) {
+            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance().getReferenceDataService().getBrValidationTargetTypes(null),
+                    BrValidationTargetTypeBean.class, (List) refDataList);
+            CacheManager.remove(CacheManager.BR_VALIDATION_TARGET_TYPE_KEY);
+            refDataTOClass = BrValidationTargetTypeTO.class;
+        } else if (refDataClass == BrTechnicalTypeBean.class) {
+            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance().getReferenceDataService().getBrTechnicalTypes(null),
+                    BrTechnicalTypeBean.class, (List) refDataList);
+            CacheManager.remove(CacheManager.BR_TECHNICAL_TYPE_KEY);
+            refDataTOClass = BrTechnicalTypeTO.class;
+        } // TRANSACTION
+        else if (refDataClass == RegistrationStatusTypeBean.class) {
+            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance().getReferenceDataService().getRegistrationStatusTypes(null),
+                    RegistrationStatusTypeBean.class, (List) refDataList);
+            CacheManager.remove(CacheManager.REGISTRATION_STATUS_TYPE_CODES_KEY);
+            refDataTOClass = RegistrationStatusTypeTO.class;
         }
     }
 
@@ -332,7 +412,7 @@ public class ReferenceDataManagementPanel extends javax.swing.JPanel {
         menuRemoveRefData = new javax.swing.JMenuItem();
         pnlHeader = new org.sola.clients.swing.ui.HeaderPanel();
         jPanel1 = new javax.swing.JPanel();
-        requestTypePanel1 = new org.sola.clients.swing.ui.referencedata.RequestTypePanel();
+        pnlRequestType = new org.sola.clients.swing.ui.referencedata.RequestTypePanel();
         pnlRefDataList = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableRefData = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
@@ -344,6 +424,7 @@ public class ReferenceDataManagementPanel extends javax.swing.JPanel {
         pnlRefData = createRefDataPanel();
         btnOK = new javax.swing.JButton();
         btnClose = new javax.swing.JButton();
+        pnlRrrType = new org.sola.clients.swing.ui.referencedata.RrrTypePanel();
 
         popupRefData.setName("popupRefData"); // NOI18N
 
@@ -364,7 +445,7 @@ public class ReferenceDataManagementPanel extends javax.swing.JPanel {
         menuRemoveRefData.setName("menuRemoveRefData"); // NOI18N
         popupRefData.add(menuRemoveRefData);
 
-        setMinimumSize(new java.awt.Dimension(677, 564));
+        setMinimumSize(new java.awt.Dimension(631, 457));
 
         pnlHeader.setName("pnlHeader"); // NOI18N
         pnlHeader.setTitleText(bundle.getString("ReferenceDataManagementPanel.pnlHeader.titleText")); // NOI18N
@@ -372,8 +453,9 @@ public class ReferenceDataManagementPanel extends javax.swing.JPanel {
         jPanel1.setName("jPanel1"); // NOI18N
         jPanel1.setLayout(new java.awt.CardLayout());
 
-        requestTypePanel1.setName("requestTypePanel1"); // NOI18N
-        jPanel1.add(requestTypePanel1, "card4");
+        pnlRequestType.setCloseOnSave(true);
+        pnlRequestType.setName("pnlRequestType"); // NOI18N
+        jPanel1.add(pnlRequestType, "card4");
 
         pnlRefDataList.setName("pnlRefDataList"); // NOI18N
 
@@ -451,15 +533,15 @@ public class ReferenceDataManagementPanel extends javax.swing.JPanel {
         pnlRefDataList.setLayout(pnlRefDataListLayout);
         pnlRefDataListLayout.setHorizontalGroup(
             pnlRefDataListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(toolbarRefData, javax.swing.GroupLayout.DEFAULT_SIZE, 644, Short.MAX_VALUE)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 644, Short.MAX_VALUE)
+            .addComponent(toolbarRefData, javax.swing.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE)
         );
         pnlRefDataListLayout.setVerticalGroup(
             pnlRefDataListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlRefDataListLayout.createSequentialGroup()
                 .addComponent(toolbarRefData, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE))
         );
 
         jPanel1.add(pnlRefDataList, "card3");
@@ -491,16 +573,16 @@ public class ReferenceDataManagementPanel extends javax.swing.JPanel {
         pnlRefDataManagementLayout.setHorizontalGroup(
             pnlRefDataManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlRefDataManagementLayout.createSequentialGroup()
-                .addContainerGap(401, Short.MAX_VALUE)
+                .addContainerGap(369, Short.MAX_VALUE)
                 .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnOK, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addComponent(pnlRefData, javax.swing.GroupLayout.DEFAULT_SIZE, 644, Short.MAX_VALUE)
+            .addComponent(pnlRefData, javax.swing.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE)
         );
         pnlRefDataManagementLayout.setVerticalGroup(
             pnlRefDataManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlRefDataManagementLayout.createSequentialGroup()
-                .addComponent(pnlRefData, javax.swing.GroupLayout.DEFAULT_SIZE, 478, Short.MAX_VALUE)
+                .addComponent(pnlRefData, javax.swing.GroupLayout.DEFAULT_SIZE, 371, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pnlRefDataManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btnClose)
@@ -509,23 +591,26 @@ public class ReferenceDataManagementPanel extends javax.swing.JPanel {
 
         jPanel1.add(pnlRefDataManagement, "card3");
 
+        pnlRrrType.setName("pnlRrrType"); // NOI18N
+        jPanel1.add(pnlRrrType, "card5");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlHeader, javax.swing.GroupLayout.DEFAULT_SIZE, 677, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(15, 15, 15))
+            .addComponent(pnlHeader, javax.swing.GroupLayout.DEFAULT_SIZE, 631, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(9, 9, 9)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE)
+                .addGap(10, 10, 10))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(pnlHeader, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 512, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 405, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         bindingGroup.bind();
@@ -543,18 +628,30 @@ public class ReferenceDataManagementPanel extends javax.swing.JPanel {
     /** Shows {@link ReferenceDataPanel} to create new record in the given reference data table.*/
     @Action
     public void addRefData() {
-        showRefData(null);
-        btnOK.setText(MessageUtility.getLocalizedMessage(
-                ClientMessage.GENERAL_LABELS_CREATE).getMessage());
+        if (refDataClass == RequestTypeBean.class) {
+            showRequestTypePanel(null);
+        } else if (refDataClass == RrrTypeBean.class) {
+            showRrrTypePanel(null);
+        } else {
+            showRefData(null);
+            btnOK.setText(MessageUtility.getLocalizedMessage(
+                    ClientMessage.GENERAL_LABELS_CREATE).getMessage());
+        }
     }
 
     /** Shows {@link ReferenceDataPanel} and passes reference data bean for editing. */
     @Action
     public void editRefData() {
         if (selectedRefData != null) {
-            showRefData(selectedRefData);
-            btnOK.setText(MessageUtility.getLocalizedMessage(
-                    ClientMessage.GENERAL_LABELS_SAVE_AND_CLOSE).getMessage());
+            if (refDataClass == RequestTypeBean.class) {
+                showRequestTypePanel((RequestTypeBean) selectedRefData);
+            } else if (refDataClass == RrrTypeBean.class) {
+                showRrrTypePanel((RrrTypeBean) selectedRefData);
+            } else {
+                showRefData(selectedRefData);
+                btnOK.setText(MessageUtility.getLocalizedMessage(
+                        ClientMessage.GENERAL_LABELS_SAVE_AND_CLOSE).getMessage());
+            }
         }
     }
 
@@ -584,8 +681,9 @@ public class ReferenceDataManagementPanel extends javax.swing.JPanel {
     private org.sola.clients.swing.ui.referencedata.ReferenceDataPanel pnlRefData;
     private javax.swing.JPanel pnlRefDataList;
     private javax.swing.JPanel pnlRefDataManagement;
+    private org.sola.clients.swing.ui.referencedata.RequestTypePanel pnlRequestType;
+    private org.sola.clients.swing.ui.referencedata.RrrTypePanel pnlRrrType;
     private javax.swing.JPopupMenu popupRefData;
-    private org.sola.clients.swing.ui.referencedata.RequestTypePanel requestTypePanel1;
     private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tableRefData;
     private javax.swing.JToolBar toolbarRefData;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;

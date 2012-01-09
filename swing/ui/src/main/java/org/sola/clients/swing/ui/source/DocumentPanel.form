@@ -137,7 +137,7 @@
         </Property>
       </Properties>
       <BindingProperties>
-        <BindingProperty name="elements" source="sourceTypeListBean" sourcePath="${filteredSourceTypeList}" target="cbxDocType" targetPath="elements" updateStrategy="0" immediately="false"/>
+        <BindingProperty name="elements" source="sourceTypeListBean" sourcePath="${sourceTypeList}" target="cbxDocType" targetPath="elements" updateStrategy="0" immediately="false"/>
         <BindingProperty name="selectedItem" source="sourceBean" sourcePath="${sourceType}" target="cbxDocType" targetPath="selectedItem" updateStrategy="0" immediately="false">
           <Property name="name" type="java.lang.String" value="DocType"/>
         </BindingProperty>

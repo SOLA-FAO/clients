@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -54,7 +54,8 @@ public class CadastreObjectSearch extends FreeTextSearch {
         }
 
         List<CadastreObjectBean> searchResult = new LinkedList<CadastreObjectBean>();
-        TypeConverters.TransferObjectListToBeanList(this.dataSource.getCadastreObjectByParts(searchString), 
+        TypeConverters.TransferObjectListToBeanList(
+                this.dataSource.getCadastreObjectByParts(searchString), 
                 CadastreObjectBean.class, (List)searchResult);
         
         listModel.clear();

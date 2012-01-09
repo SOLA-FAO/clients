@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -32,40 +32,51 @@
 package org.sola.clients.swing.gis.ui.controlsbundle;
 
 import java.util.ArrayList;
-import org.sola.clients.geotools.ui.layers.SolaFeatureLayer;
+import org.geotools.map.extended.layer.ExtendedFeatureLayer;
+import org.geotools.map.extended.layer.ExtendedLayer;
 import org.sola.clients.swing.gis.Messaging;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
-import org.sola.clients.swing.gis.layers.PojoLayer;
-import org.sola.clients.swing.gis.tools.InformationTool;
-import org.sola.clients.geotools.ui.ControlsBundle;
+import org.sola.clients.swing.gis.layer.PojoLayer;
+import org.sola.clients.swing.gis.tool.InformationTool;
+import org.geotools.swing.extended.ControlsBundle;
+import org.sola.clients.swing.gis.mapaction.SolaPrint;
+import org.sola.clients.swing.gis.ui.control.SearchPanel;
+import org.sola.common.messaging.GisMessage;
 import org.sola.webservices.spatial.ConfigMapLayerTO;
 import org.sola.webservices.spatial.MapDefinitionTO;
 
 /**
  *
- * @author Manoku
+ * @author Elton Manoku
  */
 public abstract class SolaControlsBundle extends ControlsBundle {
 
-    private PojoDataAccess pojoDataAccess = null;
     private static boolean gisInitialized = false;
+    private PojoDataAccess pojoDataAccess = null;
     
-    public SolaControlsBundle(){
+    private SolaPrint solaPrint = null;
+
+    public SolaControlsBundle() {
         super();
-        if (!gisInitialized){
-            org.sola.clients.geotools.util.Messaging.getInstance().setMessaging(new Messaging());
-            SolaFeatureLayer.SLD_RESOURCES = "/org/sola/clients/swing/gis/layers/resources/,"
-                    + SolaFeatureLayer.SLD_RESOURCES;
+        if (!gisInitialized) {
+            org.geotools.swing.extended.util.Messaging.getInstance().setMessaging(new Messaging());
+            ExtendedFeatureLayer.SLD_RESOURCES = "/org/sola/clients/swing/gis/layer/resources/,"
+                    + ExtendedFeatureLayer.SLD_RESOURCES;
+            gisInitialized = true;
         }
     }
-    
+
     public void Setup(PojoDataAccess pojoDataAccess) {
         try {
             this.pojoDataAccess = pojoDataAccess;
             MapDefinitionTO mapDefinition = pojoDataAccess.getMapDefinition();
-            super.Setup(mapDefinition.getSrid(), true);
+            super.Setup(mapDefinition.getSrid(), mapDefinition.getWktOfCrs(), true);
+            this.addSearchPanel();
             InformationTool infoTool = new InformationTool(this.pojoDataAccess);
             this.getMap().addTool(infoTool, this.getToolbar());
+            this.solaPrint = new SolaPrint(this.getMap());
+            this.getMap().addMapAction(this.solaPrint, this.getToolbar());
+            
             this.getMap().setFullExtent(
                     mapDefinition.getEast(),
                     mapDefinition.getWest(),
@@ -77,28 +88,30 @@ public abstract class SolaControlsBundle extends ControlsBundle {
             }
             this.getMap().zoomToFullExtent();
         } catch (Exception ex) {
-            Messaging.getInstance().show("gis.controlbundle.error.setup");
+            Messaging.getInstance().show(GisMessage.GENERAL_CONTROLBUNDLE_ERROR);
             org.sola.common.logging.LogUtility.log(
-                    "gis.controlbundle.error.setup", ex);
+                    GisMessage.GENERAL_CONTROLBUNDLE_ERROR, ex);
         }
     }
 
     public void addLayerConfig(ConfigMapLayerTO configMapLayer, PojoDataAccess pojoDataAccess)
             throws Exception {
+        ExtendedLayer layer = null;
         if (configMapLayer.getTypeCode().equals("wms")) {
             String wmsServerURL = configMapLayer.getWmsUrl();
             ArrayList<String> wmsLayerNames = new ArrayList<String>();
             String[] layerNameList = configMapLayer.getWmsLayers().split(";");
             java.util.Collections.addAll(wmsLayerNames, layerNameList);
-            this.getMap().addLayerWMS(
-                    configMapLayer.getId(), wmsServerURL, wmsLayerNames);
+            layer = this.getMap().addLayerWMS(
+                    configMapLayer.getId(), configMapLayer.getTitle(), wmsServerURL, wmsLayerNames);
         } else if (configMapLayer.getTypeCode().equals("shape")) {
-            this.getMap().addLayerShapefile(
+            layer = this.getMap().addLayerShapefile(
                     configMapLayer.getId(),
+                    configMapLayer.getTitle(),
                     configMapLayer.getShapeLocation(),
                     configMapLayer.getStyle());
         } else if (configMapLayer.getTypeCode().equals("pojo")) {
-            PojoLayer layer = new PojoLayer(
+            layer = new PojoLayer(
                     configMapLayer.getId(), pojoDataAccess);
             this.getMap().addLayer(layer);
         }
@@ -107,8 +120,18 @@ public abstract class SolaControlsBundle extends ControlsBundle {
     public PojoDataAccess getPojoDataAccess() {
         return pojoDataAccess;
     }
-    
-    public void refresh(boolean force){
+
+    public void refresh(boolean force) {
         this.getMap().refresh();
+    }
+    
+    public void setApplicationId(String applicationId){
+        this.solaPrint.setApplicationId(applicationId);
+    }
+    
+    private void addSearchPanel(){
+        SearchPanel panel = new SearchPanel(this.getMap());
+        this.addInLeftPanel(Messaging.getInstance().getMessageText(
+                GisMessage.LEFT_PANEL_TAB_FIND_TITLE), panel);
     }
 }

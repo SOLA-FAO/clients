@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -34,6 +34,7 @@ import org.jdesktop.application.Action;
 import org.sola.clients.beans.security.GroupBean;
 import org.sola.clients.beans.security.GroupSummaryBean;
 import org.sola.clients.beans.security.GroupSummaryListBean;
+import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.ui.renderers.TableCellTextAreaRenderer;
 import org.sola.clients.swing.ui.security.GroupPanel;
 import org.sola.common.messaging.ClientMessage;
@@ -73,7 +74,7 @@ public class GroupsManagementPanel extends javax.swing.JPanel {
     /** Default constructor. */
     public GroupsManagementPanel() {
         initComponents();
-
+        customizeComponents();
         resourceBundle = ResourceBundle.getBundle("org/sola/clients/swing/admin/security/Bundle"); 
         showGroups();
         pnlGroup.addPropertyChangeListener(new GroupPanelListener());
@@ -90,7 +91,20 @@ public class GroupsManagementPanel extends javax.swing.JPanel {
         });
         customizeGroupButtons(null);
     }
+    
+    
+     /** Applies customization of component L&F. */
+    private void customizeComponents() {
+  
+//    BUTTONS   
+    LafManager.getInstance().setBtnProperties(btnAddGroup);
+    LafManager.getInstance().setBtnProperties(btnEditGroup);
+    LafManager.getInstance().setBtnProperties(btnRemoveGroup);
+    
+    }
 
+    
+    
     /** 
      * Enables or disables group management buttons, depending on selection in 
      * the groups table and user rights. 

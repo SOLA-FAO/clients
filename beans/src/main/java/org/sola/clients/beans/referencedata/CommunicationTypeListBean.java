@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -27,25 +27,41 @@
  */
 package org.sola.clients.beans.referencedata;
 
+import java.util.ArrayList;
 import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
-import org.sola.clients.beans.AbstractBindingBean;
+import org.sola.clients.beans.AbstractBindingListBean;
 import org.sola.clients.beans.cache.CacheManager;
 
 /**
  * Holds the list of {@link CommunicationTypeBean} objects and used to bound the
  * data in the combobox on the forms.
  */
-public class CommunicationTypeListBean extends AbstractBindingBean {
+public class CommunicationTypeListBean extends AbstractBindingListBean {
     
     public static final String SELECTED_COMMUNICATIONTYPE_PROPERTY = "selectedCommunicationType";
     private ObservableList<CommunicationTypeBean> communicationTypeListBean;
     private CommunicationTypeBean selectedCommunicationTypeBean;
     
     public CommunicationTypeListBean() {
-        // Load from cache by default
-        communicationTypeListBean = ObservableCollections.observableList(
-                CacheManager.getCommunicationTypes());
+        this(false);
+    }
+    
+    public CommunicationTypeListBean(boolean createDummy) {
+        super();
+        loadList(createDummy);
+    }
+    
+    /** 
+     * Loads list of {@link CommunicationTypeBean}.
+     * @param createDummy Indicates whether to add empty object on the list.
+     */
+    public final void loadList(boolean createDummy) {
+        if (communicationTypeListBean == null) {
+            communicationTypeListBean = ObservableCollections.observableList(new ArrayList<CommunicationTypeBean>());
+        }
+        loadCodeList(CommunicationTypeBean.class, communicationTypeListBean, 
+                CacheManager.getCommunicationTypes(), createDummy);
     }
     
     public ObservableList<CommunicationTypeBean> getCommunicationTypeList() {

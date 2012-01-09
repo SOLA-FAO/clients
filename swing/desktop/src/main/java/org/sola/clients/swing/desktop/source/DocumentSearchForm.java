@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -31,6 +31,7 @@ import org.sola.clients.swing.ui.source.DocumentSeachPanel;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.ImageIcon;
+import org.sola.clients.swing.common.LafManager;
 
 /**
  * This form provides parameterized application search capabilities.
@@ -44,7 +45,7 @@ public class DocumentSearchForm extends javax.swing.JDialog {
         this.setIconImage(new ImageIcon(DocumentSearchForm.class.getResource("/images/sola/logo_icon.jpg")).getImage());
     
         initComponents();
-        
+        customizeComponents();
         documentSeachPanel1.addPropertyChangeListener(new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
@@ -54,7 +55,15 @@ public class DocumentSearchForm extends javax.swing.JDialog {
             }
         });
     }
-
+    
+    
+     /** Applies customization of component L&F. */
+    private void customizeComponents() {
+       
+//    BUTTONS   
+     LafManager.getInstance().setBtnProperties(btnOk);
+    }
+    
     public String getOkButtonText() {
         return btnOk.getText();
     }
@@ -74,6 +83,7 @@ public class DocumentSearchForm extends javax.swing.JDialog {
         setName("Form"); // NOI18N
 
         documentSeachPanel1.setName("documentSeachPanel1"); // NOI18N
+        documentSeachPanel1.setShowPrintButton(false);
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(org.sola.clients.swing.desktop.DesktopApplication.class).getContext().getResourceMap(DocumentSearchForm.class);
         btnOk.setText(resourceMap.getString("btnOk.text")); // NOI18N

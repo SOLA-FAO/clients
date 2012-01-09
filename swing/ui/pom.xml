@@ -1,15 +1,15 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>sola-clients-swing</artifactId>
         <groupId>org.sola.clients</groupId>
-        <version>alpha</version>
+        <version>1.0-SNAPSHOT</version>
     </parent>
     <groupId>org.sola.clients.swing</groupId>
     <artifactId>clients-swing-ui</artifactId>
-    <version>alpha</version>
+    <version>1.0-SNAPSHOT</version>
     <name>Clients SWING UI</name>
     <url>http://maven.apache.org</url>
     <properties>
@@ -17,16 +17,17 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.sola.clients.swing</groupId>
-            <artifactId>clients-swing-common</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.sola.clients</groupId>
             <artifactId>clients-reports</artifactId>
-            <version>${project.version}</version>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
-             
+        
+        <dependency>
+            <groupId>org.sola.clients.swing</groupId>
+            <artifactId>clients-swing-common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

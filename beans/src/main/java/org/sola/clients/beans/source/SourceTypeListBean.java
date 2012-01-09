@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -27,7 +27,6 @@
  */
 package org.sola.clients.beans.source;
 
-import java.util.ArrayList;
 import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingBean;
@@ -39,12 +38,11 @@ import org.sola.clients.beans.referencedata.SourceTypeBean;
  * on the comboboxes or listboxes controls.
  */
 public class SourceTypeListBean extends AbstractBindingBean {
-
+    
     public static final String SELECTED_SOURCE_TYPE_PROPERTY = "selectedSourceType";
     private ObservableList<SourceTypeBean> sourceTypeListBean;
-    private ObservableList<SourceTypeBean> filteredSourceTypeListBean;
     private SourceTypeBean selectedSourceType;
-
+    
     /** 
      * Creates object instance and populates source type list with reference 
      * data from the cache.
@@ -52,20 +50,10 @@ public class SourceTypeListBean extends AbstractBindingBean {
     public SourceTypeListBean() {
         // Load from the cache by default
         sourceTypeListBean = ObservableCollections.observableList(CacheManager.getSourceTypes());
-        filteredSourceTypeListBean = ObservableCollections.observableList(new ArrayList<SourceTypeBean>());
-        for (SourceTypeBean bean : sourceTypeListBean) {
-            if (bean.getStatus().equals("c")) {
-                filteredSourceTypeListBean.add(bean);
-            }
-        }
     }
-
+    
     public ObservableList<SourceTypeBean> getSourceTypeList() {
         return sourceTypeListBean;
-    }
-
-    public ObservableList<SourceTypeBean> getFilteredSourceTypeList() {
-        return filteredSourceTypeListBean;
     }
 
     public SourceTypeBean getSelectedSourceType() {

@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -37,10 +37,10 @@ import com.vividsolutions.jts.io.WKBWriter;
 import com.vividsolutions.jts.io.WKTReader;
 import java.awt.Dimension;
 import javax.swing.JDialog;
-import org.sola.clients.swing.gis.beans.CadastreChangeBean;
+import org.sola.clients.beans.security.SecurityBean;
+import org.sola.clients.swing.gis.beans.TransactionCadastreChangeBean;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForBaUnit;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForCadastreChange;
-import org.sola.clients.swing.common.config.ConfigurationManager;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleViewer;
 import org.sola.services.boundary.wsclients.WSManager;
@@ -120,9 +120,9 @@ public class AppGUITestDisplay {
     public void testUIControlsBundleForCadastreChange() throws Exception {
         System.out.println("Test ControlsBundle for cadastre change");
 
-        WSManager.getInstance().initWebServices("test", "test".toCharArray(), this.getWSConfig());
+        SecurityBean.authenticate("test", "test".toCharArray(), this.getWSConfig());
 
-        CadastreChangeBean cadastreChangeBean =
+        TransactionCadastreChangeBean cadastreChangeBean =
                 PojoDataAccess.getInstance().getCadastreChange("4000");
         ControlsBundleForCadastreChange ctrl = 
                 new ControlsBundleForCadastreChange("333", cadastreChangeBean, "3068323", null);

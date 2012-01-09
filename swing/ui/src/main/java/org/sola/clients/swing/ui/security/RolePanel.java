@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -28,6 +28,7 @@
 package org.sola.clients.swing.ui.security;
 
 import org.sola.clients.beans.security.RoleBean;
+import org.sola.clients.swing.common.LafManager;
 
 /**
  * Used to manage Roles.
@@ -44,6 +45,7 @@ public class RolePanel extends javax.swing.JPanel {
     /** Default constructor. */
     public RolePanel() {
         initComponents();
+        customizeComponents() ;
     }
     
     /** 
@@ -53,8 +55,36 @@ public class RolePanel extends javax.swing.JPanel {
     public RolePanel(RoleBean role) {
         setupRoleBean(role);
         initComponents();
+        customizeComponents() ;
     }
+    
+    
+      /** Applies customization of component L&F. */
+    private void customizeComponents() {
+   
+//    BUTTONS   
+    LafManager.getInstance().setBtnProperties(btnCancel);
+    LafManager.getInstance().setBtnProperties(btnOk);
+    
+//    LABELS    
+    LafManager.getInstance().setLabProperties(jLabel1);
+    LafManager.getInstance().setLabProperties(jLabel2);
+    LafManager.getInstance().setLabProperties(jLabel3);
+    LafManager.getInstance().setLabProperties(jLabel4);
 
+    
+//    TXTAREA FIELDS
+    LafManager.getInstance().setTxtAreaProperties(txtDescription);
+   
+    
+//    TXT FIELDS
+    LafManager.getInstance().setTxtProperties(txtCode);
+    LafManager.getInstance().setTxtProperties(txtName);
+    LafManager.getInstance().setTxtProperties(txtStatus);
+    }
+    
+   
+    
     /** Setup {@link RoleBean} object, used to bind data on the form. */
     private void setupRoleBean(RoleBean role) {
         txtCode.setEnabled(true);

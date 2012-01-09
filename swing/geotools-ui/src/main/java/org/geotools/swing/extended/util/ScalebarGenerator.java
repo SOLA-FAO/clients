@@ -1,0 +1,176 @@
+/**
+ * ******************************************************************************************
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ *
+ *    1. Redistributions of source code must retain the above copyright notice,this list
+ *       of conditions and the following disclaimer.
+ *    2. Redistributions in binary form must reproduce the above copyright notice,this list
+ *       of conditions and the following disclaimer in the documentation and/or other
+ *       materials provided with the distribution.
+ *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
+ *       promote products derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+ * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
+ * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * *********************************************************************************************
+ */
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.geotools.swing.extended.util;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.text.DecimalFormat;
+
+/**
+ *
+ * @author Elton Manoku
+ */
+public class ScalebarGenerator {
+
+    private enum segmentMeasureUnitType {
+        m,
+        km
+    }
+    private int height = 40;
+    private int numberOfSegments = 3;
+    private int margin = 15;
+    private Color colorBorderSegment = Color.DARK_GRAY;
+    private Color colorSegmentEven = Color.BLACK;
+    private Color colorSegmentUneven = Color.BLUE;
+    private Color colorText = Color.RED;
+    private Font textFont = new Font(Font.SANS_SERIF, Font.BOLD, 10);
+    private segmentMeasureUnitType segmentMeasureUnit = segmentMeasureUnitType.m;
+
+    public ScalebarGenerator() {
+    }
+
+    public void setColorBorderSegment(Color colorBorderSegment) {
+        this.colorBorderSegment = colorBorderSegment;
+    }
+
+    public void setColorSegmentEven(Color colorSegmentEven) {
+        this.colorSegmentEven = colorSegmentEven;
+    }
+
+    public void setColorSegmentUneven(Color colorSegmentUneven) {
+        this.colorSegmentUneven = colorSegmentUneven;
+    }
+
+    public void setColorText(Color colorText) {
+        this.colorText = colorText;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public void setMargin(int margin) {
+        this.margin = margin;
+    }
+
+    public void setNumberOfSegments(int numberOfSegments) {
+        this.numberOfSegments = numberOfSegments;
+    }
+
+    public void setTextFont(Font textFont) {
+        this.textFont = textFont;
+    }
+    
+    public BufferedImage getImage(Double scale, double width, double dpi) {
+
+        double extentWidth = 2.54 * scale / 100; //viewport.getBounds().getWidth();
+        double screenWidth = dpi; //viewport.getScreenArea().getWidth();
+        double widthInMeters = extentWidth * width / screenWidth;
+        if (widthInMeters == 0){
+            return null;
+        }
+        int rounding = 1;
+            this.segmentMeasureUnit = segmentMeasureUnitType.m;
+        if (widthInMeters > 1000) {
+            rounding = 500;
+            this.segmentMeasureUnit = segmentMeasureUnitType.km;
+        } else if (widthInMeters > 100) {
+            rounding = 50;
+        } else if (widthInMeters > 10){
+            rounding  = 5;
+        }
+        int segmentInMeters =  
+                (int)Math.ceil((widthInMeters / this.numberOfSegments) / rounding) * rounding;
+        
+        int finalWidthInMeters = segmentInMeters * this.numberOfSegments;
+        int scalebarDrawingWidth = (int) Math.round(finalWidthInMeters * screenWidth / extentWidth);
+        int segmentDrawingWidth = scalebarDrawingWidth / this.numberOfSegments;
+        int finalScalebarWidth = scalebarDrawingWidth + margin * 2;
+        BufferedImage bi = new BufferedImage(finalScalebarWidth, height, BufferedImage.TYPE_INT_ARGB);
+
+        int segmentHeight = this.height - this.margin * 2;
+        Graphics2D g2D = (Graphics2D) bi.getGraphics();
+        g2D.setColor(this.colorBorderSegment);
+        g2D.fillRect(this.margin-1, this.margin-1, 
+                (this.numberOfSegments * segmentDrawingWidth) + 2, 
+                segmentHeight+2);
+        for (int segmentInd = 0; segmentInd < this.numberOfSegments; segmentInd++) {
+            int x = this.margin + segmentInd * segmentDrawingWidth;
+            int y = this.margin;
+            if (segmentInd % 2 == 0) {
+                g2D.setColor(this.colorSegmentEven);
+            } else {
+                g2D.setColor(this.colorSegmentUneven);
+            }
+            g2D.fillRect(x, y, segmentDrawingWidth, segmentHeight);
+            this.drawSegmentText(g2D,
+                    segmentInd * segmentInMeters,
+                    this.margin + segmentInd * segmentDrawingWidth,
+                    this.height);
+        }
+        this.drawSegmentText(g2D,
+                this.numberOfSegments * segmentInMeters,
+                this.margin + this.numberOfSegments * segmentDrawingWidth,
+                this.height);
+
+        if (scale != null) {
+            String scaleText = String.format("1: %s", scale.longValue());
+            this.drawText(g2D, scaleText, finalScalebarWidth / 2, this.margin - 2);
+        }
+
+        return bi;
+    }
+
+    private void drawText(Graphics2D g2D, String txt, int x, int y) {
+        g2D.setFont(this.textFont);
+        FontMetrics fontMetrics = g2D.getFontMetrics();
+        int txtWidth = fontMetrics.stringWidth(txt);
+        x = x - txtWidth / 2;
+        g2D.setColor(this.colorText);
+        g2D.drawString(txt, x, y);
+    }
+
+    private void drawSegmentText(Graphics2D g2D, int segmentMeasureInMeters, int x, int y) {
+        String measureToWrite = "";
+        if (this.segmentMeasureUnit == segmentMeasureUnitType.km) {
+            DecimalFormat decFormat = new DecimalFormat("0.0");
+            measureToWrite = decFormat.format(((double) segmentMeasureInMeters / 1000));
+        } else {
+            measureToWrite = String.format("%s", segmentMeasureInMeters);
+        }
+        measureToWrite = String.format("%s %s", measureToWrite, this.segmentMeasureUnit);
+        this.drawText(g2D, measureToWrite, x, y);
+    }
+}

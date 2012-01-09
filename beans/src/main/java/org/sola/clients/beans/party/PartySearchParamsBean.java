@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -28,6 +28,9 @@
 package org.sola.clients.beans.party;
 
 import org.sola.clients.beans.AbstractBindingBean;
+import org.sola.clients.beans.cache.CacheManager;
+import org.sola.clients.beans.referencedata.PartyRoleTypeBean;
+import org.sola.clients.beans.referencedata.PartyTypeBean;
 import org.sola.webservices.transferobjects.search.PartySearchParamsTO;
 
 /** 
@@ -38,10 +41,12 @@ public class PartySearchParamsBean extends AbstractBindingBean {
     public static final String NAME_PROPERTY = "name";
     public static final String TYPE_CODE_PROPERTY = "typeCode";
     public static final String ROLE_TYPE_CODE_PROPERTY = "roleTypeCode";
+    public static final String PARTY_TYPE_PROPERTY = "partyType";
+    public static final String ROLE_TYPE_PROPERTY = "roleType";
     
     private String name;
-    private String typeCode;
-    private String roleTypeCode;
+    private PartyTypeBean partyType;
+    private PartyRoleTypeBean roleType;
     
     public PartySearchParamsBean(){
         super();
@@ -58,23 +63,44 @@ public class PartySearchParamsBean extends AbstractBindingBean {
     }
 
     public String getRoleTypeCode() {
-        return roleTypeCode;
+        return getRoleType().getCode();
     }
 
     public void setRoleTypeCode(String roleTypeCode) {
-        String oldValue = this.roleTypeCode;
-        this.roleTypeCode = roleTypeCode;
+        String oldValue = getRoleType().getCode();
+        setRoleType(CacheManager.getBeanByCode(CacheManager.getPartyRoles(), roleTypeCode));
         propertySupport.firePropertyChange(ROLE_TYPE_CODE_PROPERTY, oldValue, roleTypeCode);
     }
 
     public String getTypeCode() {
-        return typeCode;
+        return getPartyType().getCode();
     }
 
     public void setTypeCode(String typeCode) {
-        String oldValue = this.typeCode;
-        this.typeCode = typeCode;
+        String oldValue = getPartyType().getCode();
+        setPartyType(CacheManager.getBeanByCode(CacheManager.getPartyTypes(), typeCode));
         propertySupport.firePropertyChange(TYPE_CODE_PROPERTY, oldValue, typeCode);
     }
-    
+
+    public PartyTypeBean getPartyType() {
+        if(partyType == null){
+            partyType = new PartyTypeBean();
+        }
+        return partyType;
+    }
+
+    public void setPartyType(PartyTypeBean partyType) {
+        this.setJointRefDataBean(getPartyType(), partyType, PARTY_TYPE_PROPERTY);
+    }
+
+    public PartyRoleTypeBean getRoleType() {
+        if(roleType == null){
+            roleType = new PartyRoleTypeBean();
+        }
+        return roleType;
+    }
+
+    public void setRoleType(PartyRoleTypeBean roleType) {
+        this.setJointRefDataBean(getRoleType(), roleType, ROLE_TYPE_PROPERTY);
+    }
 }

@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -45,7 +45,7 @@ public class SecurityBean extends AbstractBindingBean {
     private String userName;
     private char[] userPassword;
     private static UserBean currentUser;
-    
+
     public SecurityBean() {
         super();
     }
@@ -60,10 +60,14 @@ public class SecurityBean extends AbstractBindingBean {
      * {@code SecurityBean.getCurrentUser().isInRole()}
      * @see UserBean#isInRole(java.lang.String[]) 
      */
-    public static boolean isInRole(String ... roles){
-        return getCurrentUser().isInRole(roles);
+    public static boolean isInRole(String... roles) {
+        if (getCurrentUser() == null) {
+            return false;
+        } else {
+            return getCurrentUser().isInRole(roles);
+        }
     }
-    
+
     public String getUserName() {
         return userName;
     }
@@ -96,14 +100,14 @@ public class SecurityBean extends AbstractBindingBean {
      */
     public boolean authenticate(HashMap<String, String> config) throws WebServiceClientException, SOLAException {
         boolean result = false;
-        if (userName != null && userPassword != null && !userName.equals("") && userPassword.length>0) {
+        if (userName != null && userPassword != null && !userName.equals("") && userPassword.length > 0) {
             result = authenticate(userName, userPassword, config);
         } else {
             throw new SOLAException(ClientMessage.CHECK_INVALID_USERNAME_PASSWORD);
         }
         return result;
     }
-    
+
     /** 
      * Authenticates user by calling 
      * {@link WSManager#initWebServices(String, char[])} and passing user name 
@@ -112,16 +116,16 @@ public class SecurityBean extends AbstractBindingBean {
      * @param password User password.
      * @param config Configuration settings for the Web-services initialization.
      */
-    public static boolean authenticate(String userName, char[] password, HashMap<String, String> config) 
+    public static boolean authenticate(String userName, char[] password, HashMap<String, String> config)
             throws WebServiceClientException, SOLAException {
         boolean result = false;
-        if (userName != null && password != null && !userName.equals("") && password.length>0) {
+        if (userName != null && password != null && !userName.equals("") && password.length > 0) {
             // Initialize web services
             result = WSManager.getInstance().initWebServices(userName, password, config);
-            if(result){
+            if (result) {
                 // Set current user
                 UserBean user = TypeConverters.TransferObjectToBean(
-                        WSManager.getInstance().getAdminService().getCurrentUser(), 
+                        WSManager.getInstance().getAdminService().getCurrentUser(),
                         UserBean.class, null);
                 currentUser = user;
             }

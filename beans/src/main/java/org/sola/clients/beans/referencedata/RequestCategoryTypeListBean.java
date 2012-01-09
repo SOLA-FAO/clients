@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingListBean;
-import org.sola.clients.beans.AbstractCodeBean;
 import org.sola.clients.beans.cache.CacheManager;
 
 /**
@@ -65,7 +64,8 @@ public class RequestCategoryTypeListBean extends AbstractBindingListBean {
         if (requestCategoryTypes == null) {
             requestCategoryTypes = ObservableCollections.observableList(new ArrayList<RequestCategoryTypeBean>());
         }
-        loadCodeList(requestCategoryTypes, CacheManager.getRequestCategoryTypes(), createDummy);
+        loadCodeList(RequestCategoryTypeBean.class, requestCategoryTypes, 
+                CacheManager.getRequestCategoryTypes(), createDummy);
     }
 
     public ObservableList<RequestCategoryTypeBean> getRequestCategoryTypes() {

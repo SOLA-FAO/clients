@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -27,47 +27,56 @@
  */
 package org.sola.clients.beans.referencedata;
 
+import java.util.ArrayList;
 import org.sola.clients.beans.application.ApplicationServiceBean;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
-import org.sola.clients.beans.AbstractBindingBean;
+import org.sola.clients.beans.AbstractBindingListBean;
 import org.sola.clients.beans.cache.CacheManager;
 
 /**
  * Holds list of {@link RequestTypeBean} objects.
  */
-public class RequestTypeListBean extends AbstractBindingBean {
+public class RequestTypeListBean extends AbstractBindingListBean {
 
     public static final String SELECTED_REQUEST_TYPE_PROPERTY = "selectedRequestType";
     private ObservableList<RequestTypeBean> requestTypeListBean;
-    private ObservableList<RequestTypeBean> filteredRequestTypeListBean;
     private RequestTypeBean selectedRequestTypeBean;
 
-    /** Initializes object's instance and populates {@link ObservableList}&lt;
-     * {@link RequestTypeBean} &gt; with values from the cache. */
+    /** 
+     * Initializes object's instance and populates {@link ObservableList}&lt;
+     * {@link RequestTypeBean} &gt; with values from the cache. 
+     */
     public RequestTypeListBean() {
-        requestTypeListBean = ObservableCollections.observableList(new LinkedList<RequestTypeBean>());
-        filteredRequestTypeListBean = ObservableCollections.observableList(new LinkedList<RequestTypeBean>());
-        // Load from cache by default
-        // Make a copy of list, since it could be modified
-        for (Iterator<RequestTypeBean> it = CacheManager.getRequestTypes().iterator(); it.hasNext();) {
-            RequestTypeBean requestTypeBean = it.next();
-            requestTypeListBean.add(requestTypeBean);
-            if (requestTypeBean.getStatus().equals("c")) {
-                filteredRequestTypeListBean.add(requestTypeBean);
-            }
-        }
+        this(false);
     }
 
+    /** 
+     * Creates object instance.
+     * @param createDummy Indicates whether to add empty object on the list.
+     */
+    public RequestTypeListBean(boolean createDummy) {
+        super();
+        loadList(createDummy);
+    }
+    
+    /** 
+     * Loads list of {@link RequestTypeBean}.
+     * @param createDummy Indicates whether to add empty object on the list.
+     */
+    public final void loadList(boolean createDummy) {
+        if (requestTypeListBean == null) {
+            requestTypeListBean = ObservableCollections.observableList(new ArrayList<RequestTypeBean>());
+        }
+        loadCodeList(RequestTypeBean.class, requestTypeListBean, 
+                CacheManager.getRequestTypes(), createDummy);
+    }
+    
     public ObservableList<RequestTypeBean> getRequestTypeList() {
         return requestTypeListBean;
-    }
-
-    public ObservableList<RequestTypeBean> getFilteredRequestTypeList() {
-        return filteredRequestTypeListBean;
     }
 
     public RequestTypeBean getSelectedRequestType() {
@@ -116,10 +125,10 @@ public class RequestTypeListBean extends AbstractBindingBean {
     public void removeRequestTypesByAppServices(List<ApplicationServiceBean> appServices) {
         for (Iterator<ApplicationServiceBean> it = appServices.iterator(); it.hasNext();) {
             ApplicationServiceBean applicationServiceBean = it.next();
-
+            
             for (Iterator<RequestTypeBean> it1 = requestTypeListBean.iterator(); it1.hasNext();) {
                 RequestTypeBean requestTypeBean = it1.next();
-
+                
                 if (requestTypeBean.getCode().equals(applicationServiceBean.getRequestTypeCode())) {
                     requestTypeListBean.remove(requestTypeBean);
                     break;
@@ -127,7 +136,7 @@ public class RequestTypeListBean extends AbstractBindingBean {
             }
         }
     }
-
+    
     /** Removes currently selected {@link RequestTypeBean} from the RequestType list. */
     public void removeRequestType() {
         if (selectedRequestTypeBean != null && requestTypeListBean != null) {

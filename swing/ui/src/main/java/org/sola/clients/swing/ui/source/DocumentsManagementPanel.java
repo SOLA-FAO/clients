@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -36,6 +36,7 @@ import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.controls.SolaList;
 import org.sola.clients.beans.source.SourceBean;
 import org.sola.clients.beans.source.SourceListBean;
+import org.sola.clients.swing.common.LafManager;
 
 /** 
  * Displays documents list. This panel could be used on different forms, where
@@ -48,7 +49,6 @@ public class DocumentsManagementPanel extends javax.swing.JPanel {
     private ApplicationDocumentsForm applicationDocumentsForm;
     private SolaList<SourceBean> sourceList;
     private boolean allowEdit = true;
-    private boolean allowNew = true;
     
     /** Creates new instance of {@link DocumentsPanel}. */
     private DocumentsPanel createDocumentsPanel() {
@@ -76,6 +76,7 @@ public class DocumentsManagementPanel extends javax.swing.JPanel {
     /** Default constructor */
     public DocumentsManagementPanel() {
         initComponents();
+        customizeComponents();
         customizeButtons(null);
     }
 
@@ -87,15 +88,26 @@ public class DocumentsManagementPanel extends javax.swing.JPanel {
      * @param allowEdit Indicates whether it is allowed to do changes on the list.
      */
     public DocumentsManagementPanel(SolaList<SourceBean> sourceList,
-            ApplicationBean applicationBean, boolean allowEdit, boolean allowNew) {
+            ApplicationBean applicationBean, boolean allowEdit) {
         this.applicationBean = applicationBean;
         this.sourceList = sourceList;
         this.allowEdit = allowEdit;
-        this.allowNew = allowNew;
         initComponents();
+        customizeComponents();
         customizeButtons(null);
     }
-
+     
+    
+      /** Applies customization of component L&F. */
+    private void customizeComponents() {
+       
+//    BUTTONS   
+    LafManager.getInstance().setBtnProperties(btnAdd);
+    LafManager.getInstance().setBtnProperties(btnRemove);
+    LafManager.getInstance().setBtnProperties(btnView);
+    }
+    
+    
     /** 
      * This constructor is called to load list of {@link SourceBean} by the 
      * given list of IDs.
@@ -106,10 +118,9 @@ public class DocumentsManagementPanel extends javax.swing.JPanel {
      * @param allowEdit Indicates whether it is allowed to do changes on the list.
      */
     public DocumentsManagementPanel(List<String> sourceIds,
-            ApplicationBean applicationBean, boolean allowEdit, boolean allowNew) {
+            ApplicationBean applicationBean, boolean allowEdit) {
         this.applicationBean = applicationBean;
         this.allowEdit = allowEdit;
-        this.allowNew = allowNew;
         initComponents();
         loadSourcesByIds(sourceIds);
         customizeButtons(null);
@@ -271,7 +282,7 @@ public class DocumentsManagementPanel extends javax.swing.JPanel {
             }
         };
 
-        applicationDocumentsForm = new ApplicationDocumentsForm(applicationBean, null, true, this.allowNew);
+        applicationDocumentsForm = new ApplicationDocumentsForm(applicationBean, null, true);
         applicationDocumentsForm.setLocationRelativeTo(this);
         applicationDocumentsForm.addPropertyChangeListener(
                 SourceListBean.SELECTED_SOURCE_PROPERTY, listener);

@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -29,6 +29,7 @@ package org.sola.clients.swing.desktop.administrative;
 
 import javax.swing.ImageIcon;
 import org.sola.clients.beans.cadastre.CadastreObjectBean;
+import org.sola.clients.swing.common.LafManager;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
@@ -41,10 +42,19 @@ public class CreateParcelForm extends javax.swing.JDialog {
     public CreateParcelForm(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        customizeComponents();
         this.setIconImage(new ImageIcon(CreateParcelForm.class.getResource("/images/sola/logo_icon.jpg")).getImage());
      
     }
-
+    
+    /** Applies customization of component L&F. */
+    private void customizeComponents() {
+        
+//    BUTTONS   
+    LafManager.getInstance().setBtnProperties(btnCreate);
+    LafManager.getInstance().setBtnProperties(btnSelect);
+    }
+   
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -39,6 +39,7 @@ import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.beans.source.SourceBean;
 import org.sola.clients.beans.source.SourceSearchResultBean;
 import org.sola.clients.beans.source.SourceSummaryBean;
+import org.sola.clients.swing.common.LafManager;
 import org.sola.common.RolesConstants;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -65,6 +66,10 @@ public class TransactionedDocumentsForm extends javax.swing.JDialog {
     }
 
     private void postInit() {
+        
+        
+        customizeComponents();
+        
         String serviceName = "";
         String applicationNr = "";
         
@@ -111,7 +116,26 @@ public class TransactionedDocumentsForm extends javax.swing.JDialog {
             }
         });
     }
-
+    
+    
+     /** Applies customization of component L&F. */
+    private void customizeComponents() {
+     
+//    BUTTONS   
+    LafManager.getInstance().setBtnProperties(btnAddDocumentFromApplication);
+    LafManager.getInstance().setBtnProperties(btnAddDocumentFromSearch);
+    LafManager.getInstance().setBtnProperties(btnRemove);
+    
+//    LABELS    
+    LafManager.getInstance().setLabProperties(jLabel2);
+    LafManager.getInstance().setLabProperties(lblSelectedDocuments);
+    
+//    TABBED PANELS
+     LafManager.getInstance().setTabProperties(jTabbedPane1);
+   
+    }
+    
+    
     private void customizeRemoveButton(SourceBean source){
         if(source == null){
             btnRemove.setEnabled(false);
@@ -206,6 +230,7 @@ public class TransactionedDocumentsForm extends javax.swing.JDialog {
         jPanel2.setName("jPanel2"); // NOI18N
 
         documentSeachPanel.setName("documentSeachPanel"); // NOI18N
+        documentSeachPanel.setShowPrintButton(false);
 
         btnAddDocumentFromSearch.setText(resourceMap.getString("btnAddDocumentFromSearch.text")); // NOI18N
         btnAddDocumentFromSearch.setName("btnAddDocumentFromSearch"); // NOI18N
@@ -222,7 +247,7 @@ public class TransactionedDocumentsForm extends javax.swing.JDialog {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(documentSeachPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(11, Short.MAX_VALUE))
+                .addContainerGap(22, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(564, Short.MAX_VALUE)
                 .addComponent(btnAddDocumentFromSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)

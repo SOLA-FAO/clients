@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -32,6 +32,7 @@ import org.sola.clients.beans.administrative.RrrBean;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationServiceBean;
 import org.sola.clients.beans.referencedata.StatusConstants;
+import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.ui.source.DocumentsManagementPanel;
 
 /**
@@ -59,7 +60,7 @@ public class SimpleRightForm extends javax.swing.JDialog {
         }
 
         DocumentsManagementPanel panel = new DocumentsManagementPanel(
-                rrrBean.getSourceList(), appBean, allowEdit, true);
+                rrrBean.getSourceList(), appBean, allowEdit);
         return panel;
     }
 
@@ -94,6 +95,7 @@ public class SimpleRightForm extends javax.swing.JDialog {
         initComponents();
 
         this.setTitle(rrrBean.getRrrType().getDisplayValue());
+        customizeComponents();
         customizeForm(rrrAction);
     }
 
@@ -118,7 +120,7 @@ public class SimpleRightForm extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setName("Form"); // NOI18N
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(org.sola.clients.swing.desktop.DesktopApplication.class).getContext().getResourceMap(SimpleRightForm.class);
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance().getContext().getResourceMap(SimpleRightForm.class);
         jLabel13.setFont(resourceMap.getFont("jLabel13.font")); // NOI18N
         jLabel13.setIcon(resourceMap.getIcon("jLabel13.icon")); // NOI18N
         jLabel13.setText(resourceMap.getString("jLabel13.text")); // NOI18N
@@ -209,7 +211,7 @@ public class SimpleRightForm extends javax.swing.JDialog {
         cbxIsPrimary.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         cbxIsPrimary.setName("cbxIsPrimary"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${isPrimary}"), cbxIsPrimary, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${primary}"), cbxIsPrimary, org.jdesktop.beansbinding.BeanProperty.create("selected"));
         bindingGroup.addBinding(binding);
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
@@ -267,7 +269,33 @@ public class SimpleRightForm extends javax.swing.JDialog {
             this.rrrBean=rrrBean.makeCopyByAction(rrrAction);
         }
     }
-
+    
+    
+       /** Applies customization of component L&F. */
+    private void customizeComponents() {
+   
+//    BUTTONS   
+    LafManager.getInstance().setBtnProperties(btnSave);
+    
+    
+//     CHECKBOXES
+    LafManager.getInstance().setChkProperties(cbxIsPrimary);
+   
+//    LABELS    
+    LafManager.getInstance().setLabProperties(jLabel13);
+    LafManager.getInstance().setLabProperties(jLabel14);
+    LafManager.getInstance().setLabProperties(jLabel15);
+    
+//    TXT FIELDS
+    LafManager.getInstance().setTxtProperties(txtNotationText);
+    LafManager.getInstance().setTxtProperties(txtStatus);
+    
+//    FORMATTED TXT
+    LafManager.getInstance().setFormattedTxtProperties(txtRegDatetime);
+    
+    }
+    
+    
     /** 
      * Customizes form view, disabling or enabling different parts, depending 
      * on the given {@link RrrBean#RRR_ACTION} and user rights. 

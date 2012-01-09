@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -98,10 +98,8 @@ public class PartyForm extends javax.swing.JDialog {
         PartyPanel panel;
         if (partyBean != null) {
             panel = new PartyPanel(savePartyOnAction, partyBean, isReadOnly);
-            panel.setOkButtonText("Save");
         } else {
             panel = new PartyPanel(savePartyOnAction);
-            panel.setOkButtonText("Create");
         }
         return panel;
     }
@@ -122,9 +120,12 @@ public class PartyForm extends javax.swing.JDialog {
     }
 
     private void okButtonClicked(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(PartyPanel.SELECTED_PARTY)
+        if ((evt.getPropertyName().equals(PartyPanel.UPDATED_PARTY) ||
+                evt.getPropertyName().equals(PartyPanel.CREATED_PARTY))
                 && evt.getNewValue() != null) {
-            firePropertyChange(PartyPanel.SELECTED_PARTY, null, evt.getNewValue());
+            firePropertyChange(PartyPanel.UPDATED_PARTY, null, evt.getNewValue());
+            this.dispose();
+        }else if (evt.getPropertyName().equals(PartyPanel.CANCEL_ACTION)){
             this.dispose();
         }
     }
@@ -140,23 +141,20 @@ public class PartyForm extends javax.swing.JDialog {
         setTitle(bundle.getString("PartyForm.title")); // NOI18N
         setName("Form"); // NOI18N
 
+        partyPanel.setCloseOnCreate(true);
+        partyPanel.setCloseOnSave(true);
         partyPanel.setName("partyPanel"); // NOI18N
+        partyPanel.setSavePartyOnAction(true);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(partyPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 587, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(partyPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 607, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(partyPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 465, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(partyPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
         );
 
         pack();

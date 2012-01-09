@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -126,11 +126,12 @@ public class ApplicationBean extends ApplicationSummaryBean {
     }
 
     public boolean canDespatch() {
-        return canArchive() || isRequisitioned();
+        return canArchive();
     }
 
     public boolean canResubmit() {
-        return isAssigned() && isRequisitioned();
+        String appStatus = getStatusCode();
+        return isAssigned() && (StatusConstants.REQUISITIONED.equalsIgnoreCase(appStatus));
     }
 
     /**
@@ -161,7 +162,7 @@ public class ApplicationBean extends ApplicationSummaryBean {
     }
 
     public boolean canWithdraw() {
-        return isAssigned() && (isLodged() || isRequisitioned());
+        return isAssigned() && isLodged();
     }
 
     public boolean canRequisition() {
@@ -169,7 +170,7 @@ public class ApplicationBean extends ApplicationSummaryBean {
     }
 
     public boolean canLapse() {
-        return isAssigned() && isRequisitioned();
+        return isAssigned() && isLodged();
     }
 
     public boolean canValidate() {
@@ -181,11 +182,6 @@ public class ApplicationBean extends ApplicationSummaryBean {
     public boolean isLodged() {
         String appStatus = getStatusCode();
         return StatusConstants.LODGED.equalsIgnoreCase(appStatus);
-    }
-
-    public boolean isRequisitioned() {
-        String appStatus = getStatusCode();
-        return StatusConstants.REQUISITIONED.equalsIgnoreCase(appStatus);
     }
 
     public boolean isAssigned() {

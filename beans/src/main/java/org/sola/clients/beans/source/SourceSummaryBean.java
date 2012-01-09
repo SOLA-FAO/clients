@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -34,6 +34,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.sola.clients.beans.AbstractTransactionedBean;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.referencedata.SourceTypeBean;
+import org.sola.clients.beans.validation.Localized;
+import org.sola.common.messaging.ClientMessage;
 import org.sola.webservices.transferobjects.casemanagement.SourceSummaryTO;
 
 /** 
@@ -56,12 +58,12 @@ public class SourceSummaryBean extends AbstractTransactionedBean {
     private String archiveId;
     private String archiveDocumentId;
     private String laNr;
-    @NotNull(message = "Enter date.")
+    @NotNull(message = ClientMessage.CHECK_NOTNULL_RECORDATION, payload=Localized.class)
     private Date recordation;
-    @NotEmpty(message = "Enter reference number.")
+    @NotEmpty(message = ClientMessage.CHECK_NOTNULL_REFERENCENR, payload=Localized.class)
     private String referenceNr;
     private Date submission;
-    @NotNull(message = "Select document type.")
+    @NotNull(message = ClientMessage.CHECK_NOTNULL_SOURCETYPE, payload=Localized.class)
     private SourceTypeBean sourceType;
 
     public SourceSummaryBean() {

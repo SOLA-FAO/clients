@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -36,6 +36,8 @@ import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.beans.party.validation.PartyEntityValidationGroup;
 import org.sola.clients.beans.party.validation.PartyIndividualValidationGroup;
 import org.sola.clients.beans.referencedata.PartyTypeBean;
+import org.sola.clients.beans.validation.Localized;
+import org.sola.common.messaging.ClientMessage;
 import org.sola.webservices.transferobjects.casemanagement.PartySummaryTO;
 import org.sola.webservices.transferobjects.casemanagement.PartyTO;
 
@@ -52,13 +54,15 @@ public class PartySummaryBean extends AbstractIdBean {
     public static final String LASTNAME_PROPERTY = "lastName";
     public static final String EXTID_PROPERTY = "extId";
     public static final String TYPE_PROPERTY = "type";
+    public static final String IS_RIGHTHOLDER_PROPERTY = "rightHolder";
     public static final String ROLE_CODE_PROPERTY = "roleCode";
     
-    @NotEmpty(message="Fill in name.")
+    @NotEmpty(message= ClientMessage.CHECK_NOTNULL_NAME, payload=Localized.class)
     private String name;
-    @NotEmpty(message="Fill in last name.", groups=PartyIndividualValidationGroup.class)
+    @NotEmpty(message= ClientMessage.CHECK_NOTNULL_LASTNAME, payload=Localized.class, groups=PartyIndividualValidationGroup.class)
     private String lastName;
     private String extId;
+    private boolean rightHolder;
     private PartyTypeBean typeBean;
 
     public PartySummaryBean() {
@@ -96,6 +100,18 @@ public class PartySummaryBean extends AbstractIdBean {
         propertySupport.firePropertyChange(NAME_PROPERTY, oldValue, value);
     }
 
+    public String getFullName(){
+        String fullName = getName();
+        if(getLastName()!=null && fullName!=null && fullName.length()>0){
+            if(fullName!=null && fullName.length()>0){
+                fullName = getLastName() + " " + fullName;
+            }else{
+                fullName = getLastName();
+            }
+        }
+        return fullName;
+    }
+    
     public PartyTypeBean getType() {
         return typeBean;
     }
@@ -122,6 +138,16 @@ public class PartySummaryBean extends AbstractIdBean {
         return TypeConverters.TransferObjectToBean(party, PartyBean.class, null);
     }
 
+    public boolean isRightHolder() {
+        return rightHolder;
+    }
+
+    public void setRightHolder(boolean rightHolder) {
+        boolean oldValue = this.rightHolder;
+        this.rightHolder = rightHolder;
+        propertySupport.firePropertyChange(IS_RIGHTHOLDER_PROPERTY, oldValue, this.rightHolder);
+    }
+    
     @Override
     public String toString() {
         return String.format("%s %s", name, lastName);

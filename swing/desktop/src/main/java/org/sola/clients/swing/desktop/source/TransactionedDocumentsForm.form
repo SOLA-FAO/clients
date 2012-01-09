@@ -139,7 +139,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="documentSeachPanel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="11" max="32767" attributes="0"/>
+                      <EmptySpace pref="22" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace pref="564" max="32767" attributes="0"/>
@@ -164,6 +164,7 @@
             <Component class="org.sola.clients.swing.ui.source.DocumentSeachPanel" name="documentSeachPanel">
               <Properties>
                 <Property name="name" type="java.lang.String" value="documentSeachPanel" noResource="true"/>
+                <Property name="showPrintButton" type="boolean" value="false"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="btnAddDocumentFromSearch">

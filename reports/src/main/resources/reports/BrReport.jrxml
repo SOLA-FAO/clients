@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="BrReport" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
+	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
+	<style name="Detail" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="body" class="java.lang.String">
+		<fieldDescription><![CDATA[body]]></fieldDescription>
+	</field>
+	<field name="description" class="java.lang.String">
+		<fieldDescription><![CDATA[description]]></fieldDescription>
+	</field>
+	<field name="feedback" class="java.lang.String">
+		<fieldDescription><![CDATA[feedback]]></fieldDescription>
+	</field>
+	<field name="id" class="java.lang.String">
+		<fieldDescription><![CDATA[id]]></fieldDescription>
+	</field>
+	<field name="orderOfExecution" class="java.lang.String">
+		<fieldDescription><![CDATA[orderOfExecution]]></fieldDescription>
+	</field>
+	<field name="severityCode" class="java.lang.String">
+		<fieldDescription><![CDATA[severityCode]]></fieldDescription>
+	</field>
+	<field name="targetCode" class="java.lang.String">
+		<fieldDescription><![CDATA[targetCode]]></fieldDescription>
+	</field>
+	<field name="targetRequestTypeCode" class="java.lang.String">
+		<fieldDescription><![CDATA[targetRequestTypeCode]]></fieldDescription>
+	</field>
+	<field name="targetRrrTypeCode" class="java.lang.String">
+		<fieldDescription><![CDATA[targetRrrTypeCode]]></fieldDescription>
+	</field>
+	<field name="technicalTypeCode" class="java.lang.String">
+		<fieldDescription><![CDATA[technicalTypeCode]]></fieldDescription>
+	</field>
+	<field name="momentCode" class="java.lang.String">
+		<fieldDescription><![CDATA[momentCode]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="102" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="-10" width="812" height="66" backcolor="#A06B23"/>
+				<staticText>
+					<reportElement style="Title" x="0" y="0" width="370" height="66"/>
+					<box topPadding="4" leftPadding="4" bottomPadding="4" rightPadding="4"/>
+					<textElement verticalAlignment="Bottom">
+						<font isBold="false"/>
+					</textElement>
+					<text><![CDATA[Br Report]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="SubTitle" x="370" y="37" width="316" height="29"/>
+					<textElement textAlignment="Right">
+						<font size="22" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Br definitions and actions]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="60" width="812" height="32" forecolor="#000000" backcolor="#8C3C22"/>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement x="553" y="12" width="144" height="20" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Right">
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+			<image>
+				<reportElement x="720" y="-10" width="77" height="66"/>
+				<imageExpression class="java.lang.String"><![CDATA["images/sola/logo_orange.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="21" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="105" height="20" forecolor="#D0B48E" backcolor="#A06B23"/>
+				<box>
+					<pen lineWidth="0.0" lineColor="#CC6600"/>
+					<topPen lineWidth="0.0" lineColor="#CC6600"/>
+					<leftPen lineWidth="0.0" lineColor="#CC6600"/>
+					<bottomPen lineWidth="0.0" lineColor="#CC6600"/>
+					<rightPen lineWidth="0.0" lineColor="#CC6600"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Br]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="105" y="0" width="105" height="20" forecolor="#D0B48E" backcolor="#A06B23"/>
+				<box>
+					<pen lineWidth="0.0" lineColor="#CC6600"/>
+					<topPen lineWidth="0.0" lineColor="#CC6600"/>
+					<leftPen lineWidth="0.0" lineColor="#CC6600"/>
+					<bottomPen lineWidth="0.0" lineColor="#CC6600"/>
+					<rightPen lineWidth="0.0" lineColor="#CC6600"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Type]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="315" y="0" width="105" height="20" forecolor="#D0B48E" backcolor="#A06B23"/>
+				<box>
+					<pen lineWidth="0.0" lineColor="#CC6600"/>
+					<topPen lineWidth="0.0" lineColor="#CC6600"/>
+					<leftPen lineWidth="0.0" lineColor="#CC6600"/>
+					<bottomPen lineWidth="0.0" lineColor="#CC6600"/>
+					<rightPen lineWidth="0.0" lineColor="#CC6600"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Description]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="420" y="0" width="105" height="20" forecolor="#D0B48E" backcolor="#A06B23"/>
+				<box>
+					<pen lineWidth="0.0" lineColor="#CC6600"/>
+					<topPen lineWidth="0.0" lineColor="#CC6600"/>
+					<leftPen lineWidth="0.0" lineColor="#CC6600"/>
+					<bottomPen lineWidth="0.0" lineColor="#CC6600"/>
+					<rightPen lineWidth="0.0" lineColor="#CC6600"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Body]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="210" y="0" width="105" height="20" forecolor="#D0B48E" backcolor="#A06B23"/>
+				<box>
+					<pen lineWidth="0.0" lineColor="#CC6600"/>
+					<topPen lineWidth="0.0" lineColor="#CC6600"/>
+					<leftPen lineWidth="0.0" lineColor="#CC6600"/>
+					<bottomPen lineWidth="0.0" lineColor="#CC6600"/>
+					<rightPen lineWidth="0.0" lineColor="#CC6600"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Feedback]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="525" y="0" width="105" height="20" forecolor="#D0B48E" backcolor="#A06B23"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Severity]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="735" y="0" width="77" height="20" forecolor="#D0B48E" backcolor="#A06B23"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Moment]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="630" y="0" width="105" height="20" forecolor="#D0B48E" backcolor="#A06B23"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Target]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="66" splitType="Stretch">
+			<frame>
+				<reportElement style="Row" positionType="Float" stretchType="RelativeToTallestObject" mode="Opaque" x="0" y="0" width="812" height="66"/>
+			</frame>
+			<elementGroup>
+				<textField isBlankWhenNull="true">
+					<reportElement positionType="Float" x="105" y="0" width="100" height="66"/>
+					<box>
+						<pen lineWidth="0.0" lineColor="#CC6600"/>
+						<topPen lineWidth="0.0" lineColor="#CC6600"/>
+						<leftPen lineWidth="0.0" lineColor="#CC6600"/>
+						<bottomPen lineWidth="0.0" lineColor="#CC6600"/>
+						<rightPen lineWidth="0.0" lineColor="#CC6600"/>
+					</box>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{technicalTypeCode}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement positionType="Float" isPrintRepeatedValues="false" x="0" y="0" width="100" height="66"/>
+					<box>
+						<pen lineWidth="0.0" lineColor="#CC6600"/>
+						<topPen lineWidth="0.0" lineColor="#CC6600"/>
+						<leftPen lineWidth="0.0" lineColor="#CC6600"/>
+						<bottomPen lineWidth="0.0" lineColor="#CC6600"/>
+						<rightPen lineWidth="0.0" lineColor="#CC6600"/>
+					</box>
+					<textElement markup="none">
+						<font size="13" isBold="true" isStrikeThrough="false"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{id}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement positionType="Float" isPrintRepeatedValues="false" x="210" y="0" width="100" height="66"/>
+					<box>
+						<pen lineWidth="0.0" lineColor="#CC6600"/>
+						<topPen lineWidth="0.0" lineColor="#CC6600"/>
+						<leftPen lineWidth="0.0" lineColor="#CC6600"/>
+						<bottomPen lineWidth="0.0" lineColor="#CC6600"/>
+						<rightPen lineWidth="0.0" lineColor="#CC6600"/>
+					</box>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{feedback}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement positionType="Float" isPrintRepeatedValues="false" x="315" y="0" width="100" height="66"/>
+					<box>
+						<pen lineWidth="0.0" lineColor="#CC6600"/>
+						<topPen lineWidth="0.0" lineColor="#CC6600"/>
+						<leftPen lineWidth="0.0" lineColor="#CC6600"/>
+						<bottomPen lineWidth="0.0" lineColor="#CC6600"/>
+						<rightPen lineWidth="0.0" lineColor="#CC6600"/>
+					</box>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{description}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true" hyperlinkType="LocalAnchor">
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="420" y="0" width="100" height="66" isPrintWhenDetailOverflows="true"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{body}]]></textFieldExpression>
+					<anchorNameExpression><![CDATA["body"]]></anchorNameExpression>
+					<hyperlinkTooltipExpression><![CDATA[$F{body}.replaceAll( "FROM", "FROM \n" )]]></hyperlinkTooltipExpression>
+				</textField>
+			</elementGroup>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="525" y="0" width="100" height="66"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{severityCode}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="630" y="0" width="100" height="66"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{targetCode}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="735" y="0" width="77" height="66"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{momentCode}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="33" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="797" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="25" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="812" height="25" forecolor="#D0B48E" backcolor="#A06B23"/>
+				<textField evaluationTime="Report">
+					<reportElement style="Column header" x="757" y="3" width="40" height="20" forecolor="#FFFFFF"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Column header" x="677" y="3" width="80" height="20" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				</textField>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement style="Column header" x="2" y="3" width="197" height="20" forecolor="#FFFFFF"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

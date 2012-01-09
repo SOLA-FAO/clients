@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -49,13 +49,12 @@ import org.sola.webservices.transferobjects.administrative.RrrShareTO;
 public class RrrShareBean extends AbstractVersionedBean {
 
     public static final String SELECTED_RIGHTHOLDER_PROPERTY = "selectedRightHolder";
-    
     private String rrrId;
-    @NotNull(message = ClientMessage.CHECK_NOTNULL_FIELDS, payload=Localized.class)
-    @Min(value=1, message="Minimum value for numerator is 1.")
+    @NotNull(message = ClientMessage.CHECK_NOTNULL_NOMINATOR, payload = Localized.class)
+    @Min(value = 1, message = ClientMessage.CHECK_MIN_NOMINATOR, payload = Localized.class)
     private Short nominator;
-    @Min(value=1, message="Minimum value for denominator is 1.")
-    @NotNull(message = "Fill in denominator.")
+    @Min(value = 1, message = ClientMessage.CHECK_MIN_DENOMINATOR, payload = Localized.class)
+    @NotNull(message = ClientMessage.CHECK_NOTNULL_DENOMINATOR, payload = Localized.class)
     private Short denominator;
     private SolaList<PartySummaryBean> rightHolderList;
     private PartySummaryBean selectedRightHolder;
@@ -96,10 +95,26 @@ public class RrrShareBean extends AbstractVersionedBean {
         return rightHolderList;
     }
 
-    @NoDuplicates(message="You have duplicated parties in one share.")
-    @Size(min = 1, message = "Fill in at least one owner.")
+    @NoDuplicates(message = ClientMessage.CHECK_NODUPLI_RIGHTHOLDERLIST, payload = Localized.class)
+    @Size(min = 1, message = ClientMessage.CHECK_SIZE_FILTERRIGHTHOLDER, payload = Localized.class)
     public ObservableList<PartySummaryBean> getFilteredRightHolderList() {
         return rightHolderList.getFilteredList();
+    }
+
+    /** Returns read only string combining list of right holders.*/
+    public String getRightHoldersStringList() {
+        String result = "";
+        for (PartySummaryBean rightHolder : getFilteredRightHolderList()) {
+            if (result.length() > 0) {
+                result = result + "\r\n";
+            }
+            result = result + "- " + rightHolder.getName();
+            if (rightHolder.getLastName() != null && rightHolder.getLastName().length() > 0) {
+                result = result + " " + rightHolder.getLastName();
+            }
+            result = result + ";";
+        }
+        return result;
     }
 
     public void setRightHolderList(SolaList<PartySummaryBean> rightHolderList) {
@@ -129,12 +144,12 @@ public class RrrShareBean extends AbstractVersionedBean {
         this.selectedRightHolder = selectedRightHolder;
         propertySupport.firePropertyChange(SELECTED_RIGHTHOLDER_PROPERTY, oldValue, this.selectedRightHolder);
     }
-    
-    public void addOrUpdateRightholder(PartySummaryBean rightholder){
-        if(rightholder!=null && rightHolderList!=null){
-            if(rightHolderList.contains(rightholder)){
+
+    public void addOrUpdateRightholder(PartySummaryBean rightholder) {
+        if (rightholder != null && rightHolderList != null) {
+            if (rightHolderList.contains(rightholder)) {
                 rightHolderList.set(rightHolderList.indexOf(rightholder), rightholder);
-            }else{
+            } else {
                 rightHolderList.addAsNew(rightholder);
             }
         }

@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -108,7 +108,7 @@ public class AdminApplication extends SingleFrameApplication {
     protected void startup() {
         Thread.setDefaultUncaughtExceptionHandler(new DesktopClientExceptionHandler());
         LocalizationManager.loadLanguage(AdminApplication.class);
-        //LafManager.getInstance().setProperties("autumn");
+        LafManager.getInstance().setProperties("green");
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         int x = ((dim.width) / 2);
         int y = ((dim.height) / 2);

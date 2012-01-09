@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -30,6 +30,8 @@ package org.sola.clients.beans.security;
 import javax.validation.constraints.Size;
 import org.sola.clients.beans.controls.SolaList;
 import org.sola.clients.beans.converters.TypeConverters;
+import org.sola.clients.beans.validation.Localized;
+import org.sola.common.messaging.ClientMessage;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.EntityAction;
 import org.sola.webservices.transferobjects.security.GroupTO;
@@ -45,7 +47,7 @@ public class GroupBean extends GroupSummaryBean {
     public static final String GROUP_ROLES_PROPERTY = "groupRoles";
     
     
-    @Size(min=1, message="Select at least one role.")
+    @Size(min=1, message= ClientMessage.CHECK_MIN_GROUPROLES, payload=Localized.class)
     private SolaList<GroupRoleBean> groupRoles;
     
     public GroupBean(){

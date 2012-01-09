@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -33,6 +33,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.sola.clients.beans.AbstractTransactionedBean;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.referencedata.CadastreObjectTypeBean;
+import org.sola.clients.beans.validation.Localized;
+import org.sola.common.messaging.ClientMessage;
 import org.sola.webservices.transferobjects.cadastre.CadastreObjectTO;
 
 /** 
@@ -53,11 +55,11 @@ public class CadastreObjectBean extends AbstractTransactionedBean {
     private Date approvalDatetime;
     private Date historicDatetime;
     private String sourceReference;
-    @NotEmpty(message = "Name first part is not set.")
+    @NotEmpty(message =  ClientMessage.CHECK_NOTNULL_CADFIRSTPART, payload=Localized.class)
     private String nameFirstpart;
-    @NotEmpty(message = "Name last part is not set.")
+    @NotEmpty(message =  ClientMessage.CHECK_NOTNULL_CADLASTPART, payload=Localized.class)
     private String nameLastpart;
-    @NotNull(message = "Type is not set.")
+    @NotNull(message =  ClientMessage.CHECK_NOTNULL_CADOBJTYPE, payload=Localized.class)
     private CadastreObjectTypeBean cadastreObjectType;
     private byte[] geomPolygon;
 

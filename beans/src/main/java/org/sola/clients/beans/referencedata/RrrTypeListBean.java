@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -40,7 +40,6 @@ public class RrrTypeListBean extends AbstractBindingListBean {
 
     public static final String SELECTED_RRR_TYPE_PROPERTY = "selectedRrrType";
     private ObservableList<RrrTypeBean> rrrTypeBeanList;
-    private ObservableList<RrrTypeBean> filteredRrrTypeBeanList;
     private RrrTypeBean selectedRrrType;
 
     /** 
@@ -50,7 +49,7 @@ public class RrrTypeListBean extends AbstractBindingListBean {
     public RrrTypeListBean() {
         this(false);
     }
-
+    
     /** 
      * Initializes object's instance and populates {@link ObservableList}&lt;
      * {@link RrrTypeBean} &gt; with values from the cache. 
@@ -60,22 +59,16 @@ public class RrrTypeListBean extends AbstractBindingListBean {
         super();
         loadList(createDummy);
     }
-
+    
     /** 
      * Loads list of {@link RrrTypeBean}.
      * @param createDummy Indicates whether to add empty object on the list.
      */
-    public final void loadList(boolean createDummy) {
-        if (rrrTypeBeanList == null) {
+    public final void loadList(boolean createDummy){
+        if(rrrTypeBeanList == null){
             rrrTypeBeanList = ObservableCollections.observableList(new ArrayList<RrrTypeBean>());
-            filteredRrrTypeBeanList = ObservableCollections.observableList(new ArrayList<RrrTypeBean>());
         }
-        loadCodeList(rrrTypeBeanList, CacheManager.getRrrTypes(), createDummy);
-        for (RrrTypeBean bean : rrrTypeBeanList) {
-            if (bean.getStatus().equals("c")) {
-                filteredRrrTypeBeanList.add(bean);
-            }
-        }
+        loadCodeList(RrrTypeBean.class, rrrTypeBeanList, CacheManager.getRrrTypes(), createDummy);
     }
 
     public RrrTypeBean getSelectedRrrType() {
@@ -89,10 +82,6 @@ public class RrrTypeListBean extends AbstractBindingListBean {
 
     public ObservableList<RrrTypeBean> getRrrTypeBeanList() {
         return rrrTypeBeanList;
-    }
-
-    public ObservableList<RrrTypeBean> getFilteredRrrTypeBeanList() {
-        return filteredRrrTypeBeanList;
     }
 
     public void setSelectedRightByCode(String rrrTypeCode) {

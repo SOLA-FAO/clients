@@ -80,7 +80,7 @@
             </Property>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="elements" source="requestTypeList" sourcePath="${filteredRequestTypeList}" target="tabFeeDetails1" targetPath="elements" updateStrategy="0" immediately="true">
+            <BindingProperty name="elements" source="requestTypeList" sourcePath="${requestTypeList}" target="tabFeeDetails1" targetPath="elements" updateStrategy="0" immediately="true">
               <Subbinding sourcePath="${displayValue}">
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>

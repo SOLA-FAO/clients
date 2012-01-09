@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -37,7 +37,7 @@ import org.geotools.geometry.jts.JTS;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.opengis.feature.simple.SimpleFeature;
 import org.sola.clients.swing.gis.Messaging;
-import org.sola.clients.geotools.ui.layers.SolaLayerGraphics;
+import org.geotools.map.extended.layer.ExtendedLayerGraphics;
 import org.sola.common.messaging.GisMessage;
 import org.sola.webservices.transferobjects.cadastre.CadastreObjectTO;
 
@@ -49,7 +49,7 @@ public abstract class ControlsBundleForWorkingWithCO extends SolaControlsBundle 
 
 
     protected void addCadastreObjectsInLayer(
-            SolaLayerGraphics inLayer, List<CadastreObjectTO> cadastreObjects) {
+            ExtendedLayerGraphics inLayer, List<CadastreObjectTO> cadastreObjects) {
         if (cadastreObjects == null || cadastreObjects.isEmpty()) {
             return;
         }

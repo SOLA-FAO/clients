@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -29,6 +29,7 @@ package org.sola.clients.swing.ui.security;
 
 import org.sola.clients.beans.security.GroupBean;
 import org.sola.clients.beans.security.GroupRoleHelperListBean;
+import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.ui.renderers.TableCellTextAreaRenderer;
 
 /**
@@ -56,8 +57,27 @@ public class GroupPanel extends javax.swing.JPanel {
     public GroupPanel(GroupBean group) {
         setupGroupBean(group);
         initComponents();
+        customizeComponents();
     }
-
+    
+     /** Applies customization of component L&F. */
+    private void customizeComponents() {
+   
+//    BUTTONS   
+    LafManager.getInstance().setBtnProperties(btnCancel);
+    LafManager.getInstance().setBtnProperties(btnOk);
+    
+//    LABELS    
+    LafManager.getInstance().setLabProperties(jLabel1);
+    LafManager.getInstance().setLabProperties(jLabel2);
+    LafManager.getInstance().setLabProperties(jLabel3);
+    
+//    TXT FIELDS
+    LafManager.getInstance().setTxtProperties(txtDescription);
+    LafManager.getInstance().setTxtProperties(txtName);
+    }
+    
+    
     /** Setup {@link GroupBean} object, used to bind data on the form. */
     private void setupGroupBean(GroupBean group) {
         if (group != null) {

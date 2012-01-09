@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -34,7 +34,6 @@ package org.sola.clients.swing.gis;
 import java.lang.reflect.Field;
 import org.sola.common.logging.LogUtility;
 import org.sola.common.messaging.GisMessage;
-import org.sola.common.messaging.LocalizedMessage;
 import org.sola.common.messaging.MessageUtility;
 
 /**
@@ -42,9 +41,9 @@ import org.sola.common.messaging.MessageUtility;
  * show message method of that geotools ui. By doing so, the messages that will be displayed in the
  * geotools ui can be replaced from the messages in the sola projects.
  * 
- * @author E. Manoku (Date July 2011)
+ * @author Elton Manoku
  */
-public class Messaging extends org.sola.clients.geotools.util.Messaging {
+public class Messaging extends org.geotools.swing.extended.util.Messaging {
 
     public Messaging() {
     }

@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -37,6 +37,7 @@ import org.sola.clients.swing.common.controls.BrowseControlListener;
 import org.sola.clients.beans.digitalarchive.DocumentBean;
 import org.sola.clients.swing.ui.renderers.SimpleComboBoxRenderer;
 import org.sola.clients.beans.source.SourceBean;
+import org.sola.clients.swing.common.LafManager;
 
 /**
  * Document panel, used to create or update document. {@link SourceBean} is used
@@ -76,6 +77,28 @@ public class DocumentPanel extends javax.swing.JPanel {
         this.allowEditing = allowEditing;
         customizeForm();
     }
+    /** Applies customization of component L&F. */
+    private void customizeComponents() {
+       
+//    BUTTONS   
+    LafManager.getInstance().setBtnProperties(btnOk);
+    
+//    COMBOBOXES
+    LafManager.getInstance().setCmbProperties(cbxDocType);
+    
+    
+//    LABELS    
+    LafManager.getInstance().setLabProperties(jLabel1);
+    LafManager.getInstance().setLabProperties(jLabel2);
+    LafManager.getInstance().setLabProperties(jLabel3);
+    LafManager.getInstance().setLabProperties(jLabel4);
+    
+//    TXT FIELDS
+    LafManager.getInstance().setTxtProperties(txtDocRefNumber);
+  
+//    FORMATTED TXT
+    LafManager.getInstance().setFormattedTxtProperties(txtDocRecordDate);
+    }
 
     /** Customizes form elements, based on the provided setting. */
     private void customizeForm(){
@@ -92,6 +115,7 @@ public class DocumentPanel extends javax.swing.JPanel {
      * sets text of OK button.
      */
     private void postInit() {
+        customizeComponents() ;
         btnOk.setText(okButtonText);
         cbxDocType.setSelectedIndex(-1);
         // Init browse attachment
@@ -195,7 +219,7 @@ public class DocumentPanel extends javax.swing.JPanel {
         cbxDocType.setName("cbxDocType"); // NOI18N
         cbxDocType.setRenderer(new SimpleComboBoxRenderer("getDisplayValue"));
 
-        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${filteredSourceTypeList}");
+        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${sourceTypeList}");
         org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, sourceTypeListBean, eLProperty, cbxDocType);
         bindingGroup.addBinding(jComboBoxBinding);
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, sourceBean, org.jdesktop.beansbinding.ELProperty.create("${sourceType}"), cbxDocType, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"), "DocType");

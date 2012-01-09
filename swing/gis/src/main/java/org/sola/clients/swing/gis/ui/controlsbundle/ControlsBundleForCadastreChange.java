@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -32,26 +32,24 @@
 package org.sola.clients.swing.gis.ui.controlsbundle;
 
 import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.io.WKBReader;
 import org.geotools.geometry.jts.JTS;
-import org.sola.clients.swing.gis.beans.CadastreChangeBean;
+import org.sola.clients.swing.gis.beans.TransactionCadastreChangeBean;
 import java.util.List;
 import org.geotools.geometry.jts.ReferencedEnvelope;
-import org.geotools.geometry.jts.WKTReader2;
-import org.sola.clients.geotools.ui.layers.SolaLayer;
+import org.geotools.map.extended.layer.ExtendedLayer;
 import org.sola.clients.swing.gis.Messaging;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.data.PojoFeatureSource;
-import org.sola.clients.swing.gis.layers.NewCadastreObjectLayer;
-import org.sola.clients.swing.gis.layers.NewSurveyPointLayer;
-import org.sola.clients.swing.gis.layers.PojoLayer;
-import org.sola.clients.swing.gis.layers.TargetCadastreObjectLayer;
-import org.sola.clients.swing.gis.mapactions.NewCadastreObjectListFormShow;
-import org.sola.clients.swing.gis.mapactions.PointSurveyListFormShow;
-import org.sola.clients.swing.gis.mapactions.TestCadastreChangeBean;
-import org.sola.clients.swing.gis.tools.NewParcelTool;
-import org.sola.clients.swing.gis.tools.NodeLinkingTool;
-import org.sola.clients.swing.gis.tools.SelectParcelTool;
+import org.sola.clients.swing.gis.layer.NewCadastreObjectLayer;
+import org.sola.clients.swing.gis.layer.NewSurveyPointLayer;
+import org.sola.clients.swing.gis.layer.PojoLayer;
+import org.sola.clients.swing.gis.layer.TargetCadastreObjectLayer;
+import org.sola.clients.swing.gis.mapaction.NewCadastreObjectListFormShow;
+import org.sola.clients.swing.gis.mapaction.PointSurveyListFormShow;
+import org.sola.clients.swing.gis.mapaction.TestCadastreChangeBean;
+import org.sola.clients.swing.gis.tool.NewParcelTool;
+import org.sola.clients.swing.gis.tool.NodeLinkingTool;
+import org.sola.clients.swing.gis.tool.SelectParcelTool;
 import org.sola.common.messaging.GisMessage;
 import org.sola.webservices.transferobjects.cadastre.CadastreObjectTO;
 
@@ -61,7 +59,7 @@ import org.sola.webservices.transferobjects.cadastre.CadastreObjectTO;
  */
 public final class ControlsBundleForCadastreChange extends ControlsBundleForWorkingWithCO {
 
-    private CadastreChangeBean cadastreChangeBean;
+    private TransactionCadastreChangeBean cadastreChangeBean;
     private NewParcelTool newParcelTool = null;
     private SelectParcelTool selectParcelTool = null;
     private NodeLinkingTool nodelinkingTool = null;
@@ -73,7 +71,7 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForWork
 
     public ControlsBundleForCadastreChange(
             String applicationNumber,
-            CadastreChangeBean cadastreChangeBean,
+            TransactionCadastreChangeBean cadastreChangeBean,
             String baUnitId,
             byte[] applicationLocation) {
         super();
@@ -84,6 +82,8 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForWork
         ReferencedEnvelope boundsToZoom = null;
         if (this.newPointsLayer.getFeatureCollection().size() > 0) {
             boundsToZoom = this.newPointsLayer.getFeatureCollection().getBounds();
+        } else if (this.targetParcelsLayer.getFeatureCollection().size() > 0) {
+            boundsToZoom = this.targetParcelsLayer.getFeatureCollection().getBounds();
         } else if (baUnitId != null) {
             this.setTargetParcelsByBaUnit(baUnitId);
         } else if (applicationLocation != null) {
@@ -108,7 +108,7 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForWork
         try {
 
             if (this.cadastreChangeBean == null) {
-                this.cadastreChangeBean = new CadastreChangeBean();
+                this.cadastreChangeBean = new TransactionCadastreChangeBean();
             }
 
             //Adding layers
@@ -119,11 +119,12 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForWork
 
             this.getMap().addMapAction(new TestCadastreChangeBean(this), this.getToolbar());
 
-            for (SolaLayer solaLayer : this.getMap().getSolaLayers().values()) {
+            for (ExtendedLayer solaLayer : this.getMap().getSolaLayers().values()) {
                 if (solaLayer.getClass().equals(PojoLayer.class)) {
-                    if (((PojoLayer) solaLayer).getConfig().getUsedFor().equals(
-                            PojoLayer.CONFIG_USER_FOR)) {
+                    if (((PojoLayer) solaLayer).getConfig().getId().equals(
+                            PojoLayer.CONFIG_PENDING_PARCELS_LAYER_NAME)) {
                         this.pendingLayer = (PojoLayer) solaLayer;
+                        break;
                     }
                 }
             }
@@ -133,12 +134,12 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForWork
         }
     }
 
-    public CadastreChangeBean getCadastreChangeBean() {
-        cadastreChangeBean.setNewCadastreObjectList(
+    public TransactionCadastreChangeBean getCadastreChangeBean() {
+        cadastreChangeBean.setCadastreObjectList(
                 this.newCadastreObjectLayer.getCadastreObjectList());
         cadastreChangeBean.setSurveyPointList(this.newPointsLayer.getSurveyPointList());
-        cadastreChangeBean.setTargetCadastreObjectIdList(
-                this.targetParcelsLayer.getCadastreObjectIdTargetList());
+        cadastreChangeBean.setCadastreObjectTargetList(
+                this.targetParcelsLayer.getCadastreObjectTargetList());
         return cadastreChangeBean;
     }
 
@@ -154,13 +155,13 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForWork
                 this.getMap().getSrid(), this.newCadastreObjectLayer);
         this.getMap().addLayer(newPointsLayer);
 
-        this.targetParcelsLayer.setCadastreObjectIdTargetList(
-                cadastreChangeBean.getTargetCadastreObjectIdList());
+        this.targetParcelsLayer.setCadastreObjectTargetList(
+                cadastreChangeBean.getCadastreObjectTargetList());
 
         this.newPointsLayer.setSurveyPointList(this.cadastreChangeBean.getSurveyPointList());
 
         this.newCadastreObjectLayer.setCadastreObjectList(
-                this.cadastreChangeBean.getNewCadastreObjectList());
+                this.cadastreChangeBean.getCadastreObjectList());
     }
 
     private void addToolsAndCommands() {

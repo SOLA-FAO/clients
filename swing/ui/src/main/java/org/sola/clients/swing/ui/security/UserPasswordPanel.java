@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -28,6 +28,7 @@
 package org.sola.clients.swing.ui.security;
 
 import org.sola.clients.beans.security.UserBean;
+import org.sola.clients.swing.common.LafManager;
 
 /**
  * Used to change user password.
@@ -39,6 +40,7 @@ public class UserPasswordPanel extends javax.swing.JPanel {
     /** Default constructor. */
     public UserPasswordPanel() {
         initComponents();
+        customizeComponents();
     }
 
     /** 
@@ -48,8 +50,24 @@ public class UserPasswordPanel extends javax.swing.JPanel {
     public UserPasswordPanel(String userName) {
         this.userName = userName;
         initComponents();
+        customizeComponents();
     }
-
+    
+    
+     /** Applies customization of component L&F. */
+    private void customizeComponents() {
+    
+//    LABELS    
+    LafManager.getInstance().setLabProperties(jLabel1);
+    LafManager.getInstance().setLabProperties(jLabel2);
+   
+//    PASSWORD FIELDS
+    LafManager.getInstance().setPassProperties(txtPassword);
+    LafManager.getInstance().setPassProperties(txtPasswordConfirmation);
+    
+    }
+    
+    
     /** Returns username for which to set the password. */
     public String getUserName() {
         return userName;

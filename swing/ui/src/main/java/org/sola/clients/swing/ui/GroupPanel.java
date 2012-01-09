@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -27,6 +27,8 @@
  */
 package org.sola.clients.swing.ui;
 
+import org.sola.clients.swing.common.LafManager;
+
 /**
  * Decorative groups separation panel
  */
@@ -35,6 +37,7 @@ public class GroupPanel extends javax.swing.JPanel {
     /** Default constructor. */
     public GroupPanel() {
         initComponents();
+        customizeComponents();
     }
 
     /** 
@@ -43,7 +46,19 @@ public class GroupPanel extends javax.swing.JPanel {
      */
     public GroupPanel(String title) {
         initComponents();
+        customizeComponents();
         lblGroupTitle.setText(title);
+    }
+    
+    
+    
+    /** Applies customization of component L&F. */
+    private void customizeComponents() {
+//    LABELS    
+    LafManager.getInstance().setLabProperties(lblGroupTitle);
+    lblGroupTitle.setForeground(new java.awt.Color(255, 255, 255));
+    lblGroupTitle.setFont(lblGroupTitle.getFont().deriveFont(lblGroupTitle.getFont().getStyle() | java.awt.Font.BOLD, lblGroupTitle.getFont().getSize()));
+    
     }
     
     /** Returns group title text. */
@@ -64,9 +79,10 @@ public class GroupPanel extends javax.swing.JPanel {
 
         setBackground(new java.awt.Color(255, 153, 0));
 
-        lblGroupTitle.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblGroupTitle.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblGroupTitle.setForeground(new java.awt.Color(255, 255, 255));
-        lblGroupTitle.setText("Group name");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/Bundle"); // NOI18N
+        lblGroupTitle.setText(bundle.getString("GroupPanel.lblGroupTitle.text")); // NOI18N
         lblGroupTitle.setName("lblGroupTitle"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -76,7 +92,7 @@ public class GroupPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblGroupTitle)
-                .addContainerGap(316, Short.MAX_VALUE))
+                .addContainerGap(305, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

@@ -4,12 +4,12 @@
     <parent>
         <artifactId>sola-clients</artifactId>
         <groupId>org.sola</groupId>
-        <version>alpha</version>
+        <version>1.0-SNAPSHOT</version>
     </parent>
 
     <groupId>org.sola.clients</groupId>
     <artifactId>sola-desktop-web-start</artifactId>
-    <version>alpha</version>
+    <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>Clients Desktop Web Start</name>
@@ -76,9 +76,9 @@
                     <libPath>lib</libPath>
                     <!-- pack200 has some bugs that should have been fixed. 
                     See jira.codehaus.org/browse/MWEBSTART-159 for details.
-                    Note that the jnlp-download-servlet can also host gzip
-                    compressed files, but given the target JRE is Java 7, 
-                    it is not necessary to host both pack200 and gzip files.-->
+                    The jnlp-download-servlet supports both pack200 and gzip, 
+                    however as SOLA targets JRE 7, there is no need to use
+                    the gzip format. -->
                     <pack200>true</pack200>
                     <jnlpFiles>
                         <jnlpFile>

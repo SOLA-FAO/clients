@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -36,7 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import org.sola.common.MappingManager;
-import org.sola.clients.swing.gis.beans.CadastreChangeBean;
+import org.sola.clients.swing.gis.beans.TransactionCadastreChangeBean;
 import org.sola.common.logging.LogUtility;
 import org.sola.common.messaging.MessageUtility;
 import org.sola.services.boundary.wsclients.CadastreClient;
@@ -50,7 +50,7 @@ import org.sola.webservices.spatial.QueryForNavigation;
 import org.sola.webservices.search.QueryForSelect;
 import org.sola.webservices.spatial.ResultForNavigationInfo;
 import org.sola.webservices.search.ResultForSelectionInfo;
-import org.sola.webservices.transferobjects.cadastre.CadastreChangeTO;
+import org.sola.webservices.transferobjects.transaction.TransactionCadastreChangeTO;
 
 /**
  *
@@ -142,28 +142,16 @@ public class PojoDataAccess {
         return getInstance().getWSManager().getSpatialService();
     }
 
-    //    public List<CadastreObjectTO> getCadastreObjectsByBaUnit(String baUnitId){
-//        return getCadastreService().getCadastreObjectsByBaUnit(baUnitId);
-//    }
-//    
-//    public CadastreObjectTO getCadastreObjectByPoint(double x, double y, int srid){
-//        return getCadastreService().getCadastreObjectByPoint(x, y, srid);
-//    }
-//    
-//    public List<CadastreObjectTO> getCadastreObjectsByService(String serviceId){
-//        return getInstance().getWSManager().getCadastreService().getCadastreObjectsByService(
-//                serviceId);
-//    }
-//    
-//    public void saveCadastreChange(CadastreChangeTO cadastreChangeTO){
-//        getInstance().getWSManager().getCadastreService().saveCadastreChange(cadastreChangeTO);
-//    }
-
-    public CadastreChangeBean getCadastreChange(String serviceId){
-        CadastreChangeTO cadastreChangeTO = 
-                getInstance().getWSManager().getCadastreService().getCadastreChange(serviceId);
-        CadastreChangeBean cadastreChangeBean = new CadastreChangeBean();
-        MappingManager.getMapper().map(cadastreChangeTO, cadastreChangeBean);
+    public TransactionCadastreChangeBean getCadastreChange(String serviceId){
+        TransactionCadastreChangeTO objTO = 
+                getInstance().getWSManager().getCadastreService().getTransactionCadastreChange(
+                serviceId);
+        TransactionCadastreChangeBean cadastreChangeBean = new TransactionCadastreChangeBean();
+        if (objTO == null){
+            cadastreChangeBean.setFromServiceId(serviceId);
+        }else{
+            MappingManager.getMapper().map(objTO, cadastreChangeBean);            
+        }
         return cadastreChangeBean;
     }
 }

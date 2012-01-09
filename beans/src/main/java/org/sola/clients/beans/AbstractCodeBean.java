@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -31,6 +31,9 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.beans.system.LanguageBean;
+import org.sola.clients.beans.validation.Localized;
+import org.sola.common.messaging.ClientMessage;
+import org.sola.common.messaging.MessageUtility;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.AbstractCodeTO;
 
@@ -45,13 +48,13 @@ public abstract class AbstractCodeBean extends AbstractBindingBean {
     public static final String STATUS_PROPERTY = "status";
     public static final String DESCRIPTION_PROPERTY = "description";
     public static final String DISPLAY_VALUE_PROPERTY = "displayValue";
-    @NotEmpty(message = "Fill in code.")
+    @NotEmpty(message = ClientMessage.CHECK_NOTNULL_CODE, payload=Localized.class)
     private String code;
-    @NotEmpty(message = "Fill in status.")
-    @Size(max = 1, message = "Enter only one character for the status.")
+    @NotEmpty(message = ClientMessage.CHECK_NOTNULL_STATUS, payload=Localized.class)
+    @Size(max = 1, message = ClientMessage.CHECK_SIZE_STATUS, payload=Localized.class)
     private String status;
     private String description;
-    @NotEmpty(message = "Display value shouldn't be empty.")
+    @NotEmpty(message = ClientMessage.CHECK_NOTNULL_DISPLAYVALUE, payload=Localized.class)
     private String displayValue;
     private String translatedDisplayValue;
     private String translatedDescription;
@@ -142,19 +145,17 @@ public abstract class AbstractCodeBean extends AbstractBindingBean {
         }
         if (this == aThat) {
             return true;
-
-
         }
+
         if (!(AbstractCodeBean.class.isAssignableFrom(aThat.getClass()))) {
-
-
             return false;
         }
 
         AbstractCodeBean that = (AbstractCodeBean) aThat;
 
-        if (this.getCode() != null && that.getCode() != null
-                && this.getCode().equals(that.getCode())) {
+        if ((this.getCode() != null && that.getCode() != null
+                && this.getCode().equals(that.getCode())) || 
+                (this.getCode() == null && that.getCode() == null)) {
             return true;
         } else {
             return false;

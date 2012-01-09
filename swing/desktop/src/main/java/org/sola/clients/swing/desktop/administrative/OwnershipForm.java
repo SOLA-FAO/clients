@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -40,6 +40,7 @@ import org.sola.clients.beans.referencedata.StatusConstants;
 import org.sola.clients.swing.ui.renderers.TableCellListRenderer;
 import org.sola.clients.swing.ui.source.DocumentsManagementPanel;
 import org.sola.clients.beans.administrative.validation.OwnershipValidationGroup;
+import org.sola.clients.swing.common.LafManager;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
@@ -80,7 +81,7 @@ public class OwnershipForm extends javax.swing.JDialog {
         }
 
         DocumentsManagementPanel panel = new DocumentsManagementPanel(
-                rrrBean.getSourceList(), applicationBean, allowEdit, true);
+                rrrBean.getSourceList(), applicationBean, allowEdit);
         return panel;
     }
 
@@ -105,6 +106,7 @@ public class OwnershipForm extends javax.swing.JDialog {
         initComponents();
 
         this.setTitle(rrrBean.getRrrType().getDisplayValue());
+        customizeComponents();
         customizeForm();
         customizeSharesButtons(null);
     }
@@ -125,6 +127,32 @@ public class OwnershipForm extends javax.swing.JDialog {
                 }
             }
         });
+    }
+      /** Applies customization of component L&F. */
+    private void customizeComponents() {
+      
+//    BUTTONS   
+    LafManager.getInstance().setBtnProperties(btnAddShare);
+    LafManager.getInstance().setBtnProperties(btnChangeShare);
+    LafManager.getInstance().setBtnProperties(btnRemoveShare);
+    LafManager.getInstance().setBtnProperties(btnSave);
+    LafManager.getInstance().setBtnProperties(btnViewShare);
+    
+//     CHECKBOXES
+    LafManager.getInstance().setChkProperties(cbxIsPrimary);
+    
+//    LABELS    
+    LafManager.getInstance().setLabProperties(jLabel13);
+    LafManager.getInstance().setLabProperties(jLabel14);
+    LafManager.getInstance().setLabProperties(jLabel15);
+     
+//    TXT FIELDS
+    LafManager.getInstance().setTxtProperties(txtStatus);
+    LafManager.getInstance().setTxtProperties(txtNotationText);
+   
+//    FORMATTED TXT
+    LafManager.getInstance().setFormattedTxtProperties(txtRegDatetime);
+   
     }
 
     private void customizeSharesButtons(RrrShareBean rrrShare) {
@@ -211,9 +239,9 @@ public class OwnershipForm extends javax.swing.JDialog {
 
         popUpShares.setName("popUpShares"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(org.sola.clients.swing.desktop.DesktopApplication.class).getContext().getActionMap(OwnershipForm.class, this);
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(OwnershipForm.class, this);
         menuAddShare.setAction(actionMap.get("addShare")); // NOI18N
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(org.sola.clients.swing.desktop.DesktopApplication.class).getContext().getResourceMap(OwnershipForm.class);
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance().getContext().getResourceMap(OwnershipForm.class);
         menuAddShare.setText(resourceMap.getString("menuAddShare.text")); // NOI18N
         menuAddShare.setName("menuAddShare"); // NOI18N
         popUpShares.add(menuAddShare);
@@ -324,7 +352,7 @@ public class OwnershipForm extends javax.swing.JDialog {
         cbxIsPrimary.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         cbxIsPrimary.setName("cbxIsPrimary"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${isPrimary}"), cbxIsPrimary, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${primary}"), cbxIsPrimary, org.jdesktop.beansbinding.BeanProperty.create("selected"));
         bindingGroup.addBinding(binding);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Shares", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, resourceMap.getFont("jPanel2.border.titleFont"))); // NOI18N

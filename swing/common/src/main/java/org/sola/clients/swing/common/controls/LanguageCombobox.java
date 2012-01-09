@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -108,8 +108,8 @@ public class LanguageCombobox extends JComboBox {
         }
     }
     private boolean showMessage = true;
-    private String[] languageStrings = {"English", "Italian"};
-    private String[] languageIconNames = {"en.jpg", "it.jpg"};
+    private String[] languageStrings = {"English", "Italian", "नेपाली"};
+    private String[] languageIconNames = {"en.jpg", "it.jpg", "np.png"};
     private ImageIcon[] languageIcons;
     private Class<?> applicationMainClass;
     private static final Map<String, Integer> languagesMap = Collections.unmodifiableMap(new HashMap(2, 1.0f) {
@@ -117,6 +117,7 @@ public class LanguageCombobox extends JComboBox {
         {
             put("en", 0);
             put("it", 1);
+            put("np", 2);
         }
     });
 
@@ -134,11 +135,11 @@ public class LanguageCombobox extends JComboBox {
     public LanguageCombobox(Class<?> applicationMainClass) {
         super();
         if (applicationMainClass != null) {
-            setModel(new javax.swing.DefaultComboBoxModel(new Integer[]{0, 1}));
+            setModel(new javax.swing.DefaultComboBoxModel(new Integer[]{0, 1, 2}));
             this.applicationMainClass = applicationMainClass;
             addLanguageIcons();
             setRenderer(new ComboBoxRenderer());
-            setMaximumRowCount(3);
+            setMaximumRowCount(4);
             revalidate();
         }
     }
@@ -177,6 +178,8 @@ public class LanguageCombobox extends JComboBox {
                 LocalizationManager.setLanguage(applicationMainClass, "it", "IT");
             } else if ("english".equalsIgnoreCase(languageStrings[language])) {
                 LocalizationManager.setLanguage(applicationMainClass, "en", "US");
+            } else if ("नेपाली".equalsIgnoreCase(languageStrings[language])) {
+                LocalizationManager.setLanguage(applicationMainClass, "np", "NP");
             }
 
             if (showMessage) {

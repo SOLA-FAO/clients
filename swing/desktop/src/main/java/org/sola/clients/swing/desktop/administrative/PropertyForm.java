@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -33,6 +33,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import net.sf.jasperreports.engine.JasperPrint;
 import org.jdesktop.application.Action;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.clients.swing.desktop.DesktopApplication;
@@ -41,7 +42,6 @@ import org.sola.clients.beans.administrative.BaUnitNotationBean;
 import org.sola.clients.beans.administrative.RrrBean;
 import org.sola.clients.swing.ui.application.ApplicationDocumentsForm;
 import org.sola.clients.beans.application.ApplicationBean;
-import org.sola.clients.beans.application.ApplicationPropertyBean;
 import org.sola.clients.beans.application.ApplicationServiceBean;
 import org.sola.clients.beans.cadastre.CadastreObjectBean;
 import org.sola.clients.beans.converters.TypeConverters;
@@ -57,6 +57,9 @@ import org.sola.clients.swing.ui.renderers.TableCellListRenderer;
 import org.sola.clients.swing.ui.source.DocumentsPanel;
 import org.sola.clients.beans.source.SourceBean;
 import org.sola.clients.beans.source.SourceListBean;
+import org.sola.clients.reports.ReportManager;
+import org.sola.clients.swing.common.LafManager;
+import org.sola.clients.swing.desktop.ReportViewerForm;
 import org.sola.common.RolesConstants;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -83,11 +86,11 @@ public class PropertyForm extends javax.swing.JFrame {
             }
         }
     }
-    
     private ApplicationBean applicationBean;
     private ApplicationServiceBean applicationService;
-    private ApplicationPropertyBean applicationProperty;
     private String baUnitID;
+    private String nameFirstPart;
+    private String nameLastPart;
     private ControlsBundleForBaUnit mapControl = null;
     private ApplicationDocumentsForm applicationDocumentsForm;
     private boolean readOnly = false;
@@ -96,22 +99,18 @@ public class PropertyForm extends javax.swing.JFrame {
     private BaUnitBean createBaUnitBean() {
         if (baUnitBean1 == null) {
             BaUnitBean baUnitBean = null;
-
-            if (applicationProperty != null) {
+            if (nameFirstPart != null && nameLastPart != null) {
                 // Get BA Unit
-                BaUnitTO baUnitTO = WSManager.getInstance().getAdministrative()
-                        .GetBaUnitByCode(applicationProperty.getNameFirstpart(),
-                        applicationProperty.getNameLastpart());
-                baUnitBean = TypeConverters.TransferObjectToBean(baUnitTO, BaUnitBean.class, baUnitBean);
+                baUnitBean = getBaUnit(nameFirstPart, nameLastPart);
                 if (baUnitBean != null) {
                     baUnitID = baUnitBean.getId();
                 }
             }
             if (baUnitBean == null) {
                 baUnitBean = new BaUnitBean();
-                if (applicationProperty != null) {
-                    baUnitBean.setNameFirstpart(applicationProperty.getNameFirstpart());
-                    baUnitBean.setNameLastpart(applicationProperty.getNameLastpart());
+                if (nameFirstPart != null && nameLastPart != null) {
+                    baUnitBean.setNameFirstpart(nameFirstPart);
+                    baUnitBean.setNameLastpart(nameLastPart);
                 }
             }
             baUnitBean1 = baUnitBean;
@@ -135,28 +134,77 @@ public class PropertyForm extends javax.swing.JFrame {
     }
 
     /** 
+     * Form constructor. Creates form in read only mode.
+     * @param nameFirstPart First part of the property code.
+     * @param nameLastPart Last part of the property code.
+     */
+    public PropertyForm(String nameFirstPart, String nameLastPart) {
+        this(null, null, nameFirstPart, nameLastPart, true);
+    }
+
+    /** 
      * Form constructor.
      * @param applicationBean {@link ApplicationBean} instance, used to get data
      * on BaUnit and provide list of documents.
      * @param applicationService {@link ApplicationServiceBean} instance of 
      * {@link ApplicationBean}, used to determine what actions should be taken 
      * on this form.
-     * @param applicationProperty {@link ApplicationPropertyBean} instance, used
-     * to get BaUnit object from the database if it exists.
+     * @param nameFirstPart First part of the property code.
+     * @param nameLastPart Last part of the property code.
      */
     public PropertyForm(ApplicationBean applicationBean,
             ApplicationServiceBean applicationService,
-            ApplicationPropertyBean applicationProperty, boolean readOnly) {
+            String nameFirstPart, String nameLastPart, boolean readOnly) {
 
         this.readOnly = readOnly || !SecurityBean.isInRole(RolesConstants.ADMINISTRATIVE_BA_UNIT_SAVE);
         this.applicationBean = applicationBean;
         this.applicationService = applicationService;
-        this.applicationProperty = applicationProperty;
-        createBaUnitBean();
-        this.setIconImage(new ImageIcon(PropertyForm.class.getResource("/images/sola/logo_icon.jpg")).getImage());
-    
+        this.nameFirstPart = nameFirstPart;
+        this.nameLastPart = nameLastPart;
+
         initComponents();
         customizeForm();
+    }
+
+    /** Applies customization of component L&F. */
+    private void customizeComponents() {
+
+//    BUTTONS   
+        LafManager.getInstance().setBtnProperties(btnAddNotation);
+        LafManager.getInstance().setBtnProperties(btnAddParcel);
+        LafManager.getInstance().setBtnProperties(btnChangeRight);
+        LafManager.getInstance().setBtnProperties(btnCreateRight);
+        LafManager.getInstance().setBtnProperties(btnEditRight);
+        LafManager.getInstance().setBtnProperties(btnExtinguish);
+        LafManager.getInstance().setBtnProperties(btnLinkPaperTitle);
+        LafManager.getInstance().setBtnProperties(btnRemoveNotation);
+        LafManager.getInstance().setBtnProperties(btnRemoveParcel);
+        LafManager.getInstance().setBtnProperties(btnRemoveRight);
+        LafManager.getInstance().setBtnProperties(btnSave);
+        LafManager.getInstance().setBtnProperties(btnViewPaperTitle);
+
+//    COMBOBOXES
+        LafManager.getInstance().setCmbProperties(cbxRightType);
+
+
+//    LABELS    
+        LafManager.getInstance().setLabProperties(jLabel1);
+        LafManager.getInstance().setLabProperties(jLabel15);
+        LafManager.getInstance().setLabProperties(jLabel16);
+        LafManager.getInstance().setLabProperties(jLabel2);
+        LafManager.getInstance().setLabProperties(jLabel4);
+        LafManager.getInstance().setLabProperties(jLabel5);
+
+//    TXT FIELDS
+        LafManager.getInstance().setTxtProperties(txtEstateType);
+        LafManager.getInstance().setTxtProperties(txtFirstPart);
+        LafManager.getInstance().setTxtProperties(txtLastPart);
+        LafManager.getInstance().setTxtProperties(txtName);
+        LafManager.getInstance().setTxtProperties(txtNotationText);
+
+//    TABBED PANELS
+        LafManager.getInstance().setTabProperties(jTabbedPane1);
+
     }
 
     /** 
@@ -164,19 +212,27 @@ public class PropertyForm extends javax.swing.JFrame {
      * the {@link BaUnitBean} and other components.
      */
     private void customizeForm() {
+        customizeComponents();
+        this.setIconImage(new ImageIcon(PropertyForm.class.getResource("/images/sola/logo_icon.jpg")).getImage());
+
         if (applicationBean != null && applicationService != null) {
-            this.setTitle(String.format("Service: %s  Application: #%s  Property: %s ",
+            this.setTitle(String.format("Service: %s  Application: #%s",
                     applicationService.getRequestType().getDisplayValue(),
-                    applicationBean.getNr(),
-                    applicationProperty.getNameFirstpart() + applicationProperty.getNameLastpart()));
+                    applicationBean.getNr()));
         }
-        
+
+        if (nameFirstPart != null && nameLastPart != null) {
+            this.setTitle(String.format("%s Property: %s ", this.getTitle(),
+                    nameFirstPart.concat(nameLastPart)));
+        }
+
         btnSave.setEnabled(!readOnly);
         customizeRightsButtons(null);
         customizeNotationButtons(null);
         customizeRightTypesList();
         customizeParcelButtons(null);
         customizePaperTitleButtons(null);
+        customizePrintButton();
 
         rrrTypes.addPropertyChangeListener(new PropertyChangeListener() {
 
@@ -198,6 +254,8 @@ public class PropertyForm extends javax.swing.JFrame {
                     customizeNotationButtons((BaUnitNotationBean) evt.getNewValue());
                 } else if (evt.getPropertyName().equals(BaUnitBean.SELECTED_PARCEL_PROPERTY)) {
                     customizeParcelButtons((CadastreObjectBean) evt.getNewValue());
+                } else if (evt.getPropertyName().equals(BaUnitBean.ROW_VERSION_PROPERTY)) {
+                    customizePrintButton();
                 }
 
             }
@@ -212,6 +270,11 @@ public class PropertyForm extends javax.swing.JFrame {
                 }
             }
         });
+    }
+
+    /** Enables print button if row version of {@link BaUnitBean} > 0 . */
+    private void customizePrintButton() {
+        btnPrintBaUnit.getAction().setEnabled(baUnitBean1.getRowVersion() > 0);
     }
 
     /** Enables or disables paper title buttons, depending on the form state. */
@@ -338,6 +401,19 @@ public class PropertyForm extends javax.swing.JFrame {
         return result;
     }
 
+    /** Returns {@link BaUnitBean} by first and last name part. */
+    private BaUnitBean getBaUnit(String nameFirstPart, String nameLastPart) {
+        BaUnitTO baUnitTO = WSManager.getInstance().getAdministrative().GetBaUnitByCode(nameFirstPart, nameLastPart);
+        return TypeConverters.TransferObjectToBean(baUnitTO, BaUnitBean.class, null);
+    }
+
+    /** Opens {@link ReportViewerForm} to display report.*/
+    private void showReport(JasperPrint report) {
+        ReportViewerForm form = new ReportViewerForm(report);
+        form.setLocationRelativeTo(this);
+        form.setVisible(true);
+    }
+
     /** Open form to add new parcel. */
     @Action
     public void addParcel() {
@@ -400,7 +476,6 @@ public class PropertyForm extends javax.swing.JFrame {
     /** Opens appropriate right form to create new right. */
     @Action
     public void createRight() {
-
         openRightForm(null, RrrBean.RRR_ACTION.NEW);
     }
 
@@ -435,6 +510,13 @@ public class PropertyForm extends javax.swing.JFrame {
         if (documentsPanel1.getSourceListBean().getSelectedSource() != null) {
             documentsPanel1.getSourceListBean().getSelectedSource().openDocument();
         }
+    }
+
+    /** Prints BA unit certificate. */
+    @Action
+    public void print() {
+        showReport(ReportManager.getBaUnitReport(getBaUnit(
+                baUnitBean1.getNameFirstpart(), baUnitBean1.getNameLastpart())));
     }
 
     /** Links document as a paper title on the BaUnit object. */
@@ -495,7 +577,7 @@ public class PropertyForm extends javax.swing.JFrame {
             }
         };
 
-        applicationDocumentsForm = new ApplicationDocumentsForm(applicationBean, null, true, true);
+        applicationDocumentsForm = new ApplicationDocumentsForm(applicationBean, null, true);
         applicationDocumentsForm.setLocationRelativeTo(this);
         applicationDocumentsForm.addPropertyChangeListener(
                 SourceListBean.SELECTED_SOURCE_PROPERTY, listener);
@@ -571,10 +653,12 @@ public class PropertyForm extends javax.swing.JFrame {
         jToolBar4 = new javax.swing.JToolBar();
         btnViewPaperTitle = new javax.swing.JButton();
         btnLinkPaperTitle = new javax.swing.JButton();
+        jToolBar5 = new javax.swing.JToolBar();
+        btnPrintBaUnit = new javax.swing.JButton();
 
         popupParcels.setName("popupParcels"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(PropertyForm.class, this);
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(org.sola.clients.swing.desktop.DesktopApplication.class).getContext().getActionMap(PropertyForm.class, this);
         menuAddParcel.setAction(actionMap.get("addParcel")); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
         menuAddParcel.setText(bundle.getString("PropertyForm.menuAddParcel.text")); // NOI18N
@@ -693,10 +777,10 @@ public class PropertyForm extends javax.swing.JFrame {
                 .addContainerGap()
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jPanel1Layout.createSequentialGroup()
-                        .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 784, Short.MAX_VALUE)
+                        .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 696, Short.MAX_VALUE)
                         .addContainerGap())
                     .add(jPanel1Layout.createSequentialGroup()
-                        .add(jToolBar1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 774, Short.MAX_VALUE)
+                        .add(jToolBar1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 686, Short.MAX_VALUE)
                         .add(20, 20, 20))))
         );
         jPanel1Layout.setVerticalGroup(
@@ -705,7 +789,7 @@ public class PropertyForm extends javax.swing.JFrame {
                 .addContainerGap()
                 .add(jToolBar1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -768,8 +852,8 @@ public class PropertyForm extends javax.swing.JFrame {
         cbxRightType.setName("cbxRightType"); // NOI18N
         cbxRightType.setRenderer(new SimpleComboBoxRenderer("getDisplayValue"));
 
-        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${filteredRrrTypeBeanList}");
-        org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrTypes, eLProperty, cbxRightType, "");
+        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${rrrTypeBeanList}");
+        org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrTypes, eLProperty, cbxRightType);
         bindingGroup.addBinding(jComboBoxBinding);
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrTypes, org.jdesktop.beansbinding.ELProperty.create("${selectedRrrType}"), cbxRightType, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
@@ -809,8 +893,8 @@ public class PropertyForm extends javax.swing.JFrame {
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jToolBar2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 784, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 784, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jToolBar2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 696, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 696, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -819,7 +903,7 @@ public class PropertyForm extends javax.swing.JFrame {
                 .addContainerGap()
                 .add(jToolBar2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -835,7 +919,7 @@ public class PropertyForm extends javax.swing.JFrame {
         jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitBean1, eLProperty, tableOwnership);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${rrrShare.rightHolderList}"));
         columnBinding.setColumnName("Rrr Share.right Holder List");
-        columnBinding.setColumnClass(org.sola.clients.beans.controls.ExtendedList.class);
+        columnBinding.setColumnClass(org.sola.clients.beans.controls.SolaList.class);
         columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${rrrShare.share}"));
         columnBinding.setColumnName("Rrr Share.share");
@@ -863,14 +947,14 @@ public class PropertyForm extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 784, Short.MAX_VALUE)
+                .add(jScrollPane5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 696, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 259, Short.MAX_VALUE)
+                .add(jScrollPane5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -948,11 +1032,11 @@ public class PropertyForm extends javax.swing.JFrame {
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 784, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 696, Short.MAX_VALUE)
                     .add(jPanel4Layout.createSequentialGroup()
                         .add(jLabel15)
                         .add(9, 9, 9)
-                        .add(txtNotationText, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+                        .add(txtNotationText, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jToolBar3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 139, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -967,7 +1051,7 @@ public class PropertyForm extends javax.swing.JFrame {
                         .add(txtNotationText, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .add(jLabel15)))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
+                .add(jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -979,11 +1063,11 @@ public class PropertyForm extends javax.swing.JFrame {
         mapPanel.setLayout(mapPanelLayout);
         mapPanelLayout.setHorizontalGroup(
             mapPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 804, Short.MAX_VALUE)
+            .add(0, 716, Short.MAX_VALUE)
         );
         mapPanelLayout.setVerticalGroup(
             mapPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 281, Short.MAX_VALUE)
+            .add(0, 231, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab(bundle.getString("PropertyForm.mapPanel.TabConstraints.tabTitle"), mapPanel); // NOI18N
@@ -1052,10 +1136,10 @@ public class PropertyForm extends javax.swing.JFrame {
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jLabel5)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jLabel4))
                 .add(10, 10, 10)
-                .add(jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                    .add(txtName)
-                    .add(txtEstateType, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 465, Short.MAX_VALUE))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(txtName, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 357, Short.MAX_VALUE)
+                    .add(txtEstateType, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 357, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -1105,8 +1189,8 @@ public class PropertyForm extends javax.swing.JFrame {
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, documentsPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 777, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jToolBar4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 777, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, documentsPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 689, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jToolBar4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 689, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
@@ -1118,33 +1202,46 @@ public class PropertyForm extends javax.swing.JFrame {
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jToolBar5.setFloatable(false);
+        jToolBar5.setRollover(true);
+        jToolBar5.setName("jToolBar5"); // NOI18N
+
+        btnPrintBaUnit.setAction(actionMap.get("print")); // NOI18N
+        btnPrintBaUnit.setFont(new java.awt.Font("Tahoma", 0, 12));
+        btnPrintBaUnit.setText(bundle.getString("PropertyForm.btnPrintBaUnit.text")); // NOI18N
+        btnPrintBaUnit.setFocusable(false);
+        btnPrintBaUnit.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnPrintBaUnit.setName("btnPrintBaUnit"); // NOI18N
+        btnPrintBaUnit.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar5.add(btnPrintBaUnit);
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel8, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .add(jPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .add(btnSave, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 97, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
-                        .add(10, 10, 10)
-                        .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 809, Short.MAX_VALUE)))
+            .add(layout.createSequentialGroup()
+                .addContainerGap()
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, btnSave, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 97, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 721, Short.MAX_VALUE)
+                    .add(jPanel8, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
+            .add(jToolBar5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 741, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(layout.createSequentialGroup()
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                .add(jToolBar5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel8, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 309, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 259, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(btnSave)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         bindingGroup.bind();
@@ -1178,6 +1275,9 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     if (this.mapControl == null) {
         this.mapControl = new ControlsBundleForBaUnit();
         this.mapControl.setCadastreObjects(baUnitBean1.getId());
+        if (applicationBean != null) {
+            this.mapControl.setApplicationId(this.applicationBean.getId());
+        }
         this.mapPanel.setLayout(new BorderLayout());
         this.mapPanel.add(this.mapControl, BorderLayout.CENTER);
     }
@@ -1192,6 +1292,7 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private javax.swing.JButton btnEditRight;
     private javax.swing.JButton btnExtinguish;
     private javax.swing.JButton btnLinkPaperTitle;
+    private javax.swing.JButton btnPrintBaUnit;
     private javax.swing.JButton btnRemoveNotation;
     private javax.swing.JButton btnRemoveParcel;
     private javax.swing.JButton btnRemoveRight;
@@ -1224,6 +1325,7 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private javax.swing.JToolBar jToolBar2;
     private javax.swing.JToolBar jToolBar3;
     private javax.swing.JToolBar jToolBar4;
+    private javax.swing.JToolBar jToolBar5;
     private javax.swing.JPanel mapPanel;
     private javax.swing.JMenuItem menuAddParcel;
     private javax.swing.JMenuItem menuEditRight;

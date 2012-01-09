@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -133,8 +133,7 @@ public final class TypeConverters {
                     if ((toMethod.getName().startsWith("get")
                             || toMethod.getName().startsWith("is"))
                             && !toMethod.getReturnType().equals(Void.TYPE)
-                            && !toMethod.getName().equals("getClass")
-                            && !toMethod.getName().equals("getId")) {
+                            && !toMethod.getName().equals("getClass")) {
 
                         // Use the return type of the get method resultTO determine how resultTO process it
                         Class<?> toReturnClass = toMethod.getReturnType();

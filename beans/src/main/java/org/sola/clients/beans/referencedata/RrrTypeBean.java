@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -29,6 +29,7 @@ package org.sola.clients.beans.referencedata;
 
 import org.sola.clients.beans.AbstractCodeBean;
 import org.sola.clients.beans.cache.CacheManager;
+import org.sola.clients.beans.validation.CodeBeanNotEmpty;
 import org.sola.webservices.transferobjects.referencedata.RrrTypeTO;
 
 /** 
@@ -39,12 +40,13 @@ import org.sola.webservices.transferobjects.referencedata.RrrTypeTO;
 public class RrrTypeBean extends AbstractCodeBean {
     public static final String RRR_GROUP_TYPE_PROPERTY = "rrrGroupType";
     public static final String RRR_GROUP_TYPE_CODE_PROPERTY = "rrrGroupTypeCode";
-    public static final String IS_PRIMARY_TYPE_PROPERTY = "isPrimary";
+    public static final String IS_PRIMARY_TYPE_PROPERTY = "primary";
     public static final String PARTY_REQUIRED_PROPERTY = "partyRequired";
     public static final String SHARE_CHECK_PROPERTY = "shareCheck";
     
+    @CodeBeanNotEmpty(message="Select group type.")
     private RrrGroupTypeBean rrrGroupType;
-    private boolean isPrimary;
+    private boolean primary;
     private boolean partyRequired;
     private boolean shareCheck;
     
@@ -53,13 +55,13 @@ public class RrrTypeBean extends AbstractCodeBean {
         rrrGroupType = new RrrGroupTypeBean();
     }
 
-    public boolean isIsPrimary() {
-        return isPrimary;
+    public boolean isPrimary() {
+        return primary;
     }
 
-    public void setIsPrimary(boolean value) {
-        boolean old = isPrimary;
-        isPrimary = value;
+    public void setPrimary(boolean value) {
+        boolean old = primary;
+        primary = value;
         propertySupport.firePropertyChange(IS_PRIMARY_TYPE_PROPERTY, old, value);
     }
 

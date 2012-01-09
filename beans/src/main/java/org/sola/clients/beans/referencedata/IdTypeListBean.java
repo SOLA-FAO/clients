@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -28,27 +28,41 @@
 package org.sola.clients.beans.referencedata;
 
 
+import java.util.ArrayList;
 import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
-import org.sola.clients.beans.AbstractBindingBean;
+import org.sola.clients.beans.AbstractBindingListBean;
 import org.sola.clients.beans.cache.CacheManager;
 
 /**
-
-/**
- *
- * @author rizzom
+ * Holds the list of {@link IdTypeBean} objects and used to bound the
+ * data in the combobox on the forms.
  */
-public class IdTypeListBean extends AbstractBindingBean {
+public class IdTypeListBean extends AbstractBindingListBean {
     
     public static final String SELECTED_IDTYPE_PROPERTY = "selectedIdType";
     private ObservableList<IdTypeBean> idTypeListBean;
     private IdTypeBean selectedIdTypeBean;
     
     public IdTypeListBean() {
-        // Load from cache by default
-        idTypeListBean = ObservableCollections.observableList(
-                CacheManager.getIdTypes());
+        this(false);
+    }
+    
+    public IdTypeListBean(boolean createDummy) {
+        super();
+        loadList(createDummy);
+    }
+    
+    /** 
+     * Loads list of {@link IdTypeBean}.
+     * @param createDummy Indicates whether to add empty object on the list.
+     */
+    public final void loadList(boolean createDummy) {
+        if (idTypeListBean == null) {
+            idTypeListBean = ObservableCollections.observableList(new ArrayList<IdTypeBean>());
+        }
+        loadCodeList(IdTypeBean.class, idTypeListBean, 
+                CacheManager.getIdTypes(), createDummy);
     }
     
     public ObservableList<IdTypeBean> getIdTypeList() {

@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -35,16 +35,17 @@ import java.util.List;
 import org.geotools.geometry.jts.Geometries;
 import org.sola.clients.swing.gis.Messaging;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
-import org.sola.clients.geotools.ui.layers.SolaLayerGraphics;
+import org.geotools.map.extended.layer.ExtendedLayerGraphics;
+import org.sola.common.messaging.GisMessage;
 import org.sola.webservices.transferobjects.cadastre.CadastreObjectTO;
 
 /**
  *
- * @author Manoku
+ * @author Elton Manoku
  */
 public final class ControlsBundleForBaUnit extends ControlsBundleForWorkingWithCO {
 
-    SolaLayerGraphics layerForCadastreObjects;
+    ExtendedLayerGraphics layerForCadastreObjects;
     private final String  CADASTRE_OBJECTS_LAYERNAME = "Current property cadastre objects";
     private final String STYLE_RESOURCE = "parcel_highlighted.sld";
 
@@ -58,14 +59,14 @@ public final class ControlsBundleForBaUnit extends ControlsBundleForWorkingWithC
         super.Setup(pojoDataAccess);
         try {
             layerForCadastreObjects = 
-                    new SolaLayerGraphics(CADASTRE_OBJECTS_LAYERNAME, 
-                            Geometries.POLYGON, this.getMap().getSrid(), STYLE_RESOURCE);
+                    new ExtendedLayerGraphics(CADASTRE_OBJECTS_LAYERNAME, 
+                            Geometries.POLYGON, STYLE_RESOURCE);
             //layerForCadastreObjects.setShowInToc(false);
             this.getMap().addLayer(layerForCadastreObjects);
         } catch (Exception ex) {
-            Messaging.getInstance().show("gis.baunit.cadastreobjects.error.setup");
+            Messaging.getInstance().show(GisMessage.CADASTRE_OBJBAUNIT_SETUP_ERROR);
             org.sola.common.logging.LogUtility.log(
-                    "gis.baunit.cadastreobjects.error.setup", ex);
+                    GisMessage.CADASTRE_OBJBAUNIT_SETUP_ERROR, ex);
 
         }
     }

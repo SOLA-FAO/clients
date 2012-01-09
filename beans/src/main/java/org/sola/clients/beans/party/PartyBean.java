@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -42,6 +42,8 @@ import org.sola.clients.beans.referencedata.GenderTypeBean;
 import org.sola.clients.beans.referencedata.PartyRoleTypeBean;
 import org.sola.clients.beans.referencedata.IdTypeBean;
 import org.sola.clients.beans.referencedata.PartyTypeBean;
+import org.sola.clients.beans.validation.Localized;
+import org.sola.common.messaging.ClientMessage;
 import org.sola.webservices.transferobjects.EntityAction;
 import org.sola.webservices.transferobjects.casemanagement.PartyTO;
 
@@ -51,6 +53,7 @@ import org.sola.webservices.transferobjects.casemanagement.PartyTO;
  * For more information see data dictionary <b>Party</b> schema.
  * <br />This bean is used as a part of {@link ApplicationBean}.
  */
+@PartyIdTypeCheck(message="Enter ID document reference number.")
 public class PartyBean extends PartySummaryBean implements Serializable {
 
     public static final String EMAIL_PROPERTY = "email";
@@ -68,7 +71,7 @@ public class PartyBean extends PartySummaryBean implements Serializable {
     public static final String FATHERSNAME_PROPERTY = "fathersName";
     public static final String GRANDFATHERSNAME_PROPERTY = "fathersLastName";
     public static final String ALIAS_PROPERTY = "alias";
-    @Email(message = "Invalid email format.")
+    @Email(message = ClientMessage.CHECK_INVALID_EMAIL, payload=Localized.class)
     private String email;
     private String phone;
     private String mobile;
@@ -90,9 +93,6 @@ public class PartyBean extends PartySummaryBean implements Serializable {
      */
     public PartyBean() {
         super();
-        genderTypeBean = new GenderTypeBean();
-        idTypeBean = new IdTypeBean();
-        communicationTypeBean = new CommunicationTypeBean();
         roleList = new SolaList();
     }
 
@@ -196,35 +196,32 @@ public class PartyBean extends PartySummaryBean implements Serializable {
     }
 
     public void setGenderType(GenderTypeBean genderTypeBean) {
-        if (this.genderTypeBean == null) {
-            this.genderTypeBean = new GenderTypeBean();
-        }
-        this.setJointRefDataBean(this.genderTypeBean, genderTypeBean, GENDER_TYPE_PROPERTY);
+        this.setJointRefDataBean(getGenderType(), genderTypeBean, GENDER_TYPE_PROPERTY);
     }
 
     public String getGenderCode() {
-        return genderTypeBean.getCode();
+        return getGenderType().getCode();
     }
 
     public void setGenderCode(String value) {
-        String oldValue = genderTypeBean.getCode();
+        String oldValue = getGenderType().getCode();
         setGenderType(CacheManager.getBeanByCode(CacheManager.getGenderTypes(), value));
         propertySupport.firePropertyChange(GENDER_TYPE_CODE_PROPERTY, oldValue, value);
     }
 
     public void setIdType(IdTypeBean idTypeBean) {
-        if (this.idTypeBean == null) {
-            this.idTypeBean = new IdTypeBean();
-        }
-        this.setJointRefDataBean(this.idTypeBean, idTypeBean, ID_TYPE_PROPERTY);
+        this.setJointRefDataBean(getIdType(), idTypeBean, ID_TYPE_PROPERTY);
     }
 
     public IdTypeBean getIdType() {
+        if (this.idTypeBean == null) {
+            this.idTypeBean = new IdTypeBean();
+        }
         return this.idTypeBean;
     }
 
     public String getIdTypeCode() {
-        return idTypeBean.getCode();
+        return getIdType().getCode();
     }
 
     public void setIdTypeCode(String value) {
@@ -263,22 +260,18 @@ public class PartyBean extends PartySummaryBean implements Serializable {
     }
 
     public CommunicationTypeBean getPreferredCommunication() {
+        if (this.communicationTypeBean == null) {
+            this.communicationTypeBean = new CommunicationTypeBean();
+        }
         return communicationTypeBean;
     }
 
     public void setPreferredCommunication(CommunicationTypeBean communicationTypeBean) {
-        if (this.communicationTypeBean == null) {
-            this.communicationTypeBean = new CommunicationTypeBean();
-        }
-        this.setJointRefDataBean(this.communicationTypeBean, communicationTypeBean, PREFERRED_COMMUNICATION_PROPERTY);
+        this.setJointRefDataBean(getPreferredCommunication(), communicationTypeBean, PREFERRED_COMMUNICATION_PROPERTY);
     }
 
     public String getPreferredCommunicationCode() {
-        String result = null;
-        if (communicationTypeBean != null) {
-            result = communicationTypeBean.getCode();
-        }
-        return result;
+        return getPreferredCommunication().getCode();
     }
 
     public ObservableList<PartyRoleBean> getFilteredRoleList() {
@@ -324,7 +317,6 @@ public class PartyBean extends PartySummaryBean implements Serializable {
     public void addRole(PartyRoleTypeBean partyRoleTypeBean) {
         if (roleList != null && partyRoleTypeBean != null) {
             PartyRoleBean newRole = new PartyRoleBean();
-            newRole.setEntityAction(EntityAction.INSERT);
             newRole.setRole(partyRoleTypeBean);
             roleList.addAsNew(newRole);
         }
@@ -338,25 +330,10 @@ public class PartyBean extends PartySummaryBean implements Serializable {
     }
 
     /** 
-     * Creates new party in the database. 
-     * @throws Exception
-     */
-    public boolean createParty() throws Exception {
-        PartyTO party = TypeConverters.BeanToTrasferObject(this, PartyTO.class);
-        if (getAddress() != null && (getAddress().getDescription() == null
-                || getAddress().getDescription().length() < 1)) {
-            party.setAddress(null);
-        }
-        party = WSManager.getInstance().getCaseManagementService().createParty(party);
-        TypeConverters.TransferObjectToBean(party, PartyBean.class, this);
-        return true;
-    }
-
-    /** 
      * Saves changes to the party into the database. 
      * @throws Exception
      */
-    public boolean saveParty() throws Exception {
+    public boolean saveParty() {
         PartyTO party = TypeConverters.BeanToTrasferObject(this, PartyTO.class);
 
         if (getAddress() != null && getAddress().isNew() && (getAddress().getDescription() == null
@@ -368,11 +345,26 @@ public class PartyBean extends PartySummaryBean implements Serializable {
         }
         
         party = WSManager.getInstance().getCaseManagementService().saveParty(party);
-
         TypeConverters.TransferObjectToBean(party, PartyBean.class, this);
-
-
-
         return true;
+    }
+    
+    /** Returns party by ID. */
+    public static PartyBean getParty(String partyId){
+        if(partyId == null || partyId.length()<1){
+            return null;
+        }
+        PartyTO partyTO = WSManager.getInstance().getCaseManagementService().getParty(partyId);
+        return TypeConverters.TransferObjectToBean(partyTO, PartyBean.class, null);
+    }
+    
+    /** Removes party. */
+    public static void remove(String partyId){
+        if(partyId == null || partyId.length()<1){
+            return;
+        }
+        PartyTO partyTO = WSManager.getInstance().getCaseManagementService().getParty(partyId);
+        partyTO.setEntityAction(EntityAction.DELETE);
+        WSManager.getInstance().getCaseManagementService().saveParty(partyTO);
     }
 }

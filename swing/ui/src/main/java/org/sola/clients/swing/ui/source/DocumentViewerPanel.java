@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -28,6 +28,7 @@
 package org.sola.clients.swing.ui.source;
 
 import org.sola.clients.beans.source.SourceBean;
+import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.common.utils.BindingTools;
 
 /**
@@ -37,13 +38,46 @@ public class DocumentViewerPanel extends javax.swing.JPanel {
 
     public DocumentViewerPanel() {
         initComponents();
+        customizeComponents();
     }
 
     public DocumentViewerPanel(SourceBean sourceBean) {
         this.sourceBean = sourceBean;
         initComponents();
+        customizeComponents();
     }
+     
+    
+    
+    /** Applies customization of component L&F. */
+    private void customizeComponents() {
+    
+    
+//    LABELS    
+    LafManager.getInstance().setLabProperties(jLabel1);
+    LafManager.getInstance().setLabProperties(jLabel2);
+    LafManager.getInstance().setLabProperties(jLabel3);
+    LafManager.getInstance().setLabProperties(jLabel4);
+    LafManager.getInstance().setLabProperties(jLabel5);
+    LafManager.getInstance().setLabProperties(jLabel6);
+    LafManager.getInstance().setLabProperties(jLabel7);
+    LafManager.getInstance().setLabProperties(jLabel8);
+      
+//    TXT FIELDS
+    LafManager.getInstance().setTxtProperties(jTextField1);
+    LafManager.getInstance().setTxtProperties(jTextField2);
+    LafManager.getInstance().setTxtProperties(jTextField4);
+    LafManager.getInstance().setTxtProperties(jTextField7);
 
+//    FORMATTED TXT
+    LafManager.getInstance().setFormattedTxtProperties(jFormattedTextField1);
+    LafManager.getInstance().setFormattedTxtProperties(jFormattedTextField2);
+    LafManager.getInstance().setFormattedTxtProperties(jFormattedTextField3);
+   
+   }
+
+    
+    
     /** Creates instance of source bean. */
     private SourceBean createSource() {
         if (sourceBean == null) {

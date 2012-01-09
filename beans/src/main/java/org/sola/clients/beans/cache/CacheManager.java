@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -49,6 +49,9 @@ import org.sola.clients.beans.AbstractIdBean;
 import org.sola.clients.beans.referencedata.SourceTypeBean;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.beans.referencedata.BaUnitTypeBean;
+import org.sola.clients.beans.referencedata.BrSeverityTypeBean;
+import org.sola.clients.beans.referencedata.BrTechnicalTypeBean;
+import org.sola.clients.beans.referencedata.BrValidationTargetTypeBean;
 import org.sola.clients.beans.referencedata.CadastreObjectTypeBean;
 import org.sola.clients.beans.referencedata.ChangeStatusTypeBean;
 import org.sola.clients.beans.referencedata.GenderTypeBean;
@@ -63,7 +66,6 @@ import org.sola.clients.beans.referencedata.RequestCategoryTypeBean;
 import org.sola.clients.beans.security.RoleBean;
 import org.sola.clients.beans.referencedata.RrrTypeActionBean;
 import org.sola.clients.beans.referencedata.SourceBaUnitRelationTypeBean;
-import org.sola.clients.beans.security.GroupBean;
 import org.sola.clients.beans.system.LanguageBean;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -133,6 +135,12 @@ public final class CacheManager {
     public static final String LANGUAGE_KEY = LanguageBean.class.getName() + LIST_POSTFIX;
     /** Cache key of the {@link RequestCategoryTypeBean} collection.*/
     public static final String REQUEST_CATEGORY_TYPE_KEY = RequestCategoryTypeBean.class.getName() + LIST_POSTFIX;
+    /** Cache key of the {@link BrSeverityTypeBean} collection.*/
+    public static final String BR_SEVERITY_TYPE_KEY = BrSeverityTypeBean.class.getName() + LIST_POSTFIX;
+    /** Cache key of the {@link BrTechnicalTypeBean} collection.*/
+    public static final String BR_TECHNICAL_TYPE_KEY = BrTechnicalTypeBean.class.getName() + LIST_POSTFIX;
+    /** Cache key of the {@link BrValidationTargetTypeBean} collection.*/
+    public static final String BR_VALIDATION_TARGET_TYPE_KEY = BrValidationTargetTypeBean.class.getName() + LIST_POSTFIX;
     
     private static final String GET_APPLICATION_STATUS_TYPES = "getApplicationStatusTypes";
     private static final String GET_SOURCE_TYPES = "getSourceTypes";
@@ -157,7 +165,28 @@ public final class CacheManager {
     private static final String GET_ROLES = "getRoles";
     private static final String GET_LANGUAGES = "getLanguages";
     private static final String GET_REQUEST_CATEGORY_TYPES = "getRequestCategoryTypes";
-
+    private static final String GET_BR_SEVERITY_TYPES = "getBrSeverityTypes";
+    private static final String GET_BR_TECHNICAL_TYPES = "getBrTechnicalTypes";
+    private static final String GET_BR_VALIDATION_TARGET_TYPES = "getBrValidationTargetTypes";
+    
+    public static List<BrValidationTargetTypeBean> getBrValidationTargetTypes() {
+        return getCachedBeanList(BrValidationTargetTypeBean.class,
+                WSManager.getInstance().getReferenceDataService(),
+                GET_BR_VALIDATION_TARGET_TYPES, BR_VALIDATION_TARGET_TYPE_KEY);
+    }
+    
+    public static List<BrTechnicalTypeBean> getBrTechnicalTypes() {
+        return getCachedBeanList(BrTechnicalTypeBean.class,
+                WSManager.getInstance().getReferenceDataService(),
+                GET_BR_TECHNICAL_TYPES, BR_TECHNICAL_TYPE_KEY);
+    }
+    
+    public static List<BrSeverityTypeBean> getBrSeverityTypes() {
+        return getCachedBeanList(BrSeverityTypeBean.class,
+                WSManager.getInstance().getReferenceDataService(),
+                GET_BR_SEVERITY_TYPES, BR_SEVERITY_TYPE_KEY);
+    }
+    
     public static List<RequestCategoryTypeBean> getRequestCategoryTypes() {
         return getCachedBeanList(RequestCategoryTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),

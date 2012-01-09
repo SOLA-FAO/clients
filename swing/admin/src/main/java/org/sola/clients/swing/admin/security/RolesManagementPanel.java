@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -33,6 +33,7 @@ import java.util.ResourceBundle;
 import org.jdesktop.application.Action;
 import org.sola.clients.beans.security.RoleBean;
 import org.sola.clients.beans.security.RoleListBean;
+import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.ui.renderers.TableCellTextAreaRenderer;
 import org.sola.clients.swing.ui.security.RolePanel;
 import org.sola.common.messaging.ClientMessage;
@@ -74,6 +75,7 @@ public class RolesManagementPanel extends javax.swing.JPanel {
     /** Creates new form RolesManagementPanel */
     public RolesManagementPanel() {
         initComponents();
+        customizeComponents();
         resourceBundle = ResourceBundle.getBundle("org/sola/clients/swing/admin/security/Bundle"); 
         roleListBean.loadRoles();
         showRoles();
@@ -89,7 +91,18 @@ public class RolesManagementPanel extends javax.swing.JPanel {
         });
         customizeRoleButtons(null);
     }
+     
+    
+     /** Applies customization of component L&F. */
+    private void customizeComponents() {
+    //    BUTTONS   
+     LafManager.getInstance().setBtnProperties(btnAddRole);
+     LafManager.getInstance().setBtnProperties(btnEditRole);
+     LafManager.getInstance().setBtnProperties(btnRemoveRole);
+    
+    }
 
+    
     /** 
      * Enables or disables roles management buttons, depending on selection in 
      * the roles table and user rights. 
@@ -315,7 +328,7 @@ public class RolesManagementPanel extends javax.swing.JPanel {
     @Action
     public void removeRole() {
         if (roleListBean.getSelectedRole() != null
-                && MessageUtility.displayMessage(ClientMessage.ADMIN_CONFIRM_DELETE_GROUP)
+                && MessageUtility.displayMessage(ClientMessage.ADMIN_CONFIRM_DELETE_ROLE)
                 == MessageUtility.BUTTON_ONE) {
             roleListBean.removeSelectedRole();
         }

@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -29,6 +29,7 @@ package org.sola.clients.swing.ui.security;
 
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.beans.security.UserBean;
+import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.ui.renderers.TableCellTextAreaRenderer;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -60,6 +61,40 @@ public class UserPanel extends javax.swing.JPanel {
         postInit();
     }
     
+         /** Applies customization of component L&F. */
+    private void customizeComponents() {
+   
+//    BUTTONS   
+    LafManager.getInstance().setBtnProperties(btnCancel);
+    LafManager.getInstance().setBtnProperties(btnOk);
+
+//     CHECKBOXES
+    LafManager.getInstance().setChkProperties(cbxActive);
+        
+    
+//    LABELS    
+    LafManager.getInstance().setLabProperties(jLabel1);
+    LafManager.getInstance().setLabProperties(jLabel2);
+    LafManager.getInstance().setLabProperties(jLabel4);
+    LafManager.getInstance().setLabProperties(jLabel5);
+    LafManager.getInstance().setLabProperties(jLabel6);
+    LafManager.getInstance().setLabProperties(jLabel7);
+    
+//    TXTAREA FIELDS
+    LafManager.getInstance().setTxtAreaProperties(txtDescription);
+
+//    PASSWORD FIELDS
+    LafManager.getInstance().setPassProperties(txtPassword);
+    LafManager.getInstance().setPassProperties(txtPasswordConfirmation);
+    
+    
+//    TXT FIELDS
+    LafManager.getInstance().setTxtProperties(txtFirstName);
+    LafManager.getInstance().setTxtProperties(txtLastName);
+    LafManager.getInstance().setTxtProperties(txtUserName);
+   
+    }
+    
     /** Setup {@link UserBean} object, used to bind data on the form. */
     private void setupUserBean(UserBean user) {
         if (user != null) {
@@ -74,6 +109,7 @@ public class UserPanel extends javax.swing.JPanel {
 
     /** Runs post initialization tasks. */
     private void postInit(){
+        customizeComponents();
         userGroupHelperList.setUserGroups(this.user.getUserGroups());
         pnlPassword.setVisible(saveEventToFire.equals(CREATED_USER_PROPERTY));
         passwordBean.setPassword(null);

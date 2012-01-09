@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -28,9 +28,13 @@
 package org.sola.clients.swing.ui.renderers;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import javax.swing.JFormattedTextField;
+import javax.swing.JFormattedTextField.AbstractFormatter;
+import javax.swing.JFormattedTextField.AbstractFormatterFactory;
+import javax.swing.text.DateFormatter;
 import javax.swing.text.DefaultFormatter;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
@@ -43,6 +47,7 @@ public class FormattersFactory {
     private DefaultFormatterFactory decimalFormatterFactory;
     private DefaultFormatterFactory integerFormatterFactory;
     private DefaultFormatterFactory shortFormatterFactory;
+    private DefaultFormatterFactory dateFormatterFactory;
 
     private FormattersFactory() {
     }
@@ -73,7 +78,7 @@ public class FormattersFactory {
         }
         return integerFormatterFactory;
     }
-    
+
     public DefaultFormatterFactory getShortFormatterFactory() {
         if (shortFormatterFactory == null) {
             DefaultFormatter fmt = new NumberFormatter();
@@ -81,5 +86,13 @@ public class FormattersFactory {
             shortFormatterFactory = new DefaultFormatterFactory(fmt, fmt, fmt);
         }
         return shortFormatterFactory;
+    }
+
+    public DefaultFormatterFactory getDateFormatterFactory() {
+        if (dateFormatterFactory == null) {
+            AbstractFormatter fmt = new DateFormatter(DateFormat.getDateTimeInstance());
+            dateFormatterFactory = new DefaultFormatterFactory(fmt, fmt, fmt);
+        }
+        return dateFormatterFactory;
     }
 }

@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -55,7 +55,7 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.Name;
 import org.opengis.filter.Filter;
-import org.sola.clients.swing.gis.layers.PojoLayer;
+import org.sola.clients.swing.gis.layer.PojoLayer;
 import org.sola.common.messaging.GisMessage;
 import org.sola.webservices.spatial.ResultForNavigationInfo;
 import org.sola.webservices.spatial.SpatialResult;

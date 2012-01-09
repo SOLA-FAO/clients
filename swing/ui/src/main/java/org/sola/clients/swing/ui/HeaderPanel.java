@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -28,6 +28,7 @@
 package org.sola.clients.swing.ui;
 
 import javax.swing.ImageIcon;
+import org.sola.clients.swing.common.LafManager;
 
 /**
  * Used to display headers.
@@ -47,7 +48,17 @@ public class HeaderPanel extends javax.swing.JPanel {
         initComponents();
         lblHeaderTitle.setText(title);
     }
+   
     
+    /** Applies customization of component L&F. */
+    private void customizeComponents() {
+//    LABELS    
+    LafManager.getInstance().setLabProperties(lblHeaderTitle);
+    lblHeaderTitle.setForeground(new java.awt.Color(255, 255, 255));
+    lblHeaderTitle.setFont(lblHeaderTitle.getFont().deriveFont(lblHeaderTitle.getFont().getStyle() | java.awt.Font.BOLD, lblHeaderTitle.getFont().getSize()+6));
+    
+    }
+  
     /** Returns header title text. */
     public String getTitleText(){
         return lblHeaderTitle.getText();
@@ -56,6 +67,7 @@ public class HeaderPanel extends javax.swing.JPanel {
     /** Sets header title text. */
     public void setTitleText(String title){
         lblHeaderTitle.setText(title);
+        customizeComponents();
     }
     
     @SuppressWarnings("unchecked")

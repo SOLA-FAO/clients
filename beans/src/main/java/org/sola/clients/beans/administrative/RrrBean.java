@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -47,7 +47,9 @@ import org.sola.clients.beans.referencedata.MortgageTypeBean;
 import org.sola.clients.beans.referencedata.RrrTypeBean;
 import org.sola.clients.beans.referencedata.StatusConstants;
 import org.sola.clients.beans.source.SourceBean;
+import org.sola.clients.beans.validation.Localized;
 import org.sola.clients.beans.validation.NoDuplicates;
+import org.sola.common.messaging.ClientMessage;
 import org.sola.webservices.transferobjects.EntityAction;
 import org.sola.webservices.transferobjects.administrative.RrrTO;
 
@@ -79,13 +81,13 @@ public class RrrBean extends AbstractTransactionedBean {
     private String nr;
     private Date registrationDate;
     private String transactionId;
-    @NotNull(message = "Expiration date must be filled.", groups = {MortgageValidationGroup.class})
-    @Future(message = "Expiration date must be greater then current date.",
+    @NotNull(message =  ClientMessage.CHECK_NOTNULL_EXPIRATION, payload=Localized.class, groups = {MortgageValidationGroup.class})
+    @Future(message = ClientMessage.CHECK_FUTURE_EXPIRATION, payload=Localized.class,
     groups = {MortgageValidationGroup.class})
     private Date expirationDate;
-    @NotNull(message = "Mortgage amount must be filled.", groups = {MortgageValidationGroup.class})
+    @NotNull(message =  ClientMessage.CHECK_NOTNULL_MORTGAGEAMOUNT, payload=Localized.class, groups = {MortgageValidationGroup.class})
     private BigDecimal mortgageAmount;
-    @NotNull(message = "Select mortgage type.", groups = {MortgageValidationGroup.class})
+    @NotNull(message =  ClientMessage.CHECK_NOTNULL_MORTAGAETYPE, payload=Localized.class, groups = {MortgageValidationGroup.class})
     private MortgageTypeBean mortgageType;
     private BigDecimal mortgageInterestRate;
     private Integer mortgageRanking;
@@ -96,7 +98,7 @@ public class RrrBean extends AbstractTransactionedBean {
     private RrrTypeBean rrrType;
     @Valid
     private BaUnitNotationBean notation;
-    private boolean isPrimary = false;
+    private boolean primary = false;
     @Valid
     private SolaList<PartySummaryBean> rightHolderList;
     private RrrShareBean selectedShare;
@@ -127,14 +129,14 @@ public class RrrBean extends AbstractTransactionedBean {
         }
     }
 
-    public boolean isIsPrimary() {
-        return isPrimary;
+    public boolean isPrimary() {
+        return primary;
     }
 
-    public void setIsPrimary(boolean isPrimary) {
-        boolean oldValue = this.isPrimary;
-        this.isPrimary = isPrimary;
-        propertySupport.firePropertyChange(IS_PRIMARY_PROPERTY, oldValue, isPrimary);
+    public void setPrimary(boolean primary) {
+        boolean oldValue = this.primary;
+        this.primary = primary;
+        propertySupport.firePropertyChange(IS_PRIMARY_PROPERTY, oldValue, primary);
     }
 
     public BaUnitNotationBean getNotation() {
@@ -283,8 +285,8 @@ public class RrrBean extends AbstractTransactionedBean {
         return sourceList;
     }
 
-    @Size(min = 1, message = "Fill in at least one document.")
-    @NoDuplicates(message = "You have duplicated documents in the list.")
+    @Size(min = 1, message =  ClientMessage.CHECK_SIZE_SOURCELIST, payload=Localized.class)
+    @NoDuplicates(message =  ClientMessage.CHECK_NODUPLICATED_SOURCELIST, payload=Localized.class)
     public ObservableList<SourceBean> getFilteredSourceList() {
         return sourceList.getFilteredList();
     }
@@ -298,8 +300,8 @@ public class RrrBean extends AbstractTransactionedBean {
     }
 
     @Valid
-    @Size(min = 1, message = "Create at least one share.", groups = OwnershipValidationGroup.class)
-    @TotalShareSize(message = "Total size of all shares should be equal to 1")
+    @Size(min = 1, message =  ClientMessage.CHECK_SIZE_RRRSHARELIST, payload=Localized.class, groups = OwnershipValidationGroup.class)
+    @TotalShareSize(message =  ClientMessage.CHECK_TOTALSHARE_RRRSHARELIST, payload=Localized.class)
     public ObservableList<RrrShareBean> getFilteredRrrShareList() {
         return rrrShareList.getFilteredList();
     }
@@ -318,7 +320,7 @@ public class RrrBean extends AbstractTransactionedBean {
         return rightHolderList;
     }
 
-    @Size(min = 1, groups = {MortgageValidationGroup.class}, message = "Select lender.")
+    @Size(min = 1, groups = {MortgageValidationGroup.class}, message =  ClientMessage.CHECK_SIZE_RIGHTHOLDERLIST, payload=Localized.class)
     public ObservableList<PartySummaryBean> getFilteredRightHolderList() {
         return rightHolderList.getFilteredList();
     }

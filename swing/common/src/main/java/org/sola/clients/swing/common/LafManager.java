@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -28,13 +28,27 @@
 package org.sola.clients.swing.common;
 import java.awt.Button;
 import java.awt.Color;
+import java.awt.ComponentOrientation;
 import java.awt.Font;
 import java.awt.Frame;
+import java.awt.TextField;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
+import javax.swing.JRadioButton;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.LookAndFeel;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
@@ -122,6 +136,65 @@ public class LafManager {
         this.txtFont = txtFont;
     }
     
+    public void setLabProperties(JLabel label) {
+        label.setFont(UIManager.getFont(labFont));
+        label.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
+        label.setHorizontalAlignment(JLabel.LEADING);
+    }
+    
+    public void setTxtProperties(JTextField txt) {
+        txt.setFont(UIManager.getFont(txtFont));
+        txt.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
+        txt.setHorizontalAlignment(JTextField.LEADING);
+    }
+    
+    public void setFormattedTxtProperties(JFormattedTextField txt) {
+        txt.setFont(UIManager.getFont(txtFont));
+        txt.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
+        txt.setHorizontalAlignment(JTextField.LEADING);
+    }
+   
+    public void setTxtAreaProperties(JTextArea txtarea) {
+        txtarea.setFont(UIManager.getFont(txtAreaFont));
+        txtarea.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
+    }
+    public void setCmbProperties(JComboBox combo) {
+        combo.setFont(UIManager.getFont(cmbFont));
+        combo.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
+    }
+    
+     public void setChkProperties(JCheckBox check) {
+        check.setFont(UIManager.getFont(labFont));
+        check.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
+    }
+   
+    public void setBtnProperties(JButton button) {
+        button.setFont(UIManager.getFont(btnFont));
+        button.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
+        button.setHorizontalAlignment(JButton.CENTER);
+    }
+    public void setTabProperties(JTabbedPane tab) {
+        tab.setFont(UIManager.getFont(tabFont));
+        tab.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
+    }
+    
+    public void setListProperties(JList list) {
+        list.setFont(UIManager.getFont(listFont));
+        list.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
+     }
+    
+    public void setRadioProperties(JRadioButton radio) {
+        radio.setFont(UIManager.getFont(radioFont));
+        radio.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
+     }
+    
+    public void setPassProperties(JPasswordField password) {
+        password.setFont(UIManager.getFont(passwordFont));
+        password.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
+     }
+    
+    
+    
     private LafManager(){
     }
     
@@ -142,6 +215,9 @@ public class LafManager {
     private Object btnFont = "Button.font";
     private Object tabFont = "TabbedPane.font";
     private Object cmbFont = "ComboBox.font";
+    private Object listFont = "List.font";
+    private Object radioFont = "RadioButton.font";
+    private Object passwordFont = "PasswordField.font";
     private Object btnBackground = "Button.background";
      /** 
      * sets {@link Look and feel} settings
@@ -198,29 +274,45 @@ if (theme=="green") {
          UIManager.put("textHighlightText", new Color(255,255,255));  	/*(255,255,255)*/  
          UIManager.put("textInactiveText", new Color(142,143,145));     /*(142,143,145)*/ 
 
+//      ####  Background Colors   #####         
+         UIManager.put("PasswordField.background", new Color(236,247,235));   /*(231,245,162)  ALEX[200,244,200]  */
+         UIManager.put("Table.background", new Color(226, 244, 224)); 
+         UIManager.put("Table.alternateRowColor", new Color(226, 244, 224));     /*236,247,235*/
+         UIManager.put("List.background", new Color(185, 227, 185));  
+         UIManager.put("Table.dropLineColor", new Color(166, 212, 150)); 
+         UIManager.put("List.foreground", new Color(0, 102, 51)); 
         
-        //      #### FONTS  ####        
-         UIManager.put("TextField.font", new Font ("Tahoma", 0, 12));
-         UIManager.put("TextArea.font", new Font ("Tahoma", 0, 12));
-         UIManager.put("PasswordField.font", new Font ("Tahoma", 0, 12));
-         UIManager.put("ComboBox.font", new Font ("Tahoma", 0, 12));
-         UIManager.put("Button.font", new Font ("Tahoma", 0, 12));
-         UIManager.put("Button[Disabled].textForeground", new Color(255,255,255)); 
-         UIManager.put("Button[Pressed].textForeground", new Color(255,255,255)); 
-       
-      
+//      ####  Foreround Colors   #####  
+//         UIManager.put("Button[Disabled].textForeground", new Color(255,255,255)); 
+//         UIManager.put("Button[Pressed].textForeground", new Color(255,255,255)); 
          
-        //      #### BACKGROUNDS  ####        
          
-               
-           UIManager.put("PasswordField.background", new Color(231,245,162));   /*(231,245,162)  ALEX[200,244,200]*/
-           UIManager.put("Table.background", new Color(226, 244, 224)); 
-           UIManager.put("Table.alternateRowColor", new Color(236,247,235)); 
-           UIManager.put("List.background", new Color(185, 227, 185)); 
-           UIManager.put("Table.dropLineColor", new Color(166, 212, 150)); 
-           UIManager.put("List.foreground", new Color(0, 102, 51)); 
-       
-//         
+        //      #### FONTS  ####   
+         
+//         UIManager.put("Label.font", new Font ("Tahoma", 0, 12));
+//         UIManager.put("TextField.font", new Font ("Tahoma", 0, 12));
+//         UIManager.put("TextArea.font", new Font ("Tahoma", 0, 12));
+//         UIManager.put("PasswordField.font", new Font ("Tahoma", 0, 12));
+//         UIManager.put("ComboBox.font", new Font ("Tahoma", 0, 12));
+//         UIManager.put("Button.font", new Font ("Tahoma", 0, 12));
+//         UIManager.put("TabbedPane.font", new Font ("Tahoma", 0, 12));
+//         UIManager.put("Table.font", new Font ("Tahoma", 0, 12));
+//         UIManager.put("List.font", new Font ("Tahoma", 0, 12));
+//         UIManager.put("RadioButton.font", new Font ("Tahoma", 0, 12));
+//         UIManager.put("Button[Disabled].textForeground", new Color(255,255,255)); 
+//         UIManager.put("Button[Pressed].textForeground", new Color(255,255,255)); 
+         
+         UIManager.put("TextField.font", Font.decode("AppleGothic"));
+         UIManager.put("TextArea.font", Font.decode("AppleGothic"));
+         UIManager.put("PasswordField.font", Font.decode("AppleGothic"));
+         UIManager.put("ComboBox.font", Font.decode("AppleGothic"));
+         UIManager.put("Button.font", Font.decode("AppleGothic"));
+         UIManager.put("TabbedPane.font", Font.decode("AppleGothic"));
+         UIManager.put("Table.font", Font.decode("AppleGothic"));
+         UIManager.put("Label.font", Font.decode("AppleGothic"));
+         UIManager.put("List.font", Font.decode("AppleGothic")); 
+         UIManager.put("RadioButton.font", Font.decode("AppleGothic"));
+         
  }
  if (theme=="autumn") {
        //      #### Primary Colors  ####        
@@ -262,33 +354,47 @@ if (theme=="green") {
          UIManager.put("textHighlightText", new Color(255,255,255));  	/*(255,255,255)*/  
          UIManager.put("textInactiveText", new Color(143,142,145));     /*(142,143,145)*/ 
 
+ //      ####  Background Colors   #####  
+         UIManager.put("PasswordField.background", new Color(245,231,162));   /*(231,245,162)  ALEX[200,244,200]*/
+         UIManager.put("Table.background", new Color(245,231,162)); 
+         UIManager.put("Table.alternateRowColor", new Color(233,218,150));
+         UIManager.put("Button.background", new Color(210,190,120)); 
+         UIManager.put("List.background", new Color(210,190,120)); 
+         UIManager.put("Table.dropLineColor", new Color(212, 166, 150)); 
+         UIManager.put("List.foreground", new Color(102, 0, 51)); 
+
+//      ####  Foreround Colors   #####  
+         UIManager.put("Button[Disabled].textForeground", new Color(255,255,255)); 
+         UIManager.put("Button[Pressed].textForeground", new Color(255,255,255));
         
+         
         //      #### FONTS  ####        
          
-         UIManager.put("Label.font", new Font ("Tahoma", 0, 12));
-         UIManager.put("TextField.font", new Font ("Tahoma", 0, 12));
-         UIManager.put("TextArea.font", new Font ("Tahoma", 0, 12));
-         UIManager.put("PasswordField.font", new Font ("Tahoma", 0, 12));
-         UIManager.put("ComboBox.font", new Font ("Tahoma", 0, 12));
-         UIManager.put("Button.font", new Font ("Tahoma", 0, 12));
-         UIManager.put("TabbedPane.font", new Font ("Tahoma", 0, 12));
-        
+//         UIManager.put("Label.font", new Font ("Tahoma", 0, 12));
+//         UIManager.put("TextField.font", new Font ("Tahoma", 0, 12));
+//         UIManager.put("TextArea.font", new Font ("Tahoma", 0, 12));
+//         UIManager.put("PasswordField.font", new Font ("Tahoma", 0, 12));
+//         UIManager.put("ComboBox.font", new Font ("Tahoma", 0, 12));
+//         UIManager.put("Button.font", new Font ("Tahoma", 0, 12));
+//         UIManager.put("TabbedPane.font", new Font ("Tahoma", 0, 12));
+//         UIManager.put("Table.font", new Font ("Tahoma", 0, 12));
+//         UIManager.put("List.font", new Font ("Tahoma", 0, 12));
+//         UIManager.put("RadioButton.font", new Font ("Tahoma", 0, 12));
 //         UIManager.put("Button[Disabled].textForeground", new Color(255,255,255)); 
 //         UIManager.put("Button[Pressed].textForeground", new Color(255,255,255)); 
          
+         UIManager.put("TextField.font", Font.decode("AppleGothic"));
+         UIManager.put("TextArea.font", Font.decode("AppleGothic"));
+         UIManager.put("PasswordField.font", Font.decode("AppleGothic"));
+         UIManager.put("ComboBox.font", Font.decode("AppleGothic"));
+         UIManager.put("Button.font", Font.decode("AppleGothic"));
+         UIManager.put("TabbedPane.font", Font.decode("AppleGothic"));
+         UIManager.put("Table.font", Font.decode("AppleGothic"));
+         UIManager.put("Label.font", Font.decode("AppleGothic"));
+         UIManager.put("List.font", Font.decode("AppleGothic"));  
+         UIManager.put("RadioButton.font", Font.decode("AppleGothic"));
          
-        //      #### BACKGROUNDS  ####        
-           UIManager.put("PasswordField.background", new Color(245,231,162));   /*(231,245,162)  ALEX[200,244,200]*/
-           UIManager.put("Table.background", new Color(245,231,162)); 
-           UIManager.put("Table.alternateRowColor", new Color(233,218,150));
-           
-           UIManager.put("Button.background", new Color(210,190,120)); 
-           
-           
-           UIManager.put("List.background", new Color(210,190,120)); 
-           UIManager.put("Table.dropLineColor", new Color(212, 166, 150)); 
-           UIManager.put("List.foreground", new Color(102, 0, 51)); 
- }
+   }
 
  if (theme=="default") {
       //      #### Primary Colors  ####        
@@ -330,23 +436,48 @@ if (theme=="green") {
          UIManager.put("textHighlightText", new Color(255,255,255));  	/*(255,255,255)*/  
          UIManager.put("textInactiveText", new Color(142,143,145));     /*(142,143,145)*/ 
 
-        
-        //      #### FONTS  ####        
-         UIManager.put("TextField.font", new Font ("Tahoma", 0, 12));
-         UIManager.put("TextArea.font", new Font ("Tahoma", 0, 12));
-         UIManager.put("PasswordField.font", new Font ("Tahoma", 0, 12));
-         UIManager.put("ComboBox.font", new Font ("Tahoma", 0, 12));
-        
-         UIManager.put("Button.font", new Font ("Tahoma", 0, 12));
-         
-        //      #### BACKGROUNDS  ####        
-         UIManager.put("PasswordField.background", new Color(205,208,213));   /*(231,245,162)*/
+//      ####  Background Colors   #####  
+           UIManager.put("PasswordField.background", new Color(205,208,213));   /*(231,245,162)*/
 //         UIManager.put("Table.background", new Color(242,242,242)); 
 //         UIManager.put("Table.alternateRowColor", new Color(214,217,223));
 //         
 //         UIManager.put("List.background", new Color(210,210,210)); 
 //         UIManager.put("Table.dropLineColor", new Color(0, 0, 0)); 
 //         UIManager.put("List.foreground", new Color(255, 255, 255)); 
+           
+//      ####  Foreround Colors   #####             
+           UIManager.put("Button[Disabled].textForeground", new Color(255,255,255)); 
+           UIManager.put("Button[Pressed].textForeground", new Color(255,255,255));
+
+       
+         
+         
+        
+        //      #### FONTS  ####        
+//         UIManager.put("Label.font", new Font ("Tahoma", 0, 12));
+//         UIManager.put("TextField.font", new Font ("Tahoma", 0, 12));
+//         UIManager.put("TextArea.font", new Font ("Tahoma", 0, 12));
+//         UIManager.put("PasswordField.font", new Font ("Tahoma", 0, 12));
+//         UIManager.put("ComboBox.font", new Font ("Tahoma", 0, 12));
+//         UIManager.put("Button.font", new Font ("Tahoma", 0, 12));
+//         UIManager.put("TabbedPane.font", new Font ("Tahoma", 0, 12));
+//         UIManager.put("List.font", new Font ("Tahoma", 0, 12));
+//         UIManager.put("RadioButton.font", new Font ("Tahoma", 0, 12));
+
+//         UIManager.put("Button[Disabled].textForeground", new Color(255,255,255)); 
+//         UIManager.put("Button[Pressed].textForeground", new Color(255,255,255)); 
+         
+         UIManager.put("TextField.font", Font.decode("AppleGothic"));
+         UIManager.put("TextArea.font", Font.decode("AppleGothic"));
+         UIManager.put("PasswordField.font", Font.decode("AppleGothic"));
+         UIManager.put("ComboBox.font", Font.decode("AppleGothic"));
+         UIManager.put("Button.font", Font.decode("AppleGothic"));
+         UIManager.put("TabbedPane.font", Font.decode("AppleGothic"));
+         UIManager.put("Table.font", Font.decode("AppleGothic"));
+         UIManager.put("Label.font", Font.decode("AppleGothic"));
+         UIManager.put("List.font", Font.decode("AppleGothic"));  
+         UIManager.put("RadioButton.font", Font.decode("AppleGothic"));
+         
   }
  
         for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
@@ -366,5 +497,9 @@ if (theme=="green") {
             }
         }
  }
+
+    public void setTitleTextProperties(String titleText) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
 }
 

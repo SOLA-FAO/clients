@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -27,7 +27,9 @@
  */
 package org.sola.clients.swing.desktop;
 
+import javax.swing.JLabel;
 import org.jdesktop.application.Action;
+import org.sola.clients.swing.common.LafManager;
 
 /** Simple dialog form to display product information */
 public class AboutForm extends javax.swing.JDialog {
@@ -35,9 +37,30 @@ public class AboutForm extends javax.swing.JDialog {
     public AboutForm(java.awt.Frame parent) {
         super(parent);
         initComponents();
+        customizeComponents();
         getRootPane().setDefaultButton(closeButton);
     }
+    
+      /** Applies customization of component L&F. */
+    private void customizeComponents() {
+        
+//    BUTTONS   
+    LafManager.getInstance().setBtnProperties(closeButton);
+    
+//    LABELS    
+    LafManager.getInstance().setLabProperties(jLabel1);
+    LafManager.getInstance().setLabProperties(appTitleLabel);
+    LafManager.getInstance().setLabProperties(versionLabel);
+    LafManager.getInstance().setLabProperties(appVersionLabel);
+    LafManager.getInstance().setLabProperties(vendorLabel);
+    LafManager.getInstance().setLabProperties(appVendorLabel);
+    LafManager.getInstance().setLabProperties(homepageLabel);
+    LafManager.getInstance().setLabProperties(appHomepageLabel);
+    LafManager.getInstance().setLabProperties(appDescLabel);
+//    LafManager.getInstance().setLabProperties(imageLabel);
+    }
 
+    
     /** Action to close the dialog. */
     @Action public void closeAboutBox() {
         dispose();
@@ -47,15 +70,15 @@ public class AboutForm extends javax.swing.JDialog {
     private void initComponents() {
 
         closeButton = new javax.swing.JButton();
-        javax.swing.JLabel appTitleLabel = new javax.swing.JLabel();
-        javax.swing.JLabel versionLabel = new javax.swing.JLabel();
-        javax.swing.JLabel appVersionLabel = new javax.swing.JLabel();
-        javax.swing.JLabel vendorLabel = new javax.swing.JLabel();
-        javax.swing.JLabel appVendorLabel = new javax.swing.JLabel();
-        javax.swing.JLabel homepageLabel = new javax.swing.JLabel();
-        javax.swing.JLabel appHomepageLabel = new javax.swing.JLabel();
-        javax.swing.JLabel appDescLabel = new javax.swing.JLabel();
-        javax.swing.JLabel imageLabel = new javax.swing.JLabel();
+        appTitleLabel = new javax.swing.JLabel();
+        versionLabel = new javax.swing.JLabel();
+        appVersionLabel = new javax.swing.JLabel();
+        vendorLabel = new javax.swing.JLabel();
+        appVendorLabel = new javax.swing.JLabel();
+        homepageLabel = new javax.swing.JLabel();
+        appHomepageLabel = new javax.swing.JLabel();
+        appDescLabel = new javax.swing.JLabel();
+        imageLabel = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -156,7 +179,7 @@ public class AboutForm extends javax.swing.JDialog {
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(homepageLabel)
                     .add(appHomepageLabel))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 38, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 62, Short.MAX_VALUE)
                 .add(closeButton)
                 .addContainerGap())
         );
@@ -165,8 +188,18 @@ public class AboutForm extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel appDescLabel;
+    private javax.swing.JLabel appHomepageLabel;
+    private javax.swing.JLabel appTitleLabel;
+    private javax.swing.JLabel appVendorLabel;
+    private javax.swing.JLabel appVersionLabel;
     private javax.swing.JButton closeButton;
+    private javax.swing.JLabel homepageLabel;
+    private javax.swing.JLabel imageLabel;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel vendorLabel;
+    private javax.swing.JLabel versionLabel;
     // End of variables declaration//GEN-END:variables
-    
+   
+ 
 }

@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -44,7 +44,8 @@ import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationPropertyBean;
 import org.sola.clients.beans.application.ApplicationServiceBean;
-import org.sola.clients.swing.gis.beans.CadastreChangeBean;
+import org.sola.clients.swing.common.LafManager;
+import org.sola.clients.swing.gis.beans.TransactionCadastreChangeBean;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForCadastreChange;
 import org.sola.clients.swing.ui.source.DocumentsManagementPanel;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
@@ -73,6 +74,7 @@ public class CadastreChangeMapForm extends javax.swing.JFrame {
          this.setIconImage(new ImageIcon(CadastreChangeMapForm.class.getResource("/images/sola/logo_icon.jpg")).getImage());
     
         initComponents();
+        customizeComponents();
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         customizeForm();
         this.addMapToForm();
@@ -80,26 +82,40 @@ public class CadastreChangeMapForm extends javax.swing.JFrame {
 
     private void initializeMap() {
         String baUnitId = this.getBaUnitId();
-        CadastreChangeBean cadastreChangeBean = PojoDataAccess.getInstance().getCadastreChange(
+        TransactionCadastreChangeBean cadastreChangeBean = PojoDataAccess.getInstance().getCadastreChange(
                 this.applicationService.getId());
 
         this.mapControl = new ControlsBundleForCadastreChange(
                 this.applicationBean.getNr(), cadastreChangeBean, baUnitId,
                 this.applicationBean.getLocation());
+        this.mapControl.setApplicationId(this.applicationBean.getId());
     }
 
     private void addMapToForm(){
         this.mapPanel.setLayout(new BorderLayout());
         this.mapPanel.add(this.mapControl, BorderLayout.CENTER);        
     }
+    
+      /** Applies customization of component L&F. */
+    private void customizeComponents() {
+       
+//    BUTTONS   
+    LafManager.getInstance().setBtnProperties(btnSave);
+   
+    }
 
     private void customizeForm() {
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/application/Bundle");
+        String applicationString =  bundle.getString("ApplicationForm.titleApplication");
+        String serviceString =  bundle.getString("ApplicationForm.internalServicesScrollPanel.TabConstraints.tabTitle");
+        String propertyString = bundle.getString("ApplicationForm.propertyPanel.TabConstraints.tabTitle");
+        
         if (applicationBean != null && applicationService != null) {
-            String title = String.format("Service: %s  Application: #%s ",
+            String title = String.format(serviceString+": %s "+applicationString+": #%s ",
                     applicationService.getRequestType().getDisplayValue(),
                     applicationBean.getNr());
             if (this.applicationProperty != null){
-                title = String.format("%s Property: %s / %s",
+                title = String.format("%s "+propertyString+": %s / %s",
                         title,
                         applicationProperty.getNameFirstpart(), 
                         applicationProperty.getNameLastpart());
@@ -129,7 +145,7 @@ public class CadastreChangeMapForm extends javax.swing.JFrame {
 
         DocumentsManagementPanel panel = new DocumentsManagementPanel(
                 this.mapControl.getCadastreChangeBean().getSourceIdList(),
-                applicationBean, allowEdit, false);
+                applicationBean, allowEdit);
         return panel;
     }
 
@@ -248,7 +264,7 @@ public class CadastreChangeMapForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        CadastreChangeBean cadastreChangeBean = this.mapControl.getCadastreChangeBean();
+        TransactionCadastreChangeBean cadastreChangeBean = this.mapControl.getCadastreChangeBean();
         cadastreChangeBean.setSourceIdList(this.documentsPanel.getSourceIds(false));
         List<ValidationResultBean> result = cadastreChangeBean.save();
         String message = MessageUtility.getLocalizedMessage(

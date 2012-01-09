@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -44,6 +44,7 @@ import org.sola.clients.swing.ui.renderers.SimpleComboBoxRenderer;
 import org.sola.clients.swing.ui.source.DocumentsManagementPanel;
 import org.sola.clients.swing.common.utils.BindingTools;
 import org.sola.clients.beans.administrative.validation.MortgageValidationGroup;
+import org.sola.clients.swing.common.LafManager;
 
 /**
  * Used to create and manage mortgages. {@link RrrBean} is used to bind the data on the form.
@@ -69,7 +70,7 @@ public class MortgageForm extends javax.swing.JDialog {
         }
 
         DocumentsManagementPanel panel = new DocumentsManagementPanel(
-                rrrBean.getSourceList(), appBean, allowEdit, true);
+                rrrBean.getSourceList(), appBean, allowEdit);
         return panel;
     }
 
@@ -94,9 +95,10 @@ public class MortgageForm extends javax.swing.JDialog {
        this.setIconImage(new ImageIcon(MortgageForm.class.getResource("/images/sola/logo_icon.jpg")).getImage());
     
         this.setTitle(rrrBean.getRrrType().getDisplayValue());
+        customizeComponents();
         customizeForm(rrrAction);
     }
-
+     
     private void prepareRrrBean(RrrBean rrrBean, RrrBean.RRR_ACTION rrrAction) {
         if (rrrBean == null) {
             this.rrrBean = new RrrBean();
@@ -105,7 +107,45 @@ public class MortgageForm extends javax.swing.JDialog {
             this.rrrBean = rrrBean.makeCopyByAction(rrrAction);
         }
     }
+    
+    
+      /** Applies customization of component L&F. */
+    private void customizeComponents() {
+    
+   
+//    BUTTONS   
+    LafManager.getInstance().setBtnProperties(btnSave);
+    
+//    COMBOBOXES
+    LafManager.getInstance().setCmbProperties(cbxType);
+    
+//    LABELS    
+    LafManager.getInstance().setLabProperties(jLabel1);
+    LafManager.getInstance().setLabProperties(jLabel13);
+    LafManager.getInstance().setLabProperties(jLabel14);
+    LafManager.getInstance().setLabProperties(jLabel16);
+    LafManager.getInstance().setLabProperties(jLabel2);
+    LafManager.getInstance().setLabProperties(jLabel3);
+    LafManager.getInstance().setLabProperties(jLabel4);
+    LafManager.getInstance().setLabProperties(jLabel5);
+    LafManager.getInstance().setLabProperties(jLabel6);
+    
+//    TXT FIELDS
+    LafManager.getInstance().setTxtProperties(txtNotationText);
+    LafManager.getInstance().setTxtProperties(txtStatus);
+   
 
+//    FORMATTED TXT
+    LafManager.getInstance().setFormattedTxtProperties(txtAmount);
+    LafManager.getInstance().setFormattedTxtProperties(txtExpiryDate);
+    LafManager.getInstance().setFormattedTxtProperties(txtInterestRate);
+    LafManager.getInstance().setFormattedTxtProperties(txtRanking);
+    LafManager.getInstance().setFormattedTxtProperties(txtRegDatetime);
+}   
+    
+    
+    
+    
     private void customizeForm(RrrBean.RRR_ACTION rrrAction) {
         if (rrrAction == RrrBean.RRR_ACTION.NEW) {
             btnSave.setText("Create");

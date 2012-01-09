@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -34,6 +34,7 @@ import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.swing.ui.renderers.TableCellTextAreaRenderer;
 import org.sola.clients.swing.ui.renderers.ViolationCellRenderer;
 import org.sola.clients.beans.validation.ValidationResultBean;
+import org.sola.clients.swing.common.LafManager;
 
 /**
  * Display result of changing status of application or service.
@@ -58,11 +59,24 @@ public class ValidationResultForm extends javax.swing.JDialog {
         }
         
         initComponents();
-        
+        customizeComponents();
         lblMessage.setText(message);
         customizeForm();
     }
+    
+    
+    
+      /** Applies customization of component L&F. */
+    private void customizeComponents() {
+    
+//    LABELS    
+    LafManager.getInstance().setLabProperties(lblMessage);
+    lblMessage.setFont(lblMessage.getFont().deriveFont(lblMessage.getFont().getStyle() | java.awt.Font.BOLD, lblMessage.getFont().getSize()));
+    
+    
+    }
 
+    
     public ObservableList<ValidationResultBean> getValidationResultsList() {
         return validationResultsList;
     }

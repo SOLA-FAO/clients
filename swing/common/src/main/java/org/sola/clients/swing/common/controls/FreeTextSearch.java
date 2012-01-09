@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -30,15 +30,19 @@
  */
 package org.sola.clients.swing.common.controls;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
+import org.sola.clients.swing.common.LafManager;
 
 /**
  *
- * @author Manoku
+ * @author Elton Manoku
  */
 public class FreeTextSearch extends JTextField {
 
@@ -48,6 +52,9 @@ public class FreeTextSearch extends JTextField {
     private Object selectedElement = null;
     private Integer minimalSearchStringLength = 1;
     private String searchString = "";
+    private boolean listIsHosted = false;
+    private boolean hideListIfNotNeeded = true;
+    private boolean refreshTextInSelection = false;
 
     public FreeTextSearch() {
         this.addKeyListener(
@@ -61,6 +68,7 @@ public class FreeTextSearch extends JTextField {
 
         this.list = new JList(new DefaultListModel());
         this.list.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        LafManager.getInstance().setListProperties(list);
         this.list.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
 
             @Override
@@ -75,35 +83,50 @@ public class FreeTextSearch extends JTextField {
                 onListKeyPressed(evt);
             }
         });
+        this.list.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                onMouseClicked(e);
+            }
+        });
     }
 
     private void processInput(java.awt.event.KeyEvent evt) {
-        System.out.println("Pressed key: " + evt.getKeyCode());
         JTextField tmp = (JTextField) evt.getSource();
+        LafManager.getInstance().setTxtProperties(tmp);
+
         String tmpSearchString = tmp.getText();
-        if (tmpSearchString.length() < this.minimalSearchStringLength 
+        if (tmpSearchString.length() < this.minimalSearchStringLength
                 && this.listScroll != null) {
-            this.listScroll.setVisible(false);
+            if (this.hideListIfNotNeeded) {
+                this.listScroll.setVisible(false);
+            }
             return;
         }
-        if (this.listScroll == null) {
-            this.listScroll = new JScrollPane(list);
-            this.listScroll.setSize(this.getSize().width, listHeight);
+        if (!this.listIsHosted) {
+            this.listIsHosted = true;
+            if (this.listScroll == null) {
+                this.listScroll = new JScrollPane(list);
+                this.listScroll.setSize(this.getSize().width, listHeight);
 
-            this.getParent().add(this.listScroll);
-            this.getParent().setComponentZOrder(this.listScroll, 0);
+                this.getParent().add(this.listScroll);
+                this.getParent().setComponentZOrder(this.listScroll, 0);
 
-            this.listScroll.setLocation(
-                    this.getLocation().x, this.getLocation().y + this.getSize().height + 3);
+                this.listScroll.setLocation(
+                        this.getLocation().x, this.getLocation().y + this.getSize().height + 3);
+            } else {
+                this.listScroll.setViewportView(this.list);
+            }
         }
         if (evt.getKeyCode() == 40) {
             this.list.requestFocusInWindow();
             return;
         }
 
-        if (!this.searchString.equals(tmpSearchString)){
+        if (!this.searchString.equals(tmpSearchString)) {
             DefaultListModel model = (DefaultListModel) this.list.getModel();
-            this.onNewSearchString(tmpSearchString, model);        
+            this.onNewSearchString(tmpSearchString, model);
             this.listScroll.setVisible(true);
         }
         this.searchString = tmpSearchString;
@@ -124,18 +147,31 @@ public class FreeTextSearch extends JTextField {
     private void onListKeyPressed(java.awt.event.KeyEvent evt) {
         //Enter is pressed
         if (evt.getKeyCode() == 10) {
-            this.listScroll.setVisible(false);
-            this.onSelectionConfirmed();
+            this.confirmSelection();
         }
     }
 
+    private void onMouseClicked(MouseEvent e) {
+        if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
+            this.confirmSelection();
+        }
+    }
+
+    private void confirmSelection() {
+        if (this.getSelectedElement() == null){
+            return;
+        }
+        if (this.hideListIfNotNeeded) {
+            this.listScroll.setVisible(false);
+        }
+        this.onSelectionConfirmed();
+    }
+
     public void onSelectionConfirmed() {
-        // this.getSelectedElement()
         System.out.println("Selected object:" + this.getSelectedElement());
     }
 
     public void onNewSearchString(String searchString, DefaultListModel listModel) {
-        
         listModel.addElement(searchString);
     }
 
@@ -145,7 +181,9 @@ public class FreeTextSearch extends JTextField {
 
     public void setSelectedElement(Object element) {
         this.selectedElement = element;
-        this.setText(this.selectedElement.toString());
+        if (this.refreshTextInSelection) {
+            this.setText(this.selectedElement.toString());
+        }
     }
 
     public Integer getListHeight() {
@@ -162,5 +200,29 @@ public class FreeTextSearch extends JTextField {
 
     public void setMinimalSearchStringLength(Integer minimalSearchStringLength) {
         this.minimalSearchStringLength = minimalSearchStringLength;
+    }
+
+    public JScrollPane getListScroll() {
+        return listScroll;
+    }
+
+    public void setListScroll(JScrollPane listScroll) {
+        this.listScroll = listScroll;
+    }
+
+    public boolean isHideListIfNotNeeded() {
+        return hideListIfNotNeeded;
+    }
+
+    public void setHideListIfNotNeeded(boolean hideListIfNotNeeded) {
+        this.hideListIfNotNeeded = hideListIfNotNeeded;
+    }
+
+    public boolean isRefreshTextInSelection() {
+        return refreshTextInSelection;
+    }
+
+    public void setRefreshTextInSelection(boolean refreshTextInSelection) {
+        this.refreshTextInSelection = refreshTextInSelection;
     }
 }

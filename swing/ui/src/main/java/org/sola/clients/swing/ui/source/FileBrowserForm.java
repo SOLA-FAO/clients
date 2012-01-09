@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -45,6 +45,7 @@ import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 import java.util.Locale;
 import javax.swing.SwingUtilities;
+import org.sola.clients.swing.common.LafManager;
 
 /**
  * This form provides browsing of local and remote folders for the scanned images.
@@ -70,14 +71,31 @@ public class FileBrowserForm extends javax.swing.JDialog {
     public FileBrowserForm(java.awt.Frame parent, boolean modal, AttachAction attachAction) {
         super(parent, modal);
         initComponents();
-
+        customizeComponents();
         this.attachAction = attachAction;
         serverFiles.loadServerFileInfoList();
         serverFiles.addPropertyChangeListener(serverFilesListener());
         localFileChooser.setControlButtonsAreShown(false);
         localFileChooser.setAccessory(new ImagePreview(localFileChooser, 225, 300));
     }
-
+    
+      /** Applies customization of component L&F. */
+    private void customizeComponents() {
+       
+//    BUTTONS   
+    LafManager.getInstance().setBtnProperties(btnAttachFromServer);
+    LafManager.getInstance().setBtnProperties(btnAttachLocal);
+    LafManager.getInstance().setBtnProperties(btnDeleteServerFile);
+    LafManager.getInstance().setBtnProperties(btnOpenLocal);
+    LafManager.getInstance().setBtnProperties(btnOpenServerFile);
+    LafManager.getInstance().setBtnProperties(btnRefreshServerList);
+    
+//    LABELS    
+    LafManager.getInstance().setLabProperties(lblServerPreview);
+    
+//    TABBED PANELS
+     LafManager.getInstance().setTabProperties(jTabbedPane1);
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

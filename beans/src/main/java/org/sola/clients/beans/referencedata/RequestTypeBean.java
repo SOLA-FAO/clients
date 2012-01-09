@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -28,13 +28,12 @@
 package org.sola.clients.beans.referencedata;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import javax.validation.constraints.NotNull;
-import org.jdesktop.observablecollections.ObservableCollections;
-import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.AbstractCodeBean;
 import org.sola.clients.beans.cache.CacheManager;
+import org.sola.clients.beans.controls.SolaList;
+import org.sola.clients.beans.validation.CodeBeanNotEmpty;
 import org.sola.webservices.transferobjects.referencedata.RequestTypeTO;
 
 /** 
@@ -47,6 +46,8 @@ import org.sola.webservices.transferobjects.referencedata.RequestTypeTO;
  */
 public class RequestTypeBean extends AbstractCodeBean {
 
+    public static final String CODE_CADASTRE_PRINT = "cadastrePrint";
+    
     public static final String NR_DAYS_TO_COMPLETE_PROPERTY = "nrDaysToComplete";
     public static final String NR_PROPERTIES_REQUIRED_PROPERTY = "nrPropertiesRequired";
     public static final String NOTATION_TEMPLATE_PROPERTY = "notationTemplate";
@@ -54,8 +55,8 @@ public class RequestTypeBean extends AbstractCodeBean {
     public static final String RRR_TYPE_CODE_PROPERTY = "rrrTypeCode";
     public static final String RRR_TYPE_PROPERTY = "rrrType";
     public static final String RRR_TYPE_ACTION_PROPERTY = "rrrTypeAction";
-    public static final String REQUEST_CATEGORY_TYPE_PROPERTY = "requestCategoryType";
-    public static final String REQUEST_CATEGORY_TYPE_CODE_PROPERTY = "requestCategoryTypeCode";
+    public static final String REQUEST_CATEGORY_PROPERTY = "requestCategory";
+    public static final String REQUEST_CATEGORY_CODE_PROPERTY = "requestCategoryCode";
     public static final String BASE_FEE_PROPERTY = "baseFee";
     public static final String AREA_BASE_FEE_PROPERTY = "areaBaseFee";
     public static final String VALUE_BASE_FEE_PROPERTY = "valueBaseFee";
@@ -66,8 +67,9 @@ public class RequestTypeBean extends AbstractCodeBean {
     private RrrTypeBean rrrType;
     private RrrTypeActionBean rrrTypeAction;
     @NotNull(message="Select category type.")
-    private RequestCategoryTypeBean requestCategoryType;
-    private ObservableList<RequestTypeSourceTypeBean> sourceTypeCodes;
+    @CodeBeanNotEmpty(message="Select category type.")
+    private RequestCategoryTypeBean requestCategory;
+    private SolaList<RequestTypeSourceTypeBean> sourceTypeCodes;
     @NotNull(message="Enter base fee.")
     private BigDecimal baseFee;
     @NotNull(message="Enter area base fee.")
@@ -77,7 +79,7 @@ public class RequestTypeBean extends AbstractCodeBean {
             
     public RequestTypeBean() {
         super();
-        sourceTypeCodes = ObservableCollections.observableList(new ArrayList<RequestTypeSourceTypeBean>());
+        sourceTypeCodes = new SolaList<RequestTypeSourceTypeBean>();
     }
 
     public int getNrPropertiesRequired() {
@@ -170,39 +172,39 @@ public class RequestTypeBean extends AbstractCodeBean {
         this.setJointRefDataBean(this.rrrType, rrrType, RRR_TYPE_PROPERTY);
     }
 
-    public String getRequestCategoryTypeCode() {
-        if (requestCategoryType != null) {
-            return requestCategoryType.getCode();
+    public String getRequestCategoryCode() {
+        if (requestCategory != null) {
+            return requestCategory.getCode();
         } else {
             return null;
         }
     }
 
-    public void setRequestCategoryTypeCode(String requestCategoryTypeCode) {
+    public void setRequestCategoryCode(String requestCategoryCode) {
         String oldValue = null;
-        if (requestCategoryType != null) {
-            oldValue = requestCategoryType.getCode();
+        if (requestCategory != null) {
+            oldValue = requestCategory.getCode();
         }
-        setRequestCategoryType(CacheManager.getBeanByCode(CacheManager.getRequestCategoryTypes(), requestCategoryTypeCode));
-        propertySupport.firePropertyChange(REQUEST_CATEGORY_TYPE_CODE_PROPERTY, oldValue, requestCategoryTypeCode);
+        setRequestCategory(CacheManager.getBeanByCode(CacheManager.getRequestCategoryTypes(), requestCategoryCode));
+        propertySupport.firePropertyChange(REQUEST_CATEGORY_CODE_PROPERTY, oldValue, requestCategoryCode);
     }
 
-    public RequestCategoryTypeBean getRequestCategoryType() {
-        if(requestCategoryType == null){
-            requestCategoryType = new RequestCategoryTypeBean();
+    public RequestCategoryTypeBean getRequestCategory() {
+        if(requestCategory == null){
+            requestCategory = new RequestCategoryTypeBean();
         }
-        return requestCategoryType;
+        return requestCategory;
     }
 
-    public void setRequestCategoryType(RequestCategoryTypeBean requestCategoryType) {
-        this.requestCategoryType = requestCategoryType;
-        if (this.requestCategoryType == null) {
-            this.requestCategoryType = new RequestCategoryTypeBean();
+    public void setRequestCategory(RequestCategoryTypeBean requestCategory) {
+        this.requestCategory = requestCategory;
+        if (this.requestCategory == null) {
+            this.requestCategory = new RequestCategoryTypeBean();
         }
-        this.setJointRefDataBean(this.requestCategoryType, requestCategoryType, REQUEST_CATEGORY_TYPE_PROPERTY);
+        this.setJointRefDataBean(this.requestCategory, requestCategory, REQUEST_CATEGORY_PROPERTY);
     }
 
-    public ObservableList<RequestTypeSourceTypeBean> getSourceTypeCodes() {
+    public SolaList<RequestTypeSourceTypeBean> getSourceTypeCodes() {
         return sourceTypeCodes;
     }
 

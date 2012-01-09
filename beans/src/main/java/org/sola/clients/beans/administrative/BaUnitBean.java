@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -42,6 +42,8 @@ import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.beans.referencedata.BaUnitTypeBean;
 import org.sola.clients.beans.referencedata.StatusConstants;
 import org.sola.clients.beans.source.SourceBean;
+import org.sola.clients.beans.validation.Localized;
+import org.sola.common.messaging.ClientMessage;
 import org.sola.webservices.transferobjects.EntityAction;
 import org.sola.webservices.transferobjects.administrative.BaUnitTO;
 
@@ -167,9 +169,9 @@ public class BaUnitBean extends AbstractTransactionedBean {
     public static final String SELECTED_BA_UNIT_NOTATION_PROPERTY = "selectedBaUnitNotation";
     public static final String ESTATE_TYPE_PROPERTY = "estateType";
     private String name;
-    @NotEmpty(message = "First part shouldn't be empty")
+    @NotEmpty(message = ClientMessage.CHECK_NOTNULL_FIRSTPART, payload=Localized.class)
     private String nameFirstpart;
-    @NotEmpty(message = "Last part shouldn't be empty.")
+    @NotEmpty(message = ClientMessage.CHECK_NOTNULL_FIRSTPART, payload=Localized.class)
     private String nameLastpart;
     private SolaList<RrrBean> rrrList;
     private SolaList<BaUnitNotationBean> baUnitNotationList;
@@ -397,7 +399,7 @@ public class BaUnitBean extends AbstractTransactionedBean {
         estateType = "";
 
         for (RrrBean rrrBean : rrrList.getFilteredList()) {
-            if (rrrBean.isIsPrimary()) {
+            if (rrrBean.isPrimary()) {
                 estateType = rrrBean.getRrrType().getDisplayValue();
                 break;
             }
@@ -451,5 +453,17 @@ public class BaUnitBean extends AbstractTransactionedBean {
         baUnit = WSManager.getInstance().getAdministrative().SaveBaUnit(serviceId, baUnit);
         TypeConverters.TransferObjectToBean(baUnit, BaUnitBean.class, this);
         return true;
+    }
+    
+    /** 
+     * Returns collection of {@link BaUnitBean} objects. This method is 
+     * used by Jasper report designer to extract properties of BA Unit bean 
+     * to help design a report.
+     */
+    public static java.util.Collection generateCollection() {
+        java.util.Vector collection = new java.util.Vector();
+        BaUnitBean bean = new BaUnitBean();
+        collection.add(bean);
+        return collection;
     }
 }

@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -36,6 +36,7 @@ import java.util.List;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.converters.TypeConverters;
+import org.sola.clients.beans.referencedata.RequestTypeBean;
 import org.sola.clients.beans.referencedata.StatusConstants;
 import org.sola.webservices.transferobjects.casemanagement.ServiceTO;
 
@@ -98,7 +99,7 @@ public class ApplicationServiceBean extends ApplicationServiceSummaryBean {
     }
 
     public void setAction(ServiceActionTypeBean actionBean) {
-        if(this.actionBean==null){
+        if (this.actionBean == null) {
             this.actionBean = new ServiceActionTypeBean();
         }
         this.setJointRefDataBean(this.actionBean, actionBean, ACTION_PROPERTY);
@@ -159,7 +160,7 @@ public class ApplicationServiceBean extends ApplicationServiceSummaryBean {
     }
 
     public void setStatus(ServiceStatusTypeBean statusBean) {
-        if(this.statusBean==null){
+        if (this.statusBean == null) {
             this.statusBean = new ServiceStatusTypeBean();
         }
         this.setJointRefDataBean(this.statusBean, statusBean, STATUS_PROPERTY);
@@ -198,25 +199,22 @@ public class ApplicationServiceBean extends ApplicationServiceSummaryBean {
     /** Cancels service */
     public List<ValidationResultBean> cancel() {
         return TypeConverters.TransferObjectListToBeanList(
-                WSManager.getInstance().getCaseManagementService()
-                .serviceActionCancel(this.getId(), this.getRowVersion()), 
+                WSManager.getInstance().getCaseManagementService().serviceActionCancel(this.getId(), this.getRowVersion()),
                 ValidationResultBean.class, null);
-        
+
     }
 
     /** Set service as completed */
     public List<ValidationResultBean> complete() {
         return TypeConverters.TransferObjectListToBeanList(
-                WSManager.getInstance().getCaseManagementService()
-                .serviceActionComplete(this.getId(), this.getRowVersion()), 
+                WSManager.getInstance().getCaseManagementService().serviceActionComplete(this.getId(), this.getRowVersion()),
                 ValidationResultBean.class, null);
     }
 
     /** Revert service back to the pending state */
     public List<ValidationResultBean> revert() {
         return TypeConverters.TransferObjectListToBeanList(
-                WSManager.getInstance().getCaseManagementService()
-                .serviceActionRevert(this.getId(), this.getRowVersion()), 
+                WSManager.getInstance().getCaseManagementService().serviceActionRevert(this.getId(), this.getRowVersion()),
                 ValidationResultBean.class, null);
     }
 
@@ -234,5 +232,38 @@ public class ApplicationServiceBean extends ApplicationServiceSummaryBean {
             result = false;
         }
         return result;
+    }
+
+    /**
+     * Saves the service in the database. Used only for services of category: informationServices.
+     * If another kind of request type is supplied, it will be thrown a server side exception.
+     * @return
+     * @throws Exception t
+     */
+    public boolean saveInformationService() {
+        ServiceTO service = TypeConverters.BeanToTrasferObject(this, ServiceTO.class);
+        service = WSManager.getInstance().getCaseManagementService().saveInformationService(
+                service);
+        TypeConverters.TransferObjectToBean(service, ApplicationServiceBean.class, this);
+        return true;
+    }
+
+    /**
+     * Creates and saves new Information service service in the database.
+     * If another kind of request type is supplied, it will be thrown a server side exception.
+     * @param requestTypeCode Request type code to use for creating service.
+     */
+    public static boolean saveInformationService(String requestTypeCode) {
+        if (requestTypeCode == null) {
+            return false;
+        }
+        ApplicationServiceBean serviceBean = new ApplicationServiceBean();
+        RequestTypeBean requestType = CacheManager.getBeanByCode(CacheManager.getRequestTypes(), requestTypeCode);
+        if (requestType != null) {
+            serviceBean.setRequestType(requestType);
+            return serviceBean.saveInformationService();
+        } else {
+            return false;
+        }
     }
 }

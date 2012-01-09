@@ -229,7 +229,7 @@
         <Property name="name" type="java.lang.String" value="cbxIsPrimary" noResource="true"/>
       </Properties>
       <BindingProperties>
-        <BindingProperty name="selected" source="rrrBean" sourcePath="${isPrimary}" target="cbxIsPrimary" targetPath="selected" updateStrategy="0" immediately="false"/>
+        <BindingProperty name="selected" source="rrrBean" sourcePath="${primary}" target="cbxIsPrimary" targetPath="selected" updateStrategy="0" immediately="false"/>
       </BindingProperties>
     </Component>
   </SubComponents>

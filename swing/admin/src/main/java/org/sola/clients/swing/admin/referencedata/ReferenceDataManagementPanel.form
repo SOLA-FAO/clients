@@ -49,7 +49,7 @@
   </NonVisualComponents>
   <Properties>
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[677, 564]"/>
+      <Dimension value="[631, 457]"/>
     </Property>
   </Properties>
   <AuxValues>
@@ -67,11 +67,11 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="pnlHeader" alignment="0" pref="677" max="32767" attributes="0"/>
-          <Group type="102" attributes="0">
-              <EmptySpace min="18" pref="18" max="18" attributes="0"/>
-              <Component id="jPanel1" max="32767" attributes="0"/>
-              <EmptySpace min="15" pref="15" max="15" attributes="0"/>
+          <Component id="pnlHeader" alignment="0" pref="631" max="32767" attributes="0"/>
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
+              <Component id="jPanel1" pref="612" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -80,8 +80,8 @@
           <Group type="102" alignment="0" attributes="0">
               <Component id="pnlHeader" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="jPanel1" min="-2" pref="512" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
+              <Component id="jPanel1" pref="405" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -102,9 +102,10 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignCardLayout"/>
       <SubComponents>
-        <Component class="org.sola.clients.swing.ui.referencedata.RequestTypePanel" name="requestTypePanel1">
+        <Component class="org.sola.clients.swing.ui.referencedata.RequestTypePanel" name="pnlRequestType">
           <Properties>
-            <Property name="name" type="java.lang.String" value="requestTypePanel1" noResource="true"/>
+            <Property name="closeOnSave" type="boolean" value="true"/>
+            <Property name="name" type="java.lang.String" value="pnlRequestType" noResource="true"/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
@@ -125,8 +126,8 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="toolbarRefData" alignment="0" pref="644" max="32767" attributes="0"/>
-                  <Component id="jScrollPane1" alignment="0" pref="644" max="32767" attributes="0"/>
+                  <Component id="toolbarRefData" alignment="0" pref="612" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" alignment="0" pref="612" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -134,7 +135,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="toolbarRefData" min="-2" pref="25" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane1" pref="481" max="32767" attributes="0"/>
+                      <Component id="jScrollPane1" pref="374" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -298,18 +299,18 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace pref="401" max="32767" attributes="0"/>
+                      <EmptySpace pref="369" max="32767" attributes="0"/>
                       <Component id="btnClose" min="-2" pref="96" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="btnOK" min="-2" pref="137" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="pnlRefData" alignment="0" pref="644" max="32767" attributes="0"/>
+                  <Component id="pnlRefData" alignment="0" pref="612" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
-                      <Component id="pnlRefData" pref="478" max="32767" attributes="0"/>
+                      <Component id="pnlRefData" pref="371" max="32767" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Component id="btnClose" min="-2" max="-2" attributes="0"/>
@@ -358,6 +359,16 @@
             </Component>
           </SubComponents>
         </Container>
+        <Component class="org.sola.clients.swing.ui.referencedata.RrrTypePanel" name="pnlRrrType">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="pnlRrrType" noResource="true"/>
+          </Properties>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
+              <CardConstraints cardName="card5"/>
+            </Constraint>
+          </Constraints>
+        </Component>
       </SubComponents>
     </Container>
   </SubComponents>

@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -56,8 +56,10 @@ public class DesktopClientExceptionHandler extends DefaultExceptionHandler {
      * @param t the exception.
      */
     public static void handleException(Throwable t) {
-        if (hasCause(t, WebServiceClientException.class)) {
-            WebServiceClientException wex = getCause(t, WebServiceClientException.class);
+         if (DesktopClientExceptionHandler.hasCause(t, WebServiceClientException.class)){
+
+            WebServiceClientException wex = 
+                    DesktopClientExceptionHandler.getCause(t, WebServiceClientException.class);
 
             if (wex.getType() == WebServiceClientExceptionType.SOLA_VALIDATION_FAILED
                     && wex.getValidationResult() != null) {
@@ -84,7 +86,7 @@ public class DesktopClientExceptionHandler extends DefaultExceptionHandler {
             } else {
                 DefaultExceptionHandler.handleException(t);
             }
-        } else {
+        }else{
             DefaultExceptionHandler.handleException(t);
         }
     }

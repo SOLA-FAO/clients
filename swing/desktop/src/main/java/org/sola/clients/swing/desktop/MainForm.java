@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2011 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -42,10 +42,13 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import org.sola.clients.swing.desktop.application.ApplicationForm;
-import org.sola.clients.swing.desktop.application.ApplicationSearchForm;
+import org.sola.clients.swing.desktop.application.ApplicationSearchPanel;
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.swing.common.LafManager;
+import org.sola.clients.swing.desktop.administrative.BaUnitSearchPanel;
+import org.sola.clients.swing.desktop.source.DocumentSearchPanel;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleViewer;
+import org.sola.clients.swing.ui.party.PartySearchPanel;
 import org.sola.common.RolesConstants;
 import org.sola.common.help.HelpUtility;
 
@@ -55,7 +58,6 @@ import org.sola.common.help.HelpUtility;
 public class MainForm extends FrameView {
 
     private ApplicationForm applicationForm;
-    private ApplicationSearchForm searchApplicationForm;
     
     Object foreFont =  LafManager.getInstance().getForeFont();
     Object labFont =  LafManager.getInstance().getLabFont();
@@ -98,15 +100,16 @@ public class MainForm extends FrameView {
      * form has been opened. It helps to display form with no significant delays. 
      */
     private void postInit() {
+        customizeComponents();
         // Customize buttons
         btnNewApplication.getAction().setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_CREATE_APPS));
         btnOpenMap.getAction().setEnabled(SecurityBean.isInRole(RolesConstants.GIS_VIEW_MAP));
         btnSearchApplications.getAction().setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_VIEW_APPS));
         btnShowDashboard.getAction().setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_VIEW_APPS));
+        btnManageParties.getAction().setEnabled(SecurityBean.isInRole(RolesConstants.PARTY_SAVE));
         
         // Load dashboard
-        DashBoardPanel dashBoard = new DashBoardPanel(this.getFrame());
-        changingPanel.setViewportView(dashBoard);
+        openDashBoard();
         
         txtUserName.setText(SecurityBean.getCurrentUser().getUserName());
         
@@ -117,7 +120,19 @@ public class MainForm extends FrameView {
 
         // Enable/disable toolbar and main menu based on users access
     }
-
+    /** Applies customization of component L&F. */
+    private void customizeComponents() {
+  //    BUTTONS   
+    LafManager.getInstance().setBtnProperties(btnNewApplication);
+    LafManager.getInstance().setBtnProperties(btnOpenMap);
+    LafManager.getInstance().setBtnProperties(btnSearchApplications);
+    LafManager.getInstance().setBtnProperties(btnShowDashboard);
+   
+//    LABELS    
+    LafManager.getInstance().setLabProperties(labStatus);
+    LafManager.getInstance().setLabProperties(txtUserName);
+    }
+        
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -125,10 +140,17 @@ public class MainForm extends FrameView {
         mainPanel = new javax.swing.JPanel();
         applicationsMain = new javax.swing.JToolBar();
         btnShowDashboard = new javax.swing.JButton();
+        jSeparator2 = new javax.swing.JToolBar.Separator();
         btnNewApplication = new javax.swing.JButton();
+        jSeparator4 = new javax.swing.JToolBar.Separator();
         btnSearchApplications = new javax.swing.JButton();
+        btnOpenBaUnitSearch = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jSeparator3 = new javax.swing.JToolBar.Separator();
+        btnManageParties = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JToolBar.Separator();
         btnOpenMap = new javax.swing.JButton();
-        changingPanel = new javax.swing.JScrollPane();
+        pnlContent = new org.sola.clients.swing.ui.MainContentPanel();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem menuExitItem = new javax.swing.JMenuItem();
@@ -145,19 +167,23 @@ public class MainForm extends FrameView {
         jMenuItem6 = new javax.swing.JMenuItem();
         javax.swing.JMenu homeDashboard = new javax.swing.JMenu();
         menuDashboardItem = new javax.swing.JMenuItem();
+        menuReports = new javax.swing.JMenu();
         menuApplications = new javax.swing.JMenu();
         menuNewApplication = new javax.swing.JMenuItem();
-        menuSearchApplication = new javax.swing.JMenuItem();
+        menuRegistration = new javax.swing.JMenu();
         menuMap = new javax.swing.JMenu();
         menuShowMap = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
         jmiContextHelp = new javax.swing.JMenuItem();
+        menuSearch = new javax.swing.JMenu();
+        menuSearchApplication = new javax.swing.JMenuItem();
+        menuBaUnitSearch = new javax.swing.JMenuItem();
+        menuDocumentSearch = new javax.swing.JMenuItem();
         statusPanel = new javax.swing.JPanel();
         labStatus = new javax.swing.JLabel();
         taskPanel1 = new org.sola.clients.swing.common.tasks.TaskPanel();
         txtUserName = new javax.swing.JLabel();
-        javax.swing.JSeparator statusPanelSeparator = new javax.swing.JSeparator();
 
         mainPanel.setName("mainPanel"); // NOI18N
         mainPanel.setPreferredSize(new java.awt.Dimension(700, 550));
@@ -165,13 +191,14 @@ public class MainForm extends FrameView {
 
         applicationsMain.setFloatable(false);
         applicationsMain.setRollover(true);
+        applicationsMain.setFont(new java.awt.Font("Tahoma", 0, 12));
         applicationsMain.setMaximumSize(new java.awt.Dimension(32769, 32769));
-        applicationsMain.setMinimumSize(new java.awt.Dimension(980, 45));
+        applicationsMain.setMinimumSize(new java.awt.Dimension(90, 45));
         applicationsMain.setName("applicationsMain"); // NOI18N
         applicationsMain.setPreferredSize(new java.awt.Dimension(980, 45));
         applicationsMain.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(MainForm.class, this);
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(org.sola.clients.swing.desktop.DesktopApplication.class).getContext().getActionMap(MainForm.class, this);
         btnShowDashboard.setAction(actionMap.get("openDashBoard")); // NOI18N
         btnShowDashboard.setFont(UIManager.getFont(btnFont));
         btnShowDashboard.setFocusable(false);
@@ -179,6 +206,9 @@ public class MainForm extends FrameView {
         btnShowDashboard.setName("btnShowDashboard"); // NOI18N
         btnShowDashboard.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         applicationsMain.add(btnShowDashboard);
+
+        jSeparator2.setName("jSeparator2"); // NOI18N
+        applicationsMain.add(jSeparator2);
 
         btnNewApplication.setAction(actionMap.get("openNewApplicationForm")); // NOI18N
         btnNewApplication.setFont(UIManager.getFont(btnFont));
@@ -188,44 +218,80 @@ public class MainForm extends FrameView {
         btnNewApplication.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         applicationsMain.add(btnNewApplication);
 
+        jSeparator4.setName("jSeparator4"); // NOI18N
+        applicationsMain.add(jSeparator4);
+
         btnSearchApplications.setAction(actionMap.get("searchApplications")); // NOI18N
         btnSearchApplications.setFont(UIManager.getFont(btnFont));
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/Bundle"); // NOI18N
+        btnSearchApplications.setText(bundle.getString("MainForm.btnSearchApplications.text")); // NOI18N
         btnSearchApplications.setFocusable(false);
         btnSearchApplications.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSearchApplications.setName("btnSearchApplications"); // NOI18N
         btnSearchApplications.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         applicationsMain.add(btnSearchApplications);
 
+        btnOpenBaUnitSearch.setAction(actionMap.get("searchBaUnit")); // NOI18N
+        btnOpenBaUnitSearch.setText(bundle.getString("MainForm.btnOpenBaUnitSearch.text_1")); // NOI18N
+        btnOpenBaUnitSearch.setFocusable(false);
+        btnOpenBaUnitSearch.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnOpenBaUnitSearch.setName("btnOpenBaUnitSearch"); // NOI18N
+        btnOpenBaUnitSearch.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        applicationsMain.add(btnOpenBaUnitSearch);
+
+        jButton1.setAction(actionMap.get("searchDocuments")); // NOI18N
+        jButton1.setText(bundle.getString("MainForm.jButton1.text_1")); // NOI18N
+        jButton1.setFocusable(false);
+        jButton1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButton1.setName("jButton1"); // NOI18N
+        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        applicationsMain.add(jButton1);
+
+        jSeparator3.setName("jSeparator3"); // NOI18N
+        applicationsMain.add(jSeparator3);
+
+        btnManageParties.setAction(actionMap.get("manageParties")); // NOI18N
+        btnManageParties.setText(bundle.getString("MainForm.btnManageParties.text_1")); // NOI18N
+        btnManageParties.setFocusable(false);
+        btnManageParties.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnManageParties.setName("btnManageParties"); // NOI18N
+        btnManageParties.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        applicationsMain.add(btnManageParties);
+
+        jSeparator1.setName("jSeparator1"); // NOI18N
+        applicationsMain.add(jSeparator1);
+
         btnOpenMap.setAction(actionMap.get("openMap")); // NOI18N
         btnOpenMap.setFont(UIManager.getFont(btnFont));
+        btnOpenMap.setText(bundle.getString("MainForm.btnOpenMap.text")); // NOI18N
         btnOpenMap.setFocusable(false);
         btnOpenMap.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnOpenMap.setName("btnOpenMap"); // NOI18N
         btnOpenMap.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         applicationsMain.add(btnOpenMap);
 
-        changingPanel.setAutoscrolls(true);
-        changingPanel.setName("changingPanel"); // NOI18N
+        pnlContent.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        pnlContent.setName("pnlContent"); // NOI18N
 
         org.jdesktop.layout.GroupLayout mainPanelLayout = new org.jdesktop.layout.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
             mainPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(applicationsMain, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 1006, Short.MAX_VALUE)
-            .add(changingPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 1006, Short.MAX_VALUE)
+            .add(applicationsMain, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 625, Short.MAX_VALUE)
+            .add(pnlContent, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 625, Short.MAX_VALUE)
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(mainPanelLayout.createSequentialGroup()
                 .add(applicationsMain, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 28, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(changingPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 506, Short.MAX_VALUE))
+                .add(pnlContent, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE))
         );
 
+        menuBar.setFont(new java.awt.Font("Tahoma", 0, 12));
         menuBar.setName("menuBar"); // NOI18N
         menuBar.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
 
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/Bundle"); // NOI18N
         fileMenu.setText(bundle.getString("MainForm.fileMenu.text_1")); // NOI18N
         fileMenu.setName("fileMenu"); // NOI18N
 
@@ -304,6 +370,10 @@ public class MainForm extends FrameView {
 
         menuBar.add(homeDashboard);
 
+        menuReports.setText(bundle.getString("MainForm.menuReports.text_1")); // NOI18N
+        menuReports.setName("menuReports"); // NOI18N
+        menuBar.add(menuReports);
+
         menuApplications.setText(bundle.getString("MainForm.menuApplications.text_1")); // NOI18N
         menuApplications.setName("menuApplications"); // NOI18N
 
@@ -312,12 +382,11 @@ public class MainForm extends FrameView {
         menuNewApplication.setName("menuNewApplication"); // NOI18N
         menuApplications.add(menuNewApplication);
 
-        menuSearchApplication.setAction(actionMap.get("searchApplications")); // NOI18N
-        menuSearchApplication.setText(bundle.getString("MainForm.menuSearchApplication.text_1")); // NOI18N
-        menuSearchApplication.setName("menuSearchApplication"); // NOI18N
-        menuApplications.add(menuSearchApplication);
-
         menuBar.add(menuApplications);
+
+        menuRegistration.setText(bundle.getString("MainForm.menuRegistration.text_1")); // NOI18N
+        menuRegistration.setName("menuRegistration"); // NOI18N
+        menuBar.add(menuRegistration);
 
         menuMap.setText(bundle.getString("MainForm.menuMap.text_1")); // NOI18N
         menuMap.setName("menuMap"); // NOI18N
@@ -346,6 +415,26 @@ public class MainForm extends FrameView {
 
         menuBar.add(helpMenu);
 
+        menuSearch.setText(bundle.getString("MainForm.menuSearch.text")); // NOI18N
+        menuSearch.setName("menuSearch"); // NOI18N
+
+        menuSearchApplication.setAction(actionMap.get("searchApplications")); // NOI18N
+        menuSearchApplication.setText(bundle.getString("MainForm.menuSearchApplication.text_1")); // NOI18N
+        menuSearchApplication.setName("menuSearchApplication"); // NOI18N
+        menuSearch.add(menuSearchApplication);
+
+        menuBaUnitSearch.setAction(actionMap.get("searchBaUnit")); // NOI18N
+        menuBaUnitSearch.setText(bundle.getString("MainForm.menuBaUnitSearch.text")); // NOI18N
+        menuBaUnitSearch.setName("menuBaUnitSearch"); // NOI18N
+        menuSearch.add(menuBaUnitSearch);
+
+        menuDocumentSearch.setAction(actionMap.get("searchDocuments")); // NOI18N
+        menuDocumentSearch.setText(bundle.getString("MainForm.menuDocumentSearch.text")); // NOI18N
+        menuDocumentSearch.setName("menuDocumentSearch"); // NOI18N
+        menuSearch.add(menuDocumentSearch);
+
+        menuBar.add(menuSearch);
+
         statusPanel.setName("statusPanel"); // NOI18N
         statusPanel.setPreferredSize(new java.awt.Dimension(1024, 24));
 
@@ -365,13 +454,12 @@ public class MainForm extends FrameView {
         statusPanelLayout.setHorizontalGroup(
             statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, statusPanelLayout.createSequentialGroup()
-                .add(7, 7, 7)
+                .addContainerGap()
                 .add(labStatus, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 35, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(txtUserName, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 170, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 388, Short.MAX_VALUE)
-                .add(taskPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(3, 3, 3))
+                .add(txtUserName, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
+                .add(52, 52, 52)
+                .add(taskPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 373, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
         );
         statusPanelLayout.setVerticalGroup(
             statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -380,12 +468,10 @@ public class MainForm extends FrameView {
                 .add(statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(taskPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 17, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                        .add(labStatus)
-                        .add(txtUserName)))
+                        .add(txtUserName)
+                        .add(labStatus)))
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        statusPanelSeparator.setName("statusPanelSeparator"); // NOI18N
 
         setComponent(mainPanel);
         setMenuBar(menuBar);
@@ -396,12 +482,14 @@ public class MainForm extends FrameView {
     }//GEN-LAST:event_menuShowMapActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToolBar applicationsMain;
+    private javax.swing.JButton btnManageParties;
     private javax.swing.JButton btnNewApplication;
+    private javax.swing.JButton btnOpenBaUnitSearch;
     private javax.swing.JButton btnOpenMap;
     private javax.swing.JButton btnSearchApplications;
     private javax.swing.JButton btnShowDashboard;
-    private javax.swing.JScrollPane changingPanel;
     private javax.swing.JMenu fileMenu;
+    private javax.swing.JButton jButton1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
@@ -409,20 +497,30 @@ public class MainForm extends FrameView {
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JToolBar.Separator jSeparator1;
+    private javax.swing.JToolBar.Separator jSeparator2;
+    private javax.swing.JToolBar.Separator jSeparator3;
+    private javax.swing.JToolBar.Separator jSeparator4;
     private javax.swing.JMenuItem jmiContextHelp;
     private javax.swing.JLabel labStatus;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenu menuApplications;
+    private javax.swing.JMenuItem menuBaUnitSearch;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem menuDashboardItem;
+    private javax.swing.JMenuItem menuDocumentSearch;
     private javax.swing.JMenuItem menuLangEN;
     private javax.swing.JMenuItem menuLangIT;
     private javax.swing.JMenu menuLanguage;
     private javax.swing.JMenu menuMap;
     private javax.swing.JMenuItem menuNewApplication;
+    private javax.swing.JMenu menuRegistration;
+    private javax.swing.JMenu menuReports;
+    private javax.swing.JMenu menuSearch;
     private javax.swing.JMenuItem menuSearchApplication;
     private javax.swing.JMenuItem menuShowMap;
     private javax.swing.JMenu menuView;
+    private org.sola.clients.swing.ui.MainContentPanel pnlContent;
     private javax.swing.JPanel statusPanel;
     private org.sola.clients.swing.common.tasks.TaskPanel taskPanel1;
     private javax.swing.JLabel txtUserName;
@@ -440,8 +538,11 @@ public class MainForm extends FrameView {
     /** Opens and embeds dashboard into the main form. */
     @Action
     public void openDashBoard() {
-        DashBoardPanel dashBoard = new DashBoardPanel(this.getFrame());
-        changingPanel.setViewportView(dashBoard);
+        if(!pnlContent.isPanelOpened(pnlContent.CARD_DASHBOARD)){
+            DashBoardPanel dashBoard = new DashBoardPanel(pnlContent);
+            pnlContent.addPanel(dashBoard, pnlContent.CARD_DASHBOARD);
+        }
+        pnlContent.showPanel(pnlContent.CARD_DASHBOARD);
     }
 
 
@@ -486,18 +587,48 @@ public class MainForm extends FrameView {
     /** Opens map. */
     @Action
     public void openMap() {
-        //Set up the content pane.
-        ControlsBundleViewer mapCtrl = new ControlsBundleViewer();
-        changingPanel.setViewportView(mapCtrl);
-        mapCtrl.getMap().zoomToFullExtent();
+        if(!pnlContent.isPanelOpened(pnlContent.CARD_MAP)){
+            ControlsBundleViewer mapCtrl = new ControlsBundleViewer();
+            pnlContent.addPanel(mapCtrl, pnlContent.CARD_MAP);
+            mapCtrl.getMap().zoomToFullExtent();
+        }
+        pnlContent.showPanel(pnlContent.CARD_MAP);
     }
 
     /** Opens {@link ApplicationSearchForm}. */
     @Action
     public void searchApplications() {
-        if (searchApplicationForm == null || !searchApplicationForm.isVisible()) {
-            searchApplicationForm = new ApplicationSearchForm();
+        if(!pnlContent.isPanelOpened(pnlContent.CARD_APPSEARCH)){
+            ApplicationSearchPanel searchApplicationPanel = new ApplicationSearchPanel();
+            pnlContent.addPanel(searchApplicationPanel, pnlContent.CARD_APPSEARCH);
         }
-        searchApplicationForm.setVisible(true);
+        pnlContent.showPanel(pnlContent.CARD_APPSEARCH);
+    }
+
+    @Action
+    public void manageParties() {
+        if(!pnlContent.isPanelOpened(pnlContent.CARD_PERSONS)){
+            PartySearchPanel partySearchPanel = new PartySearchPanel();
+            pnlContent.addPanel(partySearchPanel, pnlContent.CARD_PERSONS);
+        }
+        pnlContent.showPanel(pnlContent.CARD_PERSONS);
+    }
+
+    @Action
+    public void searchBaUnit() {
+        if(!pnlContent.isPanelOpened(pnlContent.CARD_BAUNIT_SEARCH)){
+            BaUnitSearchPanel baUnitSearchPanel = new BaUnitSearchPanel();
+            pnlContent.addPanel(baUnitSearchPanel, pnlContent.CARD_BAUNIT_SEARCH);
+        }
+        pnlContent.showPanel(pnlContent.CARD_BAUNIT_SEARCH);
+    }
+
+    @Action
+    public void searchDocuments() {
+        if(!pnlContent.isPanelOpened(pnlContent.CARD_DOCUMENT_SEARCH)){
+            DocumentSearchPanel documentSearchPanel = new DocumentSearchPanel();
+            pnlContent.addPanel(documentSearchPanel, pnlContent.CARD_DOCUMENT_SEARCH);
+        }
+        pnlContent.showPanel(pnlContent.CARD_DOCUMENT_SEARCH);
     }
 }
