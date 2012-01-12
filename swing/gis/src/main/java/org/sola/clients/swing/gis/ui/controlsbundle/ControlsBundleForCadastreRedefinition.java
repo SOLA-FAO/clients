@@ -33,60 +33,41 @@ package org.sola.clients.swing.gis.ui.controlsbundle;
 
 import com.vividsolutions.jts.geom.Geometry;
 import org.geotools.geometry.jts.JTS;
-import org.sola.clients.swing.gis.beans.TransactionCadastreChangeBean;
-import java.util.List;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.map.extended.layer.ExtendedLayer;
 import org.sola.clients.swing.gis.Messaging;
+import org.sola.clients.swing.gis.beans.TransactionCadastreRedefinitionBean;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.data.PojoFeatureSource;
-import org.sola.clients.swing.gis.layer.NewCadastreObjectLayer;
-import org.sola.clients.swing.gis.layer.NewSurveyPointLayer;
+import org.sola.clients.swing.gis.layer.CadastreObjectModifiedLayer;
 import org.sola.clients.swing.gis.layer.PojoLayer;
 import org.sola.clients.swing.gis.layer.TargetCadastreObjectLayer;
-import org.sola.clients.swing.gis.mapaction.NewCadastreObjectListFormShow;
-import org.sola.clients.swing.gis.mapaction.PointSurveyListFormShow;
-import org.sola.clients.swing.gis.mapaction.TestCadastreRequest;
-import org.sola.clients.swing.gis.tool.NewParcelTool;
-import org.sola.clients.swing.gis.tool.NodeLinkingTool;
-import org.sola.clients.swing.gis.tool.SelectParcelTool;
+import org.sola.clients.swing.gis.tool.ModifyNodeTool;
 import org.sola.common.messaging.GisMessage;
-import org.sola.webservices.transferobjects.cadastre.CadastreObjectTO;
 
 /**
  *
  * @author Elton Manoku
  */
-public final class ControlsBundleForCadastreChange extends ControlsBundleForWorkingWithCO {
+public final class ControlsBundleForCadastreRedefinition extends ControlsBundleForWorkingWithCO {
 
-    private TransactionCadastreChangeBean cadastreChangeBean;
-    private NewParcelTool newParcelTool = null;
-    private SelectParcelTool selectParcelTool = null;
-    private NodeLinkingTool nodelinkingTool = null;
+    private TransactionCadastreRedefinitionBean transactionBean;
     private TargetCadastreObjectLayer targetParcelsLayer = null;
-    private NewCadastreObjectLayer newCadastreObjectLayer = null;
-    private NewSurveyPointLayer newPointsLayer = null;
+    private CadastreObjectModifiedLayer cadastreObjectModifiedLayer = null;
     private PojoLayer pendingLayer = null;
     private String applicationNumber = "";
 
-    public ControlsBundleForCadastreChange(
+    public ControlsBundleForCadastreRedefinition(
             String applicationNumber,
-            TransactionCadastreChangeBean cadastreChangeBean,
-            String baUnitId,
+            TransactionCadastreRedefinitionBean transactionBean,
             byte[] applicationLocation) {
         super();
-        this.cadastreChangeBean = cadastreChangeBean;
+        this.transactionBean = transactionBean;
         this.applicationNumber = applicationNumber;
         this.Setup(PojoDataAccess.getInstance());
 
         ReferencedEnvelope boundsToZoom = null;
-        if (this.newPointsLayer.getFeatureCollection().size() > 0) {
-            boundsToZoom = this.newPointsLayer.getFeatureCollection().getBounds();
-        } else if (this.targetParcelsLayer.getFeatureCollection().size() > 0) {
-            boundsToZoom = this.targetParcelsLayer.getFeatureCollection().getBounds();
-        } else if (baUnitId != null) {
-            this.setTargetParcelsByBaUnit(baUnitId);
-        } else if (applicationLocation != null) {
+        if (applicationLocation != null) {
             try {
                 Geometry applicationLocationGeometry =
                         PojoFeatureSource.getWkbReader().read(applicationLocation);
@@ -107,8 +88,8 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForWork
         super.Setup(pojoDataAccess);
         try {
 
-            if (this.cadastreChangeBean == null) {
-                this.cadastreChangeBean = new TransactionCadastreChangeBean();
+            if (this.transactionBean == null) {
+                this.transactionBean = new TransactionCadastreRedefinitionBean();
             }
 
             //Adding layers
@@ -117,7 +98,7 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForWork
             //Adding tools and commands
             this.addToolsAndCommands();
 
-            this.getMap().addMapAction(new TestCadastreRequest(this), this.getToolbar());
+            //this.getMap().addMapAction(new TestCadastreRequest(this), this.getToolbar());
 
             for (ExtendedLayer solaLayer : this.getMap().getSolaLayers().values()) {
                 if (solaLayer.getClass().equals(PojoLayer.class)) {
@@ -134,68 +115,28 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForWork
         }
     }
 
-    public TransactionCadastreChangeBean getCadastreChangeBean() {
-        cadastreChangeBean.setCadastreObjectList(
-                this.newCadastreObjectLayer.getCadastreObjectList());
-        cadastreChangeBean.setSurveyPointList(this.newPointsLayer.getSurveyPointList());
-        cadastreChangeBean.setCadastreObjectTargetList(
+    public TransactionCadastreRedefinitionBean getTransactionBean() {
+//        this.transactionBean.setCadastreObjectList(
+//                this.cadastreObjectModifiedLayer.getCadastreObjectList());
+        this.transactionBean.setCadastreObjectTargetList(
                 this.targetParcelsLayer.getCadastreObjectTargetList());
-        return cadastreChangeBean;
+        return this.transactionBean;
     }
 
     private void addLayers() throws Exception {
         this.targetParcelsLayer = new TargetCadastreObjectLayer(this.getMap().getSrid());
         this.getMap().addLayer(targetParcelsLayer);
 
-        this.newCadastreObjectLayer = new NewCadastreObjectLayer(this.applicationNumber);
-        this.getMap().addLayer(newCadastreObjectLayer);
-
-        this.newPointsLayer = new NewSurveyPointLayer(this.newCadastreObjectLayer);
-        this.getMap().addLayer(newPointsLayer);
+        this.cadastreObjectModifiedLayer = new CadastreObjectModifiedLayer();
+        this.getMap().addLayer(this.cadastreObjectModifiedLayer);
 
         this.targetParcelsLayer.setCadastreObjectTargetList(
-                cadastreChangeBean.getCadastreObjectTargetList());
+                transactionBean.getCadastreObjectTargetList());
 
-        this.newPointsLayer.setSurveyPointList(this.cadastreChangeBean.getSurveyPointList());
-
-        this.newCadastreObjectLayer.setCadastreObjectList(
-                this.cadastreChangeBean.getCadastreObjectList());
     }
 
     private void addToolsAndCommands() {
-        selectParcelTool = new SelectParcelTool(this.getPojoDataAccess());
-        selectParcelTool.setTargetParcelsLayer(targetParcelsLayer);
-        this.getMap().addTool(selectParcelTool, this.getToolbar());
-
-        this.getMap().addMapAction(
-                new PointSurveyListFormShow(this.getMap(), this.newPointsLayer.getHostForm()),
-                this.getToolbar());
-
-        nodelinkingTool = new NodeLinkingTool(newPointsLayer);
-        nodelinkingTool.getTargetSnappingLayers().add(this.targetParcelsLayer);
-        this.getMap().addTool(nodelinkingTool, this.getToolbar());
-
-        newParcelTool = new NewParcelTool(this.newCadastreObjectLayer);
-        newParcelTool.getTargetSnappingLayers().add(newPointsLayer);
-        this.getMap().addTool(newParcelTool, this.getToolbar());
-
-        this.getMap().addMapAction(new NewCadastreObjectListFormShow(
-                this.getMap(), this.newCadastreObjectLayer.getHostForm()),
-                this.getToolbar());
-    }
-
-    public void setTargetParcelsByBaUnit(String baUnitId) {
-        List<CadastreObjectTO> cadastreObjects =
-                this.getPojoDataAccess().getCadastreService().getCadastreObjectsByBaUnit(baUnitId);
-
-        this.addCadastreObjectsInLayer(targetParcelsLayer, cadastreObjects);
-    }
-
-    public void setTargetParcelsByService(String serviceId) {
-        List<CadastreObjectTO> cadastreObjects =
-                this.getPojoDataAccess().getCadastreService().getCadastreObjectsByService(serviceId);
-
-        this.addCadastreObjectsInLayer(targetParcelsLayer, cadastreObjects);
+        this.getMap().addTool(new ModifyNodeTool(), this.getToolbar());
     }
 
     @Override

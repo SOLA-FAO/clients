@@ -46,7 +46,7 @@ import org.sola.webservices.transferobjects.cadastre.CadastreObjectTO;
  */
 public class SelectParcelTool extends ExtendedTool {
 
-    private String toolName = "selectparcel";
+    private String toolName = "select-parcel";
     private String toolTip = MessageUtility.getLocalizedMessage(
                             GisMessage.CADASTRE_TOOLTIP_SELECT_PARCEL).getMessage();
     private ExtendedLayerGraphics targetParcelsLayer = null;
@@ -88,8 +88,7 @@ public class SelectParcelTool extends ExtendedTool {
 //            Messaging.getInstance().show("gis.cadastrchange.selectparceltool.error.addparcel");
 //            MessageUtility.displayMessage(GisMessage.PARCEL_ERROR_ADDING_PARCEL);
             Messaging.getInstance().show(GisMessage.PARCEL_ERROR_ADDING_PARCEL);
-            org.sola.common.logging.LogUtility.log(
-                    GisMessage.PARCEL_ERROR_ADDING_PARCEL, ex);
+            org.sola.common.logging.LogUtility.log(GisMessage.PARCEL_ERROR_ADDING_PARCEL, ex);
         }
     }
 }

@@ -77,7 +77,7 @@ public class NewSurveyPointLayer extends ExtendedLayerEditor {
 
     private PointSurveyListForm hostForm = null;
             
-    public NewSurveyPointLayer(int srid, NewCadastreObjectLayer newCadastreObjectLayer)
+    public NewSurveyPointLayer(NewCadastreObjectLayer newCadastreObjectLayer)
             throws Exception {
         super(LAYER_NAME, Geometries.POINT,
                 LAYER_STYLE_RESOURCE, LAYER_ATTRIBUTE_DEFINITION);

@@ -31,9 +31,6 @@
  */
 package org.geotools.swing.extended;
 
-import java.awt.FontMetrics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.util.concurrent.TimeUnit;
 import org.geotools.map.event.MapLayerEvent;
 import org.geotools.map.event.MapLayerListEvent;
@@ -44,13 +41,10 @@ import org.geotools.referencing.CRS;
 import org.geotools.referencing.NamedIdentifier;
 import org.geotools.swing.tool.CursorTool;
 import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.crs.CRSAuthorityFactory;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import java.awt.Color;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Properties;
@@ -61,11 +55,7 @@ import javax.swing.JButton;
 import javax.swing.JToolBar;
 import org.geotools.geometry.jts.Geometries;
 import org.geotools.geometry.jts.ReferencedEnvelope;
-import org.geotools.map.DefaultMapContext;
 import org.geotools.map.Layer;
-import org.geotools.map.MapContext;
-import org.geotools.renderer.GTRenderer;
-import org.geotools.renderer.lite.StreamingRenderer;
 import org.geotools.swing.JMapPane;
 import org.geotools.swing.event.MapMouseAdapter;
 import org.geotools.swing.event.MapMouseEvent;
@@ -685,7 +675,6 @@ public class Map extends JMapPane {
      */
     @Override
     public void layerChanged(MapLayerListEvent event) {
-        System.out.println("layerChanged");
         paramsLock.writeLock().lock();
         try {
             int reason = event.getMapLayerEvent().getReason();

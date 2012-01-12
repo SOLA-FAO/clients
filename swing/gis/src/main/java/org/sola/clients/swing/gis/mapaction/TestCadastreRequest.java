@@ -40,10 +40,10 @@ import org.sola.webservices.transferobjects.transaction.TransactionCadastreChang
  *
  * @author Elton Manoku
  */
-public class TestCadastreChangeBean extends ExtendedAction{
+public class TestCadastreRequest extends ExtendedAction{
     private ControlsBundleForCadastreChange ctrl;
  
-  public TestCadastreChangeBean(ControlsBundleForCadastreChange ctrl) {
+  public TestCadastreRequest(ControlsBundleForCadastreChange ctrl) {
      super(ctrl.getMap(), "test bean", "test bean", ""); 
      this.ctrl = ctrl;   
   }

@@ -42,10 +42,12 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.geotools.map.extended.layer.ExtendedFeatureLayer;
 import org.geotools.map.extended.layer.ExtendedLayer;
+import org.geotools.map.extended.layer.ExtendedLayerEditor;
 import org.geotools.map.extended.layer.MapDecorationsLayer;
 import org.geotools.swing.mapaction.extended.Print;
 import org.geotools.swing.tool.extended.ExtendedDrawPolygon;
 import org.geotools.swing.tool.extended.ExtendedDrawToolWithSnapping;
+import org.geotools.swing.tool.extended.ExtendedDrawRectangle;
 
 /**
  *

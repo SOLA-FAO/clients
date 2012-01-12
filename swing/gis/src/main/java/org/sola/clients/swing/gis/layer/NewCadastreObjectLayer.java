@@ -63,7 +63,7 @@ public class NewCadastreObjectLayer extends ExtendedLayerEditor{
     public static final String LAYER_FIELD_LAST_PART = "last_part";
     public static final String LAYER_FIELD_OFFICIAL_AREA = "official_area";
     private static final String LAYER_NAME = "New Parcels";
-    private static final String LAYER_STYLE_RESOURCE = "cadastrechange_parcel_new.sld";
+    private static final String LAYER_STYLE_RESOURCE = "parcel_new.sld";
     private static final String LAYER_ATTRIBUTE_DEFINITION = String.format("%s:\"\",%s:\"\",%s:0",
             LAYER_FIELD_FIRST_PART, LAYER_FIELD_LAST_PART, LAYER_FIELD_OFFICIAL_AREA);
     private List<CadastreObjectBean> cadastreObjectList = new ArrayList<CadastreObjectBean>();
@@ -74,7 +74,7 @@ public class NewCadastreObjectLayer extends ExtendedLayerEditor{
     private DefaultTableModel tableModel = null;
     private NewCadastreObjectListForm hostForm = null;
 
-    public NewCadastreObjectLayer(int srid, String applicationNumber) throws Exception {
+    public NewCadastreObjectLayer(String applicationNumber) throws Exception {
         super(LAYER_NAME, Geometries.POLYGON,
                 LAYER_STYLE_RESOURCE, LAYER_ATTRIBUTE_DEFINITION);
         this.lastPart = String.format(LAST_PART_FORMAT, applicationNumber);

@@ -75,7 +75,6 @@ public class ExtendedDrawToolWithSnapping extends ExtendedDrawTool {
         Vertex,
         Line
     }
-    
     private List<ExtendedFeatureLayer> targetSnappingLayers = new ArrayList<ExtendedFeatureLayer>();
     private Color stylePointColorNoTargetFound = Color.RED;
     private Color stylePointColorTargetFound = Color.BLUE;
@@ -83,7 +82,6 @@ public class ExtendedDrawToolWithSnapping extends ExtendedDrawTool {
     private double snapDistanceInMeters = 5;
     private com.vividsolutions.jts.geom.Point snappingPoint = null;
     private SNAPPED_TARGET_TYPE snappedTarget = SNAPPED_TARGET_TYPE.None;
-    
     private FilterFactory2 filterFactory = CommonFactoryFinder.getFilterFactory2(null);
 
     /**
@@ -154,10 +152,12 @@ public class ExtendedDrawToolWithSnapping extends ExtendedDrawTool {
         double widthInMeters = this.getMapControl().getDisplayArea().getSpan(0);
         int widthInPixels = this.getMapControl().getWidth();
         this.snapDistanceInMeters = widthInMeters * this.snapDistanceInPixels / widthInPixels;
-            Graphics2D g2D = this.getGraphicsToDrawSnappingPoint();
-            if (this.snappingPoint != null) {
-                this.drawSnappingPoint(g2D, this.snappingPoint);
-            }
+        Graphics2D g2D = this.getGraphicsToDrawSnappingPoint();
+        if (this.snappingPoint != null) {
+            this.drawSnappingPoint(g2D, this.snappingPoint);
+            //Added because otherwise it will be drawn again.
+            this.snappingPoint = null;
+        }
     }
 
     /**
@@ -202,7 +202,7 @@ public class ExtendedDrawToolWithSnapping extends ExtendedDrawTool {
     @Override
     public void onSelectionChanged(boolean selected) {
         super.onSelectionChanged(selected);
-        if (!selected && this.snappingPoint != null){
+        if (!selected && this.snappingPoint != null) {
             Graphics2D g2D = this.getGraphicsToDrawSnappingPoint();
             this.drawSnappingPoint(g2D, this.snappingPoint);
             this.snappingPoint = null;
@@ -219,16 +219,16 @@ public class ExtendedDrawToolWithSnapping extends ExtendedDrawTool {
      * @return 
      */
     @Override
-    protected DirectPosition2D getOnClickPoint(MapMouseEvent ev){
+    protected DirectPosition2D getOnClickPoint(MapMouseEvent ev) {
         DirectPosition2D result;
-        if (this.snappedTarget != SNAPPED_TARGET_TYPE.None){
+        if (this.snappedTarget != SNAPPED_TARGET_TYPE.None) {
             result = new DirectPosition2D(this.snappingPoint.getX(), this.snappingPoint.getY());
-        }else{
+        } else {
             result = super.getOnClickPoint(ev);
         }
         return result;
     }
-    
+
     /**
      * It searches for points within the range of the mouse to snap to. 
      * Priority is given to vertexes and then lines.
@@ -247,12 +247,12 @@ public class ExtendedDrawToolWithSnapping extends ExtendedDrawTool {
         Coordinate coordinate = null;
         ReferencedEnvelope bbox = new ReferencedEnvelope(search, null);
         for (ExtendedFeatureLayer targetLayer : this.targetSnappingLayers) {
-            if (!targetLayer.isVisible()){
+            if (!targetLayer.isVisible()) {
                 continue;
             }
             FeatureCollection featuresFound =
                     this.getFeaturesInRange(targetLayer, bbox);
-            SimpleFeatureIterator iterator = (SimpleFeatureIterator)featuresFound.features();
+            SimpleFeatureIterator iterator = (SimpleFeatureIterator) featuresFound.features();
             while (iterator.hasNext()) {
                 SimpleFeature currentFeature = iterator.next();
                 Geometry geom = (Geometry) currentFeature.getDefaultGeometry();
@@ -260,24 +260,24 @@ public class ExtendedDrawToolWithSnapping extends ExtendedDrawTool {
                     continue;
                 }
                 //Check first points
-                for(Coordinate currentCoordinate:geom.getCoordinates()){
+                for (Coordinate currentCoordinate : geom.getCoordinates()) {
                     double currentDistance = currentCoordinate.distance(mouseCoordinate);
-                    if (currentDistance< distance){
+                    if (currentDistance < distance) {
                         distance = currentDistance;
                         coordinate = currentCoordinate;
                     }
                 }
-                if (coordinate != null){
+                if (coordinate != null) {
                     this.snappedTarget = SNAPPED_TARGET_TYPE.Vertex;
                     break;
                 }
                 //Check linestrings
-                for(LineString lineString: this.getLines(geom)){
-                    LocationIndexedLine line = new  LocationIndexedLine(lineString);
+                for (LineString lineString : this.getLines(geom)) {
+                    LocationIndexedLine line = new LocationIndexedLine(lineString);
                     LinearLocation linearLocation = line.project(mouseCoordinate);
                     Coordinate currentCoordinate = line.extractPoint(linearLocation);
                     double currentDistance = currentCoordinate.distance(mouseCoordinate);
-                    if (currentDistance< distance){
+                    if (currentDistance < distance) {
                         distance = currentDistance;
                         coordinate = currentCoordinate;
                     }
@@ -285,8 +285,8 @@ public class ExtendedDrawToolWithSnapping extends ExtendedDrawTool {
             }
             iterator.close();
         }
-        if (coordinate != null){
-            if (this.snappedTarget == SNAPPED_TARGET_TYPE.None){
+        if (coordinate != null) {
+            if (this.snappedTarget == SNAPPED_TARGET_TYPE.None) {
                 this.snappedTarget = SNAPPED_TARGET_TYPE.Line;
             }
             resultPoint = JTS.toGeometry(new DirectPosition2D(coordinate.x, coordinate.y));
@@ -300,24 +300,24 @@ public class ExtendedDrawToolWithSnapping extends ExtendedDrawTool {
      * @param geom
      * @return 
      */
-    private List<LineString> getLines(Geometry geom){
+    private List<LineString> getLines(Geometry geom) {
         List<LineString> result = new ArrayList<LineString>();
-        if (geom.getGeometryType().contains("Multi")){
-            for(int geomIndex=0; geomIndex< geom.getNumGeometries(); geomIndex++){
+        if (geom.getGeometryType().contains("Multi")) {
+            for (int geomIndex = 0; geomIndex < geom.getNumGeometries(); geomIndex++) {
                 result.addAll(this.getLines(geom.getGeometryN(geomIndex)));
             }
-        }else if (geom.getGeometryType().equals("LineString")){
-            result.add((LineString)geom);
-        }else if (geom.getGeometryType().equals("Polygon")){
+        } else if (geom.getGeometryType().equals("LineString")) {
+            result.add((LineString) geom);
+        } else if (geom.getGeometryType().equals("Polygon")) {
             Polygon pol = (Polygon) geom;
             result.add(pol.getExteriorRing());
-            for(int geomIndex=0; geomIndex< pol.getNumInteriorRing(); geomIndex++){
+            for (int geomIndex = 0; geomIndex < pol.getNumInteriorRing(); geomIndex++) {
                 result.add(pol.getInteriorRingN(geomIndex));
             }
         }
         return result;
     }
-    
+
     /**
      * Gets the features that are in range of the mouse.
      * 
@@ -332,13 +332,13 @@ public class ExtendedDrawToolWithSnapping extends ExtendedDrawTool {
         String geometryPropertyName = schema.getGeometryDescriptor().getLocalName();
         Filter filterBbox = filterFactory.bbox(filterFactory.property(geometryPropertyName), bbox);
         Filter filter;
-        if (targetLayer.getFilterExpressionForSnapping() != null){
+        if (targetLayer.getFilterExpressionForSnapping() != null) {
             String[] filterSides = targetLayer.getFilterExpressionForSnapping().split("=");
-           Filter filterExtra = filterFactory.equals(
-                   filterFactory.property(filterSides[0]), 
-                   filterFactory.literal(filterSides[1]));
-           filter = filterFactory.and(filterBbox, filterExtra);
-        }else{
+            Filter filterExtra = filterFactory.equals(
+                    filterFactory.property(filterSides[0]),
+                    filterFactory.literal(filterSides[1]));
+            filter = filterFactory.and(filterBbox, filterExtra);
+        } else {
             filter = filterBbox;
         }
         try {
@@ -361,7 +361,6 @@ public class ExtendedDrawToolWithSnapping extends ExtendedDrawTool {
         return g2D;
     }
 
-    
     /**
      * It draws the snapping point
      * 
