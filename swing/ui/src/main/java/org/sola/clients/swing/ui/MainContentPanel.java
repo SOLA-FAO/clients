@@ -68,6 +68,9 @@ public class MainContentPanel extends javax.swing.JPanel {
      * @param cardName Name of the card to assign to the added panel.
      */
     public void addPanel(Component panel, String cardName) {
+        if(isPanelOpened(cardName)){
+            closePanel(panel);
+        }
         cards.put(cardName, panel);
         pnlContent.add(panel, cardName);
     }
