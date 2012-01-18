@@ -38,6 +38,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
 import java.util.Locale;
+import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -51,6 +52,7 @@ import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleViewer;
 import org.sola.clients.swing.ui.party.PartySearchPanel;
 import org.sola.common.RolesConstants;
 import org.sola.common.help.HelpUtility;
+import org.sola.common.logging.LogUtility;
 
 /**
  * The main form of the application.
@@ -58,24 +60,22 @@ import org.sola.common.help.HelpUtility;
 public class MainForm extends FrameView {
 
     private ApplicationForm applicationForm;
-    
-    Object foreFont =  LafManager.getInstance().getForeFont();
-    Object labFont =  LafManager.getInstance().getLabFont();
-    Object bgFont =    LafManager.getInstance().getBgFont();
-    Object txtFont =   LafManager.getInstance().getTxtFont();
-    Object txtAreaFont =   LafManager.getInstance().getTxtAreaFont();
-    Object btnFont =   LafManager.getInstance().getBtnFont();
-    Object tabFont =   LafManager.getInstance().getTabFont();
-    Object cmbFont =   LafManager.getInstance().getCmbFont();
-    Object btnBackground =   LafManager.getInstance().getBtnBackground();
-    
-    
+    Object foreFont = LafManager.getInstance().getForeFont();
+    Object labFont = LafManager.getInstance().getLabFont();
+    Object bgFont = LafManager.getInstance().getBgFont();
+    Object txtFont = LafManager.getInstance().getTxtFont();
+    Object txtAreaFont = LafManager.getInstance().getTxtAreaFont();
+    Object btnFont = LafManager.getInstance().getBtnFont();
+    Object tabFont = LafManager.getInstance().getTabFont();
+    Object cmbFont = LafManager.getInstance().getCmbFont();
+    Object btnBackground = LafManager.getInstance().getBtnBackground();
+
     /** Main form constructor. Initializes resources, help context and tasks. */
     public MainForm(SingleFrameApplication app) {
         super(app);
         URL imgURL = this.getClass().getResource("/images/sola/logo_icon.jpg");
         this.getFrame().setIconImage(new ImageIcon(imgURL).getImage());
-        
+
         initComponents();
         /**
          * Get an instance of HelpUtility and obtain <code>ActionListener<code/>s for the Help Menu Item 
@@ -107,12 +107,12 @@ public class MainForm extends FrameView {
         btnSearchApplications.getAction().setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_VIEW_APPS));
         btnShowDashboard.getAction().setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_VIEW_APPS));
         btnManageParties.getAction().setEnabled(SecurityBean.isInRole(RolesConstants.PARTY_SAVE));
-        
+
         // Load dashboard
         openDashBoard();
-        
+
         txtUserName.setText(SecurityBean.getCurrentUser().getUserName());
-        
+
         jMenuItem3.setVisible(false);
         jMenuItem4.setVisible(false);
         jMenuItem5.setVisible(false);
@@ -120,19 +120,20 @@ public class MainForm extends FrameView {
 
         // Enable/disable toolbar and main menu based on users access
     }
+
     /** Applies customization of component L&F. */
     private void customizeComponents() {
-  //    BUTTONS   
-    LafManager.getInstance().setBtnProperties(btnNewApplication);
-    LafManager.getInstance().setBtnProperties(btnOpenMap);
-    LafManager.getInstance().setBtnProperties(btnSearchApplications);
-    LafManager.getInstance().setBtnProperties(btnShowDashboard);
-   
+        //    BUTTONS   
+        LafManager.getInstance().setBtnProperties(btnNewApplication);
+        LafManager.getInstance().setBtnProperties(btnOpenMap);
+        LafManager.getInstance().setBtnProperties(btnSearchApplications);
+        LafManager.getInstance().setBtnProperties(btnShowDashboard);
+
 //    LABELS    
-    LafManager.getInstance().setLabProperties(labStatus);
-    LafManager.getInstance().setLabProperties(txtUserName);
+        LafManager.getInstance().setLabProperties(labStatus);
+        LafManager.getInstance().setLabProperties(txtUserName);
     }
-        
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -165,6 +166,10 @@ public class MainForm extends FrameView {
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
+        menuLogLevel = new javax.swing.JMenu();
+        menuAllLogLevel = new javax.swing.JMenuItem();
+        menuDefaultLogLevel = new javax.swing.JMenuItem();
+        menuOffLogLevel = new javax.swing.JMenuItem();
         javax.swing.JMenu homeDashboard = new javax.swing.JMenu();
         menuDashboardItem = new javax.swing.JMenuItem();
         menuReports = new javax.swing.JMenu();
@@ -198,7 +203,7 @@ public class MainForm extends FrameView {
         applicationsMain.setPreferredSize(new java.awt.Dimension(980, 45));
         applicationsMain.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(org.sola.clients.swing.desktop.DesktopApplication.class).getContext().getActionMap(MainForm.class, this);
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(MainForm.class, this);
         btnShowDashboard.setAction(actionMap.get("openDashBoard")); // NOI18N
         btnShowDashboard.setFont(UIManager.getFont(btnFont));
         btnShowDashboard.setFocusable(false);
@@ -358,6 +363,29 @@ public class MainForm extends FrameView {
 
         menuView.add(jMenu1);
 
+        menuLogLevel.setText(bundle.getString("MainForm.menuLogLevel.text")); // NOI18N
+        menuLogLevel.setName("menuLogLevel"); // NOI18N
+
+        menuAllLogLevel.setAction(actionMap.get("setAllLogLevel")); // NOI18N
+        menuAllLogLevel.setText(bundle.getString("MainForm.menuAllLogLevel.text")); // NOI18N
+        menuAllLogLevel.setActionCommand(bundle.getString("MainForm.menuAllLogLevel.actionCommand")); // NOI18N
+        menuAllLogLevel.setName("menuAllLogLevel"); // NOI18N
+        menuLogLevel.add(menuAllLogLevel);
+
+        menuDefaultLogLevel.setAction(actionMap.get("setDefaultLogLevel")); // NOI18N
+        menuDefaultLogLevel.setText(bundle.getString("MainForm.menuDefaultLogLevel.text")); // NOI18N
+        menuDefaultLogLevel.setActionCommand(bundle.getString("MainForm.menuDefaultLogLevel.actionCommand")); // NOI18N
+        menuDefaultLogLevel.setName("menuDefaultLogLevel"); // NOI18N
+        menuLogLevel.add(menuDefaultLogLevel);
+
+        menuOffLogLevel.setAction(actionMap.get("setOffLogLevel")); // NOI18N
+        menuOffLogLevel.setText(bundle.getString("MainForm.menuOffLogLevel.text")); // NOI18N
+        menuOffLogLevel.setActionCommand(bundle.getString("MainForm.menuOffLogLevel.actionCommand")); // NOI18N
+        menuOffLogLevel.setName("menuOffLogLevel"); // NOI18N
+        menuLogLevel.add(menuOffLogLevel);
+
+        menuView.add(menuLogLevel);
+
         menuBar.add(menuView);
 
         homeDashboard.setText(bundle.getString("MainForm.homeDashboard.text_1")); // NOI18N
@@ -368,11 +396,11 @@ public class MainForm extends FrameView {
         menuDashboardItem.setName("menuDashboardItem"); // NOI18N
         homeDashboard.add(menuDashboardItem);
 
-        menuBar.add(homeDashboard);
-
         menuReports.setText(bundle.getString("MainForm.menuReports.text_1")); // NOI18N
         menuReports.setName("menuReports"); // NOI18N
-        menuBar.add(menuReports);
+        homeDashboard.add(menuReports);
+
+        menuBar.add(homeDashboard);
 
         menuApplications.setText(bundle.getString("MainForm.menuApplications.text_1")); // NOI18N
         menuApplications.setName("menuApplications"); // NOI18N
@@ -504,16 +532,20 @@ public class MainForm extends FrameView {
     private javax.swing.JMenuItem jmiContextHelp;
     private javax.swing.JLabel labStatus;
     private javax.swing.JPanel mainPanel;
+    private javax.swing.JMenuItem menuAllLogLevel;
     private javax.swing.JMenu menuApplications;
     private javax.swing.JMenuItem menuBaUnitSearch;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem menuDashboardItem;
+    private javax.swing.JMenuItem menuDefaultLogLevel;
     private javax.swing.JMenuItem menuDocumentSearch;
     private javax.swing.JMenuItem menuLangEN;
     private javax.swing.JMenuItem menuLangIT;
     private javax.swing.JMenu menuLanguage;
+    private javax.swing.JMenu menuLogLevel;
     private javax.swing.JMenu menuMap;
     private javax.swing.JMenuItem menuNewApplication;
+    private javax.swing.JMenuItem menuOffLogLevel;
     private javax.swing.JMenu menuRegistration;
     private javax.swing.JMenu menuReports;
     private javax.swing.JMenu menuSearch;
@@ -538,43 +570,43 @@ public class MainForm extends FrameView {
     /** Opens and embeds dashboard into the main form. */
     @Action
     public void openDashBoard() {
-        if(!pnlContent.isPanelOpened(pnlContent.CARD_DASHBOARD)){
+        if (!pnlContent.isPanelOpened(pnlContent.CARD_DASHBOARD)) {
             DashBoardPanel dashBoard = new DashBoardPanel(pnlContent);
             pnlContent.addPanel(dashBoard, pnlContent.CARD_DASHBOARD);
         }
         pnlContent.showPanel(pnlContent.CARD_DASHBOARD);
     }
 
+    class LNFSetter implements ActionListener {
 
-  class LNFSetter implements ActionListener {
-    String theLNFName;
-    String whichButton;
-    
-    
+        String theLNFName;
+        String whichButton;
+
 //    LoginForm loginform;
-    LNFSetter(String lnfName, String theme) {
-      theLNFName = lnfName;
-      whichButton = theme;
-        
-     }
-       @Override
-    public void actionPerformed(ActionEvent e) {
-        try {
-        LafManager.getInstance().setProperties(whichButton);
-        UIManager.setLookAndFeel(theLNFName);
-        
-        SwingUtilities.updateComponentTreeUI(mainPanel);
-        SwingUtilities.updateComponentTreeUI(menuBar);
-        SwingUtilities.updateComponentTreeUI(statusPanel);
-        openDashBoard();
-       
-      } catch (Exception evt) {
-        JOptionPane.showMessageDialog(null, "setLookAndFeel didn't work: " + evt, "UI Failure",
-            JOptionPane.INFORMATION_MESSAGE);
-      }
+        LNFSetter(String lnfName, String theme) {
+            theLNFName = lnfName;
+            whichButton = theme;
+
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                LafManager.getInstance().setProperties(whichButton);
+                UIManager.setLookAndFeel(theLNFName);
+
+                SwingUtilities.updateComponentTreeUI(mainPanel);
+                SwingUtilities.updateComponentTreeUI(menuBar);
+                SwingUtilities.updateComponentTreeUI(statusPanel);
+                openDashBoard();
+
+            } catch (Exception evt) {
+                JOptionPane.showMessageDialog(null, "setLookAndFeel didn't work: " + evt, "UI Failure",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
     }
- }
-    
+
     /** Opens empty {@link ApplicationForm} to create new application. */
     @Action
     public void openNewApplicationForm() {
@@ -587,7 +619,7 @@ public class MainForm extends FrameView {
     /** Opens map. */
     @Action
     public void openMap() {
-        if(!pnlContent.isPanelOpened(pnlContent.CARD_MAP)){
+        if (!pnlContent.isPanelOpened(pnlContent.CARD_MAP)) {
             ControlsBundleViewer mapCtrl = new ControlsBundleViewer();
             pnlContent.addPanel(mapCtrl, pnlContent.CARD_MAP);
             mapCtrl.getMap().zoomToFullExtent();
@@ -598,7 +630,7 @@ public class MainForm extends FrameView {
     /** Opens {@link ApplicationSearchForm}. */
     @Action
     public void searchApplications() {
-        if(!pnlContent.isPanelOpened(pnlContent.CARD_APPSEARCH)){
+        if (!pnlContent.isPanelOpened(pnlContent.CARD_APPSEARCH)) {
             ApplicationSearchPanel searchApplicationPanel = new ApplicationSearchPanel();
             pnlContent.addPanel(searchApplicationPanel, pnlContent.CARD_APPSEARCH);
         }
@@ -607,7 +639,7 @@ public class MainForm extends FrameView {
 
     @Action
     public void manageParties() {
-        if(!pnlContent.isPanelOpened(pnlContent.CARD_PERSONS)){
+        if (!pnlContent.isPanelOpened(pnlContent.CARD_PERSONS)) {
             PartySearchPanel partySearchPanel = new PartySearchPanel();
             pnlContent.addPanel(partySearchPanel, pnlContent.CARD_PERSONS);
         }
@@ -616,7 +648,7 @@ public class MainForm extends FrameView {
 
     @Action
     public void searchBaUnit() {
-        if(!pnlContent.isPanelOpened(pnlContent.CARD_BAUNIT_SEARCH)){
+        if (!pnlContent.isPanelOpened(pnlContent.CARD_BAUNIT_SEARCH)) {
             BaUnitSearchPanel baUnitSearchPanel = new BaUnitSearchPanel();
             pnlContent.addPanel(baUnitSearchPanel, pnlContent.CARD_BAUNIT_SEARCH);
         }
@@ -625,10 +657,25 @@ public class MainForm extends FrameView {
 
     @Action
     public void searchDocuments() {
-        if(!pnlContent.isPanelOpened(pnlContent.CARD_DOCUMENT_SEARCH)){
+        if (!pnlContent.isPanelOpened(pnlContent.CARD_DOCUMENT_SEARCH)) {
             DocumentSearchPanel documentSearchPanel = new DocumentSearchPanel();
             pnlContent.addPanel(documentSearchPanel, pnlContent.CARD_DOCUMENT_SEARCH);
         }
         pnlContent.showPanel(pnlContent.CARD_DOCUMENT_SEARCH);
+    }
+
+    @Action
+    public void setAllLogLevel() {
+         LogUtility.setLogLevel(Level.ALL);
+    }
+
+    @Action
+    public void setDefaultLogLevel() {
+        LogUtility.setLogLevel(Level.INFO);
+    }
+
+    @Action
+    public void setOffLogLevel() {
+        LogUtility.setLogLevel(Level.OFF);
     }
 }

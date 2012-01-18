@@ -38,6 +38,7 @@ import org.jdesktop.application.SingleFrameApplication;
 import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.common.LocalizationManager;
 import org.sola.clients.swing.ui.security.LoginPanel;
+import org.sola.common.logging.LogUtility;
 
 /**
  * The main class of the application.
@@ -73,6 +74,7 @@ public class DesktopApplication extends SingleFrameApplication {
     protected void startup() {
         Thread.setDefaultUncaughtExceptionHandler(new DesktopClientExceptionHandler());
         LocalizationManager.loadLanguage(DesktopApplication.class);
+        LogUtility.initialize(DesktopApplication.class);  
         LafManager.getInstance().setProperties("green");
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         int x = ((dim.width) / 2);
