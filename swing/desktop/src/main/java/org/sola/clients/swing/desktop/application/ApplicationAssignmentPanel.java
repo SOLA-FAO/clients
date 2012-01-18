@@ -38,6 +38,7 @@ import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.beans.security.UserSummaryBean;
 import org.sola.clients.swing.common.LafManager;
+import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.common.RolesConstants;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -45,7 +46,7 @@ import org.sola.common.messaging.MessageUtility;
 /** This dialog form is used to assign application to the user or unassign it from him.
  * <br />{@link UsersListBean} is used to bind the data on the form.
  */
-public class ApplicationAssignmentPanel extends javax.swing.JPanel {
+public class ApplicationAssignmentPanel extends ContentPanel {
 
     private String applicationId;
     Object foreFont = LafManager.getInstance().getForeFont();

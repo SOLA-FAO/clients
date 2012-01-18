@@ -27,6 +27,7 @@
  */
 package org.sola.clients.beans.administrative;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -46,6 +47,7 @@ import org.sola.clients.beans.validation.Localized;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.webservices.transferobjects.EntityAction;
 import org.sola.webservices.transferobjects.administrative.BaUnitTO;
+import org.sola.webservices.transferobjects.search.CadastreObjectSearchResultTO;
 
 /** 
  * Contains properties and methods to manage <b>BA Unit</b> object of the 
@@ -176,6 +178,7 @@ public class BaUnitBean extends AbstractTransactionedBean {
     private SolaList<RrrBean> rrrList;
     private SolaList<BaUnitNotationBean> baUnitNotationList;
     private SolaList<CadastreObjectBean> cadastreObjectList;
+    private SolaList<CadastreObjectBean> newCadastreObjectList;
     private ObservableList<BaUnitNotationBean> allBaUnitNotationList;
     private SolaList<SourceBean> sourceList;
     private BaUnitTypeBean baUnitType;
@@ -302,7 +305,7 @@ public class BaUnitBean extends AbstractTransactionedBean {
         propertySupport.firePropertyChange(SELECTED_PARCEL_PROPERTY,
                 null, selectedParcel);
     }
-
+    
     public RrrBean getSelectedRight() {
         return selectedRight;
     }
@@ -321,6 +324,50 @@ public class BaUnitBean extends AbstractTransactionedBean {
         return baUnitNotationList.getFilteredList();
     }
 
+    public SolaList<CadastreObjectBean> getNewCadastreObjectList() {
+        if(newCadastreObjectList == null){
+            loadNewParcels();
+        }
+        return newCadastreObjectList;
+    }
+    
+    public ObservableList<CadastreObjectBean> getSelectedNewCadastreObjects() {
+        ObservableList<CadastreObjectBean> selectedCadastreObjects = 
+                ObservableCollections.observableList(new ArrayList<CadastreObjectBean>());
+        for(CadastreObjectBean cadastreObject : getNewCadastreObjectList()){
+            if(cadastreObject.isSelected()){
+                selectedCadastreObjects.add(cadastreObject);
+            }
+        }
+        return selectedCadastreObjects;
+    }
+    
+    public ObservableList<CadastreObjectBean> getSelectedCadastreObjects() {
+        ObservableList<CadastreObjectBean> selectedCadastreObjects = 
+                ObservableCollections.observableList(new ArrayList<CadastreObjectBean>());
+        for(CadastreObjectBean cadastreObject : getCadastreObjectFilteredList()){
+            if(cadastreObject.isSelected()){
+                selectedCadastreObjects.add(cadastreObject);
+            }
+        }
+        return selectedCadastreObjects;
+    }
+    
+    public ObservableList<RrrBean> getSelectedRrrs() {
+        ObservableList<RrrBean> selectedRrrs = 
+                ObservableCollections.observableList(new ArrayList<RrrBean>());
+        for(RrrBean rrr : getRrrFilteredList()){
+            if(rrr.isSelected()){
+                selectedRrrs.add(rrr);
+            }
+        }
+        return selectedRrrs;
+    }
+    
+    public ObservableList<CadastreObjectBean> getFilteredNewCadastreObjectList() {
+        return getNewCadastreObjectList().getFilteredList();
+    }
+    
     public SolaList<CadastreObjectBean> getCadastreObjectList() {
         return cadastreObjectList;
     }
@@ -453,6 +500,49 @@ public class BaUnitBean extends AbstractTransactionedBean {
         baUnit = WSManager.getInstance().getAdministrative().SaveBaUnit(serviceId, baUnit);
         TypeConverters.TransferObjectToBean(baUnit, BaUnitBean.class, this);
         return true;
+    }
+    
+    /** 
+     * Loads list of new parcels, created on the base of current BA unit parcels 
+     * (e.g. result of subdivision). 
+     */
+    private void loadNewParcels(){
+        if(newCadastreObjectList == null){
+            newCadastreObjectList = new SolaList<CadastreObjectBean>();
+        }
+        newCadastreObjectList.clear();
+        if(getId()!=null){
+            List<CadastreObjectSearchResultTO> searchResults = 
+                    WSManager.getInstance().getSearchService()
+                    .searchCadastreObjects("BAUNIT_ID", getId());
+            if(searchResults!=null && searchResults.size()>0){
+                List<String> ids = new ArrayList<String>();
+                for(CadastreObjectSearchResultTO result : searchResults){
+                    ids.add(result.getId());
+                }
+                TypeConverters.TransferObjectListToBeanList(WSManager.getInstance()
+                        .getCadastreService().getCadastreObjects(ids), 
+                        CadastreObjectBean.class, (List)newCadastreObjectList);
+            }
+        }
+    }
+    
+    /** Filters all child lists to keep only records with current status. */
+    public void filterCurrentRecords(){
+        sourceList.setIncludedStatuses(new String[]{StatusConstants.CURRENT});
+        rrrList.setIncludedStatuses(new String[]{StatusConstants.CURRENT});
+        baUnitNotationList.setIncludedStatuses(new String[]{StatusConstants.CURRENT});
+        cadastreObjectList.setIncludedStatuses(new String[]{StatusConstants.CURRENT});
+    }
+
+    /** 
+     * Returns list of BA Units, created by the given service. 
+     * @param serviceId The ID of service, used pick up BA Units.
+     */
+    public static List<BaUnitBean> getBaUnitsByServiceId(String serviceId){
+        return TypeConverters.TransferObjectListToBeanList(
+                WSManager.getInstance().getAdministrative().getBaUnitsByServiceId(serviceId),
+                BaUnitBean.class, null);
     }
     
     /** 

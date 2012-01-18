@@ -41,6 +41,7 @@ import org.sola.clients.beans.application.ApplicationSearchResultsListBean;
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.common.controls.CalendarForm;
+import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.renderers.CellDelimitedListRenderer;
 import org.sola.common.RolesConstants;
 import org.sola.common.messaging.ClientMessage;
@@ -51,14 +52,15 @@ import org.sola.common.messaging.MessageUtility;
  * <p>The following list of beans is used to bind the data on the form:<br />
  * {@link ApplicationSearchResultsListBean},<br />{@link ApplicationSearchParamsBean}</p>
  */
-public class ApplicationSearchPanel extends javax.swing.JPanel {
+public class ApplicationSearchPanel extends ContentPanel {
 
-    private ApplicationForm applicationForm;
+    private ApplicationPanel applicationForm;
 
     /** Default constructor to create form and initialize parameters. */
     public ApplicationSearchPanel() {
         initComponents();
         customizeComponents();
+        setHeaderPanel(headerPanel1);
         appList.addPropertyChangeListener(new PropertyChangeListener() {
 
             @Override
@@ -645,10 +647,8 @@ public class ApplicationSearchPanel extends javax.swing.JPanel {
         
         if (appList.getSelectedApplication() != null) {
             if (applicationForm == null || !applicationForm.isVisible()) {
-                applicationForm = new ApplicationForm(appList.getSelectedApplication().getId());
+                applicationForm = new ApplicationPanel(appList.getSelectedApplication().getId());
             }
-            java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/application/Bundle"); // NOI18N
-            applicationForm.setTitle(bundle.getString("ApplicationForm.titleApplication") + " #" + appList.getSelectedApplication().getNr());
             applicationForm.setVisible(true);
         } else {
             MessageUtility.displayMessage(ClientMessage.SEARCH_SELECT_APPLICATION);

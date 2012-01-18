@@ -155,7 +155,7 @@ public class SolaList<E extends AbstractBindingBean> extends ExtendedList<E> {
         return excludedStatuses.clone();
     }
 
-    /** Sets included statuses array. */
+    /** Sets excluded statuses array. */
     public void setExcludedStatuses(String[] excludedStatuses) {
         this.excludedStatuses = excludedStatuses;
         super.filter();
@@ -166,7 +166,7 @@ public class SolaList<E extends AbstractBindingBean> extends ExtendedList<E> {
         return includedStatuses.clone();
     }
 
-    /** Sets excluded statuses array. */
+    /** Sets included statuses array. */
     public void setIncludedStatuses(String[] includedStatuses) {
         this.includedStatuses = includedStatuses;
         super.filter();

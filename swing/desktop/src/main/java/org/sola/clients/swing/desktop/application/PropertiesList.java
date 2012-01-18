@@ -47,19 +47,14 @@ public class PropertiesList extends javax.swing.JDialog {
     
     /** Creates new form PropertiesList */
     public PropertiesList() {
-        super((Frame)null, true);
-        propertyList = new SolaList();
-        initComponents();
-        this.setIconImage(new ImageIcon(PropertiesList.class.getResource("/images/sola/logo_icon.jpg")).getImage());
-      
+        this(new SolaList());
     }
 
     public PropertiesList(SolaList<ApplicationPropertyBean> propertyList) {
         super((Frame)null, true);
         this.propertyList = propertyList;
         initComponents();
-         this.setIconImage(new ImageIcon(PropertiesList.class.getResource("/images/sola/logo_icon.jpg")).getImage());
-      
+        this.setIconImage(new ImageIcon(PropertiesList.class.getResource("/images/sola/logo_icon.jpg")).getImage());
     }
     
     public ObservableList<ApplicationPropertyBean> getPropertyList() {

@@ -35,17 +35,17 @@ import org.sola.clients.swing.desktop.application.ApplicationAssignmentPanel;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationSummaryBean;
 import org.sola.clients.swing.ui.renderers.DateTimeRenderer;
-import org.sola.clients.swing.ui.renderers.CellDelimitedListRenderer;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 import java.util.Locale;
 import org.jdesktop.application.Task;
-import org.sola.clients.swing.desktop.application.ApplicationForm;
+import org.sola.clients.swing.desktop.application.ApplicationPanel;
 import org.sola.clients.beans.application.ApplicationSearchResultBean;
 import org.sola.clients.beans.application.ApplicationSearchResultsListBean;
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.common.tasks.TaskManager;
+import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.common.RolesConstants;
 
@@ -53,30 +53,27 @@ import org.sola.common.RolesConstants;
  * This panel displays assigned and unassigned applications.<br /> 
  * {@link ApplicationSummaryListBean} is used to bind the data on the panel.
  */
-public class DashBoardPanel extends javax.swing.JPanel {
+public class DashBoardPanel extends ContentPanel {
 
     private class AssignmentPanelListener implements PropertyChangeListener {
 
         @Override
         public void propertyChange(PropertyChangeEvent e) {
             if (e.getPropertyName().equals(ApplicationBean.ASSIGNEE_ID_PROPERTY)) {
-                if (contentPanel != null && contentPanel.isPanelOpened(contentPanel.CARD_APPASSIGNMENT)) {
-                    contentPanel.closePanel(contentPanel.CARD_APPASSIGNMENT);
+                if (getMainContentPanel() != null && getMainContentPanel().isPanelOpened(MainContentPanel.CARD_APPASSIGNMENT)) {
+                    getMainContentPanel().closePanel(MainContentPanel.CARD_APPASSIGNMENT);
                 }
                 refreshApplications();
             }
         }
     }
-    private ApplicationForm applicationForm;
-    private MainContentPanel contentPanel;
     private AssignmentPanelListener assignmentPanelListener;
 
     /** 
      * Panel constructor.
      * @param mainForm Parent form.
      */
-    public DashBoardPanel(MainContentPanel contentPanel) {
-        this.contentPanel = contentPanel;
+    public DashBoardPanel() {
         assignmentPanelListener = new AssignmentPanelListener();
         initComponents();
         postInit();
@@ -86,6 +83,7 @@ public class DashBoardPanel extends javax.swing.JPanel {
     private void postInit() {
 
         customizeComponents();
+        setHeaderPanel(headerPanel1);
         btnRefreshAssigned.getAction().setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_VIEW_APPS));
         btnRefreshUnassigned.getAction().setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_VIEW_APPS));
 
@@ -187,14 +185,14 @@ public class DashBoardPanel extends javax.swing.JPanel {
             return;
         }
 
-        if (contentPanel != null) {
-            if (contentPanel.isPanelOpened(contentPanel.CARD_APPASSIGNMENT)) {
-                contentPanel.closePanel(contentPanel.CARD_APPASSIGNMENT);
+        if (getMainContentPanel() != null) {
+            if (getMainContentPanel().isPanelOpened(MainContentPanel.CARD_APPASSIGNMENT)) {
+                getMainContentPanel().closePanel(MainContentPanel.CARD_APPASSIGNMENT);
             }
             ApplicationAssignmentPanel panel = new ApplicationAssignmentPanel(appBean.getId());
             panel.addPropertyChangeListener(ApplicationBean.ASSIGNEE_ID_PROPERTY, assignmentPanelListener);
-            contentPanel.addPanel(panel, contentPanel.CARD_APPASSIGNMENT);
-            contentPanel.showPanel(contentPanel.CARD_APPASSIGNMENT);
+            getMainContentPanel().addPanel(panel, MainContentPanel.CARD_APPASSIGNMENT);
+            getMainContentPanel().showPanel(MainContentPanel.CARD_APPASSIGNMENT);
         }
     }
 
@@ -203,7 +201,7 @@ public class DashBoardPanel extends javax.swing.JPanel {
      * @param appBean Selected application summary bean.
      */
     private void openApplication(final ApplicationSummaryBean appBean) {
-        if (appBean == null) {
+        if (appBean == null || getMainContentPanel() == null) {
             return;
         }
 
@@ -212,10 +210,6 @@ public class DashBoardPanel extends javax.swing.JPanel {
             @Override
             protected Object doInBackground() throws Exception {
                 setMessage("Opening application form.");
-                if (applicationForm != null) {
-                    applicationForm.dispose();
-                }
-
                 PropertyChangeListener listener = new PropertyChangeListener() {
 
                     @Override
@@ -224,10 +218,15 @@ public class DashBoardPanel extends javax.swing.JPanel {
                     }
                 };
 
-                applicationForm = new ApplicationForm(appBean.getId());
-                applicationForm.addPropertyChangeListener(ApplicationBean.APPLICATION_PROPERTY, listener);
-
-                DesktopApplication.getApplication().show(applicationForm);
+                if (getMainContentPanel() != null) {
+                    if (getMainContentPanel().isPanelOpened(MainContentPanel.CARD_APPLICATION)) {
+                        getMainContentPanel().closePanel(MainContentPanel.CARD_APPLICATION);
+                    }
+                    ApplicationPanel applicationPanel = new ApplicationPanel(appBean.getId());
+                    applicationPanel.addPropertyChangeListener(ApplicationBean.APPLICATION_PROPERTY, listener);
+                    getMainContentPanel().addPanel(applicationPanel, MainContentPanel.CARD_APPLICATION);
+                    getMainContentPanel().showPanel(MainContentPanel.CARD_APPLICATION);
+                }
                 return null;
             }
         };

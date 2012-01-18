@@ -31,15 +31,17 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import org.sola.clients.beans.administrative.BaUnitSearchResultBean;
 import org.sola.clients.swing.desktop.DesktopApplication;
+import org.sola.clients.swing.ui.ContentPanel;
 
 /**
  * Allows to search BA units.
  */
-public class BaUnitSearchPanel extends javax.swing.JPanel {
+public class BaUnitSearchPanel extends ContentPanel {
 
     /** Default constructor. */
     public BaUnitSearchPanel() {
         initComponents();
+        setHeaderPanel(headerPanel1);
         baUnitSearchPanel.addPropertyChangeListener(new PropertyChangeListener() {
 
             @Override

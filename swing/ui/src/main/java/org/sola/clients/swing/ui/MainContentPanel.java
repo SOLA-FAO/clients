@@ -29,29 +29,54 @@ package org.sola.clients.swing.ui;
 
 import java.awt.CardLayout;
 import java.awt.Component;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Set;
+import javax.swing.JPanel;
 
 /**
  * Displays different panels on the Main form.
  */
 public class MainContentPanel extends javax.swing.JPanel {
 
-    public final String CARD_DASHBOARD = "dashboard";
-    public final String CARD_PERSONS = "persons";
-    public final String CARD_APPSEARCH = "appsearch";
-    public final String CARD_BAUNIT_SEARCH = "baunitsearch";
-    public final String CARD_DOCUMENT_SEARCH = "documentsearch";
-    public final String CARD_APPASSIGNMENT = "appassignment";
-    public final String CARD_MAP = "map";
+    public final static String CARD_DASHBOARD = "dashboard";
+    public final static String CARD_PERSONS = "persons";
+    public final static String CARD_APPSEARCH = "appsearch";
+    public final static String CARD_BAUNIT_SEARCH = "baunitsearch";
+    public final static String CARD_DOCUMENT_SEARCH = "documentsearch";
+    public final static String CARD_APPASSIGNMENT = "appassignment";
+    public final static String CARD_MAP = "map";
+    public final static String CARD_APPLICATION = "application";
+    public final static String CARD_NEW_TITLE_WIZARD = "newTitleWizard";
+    public final static String CARD_BAUNIT_SELECT_PANEL = "baUnitSelectPanel";
+    
     private HashMap<String, Component> cards;
+    private ArrayList<String> cardsIndex;
+    private PropertyChangeListener panelListener;
 
     /** Default constructor. */
     public MainContentPanel() {
+        cardsIndex = new ArrayList<String>();
         cards = new HashMap<String, Component>();
+        panelListener = new PropertyChangeListener() {
+
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                handlePanelPropertyChanges(evt);
+            }
+        };
         initComponents();
+    }
+
+    /** Listens to the panel property changes to trap close button click. */
+    private void handlePanelPropertyChanges(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals(HeaderPanel.CLOSE_BUTTON_CLICKED)) {
+            closePanel((JPanel) evt.getSource());
+        }
     }
 
     /** 
@@ -63,16 +88,43 @@ public class MainContentPanel extends javax.swing.JPanel {
     }
 
     /** 
+     * Adds panel into cards panels collection.
+     * @param panel Panel object to add into the cards collection.
+     * @param cardName Name of the card to assign to the added panel.
+     * @param showPanel Indicates whether to show added panel.
+     */
+    public void addPanel(Component panel, String cardName, boolean showPanel) {
+        if (isPanelOpened(cardName)) {
+            getPanel(cardName).removePropertyChangeListener(panelListener);
+            closePanel(cardName);
+        }
+        
+        addCard(panel, cardName);
+
+        if (ContentPanel.class.isAssignableFrom(panel.getClass())) {
+            ((ContentPanel) panel).setMainContentPanel(this);
+        }
+        panel.addPropertyChangeListener(panelListener);
+        pnlContent.add(panel, cardName);
+        if (showPanel) {
+            showPanel(cardName);
+        }
+    }
+
+    private void addCard(Component panel, String cardName){
+        cards.put(cardName, panel);
+        if (!cardsIndex.contains(cardName)) {
+            cardsIndex.add(cardName);
+        }
+    }
+    
+    /** 
      * Adds panel into cards panels collection. 
      * @param panel Panel object to add into the cards collection.
      * @param cardName Name of the card to assign to the added panel.
      */
     public void addPanel(Component panel, String cardName) {
-        if(isPanelOpened(cardName)){
-            closePanel(panel);
-        }
-        cards.put(cardName, panel);
-        pnlContent.add(panel, cardName);
+        addPanel(panel, cardName, false);
     }
 
     /** 
@@ -82,7 +134,7 @@ public class MainContentPanel extends javax.swing.JPanel {
     public Component getPanel(String cardName) {
         return cards.get(cardName);
     }
-    
+
     /** 
      * Closes panel by component object. 
      * @param panel Panel object to remove from the cards collection.
@@ -93,11 +145,10 @@ public class MainContentPanel extends javax.swing.JPanel {
             for (Iterator<Entry<String, Component>> it = tab.iterator(); it.hasNext();) {
                 Entry<String, Component> entry = it.next();
                 if (entry.getValue().equals(panel)) {
-                    cards.remove(entry.getKey());
+                    closePanel(entry.getKey());
                     break;
                 }
             }
-            pnlContent.remove(panel);
         }
     }
 
@@ -106,18 +157,59 @@ public class MainContentPanel extends javax.swing.JPanel {
      * @param cardName Name of the card to close.
      */
     public void closePanel(String cardName) {
-        if(cards.containsKey(cardName)){
+        if (cards.containsKey(cardName)) {
             pnlContent.remove(cards.get(cardName));
             cards.remove(cardName);
+            cardsIndex.remove(cardName);
+            showLastCard();
         }
     }
     
+    private void closeAutoClosablePanels(){
+        Iterator<Entry<String, Component>> it = cards.entrySet().iterator();
+        ArrayList<String> keys = new ArrayList<String>();
+        
+        while(it.hasNext()){
+            Entry<String, Component> entry = it.next();
+            if(ContentPanel.class.isAssignableFrom(entry.getValue().getClass())){
+                if(((ContentPanel)entry.getValue()).isCloseOnHide() && !entry.getValue().isVisible()){
+                    keys.add(entry.getKey());
+                }
+            }
+        }
+        
+        for(String key : keys){
+            closePanel(key);
+        }
+    }
+    
+    private void showLastCard() {
+        if (cardsIndex.size() > 0) {
+            ((CardLayout) pnlContent.getLayout()).show(pnlContent, cardsIndex.get(cardsIndex.size() - 1));
+        }
+    }
+
     /** 
      * Shows panel by the given card name. 
      * @param cardName Name of the card to search by.
      */
     public void showPanel(String cardName) {
+        if (!cards.containsKey(cardName)) {
+            return;
+        }
+
         ((CardLayout) pnlContent.getLayout()).show(pnlContent, cardName);
+        
+        // move panel on top
+        int cardIndx = cardsIndex.indexOf(cardName);
+        if (cardIndx < cardsIndex.size() - 1) {
+            String lastCardName = cardsIndex.get(cardsIndex.size() - 1);
+            cardsIndex.set(cardsIndex.size() - 1, cardName);
+            cardsIndex.set(cardIndx, lastCardName);
+        }
+        
+        // close autoclosable panels
+        closeAutoClosablePanels();
     }
 
     @SuppressWarnings("unchecked")

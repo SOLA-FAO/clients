@@ -27,6 +27,7 @@
  */
 package org.sola.clients.swing.ui;
 
+import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 import org.sola.clients.swing.common.LafManager;
 
@@ -35,6 +36,9 @@ import org.sola.clients.swing.common.LafManager;
  */
 public class HeaderPanel extends javax.swing.JPanel {
 
+    public static final String CLOSE_BUTTON_CLICKED = "closeButtonClicked";
+    public static final String HELP_BUTTON_CLICKED = "helpButtonClicked";
+    
     /** Default constructor. */
     public HeaderPanel() {
         this(null);
@@ -46,9 +50,9 @@ public class HeaderPanel extends javax.swing.JPanel {
      */
     public HeaderPanel(String title) {
         initComponents();
+        customizeComponents();
         lblHeaderTitle.setText(title);
     }
-   
     
     /** Applies customization of component L&F. */
     private void customizeComponents() {
@@ -67,7 +71,6 @@ public class HeaderPanel extends javax.swing.JPanel {
     /** Sets header title text. */
     public void setTitleText(String title){
         lblHeaderTitle.setText(title);
-        customizeComponents();
     }
     
     @SuppressWarnings("unchecked")
@@ -75,8 +78,11 @@ public class HeaderPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         lblHeaderTitle = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         btnHelp = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        btnClose = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(0, 153, 102));
 
@@ -85,6 +91,10 @@ public class HeaderPanel extends javax.swing.JPanel {
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/Bundle"); // NOI18N
         lblHeaderTitle.setText(bundle.getString("HeaderPanel.lblHeaderTitle.text")); // NOI18N
         lblHeaderTitle.setName("lblHeaderTitle"); // NOI18N
+
+        jPanel3.setName("jPanel3"); // NOI18N
+        jPanel3.setOpaque(false);
+        jPanel3.setLayout(new java.awt.GridLayout(1, 2, 8, 0));
 
         jPanel1.setName("jPanel1"); // NOI18N
         jPanel1.setOpaque(false);
@@ -100,6 +110,9 @@ public class HeaderPanel extends javax.swing.JPanel {
         btnHelp.setFocusPainted(false);
         btnHelp.setName("btnHelp"); // NOI18N
         btnHelp.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnHelpMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnHelpMouseEntered(evt);
             }
@@ -109,6 +122,36 @@ public class HeaderPanel extends javax.swing.JPanel {
         });
         jPanel1.add(btnHelp);
 
+        jPanel3.add(jPanel1);
+
+        jPanel2.setName("jPanel2"); // NOI18N
+        jPanel2.setOpaque(false);
+        jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.LINE_AXIS));
+
+        btnClose.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/close_btn_off.png"))); // NOI18N
+        btnClose.setToolTipText(bundle.getString("HeaderPanel.btnClose.toolTipText")); // NOI18N
+        btnClose.setBorder(null);
+        btnClose.setBorderPainted(false);
+        btnClose.setContentAreaFilled(false);
+        btnClose.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnClose.setDefaultCapable(false);
+        btnClose.setFocusPainted(false);
+        btnClose.setName("btnClose"); // NOI18N
+        btnClose.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCloseMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnCloseMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnCloseMouseExited(evt);
+            }
+        });
+        jPanel2.add(btnClose);
+
+        jPanel3.add(jPanel2);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -116,13 +159,14 @@ public class HeaderPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblHeaderTitle)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 284, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 206, Short.MAX_VALUE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(lblHeaderTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -134,9 +178,32 @@ public class HeaderPanel extends javax.swing.JPanel {
         btnHelp.setIcon(new ImageIcon(getClass().getResource("/images/common/question-green.png")));
     }//GEN-LAST:event_btnHelpMouseExited
 
+    private void btnCloseMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCloseMouseEntered
+        btnClose.setIcon(new ImageIcon(getClass().getResource("/images/common/close_btn_on.png")));
+    }//GEN-LAST:event_btnCloseMouseEntered
+
+    private void btnCloseMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCloseMouseExited
+        btnClose.setIcon(new ImageIcon(getClass().getResource("/images/common/close_btn_off.png")));
+    }//GEN-LAST:event_btnCloseMouseExited
+
+    private void btnHelpMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnHelpMouseClicked
+        if(evt.getButton() == MouseEvent.BUTTON1){
+            firePropertyChange(HELP_BUTTON_CLICKED, false, true);
+        }
+    }//GEN-LAST:event_btnHelpMouseClicked
+
+    private void btnCloseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCloseMouseClicked
+        if(evt.getButton() == MouseEvent.BUTTON1){
+            firePropertyChange(CLOSE_BUTTON_CLICKED, false, true);
+        }
+    }//GEN-LAST:event_btnCloseMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnClose;
     private javax.swing.JButton btnHelp;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JLabel lblHeaderTitle;
     // End of variables declaration//GEN-END:variables
 }

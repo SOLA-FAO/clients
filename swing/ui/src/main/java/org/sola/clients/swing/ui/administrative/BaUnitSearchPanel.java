@@ -28,7 +28,11 @@
 package org.sola.clients.swing.ui.administrative;
 
 import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import org.jdesktop.application.Action;
+import org.sola.clients.beans.administrative.BaUnitSearchResultBean;
+import org.sola.clients.beans.administrative.BaUnitSearchResultListBean;
 import org.sola.clients.swing.ui.renderers.CellDelimitedListRenderer;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -43,8 +47,34 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
     /** Default constructor. */
     public BaUnitSearchPanel() {
         initComponents();
+        baUnitSearchResults.addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if(evt.getPropertyName().equals(BaUnitSearchResultListBean.SELECTED_BAUNIT_SEARCH_RESULT_PROPERTY)){
+                    firePropertyChange(BaUnitSearchResultListBean.SELECTED_BAUNIT_SEARCH_RESULT_PROPERTY, 
+                            evt.getOldValue(), evt.getNewValue());
+                }
+            }
+        });
     }
 
+    /** Indicates whether open button is shown or not. */
+    public boolean isShowOpenButton() {
+        return btnOpenBaUnit.isVisible();
+    }
+
+    /** Sets visibility of open button. */
+    public void setShowOpenButton(boolean showPrintButton) {
+        btnOpenBaUnit.setVisible(showPrintButton);
+        menuOpenBaUnit.setVisible(showPrintButton);
+        separator1.setVisible(showPrintButton);
+    }
+    
+    /** Returns selected search result. */
+    public BaUnitSearchResultBean getSelectedSearchResult(){
+        return baUnitSearchResults.getSelectedBaUnitSearchResult();
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -71,6 +101,9 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
         jPanel6 = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
         btnOpenBaUnit = new javax.swing.JButton();
+        separator1 = new javax.swing.JToolBar.Separator();
+        lblSearchResult = new javax.swing.JLabel();
+        lblSearchResultCount = new javax.swing.JLabel();
 
         popUpSearchResults.setName("popUpSearchResults"); // NOI18N
 
@@ -257,6 +290,19 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
         btnOpenBaUnit.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(btnOpenBaUnit);
 
+        separator1.setName("separator1"); // NOI18N
+        jToolBar1.add(separator1);
+
+        lblSearchResult.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblSearchResult.setText("Search results: ");
+        lblSearchResult.setName("lblSearchResult"); // NOI18N
+        jToolBar1.add(lblSearchResult);
+
+        lblSearchResultCount.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblSearchResultCount.setText(" ");
+        lblSearchResultCount.setName("lblSearchResultCount"); // NOI18N
+        jToolBar1.add(lblSearchResultCount);
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
@@ -296,9 +342,10 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         baUnitSearchResults.search(baUnitSearchParams);
+        lblSearchResultCount.setText(Integer.toString(baUnitSearchResults.getBaUnitSearchResults().size()));
         if(baUnitSearchResults.getBaUnitSearchResults().size()<1){
             MessageUtility.displayMessage(ClientMessage.SEARCH_NO_RESULTS);
-        } else if(baUnitSearchResults.getBaUnitSearchResults().size()<1){
+        } else if(baUnitSearchResults.getBaUnitSearchResults().size()>100){
             MessageUtility.displayMessage(ClientMessage.SEARCH_TOO_MANY_RESULTS, new String[]{"100"});
         }
     }//GEN-LAST:event_btnSearchActionPerformed
@@ -331,8 +378,11 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JLabel lblSearchResult;
+    private javax.swing.JLabel lblSearchResultCount;
     private javax.swing.JMenuItem menuOpenBaUnit;
     private javax.swing.JPopupMenu popUpSearchResults;
+    private javax.swing.JToolBar.Separator separator1;
     private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tableSearchResults;
     private javax.swing.JTextField txtNameFirstPart;
     private javax.swing.JTextField txtNameLastPart;

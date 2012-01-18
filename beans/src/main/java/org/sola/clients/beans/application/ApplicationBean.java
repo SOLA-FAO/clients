@@ -47,6 +47,7 @@ import org.sola.clients.beans.party.PartySummaryBean;
 import org.sola.clients.beans.referencedata.RequestTypeBean;
 import org.sola.clients.beans.source.SourceBean;
 import org.sola.clients.beans.referencedata.StatusConstants;
+import org.sola.clients.beans.sorters.ServicesSorterByOrder;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 import org.sola.webservices.transferobjects.EntityAction;

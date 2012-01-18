@@ -27,14 +27,17 @@
  */
 package org.sola.clients.swing.desktop.source;
 
+import org.sola.clients.swing.ui.ContentPanel;
+
 /**
  * Allows to search documents and print out digital copies.
  */
-public class DocumentSearchPanel extends javax.swing.JPanel {
+public class DocumentSearchPanel extends ContentPanel {
 
     /** Default constructor. */
     public DocumentSearchPanel() {
         initComponents();
+        setHeaderPanel(headerPanel1);
     }
 
     @SuppressWarnings("unchecked")

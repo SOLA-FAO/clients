@@ -41,13 +41,14 @@ import java.util.Locale;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import org.sola.clients.swing.desktop.application.ApplicationForm;
+import org.sola.clients.swing.desktop.application.ApplicationPanel;
 import org.sola.clients.swing.desktop.application.ApplicationSearchPanel;
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.desktop.administrative.BaUnitSearchPanel;
 import org.sola.clients.swing.desktop.source.DocumentSearchPanel;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleViewer;
+import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.clients.swing.ui.party.PartySearchPanel;
 import org.sola.common.RolesConstants;
 import org.sola.common.help.HelpUtility;
@@ -57,25 +58,23 @@ import org.sola.common.help.HelpUtility;
  */
 public class MainForm extends FrameView {
 
-    private ApplicationForm applicationForm;
-    
-    Object foreFont =  LafManager.getInstance().getForeFont();
-    Object labFont =  LafManager.getInstance().getLabFont();
-    Object bgFont =    LafManager.getInstance().getBgFont();
-    Object txtFont =   LafManager.getInstance().getTxtFont();
-    Object txtAreaFont =   LafManager.getInstance().getTxtAreaFont();
-    Object btnFont =   LafManager.getInstance().getBtnFont();
-    Object tabFont =   LafManager.getInstance().getTabFont();
-    Object cmbFont =   LafManager.getInstance().getCmbFont();
-    Object btnBackground =   LafManager.getInstance().getBtnBackground();
-    
-    
+    private ApplicationPanel applicationForm;
+    Object foreFont = LafManager.getInstance().getForeFont();
+    Object labFont = LafManager.getInstance().getLabFont();
+    Object bgFont = LafManager.getInstance().getBgFont();
+    Object txtFont = LafManager.getInstance().getTxtFont();
+    Object txtAreaFont = LafManager.getInstance().getTxtAreaFont();
+    Object btnFont = LafManager.getInstance().getBtnFont();
+    Object tabFont = LafManager.getInstance().getTabFont();
+    Object cmbFont = LafManager.getInstance().getCmbFont();
+    Object btnBackground = LafManager.getInstance().getBtnBackground();
+
     /** Main form constructor. Initializes resources, help context and tasks. */
     public MainForm(SingleFrameApplication app) {
         super(app);
         URL imgURL = this.getClass().getResource("/images/sola/logo_icon.jpg");
         this.getFrame().setIconImage(new ImageIcon(imgURL).getImage());
-        
+
         initComponents();
         /**
          * Get an instance of HelpUtility and obtain <code>ActionListener<code/>s for the Help Menu Item 
@@ -107,12 +106,12 @@ public class MainForm extends FrameView {
         btnSearchApplications.getAction().setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_VIEW_APPS));
         btnShowDashboard.getAction().setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_VIEW_APPS));
         btnManageParties.getAction().setEnabled(SecurityBean.isInRole(RolesConstants.PARTY_SAVE));
-        
+
         // Load dashboard
         openDashBoard();
-        
+
         txtUserName.setText(SecurityBean.getCurrentUser().getUserName());
-        
+
         jMenuItem3.setVisible(false);
         jMenuItem4.setVisible(false);
         jMenuItem5.setVisible(false);
@@ -120,19 +119,20 @@ public class MainForm extends FrameView {
 
         // Enable/disable toolbar and main menu based on users access
     }
+
     /** Applies customization of component L&F. */
     private void customizeComponents() {
-  //    BUTTONS   
-    LafManager.getInstance().setBtnProperties(btnNewApplication);
-    LafManager.getInstance().setBtnProperties(btnOpenMap);
-    LafManager.getInstance().setBtnProperties(btnSearchApplications);
-    LafManager.getInstance().setBtnProperties(btnShowDashboard);
-   
+        //    BUTTONS   
+        LafManager.getInstance().setBtnProperties(btnNewApplication);
+        LafManager.getInstance().setBtnProperties(btnOpenMap);
+        LafManager.getInstance().setBtnProperties(btnSearchApplications);
+        LafManager.getInstance().setBtnProperties(btnShowDashboard);
+
 //    LABELS    
-    LafManager.getInstance().setLabProperties(labStatus);
-    LafManager.getInstance().setLabProperties(txtUserName);
+        LafManager.getInstance().setLabProperties(labStatus);
+        LafManager.getInstance().setLabProperties(txtUserName);
     }
-        
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -538,97 +538,100 @@ public class MainForm extends FrameView {
     /** Opens and embeds dashboard into the main form. */
     @Action
     public void openDashBoard() {
-        if(!pnlContent.isPanelOpened(pnlContent.CARD_DASHBOARD)){
-            DashBoardPanel dashBoard = new DashBoardPanel(pnlContent);
-            pnlContent.addPanel(dashBoard, pnlContent.CARD_DASHBOARD);
+        if (!pnlContent.isPanelOpened(MainContentPanel.CARD_DASHBOARD)) {
+            DashBoardPanel dashBoard = new DashBoardPanel();
+            pnlContent.addPanel(dashBoard, MainContentPanel.CARD_DASHBOARD);
         }
-        pnlContent.showPanel(pnlContent.CARD_DASHBOARD);
+        pnlContent.showPanel(MainContentPanel.CARD_DASHBOARD);
     }
 
+    class LNFSetter implements ActionListener {
 
-  class LNFSetter implements ActionListener {
-    String theLNFName;
-    String whichButton;
-    
-    
+        String theLNFName;
+        String whichButton;
+
 //    LoginForm loginform;
-    LNFSetter(String lnfName, String theme) {
-      theLNFName = lnfName;
-      whichButton = theme;
-        
-     }
-       @Override
-    public void actionPerformed(ActionEvent e) {
-        try {
-        LafManager.getInstance().setProperties(whichButton);
-        UIManager.setLookAndFeel(theLNFName);
-        
-        SwingUtilities.updateComponentTreeUI(mainPanel);
-        SwingUtilities.updateComponentTreeUI(menuBar);
-        SwingUtilities.updateComponentTreeUI(statusPanel);
-        openDashBoard();
-       
-      } catch (Exception evt) {
-        JOptionPane.showMessageDialog(null, "setLookAndFeel didn't work: " + evt, "UI Failure",
-            JOptionPane.INFORMATION_MESSAGE);
-      }
+        LNFSetter(String lnfName, String theme) {
+            theLNFName = lnfName;
+            whichButton = theme;
+
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                LafManager.getInstance().setProperties(whichButton);
+                UIManager.setLookAndFeel(theLNFName);
+
+                SwingUtilities.updateComponentTreeUI(mainPanel);
+                SwingUtilities.updateComponentTreeUI(menuBar);
+                SwingUtilities.updateComponentTreeUI(statusPanel);
+                openDashBoard();
+
+            } catch (Exception evt) {
+                JOptionPane.showMessageDialog(null, "setLookAndFeel didn't work: " + evt, "UI Failure",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
     }
- }
-    
-    /** Opens empty {@link ApplicationForm} to create new application. */
+
+    /** Opens empty {@link ApplicationPanel} to create new application. */
     @Action
     public void openNewApplicationForm() {
-        if (applicationForm == null || !applicationForm.isVisible()) {
-            applicationForm = new ApplicationForm();
+        if (pnlContent.isPanelOpened(MainContentPanel.CARD_APPLICATION)) {
+            pnlContent.closePanel(MainContentPanel.CARD_APPLICATION);
         }
-        applicationForm.setVisible(true);
+        ApplicationPanel applicationPanel = new ApplicationPanel();
+        pnlContent.addPanel(applicationPanel, MainContentPanel.CARD_APPLICATION);
+        pnlContent.showPanel(MainContentPanel.CARD_APPLICATION);
     }
 
     /** Opens map. */
     @Action
     public void openMap() {
-        if(!pnlContent.isPanelOpened(pnlContent.CARD_MAP)){
+        if (!pnlContent.isPanelOpened(MainContentPanel.CARD_MAP)) {
             ControlsBundleViewer mapCtrl = new ControlsBundleViewer();
-            pnlContent.addPanel(mapCtrl, pnlContent.CARD_MAP);
+            pnlContent.addPanel(mapCtrl, MainContentPanel.CARD_MAP);
             mapCtrl.getMap().zoomToFullExtent();
         }
-        pnlContent.showPanel(pnlContent.CARD_MAP);
+        pnlContent.showPanel(MainContentPanel.CARD_MAP);
     }
 
     /** Opens {@link ApplicationSearchForm}. */
     @Action
     public void searchApplications() {
-        if(!pnlContent.isPanelOpened(pnlContent.CARD_APPSEARCH)){
+        if (!pnlContent.isPanelOpened(MainContentPanel.CARD_APPSEARCH)) {
             ApplicationSearchPanel searchApplicationPanel = new ApplicationSearchPanel();
-            pnlContent.addPanel(searchApplicationPanel, pnlContent.CARD_APPSEARCH);
+            pnlContent.addPanel(searchApplicationPanel, MainContentPanel.CARD_APPSEARCH);
         }
-        pnlContent.showPanel(pnlContent.CARD_APPSEARCH);
+        pnlContent.showPanel(MainContentPanel.CARD_APPSEARCH);
+        pnlContent.showPanel(MainContentPanel.CARD_APPSEARCH);
     }
 
     @Action
     public void manageParties() {
-        if(!pnlContent.isPanelOpened(pnlContent.CARD_PERSONS)){
+        if (!pnlContent.isPanelOpened(MainContentPanel.CARD_PERSONS)) {
             PartySearchPanel partySearchPanel = new PartySearchPanel();
-            pnlContent.addPanel(partySearchPanel, pnlContent.CARD_PERSONS);
+            pnlContent.addPanel(partySearchPanel, MainContentPanel.CARD_PERSONS);
         }
-        pnlContent.showPanel(pnlContent.CARD_PERSONS);
+        pnlContent.showPanel(MainContentPanel.CARD_PERSONS);
     }
 
     @Action
     public void searchBaUnit() {
-        if(!pnlContent.isPanelOpened(pnlContent.CARD_BAUNIT_SEARCH)){
+        if (!pnlContent.isPanelOpened(MainContentPanel.CARD_BAUNIT_SEARCH)) {
             BaUnitSearchPanel baUnitSearchPanel = new BaUnitSearchPanel();
-            pnlContent.addPanel(baUnitSearchPanel, pnlContent.CARD_BAUNIT_SEARCH);
+            pnlContent.addPanel(baUnitSearchPanel, MainContentPanel.CARD_BAUNIT_SEARCH);
         }
-        pnlContent.showPanel(pnlContent.CARD_BAUNIT_SEARCH);
+        pnlContent.showPanel(MainContentPanel.CARD_BAUNIT_SEARCH);
     }
 
     @Action
     public void searchDocuments() {
-        if(!pnlContent.isPanelOpened(pnlContent.CARD_DOCUMENT_SEARCH)){
+        if (!pnlContent.isPanelOpened(MainContentPanel.CARD_DOCUMENT_SEARCH)) {
             DocumentSearchPanel documentSearchPanel = new DocumentSearchPanel();
-            pnlContent.addPanel(documentSearchPanel, pnlContent.CARD_DOCUMENT_SEARCH);
+            pnlContent.addPanel(documentSearchPanel, MainContentPanel.CARD_DOCUMENT_SEARCH);
         }
-        pnlContent.showPanel(pnlContent.CARD_DOCUMENT_SEARCH);
+        pnlContent.showPanel(MainContentPanel.CARD_DOCUMENT_SEARCH);
     }
 }

@@ -76,6 +76,7 @@ public class RrrBean extends AbstractTransactionedBean {
     public static final String IS_PRIMARY_PROPERTY = "isPrimary";
     public static final String FIRST_RIGHTHOLDER_PROPERTY = "firstRightholder";
     public static final String SELECTED_SHARE_PROPERTY = "selectedShare";
+    public static final String SELECTED_PROPERTY = "selected";
     
     private String baUnitId;
     private String nr;
@@ -102,7 +103,8 @@ public class RrrBean extends AbstractTransactionedBean {
     @Valid
     private SolaList<PartySummaryBean> rightHolderList;
     private RrrShareBean selectedShare;
-
+    private boolean selected;
+    
     public RrrBean() {
         super();
         registrationDate = Calendar.getInstance().getTime();
@@ -339,6 +341,16 @@ public class RrrBean extends AbstractTransactionedBean {
         propertySupport.firePropertyChange(SELECTED_SHARE_PROPERTY, oldValue, this.selectedShare);
     }
 
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        boolean oldValue = this.selected;
+        this.selected = selected;
+        propertySupport.firePropertyChange(SELECTED_PROPERTY, oldValue, this.selected);
+    }
+    
     public RrrBean makeCopyByAction(RRR_ACTION rrrAction) {
         RrrBean copy = this;
 

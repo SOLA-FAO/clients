@@ -521,7 +521,7 @@ public class ExtendedList<E> extends AbstractList<E> implements ObservableList<E
             this.supportsElementPropertyChanged = false;
             // Populate from the parent list if there are any rows
             for (E item : parentList) {
-                add(item);
+                add(list.size(), item, false);
             }
         }
 

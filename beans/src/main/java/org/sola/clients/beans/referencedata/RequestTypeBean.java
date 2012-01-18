@@ -47,6 +47,12 @@ import org.sola.webservices.transferobjects.referencedata.RequestTypeTO;
 public class RequestTypeBean extends AbstractCodeBean {
 
     public static final String CODE_CADASTRE_PRINT = "cadastrePrint";
+    public static final String CODE_CADASTRE_CHANGE = "cadastreChange";
+    public static final String CODE_REG_POWER_OF_ATTORNEY = "regnPowerOfAttorney";
+    public static final String CODE_NEW_APARTMENT = "newApartment";
+    public static final String CODE_NEW_FREEHOLD = "newFreehold";
+    public static final String CODE_NEW_OWNERSHIP = "newOwnership";
+    public static final String CODE_NEW_STATE = "newState";
     
     public static final String NR_DAYS_TO_COMPLETE_PROPERTY = "nrDaysToComplete";
     public static final String NR_PROPERTIES_REQUIRED_PROPERTY = "nrPropertiesRequired";

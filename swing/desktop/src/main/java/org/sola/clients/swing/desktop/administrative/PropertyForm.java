@@ -146,9 +146,8 @@ public class PropertyForm extends javax.swing.JFrame {
      * Form constructor.
      * @param applicationBean {@link ApplicationBean} instance, used to get data
      * on BaUnit and provide list of documents.
-     * @param applicationService {@link ApplicationServiceBean} instance of 
-     * {@link ApplicationBean}, used to determine what actions should be taken 
-     * on this form.
+     * @param applicationService {@link ApplicationServiceBean} instance, used 
+     * to determine what actions should be taken on this form.
      * @param nameFirstPart First part of the property code.
      * @param nameLastPart Last part of the property code.
      */
@@ -162,6 +161,28 @@ public class PropertyForm extends javax.swing.JFrame {
         this.nameFirstPart = nameFirstPart;
         this.nameLastPart = nameLastPart;
 
+        initComponents();
+        customizeForm();
+    }
+
+    /** 
+     * Form constructor.
+     * @param applicationBean {@link ApplicationBean} instance, used to get 
+     * list of documents.
+     * @param applicationService {@link ApplicationServiceBean} instance, used 
+     * to determine what actions should be taken on this form.
+     * @param BaUnitBean Instance of {@link BaUnitBean}, used to bind data on the form.
+     */
+    public PropertyForm(ApplicationBean applicationBean,
+            ApplicationServiceBean applicationService, BaUnitBean baUnitBean, boolean readOnly) {
+        this.baUnitBean1 = baUnitBean;
+        this.readOnly = readOnly || !SecurityBean.isInRole(RolesConstants.ADMINISTRATIVE_BA_UNIT_SAVE);
+        this.applicationBean = applicationBean;
+        this.applicationService = applicationService;
+        if (baUnitBean != null) {
+            this.nameFirstPart = baUnitBean.getNameFirstpart();
+            this.nameLastPart = baUnitBean.getNameLastpart();
+        }
         initComponents();
         customizeForm();
     }
@@ -658,7 +679,7 @@ public class PropertyForm extends javax.swing.JFrame {
 
         popupParcels.setName("popupParcels"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(org.sola.clients.swing.desktop.DesktopApplication.class).getContext().getActionMap(PropertyForm.class, this);
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(PropertyForm.class, this);
         menuAddParcel.setAction(actionMap.get("addParcel")); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
         menuAddParcel.setText(bundle.getString("PropertyForm.menuAddParcel.text")); // NOI18N

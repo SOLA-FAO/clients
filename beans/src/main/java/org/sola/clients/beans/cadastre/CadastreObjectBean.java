@@ -51,6 +51,7 @@ public class CadastreObjectBean extends AbstractTransactionedBean {
     public static final String NAME_LASTPART_PROPERTY = "nameLastpart";
     public static final String CADASTRE_OBJECT_TYPE_PROPERTY = "cadastreObjectType";
     public static final String GEOM_POLYGON_PROPERTY = "geomPolygon";
+    public static final String SELECTED_PROPERTY = "selected";
     
     private Date approvalDatetime;
     private Date historicDatetime;
@@ -62,7 +63,8 @@ public class CadastreObjectBean extends AbstractTransactionedBean {
     @NotNull(message =  ClientMessage.CHECK_NOTNULL_CADOBJTYPE, payload=Localized.class)
     private CadastreObjectTypeBean cadastreObjectType;
     private byte[] geomPolygon;
-
+    private boolean selected;
+    
     public CadastreObjectBean() {
         super();
     }
@@ -161,6 +163,16 @@ public class CadastreObjectBean extends AbstractTransactionedBean {
         propertySupport.firePropertyChange(GEOM_POLYGON_PROPERTY, old, this.geomPolygon);
     }
 
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        boolean oldValue = this.selected;
+        this.selected = selected;
+        propertySupport.firePropertyChange(SELECTED_PROPERTY, oldValue, this.selected);
+    }
+    
     @Override
     public String toString() {
         String result = "";
