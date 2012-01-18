@@ -51,7 +51,7 @@ import org.sola.webservices.transferobjects.cadastre.CadastreObjectTO;
 public class TargetCadastreObjectLayer extends ExtendedLayerGraphics{
 
     private static final String LAYER_NAME = "Target Parcels";
-    private static final String LAYER_STYLE_RESOURCE = "parcel_target.sld";
+    private static final String LAYER_STYLE_RESOURCE = "parcel_target.xml";
     private List<CadastreObjectTargetBean> cadastreObjectTargetList = 
             new ArrayList<CadastreObjectTargetBean>();
 

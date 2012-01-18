@@ -26,7 +26,6 @@ public abstract class ExtendedDrawRectangle extends ExtendedTool{
      */
     @Override
     public void onMousePressed(MapMouseEvent ev) {
-        //startDragPos = new DirectPosition2D();
         startDragPos.setLocation(ev.getMapPosition());
     }
 

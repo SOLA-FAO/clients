@@ -47,7 +47,7 @@ public final class ControlsBundleForBaUnit extends ControlsBundleForWorkingWithC
 
     ExtendedLayerGraphics layerForCadastreObjects;
     private final String  CADASTRE_OBJECTS_LAYERNAME = "Current property cadastre objects";
-    private final String STYLE_RESOURCE = "parcel_highlighted.sld";
+    private final String STYLE_RESOURCE = "parcel_highlighted.xml";
 
     public ControlsBundleForBaUnit(){
         super();

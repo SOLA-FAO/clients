@@ -51,7 +51,7 @@ import org.sola.webservices.spatial.MapDefinitionTO;
 /**
  * Unit test for simple App.
  */
-public class AppGUITestDisplay {
+public class Development {
 
     /**
      * Test the controls bundle for setting the location of an application

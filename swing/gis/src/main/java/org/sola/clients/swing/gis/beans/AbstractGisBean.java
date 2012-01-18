@@ -36,5 +36,4 @@ package org.sola.clients.swing.gis.beans;
  * @author manoku
  */
 public class AbstractGisBean {
-     //protected static DozerBeanMapper mapper = new DozerBeanMapper();
 }

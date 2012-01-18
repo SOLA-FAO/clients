@@ -54,7 +54,7 @@ import org.geotools.swing.extended.util.Messaging;
 public class ExtendedLayerEditor extends ExtendedLayerGraphics {
 
     private static String VERTICES_LAYER_NAME_POSTFIX = " vertices";
-    private static String VERTICES_LAYER_STYLE_RESOURCE = "editor_vertices.sld";
+    private static String VERTICES_LAYER_STYLE_RESOURCE = "editor_vertices.xml";
     
     private ExtendedLayerGraphics verticesLayer = null;
     /**
@@ -166,14 +166,21 @@ public class ExtendedLayerEditor extends ExtendedLayerGraphics {
     }
 
     /**
+     * Gets the Vertices layer
+     */
+    public ExtendedLayerGraphics getVerticesLayer() {
+        return verticesLayer;
+    }
+
+    /**
      * It searches for a vertex in the layer within the distance. It returns the first found vertex.
-     * @param mousePos Position from where to search for. Normally is the mouse position in the map
+     * @param fromPosition Position from where to search for. Normally is the mouse position in the map
      * @param distance The distance to search around the position
      * @return 
      */
     public VertexInformation getFirstVertexWithinDistance(
-            DirectPosition2D mousePos, double distance) {
-        Coordinate coordinateToFind = new Coordinate(mousePos.x, mousePos.y);
+            DirectPosition2D fromPosition, double distance) {
+        Coordinate coordinateToFind = new Coordinate(fromPosition.x, fromPosition.y);
         for (VertexInformation vertexInformation : this.vertexList) {
             if (vertexInformation.getVertex().distance(coordinateToFind) <= distance) {
                 return vertexInformation;

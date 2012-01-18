@@ -93,7 +93,6 @@ public class PointSurveyListForm extends javax.swing.JDialog {
             NewSurveyPointLayer pointLayer) {
         this();
         this.layer = pointLayer;
-        //this.layer.setTable(table);
     }
 
     public JTable getTable(){

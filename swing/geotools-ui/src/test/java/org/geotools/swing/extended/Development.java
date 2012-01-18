@@ -53,7 +53,7 @@ import org.geotools.swing.tool.extended.ExtendedDrawRectangle;
  *
  * @author Manoku
  */
-public class GeotoolsUITestDisplay {
+public class Development {
 
     /**
      * Test of Visual ControlsBundle
@@ -84,7 +84,7 @@ public class GeotoolsUITestDisplay {
                 String.format("%s\\src\\test\\java\\org\\geotools\\swing\\extended\\sample\\data\\parcels.shp", 
                 directory.getAbsolutePath());
         ExtendedLayer layer = mapCtrl.getMap().addLayerShapefile(
-                "Shape layer", "Title of shape layer", shapeFile, "polygon.sld");
+                "Shape layer", "Title of shape layer", shapeFile, "polygon.xml");
 //            mapCtrl.addLayerShapefile("Shape layer", "C:\\dev\\projects\\sola\\data\\Samoa_Parcels.shp", "parcel.sld");
 //            mapCtrl.addTool(new SolaInfoTool());
         //mapCtrl.addTool(new SolaSplitParcelTool());

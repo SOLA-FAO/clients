@@ -40,9 +40,11 @@ import org.sola.clients.swing.gis.beans.TransactionCadastreRedefinitionBean;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.data.PojoFeatureSource;
 import org.sola.clients.swing.gis.layer.CadastreObjectModifiedLayer;
+import org.sola.clients.swing.gis.layer.CadastreObjectNodeModifiedLayer;
 import org.sola.clients.swing.gis.layer.PojoLayer;
-import org.sola.clients.swing.gis.layer.TargetCadastreObjectLayer;
-import org.sola.clients.swing.gis.tool.ModifyNodeTool;
+import org.sola.clients.swing.gis.tool.ModifierNodeTool;
+import org.sola.clients.swing.gis.tool.ModifyExistingNodeTool;
+import org.sola.clients.swing.gis.tool.AddNodeTool;
 import org.sola.common.messaging.GisMessage;
 
 /**
@@ -52,7 +54,8 @@ import org.sola.common.messaging.GisMessage;
 public final class ControlsBundleForCadastreRedefinition extends ControlsBundleForWorkingWithCO {
 
     private TransactionCadastreRedefinitionBean transactionBean;
-    private TargetCadastreObjectLayer targetParcelsLayer = null;
+    //private TargetCadastreObjectLayer targetParcelsLayer = null;
+    private CadastreObjectNodeModifiedLayer cadastreObjectNodeModifiedLayer = null;
     private CadastreObjectModifiedLayer cadastreObjectModifiedLayer = null;
     private PojoLayer pendingLayer = null;
     private String applicationNumber = "";
@@ -118,25 +121,31 @@ public final class ControlsBundleForCadastreRedefinition extends ControlsBundleF
     public TransactionCadastreRedefinitionBean getTransactionBean() {
 //        this.transactionBean.setCadastreObjectList(
 //                this.cadastreObjectModifiedLayer.getCadastreObjectList());
-        this.transactionBean.setCadastreObjectTargetList(
-                this.targetParcelsLayer.getCadastreObjectTargetList());
+//        this.transactionBean.setCadastreObjectTargetList(
+//                this.targetParcelsLayer.getCadastreObjectTargetList());
         return this.transactionBean;
     }
 
     private void addLayers() throws Exception {
-        this.targetParcelsLayer = new TargetCadastreObjectLayer(this.getMap().getSrid());
-        this.getMap().addLayer(targetParcelsLayer);
-
+        this.cadastreObjectNodeModifiedLayer = new CadastreObjectNodeModifiedLayer();
+        this.getMap().addLayer(this.cadastreObjectNodeModifiedLayer);
         this.cadastreObjectModifiedLayer = new CadastreObjectModifiedLayer();
         this.getMap().addLayer(this.cadastreObjectModifiedLayer);
-
-        this.targetParcelsLayer.setCadastreObjectTargetList(
-                transactionBean.getCadastreObjectTargetList());
-
     }
 
     private void addToolsAndCommands() {
-        this.getMap().addTool(new ModifyNodeTool(), this.getToolbar());
+        this.getMap().addTool(
+                new ModifyExistingNodeTool(
+                        this.getPojoDataAccess(), 
+                        this.cadastreObjectNodeModifiedLayer,
+                        this.cadastreObjectModifiedLayer), 
+                this.getToolbar());
+        this.getMap().addTool(
+                new AddNodeTool(
+                        this.getPojoDataAccess(), 
+                        this.cadastreObjectNodeModifiedLayer,
+                        this.cadastreObjectModifiedLayer), 
+                this.getToolbar());
     }
 
     @Override

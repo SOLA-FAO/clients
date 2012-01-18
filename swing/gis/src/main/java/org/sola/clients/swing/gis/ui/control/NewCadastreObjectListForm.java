@@ -37,14 +37,11 @@
  */
 package org.sola.clients.swing.gis.ui.control;
 
-import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import org.sola.clients.swing.gis.Messaging;
 import org.sola.clients.swing.gis.layer.NewCadastreObjectLayer;
-import org.sola.clients.swing.gis.layer.NewSurveyPointLayer;
 
 /**
  *

@@ -293,7 +293,7 @@ public class ExtendedEditGeometryTool extends ExtendedDrawToolWithSnapping {
         }
         if (sldResource == null) {
             sldResource = String.format(
-                    "editor_%s.sld", this.getGeometryType().getSimpleName().toLowerCase());
+                    "editor_%s.xml", this.getGeometryType().getSimpleName().toLowerCase());
         }
         this.layer = (ExtendedLayerEditor) this.getMapControl().addLayerEditor(
                 this.layerName, this.layerName, 

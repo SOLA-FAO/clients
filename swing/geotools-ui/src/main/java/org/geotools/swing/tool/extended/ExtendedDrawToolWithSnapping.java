@@ -47,16 +47,12 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 import org.geotools.data.simple.SimpleFeatureIterator;
-import org.geotools.factory.CommonFactoryFinder;
 import org.geotools.feature.FeatureCollection;
 import org.geotools.geometry.DirectPosition2D;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.swing.event.MapMouseEvent;
 import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.type.FeatureType;
-import org.opengis.filter.Filter;
-import org.opengis.filter.FilterFactory2;
 import org.geotools.map.extended.layer.ExtendedFeatureLayer;
 
 /**
@@ -82,7 +78,6 @@ public class ExtendedDrawToolWithSnapping extends ExtendedDrawTool {
     private double snapDistanceInMeters = 5;
     private com.vividsolutions.jts.geom.Point snappingPoint = null;
     private SNAPPED_TARGET_TYPE snappedTarget = SNAPPED_TARGET_TYPE.None;
-    private FilterFactory2 filterFactory = CommonFactoryFinder.getFilterFactory2(null);
 
     /**
      * Gets features layers to be target for snapping
@@ -250,8 +245,8 @@ public class ExtendedDrawToolWithSnapping extends ExtendedDrawTool {
             if (!targetLayer.isVisible()) {
                 continue;
             }
-            FeatureCollection featuresFound =
-                    this.getFeaturesInRange(targetLayer, bbox);
+            FeatureCollection featuresFound = targetLayer.getFeaturesInRange(
+                    bbox, targetLayer.getFilterExpressionForSnapping());
             SimpleFeatureIterator iterator = (SimpleFeatureIterator) featuresFound.features();
             while (iterator.hasNext()) {
                 SimpleFeature currentFeature = iterator.next();
@@ -316,37 +311,6 @@ public class ExtendedDrawToolWithSnapping extends ExtendedDrawTool {
             }
         }
         return result;
-    }
-
-    /**
-     * Gets the features that are in range of the mouse.
-     * 
-     * @param targetLayer From target layer
-     * @param bbox Within the bonding box
-     * @return 
-     */
-    private FeatureCollection getFeaturesInRange(
-            ExtendedFeatureLayer targetLayer, ReferencedEnvelope bbox) {
-
-        FeatureType schema = targetLayer.getFeatureSource().getSchema();
-        String geometryPropertyName = schema.getGeometryDescriptor().getLocalName();
-        Filter filterBbox = filterFactory.bbox(filterFactory.property(geometryPropertyName), bbox);
-        Filter filter;
-        if (targetLayer.getFilterExpressionForSnapping() != null) {
-            String[] filterSides = targetLayer.getFilterExpressionForSnapping().split("=");
-            Filter filterExtra = filterFactory.equals(
-                    filterFactory.property(filterSides[0]),
-                    filterFactory.literal(filterSides[1]));
-            filter = filterFactory.and(filterBbox, filterExtra);
-        } else {
-            filter = filterBbox;
-        }
-        try {
-            return targetLayer.getFeatureSource().getFeatures().subCollection(filter);
-        } catch (Exception ex) {
-            System.out.println("Get features for snapp error:" + ex.getMessage());
-        }
-        return null;
     }
 
     /**

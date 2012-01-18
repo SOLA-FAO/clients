@@ -60,7 +60,7 @@ import org.sola.common.messaging.GisMessage;
 public class NewSurveyPointLayer extends ExtendedLayerEditor {
 
     private static final String LAYER_NAME = "New points";
-    private static final String LAYER_STYLE_RESOURCE = "cadastrechange_newpoints.sld";
+    private static final String LAYER_STYLE_RESOURCE = "cadastrechange_newpoints.xml";
     public static final String LAYER_FIELD_FID = "fid";
     private static final String LAYER_FIELD_LABEL = "label";
     public static final String LAYER_FIELD_ISBOUNDARY = "is_boundary";
@@ -288,7 +288,6 @@ public class NewSurveyPointLayer extends ExtendedLayerEditor {
     public SimpleFeature changeVertex(VertexInformation vertexInformation, DirectPosition2D newPosition) {
         for (VertexInformation vertexCOInformation : this.newCadastreObjectLayer.getVertexList()) {
             if (vertexInformation.getVertex().equals2D(vertexCOInformation.getVertex())) {
-            //if (vertexInformation.getVertex().distance(vertexCOInformation.getVertex())< 0.01) {
                 if (this.newCadastreObjectLayer.changeVertex(vertexCOInformation, newPosition) == null) {
                     return null;
                 }

@@ -517,7 +517,7 @@ public class Map extends JMapPane {
      * @param layerName the layer name
      * @param layerTitle layer title
      * @param pathOfShapefile the path of the .shp file
-     * @param styleResource the resource name .sld in the location of resources for layer styles.
+     * @param styleResource the resource name .xml in the location of resources for layer styles.
      * This resource location is added in the path decided in SLD_RESOURCES
      * {@see org.sola.clients.geotools.ui.layers.SolaFeatureLayer}. 
      * @return 
@@ -540,7 +540,7 @@ public class Map extends JMapPane {
      * @param layerName layer name
      * @param layerTitle layer title
      * @param geometryType geometry type for this layer
-     * @param styleResource the resource name .sld in the location of resources for layer styles.
+     * @param styleResource the resource name .xml in the location of resources for layer styles.
      * This resource location is added in the path decided in SLD_RESOURCES
      * {@see org.sola.clients.geotools.ui.layers.SolaFeatureLayer}. 
      * @return 
@@ -564,7 +564,7 @@ public class Map extends JMapPane {
      * @param layerName layer name
      * @param layerTitle layer title
      * @param geometryType geometry type for this layer
-     * @param styleResource the resource name .sld in the location of resources for layer styles.
+     * @param styleResource the resource name .xml in the location of resources for layer styles.
      * This resource location is added in the path decided in SLD_RESOURCES
      * {@see org.sola.clients.geotools.ui.layers.SolaFeatureLayer}. 
      * @return 
