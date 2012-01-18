@@ -27,11 +27,8 @@
  */
 package org.sola.clients.swing.gis.tool;
 
-import com.vividsolutions.jts.io.WKBWriter;
 import org.geotools.geometry.DirectPosition2D;
 import org.geotools.swing.event.MapMouseEvent;
-//import org.sola.clients.desktop.gis.data.PojoDataAccess;
-//import org.sola.clients.geotools.ui.layers.SolaLayer;
 import org.sola.clients.swing.gis.Messaging;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.geotools.map.extended.layer.ExtendedLayerGraphics;
@@ -46,7 +43,7 @@ import org.sola.webservices.transferobjects.cadastre.CadastreObjectTO;
  */
 public class SelectParcelTool extends ExtendedTool {
 
-    private String toolName = "selectparcel";
+    private String toolName = "select-parcel";
     private String toolTip = MessageUtility.getLocalizedMessage(
                             GisMessage.CADASTRE_TOOLTIP_SELECT_PARCEL).getMessage();
     private ExtendedLayerGraphics targetParcelsLayer = null;
@@ -85,11 +82,8 @@ public class SelectParcelTool extends ExtendedTool {
             }
             this.getMapControl().refresh();
         } catch (Exception ex) {
-//            Messaging.getInstance().show("gis.cadastrchange.selectparceltool.error.addparcel");
-//            MessageUtility.displayMessage(GisMessage.PARCEL_ERROR_ADDING_PARCEL);
             Messaging.getInstance().show(GisMessage.PARCEL_ERROR_ADDING_PARCEL);
-            org.sola.common.logging.LogUtility.log(
-                    GisMessage.PARCEL_ERROR_ADDING_PARCEL, ex);
+            org.sola.common.logging.LogUtility.log(GisMessage.PARCEL_ERROR_ADDING_PARCEL, ex);
         }
     }
 }

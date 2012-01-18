@@ -38,6 +38,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
 import java.util.Locale;
+import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -52,6 +53,7 @@ import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.clients.swing.ui.party.PartySearchPanel;
 import org.sola.common.RolesConstants;
 import org.sola.common.help.HelpUtility;
+import org.sola.common.logging.LogUtility;
 
 /**
  * The main form of the application.
@@ -165,6 +167,10 @@ public class MainForm extends FrameView {
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
+        menuLogLevel = new javax.swing.JMenu();
+        menuAllLogLevel = new javax.swing.JMenuItem();
+        menuDefaultLogLevel = new javax.swing.JMenuItem();
+        menuOffLogLevel = new javax.swing.JMenuItem();
         javax.swing.JMenu homeDashboard = new javax.swing.JMenu();
         menuDashboardItem = new javax.swing.JMenuItem();
         menuReports = new javax.swing.JMenu();
@@ -358,6 +364,29 @@ public class MainForm extends FrameView {
 
         menuView.add(jMenu1);
 
+        menuLogLevel.setText(bundle.getString("MainForm.menuLogLevel.text")); // NOI18N
+        menuLogLevel.setName("menuLogLevel"); // NOI18N
+
+        menuAllLogLevel.setAction(actionMap.get("setAllLogLevel")); // NOI18N
+        menuAllLogLevel.setText(bundle.getString("MainForm.menuAllLogLevel.text")); // NOI18N
+        menuAllLogLevel.setActionCommand(bundle.getString("MainForm.menuAllLogLevel.actionCommand")); // NOI18N
+        menuAllLogLevel.setName("menuAllLogLevel"); // NOI18N
+        menuLogLevel.add(menuAllLogLevel);
+
+        menuDefaultLogLevel.setAction(actionMap.get("setDefaultLogLevel")); // NOI18N
+        menuDefaultLogLevel.setText(bundle.getString("MainForm.menuDefaultLogLevel.text")); // NOI18N
+        menuDefaultLogLevel.setActionCommand(bundle.getString("MainForm.menuDefaultLogLevel.actionCommand")); // NOI18N
+        menuDefaultLogLevel.setName("menuDefaultLogLevel"); // NOI18N
+        menuLogLevel.add(menuDefaultLogLevel);
+
+        menuOffLogLevel.setAction(actionMap.get("setOffLogLevel")); // NOI18N
+        menuOffLogLevel.setText(bundle.getString("MainForm.menuOffLogLevel.text")); // NOI18N
+        menuOffLogLevel.setActionCommand(bundle.getString("MainForm.menuOffLogLevel.actionCommand")); // NOI18N
+        menuOffLogLevel.setName("menuOffLogLevel"); // NOI18N
+        menuLogLevel.add(menuOffLogLevel);
+
+        menuView.add(menuLogLevel);
+
         menuBar.add(menuView);
 
         homeDashboard.setText(bundle.getString("MainForm.homeDashboard.text_1")); // NOI18N
@@ -504,16 +533,20 @@ public class MainForm extends FrameView {
     private javax.swing.JMenuItem jmiContextHelp;
     private javax.swing.JLabel labStatus;
     private javax.swing.JPanel mainPanel;
+    private javax.swing.JMenuItem menuAllLogLevel;
     private javax.swing.JMenu menuApplications;
     private javax.swing.JMenuItem menuBaUnitSearch;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem menuDashboardItem;
+    private javax.swing.JMenuItem menuDefaultLogLevel;
     private javax.swing.JMenuItem menuDocumentSearch;
     private javax.swing.JMenuItem menuLangEN;
     private javax.swing.JMenuItem menuLangIT;
     private javax.swing.JMenu menuLanguage;
+    private javax.swing.JMenu menuLogLevel;
     private javax.swing.JMenu menuMap;
     private javax.swing.JMenuItem menuNewApplication;
+    private javax.swing.JMenuItem menuOffLogLevel;
     private javax.swing.JMenu menuRegistration;
     private javax.swing.JMenu menuReports;
     private javax.swing.JMenu menuSearch;
@@ -633,5 +666,20 @@ public class MainForm extends FrameView {
             pnlContent.addPanel(documentSearchPanel, MainContentPanel.CARD_DOCUMENT_SEARCH);
         }
         pnlContent.showPanel(MainContentPanel.CARD_DOCUMENT_SEARCH);
+    }
+
+    @Action
+    public void setAllLogLevel() {
+         LogUtility.setLogLevel(Level.ALL);
+    }
+
+    @Action
+    public void setDefaultLogLevel() {
+        LogUtility.setLogLevel(Level.INFO);
+    }
+
+    @Action
+    public void setOffLogLevel() {
+        LogUtility.setLogLevel(Level.OFF);
     }
 }

@@ -27,16 +27,16 @@
  */
 package org.geotools.data.collection.extended;
 
+import com.vividsolutions.jts.geom.Coordinate;
 import org.geotools.data.DataUtilities;
-import org.geotools.data.collection.ListFeatureCollection;
 import org.geotools.data.collection.ListFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.feature.CollectionEvent;
 import org.geotools.feature.CollectionListener;
+import org.geotools.feature.FeatureCollection;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.geometry.jts.Geometries;
 import org.opengis.feature.simple.SimpleFeature;
-import org.geotools.map.extended.layer.ExtendedLayerGraphics;
 import org.geotools.swing.extended.util.Messaging;
 
 /**
@@ -174,7 +174,7 @@ public class GraphicsFeatureCollection extends ListFeatureCollection {
         this.close(iterator);
         return feature;
     }
-
+    
     /**
      * It notifies the listeners attached to the collection for events associated with a feature.
      * @param feature

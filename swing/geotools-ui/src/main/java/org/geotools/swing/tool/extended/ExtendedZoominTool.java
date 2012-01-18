@@ -31,107 +31,29 @@
  */
 package org.geotools.swing.tool.extended;
 
-import java.awt.Rectangle;
-import java.awt.geom.Point2D;
-import org.geotools.geometry.DirectPosition2D;
 import org.geotools.geometry.Envelope2D;
-import org.geotools.swing.event.MapMouseEvent;
 import org.geotools.swing.extended.util.Messaging;
 
 /**
  * It zooms the map in.
- * Based in {@see org.geotools.swing.tool.ZoomInTool}.
  * 
  * @author Elton Manoku
  */
-public class ExtendedZoominTool extends ExtendedTool{
+public class ExtendedZoominTool extends ExtendedDrawRectangle{
     private String toolName = "zoomin";
-     private String toolTip =  Messaging.getInstance().getMessageText(Messaging.Ids.GEOTOOL_TOOLTIP_ZOOM_IN.toString());
-    private Point2D startDragPos;
-    private boolean dragged;
-    private double zoomFactor = 1.5;
+     private String toolTip =  Messaging.getInstance().getMessageText(
+             Messaging.Ids.GEOTOOL_TOOLTIP_ZOOM_IN.toString());
     
     /**
      * Constructor
      */
     public ExtendedZoominTool() {        
         this.setToolName(this.toolName);
-        startDragPos = new DirectPosition2D();
-        dragged = false;
         this.setToolTip(toolTip);
     }
-    
-    /**
-     * Zoom in by the currently set increment, with the map
-     * centred at the location (in world coords) of the mouse
-     * click
-     * 
-     * @param e map mapPane mouse event
-     */
-    @Override
-    public void onMouseClicked(MapMouseEvent e) {
-        Rectangle paneArea = getMapControl().getVisibleRect();
-        DirectPosition2D mapPos = e.getMapPosition();
 
-        double scale = getMapControl().getWorldToScreenTransform().getScaleX();
-        double newScale = scale * this.zoomFactor;
-
-        DirectPosition2D corner = new DirectPosition2D(
-                mapPos.getX() - 0.5d * paneArea.getWidth() / newScale,
-                mapPos.getY() + 0.5d * paneArea.getHeight() / newScale);
-        
-        Envelope2D newMapArea = new Envelope2D();
-        newMapArea.setFrameFromCenter(mapPos, corner);
-        getMapControl().setDisplayArea(newMapArea);
-    }
-    
-    /**
-     * Records the map position of the mouse event in case this
-     * button press is the beginning of a mouse drag
-     *
-     * @param ev the mouse event
-     */
     @Override
-    public void onMousePressed(MapMouseEvent ev) {
-        startDragPos = new DirectPosition2D();
-        startDragPos.setLocation(ev.getMapPosition());
-    }
-
-    /**
-     * Records that the mouse is being dragged
-     *
-     * @param ev the mouse event
-     */
-    @Override
-    public void onMouseDragged(MapMouseEvent ev) {
-        dragged = true;
-    }
-
-    /**
-     * If the mouse was dragged, determines the bounds of the
-     * box that the user defined and passes this to the mapPane's
-     * {@link org.geotools.swing.JMapPane#setDisplayArea(org.opengis.geometry.Envelope) }
-     * method
-     *
-     * @param ev the mouse event
-     */
-    @Override
-    public void onMouseReleased(MapMouseEvent ev) {
-        if (dragged && !ev.getPoint().equals(startDragPos)) {
-            Envelope2D env = new Envelope2D();
-            env.setFrameFromDiagonal(startDragPos, ev.getMapPosition());
-            dragged = false;
-            getMapControl().setDisplayArea(env);
-        }
-    }
-    
-    /**
-     * Returns true to indicate that this tool draws a box
-     * on the map display when the mouse is being dragged to
-     * show the zoom-in area
-     */
-    @Override
-    public boolean drawDragBox() {
-        return true;
-    }
+    protected void onRectangleFinished(Envelope2D env) {
+        getMapControl().setDisplayArea(env);
+    }    
 }

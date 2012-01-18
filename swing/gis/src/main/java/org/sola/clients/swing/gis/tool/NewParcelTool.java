@@ -46,8 +46,7 @@ import org.sola.common.messaging.MessageUtility;
  */
 public class NewParcelTool extends ExtendedEditGeometryTool{
     
-    
-     private String toolName = "newparcel";
+     private String toolName = "new-parcel";
      private String toolTip =  MessageUtility.getLocalizedMessage(
                             GisMessage.CADASTRE_TOOLTIP_NEW_PARCEL).getMessage();
 

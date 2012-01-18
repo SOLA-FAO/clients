@@ -29,24 +29,33 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.geotools.swing.extended;
+package org.sola.clients.swing.gis.mapaction;
 
-import org.junit.Ignore;
-import org.junit.Test;
+import org.sola.clients.swing.gis.beans.TransactionCadastreChangeBean;
+import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForCadastreChange;
+import org.geotools.swing.mapaction.extended.ExtendedAction;
+import org.sola.webservices.transferobjects.transaction.TransactionCadastreChangeTO;
 
 /**
  *
- * @author Manoku
+ * @author Elton Manoku
  */
-public class UtilityTest {
-
-    /**
-     * Test of showMessage method, of class Utility.
-     */
-    @Ignore
-    @Test
-    public void testShowMessage() {
-        System.out.println("showMessage");
+public class TestCadastreRequest extends ExtendedAction{
+    private ControlsBundleForCadastreChange ctrl;
+ 
+  public TestCadastreRequest(ControlsBundleForCadastreChange ctrl) {
+     super(ctrl.getMap(), "test bean", "test bean", ""); 
+     this.ctrl = ctrl;   
+  }
+ 
+    
+    @Override
+    public void onClick(){
+        TransactionCadastreChangeBean bean = ctrl.getCadastreChangeBean();
         
-    }
+        TransactionCadastreChangeTO to = bean.getTO();
+        System.out.println("Number of survey points: " + to.getSurveyPointList().size());
+        bean.save();
+    } 
+    
 }

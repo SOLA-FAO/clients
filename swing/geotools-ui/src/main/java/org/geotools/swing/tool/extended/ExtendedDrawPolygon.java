@@ -46,7 +46,7 @@ import org.geotools.swing.extended.Map;
 public class ExtendedDrawPolygon extends ExtendedEditGeometryTool{
     private String toolName = "polygon";
     private String extraFields = "label:\"\",type:0";
-    private String layerResourceTest = "test_editor_polygon.sld";
+    private String layerResourceTest = "test_editor_polygon.xml";
 
     public ExtendedDrawPolygon(){
         this.setToolName(toolName);
@@ -59,7 +59,8 @@ public class ExtendedDrawPolygon extends ExtendedEditGeometryTool{
     @Override
     public void setMapControl(Map mapControl){
         super.setMapControl(mapControl);
-        this.layer.setFilterExpressionForSnapping("type=1");
+        this.layer.setFilterExpressionForSnapping("type=2");
+        this.getTargetSnappingLayers().add(this.layer);
     }
 
    @Override

@@ -39,9 +39,11 @@ import java.awt.Dimension;
 import javax.swing.JDialog;
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.swing.gis.beans.TransactionCadastreChangeBean;
+import org.sola.clients.swing.gis.beans.TransactionCadastreRedefinitionBean;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForBaUnit;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForCadastreChange;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
+import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForCadastreRedefinition;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleViewer;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.spatial.MapDefinitionTO;
@@ -49,7 +51,7 @@ import org.sola.webservices.spatial.MapDefinitionTO;
 /**
  * Unit test for simple App.
  */
-public class AppGUITestDisplay {
+public class Development {
 
     /**
      * Test the controls bundle for setting the location of an application
@@ -115,7 +117,7 @@ public class AppGUITestDisplay {
     /**
      * Test the controls bundle for cadastre change
      */
-    //@Ignore
+    @Ignore
     @Test
     public void testUIControlsBundleForCadastreChange() throws Exception {
         System.out.println("Test ControlsBundle for cadastre change");
@@ -126,6 +128,20 @@ public class AppGUITestDisplay {
                 PojoDataAccess.getInstance().getCadastreChange("4000");
         ControlsBundleForCadastreChange ctrl = 
                 new ControlsBundleForCadastreChange("333", cadastreChangeBean, "3068323", null);
+        this.displayControlsBundleForm(ctrl);
+    }
+
+    @Test
+    public void testUIControlsBundleForCadastreRedefinition() throws Exception {
+        System.out.println("Test ControlsBundle for cadastre redefinition");
+
+        SecurityBean.authenticate("test", "test".toCharArray(), this.getWSConfig());
+
+        TransactionCadastreRedefinitionBean transactionBean =
+                new TransactionCadastreRedefinitionBean();
+        //        PojoDataAccess.getInstance().getCadastreChange("4000");
+        ControlsBundleForCadastreRedefinition ctrl = 
+                new ControlsBundleForCadastreRedefinition("333", transactionBean, null);
         this.displayControlsBundleForm(ctrl);
     }
 

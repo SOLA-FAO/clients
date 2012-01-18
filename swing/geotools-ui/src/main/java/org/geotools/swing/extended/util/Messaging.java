@@ -65,10 +65,12 @@ public class Messaging {
         GEOTOOL_TOOLTIP_ZOOM_OUT,
         GEOTOOL_TOOLTIP_ZOOM_IN,
         GEOTOOL_TOOLTIP_PAN,
+        GEOTOOL_TOOLTIP_REMOVE_VERTEX,
         PRINT,
         PRINT_LAYOUT_NOT_SELECTED,
         PRINT_SCALE_NOT_CORRECT,
-        LEFT_PANEL_TAB_LAYERS_TITLE
+        LEFT_PANEL_TAB_LAYERS_TITLE,
+        GEOTOOL_GET_FEATURE_IN_RANGLE_ERROR
     };
 
     private static Messaging messaging = new Messaging();
@@ -165,6 +167,8 @@ public class Messaging {
             msgBody = "Scale is not correct.";
         } else if(messageId.equals(Messaging.Ids.LEFT_PANEL_TAB_LAYERS_TITLE.toString())){
             msgBody = "Layers";
+        } else if(messageId.equals(Messaging.Ids.GEOTOOL_GET_FEATURE_IN_RANGLE_ERROR.toString())){
+            msgBody = "Error while getting features in range. \n Error : %s";
         }
         return msgBody;
     }

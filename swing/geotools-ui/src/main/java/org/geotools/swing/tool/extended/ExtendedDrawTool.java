@@ -50,7 +50,6 @@ import org.geotools.swing.event.MapPaneAdapter;
 import org.geotools.swing.event.MapPaneEvent;
 import org.geotools.swing.extended.Map;
 import org.geotools.swing.extended.util.Messaging;
-import org.geotools.map.extended.layer.ExtendedLayerEditor;
 
 /**
  * Map tool that implements drawing in the map control. Based in configuration it can draw,
@@ -177,6 +176,7 @@ public abstract class ExtendedDrawTool extends ExtendedTool {
     /**
      * It is called after the rendering of the map control. It is used to redraw the temporary 
      * lines already drawn but reprojected while the map has been panned or zoomed.
+     * 
      */
     protected void afterRendering() {
         this.startPos1 = this.startPos2 = this.movingPos = null;
@@ -290,7 +290,7 @@ public abstract class ExtendedDrawTool extends ExtendedTool {
     }
 
     /**
-     * It adds Map listeners to the tool.
+     * It adds Map listeners to the tool. It catches the moment after the rendering stops.
      */
     private void addMapListenerEvents() {
         MapPaneAdapter mapPaneListener = new MapPaneAdapter() {

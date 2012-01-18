@@ -53,6 +53,9 @@ import org.geotools.swing.extended.util.Messaging;
  */
 public class ExtendedLayerEditor extends ExtendedLayerGraphics {
 
+    private static String VERTICES_LAYER_NAME_POSTFIX = " vertices";
+    private static String VERTICES_LAYER_STYLE_RESOURCE = "editor_vertices.xml";
+    
     private ExtendedLayerGraphics verticesLayer = null;
     /**
      * The list of {@see VertexInformation} for the features in this layer
@@ -73,14 +76,24 @@ public class ExtendedLayerEditor extends ExtendedLayerGraphics {
             Geometries geometryType,
             String styleResource,
             String extraFieldsFormat) throws Exception {
-        super(name, geometryType, styleResource, extraFieldsFormat);
-        this.verticesLayer = new ExtendedLayerGraphics(
-                name + " vertices",
-                Geometries.POINT, "editor_vertices.sld");
-        this.getMapLayers().addAll(this.verticesLayer.getMapLayers());
+        this(name, geometryType, styleResource, VERTICES_LAYER_STYLE_RESOURCE, extraFieldsFormat);
     }
 
     
+    public ExtendedLayerEditor(
+            String name,
+            Geometries geometryType,
+            String styleResource,
+            String styleResourceForVertexes,
+            String extraFieldsFormat) throws Exception {
+        super(name, geometryType, styleResource, extraFieldsFormat);
+        this.verticesLayer = new ExtendedLayerGraphics(
+                name + VERTICES_LAYER_NAME_POSTFIX,
+                Geometries.POINT, 
+                styleResourceForVertexes);
+        this.getMapLayers().addAll(this.verticesLayer.getMapLayers());
+    }
+
     @Override
     public SimpleFeature addFeature(String fid, byte[] geomAsBytes,
             java.util.HashMap<String, Object> fieldsWithValues) throws Exception {
@@ -153,14 +166,21 @@ public class ExtendedLayerEditor extends ExtendedLayerGraphics {
     }
 
     /**
+     * Gets the Vertices layer
+     */
+    public ExtendedLayerGraphics getVerticesLayer() {
+        return verticesLayer;
+    }
+
+    /**
      * It searches for a vertex in the layer within the distance. It returns the first found vertex.
-     * @param mousePos Position from where to search for. Normally is the mouse position in the map
+     * @param fromPosition Position from where to search for. Normally is the mouse position in the map
      * @param distance The distance to search around the position
      * @return 
      */
     public VertexInformation getFirstVertexWithinDistance(
-            DirectPosition2D mousePos, double distance) {
-        Coordinate coordinateToFind = new Coordinate(mousePos.x, mousePos.y);
+            DirectPosition2D fromPosition, double distance) {
+        Coordinate coordinateToFind = new Coordinate(fromPosition.x, fromPosition.y);
         for (VertexInformation vertexInformation : this.vertexList) {
             if (vertexInformation.getVertex().distance(coordinateToFind) <= distance) {
                 return vertexInformation;

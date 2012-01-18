@@ -46,7 +46,7 @@ import org.sola.clients.swing.gis.layer.PojoLayer;
 import org.sola.clients.swing.gis.layer.TargetCadastreObjectLayer;
 import org.sola.clients.swing.gis.mapaction.NewCadastreObjectListFormShow;
 import org.sola.clients.swing.gis.mapaction.PointSurveyListFormShow;
-import org.sola.clients.swing.gis.mapaction.TestCadastreChangeBean;
+import org.sola.clients.swing.gis.mapaction.TestCadastreRequest;
 import org.sola.clients.swing.gis.tool.NewParcelTool;
 import org.sola.clients.swing.gis.tool.NodeLinkingTool;
 import org.sola.clients.swing.gis.tool.SelectParcelTool;
@@ -55,7 +55,7 @@ import org.sola.webservices.transferobjects.cadastre.CadastreObjectTO;
 
 /**
  *
- * @author manoku
+ * @author Elton Manoku
  */
 public final class ControlsBundleForCadastreChange extends ControlsBundleForWorkingWithCO {
 
@@ -117,7 +117,7 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForWork
             //Adding tools and commands
             this.addToolsAndCommands();
 
-            this.getMap().addMapAction(new TestCadastreChangeBean(this), this.getToolbar());
+            this.getMap().addMapAction(new TestCadastreRequest(this), this.getToolbar());
 
             for (ExtendedLayer solaLayer : this.getMap().getSolaLayers().values()) {
                 if (solaLayer.getClass().equals(PojoLayer.class)) {
@@ -147,12 +147,10 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForWork
         this.targetParcelsLayer = new TargetCadastreObjectLayer(this.getMap().getSrid());
         this.getMap().addLayer(targetParcelsLayer);
 
-        this.newCadastreObjectLayer = new NewCadastreObjectLayer(
-                this.getMap().getSrid(), this.applicationNumber);
+        this.newCadastreObjectLayer = new NewCadastreObjectLayer(this.applicationNumber);
         this.getMap().addLayer(newCadastreObjectLayer);
 
-        this.newPointsLayer = new NewSurveyPointLayer(
-                this.getMap().getSrid(), this.newCadastreObjectLayer);
+        this.newPointsLayer = new NewSurveyPointLayer(this.newCadastreObjectLayer);
         this.getMap().addLayer(newPointsLayer);
 
         this.targetParcelsLayer.setCadastreObjectTargetList(

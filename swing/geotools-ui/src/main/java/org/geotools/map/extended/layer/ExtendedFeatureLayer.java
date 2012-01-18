@@ -35,10 +35,14 @@ import com.vividsolutions.jts.io.WKBReader;
 import com.vividsolutions.jts.io.WKBWriter;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import org.geotools.data.simple.SimpleFeatureSource;
+import org.geotools.factory.CommonFactoryFinder;
+import org.geotools.feature.FeatureCollection;
+import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.map.FeatureLayer;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.Rule;
@@ -48,9 +52,12 @@ import org.geotools.styling.StyleFactory;
 import org.geotools.styling.StyleFactoryImpl;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.feature.type.FeatureType;
 import org.opengis.feature.type.GeometryType;
 import org.geotools.swing.control.extended.TocSymbol;
 import org.geotools.swing.extended.util.Messaging;
+import org.opengis.filter.Filter;
+import org.opengis.filter.FilterFactory2;
 
 /**
  * This layer is used as a base feature layer for other feature based layers.
@@ -64,6 +71,7 @@ public class ExtendedFeatureLayer extends ExtendedLayer {
      */
     public static String SLD_RESOURCES = "/org/geotools/map/extended/layer/resources/";
     private static StyleFactory styleFactory = new StyleFactoryImpl();
+    private static FilterFactory2 filterFactory = CommonFactoryFinder.getFilterFactory2(null);
     /**
      * It is used to read WKB and convert it to geometry
      */
@@ -158,7 +166,6 @@ public class ExtendedFeatureLayer extends ExtendedLayer {
         this.filterExpressionForSnapping = filterExpressionForSnapping;
     }
 
-
     /**
      * It retrieves the list of symbols that represent the symbology. For each rule in the style
      * a symbol is created.
@@ -173,16 +180,23 @@ public class ExtendedFeatureLayer extends ExtendedLayer {
         GeometryType geomType = simpleFeatureType.getGeometryDescriptor().getType();
         if (geomType.getBinding().toString().contains("Polygon")) {
             int[] xy = new int[10];
-            xy[0] = 2;  xy[1] = 2;
-            xy[2] = 20; xy[3] = 2;
-            xy[4] = 20; xy[5] = 10;
-            xy[6] = 2;  xy[7] = 10;
-            xy[8] = 2;  xy[9] = 2;
+            xy[0] = 2;
+            xy[1] = 2;
+            xy[2] = 20;
+            xy[3] = 2;
+            xy[4] = 20;
+            xy[5] = 10;
+            xy[6] = 2;
+            xy[7] = 10;
+            xy[8] = 2;
+            xy[9] = 2;
             feature = legendDrawer.feature(legendDrawer.polygon(xy));
         } else if (geomType.getBinding().toString().contains("Polyline")) {
             int[] xy = new int[4];
-            xy[0] = 0;  xy[1] = 5;
-            xy[2] = 20; xy[3] = 5;
+            xy[0] = 0;
+            xy[1] = 5;
+            xy[2] = 20;
+            xy[3] = 5;
             feature = legendDrawer.feature(legendDrawer.line(xy));
         } else if (geomType.getBinding().toString().contains("Point")) {
             int x = 10, y = 5;
@@ -252,5 +266,38 @@ public class ExtendedFeatureLayer extends ExtendedLayer {
             throw new Exception(
                     Messaging.Ids.UTILITIES_SLD_LOADING_ERROR.toString(), ex);
         }
+    }
+
+    /**
+     * It searches for features within the bbox. Additionally, the extra attribute based filter 
+     * can be used as well.
+     * @param bbox The bounding box to search in
+     * @param whereAttributeFilter Extra attribute based filter. It can be null
+     * @return A FeatureCollection if something found or nothing found 
+     * or null if some error occurred
+     */
+    public FeatureCollection getFeaturesInRange(
+            ReferencedEnvelope bbox, String whereAttributeFilter) {
+
+        FeatureType schema = this.getFeatureSource().getSchema();
+        String geometryPropertyName = schema.getGeometryDescriptor().getLocalName();
+        Filter filterBbox = filterFactory.bbox(filterFactory.property(geometryPropertyName), bbox);
+        Filter filter;
+        if (whereAttributeFilter != null) {
+            String[] filterSides = whereAttributeFilter.split("=");
+            Filter filterExtra = filterFactory.equals(
+                    filterFactory.property(filterSides[0]),
+                    filterFactory.literal(filterSides[1]));
+            filter = filterFactory.and(filterBbox, filterExtra);
+        } else {
+            filter = filterBbox;
+        }
+        try {
+            return this.getFeatureSource().getFeatures().subCollection(filter);
+        } catch (IOException ex) {
+            Messaging.getInstance().show(
+                    Messaging.Ids.GEOTOOL_GET_FEATURE_IN_RANGLE_ERROR.toString(), ex.getMessage());
+        }
+        return null;
     }
 }
