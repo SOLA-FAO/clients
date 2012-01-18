@@ -60,7 +60,6 @@ import org.sola.common.logging.LogUtility;
  */
 public class MainForm extends FrameView {
 
-    private ApplicationPanel applicationForm;
     Object foreFont = LafManager.getInstance().getForeFont();
     Object labFont = LafManager.getInstance().getLabFont();
     Object bgFont = LafManager.getInstance().getBgFont();
