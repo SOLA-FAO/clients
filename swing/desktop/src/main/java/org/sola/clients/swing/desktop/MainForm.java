@@ -203,7 +203,7 @@ public class MainForm extends FrameView {
         applicationsMain.setPreferredSize(new java.awt.Dimension(980, 45));
         applicationsMain.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(org.sola.clients.swing.desktop.DesktopApplication.class).getContext().getActionMap(MainForm.class, this);
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(MainForm.class, this);
         btnShowDashboard.setAction(actionMap.get("openDashBoard")); // NOI18N
         btnShowDashboard.setFont(UIManager.getFont(btnFont));
         btnShowDashboard.setFocusable(false);
@@ -396,11 +396,11 @@ public class MainForm extends FrameView {
         menuDashboardItem.setName("menuDashboardItem"); // NOI18N
         homeDashboard.add(menuDashboardItem);
 
-        menuBar.add(homeDashboard);
-
         menuReports.setText(bundle.getString("MainForm.menuReports.text_1")); // NOI18N
         menuReports.setName("menuReports"); // NOI18N
-        menuBar.add(menuReports);
+        homeDashboard.add(menuReports);
+
+        menuBar.add(homeDashboard);
 
         menuApplications.setText(bundle.getString("MainForm.menuApplications.text_1")); // NOI18N
         menuApplications.setName("menuApplications"); // NOI18N
