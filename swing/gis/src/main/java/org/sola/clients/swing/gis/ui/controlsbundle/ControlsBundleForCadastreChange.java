@@ -46,7 +46,6 @@ import org.sola.clients.swing.gis.layer.PojoLayer;
 import org.sola.clients.swing.gis.layer.TargetCadastreObjectLayer;
 import org.sola.clients.swing.gis.mapaction.NewCadastreObjectListFormShow;
 import org.sola.clients.swing.gis.mapaction.PointSurveyListFormShow;
-import org.sola.clients.swing.gis.mapaction.TestCadastreRequest;
 import org.sola.clients.swing.gis.tool.NewParcelTool;
 import org.sola.clients.swing.gis.tool.NodeLinkingTool;
 import org.sola.clients.swing.gis.tool.SelectParcelTool;
@@ -116,8 +115,6 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForWork
 
             //Adding tools and commands
             this.addToolsAndCommands();
-
-            this.getMap().addMapAction(new TestCadastreRequest(this), this.getToolbar());
 
             for (ExtendedLayer solaLayer : this.getMap().getSolaLayers().values()) {
                 if (solaLayer.getClass().equals(PojoLayer.class)) {

@@ -31,6 +31,7 @@ import java.awt.Component;
 import java.util.HashMap;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.sola.clients.swing.gis.TestCadastreTransactionChange;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForApplicationLocation;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.WKBWriter;
@@ -126,8 +127,10 @@ public class Development {
 
         TransactionCadastreChangeBean cadastreChangeBean =
                 PojoDataAccess.getInstance().getCadastreChange("4000");
-        ControlsBundleForCadastreChange ctrl = 
+        ControlsBundleForCadastreChange ctrl =
                 new ControlsBundleForCadastreChange("333", cadastreChangeBean, "3068323", null);
+        ctrl.getMap().addMapAction(new TestCadastreTransactionChange(ctrl), ctrl.getToolbar());
+
         this.displayControlsBundleForm(ctrl);
     }
 
@@ -139,9 +142,11 @@ public class Development {
 
         TransactionCadastreRedefinitionBean transactionBean =
                 new TransactionCadastreRedefinitionBean();
+        transactionBean.setFromServiceId("4000");
         //        PojoDataAccess.getInstance().getCadastreChange("4000");
-        ControlsBundleForCadastreRedefinition ctrl = 
-                new ControlsBundleForCadastreRedefinition("333", transactionBean, null);
+        ControlsBundleForCadastreRedefinition ctrl =
+                new ControlsBundleForCadastreRedefinition(transactionBean, null);
+        ctrl.getMap().addMapAction(new TestCadastreTransactionRedefinition(ctrl), ctrl.getToolbar());
         this.displayControlsBundleForm(ctrl);
     }
 

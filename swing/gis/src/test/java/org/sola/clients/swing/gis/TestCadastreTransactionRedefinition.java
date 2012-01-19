@@ -29,21 +29,24 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.sola.clients.swing.gis.mapaction;
+package org.sola.clients.swing.gis;
 
 import org.sola.clients.swing.gis.beans.TransactionCadastreChangeBean;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForCadastreChange;
 import org.geotools.swing.mapaction.extended.ExtendedAction;
+import org.sola.clients.swing.gis.beans.TransactionCadastreRedefinitionBean;
+import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForCadastreRedefinition;
 import org.sola.webservices.transferobjects.transaction.TransactionCadastreChangeTO;
+import org.sola.webservices.transferobjects.transaction.TransactionCadastreRedefinitionTO;
 
 /**
  *
  * @author Elton Manoku
  */
-public class TestCadastreRequest extends ExtendedAction{
-    private ControlsBundleForCadastreChange ctrl;
+public class TestCadastreTransactionRedefinition extends ExtendedAction{
+    private ControlsBundleForCadastreRedefinition ctrl;
  
-  public TestCadastreRequest(ControlsBundleForCadastreChange ctrl) {
+  public TestCadastreTransactionRedefinition(ControlsBundleForCadastreRedefinition ctrl) {
      super(ctrl.getMap(), "test bean", "test bean", ""); 
      this.ctrl = ctrl;   
   }
@@ -51,10 +54,8 @@ public class TestCadastreRequest extends ExtendedAction{
     
     @Override
     public void onClick(){
-        TransactionCadastreChangeBean bean = ctrl.getCadastreChangeBean();
-        
-        TransactionCadastreChangeTO to = bean.getTO();
-        System.out.println("Number of survey points: " + to.getSurveyPointList().size());
+        TransactionCadastreRedefinitionBean bean = ctrl.getTransactionBean();        
+        TransactionCadastreRedefinitionTO to = bean.getTO();
         bean.save();
     } 
     

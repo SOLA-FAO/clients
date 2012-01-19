@@ -4,13 +4,16 @@
  */
 package org.sola.clients.swing.gis.layer;
 
+import com.vividsolutions.jts.geom.Geometry;
 import java.util.ArrayList;
 import java.util.List;
+import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.geometry.jts.Geometries;
 import org.geotools.map.extended.layer.ExtendedLayerGraphics;
 import org.geotools.swing.extended.util.Messaging;
 import org.opengis.feature.simple.SimpleFeature;
 import org.sola.clients.swing.gis.beans.CadastreObjectNodeBean;
+import org.sola.clients.swing.gis.beans.CadastreObjectNodeTargetBean;
 
 /**
  *
@@ -48,5 +51,23 @@ public class CadastreObjectNodeModifiedLayer extends ExtendedLayerGraphics {
         } catch (Exception ex) {
             Messaging.getInstance().show("Error while removing node.");
         }
+    }
+    
+    public List<CadastreObjectNodeTargetBean> getNodeTargetList(){
+        List<CadastreObjectNodeTargetBean> nodeTargetList =
+                new ArrayList<CadastreObjectNodeTargetBean>();
+        SimpleFeature nodeFeature = null;
+        SimpleFeatureIterator iterator = 
+                (SimpleFeatureIterator)this.getFeatureCollection().features();
+        while(iterator.hasNext()){
+            nodeFeature = iterator.next();
+            CadastreObjectNodeTargetBean nodeTargetBean =
+                    new CadastreObjectNodeTargetBean();
+            nodeTargetBean.setNodeId(nodeFeature.getID());
+            nodeTargetBean.setGeom(wkbWriter.write((Geometry)nodeFeature.getDefaultGeometry()));
+            nodeTargetList.add(nodeTargetBean);
+        }
+        iterator.close();
+        return nodeTargetList;
     }
 }

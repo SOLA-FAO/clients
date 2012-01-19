@@ -29,35 +29,33 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.sola.clients.swing.gis.to;
+package org.sola.clients.swing.gis;
 
-import java.util.List;
-import org.sola.webservices.transferobjects.cadastre.CadastreObjectTargetTO;
-import org.sola.webservices.transferobjects.cadastre.SurveyPointTO;
-import org.sola.webservices.transferobjects.transaction.TransactionSourceTO;
+import org.sola.clients.swing.gis.beans.TransactionCadastreChangeBean;
+import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForCadastreChange;
+import org.geotools.swing.mapaction.extended.ExtendedAction;
+import org.sola.webservices.transferobjects.transaction.TransactionCadastreChangeTO;
 
 /**
  *
  * @author Elton Manoku
  */
-public class TransactionCadastreChangeExtraTO 
-extends org.sola.webservices.transferobjects.transaction.TransactionCadastreChangeTO{
-
-    public void setCadastreObjectList(List<CadastreObjectExtraTO> newCadastreObjectList) {
-        for(CadastreObjectExtraTO coExtraTO: newCadastreObjectList){
-            this.cadastreObjectList.add(coExtraTO);
-        }
-    }
+public class TestCadastreTransactionChange extends ExtendedAction{
+    private ControlsBundleForCadastreChange ctrl;
+ 
+  public TestCadastreTransactionChange(ControlsBundleForCadastreChange ctrl) {
+     super(ctrl.getMap(), "test bean", "test bean", ""); 
+     this.ctrl = ctrl;   
+  }
+ 
     
-    public void setTransactionSourceList(List<TransactionSourceTO> transactionSourceList) {
-        this.transactionSourceList = transactionSourceList;
-    }
-
-    public void setSurveyPointList(List<SurveyPointTO> surveyPointList) {
-        this.surveyPointList = surveyPointList;
-    }
-
-    public void setCadastreObjectTargetList(List<CadastreObjectTargetTO> cadastreObjectTargetList) {
-        this.cadastreObjectTargetList = cadastreObjectTargetList;
-    }
+    @Override
+    public void onClick(){
+        TransactionCadastreChangeBean bean = ctrl.getCadastreChangeBean();
+        
+        TransactionCadastreChangeTO to = bean.getTO();
+        System.out.println("Number of survey points: " + to.getSurveyPointList().size());
+        bean.save();
+    } 
+    
 }
