@@ -219,13 +219,9 @@ public class DashBoardPanel extends ContentPanel {
                 };
 
                 if (getMainContentPanel() != null) {
-                    if (getMainContentPanel().isPanelOpened(MainContentPanel.CARD_APPLICATION)) {
-                        getMainContentPanel().closePanel(MainContentPanel.CARD_APPLICATION);
-                    }
                     ApplicationPanel applicationPanel = new ApplicationPanel(appBean.getId());
                     applicationPanel.addPropertyChangeListener(ApplicationBean.APPLICATION_PROPERTY, listener);
-                    getMainContentPanel().addPanel(applicationPanel, MainContentPanel.CARD_APPLICATION);
-                    getMainContentPanel().showPanel(MainContentPanel.CARD_APPLICATION);
+                    getMainContentPanel().addPanel(applicationPanel, MainContentPanel.CARD_APPLICATION, true);
                 }
                 return null;
             }

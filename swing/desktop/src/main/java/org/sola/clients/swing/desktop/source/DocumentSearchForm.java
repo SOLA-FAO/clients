@@ -27,7 +27,7 @@
  */
 package org.sola.clients.swing.desktop.source;
 
-import org.sola.clients.swing.ui.source.DocumentSeachPanel;
+import org.sola.clients.swing.ui.source.DocumentSearchPanel;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.ImageIcon;
@@ -49,7 +49,7 @@ public class DocumentSearchForm extends javax.swing.JDialog {
         documentSeachPanel1.addPropertyChangeListener(new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                if(evt.getPropertyName().equals(DocumentSeachPanel.SELECTED_SOURCE)){
+                if(evt.getPropertyName().equals(DocumentSearchPanel.SELECTED_SOURCE)){
                     btnOk.setEnabled(evt.getNewValue()!=null);
                 }
             }
@@ -76,7 +76,7 @@ public class DocumentSearchForm extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        documentSeachPanel1 = new org.sola.clients.swing.ui.source.DocumentSeachPanel();
+        documentSeachPanel1 = new org.sola.clients.swing.ui.source.DocumentSearchPanel();
         btnOk = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -121,7 +121,7 @@ public class DocumentSearchForm extends javax.swing.JDialog {
 
     private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
         if(documentSeachPanel1.getSelectedSource()!=null){
-            firePropertyChange(DocumentSeachPanel.SELECTED_SOURCE, null, 
+            firePropertyChange(DocumentSearchPanel.SELECTED_SOURCE, null, 
                     documentSeachPanel1.getSelectedSource());
             this.dispose();
         }
@@ -129,6 +129,6 @@ public class DocumentSearchForm extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnOk;
-    private org.sola.clients.swing.ui.source.DocumentSeachPanel documentSeachPanel1;
+    private org.sola.clients.swing.ui.source.DocumentSearchPanel documentSeachPanel1;
     // End of variables declaration//GEN-END:variables
 }

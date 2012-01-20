@@ -55,7 +55,7 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Component class="org.sola.clients.swing.ui.source.DocumentSeachPanel" name="documentSeachPanel1">
+        <Component class="org.sola.clients.swing.ui.source.DocumentSearchPanel" name="documentSeachPanel1">
           <Properties>
             <Property name="name" type="java.lang.String" value="documentSeachPanel1" noResource="true"/>
           </Properties>

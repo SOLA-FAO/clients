@@ -637,7 +637,6 @@ public class MainForm extends FrameView {
             pnlContent.addPanel(searchApplicationPanel, MainContentPanel.CARD_APPSEARCH);
         }
         pnlContent.showPanel(MainContentPanel.CARD_APPSEARCH);
-        pnlContent.showPanel(MainContentPanel.CARD_APPSEARCH);
     }
 
     @Action

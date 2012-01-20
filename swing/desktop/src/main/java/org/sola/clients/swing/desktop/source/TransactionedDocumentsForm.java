@@ -27,7 +27,7 @@
  */
 package org.sola.clients.swing.desktop.source;
 
-import org.sola.clients.swing.ui.source.DocumentSeachPanel;
+import org.sola.clients.swing.ui.source.DocumentSearchPanel;
 import org.sola.clients.swing.ui.source.DocumentsPanel;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -110,7 +110,7 @@ public class TransactionedDocumentsForm extends javax.swing.JDialog {
         documentSeachPanel.addPropertyChangeListener(new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                if(evt.getPropertyName().equals(DocumentSeachPanel.SELECTED_SOURCE)){
+                if(evt.getPropertyName().equals(DocumentSearchPanel.SELECTED_SOURCE)){
                     customizeAddFromSearchButton((SourceSearchResultBean)evt.getNewValue());
                 }
             }
@@ -178,7 +178,7 @@ public class TransactionedDocumentsForm extends javax.swing.JDialog {
         applicationDocumentsPanel = new org.sola.clients.swing.ui.source.DocumentsPanel();
         btnAddDocumentFromApplication = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
-        documentSeachPanel = new org.sola.clients.swing.ui.source.DocumentSeachPanel();
+        documentSeachPanel = new org.sola.clients.swing.ui.source.DocumentSearchPanel();
         btnAddDocumentFromSearch = new javax.swing.JButton();
         selectedDocumentsPanel = new org.sola.clients.swing.ui.source.DocumentsPanel();
         lblSelectedDocuments = new javax.swing.JLabel();
@@ -347,7 +347,7 @@ public class TransactionedDocumentsForm extends javax.swing.JDialog {
     private javax.swing.JButton btnAddDocumentFromApplication;
     private javax.swing.JButton btnAddDocumentFromSearch;
     private javax.swing.JButton btnRemove;
-    private org.sola.clients.swing.ui.source.DocumentSeachPanel documentSeachPanel;
+    private org.sola.clients.swing.ui.source.DocumentSearchPanel documentSeachPanel;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

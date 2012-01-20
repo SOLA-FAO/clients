@@ -161,7 +161,7 @@
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="org.sola.clients.swing.ui.source.DocumentSeachPanel" name="documentSeachPanel">
+            <Component class="org.sola.clients.swing.ui.source.DocumentSearchPanel" name="documentSeachPanel">
               <Properties>
                 <Property name="name" type="java.lang.String" value="documentSeachPanel" noResource="true"/>
                 <Property name="showPrintButton" type="boolean" value="false"/>

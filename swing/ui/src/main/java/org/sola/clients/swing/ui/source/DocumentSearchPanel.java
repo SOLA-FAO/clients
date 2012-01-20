@@ -31,7 +31,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.JFormattedTextField;
 import org.jdesktop.application.Action;
+import org.sola.clients.beans.application.ApplicationServiceBean;
 import org.sola.clients.beans.digitalarchive.DocumentBean;
+import org.sola.clients.beans.referencedata.RequestTypeBean;
 import org.sola.clients.swing.common.controls.CalendarForm;
 import org.sola.clients.swing.ui.renderers.AttachedDocumentCellRenderer;
 import org.sola.clients.beans.source.SourceSearchParamsBean;
@@ -46,12 +48,12 @@ import org.sola.common.messaging.MessageUtility;
  * <p>The following list of beans is used to bind the data on the form:<br />
  * {@link SourceSearchResultsListBean},<br />{@link SourceSearchParamsBean}</p>
  */
-public class DocumentSeachPanel extends javax.swing.JPanel {
+public class DocumentSearchPanel extends javax.swing.JPanel {
 
     public static final String SELECTED_SOURCE = "selectedSource";
-    
+
     /** Default constructor to create form and initialize parameters. */
-    public DocumentSeachPanel() {
+    public DocumentSearchPanel() {
         initComponents();
         customizeComponents();
         customizePrintButton();
@@ -77,54 +79,55 @@ public class DocumentSeachPanel extends javax.swing.JPanel {
         menuPrint.setVisible(showPrintButton);
         separatorPrint.setVisible(showPrintButton);
     }
-    
+
     /** Enables or disables printing button.*/
-    private void customizePrintButton(){
+    private void customizePrintButton() {
         boolean enabled = false;
-        if(searchResultsList.getSelectedSource()!=null && 
-                searchResultsList.getSelectedSource().getArchiveDocumentId()!=null && 
-                searchResultsList.getSelectedSource().getArchiveDocumentId().length()>0){
+        if (searchResultsList.getSelectedSource() != null
+                && searchResultsList.getSelectedSource().getArchiveDocumentId() != null
+                && searchResultsList.getSelectedSource().getArchiveDocumentId().length() > 0) {
             enabled = true;
         }
         btnPrint.getAction().setEnabled(enabled);
+        btnOpen.getAction().setEnabled(enabled);
     }
-    
+
     /** Applies customization of component L&F. */
     private void customizeComponents() {
-   
+
 //    BUTTONS   
-    LafManager.getInstance().setBtnProperties(btnClear);
-    LafManager.getInstance().setBtnProperties(btnDateFrom);
-    LafManager.getInstance().setBtnProperties(btnDateTo);
-    LafManager.getInstance().setBtnProperties(btnSearch);
-    LafManager.getInstance().setBtnProperties(btnSubmissionDateFrom);
-    LafManager.getInstance().setBtnProperties(btnSubmissionDateTo);
-    
-    
+        LafManager.getInstance().setBtnProperties(btnClear);
+        LafManager.getInstance().setBtnProperties(btnDateFrom);
+        LafManager.getInstance().setBtnProperties(btnDateTo);
+        LafManager.getInstance().setBtnProperties(btnSearch);
+        LafManager.getInstance().setBtnProperties(btnSubmissionDateFrom);
+        LafManager.getInstance().setBtnProperties(btnSubmissionDateTo);
+
+
 //    COMBOBOXES
-    LafManager.getInstance().setCmbProperties(cbxSourceType);
-    
-    
+        LafManager.getInstance().setCmbProperties(cbxSourceType);
+
+
 //    LABELS    
-    LafManager.getInstance().setLabProperties(jLabel1);
-    LafManager.getInstance().setLabProperties(jLabel2);
-    LafManager.getInstance().setLabProperties(jLabel3);
-    LafManager.getInstance().setLabProperties(jLabel5);
-    LafManager.getInstance().setLabProperties(jLabel6);
-    LafManager.getInstance().setLabProperties(jLabel7);
-    LafManager.getInstance().setLabProperties(jLabel8);
-    LafManager.getInstance().setLabProperties(lblResults);
-   
+        LafManager.getInstance().setLabProperties(jLabel1);
+        LafManager.getInstance().setLabProperties(jLabel2);
+        LafManager.getInstance().setLabProperties(jLabel3);
+        LafManager.getInstance().setLabProperties(jLabel5);
+        LafManager.getInstance().setLabProperties(jLabel6);
+        LafManager.getInstance().setLabProperties(jLabel7);
+        LafManager.getInstance().setLabProperties(jLabel8);
+        LafManager.getInstance().setLabProperties(lblResults);
+
 //    TXT FIELDS
-    LafManager.getInstance().setTxtProperties(txtLaNr);
-    LafManager.getInstance().setTxtProperties(txtRefNumber);
-    
+        LafManager.getInstance().setTxtProperties(txtLaNr);
+        LafManager.getInstance().setTxtProperties(txtRefNumber);
+
 
 //    FORMATTED TXT
-    LafManager.getInstance().setFormattedTxtProperties(txtDateFrom);
-    LafManager.getInstance().setFormattedTxtProperties(txtDateTo);
-    LafManager.getInstance().setFormattedTxtProperties(txtSubmissionDateFrom);
-    LafManager.getInstance().setFormattedTxtProperties(txtSubmissionDateTo);
+        LafManager.getInstance().setFormattedTxtProperties(txtDateFrom);
+        LafManager.getInstance().setFormattedTxtProperties(txtDateTo);
+        LafManager.getInstance().setFormattedTxtProperties(txtSubmissionDateFrom);
+        LafManager.getInstance().setFormattedTxtProperties(txtSubmissionDateTo);
     }
 
     private void clearForm() {
@@ -147,10 +150,17 @@ public class DocumentSeachPanel extends javax.swing.JPanel {
     }
 
     @Action
-    public void print(){
-        DocumentBean.openDocument(searchResultsList.getSelectedSource().getArchiveDocumentId());
+    public void print() {
+        if (ApplicationServiceBean.saveInformationService(RequestTypeBean.CODE_DOCUMENT_COPY)) {
+            openDocument();
+        }
     }
     
+    @Action
+    public void openDocument() {
+        DocumentBean.openDocument(searchResultsList.getSelectedSource().getArchiveDocumentId());
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -160,6 +170,7 @@ public class DocumentSeachPanel extends javax.swing.JPanel {
         searchParams = new org.sola.clients.beans.source.SourceSearchParamsBean();
         sourceTypesList = new org.sola.clients.beans.source.SourceTypeListBean();
         popUpSearchResults = new javax.swing.JPopupMenu();
+        menuOpen = new javax.swing.JMenuItem();
         menuPrint = new javax.swing.JMenuItem();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblSearchResults = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
@@ -196,6 +207,7 @@ public class DocumentSeachPanel extends javax.swing.JPanel {
         txtDateFrom = new javax.swing.JFormattedTextField();
         btnDateFrom = new javax.swing.JButton();
         jToolBar1 = new javax.swing.JToolBar();
+        btnOpen = new javax.swing.JButton();
         btnPrint = new javax.swing.JButton();
         separatorPrint = new javax.swing.JToolBar.Separator();
         jLabel4 = new javax.swing.JLabel();
@@ -203,10 +215,16 @@ public class DocumentSeachPanel extends javax.swing.JPanel {
 
         popUpSearchResults.setName("popUpSearchResults"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(DocumentSeachPanel.class, this);
-        menuPrint.setAction(actionMap.get("print")); // NOI18N
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(DocumentSearchPanel.class, this);
+        menuOpen.setAction(actionMap.get("openDocument")); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/source/Bundle"); // NOI18N
-        menuPrint.setText(bundle.getString("DocumentSeachPanel.menuPrint.text")); // NOI18N
+        menuOpen.setText(bundle.getString("DocumentSearchPanel.menuOpen.text")); // NOI18N
+        menuOpen.setToolTipText(bundle.getString("DocumentSearchPanel.menuOpen.toolTipText")); // NOI18N
+        menuOpen.setName("menuOpen"); // NOI18N
+        popUpSearchResults.add(menuOpen);
+
+        menuPrint.setAction(actionMap.get("print")); // NOI18N
+        menuPrint.setText(bundle.getString("DocumentSearchPanel.menuPrint.text")); // NOI18N
         menuPrint.setName("menuPrint"); // NOI18N
         popUpSearchResults.add(menuPrint);
 
@@ -261,18 +279,18 @@ public class DocumentSeachPanel extends javax.swing.JPanel {
         tblSearchResults.getColumnModel().getColumn(0).setPreferredWidth(120);
         tblSearchResults.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("DocumentSeachPanel.tblSearchResults.columnModel.title5_1_1")); // NOI18N
         tblSearchResults.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("DocumentSeachPanel.tblSearchResults.columnModel.title0_1_1")); // NOI18N
-        tblSearchResults.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("DocumentSeachPanel.tblSearchResults.columnModel.title2_1")); // NOI18N
+        tblSearchResults.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("DocumentSearchPanel.tblSearchResults.columnModel.title2_1")); // NOI18N
         tblSearchResults.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("DocumentSeachPanel.tblSearchResults.columnModel.title1_1_1")); // NOI18N
         tblSearchResults.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("DocumentSeachPanel.tblSearchResults.columnModel.title3_1_1")); // NOI18N
         tblSearchResults.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("DocumentSeachPanel.tblSearchResults.columnModel.title4_1")); // NOI18N
         tblSearchResults.getColumnModel().getColumn(6).setPreferredWidth(30);
         tblSearchResults.getColumnModel().getColumn(6).setMaxWidth(30);
-        tblSearchResults.getColumnModel().getColumn(6).setHeaderValue(bundle.getString("DocumentSeachPanel.tblSearchResults.columnModel.title6_1")); // NOI18N
+        tblSearchResults.getColumnModel().getColumn(6).setHeaderValue(bundle.getString("DocumentSearchPanel.tblSearchResults.columnModel.title6_1")); // NOI18N
         tblSearchResults.getColumnModel().getColumn(6).setCellRenderer(new AttachedDocumentCellRenderer());
 
         jPanel9.setName("jPanel9"); // NOI18N
 
-        btnClear.setText(bundle.getString("DocumentSeachPanel.btnClear.text")); // NOI18N
+        btnClear.setText(bundle.getString("DocumentSearchPanel.btnClear.text")); // NOI18N
         btnClear.setName("btnClear"); // NOI18N
         btnClear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -280,7 +298,7 @@ public class DocumentSeachPanel extends javax.swing.JPanel {
             }
         });
 
-        btnSearch.setText(bundle.getString("DocumentSeachPanel.btnSearch.text")); // NOI18N
+        btnSearch.setText(bundle.getString("DocumentSearchPanel.btnSearch.text")); // NOI18N
         btnSearch.setName("btnSearch"); // NOI18N
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -322,7 +340,7 @@ public class DocumentSeachPanel extends javax.swing.JPanel {
         bindingGroup.addBinding(binding);
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12));
-        jLabel8.setText(bundle.getString("DocumentSeachPanel.jLabel8.text")); // NOI18N
+        jLabel8.setText(bundle.getString("DocumentSearchPanel.jLabel8.text")); // NOI18N
         jLabel8.setName("jLabel8"); // NOI18N
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
@@ -348,7 +366,7 @@ public class DocumentSeachPanel extends javax.swing.JPanel {
         jPanel7.setName("jPanel7"); // NOI18N
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 12));
-        jLabel3.setText(bundle.getString("DocumentSeachPanel.jLabel3.text")); // NOI18N
+        jLabel3.setText(bundle.getString("DocumentSearchPanel.jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
 
         txtLaNr.setName("txtLaNr"); // NOI18N
@@ -381,7 +399,7 @@ public class DocumentSeachPanel extends javax.swing.JPanel {
         jPanel8.setName("jPanel8"); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 12));
-        jLabel1.setText(bundle.getString("DocumentSeachPanel.jLabel1.text")); // NOI18N
+        jLabel1.setText(bundle.getString("DocumentSearchPanel.jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
 
         cbxSourceType.setName("cbxSourceType"); // NOI18N
@@ -420,14 +438,14 @@ public class DocumentSeachPanel extends javax.swing.JPanel {
         jPanel4.setName("jPanel4"); // NOI18N
 
         txtSubmissionDateFrom.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
-        txtSubmissionDateFrom.setText(bundle.getString("DocumentSeachPanel.txtSubmissionDateFrom.text")); // NOI18N
+        txtSubmissionDateFrom.setText(bundle.getString("DocumentSearchPanel.txtSubmissionDateFrom.text")); // NOI18N
         txtSubmissionDateFrom.setName("txtSubmissionDateFrom"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, searchParams, org.jdesktop.beansbinding.ELProperty.create("${fromSubmissionDate}"), txtSubmissionDateFrom, org.jdesktop.beansbinding.BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
 
         btnSubmissionDateFrom.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/calendar.png"))); // NOI18N
-        btnSubmissionDateFrom.setText(bundle.getString("DocumentSeachPanel.btnSubmissionDateFrom.text")); // NOI18N
+        btnSubmissionDateFrom.setText(bundle.getString("DocumentSearchPanel.btnSubmissionDateFrom.text")); // NOI18N
         btnSubmissionDateFrom.setBorder(null);
         btnSubmissionDateFrom.setName("btnSubmissionDateFrom"); // NOI18N
         btnSubmissionDateFrom.addActionListener(new java.awt.event.ActionListener() {
@@ -437,7 +455,7 @@ public class DocumentSeachPanel extends javax.swing.JPanel {
         });
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12));
-        jLabel2.setText(bundle.getString("DocumentSeachPanel.jLabel2.text")); // NOI18N
+        jLabel2.setText(bundle.getString("DocumentSearchPanel.jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -468,18 +486,18 @@ public class DocumentSeachPanel extends javax.swing.JPanel {
         jPanel5.setName("jPanel5"); // NOI18N
 
         jLabel5.setFont(new java.awt.Font("Arial", 0, 12));
-        jLabel5.setText(bundle.getString("DocumentSeachPanel.jLabel5.text")); // NOI18N
+        jLabel5.setText(bundle.getString("DocumentSearchPanel.jLabel5.text")); // NOI18N
         jLabel5.setName("jLabel5"); // NOI18N
 
         txtSubmissionDateTo.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
-        txtSubmissionDateTo.setText(bundle.getString("DocumentSeachPanel.txtSubmissionDateTo.text")); // NOI18N
+        txtSubmissionDateTo.setText(bundle.getString("DocumentSearchPanel.txtSubmissionDateTo.text")); // NOI18N
         txtSubmissionDateTo.setName("txtSubmissionDateTo"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, searchParams, org.jdesktop.beansbinding.ELProperty.create("${toSubmissionDate}"), txtSubmissionDateTo, org.jdesktop.beansbinding.BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
 
         btnSubmissionDateTo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/calendar.png"))); // NOI18N
-        btnSubmissionDateTo.setText(bundle.getString("DocumentSeachPanel.btnSubmissionDateTo.text")); // NOI18N
+        btnSubmissionDateTo.setText(bundle.getString("DocumentSearchPanel.btnSubmissionDateTo.text")); // NOI18N
         btnSubmissionDateTo.setBorder(null);
         btnSubmissionDateTo.setName("btnSubmissionDateTo"); // NOI18N
         btnSubmissionDateTo.addActionListener(new java.awt.event.ActionListener() {
@@ -515,18 +533,18 @@ public class DocumentSeachPanel extends javax.swing.JPanel {
         jPanel3.setName("jPanel3"); // NOI18N
 
         jLabel6.setFont(new java.awt.Font("Arial", 0, 12));
-        jLabel6.setText(bundle.getString("DocumentSeachPanel.jLabel6.text")); // NOI18N
+        jLabel6.setText(bundle.getString("DocumentSearchPanel.jLabel6.text")); // NOI18N
         jLabel6.setName("jLabel6"); // NOI18N
 
         txtDateTo.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
-        txtDateTo.setText(bundle.getString("DocumentSeachPanel.txtDateTo.text")); // NOI18N
+        txtDateTo.setText(bundle.getString("DocumentSearchPanel.txtDateTo.text")); // NOI18N
         txtDateTo.setName("txtDateTo"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, searchParams, org.jdesktop.beansbinding.ELProperty.create("${toRecordationDate}"), txtDateTo, org.jdesktop.beansbinding.BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
 
         btnDateTo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/calendar.png"))); // NOI18N
-        btnDateTo.setText(bundle.getString("DocumentSeachPanel.btnDateTo.text")); // NOI18N
+        btnDateTo.setText(bundle.getString("DocumentSearchPanel.btnDateTo.text")); // NOI18N
         btnDateTo.setBorder(null);
         btnDateTo.setName("btnDateTo"); // NOI18N
         btnDateTo.addActionListener(new java.awt.event.ActionListener() {
@@ -562,18 +580,18 @@ public class DocumentSeachPanel extends javax.swing.JPanel {
         jPanel2.setName("jPanel2"); // NOI18N
 
         jLabel7.setFont(new java.awt.Font("Arial", 0, 12));
-        jLabel7.setText(bundle.getString("DocumentSeachPanel.jLabel7.text")); // NOI18N
+        jLabel7.setText(bundle.getString("DocumentSearchPanel.jLabel7.text")); // NOI18N
         jLabel7.setName("jLabel7"); // NOI18N
 
         txtDateFrom.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
-        txtDateFrom.setText(bundle.getString("DocumentSeachPanel.txtDateFrom.text")); // NOI18N
+        txtDateFrom.setText(bundle.getString("DocumentSearchPanel.txtDateFrom.text")); // NOI18N
         txtDateFrom.setName("txtDateFrom"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, searchParams, org.jdesktop.beansbinding.ELProperty.create("${fromRecordationDate}"), txtDateFrom, org.jdesktop.beansbinding.BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
 
         btnDateFrom.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/calendar.png"))); // NOI18N
-        btnDateFrom.setText(bundle.getString("DocumentSeachPanel.btnDateFrom.text")); // NOI18N
+        btnDateFrom.setText(bundle.getString("DocumentSearchPanel.btnDateFrom.text")); // NOI18N
         btnDateFrom.setBorder(null);
         btnDateFrom.setName("btnDateFrom"); // NOI18N
         btnDateFrom.addActionListener(new java.awt.event.ActionListener() {
@@ -612,9 +630,18 @@ public class DocumentSeachPanel extends javax.swing.JPanel {
         jToolBar1.setRollover(true);
         jToolBar1.setName("jToolBar1"); // NOI18N
 
+        btnOpen.setAction(actionMap.get("openDocument")); // NOI18N
+        btnOpen.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnOpen.setText(bundle.getString("DocumentSearchPanel.btnOpen.text")); // NOI18N
+        btnOpen.setFocusable(false);
+        btnOpen.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnOpen.setName("btnOpen"); // NOI18N
+        btnOpen.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnOpen);
+
         btnPrint.setAction(actionMap.get("print")); // NOI18N
-        btnPrint.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        btnPrint.setText(bundle.getString("DocumentSeachPanel.btnPrint.text")); // NOI18N
+        btnPrint.setFont(new java.awt.Font("Tahoma", 0, 12));
+        btnPrint.setText(bundle.getString("DocumentSearchPanel.btnPrint.text")); // NOI18N
         btnPrint.setFocusable(false);
         btnPrint.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnPrint.setName("btnPrint"); // NOI18N
@@ -625,12 +652,12 @@ public class DocumentSeachPanel extends javax.swing.JPanel {
         jToolBar1.add(separatorPrint);
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 12));
-        jLabel4.setText(bundle.getString("DocumentSeachPanel.jLabel4.text")); // NOI18N
+        jLabel4.setText(bundle.getString("DocumentSearchPanel.jLabel4.text")); // NOI18N
         jLabel4.setName("jLabel4"); // NOI18N
         jToolBar1.add(jLabel4);
 
         lblResults.setFont(new java.awt.Font("Arial", 1, 12));
-        lblResults.setText(bundle.getString("DocumentSeachPanel.lblResults.text")); // NOI18N
+        lblResults.setText(bundle.getString("DocumentSearchPanel.lblResults.text")); // NOI18N
         lblResults.setName("lblResults"); // NOI18N
         jToolBar1.add(lblResults);
 
@@ -690,13 +717,14 @@ public class DocumentSeachPanel extends javax.swing.JPanel {
 
     private void tblSearchResultsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSearchResultsMouseClicked
         if (evt.getClickCount() == 2) {
-            searchResultsList.openAttachment();
+            openDocument();
         }
     }//GEN-LAST:event_tblSearchResultsMouseClicked
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnDateFrom;
     private javax.swing.JButton btnDateTo;
+    private javax.swing.JButton btnOpen;
     private javax.swing.JButton btnPrint;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnSubmissionDateFrom;
@@ -725,6 +753,7 @@ public class DocumentSeachPanel extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel lblResults;
+    private javax.swing.JMenuItem menuOpen;
     private javax.swing.JMenuItem menuPrint;
     private javax.swing.JPopupMenu popUpSearchResults;
     private org.sola.clients.beans.source.SourceSearchParamsBean searchParams;

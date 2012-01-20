@@ -53,6 +53,9 @@ public class RequestTypeBean extends AbstractCodeBean {
     public static final String CODE_NEW_FREEHOLD = "newFreehold";
     public static final String CODE_NEW_OWNERSHIP = "newOwnership";
     public static final String CODE_NEW_STATE = "newState";
+    public static final String CODE_TITLE_SERACH = "titleSearch";
+    public static final String CODE_DOCUMENT_COPY = "documentCopy";
+    public static final String CODE_SERVICE_ENQUIRY = "serviceEnquiry";
     
     public static final String NR_DAYS_TO_COMPLETE_PROPERTY = "nrDaysToComplete";
     public static final String NR_PROPERTIES_REQUIRED_PROPERTY = "nrPropertiesRequired";

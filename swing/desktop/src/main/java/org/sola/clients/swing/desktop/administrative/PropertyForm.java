@@ -45,6 +45,7 @@ import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationServiceBean;
 import org.sola.clients.beans.cadastre.CadastreObjectBean;
 import org.sola.clients.beans.converters.TypeConverters;
+import org.sola.clients.beans.referencedata.RequestTypeBean;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForBaUnit;
 import org.sola.clients.beans.referencedata.RrrTypeActionConstants;
 import org.sola.clients.beans.referencedata.RrrTypeBean;
@@ -536,8 +537,10 @@ public class PropertyForm extends javax.swing.JFrame {
     /** Prints BA unit certificate. */
     @Action
     public void print() {
-        showReport(ReportManager.getBaUnitReport(getBaUnit(
-                baUnitBean1.getNameFirstpart(), baUnitBean1.getNameLastpart())));
+        if (ApplicationServiceBean.saveInformationService(RequestTypeBean.CODE_TITLE_SERACH)) {
+            showReport(ReportManager.getBaUnitReport(getBaUnit(
+                    baUnitBean1.getNameFirstpart(), baUnitBean1.getNameLastpart())));
+        }
     }
 
     /** Links document as a paper title on the BaUnit object. */

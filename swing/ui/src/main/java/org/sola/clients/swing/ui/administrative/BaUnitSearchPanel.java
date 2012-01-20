@@ -28,11 +28,8 @@
 package org.sola.clients.swing.ui.administrative;
 
 import java.awt.event.MouseEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import org.jdesktop.application.Action;
 import org.sola.clients.beans.administrative.BaUnitSearchResultBean;
-import org.sola.clients.beans.administrative.BaUnitSearchResultListBean;
 import org.sola.clients.swing.ui.renderers.CellDelimitedListRenderer;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -47,15 +44,6 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
     /** Default constructor. */
     public BaUnitSearchPanel() {
         initComponents();
-        baUnitSearchResults.addPropertyChangeListener(new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                if(evt.getPropertyName().equals(BaUnitSearchResultListBean.SELECTED_BAUNIT_SEARCH_RESULT_PROPERTY)){
-                    firePropertyChange(BaUnitSearchResultListBean.SELECTED_BAUNIT_SEARCH_RESULT_PROPERTY, 
-                            evt.getOldValue(), evt.getNewValue());
-                }
-            }
-        });
     }
 
     /** Indicates whether open button is shown or not. */

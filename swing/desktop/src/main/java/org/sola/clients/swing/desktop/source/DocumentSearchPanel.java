@@ -46,7 +46,7 @@ public class DocumentSearchPanel extends ContentPanel {
 
         headerPanel1 = new org.sola.clients.swing.ui.HeaderPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        documentSeachPanel1 = new org.sola.clients.swing.ui.source.DocumentSeachPanel();
+        documentSeachPanel1 = new org.sola.clients.swing.ui.source.DocumentSearchPanel();
 
         setName("Form"); // NOI18N
 
@@ -80,7 +80,7 @@ public class DocumentSearchPanel extends ContentPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private org.sola.clients.swing.ui.source.DocumentSeachPanel documentSeachPanel1;
+    private org.sola.clients.swing.ui.source.DocumentSearchPanel documentSeachPanel1;
     private org.sola.clients.swing.ui.HeaderPanel headerPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
