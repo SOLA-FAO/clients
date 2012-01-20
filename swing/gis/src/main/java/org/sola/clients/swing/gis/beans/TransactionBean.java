@@ -33,54 +33,56 @@ package org.sola.clients.swing.gis.beans;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.beans.validation.ValidationResultBean;
-import org.sola.clients.swing.gis.to.TransactionCadastreRedefinitionExtraTO;
 import org.sola.common.MappingManager;
-import org.sola.clients.swing.gis.data.PojoDataAccess;
-import org.sola.clients.swing.gis.to.TransactionCadastreChangeExtraTO;
-import org.sola.webservices.transferobjects.transaction.TransactionCadastreChangeTO;
-import org.sola.webservices.transferobjects.transaction.TransactionCadastreRedefinitionTO;
+import org.sola.webservices.transferobjects.transaction.TransactionTO;
 
 /**
  *
  * @author Elton Manoku
  */
-public class TransactionCadastreRedefinitionBean extends TransactionBean{
+public abstract class TransactionBean extends AbstractGisBean{
     
-    private List<CadastreObjectTargetRedefinitionBean> cadastreObjectTargetList = 
-            new ArrayList<CadastreObjectTargetRedefinitionBean>();
+    private String fromServiceId;
+    List<TransactionSourceBean> transactionSourceList = new ArrayList<TransactionSourceBean>();
 
-    private List<CadastreObjectNodeTargetBean> cadastreObjectNodeTargetList = 
-            new ArrayList<CadastreObjectNodeTargetBean>();
-
-    public List<CadastreObjectNodeTargetBean> getCadastreObjectNodeTargetList() {
-        return cadastreObjectNodeTargetList;
+    public String getFromServiceId() {
+        return fromServiceId;
     }
 
-    public void setCadastreObjectNodeTargetList(List<CadastreObjectNodeTargetBean> cadastreObjectNodeTargetList) {
-        this.cadastreObjectNodeTargetList = cadastreObjectNodeTargetList;
+    public void setFromServiceId(String fromServiceId) {
+        this.fromServiceId = fromServiceId;
     }
 
-    public List<CadastreObjectTargetRedefinitionBean> getCadastreObjectTargetList() {
-        return cadastreObjectTargetList;
+
+    public List<TransactionSourceBean> getTransactionSourceList() {
+        return transactionSourceList;
     }
 
-    public void setCadastreObjectTargetList(List<CadastreObjectTargetRedefinitionBean> cadastreObjectTargetList) {
-        this.cadastreObjectTargetList = cadastreObjectTargetList;
+    public void setTransactionSourceList(List<TransactionSourceBean> transactionSourceList) {
+        this.transactionSourceList = transactionSourceList;
+    }
+
+        
+
+    public List<String> getSourceIdList(){
+        List<String> sourceIdList = new ArrayList<String>();
+        for(TransactionSourceBean bean: this.getTransactionSourceList()){
+            sourceIdList.add(bean.getSourceId());
+        }
+        return sourceIdList;
     }
     
-    @Override
-    public TransactionCadastreRedefinitionTO getTO(){
-        TransactionCadastreRedefinitionExtraTO to = new TransactionCadastreRedefinitionExtraTO();
-        MappingManager.getMapper().map(this, to);
-        return to;
+    public void setSourceIdList(List<String> sourceIdList){
+        this.transactionSourceList = new ArrayList<TransactionSourceBean>();
+        for(String sourceId: sourceIdList){
+            TransactionSourceBean bean = new TransactionSourceBean();
+            bean.setSourceId(sourceId);
+            this.transactionSourceList.add(bean);
+        }
     }
     
-    @Override
-    public List<ValidationResultBean> save(){        
-        return TypeConverters.TransferObjectListToBeanList(
-                PojoDataAccess.getInstance().getCadastreService().saveTransactionCadastreRedefinition(
-                this.getTO()), ValidationResultBean.class, null);
-    }
+    public abstract <T extends TransactionTO> T getTO();
+    
+    public abstract List<ValidationResultBean> save();
 }

@@ -32,32 +32,28 @@
 package org.sola.clients.swing.gis.to;
 
 import java.util.List;
-import org.sola.webservices.transferobjects.cadastre.CadastreObjectTargetTO;
-import org.sola.webservices.transferobjects.cadastre.SurveyPointTO;
+import org.sola.webservices.transferobjects.cadastre.CadastreObjectNodeTargetTO;
+import org.sola.webservices.transferobjects.cadastre.CadastreObjectTargetRedefinitionTO;
 import org.sola.webservices.transferobjects.transaction.TransactionSourceTO;
 
 /**
  *
  * @author Elton Manoku
  */
-public class TransactionCadastreChangeExtraTO 
-extends org.sola.webservices.transferobjects.transaction.TransactionCadastreChangeTO{
-
-    public void setCadastreObjectList(List<CadastreObjectExtraTO> newCadastreObjectList) {
-        for(CadastreObjectExtraTO coExtraTO: newCadastreObjectList){
-            this.cadastreObjectList.add(coExtraTO);
-        }
-    }
+public class TransactionCadastreRedefinitionExtraTO 
+extends org.sola.webservices.transferobjects.transaction.TransactionCadastreRedefinitionTO{
     
     public void setTransactionSourceList(List<TransactionSourceTO> transactionSourceList) {
         this.transactionSourceList = transactionSourceList;
     }
 
-    public void setSurveyPointList(List<SurveyPointTO> surveyPointList) {
-        this.surveyPointList = surveyPointList;
+    public void setCadastreObjectTargetList(
+            List<CadastreObjectTargetRedefinitionTO> cadastreObjectTargetList) {
+        this.cadastreObjectTargetList = cadastreObjectTargetList;
     }
 
-    public void setCadastreObjectTargetList(List<CadastreObjectTargetTO> cadastreObjectTargetList) {
-        this.cadastreObjectTargetList = cadastreObjectTargetList;
+    public void setCadastreObjectNodeTargetList(
+            List<CadastreObjectNodeTargetTO> cadastreObjectNodeTargetList) {
+        this.cadastreObjectNodeTargetList = cadastreObjectNodeTargetList;
     }
 }

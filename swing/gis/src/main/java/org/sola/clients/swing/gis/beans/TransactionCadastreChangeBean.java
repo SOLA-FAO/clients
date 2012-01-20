@@ -44,22 +44,12 @@ import org.sola.webservices.transferobjects.transaction.TransactionCadastreChang
  *
  * @author manoku
  */
-public class TransactionCadastreChangeBean extends AbstractGisBean{
+public class TransactionCadastreChangeBean extends TransactionBean{
     
-    private String fromServiceId;
     private List<CadastreObjectBean> cadastreObjectList = new ArrayList<CadastreObjectBean>();
     private List<CadastreObjectTargetBean> cadastreObjectTargetList = 
             new ArrayList<CadastreObjectTargetBean>();
     private List<SurveyPointBean> surveyPointList = new ArrayList<SurveyPointBean>();
-    List<TransactionSourceBean> transactionSourceList = new ArrayList<TransactionSourceBean>();
-
-    public String getFromServiceId() {
-        return fromServiceId;
-    }
-
-    public void setFromServiceId(String fromServiceId) {
-        this.fromServiceId = fromServiceId;
-    }
 
     public List<CadastreObjectBean> getCadastreObjectList() {
         return cadastreObjectList;
@@ -76,15 +66,6 @@ public class TransactionCadastreChangeBean extends AbstractGisBean{
     public void setCadastreObjectTargetList(List<CadastreObjectTargetBean> cadastreObjectTargetList) {
         this.cadastreObjectTargetList = cadastreObjectTargetList;
     }
-
-    public List<TransactionSourceBean> getTransactionSourceList() {
-        return transactionSourceList;
-    }
-
-    public void setTransactionSourceList(List<TransactionSourceBean> transactionSourceList) {
-        this.transactionSourceList = transactionSourceList;
-    }
-
     
     public List<SurveyPointBean> getSurveyPointList() {
         return surveyPointList;
@@ -93,34 +74,18 @@ public class TransactionCadastreChangeBean extends AbstractGisBean{
     public void setSurveyPointList(List<SurveyPointBean> surveyPointList) {
         this.surveyPointList = surveyPointList;
     }
-    
-
-    public List<String> getSourceIdList(){
-        List<String> sourceIdList = new ArrayList<String>();
-        for(TransactionSourceBean bean: this.getTransactionSourceList()){
-            sourceIdList.add(bean.getSourceId());
-        }
-        return sourceIdList;
-    }
-    
-    public void setSourceIdList(List<String> sourceIdList){
-        this.transactionSourceList = new ArrayList<TransactionSourceBean>();
-        for(String sourceId: sourceIdList){
-            TransactionSourceBean bean = new TransactionSourceBean();
-            bean.setSourceId(sourceId);
-            this.transactionSourceList.add(bean);
-        }
-    }
-    
+     
+    @Override
     public TransactionCadastreChangeTO getTO(){
         TransactionCadastreChangeExtraTO to = new TransactionCadastreChangeExtraTO();
         MappingManager.getMapper().map(this, to);
         return to;
     }
     
-    public List<ValidationResultBean> save(){        
+    @Override
+    public List<ValidationResultBean> save(){
         return TypeConverters.TransferObjectListToBeanList(
-                PojoDataAccess.getInstance().getCadastreService().saveTransactionCadastreChange(this.getTO()), 
-                ValidationResultBean.class, null);
+                PojoDataAccess.getInstance().getCadastreService().saveTransactionCadastreChange(
+                this.getTO()), ValidationResultBean.class, null);
     }
 }
