@@ -126,7 +126,7 @@ public class Development {
         SecurityBean.authenticate("test", "test".toCharArray(), this.getWSConfig());
 
         TransactionCadastreChangeBean cadastreChangeBean =
-                PojoDataAccess.getInstance().getCadastreChange("4000");
+                PojoDataAccess.getInstance().getTransactionCadastreChange("4001");
         ControlsBundleForCadastreChange ctrl =
                 new ControlsBundleForCadastreChange("333", cadastreChangeBean, "3068323", null);
         ctrl.getMap().addMapAction(new TestCadastreTransactionChange(ctrl), ctrl.getToolbar());
@@ -134,6 +134,7 @@ public class Development {
         this.displayControlsBundleForm(ctrl);
     }
 
+    //@Ignore
     @Test
     public void testUIControlsBundleForCadastreRedefinition() throws Exception {
         System.out.println("Test ControlsBundle for cadastre redefinition");
@@ -141,11 +142,9 @@ public class Development {
         SecurityBean.authenticate("test", "test".toCharArray(), this.getWSConfig());
 
         TransactionCadastreRedefinitionBean transactionBean =
-                new TransactionCadastreRedefinitionBean();
-        transactionBean.setFromServiceId("4000");
-        //        PojoDataAccess.getInstance().getCadastreChange("4000");
+                  PojoDataAccess.getInstance().getTransactionCadastreRedefinition("4000");
         ControlsBundleForCadastreRedefinition ctrl =
-                new ControlsBundleForCadastreRedefinition(transactionBean, null);
+                new ControlsBundleForCadastreRedefinition(transactionBean, "3068323", null);
         ctrl.getMap().addMapAction(new TestCadastreTransactionRedefinition(ctrl), ctrl.getToolbar());
         this.displayControlsBundleForm(ctrl);
     }

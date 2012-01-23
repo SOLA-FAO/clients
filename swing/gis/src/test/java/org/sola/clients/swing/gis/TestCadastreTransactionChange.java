@@ -51,7 +51,7 @@ public class TestCadastreTransactionChange extends ExtendedAction{
     
     @Override
     public void onClick(){
-        TransactionCadastreChangeBean bean = ctrl.getCadastreChangeBean();
+        TransactionCadastreChangeBean bean = ctrl.getTransactionBean();
         
         TransactionCadastreChangeTO to = bean.getTO();
         System.out.println("Number of survey points: " + to.getSurveyPointList().size());

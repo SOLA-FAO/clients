@@ -50,67 +50,35 @@ import org.sola.common.messaging.GisMessage;
  *
  * @author Elton Manoku
  */
-public final class ControlsBundleForCadastreRedefinition extends ControlsBundleForWorkingWithCO {
+public final class ControlsBundleForCadastreRedefinition extends ControlsBundleForTransaction {
 
     private TransactionCadastreRedefinitionBean transactionBean;
     private CadastreObjectNodeModifiedLayer cadastreObjectNodeModifiedLayer = null;
     private CadastreObjectModifiedLayer cadastreObjectModifiedLayer = null;
-    private PojoLayer pendingLayer = null;
 
     public ControlsBundleForCadastreRedefinition(
             TransactionCadastreRedefinitionBean transactionBean,
+            String baUnitId,
             byte[] applicationLocation) {
         super();
         this.transactionBean = transactionBean;
+        if (this.transactionBean == null) {
+            this.transactionBean = new TransactionCadastreRedefinitionBean();
+        }
         this.Setup(PojoDataAccess.getInstance());
-
-        ReferencedEnvelope boundsToZoom = null;
-        if (applicationLocation != null) {
-            try {
-                Geometry applicationLocationGeometry =
-                        PojoFeatureSource.getWkbReader().read(applicationLocation);
-                boundsToZoom = JTS.toEnvelope(applicationLocationGeometry);
-            } catch (Exception ex) {
-                Messaging.getInstance().show(GisMessage.CADASTRE_CHANGE_ERROR_SETUP);
-                org.sola.common.logging.LogUtility.log(GisMessage.CADASTRE_CHANGE_ERROR_SETUP, ex);
-            }
-        }
-        if (boundsToZoom != null) {
-            boundsToZoom.expandBy(20);
-            this.getMap().setDisplayArea(boundsToZoom);
-        }
+        this.zoomToInterestingArea(null, applicationLocation);
     }
 
     @Override
-    public void Setup(PojoDataAccess pojoDataAccess) {
-        super.Setup(pojoDataAccess);
-        try {
-
-            if (this.transactionBean == null) {
-                this.transactionBean = new TransactionCadastreRedefinitionBean();
-            }
-
-            //Adding layers
-            this.addLayers();
-
-            //Adding tools and commands
-            this.addToolsAndCommands();
-
-            for (ExtendedLayer solaLayer : this.getMap().getSolaLayers().values()) {
-                if (solaLayer.getClass().equals(PojoLayer.class)) {
-                    if (((PojoLayer) solaLayer).getConfig().getId().equals(
-                            PojoLayer.CONFIG_PENDING_PARCELS_LAYER_NAME)) {
-                        this.pendingLayer = (PojoLayer) solaLayer;
-                        break;
-                    }
-                }
-            }
-        } catch (Exception ex) {
-            Messaging.getInstance().show(GisMessage.CADASTRE_CHANGE_ERROR_SETUP);
-            org.sola.common.logging.LogUtility.log(GisMessage.CADASTRE_CHANGE_ERROR_SETUP, ex);
+    protected void zoomToInterestingArea(
+            ReferencedEnvelope interestingArea, byte[] applicationLocation) {
+        if (this.cadastreObjectModifiedLayer.getFeatureCollection().size() > 0) {
+            interestingArea = this.cadastreObjectModifiedLayer.getFeatureCollection().getBounds();
         }
+        super.zoomToInterestingArea(interestingArea, applicationLocation);
     }
 
+    @Override
     public TransactionCadastreRedefinitionBean getTransactionBean() {
         this.transactionBean.setCadastreObjectNodeTargetList(
                 this.cadastreObjectNodeModifiedLayer.getNodeTargetList());
@@ -119,31 +87,39 @@ public final class ControlsBundleForCadastreRedefinition extends ControlsBundleF
         return this.transactionBean;
     }
 
-    private void addLayers() throws Exception {
+    @Override
+    protected void addLayers() throws Exception {
         this.cadastreObjectModifiedLayer = new CadastreObjectModifiedLayer();
         this.getMap().addLayer(this.cadastreObjectModifiedLayer);
+
+        this.cadastreObjectModifiedLayer.addCadastreObjectTargetList(
+                this.transactionBean.getCadastreObjectTargetList());
+
         this.cadastreObjectNodeModifiedLayer = new CadastreObjectNodeModifiedLayer();
         this.getMap().addLayer(this.cadastreObjectNodeModifiedLayer);
-    }
-
-    private void addToolsAndCommands() {
-        this.getMap().addTool(
-                new AddNodeTool(
-                        this.getPojoDataAccess(), 
-                        this.cadastreObjectNodeModifiedLayer,
-                        this.cadastreObjectModifiedLayer), 
-                this.getToolbar());
-        this.getMap().addTool(
-                new ModifyExistingNodeTool(
-                        this.getPojoDataAccess(), 
-                        this.cadastreObjectNodeModifiedLayer,
-                        this.cadastreObjectModifiedLayer), 
-                this.getToolbar());
+        
+        this.cadastreObjectNodeModifiedLayer.addNodeTargetList(
+                this.transactionBean.getCadastreObjectNodeTargetList());
     }
 
     @Override
-    public void refresh(boolean force) {
-        this.pendingLayer.setForceRefresh(force);
-        super.refresh(force);
+    protected void addToolsAndCommands() {
+        this.getMap().addTool(
+                new AddNodeTool(
+                this.getPojoDataAccess(),
+                this.cadastreObjectNodeModifiedLayer,
+                this.cadastreObjectModifiedLayer),
+                this.getToolbar());
+        this.getMap().addTool(
+                new ModifyExistingNodeTool(
+                this.getPojoDataAccess(),
+                this.cadastreObjectNodeModifiedLayer,
+                this.cadastreObjectModifiedLayer),
+                this.getToolbar());
+    }
+    
+    public void reset() throws Exception{
+        this.cadastreObjectModifiedLayer.removeFeatures();
+        this.cadastreObjectNodeModifiedLayer.removeFeatures();
     }
 }

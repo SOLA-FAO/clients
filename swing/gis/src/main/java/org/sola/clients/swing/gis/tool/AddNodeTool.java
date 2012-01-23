@@ -6,20 +6,15 @@ package org.sola.clients.swing.gis.tool;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.CoordinateList;
-import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.LinearRing;
 import com.vividsolutions.jts.geom.Polygon;
-import com.vividsolutions.jts.io.WKBWriter;
-import com.vividsolutions.jts.linearref.LengthIndexedLine;
 import com.vividsolutions.jts.linearref.LinearLocation;
 import com.vividsolutions.jts.linearref.LocationIndexedLine;
-import org.geotools.data.simple.SimpleFeatureIterator;
-import org.geotools.feature.FeatureCollection;
+import java.util.ArrayList;
+import java.util.List;
 import org.geotools.geometry.Envelope2D;
-import org.geotools.geometry.jts.ReferencedEnvelope;
-import org.geotools.swing.event.MapMouseEvent;
 import org.opengis.feature.simple.SimpleFeature;
 import org.sola.clients.swing.gis.beans.CadastreObjectBean;
 import org.sola.clients.swing.gis.beans.CadastreObjectNodeBean;
@@ -59,16 +54,22 @@ public class AddNodeTool extends ModifierNodeTool {
         }
         CadastreObjectNodeBean nodeBean = MappingManager.getMapper().map(
                 new CadastreObjectNodeExtraTO(nodeTO), CadastreObjectNodeBean.class);
-        this.cadastreObjectNodeModifiedLayer.addNodeObject(nodeBean);
+        SimpleFeature nodeFeature = this.cadastreObjectNodeModifiedLayer.addNodeTarget(
+                    nodeBean.getId(), nodeBean.getGeom());
         this.cadastreObjectModifiedLayer.addCadastreObjects(nodeBean.getCadastreObjectList());
         this.getMapControl().refresh();
-        this.getNodeList().add(nodeBean);
-        SimpleFeature nodeFeature = this.getFirstNodeFeature(env);
+        //this.getNodeList().add(nodeBean);
+        //SimpleFeature nodeFeature = this.getFirstNodeFeature(env);
 
-        if (nodeFeature == null) {
-            return;
+        //if (nodeFeature == null) {
+        //    return;
+        //}
+        List<String> cadastreObjectTargetIds = new ArrayList<String>();
+        for(CadastreObjectBean coBean: nodeBean.getCadastreObjectList()){
+            cadastreObjectTargetIds.add(coBean.getId());
         }
-        this.insertNode(nodeFeature);
+                
+        this.insertNode(nodeFeature, cadastreObjectTargetIds);
         this.manipulateNode(nodeFeature);
     }
 
@@ -79,34 +80,36 @@ public class AddNodeTool extends ModifierNodeTool {
                 this.getMapControl().getSrid());
     }
 
-    private void insertNode(SimpleFeature nodeFeature) {
-        CadastreObjectNodeBean nodeBean = this.getNode(nodeFeature);
-        if (nodeBean == null) {
-            throw new RuntimeException(GisMessage.CADASTRE_REDEFINITION_NODE_NOTFOUND);
-        }
+    private void insertNode(SimpleFeature nodeFeature, List<String> cadastreObjectTargetIds) {
+//        CadastreObjectNodeBean nodeBean = this.getNode(nodeFeature);
+//        if (nodeBean == null) {
+//            throw new RuntimeException(GisMessage.CADASTRE_REDEFINITION_NODE_NOTFOUND);
+//        }
 
         Geometry nodeFeatureGeom = (Geometry) nodeFeature.getDefaultGeometry();
         Coordinate coordinate = nodeFeatureGeom.getCoordinate();
-
-        for (CadastreObjectBean cadastreObjectBean : nodeBean.getCadastreObjectList()) {
-            SimpleFeature cadastreObjectFeature =
+        for(String cadastreObjectTargetId:cadastreObjectTargetIds){
+            SimpleFeature cadastreObjectFeature= 
                     this.cadastreObjectModifiedLayer.getFeatureCollection().getFeature(
-                    cadastreObjectBean.getId());
-            if (cadastreObjectFeature == null) {
+                    cadastreObjectTargetId);
+            if (cadastreObjectFeature == null){
                 continue;
             }
-
             Polygon cadastreObjectGeom = (Polygon) cadastreObjectFeature.getDefaultGeometry();
             LinearRing exteriorRing = this.insertCoordinateInRing(
                     cadastreObjectGeom.getExteriorRing(), coordinate);
 
             LinearRing[] interiorRings = new LinearRing[cadastreObjectGeom.getNumInteriorRing()];
-            for (int interiorRingIndex = 0; interiorRingIndex < interiorRings.length; interiorRingIndex++) {
+            for (
+                    int interiorRingIndex = 0; 
+                    interiorRingIndex < interiorRings.length; 
+                    interiorRingIndex++) {
                 interiorRings[interiorRingIndex] = this.insertCoordinateInRing(
                         cadastreObjectGeom.getInteriorRingN(interiorRingIndex), coordinate);
             }
 
-            cadastreObjectGeom = this.cadastreObjectModifiedLayer.getGeometryFactory().createPolygon(
+            cadastreObjectGeom = 
+                    this.cadastreObjectModifiedLayer.getGeometryFactory().createPolygon(
                     exteriorRing, interiorRings);
             cadastreObjectFeature.setDefaultGeometry(cadastreObjectGeom);
             cadastreObjectGeom.geometryChanged();
