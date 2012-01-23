@@ -61,6 +61,7 @@ import org.sola.clients.beans.source.SourceListBean;
 import org.sola.clients.reports.ReportManager;
 import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.desktop.ReportViewerForm;
+import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.common.RolesConstants;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -70,7 +71,7 @@ import org.sola.webservices.transferobjects.administrative.BaUnitTO;
  * This form is used to manage property object ({@codeBaUnit}). 
  * {@link BaUnitBean} is used to bind data on the form.
  */
-public class PropertyForm extends javax.swing.JFrame {
+public class PropertyPanel extends ContentPanel {
 
     /** 
      * Listens for events of different right forms, to add created right into 
@@ -87,6 +88,7 @@ public class PropertyForm extends javax.swing.JFrame {
             }
         }
     }
+    
     private ApplicationBean applicationBean;
     private ApplicationServiceBean applicationService;
     private String baUnitID;
@@ -95,6 +97,7 @@ public class PropertyForm extends javax.swing.JFrame {
     private ControlsBundleForBaUnit mapControl = null;
     private ApplicationDocumentsForm applicationDocumentsForm;
     private boolean readOnly = false;
+    java.util.ResourceBundle resourceBundle;
 
     /** Creates {@link BaUnitBean} used to bind form components. */
     private BaUnitBean createBaUnitBean() {
@@ -135,11 +138,11 @@ public class PropertyForm extends javax.swing.JFrame {
     }
 
     /** 
-     * Form constructor. Creates form in read only mode.
+     * Form constructor. Creates and open form in read only mode.
      * @param nameFirstPart First part of the property code.
      * @param nameLastPart Last part of the property code.
      */
-    public PropertyForm(String nameFirstPart, String nameLastPart) {
+    public PropertyPanel(String nameFirstPart, String nameLastPart) {
         this(null, null, nameFirstPart, nameLastPart, true);
     }
 
@@ -151,8 +154,9 @@ public class PropertyForm extends javax.swing.JFrame {
      * to determine what actions should be taken on this form.
      * @param nameFirstPart First part of the property code.
      * @param nameLastPart Last part of the property code.
+     * @param readOnly If true, opens form in read only mode.
      */
-    public PropertyForm(ApplicationBean applicationBean,
+    public PropertyPanel(ApplicationBean applicationBean,
             ApplicationServiceBean applicationService,
             String nameFirstPart, String nameLastPart, boolean readOnly) {
 
@@ -161,7 +165,7 @@ public class PropertyForm extends javax.swing.JFrame {
         this.applicationService = applicationService;
         this.nameFirstPart = nameFirstPart;
         this.nameLastPart = nameLastPart;
-
+        resourceBundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle");
         initComponents();
         customizeForm();
     }
@@ -173,9 +177,11 @@ public class PropertyForm extends javax.swing.JFrame {
      * @param applicationService {@link ApplicationServiceBean} instance, used 
      * to determine what actions should be taken on this form.
      * @param BaUnitBean Instance of {@link BaUnitBean}, used to bind data on the form.
+     * @param readOnly If true, opens form in read only mode.
      */
-    public PropertyForm(ApplicationBean applicationBean,
-            ApplicationServiceBean applicationService, BaUnitBean baUnitBean, boolean readOnly) {
+    public PropertyPanel(ApplicationBean applicationBean, 
+            ApplicationServiceBean applicationService, 
+            BaUnitBean baUnitBean, boolean readOnly) {
         this.baUnitBean1 = baUnitBean;
         this.readOnly = readOnly || !SecurityBean.isInRole(RolesConstants.ADMINISTRATIVE_BA_UNIT_SAVE);
         this.applicationBean = applicationBean;
@@ -184,6 +190,7 @@ public class PropertyForm extends javax.swing.JFrame {
             this.nameFirstPart = baUnitBean.getNameFirstpart();
             this.nameLastPart = baUnitBean.getNameLastpart();
         }
+        resourceBundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle");
         initComponents();
         customizeForm();
     }
@@ -235,17 +242,20 @@ public class PropertyForm extends javax.swing.JFrame {
      */
     private void customizeForm() {
         customizeComponents();
-        this.setIconImage(new ImageIcon(PropertyForm.class.getResource("/images/sola/logo_icon.jpg")).getImage());
-
-        if (applicationBean != null && applicationService != null) {
-            this.setTitle(String.format("Service: %s  Application: #%s",
-                    applicationService.getRequestType().getDisplayValue(),
-                    applicationBean.getNr()));
-        }
 
         if (nameFirstPart != null && nameLastPart != null) {
-            this.setTitle(String.format("%s Property: %s ", this.getTitle(),
-                    nameFirstPart.concat(nameLastPart)));
+            headerPanel.setTitleText(String.format(
+                    resourceBundle.getString("PropertyPanel.existingProperty.Text"), 
+                    nameFirstPart, nameLastPart));
+        } else {
+            headerPanel.setTitleText(resourceBundle.getString("PropertyPanel.newProperty.Text"));
+        }
+        
+        if (applicationBean != null && applicationService != null) {
+            headerPanel.setTitleText(String.format("%s; Service: %s  Application: #%s",
+                    headerPanel.getTitleText(), 
+                    applicationService.getRequestType().getDisplayValue(),
+                    applicationBean.getNr()));
         }
 
         btnSave.setEnabled(!readOnly);
@@ -450,7 +460,7 @@ public class PropertyForm extends javax.swing.JFrame {
             }
         };
 
-        CreateParcelForm parcelForm = new CreateParcelForm(this, true);
+        CreateParcelForm parcelForm = new CreateParcelForm(null, true);
 
         parcelForm.setLocationRelativeTo(this);
         parcelForm.addPropertyChangeListener(CreateParcelForm.SELECTED_PARCEL, listener);
@@ -571,11 +581,11 @@ public class PropertyForm extends javax.swing.JFrame {
         Window form = null;
 
         if (rrrBean.getRrrType().getCode().equals("mortgage")) {
-            form = new MortgageForm(this, true, rrrBean, applicationBean, applicationService, action);
+            form = new MortgageForm(null, true, rrrBean, applicationBean, applicationService, action);
         } else if (rrrBean.getRrrType().getCode().toLowerCase().contains("ownership")) {
-            form = new OwnershipForm(this, true, rrrBean, applicationBean, applicationService, action);
+            form = new OwnershipForm(null, true, rrrBean, applicationBean, applicationService, action);
         } else {
-            form = new SimpleRightForm(this, true, rrrBean, applicationBean, applicationService, action);
+            form = new SimpleRightForm(null, true, rrrBean, applicationBean, applicationService, action);
         }
 
         form.addPropertyChangeListener(SimpleRightForm.UPDATED_RRR, rightFormListener);
@@ -628,7 +638,29 @@ public class PropertyForm extends javax.swing.JFrame {
         menuRemoveRight = new javax.swing.JMenuItem();
         popupNotations = new javax.swing.JPopupMenu();
         menuRemoveNotation = new javax.swing.JMenuItem();
+        jToolBar5 = new javax.swing.JToolBar();
+        btnPrintBaUnit = new javax.swing.JButton();
+        jScrollPane6 = new javax.swing.JScrollPane();
         jTabbedPane1 = new javax.swing.JTabbedPane();
+        jPanel7 = new javax.swing.JPanel();
+        jPanel13 = new javax.swing.JPanel();
+        jPanel10 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        txtFirstPart = new javax.swing.JTextField();
+        jPanel9 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        txtLastPart = new javax.swing.JTextField();
+        jPanel11 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        txtEstateType = new javax.swing.JTextField();
+        jPanel12 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        txtName = new javax.swing.JTextField();
+        jToolBar4 = new javax.swing.JToolBar();
+        btnViewPaperTitle = new javax.swing.JButton();
+        btnLinkPaperTitle = new javax.swing.JButton();
+        documentsPanel1 = createDocumentsPanel();
+        groupPanel1 = new org.sola.clients.swing.ui.GroupPanel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableParcels = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
@@ -661,69 +693,59 @@ public class PropertyForm extends javax.swing.JFrame {
         btnRemoveNotation = new javax.swing.JButton();
         txtNotationText = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jToolBar6 = new javax.swing.JToolBar();
+        jButton1 = new javax.swing.JButton();
         mapPanel = new javax.swing.JPanel();
+        headerPanel = new org.sola.clients.swing.ui.HeaderPanel();
         btnSave = new javax.swing.JButton();
-        jPanel8 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        txtFirstPart = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        txtLastPart = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        txtEstateType = new javax.swing.JTextField();
-        txtName = new javax.swing.JTextField();
-        jPanel5 = new javax.swing.JPanel();
-        documentsPanel1 = createDocumentsPanel();
-        jToolBar4 = new javax.swing.JToolBar();
-        btnViewPaperTitle = new javax.swing.JButton();
-        btnLinkPaperTitle = new javax.swing.JButton();
-        jToolBar5 = new javax.swing.JToolBar();
-        btnPrintBaUnit = new javax.swing.JButton();
 
         popupParcels.setName("popupParcels"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(PropertyForm.class, this);
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(PropertyPanel.class, this);
         menuAddParcel.setAction(actionMap.get("addParcel")); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
-        menuAddParcel.setText(bundle.getString("PropertyForm.menuAddParcel.text")); // NOI18N
+        menuAddParcel.setText(bundle.getString("PropertyPanel.menuAddParcel.text")); // NOI18N
         menuAddParcel.setName("menuAddParcel"); // NOI18N
         popupParcels.add(menuAddParcel);
 
         menuRemoveParcel.setAction(actionMap.get("removeParcel")); // NOI18N
-        menuRemoveParcel.setText(bundle.getString("PropertyForm.menuRemoveParcel.text")); // NOI18N
+        menuRemoveParcel.setText(bundle.getString("PropertyPanel.menuRemoveParcel.text")); // NOI18N
         menuRemoveParcel.setName("menuRemoveParcel"); // NOI18N
         popupParcels.add(menuRemoveParcel);
 
         popupRights.setName("popupRights"); // NOI18N
 
         menuVaryRight.setAction(actionMap.get("varyRight")); // NOI18N
-        menuVaryRight.setText(bundle.getString("PropertyForm.menuVaryRight.text")); // NOI18N
+        menuVaryRight.setText(bundle.getString("PropertyPanel.menuVaryRight.text")); // NOI18N
         menuVaryRight.setName("menuVaryRight"); // NOI18N
         popupRights.add(menuVaryRight);
 
         menuExtinguishRight.setAction(actionMap.get("extinguishRight")); // NOI18N
-        menuExtinguishRight.setText(bundle.getString("PropertyForm.menuExtinguishRight.text")); // NOI18N
+        menuExtinguishRight.setText(bundle.getString("PropertyPanel.menuExtinguishRight.text")); // NOI18N
         menuExtinguishRight.setName("menuExtinguishRight"); // NOI18N
         popupRights.add(menuExtinguishRight);
 
         menuEditRight.setAction(actionMap.get("editRight")); // NOI18N
-        menuEditRight.setText(bundle.getString("PropertyForm.menuEditRight.text")); // NOI18N
+        menuEditRight.setText(bundle.getString("PropertyPanel.menuEditRight.text")); // NOI18N
         menuEditRight.setName("menuEditRight"); // NOI18N
         popupRights.add(menuEditRight);
 
         menuRemoveRight.setAction(actionMap.get("removeRight")); // NOI18N
-        menuRemoveRight.setText(bundle.getString("PropertyForm.menuRemoveRight.text")); // NOI18N
+        menuRemoveRight.setText(bundle.getString("PropertyPanel.menuRemoveRight.text")); // NOI18N
         menuRemoveRight.setName("menuRemoveRight"); // NOI18N
         popupRights.add(menuRemoveRight);
 
         popupNotations.setName("popupNotations"); // NOI18N
 
         menuRemoveNotation.setAction(actionMap.get("removeNotation")); // NOI18N
-        menuRemoveNotation.setText(bundle.getString("PropertyForm.menuRemoveNotation.text")); // NOI18N
+        menuRemoveNotation.setText(bundle.getString("PropertyPanel.menuRemoveNotation.text")); // NOI18N
         menuRemoveNotation.setName("menuRemoveNotation"); // NOI18N
         popupNotations.add(menuRemoveNotation);
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setHeaderPanel(headerPanel);
         setName("Form"); // NOI18N
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
@@ -731,7 +753,200 @@ public class PropertyForm extends javax.swing.JFrame {
             }
         });
 
+        jToolBar5.setFloatable(false);
+        jToolBar5.setRollover(true);
+        jToolBar5.setName("jToolBar5"); // NOI18N
+
+        btnPrintBaUnit.setAction(actionMap.get("print")); // NOI18N
+        btnPrintBaUnit.setFont(new java.awt.Font("Tahoma", 0, 12));
+        btnPrintBaUnit.setText(bundle.getString("PropertyPanel.btnPrintBaUnit.text")); // NOI18N
+        btnPrintBaUnit.setFocusable(false);
+        btnPrintBaUnit.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnPrintBaUnit.setName("btnPrintBaUnit"); // NOI18N
+        btnPrintBaUnit.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar5.add(btnPrintBaUnit);
+
+        jScrollPane6.setBorder(null);
+        jScrollPane6.setName("jScrollPane6"); // NOI18N
+
         jTabbedPane1.setName("jTabbedPane1"); // NOI18N
+        jTabbedPane1.setPreferredSize(new java.awt.Dimension(494, 300));
+
+        jPanel7.setName("jPanel7"); // NOI18N
+
+        jPanel13.setName("jPanel13"); // NOI18N
+        jPanel13.setLayout(new java.awt.GridLayout(1, 3, 15, 0));
+
+        jPanel10.setName("jPanel10"); // NOI18N
+
+        jLabel1.setText(bundle.getString("PropertyPanel.jLabel1.text")); // NOI18N
+        jLabel1.setName("jLabel1"); // NOI18N
+
+        txtFirstPart.setEnabled(false);
+        txtFirstPart.setName("txtFirstPart"); // NOI18N
+
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitBean1, org.jdesktop.beansbinding.ELProperty.create("${nameFirstpart}"), txtFirstPart, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        org.jdesktop.layout.GroupLayout jPanel10Layout = new org.jdesktop.layout.GroupLayout(jPanel10);
+        jPanel10.setLayout(jPanel10Layout);
+        jPanel10Layout.setHorizontalGroup(
+            jPanel10Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel10Layout.createSequentialGroup()
+                .add(jLabel1)
+                .addContainerGap(133, Short.MAX_VALUE))
+            .add(txtFirstPart, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
+        );
+        jPanel10Layout.setVerticalGroup(
+            jPanel10Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel10Layout.createSequentialGroup()
+                .add(jLabel1)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(txtFirstPart, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(13, Short.MAX_VALUE))
+        );
+
+        jPanel13.add(jPanel10);
+
+        jPanel9.setName("jPanel9"); // NOI18N
+
+        jLabel2.setText(bundle.getString("PropertyPanel.jLabel2.text")); // NOI18N
+        jLabel2.setName("jLabel2"); // NOI18N
+
+        txtLastPart.setEnabled(false);
+        txtLastPart.setName("txtLastPart"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitBean1, org.jdesktop.beansbinding.ELProperty.create("${nameLastpart}"), txtLastPart, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        org.jdesktop.layout.GroupLayout jPanel9Layout = new org.jdesktop.layout.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel9Layout.createSequentialGroup()
+                .add(jLabel2)
+                .addContainerGap(134, Short.MAX_VALUE))
+            .add(txtLastPart, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel9Layout.createSequentialGroup()
+                .add(jLabel2)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(txtLastPart, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(13, Short.MAX_VALUE))
+        );
+
+        jPanel13.add(jPanel9);
+
+        jPanel11.setName("jPanel11"); // NOI18N
+
+        jLabel4.setText(bundle.getString("PropertyPanel.jLabel4.text")); // NOI18N
+        jLabel4.setName("jLabel4"); // NOI18N
+
+        txtEstateType.setEditable(false);
+        txtEstateType.setEnabled(false);
+        txtEstateType.setName("txtEstateType"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitBean1, org.jdesktop.beansbinding.ELProperty.create("${estateType}"), txtEstateType, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        org.jdesktop.layout.GroupLayout jPanel11Layout = new org.jdesktop.layout.GroupLayout(jPanel11);
+        jPanel11.setLayout(jPanel11Layout);
+        jPanel11Layout.setHorizontalGroup(
+            jPanel11Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel11Layout.createSequentialGroup()
+                .add(jLabel4)
+                .addContainerGap(121, Short.MAX_VALUE))
+            .add(txtEstateType, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
+        );
+        jPanel11Layout.setVerticalGroup(
+            jPanel11Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel11Layout.createSequentialGroup()
+                .add(jLabel4)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(txtEstateType, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(13, Short.MAX_VALUE))
+        );
+
+        jPanel13.add(jPanel11);
+
+        jPanel12.setName("jPanel12"); // NOI18N
+
+        jLabel5.setText(bundle.getString("PropertyPanel.jLabel5.text")); // NOI18N
+        jLabel5.setName("jLabel5"); // NOI18N
+
+        txtName.setName("txtName"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitBean1, org.jdesktop.beansbinding.ELProperty.create("${name}"), txtName, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        org.jdesktop.layout.GroupLayout jPanel12Layout = new org.jdesktop.layout.GroupLayout(jPanel12);
+        jPanel12.setLayout(jPanel12Layout);
+        jPanel12Layout.setHorizontalGroup(
+            jPanel12Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel12Layout.createSequentialGroup()
+                .add(jLabel5)
+                .addContainerGap(517, Short.MAX_VALUE))
+            .add(txtName, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
+        );
+        jPanel12Layout.setVerticalGroup(
+            jPanel12Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel12Layout.createSequentialGroup()
+                .add(jLabel5)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(txtName, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jToolBar4.setFloatable(false);
+        jToolBar4.setRollover(true);
+        jToolBar4.setName("jToolBar4"); // NOI18N
+
+        btnViewPaperTitle.setAction(actionMap.get("viewDocument")); // NOI18N
+        btnViewPaperTitle.setName("btnViewPaperTitle"); // NOI18N
+        jToolBar4.add(btnViewPaperTitle);
+
+        btnLinkPaperTitle.setAction(actionMap.get("linkDocument")); // NOI18N
+        btnLinkPaperTitle.setName("btnLinkPaperTitle"); // NOI18N
+        jToolBar4.add(btnLinkPaperTitle);
+
+        documentsPanel1.setName("documentsPanel1"); // NOI18N
+
+        groupPanel1.setName("groupPanel1"); // NOI18N
+        groupPanel1.setTitleText(bundle.getString("PropertyPanel.groupPanel1.titleText")); // NOI18N
+
+        org.jdesktop.layout.GroupLayout jPanel7Layout = new org.jdesktop.layout.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel12, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(jPanel13, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
+                    .add(groupPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
+                    .add(jToolBar4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
+                    .add(documentsPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel13, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel12, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(groupPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jToolBar4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(documentsPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 60, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(118, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab(bundle.getString("PropertyPanel.jPanel7.TabConstraints.tabTitle"), jPanel7); // NOI18N
 
         jPanel1.setName("jPanel1"); // NOI18N
 
@@ -767,18 +982,18 @@ public class PropertyForm extends javax.swing.JFrame {
         columnBinding.setColumnClass(Boolean.class);
         columnBinding.setEditable(false);
         bindingGroup.addBinding(jTableBinding);
-        jTableBinding.bind();org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitBean1, org.jdesktop.beansbinding.ELProperty.create("${selectedParcel}"), tableParcels, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
+        jTableBinding.bind();binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitBean1, org.jdesktop.beansbinding.ELProperty.create("${selectedParcel}"), tableParcels, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
         bindingGroup.addBinding(binding);
 
         jScrollPane1.setViewportView(tableParcels);
-        tableParcels.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("PropertyForm.tableParcels.columnModel.title0")); // NOI18N
-        tableParcels.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("PropertyForm.tableParcels.columnModel.title1")); // NOI18N
-        tableParcels.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PropertyForm.tableParcels.columnModel.title3")); // NOI18N
-        tableParcels.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("PropertyForm.tableParcels.columnModel.title2")); // NOI18N
-        tableParcels.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("PropertyForm.tableParcels.columnModel.title4")); // NOI18N
+        tableParcels.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title0")); // NOI18N
+        tableParcels.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title1")); // NOI18N
+        tableParcels.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title3")); // NOI18N
+        tableParcels.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title2")); // NOI18N
+        tableParcels.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title4")); // NOI18N
         tableParcels.getColumnModel().getColumn(5).setPreferredWidth(40);
         tableParcels.getColumnModel().getColumn(5).setMaxWidth(40);
-        tableParcels.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("PropertyForm.tableParcels.columnModel.title5")); // NOI18N
+        tableParcels.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title5")); // NOI18N
         tableParcels.getColumnModel().getColumn(5).setCellRenderer(new LockCellRenderer());
 
         jToolBar1.setFloatable(false);
@@ -801,10 +1016,10 @@ public class PropertyForm extends javax.swing.JFrame {
                 .addContainerGap()
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jPanel1Layout.createSequentialGroup()
-                        .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 696, Short.MAX_VALUE)
+                        .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
                         .addContainerGap())
                     .add(jPanel1Layout.createSequentialGroup()
-                        .add(jToolBar1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 686, Short.MAX_VALUE)
+                        .add(jToolBar1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 564, Short.MAX_VALUE)
                         .add(20, 20, 20))))
         );
         jPanel1Layout.setVerticalGroup(
@@ -813,11 +1028,11 @@ public class PropertyForm extends javax.swing.JFrame {
                 .addContainerGap()
                 .add(jToolBar1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab(bundle.getString("PropertyForm.jPanel1.TabConstraints.tabTitle"), jPanel1); // NOI18N
+        jTabbedPane1.addTab(bundle.getString("PropertyPanel.jPanel1.TabConstraints.tabTitle"), jPanel1); // NOI18N
 
         jPanel2.setName("jPanel2"); // NOI18N
 
@@ -854,19 +1069,19 @@ public class PropertyForm extends javax.swing.JFrame {
             }
         });
         jScrollPane2.setViewportView(tableRights);
-        tableRights.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("PropertyForm.tableRights.columnModel.title0")); // NOI18N
-        tableRights.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("PropertyForm.tableRights.columnModel.title1")); // NOI18N
-        tableRights.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PropertyForm.tableRights.columnModel.title2")); // NOI18N
+        tableRights.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("PropertyPanel.tableRights.columnModel.title0")); // NOI18N
+        tableRights.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("PropertyPanel.tableRights.columnModel.title1")); // NOI18N
+        tableRights.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PropertyPanel.tableRights.columnModel.title2")); // NOI18N
         tableRights.getColumnModel().getColumn(3).setPreferredWidth(40);
         tableRights.getColumnModel().getColumn(3).setMaxWidth(40);
-        tableRights.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("PropertyForm.tableRights.columnModel.title3")); // NOI18N
+        tableRights.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("PropertyPanel.tableRights.columnModel.title3")); // NOI18N
         tableRights.getColumnModel().getColumn(3).setCellRenderer(new LockCellRenderer());
 
         jToolBar2.setFloatable(false);
         jToolBar2.setRollover(true);
         jToolBar2.setName("jToolBar2"); // NOI18N
 
-        jLabel16.setText(bundle.getString("PropertyForm.jLabel16.text")); // NOI18N
+        jLabel16.setText(bundle.getString("PropertyPanel.jLabel16.text")); // NOI18N
         jLabel16.setName("jLabel16"); // NOI18N
         jToolBar2.add(jLabel16);
 
@@ -917,8 +1132,8 @@ public class PropertyForm extends javax.swing.JFrame {
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jToolBar2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 696, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 696, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jToolBar2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -927,11 +1142,11 @@ public class PropertyForm extends javax.swing.JFrame {
                 .addContainerGap()
                 .add(jToolBar2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab(bundle.getString("PropertyForm.jPanel2.TabConstraints.tabTitle"), jPanel2); // NOI18N
+        jTabbedPane1.addTab(bundle.getString("PropertyPanel.jPanel2.TabConstraints.tabTitle"), jPanel2); // NOI18N
 
         jPanel3.setName("jPanel3"); // NOI18N
 
@@ -956,14 +1171,14 @@ public class PropertyForm extends javax.swing.JFrame {
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();
         jScrollPane5.setViewportView(tableOwnership);
-        tableOwnership.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("PropertyForm.tableOwnership.columnModel.title0")); // NOI18N
+        tableOwnership.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("PropertyPanel.tableOwnership.columnModel.title0")); // NOI18N
         tableOwnership.getColumnModel().getColumn(0).setCellRenderer(new TableCellListRenderer("getName", "getLastName"));
         tableOwnership.getColumnModel().getColumn(1).setPreferredWidth(70);
         tableOwnership.getColumnModel().getColumn(1).setMaxWidth(70);
-        tableOwnership.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("PropertyForm.tableOwnership.columnModel.title1")); // NOI18N
+        tableOwnership.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("PropertyPanel.tableOwnership.columnModel.title1")); // NOI18N
         tableOwnership.getColumnModel().getColumn(2).setPreferredWidth(130);
         tableOwnership.getColumnModel().getColumn(2).setMaxWidth(130);
-        tableOwnership.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PropertyForm.tableOwnership.columnModel.title2")); // NOI18N
+        tableOwnership.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PropertyPanel.tableOwnership.columnModel.title2")); // NOI18N
 
         org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -971,18 +1186,18 @@ public class PropertyForm extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 696, Short.MAX_VALUE)
+                .add(jScrollPane5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE)
+                .add(jScrollPane5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab(bundle.getString("PropertyForm.jPanel3.TabConstraints.tabTitle"), jPanel3); // NOI18N
+        jTabbedPane1.addTab(bundle.getString("PropertyPanel.jPanel3.TabConstraints.tabTitle"), jPanel3); // NOI18N
 
         jPanel4.setName("jPanel4"); // NOI18N
 
@@ -1017,14 +1232,14 @@ public class PropertyForm extends javax.swing.JFrame {
         tableNotations.getColumnModel().getColumn(0).setMinWidth(80);
         tableNotations.getColumnModel().getColumn(0).setPreferredWidth(80);
         tableNotations.getColumnModel().getColumn(0).setMaxWidth(80);
-        tableNotations.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("PropertyForm.tableNotations.columnModel.title0")); // NOI18N
-        tableNotations.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("PropertyForm.tableNotations.columnModel.title1")); // NOI18N
+        tableNotations.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("PropertyPanel.tableNotations.columnModel.title0")); // NOI18N
+        tableNotations.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("PropertyPanel.tableNotations.columnModel.title1")); // NOI18N
         tableNotations.getColumnModel().getColumn(2).setPreferredWidth(180);
         tableNotations.getColumnModel().getColumn(2).setMaxWidth(180);
-        tableNotations.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PropertyForm.tableNotations.columnModel.title2")); // NOI18N
+        tableNotations.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PropertyPanel.tableNotations.columnModel.title2")); // NOI18N
         tableNotations.getColumnModel().getColumn(3).setPreferredWidth(40);
         tableNotations.getColumnModel().getColumn(3).setMaxWidth(40);
-        tableNotations.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("PropertyForm.tableNotations.columnModel.title3")); // NOI18N
+        tableNotations.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("PropertyPanel.tableNotations.columnModel.title3")); // NOI18N
         tableNotations.getColumnModel().getColumn(3).setCellRenderer(new LockCellRenderer());
 
         jToolBar3.setFloatable(false);
@@ -1046,7 +1261,7 @@ public class PropertyForm extends javax.swing.JFrame {
         txtNotationText.setName("txtNotationText"); // NOI18N
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 0, 12));
-        jLabel15.setText(bundle.getString("PropertyForm.jLabel15.text")); // NOI18N
+        jLabel15.setText(bundle.getString("PropertyPanel.jLabel15.text")); // NOI18N
         jLabel15.setName("jLabel15"); // NOI18N
 
         org.jdesktop.layout.GroupLayout jPanel4Layout = new org.jdesktop.layout.GroupLayout(jPanel4);
@@ -1056,11 +1271,11 @@ public class PropertyForm extends javax.swing.JFrame {
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 696, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
                     .add(jPanel4Layout.createSequentialGroup()
                         .add(jLabel15)
                         .add(9, 9, 9)
-                        .add(txtNotationText, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE)
+                        .add(txtNotationText, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jToolBar3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 139, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -1075,11 +1290,65 @@ public class PropertyForm extends javax.swing.JFrame {
                         .add(txtNotationText, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .add(jLabel15)))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
+                .add(jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab(bundle.getString("PropertyForm.jPanel4.TabConstraints.tabTitle"), jPanel4); // NOI18N
+        jTabbedPane1.addTab(bundle.getString("PropertyPanel.jPanel4.TabConstraints.tabTitle"), jPanel4); // NOI18N
+
+        jPanel6.setName("jPanel6"); // NOI18N
+
+        jScrollPane3.setName("jScrollPane3"); // NOI18N
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jTable1.setName("jTable1"); // NOI18N
+        jScrollPane3.setViewportView(jTable1);
+
+        jToolBar6.setFloatable(false);
+        jToolBar6.setRollover(true);
+        jToolBar6.setName("jToolBar6"); // NOI18N
+
+        jButton1.setAction(actionMap.get("removePriorProperties")); // NOI18N
+        jButton1.setFont(new java.awt.Font("Tahoma", 0, 12));
+        jButton1.setText(bundle.getString("PropertyPanel.jButton1.text")); // NOI18N
+        jButton1.setFocusable(false);
+        jButton1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButton1.setName("jButton1"); // NOI18N
+        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar6.add(jButton1);
+
+        org.jdesktop.layout.GroupLayout jPanel6Layout = new org.jdesktop.layout.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jToolBar6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jToolBar6, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab(bundle.getString("PropertyPanel.jPanel6.TabConstraints.tabTitle"), jPanel6); // NOI18N
 
         mapPanel.setName("mapPanel"); // NOI18N
 
@@ -1087,16 +1356,21 @@ public class PropertyForm extends javax.swing.JFrame {
         mapPanel.setLayout(mapPanelLayout);
         mapPanelLayout.setHorizontalGroup(
             mapPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 716, Short.MAX_VALUE)
+            .add(0, 594, Short.MAX_VALUE)
         );
         mapPanelLayout.setVerticalGroup(
             mapPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 231, Short.MAX_VALUE)
+            .add(0, 366, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab(bundle.getString("PropertyForm.mapPanel.TabConstraints.tabTitle"), mapPanel); // NOI18N
+        jTabbedPane1.addTab(bundle.getString("PropertyPanel.mapPanel.TabConstraints.tabTitle"), mapPanel); // NOI18N
 
-        btnSave.setText(bundle.getString("PropertyForm.btnSave.text")); // NOI18N
+        jScrollPane6.setViewportView(jTabbedPane1);
+
+        headerPanel.setName("headerPanel"); // NOI18N
+        headerPanel.setTitleText(bundle.getString("PropertyPanel.headerPanel.titleText")); // NOI18N
+
+        btnSave.setText(bundle.getString("PropertyPanel.btnSave.text")); // NOI18N
         btnSave.setName("btnSave"); // NOI18N
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1104,173 +1378,35 @@ public class PropertyForm extends javax.swing.JFrame {
             }
         });
 
-        jPanel8.setName("jPanel8"); // NOI18N
-
-        jLabel1.setText(bundle.getString("PropertyForm.jLabel1.text")); // NOI18N
-        jLabel1.setName("jLabel1"); // NOI18N
-
-        txtFirstPart.setEnabled(false);
-        txtFirstPart.setName("txtFirstPart"); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitBean1, org.jdesktop.beansbinding.ELProperty.create("${nameFirstpart}"), txtFirstPart, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        jLabel2.setText(bundle.getString("PropertyForm.jLabel2.text")); // NOI18N
-        jLabel2.setName("jLabel2"); // NOI18N
-
-        txtLastPart.setEnabled(false);
-        txtLastPart.setName("txtLastPart"); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitBean1, org.jdesktop.beansbinding.ELProperty.create("${nameLastpart}"), txtLastPart, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        jLabel4.setText(bundle.getString("PropertyForm.jLabel4.text")); // NOI18N
-        jLabel4.setName("jLabel4"); // NOI18N
-
-        jLabel5.setText(bundle.getString("PropertyForm.jLabel5.text")); // NOI18N
-        jLabel5.setName("jLabel5"); // NOI18N
-
-        txtEstateType.setEditable(false);
-        txtEstateType.setEnabled(false);
-        txtEstateType.setName("txtEstateType"); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitBean1, org.jdesktop.beansbinding.ELProperty.create("${estateType}"), txtEstateType, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        txtName.setName("txtName"); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitBean1, org.jdesktop.beansbinding.ELProperty.create("${name}"), txtName, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        org.jdesktop.layout.GroupLayout jPanel8Layout = new org.jdesktop.layout.GroupLayout(jPanel8);
-        jPanel8.setLayout(jPanel8Layout);
-        jPanel8Layout.setHorizontalGroup(
-            jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel8Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(jLabel1)
-                    .add(jLabel2))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                    .add(txtFirstPart)
-                    .add(txtLastPart, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE))
-                .add(18, 18, 18)
-                .add(jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jLabel5)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jLabel4))
-                .add(10, 10, 10)
-                .add(jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(txtName, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 357, Short.MAX_VALUE)
-                    .add(txtEstateType, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 357, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        jPanel8Layout.setVerticalGroup(
-            jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel8Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel8Layout.createSequentialGroup()
-                        .add(jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                            .add(txtEstateType, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(jLabel4))
-                        .add(18, 18, 18)
-                        .add(jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                            .add(jLabel5)
-                            .add(txtName, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                    .add(jPanel8Layout.createSequentialGroup()
-                        .add(jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                            .add(txtFirstPart)
-                            .add(jLabel1))
-                        .add(18, 18, 18)
-                        .add(jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                            .add(txtLastPart, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(jLabel2))))
-                .addContainerGap())
-        );
-
-        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("PropertyForm.jPanel5.border.title"))); // NOI18N
-        jPanel5.setName("jPanel5"); // NOI18N
-
-        documentsPanel1.setName("documentsPanel1"); // NOI18N
-
-        jToolBar4.setFloatable(false);
-        jToolBar4.setRollover(true);
-        jToolBar4.setName("jToolBar4"); // NOI18N
-
-        btnViewPaperTitle.setAction(actionMap.get("viewDocument")); // NOI18N
-        btnViewPaperTitle.setName("btnViewPaperTitle"); // NOI18N
-        jToolBar4.add(btnViewPaperTitle);
-
-        btnLinkPaperTitle.setAction(actionMap.get("linkDocument")); // NOI18N
-        btnLinkPaperTitle.setName("btnLinkPaperTitle"); // NOI18N
-        jToolBar4.add(btnLinkPaperTitle);
-
-        org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, documentsPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 689, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jToolBar4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 689, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel5Layout.createSequentialGroup()
-                .add(jToolBar4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(documentsPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 60, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jToolBar5.setFloatable(false);
-        jToolBar5.setRollover(true);
-        jToolBar5.setName("jToolBar5"); // NOI18N
-
-        btnPrintBaUnit.setAction(actionMap.get("print")); // NOI18N
-        btnPrintBaUnit.setFont(new java.awt.Font("Tahoma", 0, 12));
-        btnPrintBaUnit.setText(bundle.getString("PropertyForm.btnPrintBaUnit.text")); // NOI18N
-        btnPrintBaUnit.setFocusable(false);
-        btnPrintBaUnit.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnPrintBaUnit.setName("btnPrintBaUnit"); // NOI18N
-        btnPrintBaUnit.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar5.add(btnPrintBaUnit);
-
-        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
+        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
+        this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(headerPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
+            .add(jToolBar5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, btnSave, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 97, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 721, Short.MAX_VALUE)
-                    .add(jPanel8, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(jScrollPane6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 599, Short.MAX_VALUE)
                 .addContainerGap())
-            .add(jToolBar5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 741, Short.MAX_VALUE)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(512, Short.MAX_VALUE)
+                .add(btnSave, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 97, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+            .add(layout.createSequentialGroup()
+                .add(headerPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jToolBar5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel8, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 259, Short.MAX_VALUE)
+                .add(jScrollPane6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(btnSave)
                 .addContainerGap())
         );
 
         bindingGroup.bind();
-
-        pack();
     }// </editor-fold>//GEN-END:initComponents
 
 private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
@@ -1282,7 +1418,6 @@ private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     }
     if (result) {
         JOptionPane.showMessageDialog(this, "Changes successfully saved.");
-        this.dispose();
     } else {
         JOptionPane.showMessageDialog(this, "Failed to save application.", "Error", JOptionPane.ERROR_MESSAGE);
     }
@@ -1327,6 +1462,9 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler4;
+    private org.sola.clients.swing.ui.GroupPanel groupPanel1;
+    private org.sola.clients.swing.ui.HeaderPanel headerPanel;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
@@ -1334,22 +1472,31 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTable jTable1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
     private javax.swing.JToolBar jToolBar3;
     private javax.swing.JToolBar jToolBar4;
     private javax.swing.JToolBar jToolBar5;
+    private javax.swing.JToolBar jToolBar6;
     private javax.swing.JPanel mapPanel;
     private javax.swing.JMenuItem menuAddParcel;
     private javax.swing.JMenuItem menuEditRight;

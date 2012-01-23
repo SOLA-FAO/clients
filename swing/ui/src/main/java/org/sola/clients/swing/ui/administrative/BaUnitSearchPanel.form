@@ -342,6 +342,7 @@
               <Subbinding sourcePath="${rightholders}">
                 <BindingParameter name="NAME" value="Right holders"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
+                <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
               </Subbinding>
               <Subbinding sourcePath="${registrationStatus.displayValue}">
                 <BindingParameter name="NAME" value="Status"/>

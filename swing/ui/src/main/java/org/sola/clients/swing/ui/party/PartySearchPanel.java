@@ -39,6 +39,7 @@ import org.sola.clients.beans.referencedata.PartyRoleTypeListBean;
 import org.sola.clients.beans.referencedata.PartyTypeListBean;
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.swing.common.LafManager;
+import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.common.RolesConstants;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -46,7 +47,7 @@ import org.sola.common.messaging.MessageUtility;
 /**
  * Allows to search parties and manage them.
  */
-public class PartySearchPanel extends javax.swing.JPanel {
+public class PartySearchPanel extends ContentPanel {
     
     /** {@link PartyPanel} listener to capture creation save and cancel events. */
     private class PartyPanelListener implements PropertyChangeListener {
@@ -238,6 +239,8 @@ public class PartySearchPanel extends javax.swing.JPanel {
         menuRemove.setText(bundle.getString("PartySearchPanel.menuRemove.text")); // NOI18N
         menuRemove.setName("menuRemove"); // NOI18N
         popupParties.add(menuRemove);
+
+        setHeaderPanel(pnlHeader);
 
         pnlContent.setName("pnlContent"); // NOI18N
         pnlContent.setLayout(new java.awt.CardLayout());

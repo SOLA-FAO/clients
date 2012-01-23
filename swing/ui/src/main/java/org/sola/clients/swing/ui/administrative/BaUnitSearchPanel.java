@@ -28,8 +28,11 @@
 package org.sola.clients.swing.ui.administrative;
 
 import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import org.jdesktop.application.Action;
 import org.sola.clients.beans.administrative.BaUnitSearchResultBean;
+import org.sola.clients.beans.administrative.BaUnitSearchResultListBean;
 import org.sola.clients.swing.ui.renderers.CellDelimitedListRenderer;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -39,13 +42,30 @@ import org.sola.common.messaging.MessageUtility;
  */
 public class BaUnitSearchPanel extends javax.swing.JPanel {
     
-    public static final String SELECTED_BAUNIT_SEARCH_RESULT = "selectedBaUnitSearchResult";
+    public static final String SELECTED_BAUNIT_SEARCH_RESULT = "selectedBaUnitSearchResultOpen";
     
     /** Default constructor. */
     public BaUnitSearchPanel() {
         initComponents();
+        
+        customieOpenButton(null);
+        baUnitSearchResults.addPropertyChangeListener(new PropertyChangeListener() {
+
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if(evt.getPropertyName().equals(BaUnitSearchResultListBean
+                        .SELECTED_BAUNIT_SEARCH_RESULT_PROPERTY)){
+                    firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
+                    customieOpenButton((BaUnitSearchResultBean)evt.getNewValue());
+                }
+            }
+        });
     }
 
+    private void customieOpenButton(BaUnitSearchResultBean searchResult){
+        btnOpenBaUnit.getAction().setEnabled(searchResult!=null);
+    }
+    
     /** Indicates whether open button is shown or not. */
     public boolean isShowOpenButton() {
         return btnOpenBaUnit.isVisible();
@@ -248,6 +268,7 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${rightholders}"));
         columnBinding.setColumnName("Right holders");
         columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${registrationStatus.displayValue}"));
         columnBinding.setColumnName("Status");
         columnBinding.setColumnClass(String.class);
@@ -281,12 +302,12 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
         separator1.setName("separator1"); // NOI18N
         jToolBar1.add(separator1);
 
-        lblSearchResult.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblSearchResult.setFont(new java.awt.Font("Tahoma", 0, 12));
         lblSearchResult.setText("Search results: ");
         lblSearchResult.setName("lblSearchResult"); // NOI18N
         jToolBar1.add(lblSearchResult);
 
-        lblSearchResultCount.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblSearchResultCount.setFont(new java.awt.Font("Tahoma", 0, 12));
         lblSearchResultCount.setText(" ");
         lblSearchResultCount.setName("lblSearchResultCount"); // NOI18N
         jToolBar1.add(lblSearchResultCount);

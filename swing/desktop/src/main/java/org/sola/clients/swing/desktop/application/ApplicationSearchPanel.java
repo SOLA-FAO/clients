@@ -36,7 +36,6 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Task;
-import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationSearchParamsBean;
 import org.sola.clients.beans.application.ApplicationSearchResultBean;
 import org.sola.clients.beans.application.ApplicationSearchResultsListBean;
@@ -47,7 +46,6 @@ import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.desktop.DesktopApplication;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
-import org.sola.clients.swing.ui.renderers.CellDelimitedListRenderer;
 import org.sola.common.RolesConstants;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -59,69 +57,65 @@ import org.sola.common.messaging.MessageUtility;
  */
 public class ApplicationSearchPanel extends ContentPanel {
 
-    private ApplicationPanel applicationForm;
-
     /** Default constructor to create form and initialize parameters. */
     public ApplicationSearchPanel() {
         initComponents();
-        customizeComponents();
         setHeaderPanel(headerPanel1);
         appList.addPropertyChangeListener(new PropertyChangeListener() {
 
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                if(evt.getPropertyName().equals(ApplicationSearchResultsListBean.SELECTED_APPLICATION_PROPERTY)){
-                    customizeOpenButton((ApplicationSearchResultBean)evt.getNewValue());
+                if (evt.getPropertyName().equals(ApplicationSearchResultsListBean.SELECTED_APPLICATION_PROPERTY)) {
+                    customizeOpenButton((ApplicationSearchResultBean) evt.getNewValue());
                 }
             }
         });
         customizeOpenButton(null);
         btnFind.setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_VIEW_APPS));
+        customizeComponents();
     }
-    
-    private void customizeOpenButton(ApplicationSearchResultBean searchResult){
-        btnOpen.getAction().setEnabled(searchResult != null);
+
+    private void customizeOpenButton(ApplicationSearchResultBean searchResult) {
+        btnOpenApplication.getAction().setEnabled(searchResult != null);
     }
-    
-     /** Applies customization of component L&F. */
+
+    /** Applies customization of component L&F. */
     private void customizeComponents() {
-    
+
 //    BUTTONS   
-    LafManager.getInstance().setBtnProperties(btnClear);
-    LafManager.getInstance().setBtnProperties(btnOpen);
-    LafManager.getInstance().setBtnProperties(btnFind);
-    LafManager.getInstance().setBtnProperties(btnShowCalendarFrom);
-    LafManager.getInstance().setBtnProperties(btnShowCalendarTo);
-    
+        LafManager.getInstance().setBtnProperties(btnClear);
+        LafManager.getInstance().setBtnProperties(btnOpenApplication);
+        LafManager.getInstance().setBtnProperties(btnFind);
+        LafManager.getInstance().setBtnProperties(btnShowCalendarFrom);
+        LafManager.getInstance().setBtnProperties(btnShowCalendarTo);
+
 //    LABELS    
-    LafManager.getInstance().setLabProperties(labAgentName);
-    LafManager.getInstance().setLabProperties(labAppNumber);
-    LafManager.getInstance().setLabProperties(labContactPerson);
-    LafManager.getInstance().setLabProperties(labFrom);
-    LafManager.getInstance().setLabProperties(labResults);
-    LafManager.getInstance().setLabProperties(labTo);
-    LafManager.getInstance().setLabProperties(lblSearchResults);
-    
-   
+        LafManager.getInstance().setLabProperties(labAgentName);
+        LafManager.getInstance().setLabProperties(labAppNumber);
+        LafManager.getInstance().setLabProperties(labContactPerson);
+        LafManager.getInstance().setLabProperties(labFrom);
+        LafManager.getInstance().setLabProperties(labResults);
+        LafManager.getInstance().setLabProperties(labTo);
+        LafManager.getInstance().setLabProperties(lblSearchResults);
+
+
 //    TXT FIELDS
-    
-    LafManager.getInstance().setTxtProperties(txtAgentName);
-    LafManager.getInstance().setTxtProperties(txtAppNumber);
-    LafManager.getInstance().setTxtProperties(txtContactPerson);
-    
+        LafManager.getInstance().setTxtProperties(txtAgentName);
+        LafManager.getInstance().setTxtProperties(txtAppNumber);
+        LafManager.getInstance().setTxtProperties(txtContactPerson);
+
 
 //    FORMATTED TXT
-    
-    LafManager.getInstance().setFormattedTxtProperties(txtFromDate);
-    LafManager.getInstance().setFormattedTxtProperties(txtToDate);
-    
+        LafManager.getInstance().setFormattedTxtProperties(txtFromDate);
+        LafManager.getInstance().setFormattedTxtProperties(txtToDate);
+
     }
-    
-    private void showCalendar(JFormattedTextField dateField){
+
+    private void showCalendar(JFormattedTextField dateField) {
         CalendarForm calendar = new CalendarForm(null, true, dateField);
         calendar.setVisible(true);
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -137,7 +131,7 @@ public class ApplicationSearchPanel extends ContentPanel {
         lblSearchResults = new javax.swing.JLabel();
         labResults = new javax.swing.JLabel();
         jToolBar1 = new javax.swing.JToolBar();
-        btnOpen = new javax.swing.JButton();
+        btnOpenApplication = new javax.swing.JButton();
         headerPanel1 = new org.sola.clients.swing.ui.HeaderPanel();
         jPanel10 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
@@ -179,7 +173,7 @@ public class ApplicationSearchPanel extends ContentPanel {
 
         java.util.ResourceBundle bundle1 = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/application/resources/ApplicationSearchPanel"); // NOI18N
         appListPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, bundle1.getString("ApplicationSearchPanel.appListPanel.border.title"), javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
-        appListPanel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        appListPanel.setFont(new java.awt.Font("Tahoma", 0, 12));
         appListPanel.setName("appListPanel"); // NOI18N
         appListPanel.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
 
@@ -272,14 +266,13 @@ public class ApplicationSearchPanel extends ContentPanel {
         jToolBar1.setRollover(true);
         jToolBar1.setName("jToolBar1"); // NOI18N
 
-        btnOpen.setAction(actionMap.get("openApplication")); // NOI18N
-        btnOpen.setFont(new java.awt.Font("Tahoma", 0, 12));
-        btnOpen.setText(bundle.getString("ApplicationSearchPanel.btnOpen.text")); // NOI18N
-        btnOpen.setFocusable(false);
-        btnOpen.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnOpen.setName("btnOpen"); // NOI18N
-        btnOpen.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(btnOpen);
+        btnOpenApplication.setAction(actionMap.get("openApplication")); // NOI18N
+        btnOpenApplication.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnOpenApplication.setFocusable(false);
+        btnOpenApplication.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnOpenApplication.setName("btnOpenApplication"); // NOI18N
+        btnOpenApplication.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnOpenApplication);
 
         headerPanel1.setName("headerPanel1"); // NOI18N
         headerPanel1.setTitleText(bundle.getString("ApplicationSearchPanel.headerPanel1.titleText")); // NOI18N
@@ -328,7 +321,7 @@ public class ApplicationSearchPanel extends ContentPanel {
             .addComponent(txtToDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
-        labTo.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        labTo.setFont(new java.awt.Font("Tahoma", 0, 12));
         labTo.setText(bundle.getString("ApplicationSearchPanel.labTo.text")); // NOI18N
         labTo.setName("labTo"); // NOI18N
 
@@ -352,7 +345,7 @@ public class ApplicationSearchPanel extends ContentPanel {
 
         jPanel6.setName("jPanel6"); // NOI18N
 
-        labFrom.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        labFrom.setFont(new java.awt.Font("Tahoma", 0, 12));
         labFrom.setText(bundle.getString("ApplicationSearchPanel.labFrom.text")); // NOI18N
         labFrom.setName("labFrom"); // NOI18N
 
@@ -433,7 +426,7 @@ public class ApplicationSearchPanel extends ContentPanel {
 
         jPanel7.setName("jPanel7"); // NOI18N
 
-        labAppNumber.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        labAppNumber.setFont(new java.awt.Font("Tahoma", 0, 12));
         labAppNumber.setText(bundle.getString("ApplicationSearchPanel.labAppNumber.text")); // NOI18N
         labAppNumber.setName("labAppNumber"); // NOI18N
 
@@ -452,7 +445,7 @@ public class ApplicationSearchPanel extends ContentPanel {
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addComponent(labAppNumber)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(73, Short.MAX_VALUE))
             .addComponent(txtAppNumber, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
         );
         jPanel7Layout.setVerticalGroup(
@@ -466,7 +459,7 @@ public class ApplicationSearchPanel extends ContentPanel {
 
         jPanel2.setName("jPanel2"); // NOI18N
 
-        labAgentName.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        labAgentName.setFont(new java.awt.Font("Tahoma", 0, 12));
         labAgentName.setText(bundle.getString("ApplicationSearchPanel.labAgentName.text")); // NOI18N
         labAgentName.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         labAgentName.setName("labAgentName"); // NOI18N
@@ -500,7 +493,7 @@ public class ApplicationSearchPanel extends ContentPanel {
 
         jPanel1.setName("jPanel1"); // NOI18N
 
-        labContactPerson.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        labContactPerson.setFont(new java.awt.Font("Tahoma", 0, 12));
         labContactPerson.setText(bundle.getString("ApplicationSearchPanel.labContactPerson.text")); // NOI18N
         labContactPerson.setName("labContactPerson"); // NOI18N
 
@@ -660,7 +653,7 @@ public class ApplicationSearchPanel extends ContentPanel {
             openApplication();
         }
     }//GEN-LAST:event_tbAppListMouseClicked
-    
+
     private void btnShowCalendarFromActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowCalendarFromActionPerformed
         showCalendar(txtFromDate);
     }//GEN-LAST:event_btnShowCalendarFromActionPerformed
@@ -680,9 +673,9 @@ public class ApplicationSearchPanel extends ContentPanel {
             Object[] parms = {100};
             MessageUtility.displayMessage(ClientMessage.SEARCH_TOO_MANY_RESULTS, parms);
         }
-          labResults.setText(String.format("(%s)", appList.getApplicationSearchResultsList().size()));
-          tbAppList.setVisible(true);     
-          txtAppNumber.requestFocus();
+        labResults.setText(String.format("(%s)", appList.getApplicationSearchResultsList().size()));
+        tbAppList.setVisible(true);
+        txtAppNumber.requestFocus();
     }//GEN-LAST:event_btnFindActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
@@ -697,13 +690,13 @@ public class ApplicationSearchPanel extends ContentPanel {
     }//GEN-LAST:event_btnClearActionPerformed
 
     /** Opens {@link ApplicationForm} for selected application in search results.*/
-        @Action
+    @Action
     public void openApplication() {
-        if (!SecurityBean.isInRole(RolesConstants.APPLICATION_EDIT_APPS) || 
-                appList.getSelectedApplication() == null) {
+        if (!SecurityBean.isInRole(RolesConstants.APPLICATION_EDIT_APPS)
+                || appList.getSelectedApplication() == null) {
             return;
         }
-        
+
         Task t = new Task(DesktopApplication.getApplication()) {
 
             @Override
@@ -719,13 +712,12 @@ public class ApplicationSearchPanel extends ContentPanel {
         };
         TaskManager.getInstance().runTask(t);
     }
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.sola.clients.beans.application.ApplicationSearchResultsListBean appList;
     private javax.swing.JScrollPane appListPanel;
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnFind;
-    private javax.swing.JButton btnOpen;
+    private javax.swing.JButton btnOpenApplication;
     private javax.swing.JButton btnShowCalendarFrom;
     private javax.swing.JButton btnShowCalendarTo;
     private org.sola.clients.swing.ui.HeaderPanel headerPanel1;
@@ -760,5 +752,4 @@ public class ApplicationSearchPanel extends ContentPanel {
     private javax.swing.JFormattedTextField txtToDate;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
-
 }

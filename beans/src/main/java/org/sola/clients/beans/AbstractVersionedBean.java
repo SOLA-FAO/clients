@@ -46,7 +46,7 @@ public class AbstractVersionedBean extends AbstractBindingBean {
 
     public String getRowId() {
         if(rowId==null || rowId.length()<1){
-            rowId = UUID.randomUUID().toString();
+            generateRowId();
         }
         return rowId;
     }
@@ -59,6 +59,10 @@ public class AbstractVersionedBean extends AbstractBindingBean {
         return rowVersion;
     }
 
+    public void generateRowId(){
+        setRowId(UUID.randomUUID().toString());
+    }
+    
     public boolean isNew() {
         boolean result = true;
         if(rowVersion>0){

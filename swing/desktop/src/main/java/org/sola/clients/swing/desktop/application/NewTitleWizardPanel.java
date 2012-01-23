@@ -29,8 +29,9 @@ import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.beans.referencedata.StatusConstants;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.desktop.DesktopApplication;
-import org.sola.clients.swing.desktop.administrative.PropertyForm;
+import org.sola.clients.swing.desktop.administrative.PropertyPanel;
 import org.sola.clients.swing.ui.ContentPanel;
+import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 import org.sola.services.boundary.wsclients.WSManager;
@@ -144,9 +145,9 @@ public class NewTitleWizardPanel extends ContentPanel {
 
     private void openPropertyForm(BaUnitBean baUnit) {
         ApplicationBean appBean = applicationBean.copy();
-        PropertyForm propertyForm = new PropertyForm(appBean,
+        PropertyPanel propertyPanel = new PropertyPanel(appBean,
                 appBean.getSelectedService(), baUnit, false);
-        DesktopApplication.getApplication().show(propertyForm);
+        getMainContentPanel().addPanel(propertyPanel, MainContentPanel.CARD_PROPERTY_PANEL);
     }
 
     @SuppressWarnings("unchecked")
@@ -589,7 +590,7 @@ public class NewTitleWizardPanel extends ContentPanel {
     private void btnFinishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinishActionPerformed
         if (getBaUnitBean().getSelectedCadastreObjects().size() < 1
                 && getBaUnitBean().getSelectedNewCadastreObjects().size() < 1
-                && getBaUnitBean().getSelectedRrrs().size() < 1) {
+                && getBaUnitBean().getSelectedRrrs(false).size() < 1) {
             if (MessageUtility.displayMessage(ClientMessage.BAUNIT_NOTHING_SELECTED) != MessageUtility.BUTTON_ONE) {
                 return;
             }
@@ -602,15 +603,16 @@ public class NewTitleWizardPanel extends ContentPanel {
         BaUnitBean baUnit = new BaUnitBean();
         baUnit.getCadastreObjectList().addAll(getBaUnitBean().getSelectedCadastreObjects());
         baUnit.getCadastreObjectList().addAll(getBaUnitBean().getSelectedNewCadastreObjects());
-        baUnit.getRrrList().addAll(getBaUnitBean().getSelectedRrrs());
-        for(CadastreObjectBean cadastreObject : baUnit.getCadastreObjectList()){
+        baUnit.getRrrList().addAll(getBaUnitBean().getSelectedRrrs(true));
+
+        for (CadastreObjectBean cadastreObject : baUnit.getCadastreObjectList()) {
             cadastreObject.setStatusCode(StatusConstants.PENDING);
         }
-        for(RrrBean rrrBean : baUnit.getRrrList()){
+        for (RrrBean rrrBean : baUnit.getRrrList()) {
             rrrBean.setStatusCode(StatusConstants.PENDING);
         }
         openPropertyForm(baUnit);
-        if(getMainContentPanel() != null){
+        if (getMainContentPanel() != null) {
             getMainContentPanel().closePanel(this);
         }
     }//GEN-LAST:event_btnFinishActionPerformed

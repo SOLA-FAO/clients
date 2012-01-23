@@ -69,10 +69,10 @@ import org.jdesktop.application.Application;
 import org.jdesktop.observablecollections.ObservableListListener;
 import org.sola.clients.beans.administrative.BaUnitBean;
 import org.sola.clients.swing.desktop.DesktopApplication;
-import org.sola.clients.swing.desktop.administrative.PropertyForm;
+import org.sola.clients.swing.desktop.administrative.PropertyPanel;
 import org.sola.clients.beans.application.ApplicationPropertyBean;
 import org.sola.clients.beans.referencedata.ApplicationActionTypeBean;
-import org.sola.clients.swing.desktop.cadastre.CadastreChangeMapForm;
+import org.sola.clients.swing.desktop.cadastre.CadastreChangeMapPanel;
 import org.sola.clients.beans.validation.ValidationResultBean;
 import org.sola.clients.beans.referencedata.StatusConstants;
 import org.sola.clients.beans.security.SecurityBean;
@@ -517,19 +517,19 @@ public class ApplicationPanel extends ContentPanel {
     private void openPropertyForm(BaUnitBean baUnitBean, boolean readOnly) {
         if (baUnitBean != null) {
             ApplicationBean applicationBean = appBean.copy();
-            PropertyForm propertyForm = new PropertyForm(applicationBean,
+            PropertyPanel propertyPnl = new PropertyPanel(applicationBean,
                     applicationBean.getSelectedService(), baUnitBean, readOnly);
-            DesktopApplication.getApplication().show(propertyForm);
+            getMainContentPanel().addPanel(propertyPnl, MainContentPanel.CARD_PROPERTY_PANEL, true);
         }
     }
 
     private void openPropertyForm(ApplicationPropertyBean applicationProperty, boolean readOnly) {
         if (applicationProperty != null) {
             ApplicationBean applicationBean = appBean.copy();
-            PropertyForm propertyForm = new PropertyForm(applicationBean,
+            PropertyPanel propertyPnl = new PropertyPanel(applicationBean,
                     applicationBean.getSelectedService(), applicationProperty.getNameFirstpart(),
                     applicationProperty.getNameLastpart(), readOnly);
-            DesktopApplication.getApplication().show(propertyForm);
+            getMainContentPanel().addPanel(propertyPnl, MainContentPanel.CARD_PROPERTY_PANEL, true);
         }
     }
 
@@ -570,12 +570,11 @@ public class ApplicationPanel extends ContentPanel {
             } else if (requestType.equalsIgnoreCase(RequestTypeBean.CODE_CADASTRE_CHANGE)) {
 
                 if (appBean.getPropertyList().getFilteredList().size() == 1) {
-                    CadastreChangeMapForm form = new CadastreChangeMapForm(
+                    CadastreChangeMapPanel form = new CadastreChangeMapPanel(
                             appBean,
                             appBean.getSelectedService(),
                             appBean.getPropertyList().getFilteredList().get(0));
-                    form.setLocationRelativeTo(this);
-                    form.setVisible(true);
+                    getMainContentPanel().addPanel(form, MainContentPanel.CARD_CADASTRECHANGE, true);
 
                 } else if (appBean.getPropertyList().getFilteredList().size() > 1) {
                     PropertiesList propertyListForm = new PropertiesList(appBean.getPropertyList());
@@ -589,27 +588,26 @@ public class ApplicationPanel extends ContentPanel {
                                     && evt.getNewValue() != null) {
                                 ApplicationPropertyBean property = (ApplicationPropertyBean) evt.getNewValue();
                                 ((JDialog) evt.getSource()).dispose();
-                                CadastreChangeMapForm form = new CadastreChangeMapForm(
+                                CadastreChangeMapPanel form = new CadastreChangeMapPanel(
                                         appBean,
                                         appBean.getSelectedService(), property);
-                                form.setVisible(true);
+                                getMainContentPanel().addPanel(form, MainContentPanel.CARD_CADASTRECHANGE, true);
                             }
                         }
                     });
                     propertyListForm.setVisible(true);
 
                 } else {
-                    CadastreChangeMapForm form = new CadastreChangeMapForm(
+                    CadastreChangeMapPanel form = new CadastreChangeMapPanel(
                             appBean, appBean.getSelectedService(), null);
-                    form.setLocationRelativeTo(this);
-                    form.setVisible(true);
+                    getMainContentPanel().addPanel(form, MainContentPanel.CARD_CADASTRECHANGE, true);
                 }
 
             } else if (requestType.equalsIgnoreCase(RequestTypeBean.CODE_NEW_APARTMENT)
                     || requestType.equalsIgnoreCase(RequestTypeBean.CODE_NEW_FREEHOLD)
                     || requestType.equalsIgnoreCase(RequestTypeBean.CODE_NEW_OWNERSHIP)
                     || requestType.equalsIgnoreCase(RequestTypeBean.CODE_NEW_STATE)) {
-                
+
                 // Try to get BA Units, craeted through the service
                 List<BaUnitBean> baUnitsList = BaUnitBean.getBaUnitsByServiceId(appBean.getSelectedService().getId());
 
@@ -2951,8 +2949,8 @@ public class ApplicationPanel extends ContentPanel {
 
     @Action
     public void printStatusReport() {
-        if (appBean.getRowVersion() > 0 && 
-                ApplicationServiceBean.saveInformationService(RequestTypeBean.CODE_SERVICE_ENQUIRY)) {
+        if (appBean.getRowVersion() > 0
+                && ApplicationServiceBean.saveInformationService(RequestTypeBean.CODE_SERVICE_ENQUIRY)) {
             showReport(ReportManager.getApplicationStatusReport(appBean));
         }
     }

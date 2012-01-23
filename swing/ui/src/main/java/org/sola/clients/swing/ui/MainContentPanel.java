@@ -53,6 +53,8 @@ public class MainContentPanel extends javax.swing.JPanel {
     public final static String CARD_APPLICATION = "application";
     public final static String CARD_NEW_TITLE_WIZARD = "newTitleWizard";
     public final static String CARD_BAUNIT_SELECT_PANEL = "baUnitSelectPanel";
+    public final static String CARD_PROPERTY_PANEL = "propertyPanel";
+    public final static String CARD_CADASTRECHANGE = "cadastreChange";
     
     private HashMap<String, Component> cards;
     private ArrayList<String> cardsIndex;

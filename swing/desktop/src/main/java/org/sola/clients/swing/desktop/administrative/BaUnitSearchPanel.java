@@ -32,6 +32,7 @@ import java.beans.PropertyChangeListener;
 import org.sola.clients.beans.administrative.BaUnitSearchResultBean;
 import org.sola.clients.swing.desktop.DesktopApplication;
 import org.sola.clients.swing.ui.ContentPanel;
+import org.sola.clients.swing.ui.MainContentPanel;
 
 /**
  * Allows to search BA units.
@@ -48,15 +49,17 @@ public class BaUnitSearchPanel extends ContentPanel {
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(org.sola.clients.swing.ui.administrative.BaUnitSearchPanel.SELECTED_BAUNIT_SEARCH_RESULT)) {
                     BaUnitSearchResultBean searchResult = (BaUnitSearchResultBean)evt.getNewValue();
-                    openPropertyForm(searchResult.getNameFirstPart(), searchResult.getNameLastPart());
+                    if(searchResult!=null){
+                        openPropertyForm(searchResult.getNameFirstPart(), searchResult.getNameLastPart());
+                    }
                 }
             }
         });
     }
 
     private void openPropertyForm(String nameFirstPart, String nameLastPart) {
-        PropertyForm propertyForm = new PropertyForm(nameFirstPart, nameLastPart);
-        DesktopApplication.getApplication().show(propertyForm);
+        PropertyPanel propertyPanel = new PropertyPanel(nameFirstPart, nameLastPart);
+        getMainContentPanel().addPanel(propertyPanel, MainContentPanel.CARD_PROPERTY_PANEL, true);
     }
 
     @SuppressWarnings("unchecked")

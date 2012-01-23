@@ -353,11 +353,26 @@ public class BaUnitBean extends AbstractTransactionedBean {
         return selectedCadastreObjects;
     }
     
-    public ObservableList<RrrBean> getSelectedRrrs() {
+    /** 
+     * Returns the list of selected rights.
+     * @param regenerateIds If true, will generate new IDs for all parent and child objects.
+     */
+    public ObservableList<RrrBean> getSelectedRrrs(boolean regenerateIds) {
         ObservableList<RrrBean> selectedRrrs = 
                 ObservableCollections.observableList(new ArrayList<RrrBean>());
         for(RrrBean rrr : getRrrFilteredList()){
             if(rrr.isSelected()){
+                if(regenerateIds){
+                    rrr.generateId();
+                    rrr.generateRowId();
+                    rrr.setRowVersion(0);
+                    rrr.getNotation().generateId();
+                    for(RrrShareBean rrrShare : rrr.getRrrShareList()){
+                        rrrShare.generateRowId();
+                        rrrShare.setRrrId(rrr.getId());
+                    }
+                    rrr.setBaUnitId(null);
+                }
                 selectedRrrs.add(rrr);
             }
         }
