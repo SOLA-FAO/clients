@@ -53,9 +53,9 @@ public abstract class ModifierNodeTool extends ExtendedDrawRectangle {
         this.form = new NodeModifyForm();
     }
 
-    protected final List<CadastreObjectNodeBean> getNodeList(){
-        return this.cadastreObjectNodeModifiedLayer.getNodeList();
-    }
+//    protected final List<CadastreObjectNodeBean> getNodeList(){
+//        return this.cadastreObjectNodeModifiedLayer.getNodeList();
+//    }
     
     protected abstract CadastreObjectNodeTO getNodeFromServer(Envelope2D env);
 
@@ -64,8 +64,10 @@ public abstract class ModifierNodeTool extends ExtendedDrawRectangle {
         this.form.setStatus(NodeModifyForm.Status.DoNothing);
         this.form.setCoordinateX(nodeFeatureGeom.getCoordinate().x);
         this.form.setCoordinateY(nodeFeatureGeom.getCoordinate().y);
-        CadastreObjectNodeBean nodeBean = this.getNode(nodeFeature);
-        this.form.setRemoveButtonVisibility(nodeBean.getCadastreObjectList().size() < 3);
+        //CadastreObjectNodeBean nodeBean = this.getNode(nodeFeature);
+        this.form.setRemoveButtonVisibility(
+                this.cadastreObjectModifiedLayer.getCadastreObjectFeatures(nodeFeature)
+                .size() < 3);
         this.form.setVisible(true);
         if (this.form.getStatus() == NodeModifyForm.Status.ModifyNode) {
             this.modifyNode(nodeFeature,
@@ -95,24 +97,18 @@ public abstract class ModifierNodeTool extends ExtendedDrawRectangle {
     private void modifyNode(
             SimpleFeature nodeFeature,
             Double newCoordinateX, Double newCoordinateY) {
-        CadastreObjectNodeBean nodeBean = this.getNode(nodeFeature);
-        if (nodeBean == null) {
-            throw new RuntimeException(GisMessage.CADASTRE_REDEFINITION_NODE_NOTFOUND);
-        }
+        //CadastreObjectNodeBean nodeBean = this.getNode(nodeFeature);
+        //if (nodeBean == null) {
+        //    throw new RuntimeException(GisMessage.CADASTRE_REDEFINITION_NODE_NOTFOUND);
+        //}
         Geometry nodeFeatureGeom = (Geometry) nodeFeature.getDefaultGeometry();
         Coordinate existingCoordinate = new Coordinate(
                 nodeFeatureGeom.getCoordinate().x, nodeFeatureGeom.getCoordinate().y);
-        nodeFeatureGeom.getCoordinate().x = newCoordinateX;
-        nodeFeatureGeom.getCoordinate().y = newCoordinateY;
-        nodeFeatureGeom.geometryChanged();
+        
+        List<SimpleFeature> cadastreObjects = 
+                this.cadastreObjectModifiedLayer.getCadastreObjectFeatures(nodeFeature);
 
-        for (CadastreObjectBean cadastreObjectBean : nodeBean.getCadastreObjectList()) {
-            SimpleFeature cadastreObjectFeature =
-                    this.cadastreObjectModifiedLayer.getFeatureCollection().getFeature(
-                    cadastreObjectBean.getId());
-            if (cadastreObjectFeature == null) {
-                continue;
-            }
+        for (SimpleFeature cadastreObjectFeature : cadastreObjects) {
             Geometry cadastreObjectGeom = (Geometry) cadastreObjectFeature.getDefaultGeometry();
             com.vividsolutions.jts.geom.CoordinateList coordinates =
                     new CoordinateList(cadastreObjectGeom.getCoordinates(), false);
@@ -127,47 +123,45 @@ public abstract class ModifierNodeTool extends ExtendedDrawRectangle {
             }
             cadastreObjectGeom.geometryChanged();
         }
+        nodeFeatureGeom.getCoordinate().x = newCoordinateX;
+        nodeFeatureGeom.getCoordinate().y = newCoordinateY;
+        nodeFeatureGeom.geometryChanged();
 
         this.getMapControl().refresh();
     }
 
     private void removeNode(SimpleFeature nodeFeature) {
-        CadastreObjectNodeBean nodeBean = this.getNode(nodeFeature);
-        if (nodeBean == null) {
-            throw new RuntimeException(GisMessage.CADASTRE_REDEFINITION_NODE_NOTFOUND);
-        }
+        List<SimpleFeature> cadastreObjects = 
+                this.cadastreObjectModifiedLayer.getCadastreObjectFeatures(nodeFeature);
 
-        if (nodeBean.getCadastreObjectList().size() > 2) {
+        if (cadastreObjects.size() > 2) {
             throw new RuntimeException(GisMessage.CADASTRE_REDEFINITION_NODE_HAS_MORE_THAN_ONE_CO);
         }
 
         Geometry nodeFeatureGeom = (Geometry) nodeFeature.getDefaultGeometry();
         Coordinate coordinate = nodeFeatureGeom.getCoordinate();
 
-        for (CadastreObjectBean cadastreObjectBean : nodeBean.getCadastreObjectList()) {
-            SimpleFeature cadastreObjectFeature =
-                    this.cadastreObjectModifiedLayer.getFeatureCollection().getFeature(
-                    cadastreObjectBean.getId());
-            if (cadastreObjectFeature == null) {
-                continue;
-            }
-
+        for (SimpleFeature cadastreObjectFeature : cadastreObjects) {
             Polygon cadastreObjectGeom = (Polygon) cadastreObjectFeature.getDefaultGeometry();
             LinearRing exteriorRing = this.removeCoordinateFromRing(
                     cadastreObjectGeom.getExteriorRing(), coordinate);
 
             LinearRing[] interiorRings = new LinearRing[cadastreObjectGeom.getNumInteriorRing()];
-            for (int interiorRingIndex = 0; interiorRingIndex < interiorRings.length; interiorRingIndex++) {
+            for (
+                    int interiorRingIndex = 0; 
+                    interiorRingIndex < interiorRings.length; 
+                    interiorRingIndex++) {
                 interiorRings[interiorRingIndex] = this.removeCoordinateFromRing(
                         cadastreObjectGeom.getInteriorRingN(interiorRingIndex), coordinate);
             }
 
-            cadastreObjectGeom = this.cadastreObjectModifiedLayer.getGeometryFactory().createPolygon(
+            cadastreObjectGeom = 
+                    this.cadastreObjectModifiedLayer.getGeometryFactory().createPolygon(
                     exteriorRing, interiorRings);
             cadastreObjectFeature.setDefaultGeometry(cadastreObjectGeom);
             cadastreObjectGeom.geometryChanged();
         }
-        this.cadastreObjectNodeModifiedLayer.removeNodeObject(nodeBean);
+        this.cadastreObjectNodeModifiedLayer.removeFeature(nodeFeature.getID());
         this.getMapControl().refresh();
     }
 
@@ -187,13 +181,13 @@ public abstract class ModifierNodeTool extends ExtendedDrawRectangle {
     }
 
 
-    protected CadastreObjectNodeBean getNode(SimpleFeature fromFeature) {
-        CadastreObjectNodeBean nodeBean = null;
-        int nodeBeanIndex = this.getNodeList().indexOf(
-                new CadastreObjectNodeBean(fromFeature.getID()));
-        if (nodeBeanIndex > -1) {
-            nodeBean = this.getNodeList().get(nodeBeanIndex);
-        }
-        return nodeBean;
-    }
+//    protected CadastreObjectNodeBean getNode(SimpleFeature fromFeature) {
+//        CadastreObjectNodeBean nodeBean = null;
+//        int nodeBeanIndex = this.getNodeList().indexOf(
+//                new CadastreObjectNodeBean(fromFeature.getID()));
+//        if (nodeBeanIndex > -1) {
+//            nodeBean = this.getNodeList().get(nodeBeanIndex);
+//        }
+//        return nodeBean;
+//    }
 }

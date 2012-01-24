@@ -29,15 +29,19 @@ public class CadastreObjectNodeModifiedLayer extends ExtendedLayerGraphics {
         super(LAYER_NAME, Geometries.POINT, LAYER_STYLE_RESOURCE, null);
     }
 
-    public List<CadastreObjectNodeBean> getNodeList() {
-        return nodeList;
-    }
+//    public List<CadastreObjectNodeBean> getNodeList() {
+//        return nodeList;
+//    }
     
-    public SimpleFeature addNodeObject(CadastreObjectNodeBean nodeBean) {
+    public SimpleFeature addNodeTarget(CadastreObjectNodeTargetBean nodeBean) {
+        return this.addNodeTarget(nodeBean.getNodeId(), nodeBean.getGeom());
+    }
+
+    public SimpleFeature addNodeTarget(String id, byte[] geom) {
         SimpleFeature featureAdded = null;
         try {
-            featureAdded = this.addFeature(nodeBean.getId(), nodeBean.getGeom(), null);
-            this.nodeList.add(nodeBean);
+            featureAdded = this.addFeature(id, geom, null);
+            //this.nodeList.add(nodeBean);
         } catch (Exception ex) {
             Messaging.getInstance().show("Error while adding nodes involved");
         }
@@ -69,5 +73,11 @@ public class CadastreObjectNodeModifiedLayer extends ExtendedLayerGraphics {
         }
         iterator.close();
         return nodeTargetList;
+    }
+    
+    public void addNodeTargetList(List<CadastreObjectNodeTargetBean> targetList){
+        for(CadastreObjectNodeTargetBean targetBean: targetList){
+            this.addNodeTarget(targetBean);
+        }
     }
 }

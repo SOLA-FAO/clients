@@ -34,7 +34,6 @@ package org.sola.clients.swing.gis.beans;
 import java.util.ArrayList;
 import java.util.List;
 import org.sola.clients.beans.validation.ValidationResultBean;
-import org.sola.common.MappingManager;
 import org.sola.webservices.transferobjects.transaction.TransactionTO;
 
 /**

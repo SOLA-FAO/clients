@@ -35,8 +35,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
+import org.sola.clients.swing.gis.beans.TransactionBean;
 import org.sola.common.MappingManager;
 import org.sola.clients.swing.gis.beans.TransactionCadastreChangeBean;
+import org.sola.clients.swing.gis.beans.TransactionCadastreRedefinitionBean;
 import org.sola.common.logging.LogUtility;
 import org.sola.common.messaging.MessageUtility;
 import org.sola.services.boundary.wsclients.CadastreClient;
@@ -51,6 +53,7 @@ import org.sola.webservices.search.QueryForSelect;
 import org.sola.webservices.spatial.ResultForNavigationInfo;
 import org.sola.webservices.search.ResultForSelectionInfo;
 import org.sola.webservices.transferobjects.transaction.TransactionCadastreChangeTO;
+import org.sola.webservices.transferobjects.transaction.TransactionCadastreRedefinitionTO;
 
 /**
  *
@@ -142,16 +145,30 @@ public class PojoDataAccess {
         return getInstance().getWSManager().getSpatialService();
     }
 
-    public TransactionCadastreChangeBean getCadastreChange(String serviceId){
+    public TransactionCadastreChangeBean getTransactionCadastreChange(String serviceId){
         TransactionCadastreChangeTO objTO = 
                 getInstance().getWSManager().getCadastreService().getTransactionCadastreChange(
                 serviceId);
-        TransactionCadastreChangeBean cadastreChangeBean = new TransactionCadastreChangeBean();
+        TransactionCadastreChangeBean transactionBean = new TransactionCadastreChangeBean();
         if (objTO == null){
-            cadastreChangeBean.setFromServiceId(serviceId);
+            transactionBean.setFromServiceId(serviceId);
         }else{
-            MappingManager.getMapper().map(objTO, cadastreChangeBean);            
+            MappingManager.getMapper().map(objTO, transactionBean);            
         }
-        return cadastreChangeBean;
+        return transactionBean;
     }
+
+    public TransactionCadastreRedefinitionBean getTransactionCadastreRedefinition(String serviceId){
+        TransactionCadastreRedefinitionTO objTO = 
+                getInstance().getWSManager().getCadastreService().getTransactionCadastreRedefinition(
+                serviceId);
+        TransactionCadastreRedefinitionBean transactionBean = 
+                new TransactionCadastreRedefinitionBean();
+        if (objTO == null){
+            transactionBean.setFromServiceId(serviceId);
+        }else{
+            MappingManager.getMapper().map(objTO, transactionBean);            
+        }
+        return transactionBean;
+    }    
 }

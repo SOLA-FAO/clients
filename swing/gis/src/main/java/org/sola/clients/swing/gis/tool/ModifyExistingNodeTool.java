@@ -45,11 +45,12 @@ public class ModifyExistingNodeTool extends ModifierNodeTool {
             }
             CadastreObjectNodeBean nodeBean = MappingManager.getMapper().map(
                     new CadastreObjectNodeExtraTO(nodeTO), CadastreObjectNodeBean.class);
-            this.cadastreObjectNodeModifiedLayer.addNodeObject(nodeBean);
+            nodeFeature = this.cadastreObjectNodeModifiedLayer.addNodeTarget(
+                    nodeBean.getId(), nodeBean.getGeom());
             this.cadastreObjectModifiedLayer.addCadastreObjects(nodeBean.getCadastreObjectList());
             this.getMapControl().refresh();
-            this.getNodeList().add(nodeBean);
-            nodeFeature = this.getFirstNodeFeature(env);
+            //this.getNodeList().add(nodeBean);
+            //nodeFeature = this.getFirstNodeFeature(env);
         }
         if (nodeFeature == null) {
             return;

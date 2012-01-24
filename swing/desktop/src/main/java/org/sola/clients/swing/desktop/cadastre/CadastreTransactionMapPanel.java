@@ -30,6 +30,7 @@ package org.sola.clients.swing.desktop.cadastre;
 import java.awt.BorderLayout;
 import java.util.List;
 import org.sola.clients.beans.validation.ValidationResultBean;
+import org.sola.clients.swing.gis.beans.TransactionBean;
 import org.sola.clients.swing.ui.validation.ValidationResultForm;
 import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -37,11 +38,15 @@ import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationPropertyBean;
 import org.sola.clients.beans.application.ApplicationServiceBean;
+import org.sola.clients.beans.referencedata.RequestTypeBean;
 import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.gis.beans.TransactionCadastreChangeBean;
+import org.sola.clients.swing.gis.beans.TransactionCadastreRedefinitionBean;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForCadastreChange;
 import org.sola.clients.swing.ui.source.DocumentsManagementPanel;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
+import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForCadastreRedefinition;
+import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForTransaction;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.webservices.transferobjects.administrative.BaUnitTO;
 
@@ -49,15 +54,15 @@ import org.sola.webservices.transferobjects.administrative.BaUnitTO;
  *
  * @author rizzom
  */
-public class CadastreChangeMapPanel extends ContentPanel {
+public class CadastreTransactionMapPanel extends ContentPanel {
 
     private ApplicationBean applicationBean;
     private ApplicationServiceBean applicationService;
     private ApplicationPropertyBean applicationProperty;
-    private ControlsBundleForCadastreChange mapControl = null;
+    private ControlsBundleForTransaction mapControl = null;
 
-    /** Creates new form CadastreChangeMapForm */
-    public CadastreChangeMapPanel(ApplicationBean applicationBean,
+    public CadastreTransactionMapPanel(
+            ApplicationBean applicationBean,
             ApplicationServiceBean applicationService,
             ApplicationPropertyBean applicationProperty) {
 
@@ -73,13 +78,23 @@ public class CadastreChangeMapPanel extends ContentPanel {
     }
 
     private void initializeMap() {
-        String baUnitId = this.getBaUnitId();
-        TransactionCadastreChangeBean cadastreChangeBean = PojoDataAccess.getInstance().getCadastreChange(
-                this.applicationService.getId());
-
-        this.mapControl = new ControlsBundleForCadastreChange(
-                this.applicationBean.getNr(), cadastreChangeBean, baUnitId,
-                this.applicationBean.getLocation());
+        if (applicationService.getRequestType().getCode().equals(
+                RequestTypeBean.CODE_CADASTRE_CHANGE)) {
+            TransactionCadastreChangeBean transactionBean =
+                    PojoDataAccess.getInstance().getTransactionCadastreChange(
+                    this.applicationService.getId());
+            this.mapControl = new ControlsBundleForCadastreChange(
+                    this.applicationBean.getNr(), transactionBean, this.getBaUnitId(),
+                    this.applicationBean.getLocation());
+        } else if (applicationService.getRequestType().getCode().equals(
+                RequestTypeBean.CODE_CADASTRE_REDEFINITION)) {
+            TransactionCadastreRedefinitionBean transactionBean =
+                    PojoDataAccess.getInstance().getTransactionCadastreRedefinition(
+                    this.applicationService.getId());
+            this.mapControl = new ControlsBundleForCadastreRedefinition(
+                    transactionBean, this.getBaUnitId(),
+                    this.applicationBean.getLocation());
+        }
         this.mapControl.setApplicationId(this.applicationBean.getId());
     }
 
@@ -97,19 +112,18 @@ public class CadastreChangeMapPanel extends ContentPanel {
     }
 
     private void customizeForm() {
-        java.util.ResourceBundle bundle = java.util.ResourceBundle
-                .getBundle("org/sola/clients/swing/desktop/cadastre/Bundle");
-        String title = bundle.getString("CadastreChangeMapPanel.headerPanel.titleText");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/cadastre/Bundle");
+        String title = applicationService.getRequestType().getDisplayValue();
 
         if (applicationBean != null && applicationService != null) {
             if (this.applicationProperty != null) {
-                title = String.format(bundle.getString("CadastreChangeMapPanel.headerPanel.titleText.ApplicationAndProperty"),
+                title = String.format(bundle.getString("CadastreTransactionMapPanel.headerPanel.titleText.ApplicationAndProperty"),
                         applicationService.getRequestType().getDisplayValue(),
                         applicationProperty.getNameFirstpart(),
                         applicationProperty.getNameLastpart(),
                         applicationBean.getNr());
             } else {
-                title = String.format(bundle.getString("CadastreChangeMapPanel.headerPanel.titleText.Application"),
+                title = String.format(bundle.getString("CadastreTransactionMapPanel.headerPanel.titleText.Application"),
                         applicationService.getRequestType().getDisplayValue(),
                         applicationBean.getNr());
             }
@@ -138,7 +152,7 @@ public class CadastreChangeMapPanel extends ContentPanel {
         boolean allowEdit = true;
 
         DocumentsManagementPanel panel = new DocumentsManagementPanel(
-                this.mapControl.getCadastreChangeBean().getSourceIdList(),
+                this.mapControl.getTransactionBean().getSourceIdList(),
                 applicationBean, allowEdit);
         return panel;
     }
@@ -172,21 +186,21 @@ public class CadastreChangeMapPanel extends ContentPanel {
         );
         mapPanelLayout.setVerticalGroup(
             mapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 240, Short.MAX_VALUE)
+            .addGap(0, 292, Short.MAX_VALUE)
         );
 
         headerPanel.setName("headerPanel"); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/cadastre/Bundle"); // NOI18N
-        headerPanel.setTitleText(bundle.getString("CadastreChangeMapPanel.headerPanel.titleText")); // NOI18N
+        headerPanel.setTitleText(bundle.getString("CadastreTransactionMapPanel.headerPanel.titleText")); // NOI18N
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
         jToolBar1.setName("jToolBar1"); // NOI18N
 
-        btnSave.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnSave.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/save.png"))); // NOI18N
-        btnSave.setText(bundle.getString("CadastreChangeMapPanel.btnSave.text")); // NOI18N
-        btnSave.setToolTipText(bundle.getString("CadastreChangeMapPanel.btnSave.toolTipText")); // NOI18N
+        btnSave.setText(bundle.getString("CadastreTransactionMapPanel.btnSave.text")); // NOI18N
+        btnSave.setToolTipText(bundle.getString("CadastreTransactionMapPanel.btnSave.toolTipText")); // NOI18N
         btnSave.setName("btnSave"); // NOI18N
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -196,7 +210,7 @@ public class CadastreChangeMapPanel extends ContentPanel {
         jToolBar1.add(btnSave);
 
         groupPanel1.setName("groupPanel1"); // NOI18N
-        groupPanel1.setTitleText(bundle.getString("CadastreChangeMapPanel.groupPanel1.titleText")); // NOI18N
+        groupPanel1.setTitleText(bundle.getString("CadastreTransactionMapPanel.groupPanel1.titleText")); // NOI18N
 
         documentsPanel.setName("documentsPanel"); // NOI18N
 
@@ -228,7 +242,7 @@ public class CadastreChangeMapPanel extends ContentPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(groupPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(documentsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(documentsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(mapPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -236,9 +250,9 @@ public class CadastreChangeMapPanel extends ContentPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        TransactionCadastreChangeBean cadastreChangeBean = this.mapControl.getCadastreChangeBean();
-        cadastreChangeBean.setSourceIdList(this.documentsPanel.getSourceIds(false));
-        List<ValidationResultBean> result = cadastreChangeBean.save();
+        TransactionBean transactionBean = this.mapControl.getTransactionBean();
+        transactionBean.setSourceIdList(this.documentsPanel.getSourceIds(false));
+        List<ValidationResultBean> result = transactionBean.save();
         String message = MessageUtility.getLocalizedMessage(
                 GisMessage.CADASTRE_CHANGE_SAVED_SUCCESSFULLY).getMessage();
         this.mapControl.refresh(true);

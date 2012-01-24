@@ -72,7 +72,7 @@ import org.sola.clients.swing.desktop.DesktopApplication;
 import org.sola.clients.swing.desktop.administrative.PropertyPanel;
 import org.sola.clients.beans.application.ApplicationPropertyBean;
 import org.sola.clients.beans.referencedata.ApplicationActionTypeBean;
-import org.sola.clients.swing.desktop.cadastre.CadastreChangeMapPanel;
+import org.sola.clients.swing.desktop.cadastre.CadastreTransactionMapPanel;
 import org.sola.clients.beans.validation.ValidationResultBean;
 import org.sola.clients.beans.referencedata.StatusConstants;
 import org.sola.clients.beans.security.SecurityBean;
@@ -567,10 +567,11 @@ public class ApplicationPanel extends ContentPanel {
                 form.setLocationRelativeTo(this);
                 form.setVisible(true);
 
-            } else if (requestType.equalsIgnoreCase(RequestTypeBean.CODE_CADASTRE_CHANGE)) {
+            } else if (requestType.equalsIgnoreCase(RequestTypeBean.CODE_CADASTRE_CHANGE)
+                    || requestType.equalsIgnoreCase(RequestTypeBean.CODE_CADASTRE_REDEFINITION)) {
 
                 if (appBean.getPropertyList().getFilteredList().size() == 1) {
-                    CadastreChangeMapPanel form = new CadastreChangeMapPanel(
+                    CadastreTransactionMapPanel form = new CadastreTransactionMapPanel(
                             appBean,
                             appBean.getSelectedService(),
                             appBean.getPropertyList().getFilteredList().get(0));
@@ -586,21 +587,24 @@ public class ApplicationPanel extends ContentPanel {
                         public void propertyChange(PropertyChangeEvent evt) {
                             if (evt.getPropertyName().equals(PropertiesList.SELECTED_PROPERTY)
                                     && evt.getNewValue() != null) {
-                                ApplicationPropertyBean property = (ApplicationPropertyBean) evt.getNewValue();
+                                ApplicationPropertyBean property = 
+                                        (ApplicationPropertyBean) evt.getNewValue();
                                 ((JDialog) evt.getSource()).dispose();
-                                CadastreChangeMapPanel form = new CadastreChangeMapPanel(
+                                CadastreTransactionMapPanel form = new CadastreTransactionMapPanel(
                                         appBean,
                                         appBean.getSelectedService(), property);
-                                getMainContentPanel().addPanel(form, MainContentPanel.CARD_CADASTRECHANGE, true);
+                                getMainContentPanel().addPanel(
+                                        form, MainContentPanel.CARD_CADASTRECHANGE, true);
                             }
                         }
                     });
                     propertyListForm.setVisible(true);
 
                 } else {
-                    CadastreChangeMapPanel form = new CadastreChangeMapPanel(
+                    CadastreTransactionMapPanel form = new CadastreTransactionMapPanel(
                             appBean, appBean.getSelectedService(), null);
-                    getMainContentPanel().addPanel(form, MainContentPanel.CARD_CADASTRECHANGE, true);
+                    getMainContentPanel().addPanel(
+                            form, MainContentPanel.CARD_CADASTRECHANGE, true);
                 }
 
             } else if (requestType.equalsIgnoreCase(RequestTypeBean.CODE_NEW_APARTMENT)

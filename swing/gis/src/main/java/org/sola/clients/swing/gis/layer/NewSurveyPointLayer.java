@@ -67,7 +67,8 @@ public class NewSurveyPointLayer extends ExtendedLayerEditor {
     public static final String LAYER_FIELD_ISLINKED = "is_linked";
     public static final String LAYER_FIELD_SHIFT = "shift";
     private static final String LAYER_FIELD_ORIGINAL_GEOMETRY = "original_geometry";
-    private static final String LAYER_ATTRIBUTE_DEFINITION = String.format("%s:\"\",%s:0,%s:0,%s:0.0,%s:Point",
+    private static final String LAYER_ATTRIBUTE_DEFINITION = 
+            String.format("%s:\"\",%s:0,%s:0,%s:0.0,%s:Point",
             LAYER_FIELD_LABEL, LAYER_FIELD_ISBOUNDARY, LAYER_FIELD_ISLINKED,
             LAYER_FIELD_SHIFT, LAYER_FIELD_ORIGINAL_GEOMETRY);
     private Integer fidGenerator = 1;
