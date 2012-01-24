@@ -12,26 +12,21 @@ import org.geotools.geometry.jts.Geometries;
 import org.geotools.map.extended.layer.ExtendedLayerGraphics;
 import org.geotools.swing.extended.util.Messaging;
 import org.opengis.feature.simple.SimpleFeature;
-import org.sola.clients.swing.gis.beans.CadastreObjectNodeBean;
 import org.sola.clients.swing.gis.beans.CadastreObjectNodeTargetBean;
+import org.sola.common.messaging.GisMessage;
 
 /**
  *
  * @author Elton Manoku
  */
-public class CadastreObjectNodeModifiedLayer extends ExtendedLayerGraphics {
+public class CadastreRedefinitionNodeLayer extends ExtendedLayerGraphics {
 
     private static final String LAYER_NAME = "Modified Nodes";
     private static final String LAYER_STYLE_RESOURCE = "node_modified.xml";
-    private List<CadastreObjectNodeBean> nodeList = new ArrayList<CadastreObjectNodeBean>();
 
-    public CadastreObjectNodeModifiedLayer() throws Exception {
+    public CadastreRedefinitionNodeLayer() throws Exception {
         super(LAYER_NAME, Geometries.POINT, LAYER_STYLE_RESOURCE, null);
     }
-
-//    public List<CadastreObjectNodeBean> getNodeList() {
-//        return nodeList;
-//    }
     
     public SimpleFeature addNodeTarget(CadastreObjectNodeTargetBean nodeBean) {
         return this.addNodeTarget(nodeBean.getNodeId(), nodeBean.getGeom());
@@ -41,20 +36,12 @@ public class CadastreObjectNodeModifiedLayer extends ExtendedLayerGraphics {
         SimpleFeature featureAdded = null;
         try {
             featureAdded = this.addFeature(id, geom, null);
-            //this.nodeList.add(nodeBean);
         } catch (Exception ex) {
-            Messaging.getInstance().show("Error while adding nodes involved");
+            org.sola.common.logging.LogUtility.log(
+                    GisMessage.CADASTRE_REDEFINITION_ADD_NODE_ERROR, ex);
+            Messaging.getInstance().show(GisMessage.CADASTRE_REDEFINITION_ADD_NODE_ERROR);
         }
         return featureAdded;
-    }
-
-    public void removeNodeObject(CadastreObjectNodeBean nodeBean) {
-        try {
-            this.removeFeature(nodeBean.getId());
-            this.nodeList.remove(nodeBean);
-        } catch (Exception ex) {
-            Messaging.getInstance().show("Error while removing node.");
-        }
     }
     
     public List<CadastreObjectNodeTargetBean> getNodeTargetList(){

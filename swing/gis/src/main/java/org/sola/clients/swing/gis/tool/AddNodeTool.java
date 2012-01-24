@@ -19,8 +19,8 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.sola.clients.swing.gis.beans.CadastreObjectBean;
 import org.sola.clients.swing.gis.beans.CadastreObjectNodeBean;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
-import org.sola.clients.swing.gis.layer.CadastreObjectModifiedLayer;
-import org.sola.clients.swing.gis.layer.CadastreObjectNodeModifiedLayer;
+import org.sola.clients.swing.gis.layer.CadastreRedefinitionObjectLayer;
+import org.sola.clients.swing.gis.layer.CadastreRedefinitionNodeLayer;
 import org.sola.clients.swing.gis.to.CadastreObjectNodeExtraTO;
 import org.sola.common.MappingManager;
 import org.sola.common.messaging.GisMessage;
@@ -38,8 +38,8 @@ public class AddNodeTool extends ModifierNodeTool {
             GisMessage.CADASTRE_TOOLTIP_CHANGE_NODE).getMessage();
 
     public AddNodeTool(PojoDataAccess dataAccess,
-            CadastreObjectNodeModifiedLayer cadastreObjectNodeModifiedLayer,
-            CadastreObjectModifiedLayer cadastreObjectModifiedLayer) {
+            CadastreRedefinitionNodeLayer cadastreObjectNodeModifiedLayer,
+            CadastreRedefinitionObjectLayer cadastreObjectModifiedLayer) {
         super(dataAccess, cadastreObjectNodeModifiedLayer, cadastreObjectModifiedLayer);
         this.setToolName(toolName);
         this.setToolTip(toolTip);
@@ -83,7 +83,7 @@ public class AddNodeTool extends ModifierNodeTool {
     private void insertNode(SimpleFeature nodeFeature, List<String> cadastreObjectTargetIds) {
 //        CadastreObjectNodeBean nodeBean = this.getNode(nodeFeature);
 //        if (nodeBean == null) {
-//            throw new RuntimeException(GisMessage.CADASTRE_REDEFINITION_NODE_NOTFOUND);
+//            throw new RuntimeException(GisMessage.CADASTRE_REDEFINITION_ADD_NODE_ERROR);
 //        }
 
         Geometry nodeFeatureGeom = (Geometry) nodeFeature.getDefaultGeometry();

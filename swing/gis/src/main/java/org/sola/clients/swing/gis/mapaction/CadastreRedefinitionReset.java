@@ -11,18 +11,20 @@ import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.MessageUtility;
 
 /**
- *
+ * Cadastre redefinition reset command. It is used in the cadastre redefinition bundle to 
+ * reset the process of redefinition.
+ * 
  * @author Elton Manoku
  */
 public class CadastreRedefinitionReset extends ExtendedAction {
 
-    ControlsBundleForCadastreRedefinition mapControl;
+    private ControlsBundleForCadastreRedefinition mapControl;
 
     public CadastreRedefinitionReset(ControlsBundleForCadastreRedefinition mapControl) {
-        super(mapControl.getMap(), "location-remove",
+        super(mapControl.getMap(), "cadastre-redefinition-reset",
                 MessageUtility.getLocalizedMessage(
-                GisMessage.CADASTRE_TOOLTIP_REMOVE_LOCATION).getMessage(),
-                "resources/application-location-remove.png");
+                GisMessage.CADASTRE_REDEFINITION_RESET_TOOLTIP).getMessage(),
+                "resources/cadastre-redefinition-reset.png");
         this.mapControl = mapControl;
     }
 
@@ -30,8 +32,11 @@ public class CadastreRedefinitionReset extends ExtendedAction {
     public void onClick() {
         try {
             this.mapControl.reset();
+            this.mapControl.refresh(false);
         } catch (Exception ex) {
-            Messaging.getInstance().show("Reseted error");
+            org.sola.common.logging.LogUtility.log(
+                    GisMessage.CADASTRE_REDEFINITION_RESET_ERROR, ex);
+            Messaging.getInstance().show(GisMessage.CADASTRE_REDEFINITION_RESET_ERROR);
         }
     }
 }

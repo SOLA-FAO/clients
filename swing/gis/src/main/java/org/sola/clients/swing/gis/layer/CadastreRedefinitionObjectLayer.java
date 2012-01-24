@@ -18,12 +18,13 @@ import org.geotools.swing.extended.util.Messaging;
 import org.opengis.feature.simple.SimpleFeature;
 import org.sola.clients.swing.gis.beans.CadastreObjectBean;
 import org.sola.clients.swing.gis.beans.CadastreObjectTargetRedefinitionBean;
+import org.sola.common.messaging.GisMessage;
 
 /**
  *
  * @author Elton Manoku
  */
-public class CadastreObjectModifiedLayer extends ExtendedLayerGraphics {
+public class CadastreRedefinitionObjectLayer extends ExtendedLayerGraphics {
 
     private static final String LAYER_NAME = "Modified Parcels";
     private static final String LAYER_STYLE_RESOURCE = "parcel_modified.xml";
@@ -31,7 +32,7 @@ public class CadastreObjectModifiedLayer extends ExtendedLayerGraphics {
     private static final String LAYER_ATTRIBUTE_DEFINITION =
             String.format("%s:Polygon", LAYER_FIELD_ORIGINAL_GEOMETRY);
 
-    public CadastreObjectModifiedLayer() throws Exception {
+    public CadastreRedefinitionObjectLayer() throws Exception {
         super(LAYER_NAME, Geometries.POLYGON, LAYER_STYLE_RESOURCE, LAYER_ATTRIBUTE_DEFINITION);
     }
 
@@ -43,7 +44,9 @@ public class CadastreObjectModifiedLayer extends ExtendedLayerGraphics {
                 }
             }
         } catch (Exception ex) {
-            Messaging.getInstance().show("Error while adding parcels involved");
+            org.sola.common.logging.LogUtility.log(
+                    GisMessage.CADASTRE_REDEFINITION_ADD_CO_ERROR, ex);
+            Messaging.getInstance().show(GisMessage.CADASTRE_REDEFINITION_ADD_CO_ERROR);
         }
     }
 

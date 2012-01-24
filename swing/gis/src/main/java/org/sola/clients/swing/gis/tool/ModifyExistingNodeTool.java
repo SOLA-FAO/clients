@@ -8,8 +8,8 @@ import org.geotools.geometry.Envelope2D;
 import org.opengis.feature.simple.SimpleFeature;
 import org.sola.clients.swing.gis.beans.CadastreObjectNodeBean;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
-import org.sola.clients.swing.gis.layer.CadastreObjectModifiedLayer;
-import org.sola.clients.swing.gis.layer.CadastreObjectNodeModifiedLayer;
+import org.sola.clients.swing.gis.layer.CadastreRedefinitionObjectLayer;
+import org.sola.clients.swing.gis.layer.CadastreRedefinitionNodeLayer;
 import org.sola.clients.swing.gis.to.CadastreObjectNodeExtraTO;
 import org.sola.common.MappingManager;
 import org.sola.common.messaging.GisMessage;
@@ -27,8 +27,8 @@ public class ModifyExistingNodeTool extends ModifierNodeTool {
             GisMessage.CADASTRE_TOOLTIP_CHANGE_NODE).getMessage();
 
     public ModifyExistingNodeTool(PojoDataAccess dataAccess,
-            CadastreObjectNodeModifiedLayer cadastreObjectNodeModifiedLayer,
-            CadastreObjectModifiedLayer cadastreObjectModifiedLayer) {
+            CadastreRedefinitionNodeLayer cadastreObjectNodeModifiedLayer,
+            CadastreRedefinitionObjectLayer cadastreObjectModifiedLayer) {
         super(dataAccess, cadastreObjectNodeModifiedLayer, cadastreObjectModifiedLayer);
         this.setToolName(toolName);
         this.setToolTip(toolTip);

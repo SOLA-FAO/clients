@@ -64,10 +64,9 @@ public final class ControlsBundleForBaUnit extends ControlsBundleForWorkingWithC
             //layerForCadastreObjects.setShowInToc(false);
             this.getMap().addLayer(layerForCadastreObjects);
         } catch (Exception ex) {
-            Messaging.getInstance().show(GisMessage.CADASTRE_OBJBAUNIT_SETUP_ERROR);
             org.sola.common.logging.LogUtility.log(
                     GisMessage.CADASTRE_OBJBAUNIT_SETUP_ERROR, ex);
-
+            Messaging.getInstance().show(GisMessage.CADASTRE_OBJBAUNIT_SETUP_ERROR);
         }
     }
 

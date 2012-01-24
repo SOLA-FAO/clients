@@ -23,8 +23,8 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.sola.clients.swing.gis.beans.CadastreObjectBean;
 import org.sola.clients.swing.gis.beans.CadastreObjectNodeBean;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
-import org.sola.clients.swing.gis.layer.CadastreObjectModifiedLayer;
-import org.sola.clients.swing.gis.layer.CadastreObjectNodeModifiedLayer;
+import org.sola.clients.swing.gis.layer.CadastreRedefinitionObjectLayer;
+import org.sola.clients.swing.gis.layer.CadastreRedefinitionNodeLayer;
 import org.sola.clients.swing.gis.to.CadastreObjectNodeExtraTO;
 import org.sola.clients.swing.gis.ui.control.NodeModifyForm;
 import org.sola.common.MappingManager;
@@ -39,14 +39,14 @@ import org.sola.webservices.transferobjects.cadastre.CadastreObjectNodeTO;
 public abstract class ModifierNodeTool extends ExtendedDrawRectangle {
 
     protected PojoDataAccess dataAccess;
-    protected CadastreObjectModifiedLayer cadastreObjectModifiedLayer;
-    protected CadastreObjectNodeModifiedLayer cadastreObjectNodeModifiedLayer;
+    protected CadastreRedefinitionObjectLayer cadastreObjectModifiedLayer;
+    protected CadastreRedefinitionNodeLayer cadastreObjectNodeModifiedLayer;
     private NodeModifyForm form = null;
 
     public ModifierNodeTool(
             PojoDataAccess dataAccess,
-            CadastreObjectNodeModifiedLayer cadastreObjectNodeModifiedLayer,
-            CadastreObjectModifiedLayer cadastreObjectModifiedLayer) {
+            CadastreRedefinitionNodeLayer cadastreObjectNodeModifiedLayer,
+            CadastreRedefinitionObjectLayer cadastreObjectModifiedLayer) {
         this.dataAccess = dataAccess;
         this.cadastreObjectModifiedLayer = cadastreObjectModifiedLayer;
         this.cadastreObjectNodeModifiedLayer = cadastreObjectNodeModifiedLayer;
@@ -99,7 +99,7 @@ public abstract class ModifierNodeTool extends ExtendedDrawRectangle {
             Double newCoordinateX, Double newCoordinateY) {
         //CadastreObjectNodeBean nodeBean = this.getNode(nodeFeature);
         //if (nodeBean == null) {
-        //    throw new RuntimeException(GisMessage.CADASTRE_REDEFINITION_NODE_NOTFOUND);
+        //    throw new RuntimeException(GisMessage.CADASTRE_REDEFINITION_ADD_NODE_ERROR);
         //}
         Geometry nodeFeatureGeom = (Geometry) nodeFeature.getDefaultGeometry();
         Coordinate existingCoordinate = new Coordinate(

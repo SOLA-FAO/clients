@@ -39,9 +39,10 @@ import org.sola.clients.swing.gis.Messaging;
 import org.sola.clients.swing.gis.beans.TransactionCadastreRedefinitionBean;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.data.PojoFeatureSource;
-import org.sola.clients.swing.gis.layer.CadastreObjectModifiedLayer;
-import org.sola.clients.swing.gis.layer.CadastreObjectNodeModifiedLayer;
+import org.sola.clients.swing.gis.layer.CadastreRedefinitionObjectLayer;
+import org.sola.clients.swing.gis.layer.CadastreRedefinitionNodeLayer;
 import org.sola.clients.swing.gis.layer.PojoLayer;
+import org.sola.clients.swing.gis.mapaction.CadastreRedefinitionReset;
 import org.sola.clients.swing.gis.tool.ModifyExistingNodeTool;
 import org.sola.clients.swing.gis.tool.AddNodeTool;
 import org.sola.common.messaging.GisMessage;
@@ -53,8 +54,8 @@ import org.sola.common.messaging.GisMessage;
 public final class ControlsBundleForCadastreRedefinition extends ControlsBundleForTransaction {
 
     private TransactionCadastreRedefinitionBean transactionBean;
-    private CadastreObjectNodeModifiedLayer cadastreObjectNodeModifiedLayer = null;
-    private CadastreObjectModifiedLayer cadastreObjectModifiedLayer = null;
+    private CadastreRedefinitionNodeLayer cadastreObjectNodeModifiedLayer = null;
+    private CadastreRedefinitionObjectLayer cadastreObjectModifiedLayer = null;
 
     public ControlsBundleForCadastreRedefinition(
             TransactionCadastreRedefinitionBean transactionBean,
@@ -89,13 +90,13 @@ public final class ControlsBundleForCadastreRedefinition extends ControlsBundleF
 
     @Override
     protected void addLayers() throws Exception {
-        this.cadastreObjectModifiedLayer = new CadastreObjectModifiedLayer();
+        this.cadastreObjectModifiedLayer = new CadastreRedefinitionObjectLayer();
         this.getMap().addLayer(this.cadastreObjectModifiedLayer);
 
         this.cadastreObjectModifiedLayer.addCadastreObjectTargetList(
                 this.transactionBean.getCadastreObjectTargetList());
 
-        this.cadastreObjectNodeModifiedLayer = new CadastreObjectNodeModifiedLayer();
+        this.cadastreObjectNodeModifiedLayer = new CadastreRedefinitionNodeLayer();
         this.getMap().addLayer(this.cadastreObjectNodeModifiedLayer);
         
         this.cadastreObjectNodeModifiedLayer.addNodeTargetList(
@@ -116,6 +117,8 @@ public final class ControlsBundleForCadastreRedefinition extends ControlsBundleF
                 this.cadastreObjectNodeModifiedLayer,
                 this.cadastreObjectModifiedLayer),
                 this.getToolbar());
+        
+        this.getMap().addMapAction(new CadastreRedefinitionReset(this), this.getToolbar());
     }
     
     public void reset() throws Exception{
