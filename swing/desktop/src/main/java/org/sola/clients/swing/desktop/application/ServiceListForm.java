@@ -48,21 +48,21 @@ public class ServiceListForm extends javax.swing.JDialog {
 
     /** Creates new form ServiceList */
     public ServiceListForm() {
-        super((JFrame)null, true);
+        super((JFrame) null, true);
         initComponents();
-         this.setIconImage(new ImageIcon(ServiceListForm.class.getResource("/images/sola/logo_icon.jpg")).getImage());
-      
+        this.setIconImage(new ImageIcon(ServiceListForm.class.getResource("/images/sola/logo_icon.jpg")).getImage());
+
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/application/Bundle"); // NOI18N
         this.setTitle(bundle.getString("ServiceList.labTitle.text"));
     }
 
     public ServiceListForm(ApplicationBean application) {
-        super((JFrame)null, true);
+        super((JFrame) null, true);
         this.application = application;
-        
+
         initComponents();
         this.setIconImage(new ImageIcon(ServiceListForm.class.getResource("/images/sola/logo_icon.jpg")).getImage());
-      
+
     }
 
     @SuppressWarnings("unchecked")
@@ -129,18 +129,16 @@ public class ServiceListForm extends javax.swing.JDialog {
     private void tabFeeDetails1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabFeeDetails1MouseClicked
         if (evt.getClickCount() == 2) {
             if (requestTypeList.getSelectedRequestType() != null) {
-                for (Iterator<ApplicationServiceBean> it = application.getServiceList().iterator(); it.hasNext();) {
-                    ApplicationServiceBean appService = it.next();
-                       System.out.println("appService.getRequestTypeCode() "+appService.getRequestTypeCode());
-               
-                       if (requestTypeList.getSelectedRequestType().getCode().equals(appService.getRequestTypeCode())) {
-                            MessageUtility.displayMessage(ClientMessage.APPLICATION_ALREADYSELECTED_SERVICE);
-                        return;
-                        
-                        }
-                }
+//                for (Iterator<ApplicationServiceBean> it = application.getServiceList().iterator(); it.hasNext();) {
+//                    ApplicationServiceBean appService = it.next();
+//                    System.out.println("appService.getRequestTypeCode() " + appService.getRequestTypeCode());
+//
+//                    if (requestTypeList.getSelectedRequestType().getCode().equals(appService.getRequestTypeCode())) {
+//                        MessageUtility.displayMessage(ClientMessage.APPLICATION_ALREADYSELECTED_SERVICE);
+//                        return;
+//                    }
+//                }
                 application.addService(requestTypeList.getSelectedRequestType());
-                //requestTypeList.removeRequestType();
             }
         }
 }//GEN-LAST:event_tabFeeDetails1MouseClicked
