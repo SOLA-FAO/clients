@@ -30,21 +30,15 @@ package org.sola.clients.beans.administrative;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.jdesktop.observablecollections.ObservableListListener;
 import org.sola.services.boundary.wsclients.WSManager;
-import org.sola.clients.beans.AbstractTransactionedBean;
-import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.cadastre.CadastreObjectBean;
 import org.sola.clients.beans.controls.SolaList;
 import org.sola.clients.beans.converters.TypeConverters;
-import org.sola.clients.beans.referencedata.BaUnitTypeBean;
 import org.sola.clients.beans.referencedata.StatusConstants;
 import org.sola.clients.beans.source.SourceBean;
-import org.sola.clients.beans.validation.Localized;
-import org.sola.common.messaging.ClientMessage;
 import org.sola.webservices.transferobjects.EntityAction;
 import org.sola.webservices.transferobjects.administrative.BaUnitTO;
 import org.sola.webservices.transferobjects.search.CadastreObjectSearchResultTO;
@@ -53,7 +47,7 @@ import org.sola.webservices.transferobjects.search.CadastreObjectSearchResultTO;
  * Contains properties and methods to manage <b>BA Unit</b> object of the 
  * domain model. Could be populated from the {@link BaUnitTO} object.
  */
-public class BaUnitBean extends AbstractTransactionedBean {
+public class BaUnitBean extends BaUnitSummaryBean {
 
     private class RrrListListener implements ObservableListListener {
 
@@ -161,31 +155,28 @@ public class BaUnitBean extends AbstractTransactionedBean {
             return notationBean;
         }
     }
-    public static final String BA_UNIT_TYPE_PROPERTY = "baUnitType";
-    public static final String TYPE_CODE_PROPERTY = "typeCode";
-    public static final String NAME_PROPERTY = "name";
-    public static final String NAME_FIRSTPART_PROPERTY = "nameFirstpart";
-    public static final String NAME_LASTPART_PROPERTY = "nameLastpart";
+    
     public static final String SELECTED_PARCEL_PROPERTY = "selectedParcel";
     public static final String SELECTED_RIGHT_PROPERTY = "selectedRight";
     public static final String SELECTED_BA_UNIT_NOTATION_PROPERTY = "selectedBaUnitNotation";
+    public static final String SELECTED_PARENT_BA_UNIT_PROPERTY = "selectedParentBaUnit";
+    public static final String SELECTED_CHILD_BA_UNIT_PROPERTY = "selectedChildBaUnit";
     public static final String ESTATE_TYPE_PROPERTY = "estateType";
-    private String name;
-    @NotEmpty(message = ClientMessage.CHECK_NOTNULL_FIRSTPART, payload=Localized.class)
-    private String nameFirstpart;
-    @NotEmpty(message = ClientMessage.CHECK_NOTNULL_FIRSTPART, payload=Localized.class)
-    private String nameLastpart;
+    
     private SolaList<RrrBean> rrrList;
     private SolaList<BaUnitNotationBean> baUnitNotationList;
     private SolaList<CadastreObjectBean> cadastreObjectList;
     private SolaList<CadastreObjectBean> newCadastreObjectList;
     private ObservableList<BaUnitNotationBean> allBaUnitNotationList;
     private SolaList<SourceBean> sourceList;
-    private BaUnitTypeBean baUnitType;
+    private ObservableList<RrrShareWithStatus> rrrSharesList;
+    private SolaList<RelatedBaUnitInfoBean> childBaUnits;
+    private SolaList<RelatedBaUnitInfoBean> parentBaUnits;
     private CadastreObjectBean selectedParcel;
     private RrrBean selectedRight;
     private BaUnitNotationBean selectedBaUnitNotation;
-    private ObservableList<RrrShareWithStatus> rrrSharesList;
+    private RelatedBaUnitInfoBean selectedParentBaUnit;
+    private RelatedBaUnitInfoBean selectedChildBaUnit;
     private String estateType;
 
     public BaUnitBean() {
@@ -193,12 +184,15 @@ public class BaUnitBean extends AbstractTransactionedBean {
         rrrList = new SolaList();
         baUnitNotationList = new SolaList();
         cadastreObjectList = new SolaList();
+        childBaUnits = new SolaList();
+        parentBaUnits = new SolaList();
         sourceList = new SolaList();
-        //sourceList.setIncludedStatuses(new String[]{StatusConstants.CURRENT});
-        sourceList.setExcludedStatuses(new String[]{StatusConstants.HISTORIC});
         allBaUnitNotationList = ObservableCollections.observableList(new LinkedList<BaUnitNotationBean>());
         rrrSharesList = ObservableCollections.observableList(new LinkedList<RrrShareWithStatus>());
         rrrList.getFilteredList().addObservableListListener(new RrrListListener());
+        
+        sourceList.setExcludedStatuses(new String[]{StatusConstants.HISTORIC});
+        
         AllBaUnitNotationsListUpdater allBaUnitNotationsListener = new AllBaUnitNotationsListUpdater();
         rrrList.getFilteredList().addObservableListListener(allBaUnitNotationsListener);
         baUnitNotationList.getFilteredList().addObservableListListener(allBaUnitNotationsListener);
@@ -278,14 +272,6 @@ public class BaUnitBean extends AbstractTransactionedBean {
         return allBaUnitNotationList;
     }
 
-    public String getTypeCode() {
-        if (baUnitType != null) {
-            return baUnitType.getCode();
-        } else {
-            return null;
-        }
-    }
-
     public BaUnitNotationBean getSelectedBaUnitNotation() {
         return selectedBaUnitNotation;
     }
@@ -294,6 +280,26 @@ public class BaUnitBean extends AbstractTransactionedBean {
         this.selectedBaUnitNotation = selectedBaUnitNotation;
         propertySupport.firePropertyChange(SELECTED_BA_UNIT_NOTATION_PROPERTY,
                 null, selectedBaUnitNotation);
+    }
+
+    public RelatedBaUnitInfoBean getSelectedChildBaUnit() {
+        return selectedChildBaUnit;
+    }
+
+    public void setSelectedChildBaUnit(RelatedBaUnitInfoBean selectedChildBaUnit) {
+        this.selectedChildBaUnit = selectedChildBaUnit;
+        propertySupport.firePropertyChange(SELECTED_CHILD_BA_UNIT_PROPERTY,
+                null, this.selectedChildBaUnit);
+    }
+
+    public RelatedBaUnitInfoBean getSelectedParentBaUnit() {
+        return selectedParentBaUnit;
+    }
+
+    public void setSelectedParentBaUnit(RelatedBaUnitInfoBean selectedParentBaUnit) {
+        this.selectedParentBaUnit = selectedParentBaUnit;
+        propertySupport.firePropertyChange(SELECTED_PARENT_BA_UNIT_PROPERTY,
+                null, this.selectedParentBaUnit);
     }
 
     public CadastreObjectBean getSelectedParcel() {
@@ -329,6 +335,22 @@ public class BaUnitBean extends AbstractTransactionedBean {
             loadNewParcels();
         }
         return newCadastreObjectList;
+    }
+
+    public SolaList<RelatedBaUnitInfoBean> getChildBaUnits() {
+        return childBaUnits;
+    }
+
+    public SolaList<RelatedBaUnitInfoBean> getParentBaUnits() {
+        return parentBaUnits;
+    }
+    
+    public ObservableList<RelatedBaUnitInfoBean> getFilteredChildBaUnits() {
+        return childBaUnits.getFilteredList();
+    }
+
+    public ObservableList<RelatedBaUnitInfoBean> getFilteredParentBaUnits() {
+        return parentBaUnits.getFilteredList();
     }
     
     public ObservableList<CadastreObjectBean> getSelectedNewCadastreObjects() {
@@ -369,6 +391,7 @@ public class BaUnitBean extends AbstractTransactionedBean {
                     rrr.getNotation().generateId();
                     for(RrrShareBean rrrShare : rrr.getRrrShareList()){
                         rrrShare.generateRowId();
+                        rrrShare.setRowVersion(0);
                         rrrShare.setRrrId(rrr.getId());
                     }
                     rrr.setBaUnitId(null);
@@ -389,36 +412,6 @@ public class BaUnitBean extends AbstractTransactionedBean {
 
     public ObservableList<CadastreObjectBean> getCadastreObjectFilteredList() {
         return cadastreObjectList.getFilteredList();
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        String oldValue = this.name;
-        this.name = name;
-        propertySupport.firePropertyChange(NAME_PROPERTY, oldValue, name);
-    }
-
-    public String getNameFirstpart() {
-        return nameFirstpart;
-    }
-
-    public void setNameFirstpart(String nameFirstpart) {
-        String oldValue = this.nameFirstpart;
-        this.nameFirstpart = nameFirstpart;
-        propertySupport.firePropertyChange(NAME_FIRSTPART_PROPERTY, oldValue, nameFirstpart);
-    }
-
-    public String getNameLastpart() {
-        return nameLastpart;
-    }
-
-    public void setNameLastpart(String nameLastpart) {
-        String oldValue = this.nameLastpart;
-        this.nameLastpart = nameLastpart;
-        propertySupport.firePropertyChange(NAME_LASTPART_PROPERTY, oldValue, nameLastpart);
     }
 
     public SolaList<RrrBean> getRrrList() {
@@ -482,27 +475,12 @@ public class BaUnitBean extends AbstractTransactionedBean {
         return sourceList.getFilteredList();
     }
 
-    public void setTypeCode(String typeCode) {
-        String oldValue = null;
-        if (baUnitType != null) {
-            oldValue = baUnitType.getCode();
+    public void removeSelectedParentBaUnit(){
+        if(getSelectedParentBaUnit() != null){
+            getParentBaUnits().safeRemove(getSelectedParentBaUnit(), EntityAction.DELETE);
         }
-        setBaUnitType(CacheManager.getBeanByCode(
-                CacheManager.getBaUnitTypes(), typeCode));
-        propertySupport.firePropertyChange(TYPE_CODE_PROPERTY, oldValue, typeCode);
     }
-
-    public BaUnitTypeBean getBaUnitType() {
-        return baUnitType;
-    }
-
-    public void setBaUnitType(BaUnitTypeBean baUnitType) {
-        if (this.baUnitType == null) {
-            this.baUnitType = new BaUnitTypeBean();
-        }
-        this.setJointRefDataBean(this.baUnitType, baUnitType, BA_UNIT_TYPE_PROPERTY);
-    }
-
+    
     public boolean createBaUnit(String serviceId) {
         BaUnitTO baUnit = TypeConverters.BeanToTrasferObject(this, BaUnitTO.class);
         baUnit = WSManager.getInstance().getAdministrative().CreateBaUnit(serviceId, baUnit);
@@ -550,6 +528,16 @@ public class BaUnitBean extends AbstractTransactionedBean {
         cadastreObjectList.setIncludedStatuses(new String[]{StatusConstants.CURRENT});
     }
 
+    /** 
+     * Returns BA Unit by ID. 
+     * @param baUnitId The ID of BA Unit to return.
+     */
+    public static BaUnitBean getBaUnitsById(String baUnitId){
+        return TypeConverters.TransferObjectToBean(
+                WSManager.getInstance().getAdministrative().GetBaUnitById(baUnitId),
+                BaUnitBean.class, null);
+    }
+    
     /** 
      * Returns list of BA Units, created by the given service. 
      * @param serviceId The ID of service, used pick up BA Units.
