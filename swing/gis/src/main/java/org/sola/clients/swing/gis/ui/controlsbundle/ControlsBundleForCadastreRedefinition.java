@@ -43,8 +43,8 @@ import org.sola.clients.swing.gis.layer.CadastreRedefinitionObjectLayer;
 import org.sola.clients.swing.gis.layer.CadastreRedefinitionNodeLayer;
 import org.sola.clients.swing.gis.layer.PojoLayer;
 import org.sola.clients.swing.gis.mapaction.CadastreRedefinitionReset;
-import org.sola.clients.swing.gis.tool.ModifyExistingNodeTool;
-import org.sola.clients.swing.gis.tool.AddNodeTool;
+import org.sola.clients.swing.gis.tool.CadastreRedefinitionModifyNodeTool;
+import org.sola.clients.swing.gis.tool.CadastreRedefinitionAddNodeTool;
 import org.sola.common.messaging.GisMessage;
 
 /**
@@ -106,13 +106,13 @@ public final class ControlsBundleForCadastreRedefinition extends ControlsBundleF
     @Override
     protected void addToolsAndCommands() {
         this.getMap().addTool(
-                new AddNodeTool(
+                new CadastreRedefinitionAddNodeTool(
                 this.getPojoDataAccess(),
                 this.cadastreObjectNodeModifiedLayer,
                 this.cadastreObjectModifiedLayer),
                 this.getToolbar());
         this.getMap().addTool(
-                new ModifyExistingNodeTool(
+                new CadastreRedefinitionModifyNodeTool(
                 this.getPojoDataAccess(),
                 this.cadastreObjectNodeModifiedLayer,
                 this.cadastreObjectModifiedLayer),

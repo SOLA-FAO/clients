@@ -27,43 +27,63 @@
  */
 package org.sola.clients.swing.gis.tool;
 
-import org.geotools.feature.CollectionEvent;
 import org.geotools.geometry.DirectPosition2D;
-import org.geotools.geometry.jts.Geometries;
-import org.opengis.feature.simple.SimpleFeature;
-import org.sola.clients.swing.gis.layer.NewSurveyPointLayer;
-import org.geotools.swing.tool.extended.ExtendedEditGeometryTool;
+import org.geotools.swing.event.MapMouseEvent;
+import org.sola.clients.swing.gis.Messaging;
+import org.sola.clients.swing.gis.data.PojoDataAccess;
+import org.geotools.map.extended.layer.ExtendedLayerGraphics;
+import org.geotools.swing.tool.extended.ExtendedTool;
 import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.MessageUtility;
+import org.sola.webservices.transferobjects.cadastre.CadastreObjectTO;
 
 /**
  *
  * @author rizzom
  */
-public class NodeLinkingTool extends ExtendedEditGeometryTool {
+public class CadastreChangeSelectParcelTool extends ExtendedTool {
 
-    private String toolName = "nodelinking";
+    private String toolName = "select-parcel";
     private String toolTip = MessageUtility.getLocalizedMessage(
-                            GisMessage.CADASTRE_TOOLTIP_NEW_SURVEYPOINT).getMessage();
+                            GisMessage.CADASTRE_TOOLTIP_SELECT_PARCEL).getMessage();
+    private ExtendedLayerGraphics targetParcelsLayer = null;
+    private PojoDataAccess dataAccess;
 
-    public NodeLinkingTool(NewSurveyPointLayer targetLayer) {
+    public CadastreChangeSelectParcelTool(PojoDataAccess dataAccess) {
         this.setToolName(toolName);
-        this.setGeometryType(Geometries.POINT);
-        this.setIconImage("resources/node-linking.png");
+        this.setIconImage("resources/select-parcel.png");
         this.setToolTip(toolTip);
-        this.layer = targetLayer;
+        this.dataAccess = dataAccess;
+    }
+
+    public ExtendedLayerGraphics getTargetParcelsLayer() {
+        return targetParcelsLayer;
+    }
+
+    public void setTargetParcelsLayer(ExtendedLayerGraphics targetParcelsLayer) {
+        this.targetParcelsLayer = targetParcelsLayer;
     }
 
     @Override
-    protected SimpleFeature treatChangeVertex(DirectPosition2D mousePositionInMap) {
-        SimpleFeature featureChanged = super.treatChangeVertex(mousePositionInMap);
-        if (featureChanged != null && featureChanged.getAttribute(
-                NewSurveyPointLayer.LAYER_FIELD_ISBOUNDARY).equals(1)) {
-            featureChanged.setAttribute(NewSurveyPointLayer.LAYER_FIELD_ISLINKED,
-                    ((this.getSnappedTarget() == SNAPPED_TARGET_TYPE.Vertex) ? 1 : 0));
-            this.layer.getFeatureCollection().notifyListeners(featureChanged,
-                    CollectionEvent.FEATURES_CHANGED);
+    public void onMouseClicked(MapMouseEvent ev) {
+        DirectPosition2D pos = ev.getMapPosition();
+        CadastreObjectTO cadastreObject =
+                this.dataAccess.getCadastreService().getCadastreObjectByPoint(
+                pos.x, pos.y, this.getMapControl().getSrid());
+        if (cadastreObject == null){
+            Messaging.getInstance().show(GisMessage.PARCEL_TARGET_NOT_FOUND);
+            return;
         }
-        return featureChanged;
+        try {
+            if (this.targetParcelsLayer.removeFeature(cadastreObject.getId()) == null) {
+                this.targetParcelsLayer.addFeature(
+                        cadastreObject.getId(),
+                        cadastreObject.getGeomPolygon(), null);
+            }
+            this.getMapControl().refresh();
+        } catch (Exception ex) {
+            Messaging.getInstance().show(GisMessage.PARCEL_ERROR_ADDING_PARCEL);
+            org.sola.common.logging.LogUtility.log(GisMessage.PARCEL_ERROR_ADDING_PARCEL, ex);
+        }
     }
 }

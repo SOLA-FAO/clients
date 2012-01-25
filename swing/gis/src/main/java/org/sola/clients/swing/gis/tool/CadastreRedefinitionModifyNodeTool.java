@@ -20,13 +20,13 @@ import org.sola.webservices.transferobjects.cadastre.CadastreObjectNodeTO;
  *
  * @author Elton Manoku
  */
-public class ModifyExistingNodeTool extends ModifierNodeTool {
+public class CadastreRedefinitionModifyNodeTool extends CadastreRedefinitionAbstractTool {
 
     private String toolName = "change-node";
     private String toolTip = MessageUtility.getLocalizedMessage(
             GisMessage.CADASTRE_TOOLTIP_CHANGE_NODE).getMessage();
 
-    public ModifyExistingNodeTool(PojoDataAccess dataAccess,
+    public CadastreRedefinitionModifyNodeTool(PojoDataAccess dataAccess,
             CadastreRedefinitionNodeLayer cadastreObjectNodeModifiedLayer,
             CadastreRedefinitionObjectLayer cadastreObjectModifiedLayer) {
         super(dataAccess, cadastreObjectNodeModifiedLayer, cadastreObjectModifiedLayer);
@@ -49,8 +49,6 @@ public class ModifyExistingNodeTool extends ModifierNodeTool {
                     nodeBean.getId(), nodeBean.getGeom());
             this.cadastreObjectModifiedLayer.addCadastreObjects(nodeBean.getCadastreObjectList());
             this.getMapControl().refresh();
-            //this.getNodeList().add(nodeBean);
-            //nodeFeature = this.getFirstNodeFeature(env);
         }
         if (nodeFeature == null) {
             return;

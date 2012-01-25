@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import org.geotools.data.simple.SimpleFeatureIterator;
+import org.geotools.feature.CollectionEvent;
+import org.geotools.feature.CollectionListener;
 import org.geotools.feature.FeatureCollection;
 import org.geotools.geometry.jts.Geometries;
 import org.geotools.geometry.jts.ReferencedEnvelope;
@@ -34,6 +36,13 @@ public class CadastreRedefinitionObjectLayer extends ExtendedLayerGraphics {
 
     public CadastreRedefinitionObjectLayer() throws Exception {
         super(LAYER_NAME, Geometries.POLYGON, LAYER_STYLE_RESOURCE, LAYER_ATTRIBUTE_DEFINITION);
+        this.getFeatureCollection().addListener(new CollectionListener() {
+
+            @Override
+            public void collectionChanged(CollectionEvent ce) {
+                featureCollectionChanged(ce);
+            }
+        });
     }
 
     public void addCadastreObjects(List<CadastreObjectBean> cadastreObjectList) {
@@ -69,17 +78,17 @@ public class CadastreRedefinitionObjectLayer extends ExtendedLayerGraphics {
     }
 
     public void addCadastreObjectTargetList(List<CadastreObjectTargetRedefinitionBean> targetList)
-    throws Exception, ParseException{
+            throws Exception, ParseException {
         for (CadastreObjectTargetRedefinitionBean targetBean : targetList) {
             this.addCadastreObjectTarget(
-                    targetBean.getCadastreObjectId(), 
+                    targetBean.getCadastreObjectId(),
                     targetBean.getGeomPolygon(),
                     targetBean.getGeomPolygonCurrent());
         }
     }
 
-    public void addCadastreObjectTarget(String fid, byte[] geometry, byte[] originalGeometry) 
-    throws ParseException, Exception{
+    public void addCadastreObjectTarget(String fid, byte[] geometry, byte[] originalGeometry)
+            throws ParseException, Exception {
         if (this.getFeatureCollection().getFeature(fid) != null) {
             return;
         }
@@ -90,18 +99,34 @@ public class CadastreRedefinitionObjectLayer extends ExtendedLayerGraphics {
         fieldsWithValues.put(LAYER_FIELD_ORIGINAL_GEOMETRY, wkbReader.read(originalGeometry));
         this.addFeature(fid, geometry, fieldsWithValues);
     }
-    
-    public List<SimpleFeature> getCadastreObjectFeatures(SimpleFeature nodeFeature){
+
+    public List<SimpleFeature> getCadastreObjectFeatures(SimpleFeature nodeFeature) {
         List<SimpleFeature> cadastreObjectFeatureList =
                 new ArrayList<SimpleFeature>();
         ReferencedEnvelope filterBbox = new ReferencedEnvelope(nodeFeature.getBounds());
         filterBbox.expandBy(0.01, 0.01);
         FeatureCollection featureCollection = this.getFeaturesInRange(filterBbox, null);
-        SimpleFeatureIterator iterator = (SimpleFeatureIterator)featureCollection.features();
-        while(iterator.hasNext()){
+        SimpleFeatureIterator iterator = (SimpleFeatureIterator) featureCollection.features();
+        while (iterator.hasNext()) {
             cadastreObjectFeatureList.add(iterator.next());
         }
         iterator.close();
         return cadastreObjectFeatureList;
+    }
+
+    private void featureCollectionChanged(CollectionEvent ev) {
+        if (ev.getFeatures() == null
+                || ev.getEventType() == CollectionEvent.FEATURES_ADDED
+                || ev.getEventType() == CollectionEvent.FEATURES_REMOVED) {
+            return;
+        }
+        for (SimpleFeature feature : ev.getFeatures()) {
+            Geometry geom = (Geometry)feature.getDefaultGeometry();
+            Geometry originalGeometry = 
+                    (Geometry)feature.getAttribute(LAYER_FIELD_ORIGINAL_GEOMETRY);
+            if (geom.equalsTopo(originalGeometry)){
+                this.removeFeature(feature.getID());
+            }
+        }
     }
 }

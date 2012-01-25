@@ -27,62 +27,43 @@
  */
 package org.sola.clients.swing.gis.tool;
 
-
-
+import org.geotools.feature.CollectionEvent;
 import org.geotools.geometry.DirectPosition2D;
 import org.geotools.geometry.jts.Geometries;
-import org.geotools.swing.event.MapMouseEvent;
 import org.opengis.feature.simple.SimpleFeature;
-import org.sola.clients.swing.gis.layer.NewCadastreObjectLayer;
+import org.sola.clients.swing.gis.layer.NewSurveyPointLayer;
 import org.geotools.swing.tool.extended.ExtendedEditGeometryTool;
-import org.geotools.swing.extended.util.Messaging;
 import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.MessageUtility;
-
 
 /**
  *
  * @author rizzom
  */
-public class NewParcelTool extends ExtendedEditGeometryTool{
-    
-     private String toolName = "new-parcel";
-     private String toolTip =  MessageUtility.getLocalizedMessage(
-                            GisMessage.CADASTRE_TOOLTIP_NEW_PARCEL).getMessage();
+public class CadastreChangeNodeLinkingTool extends ExtendedEditGeometryTool {
 
-    public NewParcelTool(NewCadastreObjectLayer newCadastreObjectLayer) {
+    private String toolName = "nodelinking";
+    private String toolTip = MessageUtility.getLocalizedMessage(
+                            GisMessage.CADASTRE_TOOLTIP_NEW_SURVEYPOINT).getMessage();
+
+    public CadastreChangeNodeLinkingTool(NewSurveyPointLayer targetLayer) {
         this.setToolName(toolName);
-        this.setIconImage("resources/new-parcel.png");
+        this.setGeometryType(Geometries.POINT);
+        this.setIconImage("resources/node-linking.png");
         this.setToolTip(toolTip);
-        this.setGeometryType(Geometries.POLYGON);
-        this.layer = newCadastreObjectLayer;
+        this.layer = targetLayer;
     }
-        
-    
-    /**
-     * If a new click is done while creating a cadastre object, it has to snap to a point.
-     * Because the only layer used as snaptarget is the NewSurveyPointLayer the only points are the 
-     * survey points.
-     * @param ev 
-     */
- @Override
-    public void onMouseClicked(MapMouseEvent ev) {
-     if (ev.getButton() == java.awt.event.MouseEvent.BUTTON1 
-             && this.getSnappedTarget() != SNAPPED_TARGET_TYPE.Vertex){
-         Messaging.getInstance().show(GisMessage.CADASTRE_CHANGE_NEW_CO_MUST_SNAP);
-         return;
-     }
-     super.onMouseClicked(ev);
-    }    
 
- /**
-  * It means a vertex of a cadastre object cannot be changed from this tool. It must be changed
-  * by changing the vertices in the NewSurveyPointLayer.
-  * @param mousePositionInMap
-  * @return 
-  */
     @Override
-    protected SimpleFeature treatChangeVertex(DirectPosition2D mousePositionInMap){
-        return null;
+    protected SimpleFeature treatChangeVertex(DirectPosition2D mousePositionInMap) {
+        SimpleFeature featureChanged = super.treatChangeVertex(mousePositionInMap);
+        if (featureChanged != null && featureChanged.getAttribute(
+                NewSurveyPointLayer.LAYER_FIELD_ISBOUNDARY).equals(1)) {
+            featureChanged.setAttribute(NewSurveyPointLayer.LAYER_FIELD_ISLINKED,
+                    ((this.getSnappedTarget() == SNAPPED_TARGET_TYPE.Vertex) ? 1 : 0));
+            this.layer.getFeatureCollection().notifyListeners(featureChanged,
+                    CollectionEvent.FEATURES_CHANGED);
+        }
+        return featureChanged;
     }
 }

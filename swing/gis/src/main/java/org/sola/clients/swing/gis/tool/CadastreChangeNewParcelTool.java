@@ -27,63 +27,62 @@
  */
 package org.sola.clients.swing.gis.tool;
 
+
+
 import org.geotools.geometry.DirectPosition2D;
+import org.geotools.geometry.jts.Geometries;
 import org.geotools.swing.event.MapMouseEvent;
-import org.sola.clients.swing.gis.Messaging;
-import org.sola.clients.swing.gis.data.PojoDataAccess;
-import org.geotools.map.extended.layer.ExtendedLayerGraphics;
-import org.geotools.swing.tool.extended.ExtendedTool;
+import org.opengis.feature.simple.SimpleFeature;
+import org.sola.clients.swing.gis.layer.NewCadastreObjectLayer;
+import org.geotools.swing.tool.extended.ExtendedEditGeometryTool;
+import org.geotools.swing.extended.util.Messaging;
 import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.MessageUtility;
-import org.sola.webservices.transferobjects.cadastre.CadastreObjectTO;
+
 
 /**
  *
  * @author rizzom
  */
-public class SelectParcelTool extends ExtendedTool {
+public class CadastreChangeNewParcelTool extends ExtendedEditGeometryTool{
+    
+     private String toolName = "new-parcel";
+     private String toolTip =  MessageUtility.getLocalizedMessage(
+                            GisMessage.CADASTRE_TOOLTIP_NEW_PARCEL).getMessage();
 
-    private String toolName = "select-parcel";
-    private String toolTip = MessageUtility.getLocalizedMessage(
-                            GisMessage.CADASTRE_TOOLTIP_SELECT_PARCEL).getMessage();
-    private ExtendedLayerGraphics targetParcelsLayer = null;
-    private PojoDataAccess dataAccess;
-
-    public SelectParcelTool(PojoDataAccess dataAccess) {
+    public CadastreChangeNewParcelTool(NewCadastreObjectLayer newCadastreObjectLayer) {
         this.setToolName(toolName);
-        this.setIconImage("resources/select-parcel.png");
+        this.setIconImage("resources/new-parcel.png");
         this.setToolTip(toolTip);
-        this.dataAccess = dataAccess;
+        this.setGeometryType(Geometries.POLYGON);
+        this.layer = newCadastreObjectLayer;
     }
-
-    public ExtendedLayerGraphics getTargetParcelsLayer() {
-        return targetParcelsLayer;
-    }
-
-    public void setTargetParcelsLayer(ExtendedLayerGraphics targetParcelsLayer) {
-        this.targetParcelsLayer = targetParcelsLayer;
-    }
-
-    @Override
+        
+    
+    /**
+     * If a new click is done while creating a cadastre object, it has to snap to a point.
+     * Because the only layer used as snaptarget is the NewSurveyPointLayer the only points are the 
+     * survey points.
+     * @param ev 
+     */
+ @Override
     public void onMouseClicked(MapMouseEvent ev) {
-        DirectPosition2D pos = ev.getMapPosition();
-        CadastreObjectTO cadastreObject =
-                this.dataAccess.getCadastreService().getCadastreObjectByPoint(
-                pos.x, pos.y, this.getMapControl().getSrid());
-        if (cadastreObject == null){
-            Messaging.getInstance().show(GisMessage.PARCEL_TARGET_NOT_FOUND);
-            return;
-        }
-        try {
-            if (this.targetParcelsLayer.removeFeature(cadastreObject.getId()) == null) {
-                this.targetParcelsLayer.addFeature(
-                        cadastreObject.getId(),
-                        cadastreObject.getGeomPolygon(), null);
-            }
-            this.getMapControl().refresh();
-        } catch (Exception ex) {
-            Messaging.getInstance().show(GisMessage.PARCEL_ERROR_ADDING_PARCEL);
-            org.sola.common.logging.LogUtility.log(GisMessage.PARCEL_ERROR_ADDING_PARCEL, ex);
-        }
+     if (ev.getButton() == java.awt.event.MouseEvent.BUTTON1 
+             && this.getSnappedTarget() != SNAPPED_TARGET_TYPE.Vertex){
+         Messaging.getInstance().show(GisMessage.CADASTRE_CHANGE_NEW_CO_MUST_SNAP);
+         return;
+     }
+     super.onMouseClicked(ev);
+    }    
+
+ /**
+  * It means a vertex of a cadastre object cannot be changed from this tool. It must be changed
+  * by changing the vertices in the NewSurveyPointLayer.
+  * @param mousePositionInMap
+  * @return 
+  */
+    @Override
+    protected SimpleFeature treatChangeVertex(DirectPosition2D mousePositionInMap){
+        return null;
     }
 }

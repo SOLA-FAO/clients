@@ -31,13 +31,13 @@ import org.sola.webservices.transferobjects.cadastre.CadastreObjectNodeTO;
  *
  * @author Elton Manoku
  */
-public class AddNodeTool extends ModifierNodeTool {
+public class CadastreRedefinitionAddNodeTool extends CadastreRedefinitionAbstractTool {
 
     private String toolName = "add-node";
     private String toolTip = MessageUtility.getLocalizedMessage(
             GisMessage.CADASTRE_TOOLTIP_CHANGE_NODE).getMessage();
 
-    public AddNodeTool(PojoDataAccess dataAccess,
+    public CadastreRedefinitionAddNodeTool(PojoDataAccess dataAccess,
             CadastreRedefinitionNodeLayer cadastreObjectNodeModifiedLayer,
             CadastreRedefinitionObjectLayer cadastreObjectModifiedLayer) {
         super(dataAccess, cadastreObjectNodeModifiedLayer, cadastreObjectModifiedLayer);
@@ -58,12 +58,6 @@ public class AddNodeTool extends ModifierNodeTool {
                     nodeBean.getId(), nodeBean.getGeom());
         this.cadastreObjectModifiedLayer.addCadastreObjects(nodeBean.getCadastreObjectList());
         this.getMapControl().refresh();
-        //this.getNodeList().add(nodeBean);
-        //SimpleFeature nodeFeature = this.getFirstNodeFeature(env);
-
-        //if (nodeFeature == null) {
-        //    return;
-        //}
         List<String> cadastreObjectTargetIds = new ArrayList<String>();
         for(CadastreObjectBean coBean: nodeBean.getCadastreObjectList()){
             cadastreObjectTargetIds.add(coBean.getId());
@@ -81,11 +75,6 @@ public class AddNodeTool extends ModifierNodeTool {
     }
 
     private void insertNode(SimpleFeature nodeFeature, List<String> cadastreObjectTargetIds) {
-//        CadastreObjectNodeBean nodeBean = this.getNode(nodeFeature);
-//        if (nodeBean == null) {
-//            throw new RuntimeException(GisMessage.CADASTRE_REDEFINITION_ADD_NODE_ERROR);
-//        }
-
         Geometry nodeFeatureGeom = (Geometry) nodeFeature.getDefaultGeometry();
         Coordinate coordinate = nodeFeatureGeom.getCoordinate();
         for(String cadastreObjectTargetId:cadastreObjectTargetIds){

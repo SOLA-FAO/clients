@@ -46,9 +46,9 @@ import org.sola.clients.swing.gis.layer.PojoLayer;
 import org.sola.clients.swing.gis.layer.TargetCadastreObjectLayer;
 import org.sola.clients.swing.gis.mapaction.NewCadastreObjectListFormShow;
 import org.sola.clients.swing.gis.mapaction.PointSurveyListFormShow;
-import org.sola.clients.swing.gis.tool.NewParcelTool;
-import org.sola.clients.swing.gis.tool.NodeLinkingTool;
-import org.sola.clients.swing.gis.tool.SelectParcelTool;
+import org.sola.clients.swing.gis.tool.CadastreChangeNewParcelTool;
+import org.sola.clients.swing.gis.tool.CadastreChangeNodeLinkingTool;
+import org.sola.clients.swing.gis.tool.CadastreChangeSelectParcelTool;
 import org.sola.common.messaging.GisMessage;
 import org.sola.webservices.transferobjects.cadastre.CadastreObjectTO;
 
@@ -135,7 +135,7 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
 
     @Override
     protected void addToolsAndCommands() {
-        SelectParcelTool selectParcelTool = new SelectParcelTool(this.getPojoDataAccess());
+        CadastreChangeSelectParcelTool selectParcelTool = new CadastreChangeSelectParcelTool(this.getPojoDataAccess());
         selectParcelTool.setTargetParcelsLayer(targetParcelsLayer);
         this.getMap().addTool(selectParcelTool, this.getToolbar());
 
@@ -143,11 +143,11 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
                 new PointSurveyListFormShow(this.getMap(), this.newPointsLayer.getHostForm()),
                 this.getToolbar());
 
-        NodeLinkingTool nodelinkingTool = new NodeLinkingTool(newPointsLayer);
+        CadastreChangeNodeLinkingTool nodelinkingTool = new CadastreChangeNodeLinkingTool(newPointsLayer);
         nodelinkingTool.getTargetSnappingLayers().add(this.targetParcelsLayer);
         this.getMap().addTool(nodelinkingTool, this.getToolbar());
 
-        NewParcelTool newParcelTool = new NewParcelTool(this.newCadastreObjectLayer);
+        CadastreChangeNewParcelTool newParcelTool = new CadastreChangeNewParcelTool(this.newCadastreObjectLayer);
         newParcelTool.getTargetSnappingLayers().add(newPointsLayer);
         this.getMap().addTool(newParcelTool, this.getToolbar());
 
