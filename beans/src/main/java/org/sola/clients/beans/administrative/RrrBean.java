@@ -62,6 +62,10 @@ public class RrrBean extends AbstractTransactionedBean {
     public enum RRR_ACTION {
         NEW, VARY, CANCEL, EDIT, VIEW;
     }
+    
+    public static final String CODE_OWNERSHIP = "ownership";
+    public static final String CODE_MORTGAGE = "mortgage";
+    
     public static final String BA_UNIT_ID_PROPERTY = "baUnitId";
     public static final String TYPE_CODE_PROPERTY = "typeCode";
     public static final String RRR_TYPE_PROPERTY = "rrrType";

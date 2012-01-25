@@ -73,4 +73,13 @@ public class ContentPanel extends JPanel {
             getMainContentPanel().closePanel(this);
         }
     }
+    
+    /** This method is called each time when panel is added to the main content panel. */
+    protected void panelAdded(){
+        
+    }
+    
+    /** This method is called each time when panel is shown on the main content panel. */
+    protected void panelShown(){
+    }
 }

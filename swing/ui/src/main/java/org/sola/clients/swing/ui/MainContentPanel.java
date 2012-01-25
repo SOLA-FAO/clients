@@ -51,11 +51,10 @@ public class MainContentPanel extends javax.swing.JPanel {
     public final static String CARD_APPASSIGNMENT = "appassignment";
     public final static String CARD_MAP = "map";
     public final static String CARD_APPLICATION = "application";
-    public final static String CARD_NEW_TITLE_WIZARD = "newTitleWizard";
+    public final static String CARD_NEW_PROPERTY_WIZARD = "newPropertyWizard";
     public final static String CARD_BAUNIT_SELECT_PANEL = "baUnitSelectPanel";
     public final static String CARD_PROPERTY_PANEL = "propertyPanel";
     public final static String CARD_CADASTRECHANGE = "cadastreChange";
-    
     private HashMap<String, Component> cards;
     private ArrayList<String> cardsIndex;
     private PropertyChangeListener panelListener;
@@ -100,26 +99,28 @@ public class MainContentPanel extends javax.swing.JPanel {
             getPanel(cardName).removePropertyChangeListener(panelListener);
             closePanel(cardName);
         }
-        
+
         addCard(panel, cardName);
 
-        if (ContentPanel.class.isAssignableFrom(panel.getClass())) {
-            ((ContentPanel) panel).setMainContentPanel(this);
-        }
         panel.addPropertyChangeListener(panelListener);
         pnlContent.add(panel, cardName);
+        if (ContentPanel.class.isAssignableFrom(panel.getClass())) {
+            ((ContentPanel) panel).setMainContentPanel(this);
+            ((ContentPanel) panel).panelAdded();
+        }
+
         if (showPanel) {
             showPanel(cardName);
         }
     }
 
-    private void addCard(Component panel, String cardName){
+    private void addCard(Component panel, String cardName) {
         cards.put(cardName, panel);
         if (!cardsIndex.contains(cardName)) {
             cardsIndex.add(cardName);
         }
     }
-    
+
     /** 
      * Adds panel into cards panels collection. 
      * @param panel Panel object to add into the cards collection.
@@ -166,25 +167,25 @@ public class MainContentPanel extends javax.swing.JPanel {
             showLastCard();
         }
     }
-    
-    private void closeAutoClosablePanels(){
+
+    private void closeAutoClosablePanels() {
         Iterator<Entry<String, Component>> it = cards.entrySet().iterator();
         ArrayList<String> keys = new ArrayList<String>();
-        
-        while(it.hasNext()){
+
+        while (it.hasNext()) {
             Entry<String, Component> entry = it.next();
-            if(ContentPanel.class.isAssignableFrom(entry.getValue().getClass())){
-                if(((ContentPanel)entry.getValue()).isCloseOnHide() && !entry.getValue().isVisible()){
+            if (ContentPanel.class.isAssignableFrom(entry.getValue().getClass())) {
+                if (((ContentPanel) entry.getValue()).isCloseOnHide() && !entry.getValue().isVisible()) {
                     keys.add(entry.getKey());
                 }
             }
         }
-        
-        for(String key : keys){
+
+        for (String key : keys) {
             closePanel(key);
         }
     }
-    
+
     private void showLastCard() {
         if (cardsIndex.size() > 0) {
             ((CardLayout) pnlContent.getLayout()).show(pnlContent, cardsIndex.get(cardsIndex.size() - 1));
@@ -201,7 +202,7 @@ public class MainContentPanel extends javax.swing.JPanel {
         }
 
         ((CardLayout) pnlContent.getLayout()).show(pnlContent, cardName);
-        
+
         // move panel on top
         int cardIndx = cardsIndex.indexOf(cardName);
         if (cardIndx < cardsIndex.size() - 1) {
@@ -209,9 +210,13 @@ public class MainContentPanel extends javax.swing.JPanel {
             cardsIndex.set(cardsIndex.size() - 1, cardName);
             cardsIndex.set(cardIndx, lastCardName);
         }
-        
+
         // close autoclosable panels
         closeAutoClosablePanels();
+
+        if (ContentPanel.class.isAssignableFrom(cards.get(cardName).getClass())) {
+            ((ContentPanel) cards.get(cardName)).panelShown();
+        }
     }
 
     @SuppressWarnings("unchecked")

@@ -48,6 +48,7 @@ import org.sola.clients.beans.AbstractCodeBean;
 import org.sola.clients.beans.AbstractIdBean;
 import org.sola.clients.beans.referencedata.SourceTypeBean;
 import org.sola.clients.beans.converters.TypeConverters;
+import org.sola.clients.beans.referencedata.BaUnitRelTypeBean;
 import org.sola.clients.beans.referencedata.BaUnitTypeBean;
 import org.sola.clients.beans.referencedata.BrSeverityTypeBean;
 import org.sola.clients.beans.referencedata.BrTechnicalTypeBean;
@@ -141,6 +142,8 @@ public final class CacheManager {
     public static final String BR_TECHNICAL_TYPE_KEY = BrTechnicalTypeBean.class.getName() + LIST_POSTFIX;
     /** Cache key of the {@link BrValidationTargetTypeBean} collection.*/
     public static final String BR_VALIDATION_TARGET_TYPE_KEY = BrValidationTargetTypeBean.class.getName() + LIST_POSTFIX;
+    /** Cache key of the {@link BaUnitRelTypeBean} collection.*/
+    public static final String BA_UNIT_REL_TYPE_KEY = BaUnitRelTypeBean.class.getName() + LIST_POSTFIX;
     
     private static final String GET_APPLICATION_STATUS_TYPES = "getApplicationStatusTypes";
     private static final String GET_SOURCE_TYPES = "getSourceTypes";
@@ -168,11 +171,18 @@ public final class CacheManager {
     private static final String GET_BR_SEVERITY_TYPES = "getBrSeverityTypes";
     private static final String GET_BR_TECHNICAL_TYPES = "getBrTechnicalTypes";
     private static final String GET_BR_VALIDATION_TARGET_TYPES = "getBrValidationTargetTypes";
+    private static final String GET_BA_UNIT_REL_TYPES = "getBaUnitRelTypes";
     
     public static List<BrValidationTargetTypeBean> getBrValidationTargetTypes() {
         return getCachedBeanList(BrValidationTargetTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_BR_VALIDATION_TARGET_TYPES, BR_VALIDATION_TARGET_TYPE_KEY);
+    }
+    
+    public static List<BaUnitRelTypeBean> getBaUnitRelTypes() {
+        return getCachedBeanList(BaUnitRelTypeBean.class,
+                WSManager.getInstance().getReferenceDataService(),
+                GET_BA_UNIT_REL_TYPES, BA_UNIT_REL_TYPE_KEY);
     }
     
     public static List<BrTechnicalTypeBean> getBrTechnicalTypes() {
