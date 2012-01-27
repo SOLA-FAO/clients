@@ -192,6 +192,7 @@ public class BaUnitBean extends BaUnitSummaryBean {
         rrrList.getFilteredList().addObservableListListener(new RrrListListener());
         
         sourceList.setExcludedStatuses(new String[]{StatusConstants.HISTORIC});
+        rrrList.setExcludedStatuses(new String[]{StatusConstants.HISTORIC, StatusConstants.PREVIOUS});
         
         AllBaUnitNotationsListUpdater allBaUnitNotationsListener = new AllBaUnitNotationsListUpdater();
         rrrList.getFilteredList().addObservableListListener(allBaUnitNotationsListener);
@@ -385,16 +386,7 @@ public class BaUnitBean extends BaUnitSummaryBean {
         for(RrrBean rrr : getRrrFilteredList()){
             if(rrr.isSelected()){
                 if(regenerateIds){
-                    rrr.generateId();
-                    rrr.generateRowId();
-                    rrr.setRowVersion(0);
-                    rrr.getNotation().generateId();
-                    for(RrrShareBean rrrShare : rrr.getRrrShareList()){
-                        rrrShare.generateRowId();
-                        rrrShare.setRowVersion(0);
-                        rrrShare.setRrrId(rrr.getId());
-                    }
-                    rrr.setBaUnitId(null);
+                    rrr.resetIdAndVerion(true, true);
                 }
                 selectedRrrs.add(rrr);
             }

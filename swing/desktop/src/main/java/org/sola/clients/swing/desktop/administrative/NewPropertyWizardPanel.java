@@ -248,7 +248,7 @@ public class NewPropertyWizardPanel extends ContentPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jLabel1)
                 .addGap(6, 6, 6)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE))
         );
 
         jPanel6.add(jPanel2);
@@ -304,7 +304,7 @@ public class NewPropertyWizardPanel extends ContentPanel {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(jLabel2)
                 .addGap(6, 6, 6)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE))
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE))
         );
 
         jPanel6.add(jPanel4);
@@ -342,7 +342,7 @@ public class NewPropertyWizardPanel extends ContentPanel {
         tableCurrentParcels.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("NewPropertyWizardPanel.tableCurrentParcels.columnModel.title2")); // NOI18N
         tableCurrentParcels.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("NewPropertyWizardPanel.tableCurrentParcels.columnModel.title3")); // NOI18N
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel3.setText(bundle.getString("NewPropertyWizardPanel.jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
 
@@ -360,14 +360,14 @@ public class NewPropertyWizardPanel extends ContentPanel {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addComponent(jLabel3)
                 .addGap(6, 6, 6)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE))
         );
 
         jPanel6.add(jPanel5);
 
         jPanel8.setName("jPanel8"); // NOI18N
 
-        btnFinish.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnFinish.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnFinish.setText(bundle.getString("NewPropertyWizardPanel.btnFinish.text")); // NOI18N
         btnFinish.setName("btnFinish"); // NOI18N
         btnFinish.addActionListener(new java.awt.event.ActionListener() {
@@ -376,7 +376,7 @@ public class NewPropertyWizardPanel extends ContentPanel {
             }
         });
 
-        btnBackToSelection.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnBackToSelection.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnBackToSelection.setText(bundle.getString("NewPropertyWizardPanel.btnBackToSelection.text")); // NOI18N
         btnBackToSelection.setName("btnBackToSelection"); // NOI18N
         btnBackToSelection.addActionListener(new java.awt.event.ActionListener() {
@@ -430,23 +430,24 @@ public class NewPropertyWizardPanel extends ContentPanel {
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 588, Short.MAX_VALUE)
+            .addComponent(jPanel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(7, 7, 7))
         );
 
         pnlCards.add(jPanel7, "cardBaUnit");
 
         jPanel1.setName("jPanel1"); // NOI18N
 
-        tabsPropertySelection.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        tabsPropertySelection.setFont(new java.awt.Font("Tahoma", 0, 12));
         tabsPropertySelection.setName("tabsPropertySelection"); // NOI18N
 
         pnlApplicationProperty.setName("pnlApplicationProperty"); // NOI18N
@@ -479,7 +480,7 @@ public class NewPropertyWizardPanel extends ContentPanel {
 
         jScrollPane1.setViewportView(tableApplicationProperty);
 
-        btnSelectFromApplication.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnSelectFromApplication.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnSelectFromApplication.setText(bundle.getString("NewPropertyWizardPanel.btnSelectFromApplication.text")); // NOI18N
         btnSelectFromApplication.setName("btnSelectFromApplication"); // NOI18N
         btnSelectFromApplication.addActionListener(new java.awt.event.ActionListener() {
@@ -511,13 +512,13 @@ public class NewPropertyWizardPanel extends ContentPanel {
 
         tabsPropertySelection.addTab(bundle.getString("NewPropertyWizardPanel.pnlApplicationProperty.TabConstraints.tabTitle"), pnlApplicationProperty); // NOI18N
 
-        jPanel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jPanel3.setFont(new java.awt.Font("Tahoma", 0, 12));
         jPanel3.setName("jPanel3"); // NOI18N
 
         baUnitSearchPanel.setName("baUnitSearchPanel"); // NOI18N
         baUnitSearchPanel.setShowOpenButton(false);
 
-        btnSelectFromSearch.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnSelectFromSearch.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnSelectFromSearch.setText(bundle.getString("NewPropertyWizardPanel.btnSelectFromSearch.text")); // NOI18N
         btnSelectFromSearch.setName("btnSelectFromSearch"); // NOI18N
         btnSelectFromSearch.addActionListener(new java.awt.event.ActionListener() {

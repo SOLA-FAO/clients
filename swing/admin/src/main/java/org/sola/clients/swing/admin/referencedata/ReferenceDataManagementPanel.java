@@ -39,6 +39,7 @@ import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractCodeBean;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.converters.TypeConverters;
+import org.sola.clients.beans.referencedata.BaUnitRelTypeBean;
 import org.sola.clients.beans.referencedata.BaUnitTypeBean;
 import org.sola.clients.beans.referencedata.BrSeverityTypeBean;
 import org.sola.clients.beans.referencedata.BrTechnicalTypeBean;
@@ -67,6 +68,7 @@ import org.sola.common.messaging.MessageUtility;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.AbstractCodeTO;
 import org.sola.webservices.transferobjects.EntityAction;
+import org.sola.webservices.transferobjects.referencedata.BaUnitRelTypeTO;
 import org.sola.webservices.transferobjects.referencedata.BaUnitTypeTO;
 import org.sola.webservices.transferobjects.referencedata.BrSeverityTypeTO;
 import org.sola.webservices.transferobjects.referencedata.BrTechnicalTypeTO;
@@ -334,6 +336,12 @@ public class ReferenceDataManagementPanel extends javax.swing.JPanel {
                     SourceBaUnitRelationTypeBean.class, (List) refDataList);
             CacheManager.remove(CacheManager.SOURCE_BA_UNIT_RELATION_TYPE_CODES_KEY);
             refDataTOClass = SourceBaUnitRelationTypeTO.class;
+        }
+        else if (refDataClass == BaUnitRelTypeBean.class) {
+            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance().getReferenceDataService().getBaUnitRelTypes(null),
+                    BaUnitRelTypeBean.class, (List) refDataList);
+            CacheManager.remove(CacheManager.BA_UNIT_REL_TYPE_KEY);
+            refDataTOClass = BaUnitRelTypeTO.class;
         } // SOURCE
         else if (refDataClass == SourceTypeBean.class) {
             TypeConverters.TransferObjectListToBeanList(WSManager.getInstance().getReferenceDataService().getSourceTypes(null),

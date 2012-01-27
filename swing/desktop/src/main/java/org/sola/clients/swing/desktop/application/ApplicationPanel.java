@@ -334,9 +334,9 @@ public class ApplicationPanel extends ContentPanel {
             }
         } else {
             cbxAgents.requestFocus(true);
-            this.tabbedControlMain.removeTabAt(tabbedControlMain.indexOfComponent(historyPanel));
-            this.tabbedControlMain.removeTabAt(tabbedControlMain.indexOfComponent(validationPanel));
-            this.btnValidate.getAction().setEnabled(false);
+            tabbedControlMain.removeTabAt(tabbedControlMain.indexOfComponent(historyPanel));
+            tabbedControlMain.removeTabAt(tabbedControlMain.indexOfComponent(validationPanel));
+            btnValidate.getAction().setEnabled(false);
         }
 
         menuApprove.getAction().setEnabled(appBean.canApprove()
@@ -357,8 +357,8 @@ public class ApplicationPanel extends ContentPanel {
                 && SecurityBean.isInRole(RolesConstants.APPLICATION_WITHDRAW));
         btnPrintStatusReport.getAction().setEnabled(appBean.getRowVersion() > 0);
 
-        if (this.btnValidate.getAction().isEnabled()) {
-            this.btnValidate.getAction().setEnabled(appBean.canValidate()
+        if (btnValidate.getAction().isEnabled()) {
+            btnValidate.getAction().setEnabled(appBean.canValidate()
                     && SecurityBean.isInRole(RolesConstants.APPLICATION_VALIDATE));
         }
 
@@ -372,6 +372,7 @@ public class ApplicationPanel extends ContentPanel {
             btnDeleteDoc.setEnabled(editAllowed);
             btnCalculateFee.setEnabled(editAllowed);
             btnPrintFee.setEnabled(editAllowed);
+            btnValidate.setEnabled(editAllowed);
             cbxPaid.setEnabled(editAllowed);
             addDocumentPanel.setAllowEditing(editAllowed);
             txtFirstName.setEditable(editAllowed);
@@ -606,16 +607,12 @@ public class ApplicationPanel extends ContentPanel {
                             form, MainContentPanel.CARD_CADASTRECHANGE, true);
                 }
 
-            } else if (requestType.equalsIgnoreCase(RequestTypeBean.CODE_NEW_APARTMENT)
-                    || requestType.equalsIgnoreCase(RequestTypeBean.CODE_NEW_FREEHOLD)
-                    || requestType.equalsIgnoreCase(RequestTypeBean.CODE_NEW_OWNERSHIP)
-                    || requestType.equalsIgnoreCase(RequestTypeBean.CODE_NEW_STATE)) {
+            } else {
 
                 // Try to get BA Units, craeted through the service
                 List<BaUnitBean> baUnitsList = BaUnitBean.getBaUnitsByServiceId(appBean.getSelectedService().getId());
 
                 if (baUnitsList != null && baUnitsList.size() > 0) {
-
                     if (baUnitsList.size() > 1) {
                         // Show BA Unit Selection Form
                         BaUnitsListPanel baUnitListPanel = new BaUnitsListPanel(baUnitsList);
@@ -636,35 +633,43 @@ public class ApplicationPanel extends ContentPanel {
                         openPropertyForm(baUnitsList.get(0), readOnly);
                     }
                 } else {
-                    if (!readOnly) {
-                        // Open empty property form
-                        openPropertyForm(new BaUnitBean(), readOnly);
-                    }
-                }
-
-            } else {
-                if (appBean.getPropertyList().getFilteredList().size() == 1) {
-                    openPropertyForm(appBean.getPropertyList().getFilteredList().get(0), readOnly);
-                } else if (appBean.getPropertyList().getFilteredList().size() > 1) {
-                    PropertiesList propertyListForm = new PropertiesList(appBean.getPropertyList());
-                    propertyListForm.setLocationRelativeTo(this);
-
-                    propertyListForm.addPropertyChangeListener(new PropertyChangeListener() {
-
-                        @Override
-                        public void propertyChange(PropertyChangeEvent evt) {
-                            if (evt.getPropertyName().equals(PropertiesList.SELECTED_PROPERTY)
-                                    && evt.getNewValue() != null) {
-                                ApplicationPropertyBean property = (ApplicationPropertyBean) evt.getNewValue();
-                                ((JDialog) evt.getSource()).dispose();
-                                openPropertyForm(property, readOnly);
-                            }
+                    
+                    // Open property form for new title registration
+                    if (requestType.equalsIgnoreCase(RequestTypeBean.CODE_NEW_APARTMENT)
+                            || requestType.equalsIgnoreCase(RequestTypeBean.CODE_NEW_FREEHOLD)
+                            || requestType.equalsIgnoreCase(RequestTypeBean.CODE_NEW_OWNERSHIP)
+                            || requestType.equalsIgnoreCase(RequestTypeBean.CODE_NEW_STATE)) {
+                        if (!readOnly) {
+                            // Open empty property form
+                            openPropertyForm(new BaUnitBean(), readOnly);
                         }
-                    });
+                    } else {
+                        
+                        // Open property form for existing title changes
+                        if (appBean.getPropertyList().getFilteredList().size() == 1) {
+                            openPropertyForm(appBean.getPropertyList().getFilteredList().get(0), readOnly);
+                        } else if (appBean.getPropertyList().getFilteredList().size() > 1) {
+                            PropertiesList propertyListForm = new PropertiesList(appBean.getPropertyList());
+                            propertyListForm.setLocationRelativeTo(this);
 
-                    propertyListForm.setVisible(true);
-                } else {
-                    MessageUtility.displayMessage(ClientMessage.APPLICATION_PROPERTY_LIST_EMPTY);
+                            propertyListForm.addPropertyChangeListener(new PropertyChangeListener() {
+
+                                @Override
+                                public void propertyChange(PropertyChangeEvent evt) {
+                                    if (evt.getPropertyName().equals(PropertiesList.SELECTED_PROPERTY)
+                                            && evt.getNewValue() != null) {
+                                        ApplicationPropertyBean property = (ApplicationPropertyBean) evt.getNewValue();
+                                        ((JDialog) evt.getSource()).dispose();
+                                        openPropertyForm(property, readOnly);
+                                    }
+                                }
+                            });
+
+                            propertyListForm.setVisible(true);
+                        } else {
+                            MessageUtility.displayMessage(ClientMessage.APPLICATION_PROPERTY_LIST_EMPTY);
+                        }
+                    }
                 }
             }
 

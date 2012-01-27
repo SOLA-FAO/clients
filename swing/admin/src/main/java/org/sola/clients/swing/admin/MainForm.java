@@ -34,6 +34,7 @@ import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JasperPrint;
 import org.jdesktop.application.Action;
 import org.sola.clients.beans.AbstractCodeBean;
+import org.sola.clients.beans.referencedata.BaUnitRelTypeBean;
 import org.sola.clients.beans.referencedata.BaUnitTypeBean;
 import org.sola.clients.beans.referencedata.BrSeverityTypeBean;
 import org.sola.clients.beans.referencedata.BrTechnicalTypeBean;
@@ -167,6 +168,7 @@ public class MainForm extends javax.swing.JFrame {
         menuServiceStatusTypes = new javax.swing.JMenuItem();
         menuAdministrative = new javax.swing.JMenu();
         menuBaUnitType = new javax.swing.JMenuItem();
+        menuBaUnitRelationTypes = new javax.swing.JMenuItem();
         menuMortgageTypes = new javax.swing.JMenuItem();
         menuRrrGroupTypes = new javax.swing.JMenuItem();
         menuRrrTypes = new javax.swing.JMenuItem();
@@ -271,7 +273,7 @@ public class MainForm extends javax.swing.JFrame {
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 868, Short.MAX_VALUE)
+            .addComponent(mainScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 878, Short.MAX_VALUE)
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -384,6 +386,16 @@ public class MainForm extends javax.swing.JFrame {
         menuBaUnitType.setText(bundle.getString("MainForm.menuBaUnitType.text")); // NOI18N
         menuBaUnitType.setName("menuBaUnitType"); // NOI18N
         menuAdministrative.add(menuBaUnitType);
+
+        menuBaUnitRelationTypes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/book-open.png"))); // NOI18N
+        menuBaUnitRelationTypes.setText(bundle.getString("MainForm.menuBaUnitRelationTypes.text")); // NOI18N
+        menuBaUnitRelationTypes.setName("menuBaUnitRelationTypes"); // NOI18N
+        menuBaUnitRelationTypes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuBaUnitRelationTypesActionPerformed(evt);
+            }
+        });
+        menuAdministrative.add(menuBaUnitRelationTypes);
 
         menuMortgageTypes.setAction(actionMap.get("manageMortgageTypes")); // NOI18N
         menuMortgageTypes.setText(bundle.getString("MainForm.menuMortgageTypes.text")); // NOI18N
@@ -507,7 +519,7 @@ public class MainForm extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainToolbar, javax.swing.GroupLayout.DEFAULT_SIZE, 868, Short.MAX_VALUE)
+            .addComponent(mainToolbar, javax.swing.GroupLayout.DEFAULT_SIZE, 878, Short.MAX_VALUE)
             .addComponent(statusPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -535,6 +547,11 @@ public class MainForm extends javax.swing.JFrame {
     private void menuTimeReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuTimeReportActionPerformed
 
         showReport(ReportManager.getBrValidaction());     }//GEN-LAST:event_menuTimeReportActionPerformed
+
+    private void menuBaUnitRelationTypesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuBaUnitRelationTypesActionPerformed
+        openReferenceDataPanel(BaUnitRelTypeBean.class, 
+                resourceBundle.getString("MainForm.menuBaUnitRelationTypes.text"));
+    }//GEN-LAST:event_menuBaUnitRelationTypesActionPerformed
 
     /** Opens roles management panel. */
     @Action
@@ -719,6 +736,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuBRSeverityType;
     private javax.swing.JMenuItem menuBRTechnicalType;
     private javax.swing.JMenuItem menuBRValidationTargetType;
+    private javax.swing.JMenuItem menuBaUnitRelationTypes;
     private javax.swing.JMenuItem menuBaUnitType;
     private javax.swing.JMenuItem menuCommunicationType;
     private javax.swing.JMenuItem menuExit;

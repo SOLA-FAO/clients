@@ -60,12 +60,11 @@ import org.sola.webservices.transferobjects.administrative.RrrTO;
 public class RrrBean extends AbstractTransactionedBean {
 
     public enum RRR_ACTION {
+
         NEW, VARY, CANCEL, EDIT, VIEW;
     }
-    
     public static final String CODE_OWNERSHIP = "ownership";
     public static final String CODE_MORTGAGE = "mortgage";
-    
     public static final String BA_UNIT_ID_PROPERTY = "baUnitId";
     public static final String TYPE_CODE_PROPERTY = "typeCode";
     public static final String RRR_TYPE_PROPERTY = "rrrType";
@@ -81,18 +80,17 @@ public class RrrBean extends AbstractTransactionedBean {
     public static final String FIRST_RIGHTHOLDER_PROPERTY = "firstRightholder";
     public static final String SELECTED_SHARE_PROPERTY = "selectedShare";
     public static final String SELECTED_PROPERTY = "selected";
-    
     private String baUnitId;
     private String nr;
     private Date registrationDate;
     private String transactionId;
-    @NotNull(message =  ClientMessage.CHECK_NOTNULL_EXPIRATION, payload=Localized.class, groups = {MortgageValidationGroup.class})
-    @Future(message = ClientMessage.CHECK_FUTURE_EXPIRATION, payload=Localized.class,
+    @NotNull(message = ClientMessage.CHECK_NOTNULL_EXPIRATION, payload = Localized.class, groups = {MortgageValidationGroup.class})
+    @Future(message = ClientMessage.CHECK_FUTURE_EXPIRATION, payload = Localized.class,
     groups = {MortgageValidationGroup.class})
     private Date expirationDate;
-    @NotNull(message =  ClientMessage.CHECK_NOTNULL_MORTGAGEAMOUNT, payload=Localized.class, groups = {MortgageValidationGroup.class})
+    @NotNull(message = ClientMessage.CHECK_NOTNULL_MORTGAGEAMOUNT, payload = Localized.class, groups = {MortgageValidationGroup.class})
     private BigDecimal mortgageAmount;
-    @NotNull(message =  ClientMessage.CHECK_NOTNULL_MORTAGAETYPE, payload=Localized.class, groups = {MortgageValidationGroup.class})
+    @NotNull(message = ClientMessage.CHECK_NOTNULL_MORTAGAETYPE, payload = Localized.class, groups = {MortgageValidationGroup.class})
     private MortgageTypeBean mortgageType;
     private BigDecimal mortgageInterestRate;
     private Integer mortgageRanking;
@@ -108,7 +106,7 @@ public class RrrBean extends AbstractTransactionedBean {
     private SolaList<PartySummaryBean> rightHolderList;
     private RrrShareBean selectedShare;
     private boolean selected;
-    
+
     public RrrBean() {
         super();
         registrationDate = Calendar.getInstance().getTime();
@@ -178,7 +176,7 @@ public class RrrBean extends AbstractTransactionedBean {
     }
 
     public void setMortgageType(MortgageTypeBean mortgageType) {
-        if(this.mortgageType==null){
+        if (this.mortgageType == null) {
             this.mortgageType = new MortgageTypeBean();
         }
         this.setJointRefDataBean(this.mortgageType, mortgageType, MORTGAGE_TYPE_PROPERTY);
@@ -217,7 +215,7 @@ public class RrrBean extends AbstractTransactionedBean {
     }
 
     public void setRrrType(RrrTypeBean rrrType) {
-        if(this.rrrType==null){
+        if (this.rrrType == null) {
             this.rrrType = new RrrTypeBean();
         }
         this.setJointRefDataBean(this.rrrType, rrrType, RRR_TYPE_PROPERTY);
@@ -291,8 +289,8 @@ public class RrrBean extends AbstractTransactionedBean {
         return sourceList;
     }
 
-    @Size(min = 1, message =  ClientMessage.CHECK_SIZE_SOURCELIST, payload=Localized.class)
-    @NoDuplicates(message =  ClientMessage.CHECK_NODUPLICATED_SOURCELIST, payload=Localized.class)
+    @Size(min = 1, message = ClientMessage.CHECK_SIZE_SOURCELIST, payload = Localized.class)
+    @NoDuplicates(message = ClientMessage.CHECK_NODUPLICATED_SOURCELIST, payload = Localized.class)
     public ObservableList<SourceBean> getFilteredSourceList() {
         return sourceList.getFilteredList();
     }
@@ -306,8 +304,8 @@ public class RrrBean extends AbstractTransactionedBean {
     }
 
     @Valid
-    @Size(min = 1, message =  ClientMessage.CHECK_SIZE_RRRSHARELIST, payload=Localized.class, groups = OwnershipValidationGroup.class)
-    @TotalShareSize(message =  ClientMessage.CHECK_TOTALSHARE_RRRSHARELIST, payload=Localized.class)
+    @Size(min = 1, message = ClientMessage.CHECK_SIZE_RRRSHARELIST, payload = Localized.class, groups = OwnershipValidationGroup.class)
+    @TotalShareSize(message = ClientMessage.CHECK_TOTALSHARE_RRRSHARELIST, payload = Localized.class)
     public ObservableList<RrrShareBean> getFilteredRrrShareList() {
         return rrrShareList.getFilteredList();
     }
@@ -326,7 +324,7 @@ public class RrrBean extends AbstractTransactionedBean {
         return rightHolderList;
     }
 
-    @Size(min = 1, groups = {MortgageValidationGroup.class}, message =  ClientMessage.CHECK_SIZE_RIGHTHOLDERLIST, payload=Localized.class)
+    @Size(min = 1, groups = {MortgageValidationGroup.class}, message = ClientMessage.CHECK_SIZE_RIGHTHOLDERLIST, payload = Localized.class)
     public ObservableList<PartySummaryBean> getFilteredRightHolderList() {
         return rightHolderList.getFilteredList();
     }
@@ -354,7 +352,7 @@ public class RrrBean extends AbstractTransactionedBean {
         this.selected = selected;
         propertySupport.firePropertyChange(SELECTED_PROPERTY, oldValue, this.selected);
     }
-    
+
     public RrrBean makeCopyByAction(RRR_ACTION rrrAction) {
         RrrBean copy = this;
 
@@ -365,14 +363,7 @@ public class RrrBean extends AbstractTransactionedBean {
         if (rrrAction == RRR_ACTION.VARY || rrrAction == RRR_ACTION.CANCEL) {
             // Make a copy of current bean with new ID
             copy = this.copy();
-            copy.setId(UUID.randomUUID().toString());
-            copy.resetVersion();
-            copy.setTransactionId(null);
-            copy.setStatusCode(StatusConstants.PENDING);
-
-            for (RrrShareBean shareBean : copy.getRrrShareList()) {
-                shareBean.resetVersion();
-            }
+            copy.resetIdAndVerion(true, false);
         }
 
         if (rrrAction == RRR_ACTION.EDIT) {
@@ -381,5 +372,31 @@ public class RrrBean extends AbstractTransactionedBean {
         }
 
         return copy;
+    }
+
+    /** 
+     * Generates new ID, RowVerion and RowID. 
+     * @param resetChildren If true, will change ID fields also for child objects.
+     * @param removeBaUnitId If true, will set <code>BaUnitId</code> to null.
+     */
+    public void resetIdAndVerion(boolean resetChildren, boolean removeBaUnitId) {
+        generateId();
+        resetVersion();
+        setTransactionId(null);
+        setStatusCode(StatusConstants.PENDING);
+        if (removeBaUnitId) {
+            setBaUnitId(null);
+        }
+        if (resetChildren) {
+            for (RrrShareBean shareBean : getRrrShareList()) {
+                shareBean.resetVersion();
+                shareBean.setRrrId(getId());
+            }
+            getNotation().generateId();
+            getNotation().resetVersion();
+            if (removeBaUnitId) {
+                getNotation().setBaUnitId(null);
+            }
+        }
     }
 }
