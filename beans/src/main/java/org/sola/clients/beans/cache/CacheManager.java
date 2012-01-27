@@ -65,7 +65,7 @@ import org.sola.clients.beans.referencedata.RrrTypeBean;
 import org.sola.clients.beans.referencedata.RegistrationStatusTypeBean;
 import org.sola.clients.beans.referencedata.RequestCategoryTypeBean;
 import org.sola.clients.beans.security.RoleBean;
-import org.sola.clients.beans.referencedata.RrrTypeActionBean;
+import org.sola.clients.beans.referencedata.TypeActionBean;
 import org.sola.clients.beans.referencedata.SourceBaUnitRelationTypeBean;
 import org.sola.clients.beans.system.LanguageBean;
 import org.sola.common.messaging.ClientMessage;
@@ -129,7 +129,7 @@ public final class CacheManager {
     /** Cache key of the {@link PartyRoleTypeBean} collection.*/
     public static final String ROLE_TYPES_KEY = PartyRoleTypeBean.class.getName() + LIST_POSTFIX;
     /** Cache key of the {@link RrrTypeActionBean} collection.*/
-    public static final String RRR_TYPE_ACTIONS_KEY = RrrTypeActionBean.class.getName() + LIST_POSTFIX;
+    public static final String TYPE_ACTIONS_KEY = TypeActionBean.class.getName() + LIST_POSTFIX;
     /** Cache key of the {@link RoleBean} collection.*/
     public static final String ROLES_KEY = RoleBean.class.getName() + LIST_POSTFIX;
     /** Cache key of the {@link LanguageBean} collection.*/
@@ -164,7 +164,7 @@ public final class CacheManager {
     private static final String GET_CHANGE_STATUS_TYPES = "getChangeStatusTypes";
     private static final String GET_SOURCE_BA_UNIT_RELATION_TYPES = "getSourceBaUnitRelationTypes";
     private static final String GET_CADASTRE_OBJECT_TYPES = "getCadastreObjectTypes";
-    private static final String GET_RRR_TYPE_ACTIONS = "getRrrTypeActions";
+    private static final String GET_TYPE_ACTIONS = "getTypeActions";
     private static final String GET_ROLES = "getRoles";
     private static final String GET_LANGUAGES = "getLanguages";
     private static final String GET_REQUEST_CATEGORY_TYPES = "getRequestCategoryTypes";
@@ -215,10 +215,10 @@ public final class CacheManager {
                 GET_ROLES, ROLES_KEY);
     }
     
-    public static List<RrrTypeActionBean> getRrrTypeActions() {
-        return getCachedBeanList(RrrTypeActionBean.class,
+    public static List<TypeActionBean> getTypeActions() {
+        return getCachedBeanList(TypeActionBean.class,
                 WSManager.getInstance().getReferenceDataService(),
-                GET_RRR_TYPE_ACTIONS, RRR_TYPE_ACTIONS_KEY);
+                GET_TYPE_ACTIONS, TYPE_ACTIONS_KEY);
     }
     
     public static List<ChangeStatusTypeBean> getChangeStatusTypes() {

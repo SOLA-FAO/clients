@@ -35,16 +35,16 @@ import org.sola.clients.beans.AbstractCodeBean;
 import org.sola.clients.beans.cache.CacheManager;
 
 /**
- * Holds list of {@link RrrTypeActionBean} objects.
+ * Holds list of {@link TypeActionBean} objects.
  */
-public class RrrTypeActionListBean extends AbstractBindingListBean {
+public class TypeActionListBean extends AbstractBindingListBean {
 
-    public static final String SELECTED_RRR_TYPE_ACTION_PROPERTY = "selectedRrrTypeAction";
-    private ObservableList<RrrTypeActionBean> rrrTypeActions;
-    private RrrTypeActionBean selectedRrrTypeAction;
+    public static final String SELECTED_TYPE_ACTION_PROPERTY = "selectedTypeAction";
+    private ObservableList<TypeActionBean> typeActions;
+    private TypeActionBean selectedTypeAction;
     
     /** Default constructor. */
-    public RrrTypeActionListBean(){
+    public TypeActionListBean(){
         this(false);
     }
     
@@ -52,7 +52,7 @@ public class RrrTypeActionListBean extends AbstractBindingListBean {
      * Creates object instance.
      * @param createDummy Indicates whether to add empty object on the list.
      */
-    public RrrTypeActionListBean(boolean createDummy){
+    public TypeActionListBean(boolean createDummy){
         super();
         loadList(createDummy);
     }
@@ -62,24 +62,24 @@ public class RrrTypeActionListBean extends AbstractBindingListBean {
      * @param createDummy Indicates whether to add empty object on the list.
      */
     public final void loadList(boolean createDummy) {
-        if (rrrTypeActions == null) {
-            rrrTypeActions = ObservableCollections.observableList(new ArrayList<RrrTypeActionBean>());
+        if (typeActions == null) {
+            typeActions = ObservableCollections.observableList(new ArrayList<TypeActionBean>());
         }
-        loadCodeList(RrrTypeActionBean.class, rrrTypeActions, CacheManager.getRrrTypeActions(), createDummy);
+        loadCodeList(TypeActionBean.class, typeActions, CacheManager.getTypeActions(), createDummy);
     }
 
-    public ObservableList<RrrTypeActionBean> getRrrTypeActions() {
-        return rrrTypeActions;
+    public ObservableList<TypeActionBean> getTypeActions() {
+        return typeActions;
     }
 
-    public RrrTypeActionBean getSelectedRrrTypeAction() {
-        return selectedRrrTypeAction;
+    public TypeActionBean getSelectedTypeAction() {
+        return selectedTypeAction;
     }
 
-    public void setSelectedRrrTypeAction(RrrTypeActionBean selectedRrrTypeAction) {
-        this.selectedRrrTypeAction = selectedRrrTypeAction;
-        RrrTypeActionBean oldValue = this.selectedRrrTypeAction;
-        this.selectedRrrTypeAction = selectedRrrTypeAction;
-        propertySupport.firePropertyChange(SELECTED_RRR_TYPE_ACTION_PROPERTY, oldValue, this.selectedRrrTypeAction);
+    public void setSelectedTypeAction(TypeActionBean selectedTypeAction) {
+        this.selectedTypeAction = selectedTypeAction;
+        TypeActionBean oldValue = this.selectedTypeAction;
+        this.selectedTypeAction = selectedTypeAction;
+        propertySupport.firePropertyChange(SELECTED_TYPE_ACTION_PROPERTY, oldValue, this.selectedTypeAction);
     }
 }

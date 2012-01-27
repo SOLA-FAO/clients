@@ -30,7 +30,7 @@ package org.sola.clients.swing.ui.referencedata;
 import org.sola.clients.beans.AbstractCodeBean;
 import org.sola.clients.beans.referencedata.RequestCategoryTypeListBean;
 import org.sola.clients.beans.referencedata.RequestTypeBean;
-import org.sola.clients.beans.referencedata.RrrTypeActionListBean;
+import org.sola.clients.beans.referencedata.TypeActionListBean;
 import org.sola.clients.beans.referencedata.RrrTypeListBean;
 import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.ui.renderers.FormattersFactory;
@@ -69,7 +69,7 @@ public class RequestTypePanel extends javax.swing.JPanel {
       
 //    COMBOBOXES
     LafManager.getInstance().setCmbProperties(cbxCategory);
-    LafManager.getInstance().setCmbProperties(cbxRrrAction);
+    LafManager.getInstance().setCmbProperties(cbxTypeAction);
     LafManager.getInstance().setCmbProperties(cbxRrrType);
     
     
@@ -122,11 +122,11 @@ public class RequestTypePanel extends javax.swing.JPanel {
         return requestCategoryTypes;
     }
 
-    private RrrTypeActionListBean createRrrTypeActions() {
-        if (rrrTypeActions == null) {
-            rrrTypeActions = new RrrTypeActionListBean(true);
+    private TypeActionListBean createTypeActions() {
+        if (typeActions == null) {
+            typeActions = new TypeActionListBean(true);
         }
-        return rrrTypeActions;
+        return typeActions;
     }
 
     public RequestTypeBean getRequestTypeBean() {
@@ -191,7 +191,7 @@ public class RequestTypePanel extends javax.swing.JPanel {
         } else {
             this.requestTypeBean = new RequestTypeBean();
             cbxCategory.setSelectedIndex(0);
-            cbxRrrAction.setSelectedIndex(0);
+            cbxTypeAction.setSelectedIndex(0);
             cbxRrrType.setSelectedIndex(0);
             saveEventToFire = CREATED_REFDATA_PROPERTY;
         }
@@ -226,7 +226,7 @@ public class RequestTypePanel extends javax.swing.JPanel {
         descriptionValues = new org.sola.clients.beans.system.LocalizedValuesListBean();
         requestCategoryTypes = createRequestCategoryTypes();
         rrrTypes = createRrrTypes();
-        rrrTypeActions = createRrrTypeActions();
+        typeActions = createTypeActions();
         sourceTypeHelpers = new org.sola.clients.beans.referencedata.SourceTypeHelperListBean();
         jPanel18 = new javax.swing.JPanel();
         btnOk = new javax.swing.JButton();
@@ -272,7 +272,7 @@ public class RequestTypePanel extends javax.swing.JPanel {
         cbxRrrType = new javax.swing.JComboBox();
         jPanel12 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
-        cbxRrrAction = new javax.swing.JComboBox();
+        cbxTypeAction = new javax.swing.JComboBox();
         jPanel17 = new javax.swing.JPanel();
         jPanel16 = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
@@ -726,7 +726,7 @@ public class RequestTypePanel extends javax.swing.JPanel {
         jLabel12.setName("jLabel12"); // NOI18N
 
         cbxRrrType.setName("cbxRrrType"); // NOI18N
-        cbxRrrType.setNextFocusableComponent(cbxRrrAction);
+        cbxRrrType.setNextFocusableComponent(cbxTypeAction);
 
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${rrrTypeBeanList}");
         jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrTypes, eLProperty, cbxRrrType);
@@ -756,17 +756,17 @@ public class RequestTypePanel extends javax.swing.JPanel {
 
         jPanel12.setName("jPanel12"); // NOI18N
 
-        jLabel13.setFont(new java.awt.Font("Tahoma", 0, 12));
+        jLabel13.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel13.setText(bundle.getString("RequestTypePanel.jLabel13.text")); // NOI18N
         jLabel13.setName("jLabel13"); // NOI18N
 
-        cbxRrrAction.setName("cbxRrrAction"); // NOI18N
-        cbxRrrAction.setNextFocusableComponent(txtRequiredPropObjects);
+        cbxTypeAction.setName("cbxTypeAction"); // NOI18N
+        cbxTypeAction.setNextFocusableComponent(txtRequiredPropObjects);
 
-        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${rrrTypeActions}");
-        jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrTypeActions, eLProperty, cbxRrrAction);
+        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${typeActions}");
+        jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, typeActions, eLProperty, cbxTypeAction);
         bindingGroup.addBinding(jComboBoxBinding);
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${requestTypeBean.rrrTypeAction}"), cbxRrrAction, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${requestTypeBean.typeAction}"), cbxTypeAction, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
@@ -775,15 +775,15 @@ public class RequestTypePanel extends javax.swing.JPanel {
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel12Layout.createSequentialGroup()
                 .addComponent(jLabel13)
-                .addContainerGap(226, Short.MAX_VALUE))
-            .addComponent(cbxRrrAction, 0, 282, Short.MAX_VALUE)
+                .addContainerGap(208, Short.MAX_VALUE))
+            .addComponent(cbxTypeAction, 0, 282, Short.MAX_VALUE)
         );
         jPanel12Layout.setVerticalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel12Layout.createSequentialGroup()
                 .addComponent(jLabel13)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbxRrrAction, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cbxTypeAction, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(12, Short.MAX_VALUE))
         );
 
@@ -941,8 +941,8 @@ public class RequestTypePanel extends javax.swing.JPanel {
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnOk;
     private javax.swing.JComboBox cbxCategory;
-    private javax.swing.JComboBox cbxRrrAction;
     private javax.swing.JComboBox cbxRrrType;
+    private javax.swing.JComboBox cbxTypeAction;
     private org.sola.clients.beans.system.LocalizedValuesListBean descriptionValues;
     private org.sola.clients.beans.system.LocalizedValuesListBean displayValues;
     private javax.swing.JLabel jLabel1;
@@ -983,7 +983,6 @@ public class RequestTypePanel extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private org.sola.clients.beans.referencedata.RequestCategoryTypeListBean requestCategoryTypes;
-    private org.sola.clients.beans.referencedata.RrrTypeActionListBean rrrTypeActions;
     private org.sola.clients.beans.referencedata.RrrTypeListBean rrrTypes;
     private org.sola.clients.beans.referencedata.SourceTypeHelperListBean sourceTypeHelpers;
     private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tableDescriptions;
@@ -998,6 +997,7 @@ public class RequestTypePanel extends javax.swing.JPanel {
     private javax.swing.JFormattedTextField txtRequiredPropObjects;
     private javax.swing.JTextField txtSatus;
     private javax.swing.JFormattedTextField txtValueBaseFee;
+    private org.sola.clients.beans.referencedata.TypeActionListBean typeActions;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }

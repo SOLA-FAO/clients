@@ -49,7 +49,7 @@ import org.sola.clients.beans.referencedata.RegistrationStatusTypeBean;
 import org.sola.clients.beans.referencedata.RequestCategoryTypeBean;
 import org.sola.clients.beans.referencedata.RequestTypeBean;
 import org.sola.clients.beans.referencedata.RrrGroupTypeBean;
-import org.sola.clients.beans.referencedata.RrrTypeActionBean;
+import org.sola.clients.beans.referencedata.TypeActionBean;
 import org.sola.clients.beans.referencedata.RrrTypeBean;
 import org.sola.clients.beans.referencedata.ServiceActionTypeBean;
 import org.sola.clients.beans.referencedata.ServiceStatusTypeBean;
@@ -69,12 +69,9 @@ import org.sola.common.RolesConstants;
  */
 public class MainForm extends javax.swing.JFrame {
 
-    private ResourceBundle resourceBundle;
-        
     /** Creates new form MainForm */
     public MainForm() {
         initComponents();
-        resourceBundle = ResourceBundle.getBundle("org/sola/clients/swing/admin/Bundle"); 
         
         URL imgURL = this.getClass().getResource("/images/common/admin.png");
         this.setIconImage(new ImageIcon(imgURL).getImage());
@@ -163,7 +160,7 @@ public class MainForm extends javax.swing.JFrame {
         menuApplications = new javax.swing.JMenu();
         menuRequestCategory = new javax.swing.JMenuItem();
         menuRequestTypes = new javax.swing.JMenuItem();
-        menuRrrTypeActions = new javax.swing.JMenuItem();
+        menuTypeActions = new javax.swing.JMenuItem();
         menuServiceActionTypes = new javax.swing.JMenuItem();
         menuServiceStatusTypes = new javax.swing.JMenuItem();
         menuAdministrative = new javax.swing.JMenu();
@@ -362,10 +359,10 @@ public class MainForm extends javax.swing.JFrame {
         menuRequestTypes.setName("menuRequestTypes"); // NOI18N
         menuApplications.add(menuRequestTypes);
 
-        menuRrrTypeActions.setAction(actionMap.get("manageRrrTypeActions")); // NOI18N
-        menuRrrTypeActions.setText(bundle.getString("MainForm.menuRrrTypeActions.text")); // NOI18N
-        menuRrrTypeActions.setName("menuRrrTypeActions"); // NOI18N
-        menuApplications.add(menuRrrTypeActions);
+        menuTypeActions.setAction(actionMap.get("manageTypeActions")); // NOI18N
+        menuTypeActions.setText(bundle.getString("MainForm.menuTypeActions.text")); // NOI18N
+        menuTypeActions.setName("menuTypeActions"); // NOI18N
+        menuApplications.add(menuTypeActions);
 
         menuServiceActionTypes.setAction(actionMap.get("manageServiceActionTypes")); // NOI18N
         menuServiceActionTypes.setText(bundle.getString("MainForm.menuServiceActionTypes.text")); // NOI18N
@@ -549,8 +546,7 @@ public class MainForm extends javax.swing.JFrame {
         showReport(ReportManager.getBrValidaction());     }//GEN-LAST:event_menuTimeReportActionPerformed
 
     private void menuBaUnitRelationTypesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuBaUnitRelationTypesActionPerformed
-        openReferenceDataPanel(BaUnitRelTypeBean.class, 
-                resourceBundle.getString("MainForm.menuBaUnitRelationTypes.text"));
+        openReferenceDataPanel(BaUnitRelTypeBean.class, menuBaUnitRelationTypes.getText());
     }//GEN-LAST:event_menuBaUnitRelationTypesActionPerformed
 
     /** Opens roles management panel. */
@@ -592,85 +588,72 @@ public class MainForm extends javax.swing.JFrame {
     @Action
     public void manageCommunicationTypes() {
         openReferenceDataPanel(CommunicationTypeBean.class, 
-                resourceBundle.getString("MainForm.menuCommunicationType.text"));
+                menuCommunicationType.getText());
     }
 
     @Action
     public void manageBAUnitType() {
-        openReferenceDataPanel(BaUnitTypeBean.class, 
-                resourceBundle.getString("MainForm.menuBaUnitType.text"));
+        openReferenceDataPanel(BaUnitTypeBean.class, menuBaUnitType.getText());
     }
 
     @Action
     public void manageIdTypes() {
-        openReferenceDataPanel(IdTypeBean.class, 
-                resourceBundle.getString("MainForm.menuIdTypes.text"));
+        openReferenceDataPanel(IdTypeBean.class, menuIdTypes.getText());
     }
 
     @Action
     public void manageGender() {
-        openReferenceDataPanel(GenderTypeBean.class, 
-                resourceBundle.getString("MainForm.menuGenders.text"));
+        openReferenceDataPanel(GenderTypeBean.class, menuGenders.getText());
     }
 
     @Action
     public void managePartyRoleTypes() {
-        openReferenceDataPanel(PartyRoleTypeBean.class, 
-                resourceBundle.getString("MainForm.menuPartyRoleType.text"));
+        openReferenceDataPanel(PartyRoleTypeBean.class, menuPartyRoleType.getText());
     }
 
     @Action
     public void managePartyTypes() {
-        openReferenceDataPanel(PartyTypeBean.class, 
-                resourceBundle.getString("MainForm.menuPartyType.text"));
+        openReferenceDataPanel(PartyTypeBean.class, menuPartyType.getText());
     }
 
     @Action
     public void manageMortgageTypes() {
-        openReferenceDataPanel(MortgageTypeBean.class, 
-                resourceBundle.getString("MainForm.menuMortgageTypes.text"));
+        openReferenceDataPanel(MortgageTypeBean.class, menuMortgageTypes.getText());
     }
 
     @Action
     public void manageRrrGroupTypes() {
-        openReferenceDataPanel(RrrGroupTypeBean.class, 
-                resourceBundle.getString("MainForm.menuRrrGroupTypes.text"));
+        openReferenceDataPanel(RrrGroupTypeBean.class, menuRrrGroupTypes.getText());
     }
 
     @Action
     public void manageRrrTypes() {
-        openReferenceDataPanel(RrrTypeBean.class, 
-                resourceBundle.getString("MainForm.menuRrrTypes.text"));
+        openReferenceDataPanel(RrrTypeBean.class, menuRrrTypes.getText());
     }
 
     @Action
     public void manageSourceTypes() {
-        openReferenceDataPanel(SourceTypeBean.class, 
-                resourceBundle.getString("MainForm.menuSourceTypes.text"));
+        openReferenceDataPanel(SourceTypeBean.class, menuSourceTypes.getText());
     }
 
     @Action
     public void manageRequestTypes() {
-        openReferenceDataPanel(RequestTypeBean.class, 
-                resourceBundle.getString("MainForm.menuRequestTypes.text"));
+        openReferenceDataPanel(RequestTypeBean.class, menuRequestTypes.getText());
     }
 
     @Action
-    public void manageRrrTypeActions() {
-        openReferenceDataPanel(RrrTypeActionBean.class, 
-                resourceBundle.getString("MainForm.menuRrrTypeActions.text"));
+    public void manageTypeActions() {
+        openReferenceDataPanel(TypeActionBean.class, menuTypeActions.getText());
     }
 
     @Action
     public void manageServiceActionTypes() {
-        openReferenceDataPanel(ServiceActionTypeBean.class, 
-                resourceBundle.getString("MainForm.menuServiceActionTypes.text"));
+        openReferenceDataPanel(ServiceActionTypeBean.class, menuServiceActionTypes.getText());
     }
 
     @Action
     public void manageServiceStatusTypes() {
-        openReferenceDataPanel(ServiceStatusTypeBean.class, 
-                resourceBundle.getString("MainForm.menuServiceStatusTypes.text"));
+        openReferenceDataPanel(ServiceStatusTypeBean.class, menuServiceStatusTypes.getText());
     }
 
     @Action
@@ -680,32 +663,27 @@ public class MainForm extends javax.swing.JFrame {
 
     @Action
     public void manageRequestCategories() {
-        openReferenceDataPanel(RequestCategoryTypeBean.class, 
-                resourceBundle.getString("MainForm.menuRequestCategory.text"));
+        openReferenceDataPanel(RequestCategoryTypeBean.class, menuRequestCategory.getText());
     }
 
     @Action
     public void manageRegistrationStatusTypes() {
-        openReferenceDataPanel(RegistrationStatusTypeBean.class, 
-                resourceBundle.getString("MainForm.menuRegistrationStatusType.text"));
+        openReferenceDataPanel(RegistrationStatusTypeBean.class, menuRegistrationStatusType.getText());
     }
 
     @Action
     public void manageBRSeverityTypes() {
-        openReferenceDataPanel(BrSeverityTypeBean.class, 
-                resourceBundle.getString("MainForm.menuBRSeverityType.text"));
+        openReferenceDataPanel(BrSeverityTypeBean.class, menuBRSeverityType.getText());
     }
 
     @Action
     public void manageBRValidationTargetTypes() {
-        openReferenceDataPanel(BrValidationTargetTypeBean.class, 
-                resourceBundle.getString("MainForm.menuBRValidationTargetType.text"));
+        openReferenceDataPanel(BrValidationTargetTypeBean.class, menuBRValidationTargetType.getText());
     }
 
     @Action
     public void manageBRTechnicalTypes() {
-        openReferenceDataPanel(BrTechnicalTypeBean.class, 
-                resourceBundle.getString("MainForm.menuBRTechnicalType.text"));
+        openReferenceDataPanel(BrTechnicalTypeBean.class, menuBRTechnicalType.getText());
     }
 
     @Action
@@ -757,7 +735,6 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuRequestTypes;
     private javax.swing.JMenuItem menuRoles;
     private javax.swing.JMenuItem menuRrrGroupTypes;
-    private javax.swing.JMenuItem menuRrrTypeActions;
     private javax.swing.JMenuItem menuRrrTypes;
     private javax.swing.JMenu menuSecurity;
     private javax.swing.JMenuItem menuServiceActionTypes;
@@ -767,6 +744,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenu menuSystem;
     private javax.swing.JMenuItem menuTimeReport;
     private javax.swing.JMenu menuTransaction;
+    private javax.swing.JMenuItem menuTypeActions;
     private javax.swing.JMenuItem menuUsers;
     private javax.swing.JPanel statusPanel;
     private org.sola.clients.swing.common.tasks.TaskPanel taskPanel1;

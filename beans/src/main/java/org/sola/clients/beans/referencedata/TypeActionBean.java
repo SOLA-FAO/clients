@@ -28,15 +28,15 @@
 package org.sola.clients.beans.referencedata;
 
 import org.sola.clients.beans.AbstractCodeBean;
-import org.sola.webservices.transferobjects.referencedata.RrrTypeActionTO;
+import org.sola.webservices.transferobjects.referencedata.TypeActionTO;
 
 /** 
- * Represents reference data object of the <b>rrr_type_action</b> table. 
- * Could be populated from the {@link RrrTypeActionTO} object.<br />
+ * Represents reference data object of the <b>type_action</b> table. 
+ * Could be populated from the {@link TypeActionTO} object.<br />
  * For more information see data dictionary <b>Application</b> schema.
  */
-public class RrrTypeActionBean extends AbstractCodeBean {
-    public RrrTypeActionBean() {
+public class TypeActionBean extends AbstractCodeBean {
+    public TypeActionBean() {
         super();
     }
 }

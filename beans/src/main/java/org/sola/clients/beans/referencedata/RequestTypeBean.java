@@ -61,10 +61,10 @@ public class RequestTypeBean extends AbstractCodeBean {
     public static final String NR_DAYS_TO_COMPLETE_PROPERTY = "nrDaysToComplete";
     public static final String NR_PROPERTIES_REQUIRED_PROPERTY = "nrPropertiesRequired";
     public static final String NOTATION_TEMPLATE_PROPERTY = "notationTemplate";
-    public static final String RRR_TYPE_ACTION_CODE_PROPERTY = "rrrTypeActionCode";
+    public static final String TYPE_ACTION_CODE_PROPERTY = "rrrTypeActionCode";
     public static final String RRR_TYPE_CODE_PROPERTY = "rrrTypeCode";
     public static final String RRR_TYPE_PROPERTY = "rrrType";
-    public static final String RRR_TYPE_ACTION_PROPERTY = "rrrTypeAction";
+    public static final String TYPE_ACTION_PROPERTY = "rrrTypeAction";
     public static final String REQUEST_CATEGORY_PROPERTY = "requestCategory";
     public static final String REQUEST_CATEGORY_CODE_PROPERTY = "requestCategoryCode";
     public static final String BASE_FEE_PROPERTY = "baseFee";
@@ -75,7 +75,7 @@ public class RequestTypeBean extends AbstractCodeBean {
     private int nrPropertiesRequired;
     private String notationTemplate;
     private RrrTypeBean rrrType;
-    private RrrTypeActionBean rrrTypeAction;
+    private TypeActionBean typeAction;
     @NotNull(message="Select category type.")
     @CodeBeanNotEmpty(message="Select category type.")
     private RequestCategoryTypeBean requestCategory;
@@ -120,35 +120,35 @@ public class RequestTypeBean extends AbstractCodeBean {
         this.notationTemplate = notationTemplate;
     }
 
-    public String getRrrTypeActionCode() {
-        if (getRrrTypeAction() != null) {
-            return rrrTypeAction.getCode();
+    public String getTypeActionCode() {
+        if (getTypeAction() != null) {
+            return typeAction.getCode();
         } else {
             return null;
         }
     }
 
-    public void setRrrTypeActionCode(String rrrTypeActionCode) {
+    public void setTypeActionCode(String typeActionCode) {
         String oldValue = null;
-        if (rrrTypeAction != null) {
-            oldValue = rrrTypeAction.getCode();
+        if (typeAction != null) {
+            oldValue = typeAction.getCode();
         }
-        setRrrTypeAction(CacheManager.getBeanByCode(CacheManager.getRrrTypeActions(), rrrTypeActionCode));
-        propertySupport.firePropertyChange(RRR_TYPE_ACTION_CODE_PROPERTY, oldValue, rrrTypeActionCode);
+        setTypeAction(CacheManager.getBeanByCode(CacheManager.getTypeActions(), typeActionCode));
+        propertySupport.firePropertyChange(TYPE_ACTION_CODE_PROPERTY, oldValue, typeActionCode);
     }
 
-    public RrrTypeActionBean getRrrTypeAction() {
-        if(rrrTypeAction == null){
-            rrrTypeAction = new RrrTypeActionBean();
+    public TypeActionBean getTypeAction() {
+        if(typeAction == null){
+            typeAction = new TypeActionBean();
         }
-        return rrrTypeAction;
+        return typeAction;
     }
 
-    public void setRrrTypeAction(RrrTypeActionBean rrrTypeAction) {
-        if (this.rrrTypeAction == null) {
-            this.rrrTypeAction = new RrrTypeActionBean();
+    public void setTypeAction(TypeActionBean rrrTypeAction) {
+        if (this.typeAction == null) {
+            this.typeAction = new TypeActionBean();
         }
-        this.setJointRefDataBean(this.rrrTypeAction, rrrTypeAction, RRR_TYPE_ACTION_PROPERTY);
+        this.setJointRefDataBean(this.typeAction, rrrTypeAction, TYPE_ACTION_PROPERTY);
     }
 
     public String getRrrTypeCode() {

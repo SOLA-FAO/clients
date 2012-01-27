@@ -109,15 +109,15 @@
                     <Property name="name" type="java.lang.String" value="menuRequestTypes" noResource="true"/>
                   </Properties>
                 </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="menuRrrTypeActions">
+                <MenuItem class="javax.swing.JMenuItem" name="menuTypeActions">
                   <Properties>
                     <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                      <action class="org.sola.clients.swing.admin.MainForm" id="manageRrrTypeActions" methodName="manageRrrTypeActions"/>
+                      <action class="org.sola.clients.swing.admin.MainForm" id="manageTypeActions" methodName="manageTypeActions"/>
                     </Property>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="org/sola/clients/swing/admin/Bundle.properties" key="MainForm.menuRrrTypeActions.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="org/sola/clients/swing/admin/Bundle.properties" key="MainForm.menuTypeActions.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
-                    <Property name="name" type="java.lang.String" value="menuRrrTypeActions" noResource="true"/>
+                    <Property name="name" type="java.lang.String" value="menuTypeActions" noResource="true"/>
                   </Properties>
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="menuServiceActionTypes">

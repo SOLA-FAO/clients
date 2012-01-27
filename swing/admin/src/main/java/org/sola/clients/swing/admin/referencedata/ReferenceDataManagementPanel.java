@@ -54,7 +54,7 @@ import org.sola.clients.beans.referencedata.RegistrationStatusTypeBean;
 import org.sola.clients.beans.referencedata.RequestCategoryTypeBean;
 import org.sola.clients.beans.referencedata.RequestTypeBean;
 import org.sola.clients.beans.referencedata.RrrGroupTypeBean;
-import org.sola.clients.beans.referencedata.RrrTypeActionBean;
+import org.sola.clients.beans.referencedata.TypeActionBean;
 import org.sola.clients.beans.referencedata.RrrTypeBean;
 import org.sola.clients.beans.referencedata.ServiceActionTypeBean;
 import org.sola.clients.beans.referencedata.ServiceStatusTypeBean;
@@ -83,7 +83,7 @@ import org.sola.webservices.transferobjects.referencedata.RegistrationStatusType
 import org.sola.webservices.transferobjects.referencedata.RequestCategoryTypeTO;
 import org.sola.webservices.transferobjects.referencedata.RequestTypeTO;
 import org.sola.webservices.transferobjects.referencedata.RrrGroupTypeTO;
-import org.sola.webservices.transferobjects.referencedata.RrrTypeActionTO;
+import org.sola.webservices.transferobjects.referencedata.TypeActionTO;
 import org.sola.webservices.transferobjects.referencedata.RrrTypeTO;
 import org.sola.webservices.transferobjects.referencedata.ServiceActionTypeTO;
 import org.sola.webservices.transferobjects.referencedata.ServiceStatusTypeTO;
@@ -349,11 +349,11 @@ public class ReferenceDataManagementPanel extends javax.swing.JPanel {
             CacheManager.remove(CacheManager.SOURCE_TYPES_KEY);
             refDataTOClass = SourceTypeTO.class;
         } // APPLICATION
-        else if (refDataClass == RrrTypeActionBean.class) {
-            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance().getReferenceDataService().getRrrTypeActions(null),
-                    RrrTypeActionBean.class, (List) refDataList);
-            CacheManager.remove(CacheManager.RRR_TYPE_ACTIONS_KEY);
-            refDataTOClass = RrrTypeActionTO.class;
+        else if (refDataClass == TypeActionBean.class) {
+            TypeConverters.TransferObjectListToBeanList(WSManager.getInstance().getReferenceDataService().getTypeActions(null),
+                    TypeActionBean.class, (List) refDataList);
+            CacheManager.remove(CacheManager.TYPE_ACTIONS_KEY);
+            refDataTOClass = TypeActionTO.class;
         } else if (refDataClass == ServiceStatusTypeBean.class) {
             TypeConverters.TransferObjectListToBeanList(WSManager.getInstance().getReferenceDataService().getServiceStatusTypes(null),
                     ServiceStatusTypeBean.class, (List) refDataList);

@@ -562,8 +562,8 @@ public class PropertyPanel extends ContentPanel {
     private boolean isActionAllowed(String action) {
         boolean result = true;
         if (applicationService != null && applicationService.getRequestType() != null
-                && applicationService.getRequestType().getRrrTypeActionCode() != null) {
-            result = applicationService.getRequestType().getRrrTypeActionCode().equalsIgnoreCase(action);
+                && applicationService.getRequestType().getTypeActionCode() != null) {
+            result = applicationService.getRequestType().getTypeActionCode().equalsIgnoreCase(action);
         }
         return result;
     }

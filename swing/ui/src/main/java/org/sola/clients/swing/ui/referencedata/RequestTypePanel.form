@@ -16,9 +16,9 @@
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="createRrrTypes()"/>
       </AuxValues>
     </Component>
-    <Component class="org.sola.clients.beans.referencedata.RrrTypeActionListBean" name="rrrTypeActions">
+    <Component class="org.sola.clients.beans.referencedata.TypeActionListBean" name="typeActions">
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="createRrrTypeActions()"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="createTypeActions()"/>
       </AuxValues>
     </Component>
     <Component class="org.sola.clients.beans.referencedata.SourceTypeHelperListBean" name="sourceTypeHelpers">
@@ -908,7 +908,7 @@
                       <Properties>
                         <Property name="name" type="java.lang.String" value="cbxRrrType" noResource="true"/>
                         <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-                          <ComponentRef name="cbxRrrAction"/>
+                          <ComponentRef name="cbxTypeAction"/>
                         </Property>
                       </Properties>
                       <BindingProperties>
@@ -928,9 +928,9 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel13" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="226" max="32767" attributes="0"/>
+                              <EmptySpace pref="208" max="32767" attributes="0"/>
                           </Group>
-                          <Component id="cbxRrrAction" alignment="0" pref="282" max="32767" attributes="0"/>
+                          <Component id="cbxTypeAction" alignment="0" pref="282" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
@@ -938,7 +938,7 @@
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel13" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="cbxRrrAction" min="-2" max="-2" attributes="0"/>
+                              <Component id="cbxTypeAction" min="-2" max="-2" attributes="0"/>
                               <EmptySpace pref="12" max="32767" attributes="0"/>
                           </Group>
                       </Group>
@@ -956,16 +956,16 @@
                         <Property name="name" type="java.lang.String" value="jLabel13" noResource="true"/>
                       </Properties>
                     </Component>
-                    <Component class="javax.swing.JComboBox" name="cbxRrrAction">
+                    <Component class="javax.swing.JComboBox" name="cbxTypeAction">
                       <Properties>
-                        <Property name="name" type="java.lang.String" value="cbxRrrAction" noResource="true"/>
+                        <Property name="name" type="java.lang.String" value="cbxTypeAction" noResource="true"/>
                         <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
                           <ComponentRef name="txtRequiredPropObjects"/>
                         </Property>
                       </Properties>
                       <BindingProperties>
-                        <BindingProperty name="elements" source="rrrTypeActions" sourcePath="${rrrTypeActions}" target="cbxRrrAction" targetPath="elements" updateStrategy="0" immediately="false"/>
-                        <BindingProperty name="selectedItem" source="Form" sourcePath="${requestTypeBean.rrrTypeAction}" target="cbxRrrAction" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+                        <BindingProperty name="elements" source="typeActions" sourcePath="${typeActions}" target="cbxTypeAction" targetPath="elements" updateStrategy="0" immediately="false"/>
+                        <BindingProperty name="selectedItem" source="Form" sourcePath="${requestTypeBean.typeAction}" target="cbxTypeAction" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
                     </Component>
                   </SubComponents>
