@@ -33,11 +33,13 @@ import java.util.List;
 import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.jdesktop.observablecollections.ObservableListListener;
+import org.sola.clients.beans.cache.CacheManager;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.clients.beans.cadastre.CadastreObjectBean;
 import org.sola.clients.beans.controls.SolaList;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.beans.referencedata.StatusConstants;
+import org.sola.clients.beans.referencedata.TypeActionBean;
 import org.sola.clients.beans.source.SourceBean;
 import org.sola.webservices.transferobjects.EntityAction;
 import org.sola.webservices.transferobjects.administrative.BaUnitTO;
@@ -162,6 +164,8 @@ public class BaUnitBean extends BaUnitSummaryBean {
     public static final String SELECTED_PARENT_BA_UNIT_PROPERTY = "selectedParentBaUnit";
     public static final String SELECTED_CHILD_BA_UNIT_PROPERTY = "selectedChildBaUnit";
     public static final String ESTATE_TYPE_PROPERTY = "estateType";
+    public static final String PENDING_ACTION_CODE_PROPERTY = "pendingActionCode";
+    public static final String PENDING_ACTION_PROPERTY = "pendingTypeAction";
     
     private SolaList<RrrBean> rrrList;
     private SolaList<BaUnitNotationBean> baUnitNotationList;
@@ -178,7 +182,8 @@ public class BaUnitBean extends BaUnitSummaryBean {
     private RelatedBaUnitInfoBean selectedParentBaUnit;
     private RelatedBaUnitInfoBean selectedChildBaUnit;
     private String estateType;
-
+    private TypeActionBean pendingTypeAction;
+    
     public BaUnitBean() {
         super();
         rrrList = new SolaList();
@@ -352,6 +357,35 @@ public class BaUnitBean extends BaUnitSummaryBean {
 
     public ObservableList<RelatedBaUnitInfoBean> getFilteredParentBaUnits() {
         return parentBaUnits.getFilteredList();
+    }
+
+    public String getPendingActionCode() {
+        return getPendingTypeAction().getCode();
+    }
+
+    public void setPendingActionCode(String pendingActionCode) {
+        String oldValue = null;
+        if (getPendingTypeAction() != null) {
+            oldValue = getPendingTypeAction().getCode();
+        }
+        setPendingTypeAction(CacheManager.getBeanByCode(
+                CacheManager.getTypeActions(), pendingActionCode));
+        propertySupport.firePropertyChange(PENDING_ACTION_CODE_PROPERTY, oldValue, pendingActionCode);
+    }
+
+    public TypeActionBean getPendingTypeAction() {
+        if (this.pendingTypeAction == null) {
+            this.pendingTypeAction = new TypeActionBean();
+        }
+        return pendingTypeAction;
+    }
+
+    public void setPendingTypeAction(TypeActionBean pendingTypeAction) {
+        this.pendingTypeAction = pendingTypeAction;
+        if (this.pendingTypeAction == null) {
+            this.pendingTypeAction = new TypeActionBean();
+        }
+        this.setJointRefDataBean(this.pendingTypeAction, pendingTypeAction, PENDING_ACTION_PROPERTY);
     }
     
     public ObservableList<CadastreObjectBean> getSelectedNewCadastreObjects() {
