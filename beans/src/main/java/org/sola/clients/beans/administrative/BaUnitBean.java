@@ -575,6 +575,31 @@ public class BaUnitBean extends BaUnitSummaryBean {
     }
     
     /** 
+     * Terminates/Cancel BaUnit. Creates pending record for further action. 
+     * @param serviceId ID of the service, which terminates BaUnit.
+     */
+    public void terminateBaUnit(String serviceId){
+        BaUnitTO baUnitTO = WSManager.getInstance().getAdministrative()
+                .terminateBaUnit(this.getId(), serviceId);
+        if(baUnitTO!=null){
+                TypeConverters.TransferObjectToBean(
+                baUnitTO, BaUnitBean.class, this);
+        }
+    }
+    
+    /** 
+     * Rolls back BaUnit termination/cancellation. 
+     */
+    public void cancelBaUnitTermination(){
+        BaUnitTO baUnitTO = WSManager.getInstance().getAdministrative()
+                .cancelBaUnitTermination(this.getId());
+        if(baUnitTO!=null){
+                TypeConverters.TransferObjectToBean(
+                baUnitTO, BaUnitBean.class, this);
+        }
+    }
+    
+    /** 
      * Returns collection of {@link BaUnitBean} objects. This method is 
      * used by Jasper report designer to extract properties of BA Unit bean 
      * to help design a report.

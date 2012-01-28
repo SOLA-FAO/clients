@@ -36,6 +36,10 @@ import org.sola.webservices.transferobjects.referencedata.TypeActionTO;
  * For more information see data dictionary <b>Application</b> schema.
  */
 public class TypeActionBean extends AbstractCodeBean {
+    public static final String CODE_CANCEL = "cancel";
+    public static final String CODE_NEW = "new";
+    public static final String CODE_VARY = "vary";
+    
     public TypeActionBean() {
         super();
     }

@@ -52,6 +52,7 @@ import org.sola.clients.beans.referencedata.RrrTypeActionConstants;
 import org.sola.clients.beans.referencedata.RrrTypeBean;
 import org.sola.clients.beans.referencedata.RrrTypeListBean;
 import org.sola.clients.beans.referencedata.StatusConstants;
+import org.sola.clients.beans.referencedata.TypeActionBean;
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.swing.ui.renderers.LockCellRenderer;
 import org.sola.clients.swing.ui.renderers.SimpleComboBoxRenderer;
@@ -256,9 +257,8 @@ public class PropertyPanel extends ContentPanel {
         if (applicationBean != null && applicationService != null) {
             headerPanel.setTitleText(String.format("%s, %s",
                     headerPanel.getTitleText(),
-                    String.format(resourceBundle.getString("PropertyPanel.applicationInfo.Text"), 
-                    applicationService.getRequestType().getDisplayValue(), applicationBean.getNr())
-                    ));
+                    String.format(resourceBundle.getString("PropertyPanel.applicationInfo.Text"),
+                    applicationService.getRequestType().getDisplayValue(), applicationBean.getNr())));
         }
 
         btnSave.setEnabled(!readOnly);
@@ -271,7 +271,7 @@ public class PropertyPanel extends ContentPanel {
         customizePrintButton();
         customizeParentPropertyButtons();
         customizeChildPropertyButtons();
-        
+
         rrrTypes.addPropertyChangeListener(new PropertyChangeListener() {
 
             @Override
@@ -419,7 +419,7 @@ public class PropertyPanel extends ContentPanel {
         relatedBuUnit.setRelatedBaUnit(selectedBaUnit);
         relatedBuUnit.setRelatedBaUnitId(selectedBaUnit.getId());
         baUnitBean1.getParentBaUnits().addAsNew(relatedBuUnit);
-        
+
         tabsMain.setSelectedIndex(tabsMain.indexOfComponent(pnlPriorProperties));
         return true;
     }
@@ -431,19 +431,19 @@ public class PropertyPanel extends ContentPanel {
                 && !baUnitBean1.getStatusCode().equals(StatusConstants.PENDING))) {
             enabled = false;
         }
-        
-        btnOpenParent.setEnabled(baUnitBean1.getSelectedParentBaUnit()!=null);
+
+        btnOpenParent.setEnabled(baUnitBean1.getSelectedParentBaUnit() != null);
         btnAddParent.setEnabled(enabled);
         btnRemoveParent.setEnabled(enabled && btnOpenParent.isEnabled());
-        
+
         menuOpenParentBaUnit.setEnabled(btnOpenParent.isEnabled());
         menuAddParentBaUnit.setEnabled(btnAddParent.isEnabled());
         menuRemoveParentBaUnit.setEnabled(btnRemoveParent.isEnabled());
     }
-    
+
     /** Enables or disables "open" button for the child Properties list. */
     private void customizeChildPropertyButtons() {
-        btnOpenChild.setEnabled(baUnitBean1.getSelectedChildBaUnit()!=null);
+        btnOpenChild.setEnabled(baUnitBean1.getSelectedChildBaUnit() != null);
         menuOpenChildBaUnit.setEnabled(btnOpenChild.isEnabled());
     }
 
@@ -499,7 +499,7 @@ public class PropertyPanel extends ContentPanel {
 
             // Restrict selection of right type by application service
             if (applicationService != null && applicationService.getRequestType() != null
-                    && applicationService.getRequestType().getRrrTypeCode() !=null) {
+                    && applicationService.getRequestType().getRrrTypeCode() != null) {
                 rrrTypes.setSelectedRightByCode(applicationService.getRequestType().getRrrTypeCode());
                 if (rrrTypes.getSelectedRrrType() != null) {
                     cbxRightType.setEnabled(false);
@@ -516,8 +516,8 @@ public class PropertyPanel extends ContentPanel {
      * the form state. 
      */
     private void customizeCreateRightButton(RrrTypeBean rrrTypeBean) {
-        if (rrrTypeBean != null && rrrTypeBean.getCode() != null && 
-                !readOnly && isActionAllowed(RrrTypeActionConstants.NEW)) {
+        if (rrrTypeBean != null && rrrTypeBean.getCode() != null
+                && !readOnly && isActionAllowed(RrrTypeActionConstants.NEW)) {
             btnCreateRight.getAction().setEnabled(true);
         } else {
             btnCreateRight.getAction().setEnabled(false);
@@ -545,7 +545,7 @@ public class PropertyPanel extends ContentPanel {
 
             // Control the record state, duplication of pending records,
             // allowed action and allowed type of RRR.
-            if (rrrBean.getStatusCode().equals(StatusConstants.CURRENT) 
+            if (rrrBean.getStatusCode().equals(StatusConstants.CURRENT)
                     && !baUnitBean1.isPendingRrrExists(rrrBean)
                     && isRightTypeAllowed(rrrBean.getTypeCode())) {
                 if (isActionAllowed(RrrTypeActionConstants.VARY)) {
@@ -738,6 +738,23 @@ public class PropertyPanel extends ContentPanel {
         form.setVisible(true);
     }
 
+    private boolean saveBaUnit(boolean showMessage) {
+        boolean result = false;
+        if (this.baUnitID != null && !this.baUnitID.equals("")) {
+            result = baUnitBean1.saveBaUnit(applicationService.getId());
+        } else {
+            result = baUnitBean1.createBaUnit(applicationService.getId());
+        }
+        if (showMessage) {
+            if (result) {
+                JOptionPane.showMessageDialog(this, "Changes successfully saved.");
+            } else {
+                JOptionPane.showMessageDialog(this, "Failed to save property.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        return result;
+    }
+
     /** Opens form to select or create document to be used as a paper title document. */
     private void openDocumentsForm() {
         if (applicationDocumentsForm != null) {
@@ -772,8 +789,8 @@ public class PropertyPanel extends ContentPanel {
             PropertyPanel propertyPnl = new PropertyPanel(
                     relatedBaUnit.getRelatedBaUnit().getNameFirstpart(),
                     relatedBaUnit.getRelatedBaUnit().getNameLastpart());
-            getMainContentPanel().addPanel(propertyPnl, 
-                    MainContentPanel.CARD_PROPERTY_PANEL + "_" 
+            getMainContentPanel().addPanel(propertyPnl,
+                    MainContentPanel.CARD_PROPERTY_PANEL + "_"
                     + relatedBaUnit.getRelatedBaUnit().getId(), true);
         }
     }
@@ -1002,6 +1019,11 @@ public class PropertyPanel extends ContentPanel {
         btnTerminate.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnTerminate.setName("btnTerminate"); // NOI18N
         btnTerminate.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnTerminate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTerminateActionPerformed(evt);
+            }
+        });
         jToolBar5.add(btnTerminate);
 
         jSeparator4.setName("jSeparator4"); // NOI18N
@@ -1839,17 +1861,7 @@ public class PropertyPanel extends ContentPanel {
     }// </editor-fold>//GEN-END:initComponents
 
 private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-    boolean result = false;
-    if (this.baUnitID != null && !this.baUnitID.equals("")) {
-        result = baUnitBean1.saveBaUnit(applicationService.getId());
-    } else {
-        result = baUnitBean1.createBaUnit(applicationService.getId());
-    }
-    if (result) {
-        JOptionPane.showMessageDialog(this, "Changes successfully saved.");
-    } else {
-        JOptionPane.showMessageDialog(this, "Failed to save property.", "Error", JOptionPane.ERROR_MESSAGE);
-    }
+    saveBaUnit(true);
 }//GEN-LAST:event_btnSaveActionPerformed
 
     private void tableRightsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableRightsMouseClicked
@@ -1903,6 +1915,20 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
         btnOpenChildActionPerformed(evt);
     }//GEN-LAST:event_menuOpenChildBaUnitActionPerformed
 
+    private void btnTerminateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTerminateActionPerformed
+        if (baUnitBean1.getPendingActionCode() != null && baUnitBean1
+                .getPendingActionCode().equals(TypeActionBean.CODE_CANCEL)) {
+            saveBaUnit(false);
+            baUnitBean1.cancelBaUnitTermination();
+            MessageUtility.displayMessage(ClientMessage.BAUNIT_TERMINATION_CANCELED);
+        } else {
+            if (MessageUtility.displayMessage(ClientMessage.BAUNIT_CONFIRM_TERMINATION) == MessageUtility.BUTTON_ONE) {
+                saveBaUnit(false);
+                baUnitBean1.terminateBaUnit(applicationService.getId());
+                MessageUtility.displayMessage(ClientMessage.BAUNIT_TERMINATED);
+            }
+        }
+    }//GEN-LAST:event_btnTerminateActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.sola.clients.beans.administrative.BaUnitBean baUnitBean1;
     private org.sola.clients.beans.referencedata.RrrTypeListBean baUnitRrrTypes;
