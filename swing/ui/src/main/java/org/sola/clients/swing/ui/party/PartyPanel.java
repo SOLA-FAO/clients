@@ -95,7 +95,6 @@ public class PartyPanel extends javax.swing.JPanel {
      * @param readOnly Indicates whether to allow any changes on the form.
      */
     public PartyPanel(boolean savePartyOnAction, PartyBean partyBean, boolean readOnly) {
-        this.partyBean = partyBean;
         this.savePartyOnAction = savePartyOnAction;
 
         if (!readOnly) {
@@ -104,7 +103,7 @@ public class PartyPanel extends javax.swing.JPanel {
 
         initComponents();
         
-        setupPartyBean(null);
+        setupPartyBean(partyBean);
 
         this.partyRoleTypes.addPropertyChangeListener(new PropertyChangeListener() {
 
