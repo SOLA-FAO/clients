@@ -10,6 +10,7 @@
  */
 package org.sola.clients.swing.gis.ui.control;
 
+import java.text.DecimalFormat;
 import org.sola.clients.swing.gis.Messaging;
 import org.sola.common.messaging.GisMessage;
 
@@ -26,6 +27,7 @@ public class NodeModifyForm extends javax.swing.JDialog {
         DoNothing
     }
     private Status status = Status.DoNothing;
+    private DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
     /** Creates new form NodeModifyForm */
     public NodeModifyForm() {
@@ -43,11 +45,11 @@ public class NodeModifyForm extends javax.swing.JDialog {
     }
 
     public void setCoordinateX(Double x) {
-        this.txtX.setText(x.toString());
+        this.txtX.setText(decimalFormat.format(x));
     }
 
     public void setCoordinateY(Double y) {
-        this.txtY.setText(y.toString());
+        this.txtY.setText(decimalFormat.format(y));
     }
 
     public Double getCoordinateX() {
