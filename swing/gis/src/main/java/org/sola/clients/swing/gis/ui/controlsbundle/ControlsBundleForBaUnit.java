@@ -61,7 +61,6 @@ public final class ControlsBundleForBaUnit extends ControlsBundleForWorkingWithC
             layerForCadastreObjects = 
                     new ExtendedLayerGraphics(CADASTRE_OBJECTS_LAYERNAME, 
                             Geometries.POLYGON, STYLE_RESOURCE);
-            //layerForCadastreObjects.setShowInToc(false);
             this.getMap().addLayer(layerForCadastreObjects);
         } catch (Exception ex) {
             org.sola.common.logging.LogUtility.log(

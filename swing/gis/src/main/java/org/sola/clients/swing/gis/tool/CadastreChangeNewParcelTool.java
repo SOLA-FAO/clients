@@ -33,7 +33,7 @@ import org.geotools.geometry.DirectPosition2D;
 import org.geotools.geometry.jts.Geometries;
 import org.geotools.swing.event.MapMouseEvent;
 import org.opengis.feature.simple.SimpleFeature;
-import org.sola.clients.swing.gis.layer.NewCadastreObjectLayer;
+import org.sola.clients.swing.gis.layer.CadastreChangeNewCadastreObjectLayer;
 import org.geotools.swing.tool.extended.ExtendedEditGeometryTool;
 import org.geotools.swing.extended.util.Messaging;
 import org.sola.common.messaging.GisMessage;
@@ -48,9 +48,9 @@ public class CadastreChangeNewParcelTool extends ExtendedEditGeometryTool{
     
      private String toolName = "new-parcel";
      private String toolTip =  MessageUtility.getLocalizedMessage(
-                            GisMessage.CADASTRE_TOOLTIP_NEW_PARCEL).getMessage();
+                            GisMessage.CADASTRE_CHANGE_TOOLTIP_NEW_PARCEL).getMessage();
 
-    public CadastreChangeNewParcelTool(NewCadastreObjectLayer newCadastreObjectLayer) {
+    public CadastreChangeNewParcelTool(CadastreChangeNewCadastreObjectLayer newCadastreObjectLayer) {
         this.setToolName(toolName);
         this.setIconImage("resources/new-parcel.png");
         this.setToolTip(toolTip);

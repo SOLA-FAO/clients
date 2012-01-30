@@ -45,7 +45,7 @@ public class CadastreChangeSelectParcelTool extends ExtendedTool {
 
     private String toolName = "select-parcel";
     private String toolTip = MessageUtility.getLocalizedMessage(
-                            GisMessage.CADASTRE_TOOLTIP_SELECT_PARCEL).getMessage();
+                            GisMessage.CADASTRE_CHANGE_TOOLTIP_SELECT_PARCEL).getMessage();
     private ExtendedLayerGraphics targetParcelsLayer = null;
     private PojoDataAccess dataAccess;
 

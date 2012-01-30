@@ -75,7 +75,7 @@ public class Toc extends JPanel {
 
         TocCellRenderer renderer = new TocCellRenderer();
         tree.setCellRenderer(renderer);
-        this.setPreferredSize(new Dimension(200, 200));
+        this.setPreferredSize(new Dimension(250, 200));
         this.addListners();
     }
 

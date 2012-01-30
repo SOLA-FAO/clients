@@ -36,7 +36,6 @@ package org.geotools.swing.extended;
 import org.geotools.swing.control.extended.Toc;
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
 import org.geotools.swing.control.JCoordsStatusBarItem;
@@ -44,7 +43,6 @@ import org.geotools.swing.control.JMapStatusBar;
 import org.geotools.swing.control.JRendererStatusBarItem;
 import org.geotools.swing.extended.util.Messaging;
 import org.geotools.swing.mapaction.extended.FullExtent;
-import org.geotools.swing.mapaction.extended.Print;
 import org.geotools.swing.tool.extended.ExtendedPan;
 import org.geotools.swing.tool.extended.ExtendedZoominTool;
 

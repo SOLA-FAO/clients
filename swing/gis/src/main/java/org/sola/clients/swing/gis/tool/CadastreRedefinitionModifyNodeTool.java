@@ -4,14 +4,14 @@
  */
 package org.sola.clients.swing.gis.tool;
 
+import java.util.List;
+import org.geotools.feature.CollectionEvent;
 import org.geotools.geometry.Envelope2D;
 import org.opengis.feature.simple.SimpleFeature;
 import org.sola.clients.swing.gis.beans.CadastreObjectNodeBean;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.layer.CadastreRedefinitionObjectLayer;
 import org.sola.clients.swing.gis.layer.CadastreRedefinitionNodeLayer;
-import org.sola.clients.swing.gis.to.CadastreObjectNodeExtraTO;
-import org.sola.common.MappingManager;
 import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.MessageUtility;
 import org.sola.webservices.transferobjects.cadastre.CadastreObjectNodeTO;
@@ -37,23 +37,23 @@ public class CadastreRedefinitionModifyNodeTool extends CadastreRedefinitionAbst
     @Override
     protected void onRectangleFinished(Envelope2D env) {
 
+        boolean nodeIsNewFromServer = false;
         SimpleFeature nodeFeature = this.getFirstNodeFeature(env);
         if (nodeFeature == null) {
-            CadastreObjectNodeTO nodeTO = this.getNodeFromServer(env);
-            if (nodeTO == null) {
+            CadastreObjectNodeBean nodeBean = this.addNodeFromServer(env);
+            if (nodeBean == null) {
                 return;
             }
-            CadastreObjectNodeBean nodeBean = MappingManager.getMapper().map(
-                    new CadastreObjectNodeExtraTO(nodeTO), CadastreObjectNodeBean.class);
-            nodeFeature = this.cadastreObjectNodeModifiedLayer.addNodeTarget(
-                    nodeBean.getId(), nodeBean.getGeom());
-            this.cadastreObjectModifiedLayer.addCadastreObjects(nodeBean.getCadastreObjectList());
-            this.getMapControl().refresh();
+            nodeFeature = this.cadastreObjectNodeModifiedLayer.getFeatureCollection().getFeature(
+                    nodeBean.getId());
+            nodeIsNewFromServer = true;
         }
         if (nodeFeature == null) {
             return;
         }
-        this.manipulateNode(nodeFeature);
+        if (!this.manipulateNode(nodeFeature) && nodeIsNewFromServer) {
+            this.removeNewServerNodesAfterCancellation(nodeFeature);
+        }
     }
 
     @Override
@@ -61,5 +61,16 @@ public class CadastreRedefinitionModifyNodeTool extends CadastreRedefinitionAbst
         return this.dataAccess.getCadastreService().getCadastreObjectNode(
                 env.getMinX(), env.getMinY(), env.getMaxX(), env.getMaxY(),
                 this.getMapControl().getSrid());
+    }
+
+    private void removeNewServerNodesAfterCancellation(SimpleFeature nodeFeature) {
+        List<SimpleFeature> cadastreObjects =
+                this.cadastreObjectModifiedLayer.getCadastreObjectFeatures(nodeFeature);
+        for (SimpleFeature cadastreObjectFeature : cadastreObjects) {
+            this.cadastreObjectModifiedLayer.getFeatureCollection().notifyListeners(
+                    cadastreObjectFeature, CollectionEvent.FEATURES_CHANGED);
+            this.cadastreObjectNodeModifiedLayer.removeFeature(nodeFeature.getID());
+        }
+        this.removeNode(nodeFeature);
     }
 }

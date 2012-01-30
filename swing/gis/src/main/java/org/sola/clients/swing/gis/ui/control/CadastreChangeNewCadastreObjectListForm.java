@@ -41,18 +41,18 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import org.sola.clients.swing.gis.layer.NewCadastreObjectLayer;
+import org.sola.clients.swing.gis.layer.CadastreChangeNewCadastreObjectLayer;
 
 /**
  *
  * @author Manoku
  */
-public class NewCadastreObjectListForm extends javax.swing.JDialog {
+public class CadastreChangeNewCadastreObjectListForm extends javax.swing.JDialog {
 
-    private NewCadastreObjectLayer layer;
+    private CadastreChangeNewCadastreObjectLayer layer;
 
     /** Creates new form PointSurveyListForm */
-    public NewCadastreObjectListForm() {
+    public CadastreChangeNewCadastreObjectListForm() {
         initComponents();
         this.setAlwaysOnTop(true);
         this.setModalityType(ModalityType.APPLICATION_MODAL);
@@ -68,8 +68,8 @@ public class NewCadastreObjectListForm extends javax.swing.JDialog {
                 });
     }
 
-    public NewCadastreObjectListForm(
-            NewCadastreObjectLayer cadastreObjectLayer) {
+    public CadastreChangeNewCadastreObjectListForm(
+            CadastreChangeNewCadastreObjectLayer cadastreObjectLayer) {
         this();
         this.layer = cadastreObjectLayer;
     }
@@ -96,7 +96,7 @@ public class NewCadastreObjectListForm extends javax.swing.JDialog {
         setAlwaysOnTop(true);
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/gis/ui/control/Bundle"); // NOI18N
-        cmdRemove.setText(bundle.getString("NewCadastreObjectListForm.cmdRemove.text")); // NOI18N
+        cmdRemove.setText(bundle.getString("CadastreChangeNewCadastreObjectListForm.cmdRemove.text")); // NOI18N
         cmdRemove.setEnabled(false);
         cmdRemove.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -162,7 +162,7 @@ private void cmdRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
     if (selectedRowIndex > -1) {
         String fid = this.table.getModel().getValueAt(
                 selectedRowIndex, this.layer.getFieldIndex(
-                NewCadastreObjectLayer.LAYER_FIELD_FID)).toString();
+                CadastreChangeNewCadastreObjectLayer.LAYER_FIELD_FID)).toString();
         this.layer.removeFeature(fid);
         cmdRemove.setEnabled(false);
     }

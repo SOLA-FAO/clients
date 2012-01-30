@@ -18,10 +18,13 @@ import org.geotools.geometry.Envelope2D;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.swing.tool.extended.ExtendedDrawRectangle;
 import org.opengis.feature.simple.SimpleFeature;
+import org.sola.clients.swing.gis.beans.CadastreObjectNodeBean;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.layer.CadastreRedefinitionObjectLayer;
 import org.sola.clients.swing.gis.layer.CadastreRedefinitionNodeLayer;
-import org.sola.clients.swing.gis.ui.control.NodeModifyForm;
+import org.sola.clients.swing.gis.to.CadastreObjectNodeExtraTO;
+import org.sola.clients.swing.gis.ui.control.CadastreRedefinitionNodeModifyForm;
+import org.sola.common.MappingManager;
 import org.sola.common.messaging.GisMessage;
 import org.sola.webservices.transferobjects.cadastre.CadastreObjectNodeTO;
 
@@ -34,7 +37,7 @@ public abstract class CadastreRedefinitionAbstractTool extends ExtendedDrawRecta
     protected PojoDataAccess dataAccess;
     protected CadastreRedefinitionObjectLayer cadastreObjectModifiedLayer;
     protected CadastreRedefinitionNodeLayer cadastreObjectNodeModifiedLayer;
-    private NodeModifyForm form = null;
+    private CadastreRedefinitionNodeModifyForm form = null;
 
     public CadastreRedefinitionAbstractTool(
             PojoDataAccess dataAccess,
@@ -43,25 +46,47 @@ public abstract class CadastreRedefinitionAbstractTool extends ExtendedDrawRecta
         this.dataAccess = dataAccess;
         this.cadastreObjectModifiedLayer = cadastreObjectModifiedLayer;
         this.cadastreObjectNodeModifiedLayer = cadastreObjectNodeModifiedLayer;
-        this.form = new NodeModifyForm();
+        this.form = new CadastreRedefinitionNodeModifyForm();
     }
 
     protected abstract CadastreObjectNodeTO getNodeFromServer(Envelope2D env);
+    
+    protected final CadastreObjectNodeBean addNodeFromServer(Envelope2D env){
+        CadastreObjectNodeTO nodeTO = this.getNodeFromServer(env);
+        if (nodeTO == null) {
+            return null;
+        }
+        CadastreObjectNodeBean nodeBean = MappingManager.getMapper().map(
+                new CadastreObjectNodeExtraTO(nodeTO), CadastreObjectNodeBean.class);
+        this.cadastreObjectNodeModifiedLayer.addNodeTarget(nodeBean.getId(), nodeBean.getGeom());
+        this.cadastreObjectModifiedLayer.addCadastreObjects(nodeBean.getCadastreObjectList());
+        this.getMapControl().refresh();        
+        return nodeBean;
+    }
 
-    protected final void manipulateNode(SimpleFeature nodeFeature) {
+    /**
+     * It starts the manipulation of a node. It starts a popup form where the existing coordinates
+     * are shown and that can be changed.
+     * If the node is found in less than 3 cadastre objects, also the remove option is available.
+     * @param nodeFeature The node to manipulate
+     */
+    protected final boolean manipulateNode(SimpleFeature nodeFeature) {
+        boolean manipulationHappen = true;
         Geometry nodeFeatureGeom = (Geometry) nodeFeature.getDefaultGeometry();
-        this.form.setStatus(NodeModifyForm.Status.DoNothing);
+        this.form.setStatus(CadastreRedefinitionNodeModifyForm.Status.DoNothing);
         this.form.setCoordinateX(nodeFeatureGeom.getCoordinate().x);
         this.form.setCoordinateY(nodeFeatureGeom.getCoordinate().y);
         this.form.setRemoveButtonVisibility(
                 this.cadastreObjectModifiedLayer.getCadastreObjectFeatures(nodeFeature).size() < 3);
         this.form.setVisible(true);
-        if (this.form.getStatus() == NodeModifyForm.Status.ModifyNode) {
-            this.modifyNode(nodeFeature,
-                    this.form.getCoordinateX(), this.form.getCoordinateY());
-        } else if (this.form.getStatus() == NodeModifyForm.Status.RemoveNode) {
+        if (this.form.getStatus() == CadastreRedefinitionNodeModifyForm.Status.ModifyNode) {
+            this.modifyNode(nodeFeature, this.form.getCoordinateX(), this.form.getCoordinateY());
+        } else if (this.form.getStatus() == CadastreRedefinitionNodeModifyForm.Status.RemoveNode) {
             this.removeNode(nodeFeature);
+        } else {
+            manipulationHappen = false;
         }
+        return manipulationHappen;
     }
 
     protected final SimpleFeature getFirstNodeFeature(Envelope2D env) {
@@ -114,16 +139,11 @@ public abstract class CadastreRedefinitionAbstractTool extends ExtendedDrawRecta
         nodeFeatureGeom.getCoordinate().y = newCoordinateY;
         nodeFeatureGeom.geometryChanged();
 
-        cadastreObjects =
-            this.cadastreObjectModifiedLayer.getCadastreObjectFeatures(nodeFeature);
-        if (cadastreObjects.isEmpty()){
-            this.cadastreObjectNodeModifiedLayer.removeFeature(nodeFeature.getID());
-        }
-
+        this.removeIfNodeNotUsed(nodeFeature);
         this.getMapControl().refresh();
     }
 
-    private void removeNode(SimpleFeature nodeFeature) {
+    protected final void removeNode(SimpleFeature nodeFeature) {
         List<SimpleFeature> cadastreObjects =
                 this.cadastreObjectModifiedLayer.getCadastreObjectFeatures(nodeFeature);
 
@@ -171,6 +191,28 @@ public abstract class CadastreRedefinitionAbstractTool extends ExtendedDrawRecta
 
         return this.cadastreObjectModifiedLayer.getGeometryFactory().createLinearRing(
                 coordinates.toCoordinateArray());
+    }
+    
+//    private void manipulationCancelled(SimpleFeature nodeFeature){
+//        List<SimpleFeature> cadastreObjects =
+//                this.cadastreObjectModifiedLayer.getCadastreObjectFeatures(nodeFeature);
+//
+//        for (SimpleFeature cadastreObjectFeature : cadastreObjects) {
+//            this.cadastreObjectModifiedLayer.getFeatureCollection().notifyListeners(
+//                    cadastreObjectFeature, CollectionEvent.FEATURES_CHANGED);
+//        }
+//        this.removeIfNodeNotUsed(nodeFeature);
+//    }
 
+    private boolean removeIfNodeNotUsed(SimpleFeature nodeFeature){
+        boolean objectsAreRemoved = false;
+        List<SimpleFeature> cadastreObjects =
+            this.cadastreObjectModifiedLayer.getCadastreObjectFeatures(nodeFeature);
+        
+        if (cadastreObjects.isEmpty()){
+            this.cadastreObjectNodeModifiedLayer.removeFeature(nodeFeature.getID());
+            objectsAreRemoved = true;
+        }
+        return objectsAreRemoved;
     }
 }

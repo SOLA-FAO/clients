@@ -5,9 +5,7 @@
     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
       <Color blue="ff" green="ff" red="ff" type="rgb"/>
     </Property>
-    <Property name="name" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-      <PlainString value="Form"/>
-    </Property>
+    <Property name="name" type="java.lang.String" value="Form" noResource="true"/>
   </Properties>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="2"/>
@@ -44,9 +42,7 @@
   <SubComponents>
     <Container class="javax.swing.JPanel" name="pnlMap">
       <Properties>
-        <Property name="name" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <PlainString value="pnlMap"/>
-        </Property>
+        <Property name="name" type="java.lang.String" value="pnlMap" noResource="true"/>
       </Properties>
 
       <Layout>
@@ -64,9 +60,7 @@
     </Container>
     <Container class="javax.swing.JPanel" name="pnlStatusbar">
       <Properties>
-        <Property name="name" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <PlainString value="pnlStatusbar"/>
-        </Property>
+        <Property name="name" type="java.lang.String" value="pnlStatusbar" noResource="true"/>
       </Properties>
 
       <Layout>
@@ -86,9 +80,7 @@
       <Properties>
         <Property name="floatable" type="boolean" value="false"/>
         <Property name="rollover" type="boolean" value="true"/>
-        <Property name="name" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <PlainString value="mapToolbar"/>
-        </Property>
+        <Property name="name" type="java.lang.String" value="mapToolbar" noResource="true"/>
       </Properties>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>

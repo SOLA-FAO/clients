@@ -25,21 +25,45 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-package org.sola.clients.swing.gis.mapaction;
+package org.sola.clients.swing.gis.tool;
 
-import org.sola.clients.swing.gis.ui.control.PointSurveyListForm;
-import org.geotools.swing.extended.Map;
+import org.geotools.feature.CollectionEvent;
+import org.geotools.geometry.DirectPosition2D;
+import org.geotools.geometry.jts.Geometries;
+import org.opengis.feature.simple.SimpleFeature;
+import org.sola.clients.swing.gis.layer.CadastreChangeNewSurveyPointLayer;
+import org.geotools.swing.tool.extended.ExtendedEditGeometryTool;
 import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.MessageUtility;
+
 /**
  *
  * @author rizzom
  */
-public class PointSurveyListFormShow extends ComponentShow{
-    
- public PointSurveyListFormShow(Map mapObj, PointSurveyListForm pointSurveyListForm) {
-     super(mapObj, pointSurveyListForm, "point-show", 
-                MessageUtility.getLocalizedMessage(GisMessage.SURVEY_POINTS_SHOW).getMessage(), 
-                "resources/point-show.png");
-  } 
+public class CadastreChangeNodeTool extends ExtendedEditGeometryTool {
+
+    private String toolName = "nodelinking";
+    private String toolTip = MessageUtility.getLocalizedMessage(
+                            GisMessage.CADASTRE_CHANGE_TOOLTIP_NEW_SURVEYPOINT).getMessage();
+
+    public CadastreChangeNodeTool(CadastreChangeNewSurveyPointLayer targetLayer) {
+        this.setToolName(toolName);
+        this.setGeometryType(Geometries.POINT);
+        this.setIconImage("resources/node-linking.png");
+        this.setToolTip(toolTip);
+        this.layer = targetLayer;
+    }
+
+    @Override
+    protected SimpleFeature treatChangeVertex(DirectPosition2D mousePositionInMap) {
+        SimpleFeature featureChanged = super.treatChangeVertex(mousePositionInMap);
+        if (featureChanged != null && featureChanged.getAttribute(
+                CadastreChangeNewSurveyPointLayer.LAYER_FIELD_ISBOUNDARY).equals(1)) {
+            featureChanged.setAttribute(CadastreChangeNewSurveyPointLayer.LAYER_FIELD_ISLINKED,
+                    ((this.getSnappedTarget() == SNAPPED_TARGET_TYPE.Vertex) ? 1 : 0));
+            this.layer.getFeatureCollection().notifyListeners(featureChanged,
+                    CollectionEvent.FEATURES_CHANGED);
+        }
+        return featureChanged;
+    }
 }

@@ -70,7 +70,7 @@ public class LocateApplicationTool extends ExtendedEditGeometryTool {
                 continue;
             }
             if (result == null) {
-                result = this.layer.getGeometryFactory().createMultiPoint(new Point[]{geom});;
+                result = this.layer.getGeometryFactory().createMultiPoint(new Point[]{geom});
             } else {
                 result = result.union(geom);
             }

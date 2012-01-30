@@ -40,14 +40,14 @@ import org.geotools.map.extended.layer.ExtendedLayer;
 import org.sola.clients.swing.gis.Messaging;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.data.PojoFeatureSource;
-import org.sola.clients.swing.gis.layer.NewCadastreObjectLayer;
-import org.sola.clients.swing.gis.layer.NewSurveyPointLayer;
+import org.sola.clients.swing.gis.layer.CadastreChangeNewCadastreObjectLayer;
+import org.sola.clients.swing.gis.layer.CadastreChangeNewSurveyPointLayer;
 import org.sola.clients.swing.gis.layer.PojoLayer;
-import org.sola.clients.swing.gis.layer.TargetCadastreObjectLayer;
-import org.sola.clients.swing.gis.mapaction.NewCadastreObjectListFormShow;
-import org.sola.clients.swing.gis.mapaction.PointSurveyListFormShow;
+import org.sola.clients.swing.gis.layer.CadastreChangeTargetCadastreObjectLayer;
+import org.sola.clients.swing.gis.mapaction.CadastreChangeNewCadastreObjectListFormShow;
+import org.sola.clients.swing.gis.mapaction.CadastreChangePointSurveyListFormShow;
 import org.sola.clients.swing.gis.tool.CadastreChangeNewParcelTool;
-import org.sola.clients.swing.gis.tool.CadastreChangeNodeLinkingTool;
+import org.sola.clients.swing.gis.tool.CadastreChangeNodeTool;
 import org.sola.clients.swing.gis.tool.CadastreChangeSelectParcelTool;
 import org.sola.common.messaging.GisMessage;
 import org.sola.webservices.transferobjects.cadastre.CadastreObjectTO;
@@ -60,9 +60,9 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
 
     private TransactionCadastreChangeBean transactionBean;
     
-    private TargetCadastreObjectLayer targetParcelsLayer = null;
-    private NewCadastreObjectLayer newCadastreObjectLayer = null;
-    private NewSurveyPointLayer newPointsLayer = null;
+    private CadastreChangeTargetCadastreObjectLayer targetParcelsLayer = null;
+    private CadastreChangeNewCadastreObjectLayer newCadastreObjectLayer = null;
+    private CadastreChangeNewSurveyPointLayer newPointsLayer = null;
     
     private String applicationNumber = "";
 
@@ -115,13 +115,13 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
 
     @Override
     protected void addLayers() throws Exception {
-        this.targetParcelsLayer = new TargetCadastreObjectLayer(this.getMap().getSrid());
+        this.targetParcelsLayer = new CadastreChangeTargetCadastreObjectLayer(this.getMap().getSrid());
         this.getMap().addLayer(targetParcelsLayer);
 
-        this.newCadastreObjectLayer = new NewCadastreObjectLayer(this.applicationNumber);
+        this.newCadastreObjectLayer = new CadastreChangeNewCadastreObjectLayer(this.applicationNumber);
         this.getMap().addLayer(newCadastreObjectLayer);
 
-        this.newPointsLayer = new NewSurveyPointLayer(this.newCadastreObjectLayer);
+        this.newPointsLayer = new CadastreChangeNewSurveyPointLayer(this.newCadastreObjectLayer);
         this.getMap().addLayer(newPointsLayer);
 
         this.targetParcelsLayer.setCadastreObjectTargetList(
@@ -140,10 +140,10 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
         this.getMap().addTool(selectParcelTool, this.getToolbar());
 
         this.getMap().addMapAction(
-                new PointSurveyListFormShow(this.getMap(), this.newPointsLayer.getHostForm()),
+                new CadastreChangePointSurveyListFormShow(this.getMap(), this.newPointsLayer.getHostForm()),
                 this.getToolbar());
 
-        CadastreChangeNodeLinkingTool nodelinkingTool = new CadastreChangeNodeLinkingTool(newPointsLayer);
+        CadastreChangeNodeTool nodelinkingTool = new CadastreChangeNodeTool(newPointsLayer);
         nodelinkingTool.getTargetSnappingLayers().add(this.targetParcelsLayer);
         this.getMap().addTool(nodelinkingTool, this.getToolbar());
 
@@ -151,7 +151,7 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
         newParcelTool.getTargetSnappingLayers().add(newPointsLayer);
         this.getMap().addTool(newParcelTool, this.getToolbar());
 
-        this.getMap().addMapAction(new NewCadastreObjectListFormShow(
+        this.getMap().addMapAction(new CadastreChangeNewCadastreObjectListFormShow(
                 this.getMap(), this.newCadastreObjectLayer.getHostForm()),
                 this.getToolbar());
     }

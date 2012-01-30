@@ -4,7 +4,7 @@
  */
 
 /*
- * NodeModifyForm.java
+ * CadastreRedefinitionNodeModifyForm.java
  *
  * Created on Jan 14, 2012, 11:57:32 AM
  */
@@ -18,7 +18,7 @@ import org.sola.common.messaging.GisMessage;
  *
  * @author Elton Manoku
  */
-public class NodeModifyForm extends javax.swing.JDialog {
+public class CadastreRedefinitionNodeModifyForm extends javax.swing.JDialog {
 
     public enum Status {
 
@@ -29,8 +29,8 @@ public class NodeModifyForm extends javax.swing.JDialog {
     private Status status = Status.DoNothing;
     private DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
-    /** Creates new form NodeModifyForm */
-    public NodeModifyForm() {
+    /** Creates new form CadastreRedefinitionNodeModifyForm */
+    public CadastreRedefinitionNodeModifyForm() {
         initComponents();
         this.setAlwaysOnTop(true);
         this.setModalityType(ModalityType.APPLICATION_MODAL);

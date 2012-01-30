@@ -25,45 +25,21 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-package org.sola.clients.swing.gis.tool;
+package org.sola.clients.swing.gis.mapaction;
 
-import org.geotools.feature.CollectionEvent;
-import org.geotools.geometry.DirectPosition2D;
-import org.geotools.geometry.jts.Geometries;
-import org.opengis.feature.simple.SimpleFeature;
-import org.sola.clients.swing.gis.layer.NewSurveyPointLayer;
-import org.geotools.swing.tool.extended.ExtendedEditGeometryTool;
+import org.sola.clients.swing.gis.ui.control.CadastreChangePointSurveyListForm;
+import org.geotools.swing.extended.Map;
 import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.MessageUtility;
-
 /**
  *
  * @author rizzom
  */
-public class CadastreChangeNodeLinkingTool extends ExtendedEditGeometryTool {
-
-    private String toolName = "nodelinking";
-    private String toolTip = MessageUtility.getLocalizedMessage(
-                            GisMessage.CADASTRE_TOOLTIP_NEW_SURVEYPOINT).getMessage();
-
-    public CadastreChangeNodeLinkingTool(NewSurveyPointLayer targetLayer) {
-        this.setToolName(toolName);
-        this.setGeometryType(Geometries.POINT);
-        this.setIconImage("resources/node-linking.png");
-        this.setToolTip(toolTip);
-        this.layer = targetLayer;
-    }
-
-    @Override
-    protected SimpleFeature treatChangeVertex(DirectPosition2D mousePositionInMap) {
-        SimpleFeature featureChanged = super.treatChangeVertex(mousePositionInMap);
-        if (featureChanged != null && featureChanged.getAttribute(
-                NewSurveyPointLayer.LAYER_FIELD_ISBOUNDARY).equals(1)) {
-            featureChanged.setAttribute(NewSurveyPointLayer.LAYER_FIELD_ISLINKED,
-                    ((this.getSnappedTarget() == SNAPPED_TARGET_TYPE.Vertex) ? 1 : 0));
-            this.layer.getFeatureCollection().notifyListeners(featureChanged,
-                    CollectionEvent.FEATURES_CHANGED);
-        }
-        return featureChanged;
-    }
+public class CadastreChangePointSurveyListFormShow extends ComponentShow{
+    
+ public CadastreChangePointSurveyListFormShow(Map mapObj, CadastreChangePointSurveyListForm pointSurveyListForm) {
+     super(mapObj, pointSurveyListForm, "point-show", 
+                MessageUtility.getLocalizedMessage(GisMessage.CADASTRE_CHANGE_POINTS_SHOW).getMessage(), 
+                "resources/point-show.png");
+  } 
 }

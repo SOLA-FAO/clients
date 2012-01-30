@@ -31,7 +31,7 @@
  */
 
 /*
- * PointSurveyListForm.java
+ * CadastreChangePointSurveyListForm.java
  *
  * Created on Oct 19, 2011, 5:12:45 PM
  */
@@ -48,7 +48,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import org.sola.clients.swing.gis.Messaging;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
-import org.sola.clients.swing.gis.layer.NewSurveyPointLayer;
+import org.sola.clients.swing.gis.layer.CadastreChangeNewSurveyPointLayer;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.GisMessage;
 
@@ -56,12 +56,12 @@ import org.sola.common.messaging.GisMessage;
  *
  * @author Manoku
  */
-public class PointSurveyListForm extends javax.swing.JDialog {
+public class CadastreChangePointSurveyListForm extends javax.swing.JDialog {
 
-    private NewSurveyPointLayer layer;
+    private CadastreChangeNewSurveyPointLayer layer;
 
-    /** Creates new form PointSurveyListForm */
-    public PointSurveyListForm() {
+    /** Creates new form CadastreChangePointSurveyListForm */
+    public CadastreChangePointSurveyListForm() {
         initComponents();
         this.setAlwaysOnTop(true);
         this.setModalityType(ModalityType.APPLICATION_MODAL);
@@ -89,8 +89,8 @@ public class PointSurveyListForm extends javax.swing.JDialog {
         });
     }
 
-    public PointSurveyListForm(
-            NewSurveyPointLayer pointLayer) {
+    public CadastreChangePointSurveyListForm(
+            CadastreChangeNewSurveyPointLayer pointLayer) {
         this();
         this.layer = pointLayer;
     }
@@ -112,7 +112,7 @@ public class PointSurveyListForm extends javax.swing.JDialog {
             //It means is new row inserted. Column not defined
             return;
         }
-        if (this.layer.getFieldIndex(NewSurveyPointLayer.LAYER_FIELD_SHIFT) == colIndex) {
+        if (this.layer.getFieldIndex(CadastreChangeNewSurveyPointLayer.LAYER_FIELD_SHIFT) == colIndex) {
             //Calculate mean and standard deviation
             DecimalFormat df = new DecimalFormat("#.##");
             this.txtMeanShift.setText(df.format(this.layer.getMean()));
@@ -156,11 +156,11 @@ public class PointSurveyListForm extends javax.swing.JDialog {
         txtStandardDeviation.setEditable(false);
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/gis/ui/control/Bundle"); // NOI18N
-        lblMeanShift.setText(bundle.getString("PointSurveyListForm.lblMeanShift.text")); // NOI18N
+        lblMeanShift.setText(bundle.getString("CadastreChangePointSurveyListForm.lblMeanShift.text")); // NOI18N
 
-        lblStandardDeviation.setText(bundle.getString("PointSurveyListForm.lblStandardDeviation.text")); // NOI18N
+        lblStandardDeviation.setText(bundle.getString("CadastreChangePointSurveyListForm.lblStandardDeviation.text")); // NOI18N
 
-        cmdAdd.setText(bundle.getString("PointSurveyListForm.cmdAdd.text")); // NOI18N
+        cmdAdd.setText(bundle.getString("CadastreChangePointSurveyListForm.cmdAdd.text")); // NOI18N
         cmdAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmdAddActionPerformed(evt);
@@ -169,7 +169,7 @@ public class PointSurveyListForm extends javax.swing.JDialog {
 
         urbanRural.add(optionRural);
         optionRural.setSelected(true);
-        optionRural.setLabel(bundle.getString("PointSurveyListForm.optionRural.label")); // NOI18N
+        optionRural.setLabel(bundle.getString("CadastreChangePointSurveyListForm.optionRural.label")); // NOI18N
         optionRural.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 optionRuralActionPerformed(evt);
@@ -177,7 +177,7 @@ public class PointSurveyListForm extends javax.swing.JDialog {
         });
 
         urbanRural.add(optionUrban);
-        optionUrban.setLabel(bundle.getString("PointSurveyListForm.optionUrban.label")); // NOI18N
+        optionUrban.setLabel(bundle.getString("CadastreChangePointSurveyListForm.optionUrban.label")); // NOI18N
         optionUrban.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 optionUrbanActionPerformed(evt);
@@ -210,15 +210,15 @@ public class PointSurveyListForm extends javax.swing.JDialog {
         jScrollPane1.setViewportView(table);
         table.getColumnModel().getColumn(0).setPreferredWidth(20);
 
-        txtX.setText(bundle.getString("PointSurveyListForm.txtX.text")); // NOI18N
+        txtX.setText(bundle.getString("CadastreChangePointSurveyListForm.txtX.text")); // NOI18N
 
-        txtY.setText(bundle.getString("PointSurveyListForm.txtY.text")); // NOI18N
+        txtY.setText(bundle.getString("CadastreChangePointSurveyListForm.txtY.text")); // NOI18N
 
-        lblX.setText(bundle.getString("PointSurveyListForm.lblX.text")); // NOI18N
+        lblX.setText(bundle.getString("CadastreChangePointSurveyListForm.lblX.text")); // NOI18N
 
-        lblY.setText(bundle.getString("PointSurveyListForm.lblY.text")); // NOI18N
+        lblY.setText(bundle.getString("CadastreChangePointSurveyListForm.lblY.text")); // NOI18N
 
-        cmdRemove.setText(bundle.getString("PointSurveyListForm.cmdRemove.text")); // NOI18N
+        cmdRemove.setText(bundle.getString("CadastreChangePointSurveyListForm.cmdRemove.text")); // NOI18N
         cmdRemove.setEnabled(false);
         cmdRemove.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -228,9 +228,9 @@ public class PointSurveyListForm extends javax.swing.JDialog {
 
         txtAcceptableShift.setEditable(false);
 
-        lblAcceptableShift.setText(bundle.getString("PointSurveyListForm.lblAcceptableShift.text")); // NOI18N
+        lblAcceptableShift.setText(bundle.getString("CadastreChangePointSurveyListForm.lblAcceptableShift.text")); // NOI18N
 
-        cmdLoadFromExternalSource.setText(bundle.getString("PointSurveyListForm.cmdLoadFromExternalSource.text")); // NOI18N
+        cmdLoadFromExternalSource.setText(bundle.getString("CadastreChangePointSurveyListForm.cmdLoadFromExternalSource.text")); // NOI18N
         cmdLoadFromExternalSource.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmdLoadFromExternalSourceActionPerformed(evt);
@@ -323,7 +323,7 @@ private void cmdRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
     if (selectedRowIndex > -1) {
         String fid = this.table.getModel().getValueAt(
                 selectedRowIndex, this.layer.getFieldIndex(
-                NewSurveyPointLayer.LAYER_FIELD_FID)).toString();
+                CadastreChangeNewSurveyPointLayer.LAYER_FIELD_FID)).toString();
         this.layer.removeFeature(fid);
         cmdRemove.setEnabled(false);
     }

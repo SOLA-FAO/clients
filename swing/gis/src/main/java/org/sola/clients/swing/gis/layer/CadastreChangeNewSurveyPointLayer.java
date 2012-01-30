@@ -50,14 +50,14 @@ import org.sola.clients.swing.gis.Messaging;
 import org.sola.clients.swing.gis.beans.SurveyPointBean;
 import org.geotools.map.extended.layer.ExtendedLayerEditor;
 import org.geotools.map.extended.layer.VertexInformation;
-import org.sola.clients.swing.gis.ui.control.PointSurveyListForm;
+import org.sola.clients.swing.gis.ui.control.CadastreChangePointSurveyListForm;
 import org.sola.common.messaging.GisMessage;
 
 /**
  *
  * @author Manoku
  */
-public class NewSurveyPointLayer extends ExtendedLayerEditor {
+public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
 
     private static final String LAYER_NAME = "New points";
     private static final String LAYER_STYLE_RESOURCE = "cadastrechange_newpoints.xml";
@@ -73,12 +73,12 @@ public class NewSurveyPointLayer extends ExtendedLayerEditor {
             LAYER_FIELD_SHIFT, LAYER_FIELD_ORIGINAL_GEOMETRY);
     private Integer fidGenerator = 1;
     private DefaultTableModel tableModel = null;
-    private NewCadastreObjectLayer newCadastreObjectLayer = null;
+    private CadastreChangeNewCadastreObjectLayer newCadastreObjectLayer = null;
     private List<SurveyPointBean> surveyPointList = new ArrayList<SurveyPointBean>();
 
-    private PointSurveyListForm hostForm = null;
+    private CadastreChangePointSurveyListForm hostForm = null;
             
-    public NewSurveyPointLayer(NewCadastreObjectLayer newCadastreObjectLayer)
+    public CadastreChangeNewSurveyPointLayer(CadastreChangeNewCadastreObjectLayer newCadastreObjectLayer)
             throws Exception {
         super(LAYER_NAME, Geometries.POINT,
                 LAYER_STYLE_RESOURCE, LAYER_ATTRIBUTE_DEFINITION);
@@ -93,7 +93,7 @@ public class NewSurveyPointLayer extends ExtendedLayerEditor {
             }
         });
         
-        this.hostForm = new PointSurveyListForm(this);
+        this.hostForm = new CadastreChangePointSurveyListForm(this);
         this.tableModel = (DefaultTableModel) this.hostForm.getTable().getModel();
         this.tableModel.addTableModelListener(new TableModelListener() {
 
@@ -104,7 +104,7 @@ public class NewSurveyPointLayer extends ExtendedLayerEditor {
         });
     }
 
-    public PointSurveyListForm getHostForm(){
+    public CadastreChangePointSurveyListForm getHostForm(){
         return this.hostForm;
     }
     

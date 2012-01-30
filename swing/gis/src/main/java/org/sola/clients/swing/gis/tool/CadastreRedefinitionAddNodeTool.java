@@ -48,23 +48,21 @@ public class CadastreRedefinitionAddNodeTool extends CadastreRedefinitionAbstrac
     @Override
     protected void onRectangleFinished(Envelope2D env) {
 
-        CadastreObjectNodeTO nodeTO = this.getNodeFromServer(env);
-        if (nodeTO == null) {
+        CadastreObjectNodeBean nodeBean = this.addNodeFromServer(env);
+        if (nodeBean == null){
             return;
         }
-        CadastreObjectNodeBean nodeBean = MappingManager.getMapper().map(
-                new CadastreObjectNodeExtraTO(nodeTO), CadastreObjectNodeBean.class);
-        SimpleFeature nodeFeature = this.cadastreObjectNodeModifiedLayer.addNodeTarget(
-                    nodeBean.getId(), nodeBean.getGeom());
-        this.cadastreObjectModifiedLayer.addCadastreObjects(nodeBean.getCadastreObjectList());
-        this.getMapControl().refresh();
+        SimpleFeature nodeFeature = 
+                this.cadastreObjectNodeModifiedLayer.getFeatureCollection().getFeature(
+                    nodeBean.getId());
         List<String> cadastreObjectTargetIds = new ArrayList<String>();
         for(CadastreObjectBean coBean: nodeBean.getCadastreObjectList()){
             cadastreObjectTargetIds.add(coBean.getId());
         }
-                
         this.insertNode(nodeFeature, cadastreObjectTargetIds);
-        this.manipulateNode(nodeFeature);
+        if (!this.manipulateNode(nodeFeature)){
+            this.removeNode(nodeFeature);
+        }
     }
 
     @Override

@@ -31,7 +31,6 @@
  */
 package org.sola.clients.swing.gis.ui.control;
 
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
