@@ -30,14 +30,16 @@ package org.sola.clients.swing.gis.mapaction;
 import org.sola.clients.swing.gis.ui.control.PointSurveyListForm;
 import org.geotools.swing.extended.Map;
 import org.sola.common.messaging.GisMessage;
+import org.sola.common.messaging.MessageUtility;
 /**
  *
  * @author rizzom
  */
 public class PointSurveyListFormShow extends ComponentShow{
     
-    public PointSurveyListFormShow(Map mapObj, PointSurveyListForm pointSurveyListForm) {
+ public PointSurveyListFormShow(Map mapObj, PointSurveyListForm pointSurveyListForm) {
      super(mapObj, pointSurveyListForm, "point-show", 
-                GisMessage.SURVEY_POINTS_SHOW, "resources/point-show.png");
+                MessageUtility.getLocalizedMessage(GisMessage.SURVEY_POINTS_SHOW).getMessage(), 
+                "resources/point-show.png");
   } 
 }
