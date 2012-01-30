@@ -35,7 +35,7 @@ public class CadastreRedefinitionAddNodeTool extends CadastreRedefinitionAbstrac
 
     private String toolName = "add-node";
     private String toolTip = MessageUtility.getLocalizedMessage(
-            GisMessage.CADASTRE_TOOLTIP_CHANGE_NODE).getMessage();
+            GisMessage.CADASTRE_TOOLTIP_ADD_NODE).getMessage();
 
     public CadastreRedefinitionAddNodeTool(PojoDataAccess dataAccess,
             CadastreRedefinitionNodeLayer cadastreObjectNodeModifiedLayer,
