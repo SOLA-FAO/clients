@@ -267,7 +267,7 @@ public class DashBoardPanel extends ContentPanel {
 
         popUpUnassignedApplications.setName("popUpUnassignedApplications"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(org.sola.clients.swing.desktop.DesktopApplication.class).getContext().getActionMap(DashBoardPanel.class, this);
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(DashBoardPanel.class, this);
         menuAssignApplication.setAction(actionMap.get("assignApplication")); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/Bundle"); // NOI18N
         menuAssignApplication.setText(bundle.getString("DashBoardPanel.menuAssignApplication.text")); // NOI18N
@@ -388,7 +388,7 @@ public class DashBoardPanel extends ContentPanel {
         tbUnassignedApplications.add(jSeparator1);
 
         btnAssignApplication.setAction(actionMap.get("assignApplication")); // NOI18N
-        btnAssignApplication.setFont(new java.awt.Font("Arial", 0, 12));
+        btnAssignApplication.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnAssignApplication.setText(bundle.getString("DashBoardPanel.btnAssignApplication.text")); // NOI18N
         btnAssignApplication.setFocusable(false);
         btnAssignApplication.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);

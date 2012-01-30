@@ -1,0 +1,572 @@
+<?xml version="1.1" encoding="UTF-8" ?>
+
+<Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+  <NonVisualComponents>
+    <Component class="org.sola.clients.beans.administrative.RrrBean" name="rrrBean">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="CreateRrrBean()"/>
+      </AuxValues>
+    </Component>
+    <Component class="org.sola.clients.beans.referencedata.MortgageTypeListBean" name="mortgageTypeListBean">
+    </Component>
+  </NonVisualComponents>
+  <Properties>
+    <Property name="closeOnHide" type="boolean" value="true"/>
+    <Property name="headerPanel" type="org.sola.clients.swing.ui.HeaderPanel" editor="org.netbeans.modules.form.ComponentChooserEditor">
+      <ComponentRef name="headerPanel"/>
+    </Property>
+    <Property name="name" type="java.lang.String" value="Form" noResource="true"/>
+  </Properties>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="2"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Component id="headerPanel" alignment="0" pref="693" max="32767" attributes="0"/>
+          <Component id="jToolBar1" alignment="0" pref="693" max="32767" attributes="0"/>
+          <Component id="jScrollPane1" alignment="1" pref="693" max="32767" attributes="0"/>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <Component id="headerPanel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jToolBar1" min="-2" pref="25" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jScrollPane1" pref="367" max="32767" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Component class="org.sola.clients.swing.ui.HeaderPanel" name="headerPanel">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="headerPanel" noResource="true"/>
+        <Property name="titleText" type="java.lang.String" resourceKey="headerPanel.titleText"/>
+      </Properties>
+    </Component>
+    <Container class="javax.swing.JToolBar" name="jToolBar1">
+      <Properties>
+        <Property name="floatable" type="boolean" value="false"/>
+        <Property name="rollover" type="boolean" value="true"/>
+        <Property name="name" type="java.lang.String" value="jToolBar1" noResource="true"/>
+      </Properties>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
+      <SubComponents>
+        <Component class="javax.swing.JButton" name="btnSave">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" resourceKey="btnSave.icon"/>
+            <Property name="text" type="java.lang.String" resourceKey="btnSave.text"/>
+            <Property name="horizontalAlignment" type="int" value="2"/>
+            <Property name="name" type="java.lang.String" value="btnSave" noResource="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSaveActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JToolBar$Separator" name="jSeparator1">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="jSeparator1" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.Box$Filler" name="filler1">
+          <Properties>
+            <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[7, 32767]"/>
+            </Property>
+            <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[7, 0]"/>
+            </Property>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[7, 0]"/>
+            </Property>
+            <Property name="name" type="java.lang.String" value="filler1" noResource="true"/>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.HorizontalStrut"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel14">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="jLabel14.text"/>
+            <Property name="name" type="java.lang.String" value="jLabel14" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblStatus">
+          <Properties>
+            <Property name="font" type="java.awt.Font" resourceKey="lblStatus.font"/>
+            <Property name="name" type="java.lang.String" value="lblStatus" noResource="true"/>
+          </Properties>
+          <BindingProperties>
+            <BindingProperty name="text" source="rrrBean" sourcePath="${status.displayValue}" target="lblStatus" targetPath="text" updateStrategy="0" immediately="false"/>
+          </BindingProperties>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="null"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="jScrollPane1" noResource="true"/>
+      </Properties>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+      <SubComponents>
+        <Container class="javax.swing.JPanel" name="jPanel10">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="jPanel10" noResource="true"/>
+          </Properties>
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="documentsManagementPanel1" alignment="0" pref="673" max="32767" attributes="0"/>
+                          <Component id="jPanel8" alignment="0" pref="673" max="32767" attributes="0"/>
+                          <Component id="txtNotationText" alignment="0" pref="673" max="32767" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="jLabel16" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="543" pref="543" max="543" attributes="0"/>
+                          </Group>
+                          <Component id="groupPanel1" alignment="0" pref="673" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="jPanel8" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jLabel16" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="txtNotationText" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="groupPanel1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="documentsManagementPanel1" pref="164" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+          <SubComponents>
+            <Container class="javax.swing.JPanel" name="jPanel8">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="jPanel8" noResource="true"/>
+              </Properties>
+
+              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                <Property name="columns" type="int" value="3"/>
+                <Property name="horizontalGap" type="int" value="15"/>
+                <Property name="rows" type="int" value="2"/>
+              </Layout>
+              <SubComponents>
+                <Container class="javax.swing.JPanel" name="jPanel2">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="jPanel2" noResource="true"/>
+                  </Properties>
+
+                  <Layout>
+                    <DimensionLayout dim="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="jLabel13" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace pref="112" max="32767" attributes="0"/>
+                          </Group>
+                          <Component id="txtRegDatetime" alignment="0" pref="214" max="32767" attributes="1"/>
+                      </Group>
+                    </DimensionLayout>
+                    <DimensionLayout dim="1">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="jLabel13" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="txtRegDatetime" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace pref="14" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                    </DimensionLayout>
+                  </Layout>
+                  <SubComponents>
+                    <Component class="javax.swing.JLabel" name="jLabel13">
+                      <Properties>
+                        <Property name="font" type="java.awt.Font" resourceKey="jLabel13.font"/>
+                        <Property name="icon" type="javax.swing.Icon" resourceKey="jLabel13.icon"/>
+                        <Property name="text" type="java.lang.String" resourceKey="jLabel13.text"/>
+                        <Property name="name" type="java.lang.String" value="jLabel13" noResource="true"/>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JFormattedTextField" name="txtRegDatetime">
+                      <Properties>
+                        <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
+                          <Format subtype="1" type="1"/>
+                        </Property>
+                        <Property name="name" type="java.lang.String" value="txtRegDatetime" noResource="true"/>
+                      </Properties>
+                      <BindingProperties>
+                        <BindingProperty name="value" source="rrrBean" sourcePath="${registrationDate}" target="txtRegDatetime" targetPath="value" updateStrategy="0" immediately="false"/>
+                      </BindingProperties>
+                    </Component>
+                  </SubComponents>
+                </Container>
+                <Container class="javax.swing.JPanel" name="jPanel5">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="jPanel5" noResource="true"/>
+                  </Properties>
+
+                  <Layout>
+                    <DimensionLayout dim="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace pref="122" max="32767" attributes="0"/>
+                          </Group>
+                          <Component id="txtExpiryDate" alignment="0" pref="214" max="32767" attributes="1"/>
+                      </Group>
+                    </DimensionLayout>
+                    <DimensionLayout dim="1">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="txtExpiryDate" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace pref="14" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                    </DimensionLayout>
+                  </Layout>
+                  <SubComponents>
+                    <Component class="javax.swing.JLabel" name="jLabel3">
+                      <Properties>
+                        <Property name="font" type="java.awt.Font" resourceKey="jLabel3.font"/>
+                        <Property name="icon" type="javax.swing.Icon" resourceKey="jLabel3.icon"/>
+                        <Property name="text" type="java.lang.String" resourceKey="jLabel3.text"/>
+                        <Property name="name" type="java.lang.String" value="jLabel3" noResource="true"/>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JFormattedTextField" name="txtExpiryDate">
+                      <Properties>
+                        <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
+                          <Format subtype="1" type="1"/>
+                        </Property>
+                        <Property name="text" type="java.lang.String" resourceKey="txtExpiryDate.text"/>
+                        <Property name="name" type="java.lang.String" value="txtExpiryDate" noResource="true"/>
+                      </Properties>
+                      <BindingProperties>
+                        <BindingProperty name="value" source="rrrBean" sourcePath="${expirationDate}" target="txtExpiryDate" targetPath="value" updateStrategy="0" immediately="false"/>
+                      </BindingProperties>
+                    </Component>
+                  </SubComponents>
+                </Container>
+                <Container class="javax.swing.JPanel" name="jPanel1">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="jPanel1" noResource="true"/>
+                  </Properties>
+
+                  <Layout>
+                    <DimensionLayout dim="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace pref="172" max="32767" attributes="0"/>
+                          </Group>
+                          <Component id="cbxType" alignment="0" pref="214" max="32767" attributes="1"/>
+                      </Group>
+                    </DimensionLayout>
+                    <DimensionLayout dim="1">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="cbxType" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace pref="14" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                    </DimensionLayout>
+                  </Layout>
+                  <SubComponents>
+                    <Component class="javax.swing.JLabel" name="jLabel2">
+                      <Properties>
+                        <Property name="font" type="java.awt.Font" resourceKey="jLabel3.font"/>
+                        <Property name="icon" type="javax.swing.Icon" resourceKey="jLabel3.icon"/>
+                        <Property name="text" type="java.lang.String" resourceKey="jLabel2.text"/>
+                        <Property name="name" type="java.lang.String" value="jLabel2" noResource="true"/>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JComboBox" name="cbxType">
+                      <Properties>
+                        <Property name="name" type="java.lang.String" value="cbxType" noResource="true"/>
+                        <Property name="renderer" type="javax.swing.ListCellRenderer" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                          <Connection code="new SimpleComboBoxRenderer(&quot;getDisplayValue&quot;)" type="code"/>
+                        </Property>
+                      </Properties>
+                      <BindingProperties>
+                        <BindingProperty name="elements" source="mortgageTypeListBean" sourcePath="${mortgageTypeListBean}" target="cbxType" targetPath="elements" updateStrategy="0" immediately="false"/>
+                        <BindingProperty name="selectedItem" source="rrrBean" sourcePath="${mortgageType}" target="cbxType" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+                      </BindingProperties>
+                    </Component>
+                  </SubComponents>
+                </Container>
+                <Container class="javax.swing.JPanel" name="jPanel3">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="jPanel3" noResource="true"/>
+                  </Properties>
+
+                  <Layout>
+                    <DimensionLayout dim="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace pref="163" max="32767" attributes="0"/>
+                          </Group>
+                          <Component id="browseLender" alignment="0" pref="214" max="32767" attributes="0"/>
+                      </Group>
+                    </DimensionLayout>
+                    <DimensionLayout dim="1">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="browseLender" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                    </DimensionLayout>
+                  </Layout>
+                  <SubComponents>
+                    <Component class="javax.swing.JLabel" name="jLabel6">
+                      <Properties>
+                        <Property name="font" type="java.awt.Font" resourceKey="jLabel3.font"/>
+                        <Property name="icon" type="javax.swing.Icon" resourceKey="jLabel3.icon"/>
+                        <Property name="text" type="java.lang.String" resourceKey="jLabel6.text"/>
+                        <Property name="name" type="java.lang.String" value="jLabel6" noResource="true"/>
+                      </Properties>
+                    </Component>
+                    <Component class="org.sola.clients.swing.common.controls.BrowseControl" name="browseLender">
+                      <Properties>
+                        <Property name="browseButtonTooltip" type="java.lang.String" resourceKey="browseLender.browseButtonTooltip"/>
+                        <Property name="deleteButtonIcon" type="javax.swing.Icon" resourceKey="browseLender.deleteButtonIcon"/>
+                        <Property name="deleteButtonTooltip" type="java.lang.String" resourceKey="browseLender.deleteButtonTooltip"/>
+                        <Property name="displayDeleteButton" type="boolean" value="false"/>
+                        <Property name="name" type="java.lang.String" value="browseLender" noResource="true"/>
+                      </Properties>
+                      <BindingProperties>
+                        <BindingProperty name="text" source="rrrBean" sourcePath="${firstRightHolder.name}" target="browseLender" targetPath="text" updateStrategy="0" immediately="false">
+                          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                          <Property name="name" type="java.lang.String" value="lenderGoup"/>
+                        </BindingProperty>
+                      </BindingProperties>
+                    </Component>
+                  </SubComponents>
+                </Container>
+                <Container class="javax.swing.JPanel" name="jPanel6">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="jPanel6" noResource="true"/>
+                  </Properties>
+
+                  <Layout>
+                    <DimensionLayout dim="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="jLabel4" min="-2" max="-2" attributes="1"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="txtAmount" alignment="0" pref="214" max="32767" attributes="1"/>
+                      </Group>
+                    </DimensionLayout>
+                    <DimensionLayout dim="1">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="txtAmount" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace pref="14" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                    </DimensionLayout>
+                  </Layout>
+                  <SubComponents>
+                    <Component class="javax.swing.JLabel" name="jLabel4">
+                      <Properties>
+                        <Property name="font" type="java.awt.Font" resourceKey="jLabel3.font"/>
+                        <Property name="icon" type="javax.swing.Icon" resourceKey="jLabel3.icon"/>
+                        <Property name="text" type="java.lang.String" resourceKey="jLabel4.text"/>
+                        <Property name="name" type="java.lang.String" value="jLabel4" noResource="true"/>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JFormattedTextField" name="txtAmount">
+                      <Properties>
+                        <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                          <Connection code="FormattersFactory.getInstance().getDecimalFormatterFactory()" type="code"/>
+                        </Property>
+                        <Property name="text" type="java.lang.String" resourceKey="txtAmount.text"/>
+                        <Property name="name" type="java.lang.String" value="txtAmount" noResource="true"/>
+                      </Properties>
+                      <BindingProperties>
+                        <BindingProperty name="value" source="rrrBean" sourcePath="${mortgageAmount}" target="txtAmount" targetPath="value" updateStrategy="0" immediately="false"/>
+                      </BindingProperties>
+                    </Component>
+                  </SubComponents>
+                </Container>
+                <Container class="javax.swing.JPanel" name="jPanel9">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="jPanel9" noResource="true"/>
+                  </Properties>
+
+                  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                    <Property name="columns" type="int" value="2"/>
+                    <Property name="horizontalGap" type="int" value="15"/>
+                    <Property name="rows" type="int" value="1"/>
+                  </Layout>
+                  <SubComponents>
+                    <Container class="javax.swing.JPanel" name="jPanel4">
+                      <Properties>
+                        <Property name="name" type="java.lang.String" value="jPanel4" noResource="true"/>
+                      </Properties>
+
+                      <Layout>
+                        <DimensionLayout dim="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace pref="57" max="32767" attributes="0"/>
+                              </Group>
+                              <Component id="txtRanking" alignment="0" pref="99" max="32767" attributes="1"/>
+                          </Group>
+                        </DimensionLayout>
+                        <DimensionLayout dim="1">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="txtRanking" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace pref="14" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                        </DimensionLayout>
+                      </Layout>
+                      <SubComponents>
+                        <Component class="javax.swing.JLabel" name="jLabel1">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" resourceKey="jLabel1.text"/>
+                            <Property name="name" type="java.lang.String" value="jLabel1" noResource="true"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JFormattedTextField" name="txtRanking">
+                          <Properties>
+                            <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                              <Connection code="FormattersFactory.getInstance().getIntegerFormatterFactory()" type="code"/>
+                            </Property>
+                            <Property name="name" type="java.lang.String" value="txtRanking" noResource="true"/>
+                          </Properties>
+                          <BindingProperties>
+                            <BindingProperty name="value" source="rrrBean" sourcePath="${mortgageRanking}" target="txtRanking" targetPath="value" updateStrategy="0" immediately="false"/>
+                          </BindingProperties>
+                        </Component>
+                      </SubComponents>
+                    </Container>
+                    <Container class="javax.swing.JPanel" name="jPanel7">
+                      <Properties>
+                        <Property name="name" type="java.lang.String" value="jPanel7" noResource="true"/>
+                      </Properties>
+
+                      <Layout>
+                        <DimensionLayout dim="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <Component id="jLabel5" min="-2" max="-2" attributes="1"/>
+                                  <EmptySpace pref="33" max="32767" attributes="0"/>
+                              </Group>
+                              <Component id="txtInterestRate" alignment="0" pref="99" max="32767" attributes="1"/>
+                          </Group>
+                        </DimensionLayout>
+                        <DimensionLayout dim="1">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="txtInterestRate" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace pref="14" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                        </DimensionLayout>
+                      </Layout>
+                      <SubComponents>
+                        <Component class="javax.swing.JLabel" name="jLabel5">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" resourceKey="jLabel5.text"/>
+                            <Property name="name" type="java.lang.String" value="jLabel5" noResource="true"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JFormattedTextField" name="txtInterestRate">
+                          <Properties>
+                            <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                              <Connection code="FormattersFactory.getInstance().getDecimalFormatterFactory()" type="code"/>
+                            </Property>
+                            <Property name="name" type="java.lang.String" value="txtInterestRate" noResource="true"/>
+                          </Properties>
+                          <BindingProperties>
+                            <BindingProperty name="value" source="rrrBean" sourcePath="${mortgageInterestRate}" target="txtInterestRate" targetPath="value" updateStrategy="0" immediately="false"/>
+                          </BindingProperties>
+                        </Component>
+                      </SubComponents>
+                    </Container>
+                  </SubComponents>
+                </Container>
+              </SubComponents>
+            </Container>
+            <Component class="javax.swing.JLabel" name="jLabel16">
+              <Properties>
+                <Property name="font" type="java.awt.Font" resourceKey="jLabel16.font"/>
+                <Property name="icon" type="javax.swing.Icon" resourceKey="jLabel16.icon"/>
+                <Property name="text" type="java.lang.String" resourceKey="jLabel16.text"/>
+                <Property name="name" type="java.lang.String" value="jLabel16" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="txtNotationText">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="txtNotationText" noResource="true"/>
+              </Properties>
+              <BindingProperties>
+                <BindingProperty name="text" source="rrrBean" sourcePath="${notation.notationText}" target="txtNotationText" targetPath="text" updateStrategy="0" immediately="false">
+                  <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                </BindingProperty>
+              </BindingProperties>
+            </Component>
+            <Component class="org.sola.clients.swing.ui.GroupPanel" name="groupPanel1">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="groupPanel1" noResource="true"/>
+                <Property name="titleText" type="java.lang.String" resourceKey="groupPanel1.titleText"/>
+              </Properties>
+            </Component>
+            <Component class="org.sola.clients.swing.ui.source.DocumentsManagementPanel" name="documentsManagementPanel1">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="documentsManagementPanel1" noResource="true"/>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="createDocumentsPanel()"/>
+              </AuxValues>
+            </Component>
+          </SubComponents>
+        </Container>
+      </SubComponents>
+    </Container>
+  </SubComponents>
+</Form>

@@ -31,6 +31,7 @@ import java.awt.BorderLayout;
 import java.awt.Window;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JasperPrint;
 import org.jdesktop.application.Action;
@@ -68,7 +69,6 @@ import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.common.RolesConstants;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
-import org.sola.webservices.transferobjects.EntityAction;
 import org.sola.webservices.transferobjects.administrative.BaUnitTO;
 
 /**
@@ -170,7 +170,7 @@ public class PropertyPanel extends ContentPanel {
         this.nameLastPart = nameLastPart;
         resourceBundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle");
         initComponents();
-        customizeForm();
+        portInit();
     }
 
     /** 
@@ -195,7 +195,7 @@ public class PropertyPanel extends ContentPanel {
         }
         resourceBundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle");
         initComponents();
-        customizeForm();
+        portInit();
     }
 
     /** Applies customization of component L&F. */
@@ -239,39 +239,11 @@ public class PropertyPanel extends ContentPanel {
 
     }
 
-    /** 
-     * Runs form customization, to restrict certain actions, bind listeners on 
-     * the {@link BaUnitBean} and other components.
-     */
-    private void customizeForm() {
+    /** Makes post initialization tasks. */
+    private void portInit(){
         customizeComponents();
-
-        if (nameFirstPart != null && nameLastPart != null) {
-            headerPanel.setTitleText(String.format(
-                    resourceBundle.getString("PropertyPanel.existingProperty.Text"),
-                    nameFirstPart, nameLastPart));
-        } else {
-            headerPanel.setTitleText(resourceBundle.getString("PropertyPanel.newProperty.Text"));
-        }
-
-        if (applicationBean != null && applicationService != null) {
-            headerPanel.setTitleText(String.format("%s, %s",
-                    headerPanel.getTitleText(),
-                    String.format(resourceBundle.getString("PropertyPanel.applicationInfo.Text"),
-                    applicationService.getRequestType().getDisplayValue(), applicationBean.getNr())));
-        }
-
-        btnSave.setEnabled(!readOnly);
-        txtName.setEditable(!readOnly);
-        customizeRightsButtons(null);
-        customizeNotationButtons(null);
-        customizeRightTypesList();
-        customizeParcelButtons(null);
-        customizePaperTitleButtons(null);
-        customizePrintButton();
-        customizeParentPropertyButtons();
-        customizeChildPropertyButtons();
-
+        customizeForm();
+        
         rrrTypes.addPropertyChangeListener(new PropertyChangeListener() {
 
             @Override
@@ -312,6 +284,40 @@ public class PropertyPanel extends ContentPanel {
                 }
             }
         });
+    }
+    
+    /** 
+     * Runs form customization, to restrict certain actions, bind listeners on 
+     * the {@link BaUnitBean} and other components.
+     */
+    private void customizeForm() {
+
+        if (nameFirstPart != null && nameLastPart != null) {
+            headerPanel.setTitleText(String.format(
+                    resourceBundle.getString("PropertyPanel.existingProperty.Text"),
+                    nameFirstPart, nameLastPart));
+        } else {
+            headerPanel.setTitleText(resourceBundle.getString("PropertyPanel.newProperty.Text"));
+        }
+
+        if (applicationBean != null && applicationService != null) {
+            headerPanel.setTitleText(String.format("%s, %s",
+                    headerPanel.getTitleText(),
+                    String.format(resourceBundle.getString("PropertyPanel.applicationInfo.Text"),
+                    applicationService.getRequestType().getDisplayValue(), applicationBean.getNr())));
+        }
+
+        btnSave.setEnabled(!readOnly);
+        txtName.setEditable(!readOnly);
+        customizeRightsButtons(null);
+        customizeNotationButtons(null);
+        customizeRightTypesList();
+        customizeParcelButtons(null);
+        customizePaperTitleButtons(null);
+        customizePrintButton();
+        customizeParentPropertyButtons();
+        customizeChildPropertyButtons();
+        customizeTerminationButton();
     }
 
     /** Shows {@link NewTitleWizardPanel} to select parent property. */
@@ -475,6 +481,36 @@ public class PropertyPanel extends ContentPanel {
         btnAddNotation.getAction().setEnabled(!readOnly);
     }
 
+    /** Enables or disables termination button, depending on the form state. */
+    private void customizeTerminationButton(){
+        boolean enabled = !readOnly;
+        
+        // Check BaUnit status to be current
+        if(baUnitBean1.getStatusCode() == null || !baUnitBean1.getStatusCode().equals(StatusConstants.CURRENT)){
+            enabled = false;
+        }
+        
+        // Check RequestType to have cancel action.
+        if(applicationService == null || applicationService.getRequestType() == null ||
+                applicationService.getRequestType().getTypeActionCode() == null || 
+                !applicationService.getRequestType().getTypeActionCode().equals(TypeActionBean.CODE_CANCEL)){
+            enabled = false;
+        }
+        
+        // Determine what should be shown on the button, terminate or cancelling of termination.
+        if (baUnitBean1.getPendingActionCode() != null && baUnitBean1
+                .getPendingActionCode().equals(TypeActionBean.CODE_CANCEL)) {
+            // Show cancel
+            btnTerminate.setIcon(new ImageIcon(getClass().getResource("/images/common/undo.png")));
+            btnTerminate.setText(resourceBundle.getString("PropertyPanel.btnTerminate.text2"));
+        } else {
+            // Show terminate
+            btnTerminate.setIcon(new ImageIcon(getClass().getResource("/images/common/stop.png")));
+            btnTerminate.setText(resourceBundle.getString("PropertyPanel.btnTerminate.text"));
+        }
+        btnTerminate.setEnabled(enabled);
+    }
+    
     /** 
      * Enables or disables parcel buttons, depending on the form state and 
      * selection in the list of parcel. 
@@ -533,7 +569,9 @@ public class PropertyPanel extends ContentPanel {
         btnRemoveRight.getAction().setEnabled(false);
         btnChangeRight.getAction().setEnabled(false);
         btnExtinguish.getAction().setEnabled(false);
-
+        btnViewRight.setEnabled(rrrBean != null);
+        menuViewRight.setEnabled(btnViewRight.isEnabled());
+        
         if (rrrBean != null && !rrrBean.isLocked() && !readOnly) {
             boolean isPending = rrrBean.getStatusCode().equals(StatusConstants.PENDING);
 
@@ -724,18 +762,21 @@ public class PropertyPanel extends ContentPanel {
         }
 
         RightFormListener rightFormListener = new RightFormListener();
-        Window form = null;
+        ContentPanel panel = null;
+        String cardName = MainContentPanel.CARD_SIMPLE_RIGHT;
 
         if (rrrBean.getRrrType().getCode().equals(RrrBean.CODE_MORTGAGE)) {
-            form = new MortgageForm(null, true, rrrBean, applicationBean, applicationService, action);
+            panel = new MortgagePanel(rrrBean, applicationBean, applicationService, action);
+            cardName = MainContentPanel.CARD_MORTGAGE;
         } else if (rrrBean.getRrrType().getCode().toLowerCase().contains(RrrBean.CODE_OWNERSHIP)) {
-            form = new OwnershipForm(null, true, rrrBean, applicationBean, applicationService, action);
+            panel = new OwnershipPanel(rrrBean, applicationBean, applicationService, action);
+            cardName = MainContentPanel.CARD_OWNERSHIP;
         } else {
-            form = new SimpleRightForm(null, true, rrrBean, applicationBean, applicationService, action);
+            panel = new SimpleRightPanel(rrrBean, applicationBean, applicationService, action);
         }
 
-        form.addPropertyChangeListener(SimpleRightForm.UPDATED_RRR, rightFormListener);
-        form.setVisible(true);
+        panel.addPropertyChangeListener(SimpleRightPanel.UPDATED_RRR, rightFormListener);
+        getMainContentPanel().addPanel(panel, cardName, true);
     }
 
     private boolean saveBaUnit(boolean showMessage) {
@@ -811,6 +852,7 @@ public class PropertyPanel extends ContentPanel {
         menuExtinguishRight = new javax.swing.JMenuItem();
         menuEditRight = new javax.swing.JMenuItem();
         menuRemoveRight = new javax.swing.JMenuItem();
+        menuViewRight = new javax.swing.JMenuItem();
         popupNotations = new javax.swing.JPopupMenu();
         menuRemoveNotation = new javax.swing.JMenuItem();
         popupParentBaUnits = new javax.swing.JPopupMenu();
@@ -866,6 +908,7 @@ public class PropertyPanel extends ContentPanel {
         btnChangeRight = new javax.swing.JButton();
         btnExtinguish = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JToolBar.Separator();
+        btnViewRight = new javax.swing.JButton();
         btnEditRight = new javax.swing.JButton();
         btnRemoveRight = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
@@ -936,6 +979,11 @@ public class PropertyPanel extends ContentPanel {
         menuRemoveRight.setText(bundle.getString("PropertyPanel.menuRemoveRight.text")); // NOI18N
         menuRemoveRight.setName("menuRemoveRight"); // NOI18N
         popupRights.add(menuRemoveRight);
+
+        menuViewRight.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/view.png"))); // NOI18N
+        menuViewRight.setText(bundle.getString("PropertyPanel.menuViewRight.text")); // NOI18N
+        menuViewRight.setName("menuViewRight"); // NOI18N
+        popupRights.add(menuViewRight);
 
         popupNotations.setName("popupNotations"); // NOI18N
 
@@ -1419,6 +1467,18 @@ public class PropertyPanel extends ContentPanel {
         jSeparator1.setName("jSeparator1"); // NOI18N
         jToolBar2.add(jSeparator1);
 
+        btnViewRight.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/view.png"))); // NOI18N
+        btnViewRight.setText(bundle.getString("PropertyPanel.btnViewRight.text")); // NOI18N
+        btnViewRight.setFocusable(false);
+        btnViewRight.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnViewRight.setName("btnViewRight"); // NOI18N
+        btnViewRight.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewRightActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(btnViewRight);
+
         btnEditRight.setAction(actionMap.get("editRight")); // NOI18N
         btnEditRight.setName("btnEditRight"); // NOI18N
         jToolBar2.add(btnEditRight);
@@ -1862,6 +1922,7 @@ public class PropertyPanel extends ContentPanel {
 
 private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
     saveBaUnit(true);
+    customizeForm();
 }//GEN-LAST:event_btnSaveActionPerformed
 
     private void tableRightsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableRightsMouseClicked
@@ -1921,14 +1982,23 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
             saveBaUnit(false);
             baUnitBean1.cancelBaUnitTermination();
             MessageUtility.displayMessage(ClientMessage.BAUNIT_TERMINATION_CANCELED);
+            customizeForm();
         } else {
             if (MessageUtility.displayMessage(ClientMessage.BAUNIT_CONFIRM_TERMINATION) == MessageUtility.BUTTON_ONE) {
                 saveBaUnit(false);
                 baUnitBean1.terminateBaUnit(applicationService.getId());
                 MessageUtility.displayMessage(ClientMessage.BAUNIT_TERMINATED);
+                customizeForm();
             }
         }
     }//GEN-LAST:event_btnTerminateActionPerformed
+
+    private void btnViewRightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewRightActionPerformed
+        if (baUnitBean1.getSelectedRight() != null) {
+            openRightForm(baUnitBean1.getSelectedRight(), RrrBean.RRR_ACTION.VIEW);
+        }
+    }//GEN-LAST:event_btnViewRightActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.sola.clients.beans.administrative.BaUnitBean baUnitBean1;
     private org.sola.clients.beans.referencedata.RrrTypeListBean baUnitRrrTypes;
@@ -1950,6 +2020,7 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnTerminate;
     private javax.swing.JButton btnViewPaperTitle;
+    private javax.swing.JButton btnViewRight;
     private javax.swing.JComboBox cbxRightType;
     private org.sola.clients.swing.ui.source.DocumentsPanel documentsPanel1;
     private javax.swing.Box.Filler filler1;
@@ -2010,6 +2081,7 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private javax.swing.JMenuItem menuRemoveParentBaUnit;
     private javax.swing.JMenuItem menuRemoveRight;
     private javax.swing.JMenuItem menuVaryRight;
+    private javax.swing.JMenuItem menuViewRight;
     private javax.swing.JPanel pnlPriorProperties;
     private javax.swing.JPopupMenu popupChildBaUnits;
     private javax.swing.JPopupMenu popupNotations;

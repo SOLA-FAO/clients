@@ -33,12 +33,13 @@ import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationServiceBean;
 import org.sola.clients.beans.referencedata.StatusConstants;
 import org.sola.clients.swing.common.LafManager;
+import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.source.DocumentsManagementPanel;
 
 /**
  * Used to create and manage simple types of rights. {@link RrrBean} is used to bind the data on the form.
  */
-public class SimpleRightForm extends javax.swing.JDialog {
+public class SimpleRightPanel extends ContentPanel {
 
     private ApplicationBean appBean;
     private ApplicationServiceBean appService;
@@ -81,20 +82,17 @@ public class SimpleRightForm extends javax.swing.JDialog {
      * of application documents.
      * @param rrrAction {@link RrrBean#RRR_ACTION} type, used to customize form view.
      */
-    public SimpleRightForm(java.awt.Frame parent, boolean modal, RrrBean rrrBean,
-            ApplicationBean applicationBean, ApplicationServiceBean applicationService, 
-            RrrBean.RRR_ACTION rrrAction) {
-        super(parent, modal);
+    public SimpleRightPanel(RrrBean rrrBean, ApplicationBean applicationBean, 
+            ApplicationServiceBean applicationService, RrrBean.RRR_ACTION rrrAction) {
 
         this.appBean = applicationBean;
         this.appService = applicationService;
         this.rrrAction = rrrAction;
         prepareRrrBean(rrrBean, rrrAction);
-        this.setIconImage(new ImageIcon(SimpleRightForm.class.getResource("/images/sola/logo_icon.jpg")).getImage());
     
         initComponents();
 
-        this.setTitle(rrrBean.getRrrType().getDisplayValue());
+        headerPanel.setTitleText(rrrBean.getRrrType().getDisplayValue());
         customizeComponents();
         customizeForm(rrrAction);
     }
@@ -105,159 +103,162 @@ public class SimpleRightForm extends javax.swing.JDialog {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         rrrBean = CreateRrrBean();
-        jLabel13 = new javax.swing.JLabel();
-        txtRegDatetime = new javax.swing.JFormattedTextField();
-        btnSave = new javax.swing.JButton();
-        jLabel14 = new javax.swing.JLabel();
-        txtStatus = new javax.swing.JTextField();
-        jPanel1 = new javax.swing.JPanel();
         documentsPanel = createDocumentsPanel();
-        pnlNotation = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
         txtNotationText = new javax.swing.JTextField();
+        headerPanel = new org.sola.clients.swing.ui.HeaderPanel();
+        jToolBar1 = new javax.swing.JToolBar();
+        btnSave = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JToolBar.Separator();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(7, 0), new java.awt.Dimension(7, 0), new java.awt.Dimension(7, 32767));
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
         cbxIsPrimary = new javax.swing.JCheckBox();
+        txtRegDatetime = new javax.swing.JFormattedTextField();
+        jLabel13 = new javax.swing.JLabel();
+        groupPanel1 = new org.sola.clients.swing.ui.GroupPanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setCloseOnHide(true);
+        setHeaderPanel(headerPanel);
         setName("Form"); // NOI18N
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance().getContext().getResourceMap(SimpleRightForm.class);
-        jLabel13.setFont(resourceMap.getFont("jLabel13.font")); // NOI18N
-        jLabel13.setIcon(resourceMap.getIcon("jLabel13.icon")); // NOI18N
-        jLabel13.setText(resourceMap.getString("jLabel13.text")); // NOI18N
-        jLabel13.setName("jLabel13"); // NOI18N
+        documentsPanel.setName("documentsPanel"); // NOI18N
 
-        txtRegDatetime.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
-        txtRegDatetime.setName("txtRegDatetime"); // NOI18N
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance().getContext().getResourceMap(SimpleRightPanel.class);
+        jLabel15.setIcon(resourceMap.getIcon("jLabel15.icon")); // NOI18N
+        jLabel15.setText(resourceMap.getString("jLabel15.text")); // NOI18N
+        jLabel15.setName("jLabel15"); // NOI18N
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${registrationDate}"), txtRegDatetime, org.jdesktop.beansbinding.BeanProperty.create("value"));
+        txtNotationText.setName("txtNotationText"); // NOI18N
+
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${notation.notationText}"), txtNotationText, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
+        headerPanel.setName("headerPanel"); // NOI18N
+        headerPanel.setTitleText(resourceMap.getString("headerPanel.titleText")); // NOI18N
+
+        jToolBar1.setFloatable(false);
+        jToolBar1.setRollover(true);
+        jToolBar1.setName("jToolBar1"); // NOI18N
+
+        btnSave.setIcon(resourceMap.getIcon("btnSave.icon")); // NOI18N
         btnSave.setText(resourceMap.getString("btnSave.text")); // NOI18N
+        btnSave.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSave.setName("btnSave"); // NOI18N
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveActionPerformed(evt);
             }
         });
+        jToolBar1.add(btnSave);
 
-        jLabel14.setText(resourceMap.getString("jLabel14.text")); // NOI18N
-        jLabel14.setName("jLabel14"); // NOI18N
+        jSeparator1.setName("jSeparator1"); // NOI18N
+        jToolBar1.add(jSeparator1);
 
-        txtStatus.setBackground(resourceMap.getColor("txtStatus.background")); // NOI18N
-        txtStatus.setEditable(false);
-        txtStatus.setEnabled(false);
-        txtStatus.setName("txtStatus"); // NOI18N
+        filler1.setName("filler1"); // NOI18N
+        jToolBar1.add(filler1);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${status.displayValue}"), txtStatus, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
+        jLabel1.setName("jLabel1"); // NOI18N
+        jToolBar1.add(jLabel1);
+
+        jLabel2.setName("jLabel2"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${status.displayValue}"), jLabel2, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Documents"));
+        jToolBar1.add(jLabel2);
+
         jPanel1.setName("jPanel1"); // NOI18N
 
-        documentsPanel.setName("documentsPanel"); // NOI18N
+        cbxIsPrimary.setText(resourceMap.getString("cbxIsPrimary.text")); // NOI18N
+        cbxIsPrimary.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        cbxIsPrimary.setName("cbxIsPrimary"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${primary}"), cbxIsPrimary, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        bindingGroup.addBinding(binding);
+
+        txtRegDatetime.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
+        txtRegDatetime.setName("txtRegDatetime"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${registrationDate}"), txtRegDatetime, org.jdesktop.beansbinding.BeanProperty.create("value"));
+        bindingGroup.addBinding(binding);
+
+        jLabel13.setIcon(resourceMap.getIcon("jLabel15.icon")); // NOI18N
+        jLabel13.setText(resourceMap.getString("jLabel13.text")); // NOI18N
+        jLabel13.setName("jLabel13"); // NOI18N
 
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(documentsPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
-                .addContainerGap())
+                .add(jLabel13)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(txtRegDatetime, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
+                .add(18, 18, 18)
+                .add(cbxIsPrimary, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 117, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(308, 308, 308))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
-                .add(11, 11, 11)
-                .add(documentsPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)
-                .addContainerGap())
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel13)
+                    .add(txtRegDatetime, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(cbxIsPrimary))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        pnlNotation.setBorder(javax.swing.BorderFactory.createTitledBorder(null, resourceMap.getString("pnlNotation.border.title"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, resourceMap.getFont("pnlNotation.border.titleFont"))); // NOI18N
-        pnlNotation.setName("pnlNotation"); // NOI18N
+        groupPanel1.setName("groupPanel1"); // NOI18N
+        groupPanel1.setTitleText(resourceMap.getString("groupPanel1.titleText")); // NOI18N
 
-        jLabel15.setFont(resourceMap.getFont("jLabel13.font")); // NOI18N
-        jLabel15.setIcon(resourceMap.getIcon("jLabel13.icon")); // NOI18N
-        jLabel15.setText(resourceMap.getString("jLabel15.text")); // NOI18N
-        jLabel15.setName("jLabel15"); // NOI18N
-
-        txtNotationText.setName("txtNotationText"); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${notation.notationText}"), txtNotationText, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        org.jdesktop.layout.GroupLayout pnlNotationLayout = new org.jdesktop.layout.GroupLayout(pnlNotation);
-        pnlNotation.setLayout(pnlNotationLayout);
-        pnlNotationLayout.setHorizontalGroup(
-            pnlNotationLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(pnlNotationLayout.createSequentialGroup()
-                .addContainerGap()
-                .add(pnlNotationLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(txtNotationText, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
-                    .add(jLabel15))
-                .addContainerGap())
-        );
-        pnlNotationLayout.setVerticalGroup(
-            pnlNotationLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(pnlNotationLayout.createSequentialGroup()
-                .addContainerGap()
-                .add(jLabel15)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(txtNotationText, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-
-        cbxIsPrimary.setText(resourceMap.getString("cbxIsPrimary.text")); // NOI18N
-        cbxIsPrimary.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        cbxIsPrimary.setName("cbxIsPrimary"); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${primary}"), cbxIsPrimary, org.jdesktop.beansbinding.BeanProperty.create("selected"));
-        bindingGroup.addBinding(binding);
-
-        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
+        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
+        this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(headerPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 706, Short.MAX_VALUE)
+            .add(jToolBar1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 706, Short.MAX_VALUE)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(pnlNotation, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
-                        .add(jLabel13)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                        .add(txtRegDatetime, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 81, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(45, 45, 45)
-                        .add(cbxIsPrimary, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 117, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 80, Short.MAX_VALUE)
-                        .add(jLabel14)
-                        .add(18, 18, 18)
-                        .add(txtStatus, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 144, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(btnSave, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 91, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(txtNotationText, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 686, Short.MAX_VALUE)
+                    .add(jLabel15))
+                .addContainerGap())
+            .add(layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .add(layout.createSequentialGroup()
+                .addContainerGap()
+                .add(groupPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 686, Short.MAX_VALUE)
+                .addContainerGap())
+            .add(layout.createSequentialGroup()
+                .addContainerGap()
+                .add(documentsPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 686, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
-                .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(txtStatus, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jLabel13)
-                    .add(jLabel14)
-                    .add(cbxIsPrimary)
-                    .add(txtRegDatetime, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(headerPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jToolBar1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(pnlNotation, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(btnSave)
+                .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jLabel15)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(txtNotationText, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(18, 18, 18)
+                .add(groupPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(documentsPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         bindingGroup.bind();
-
-        pack();
     }// </editor-fold>//GEN-END:initComponents
 
     /** Checks provided {@link RrrBean} and makes a copy if needed. */
@@ -283,12 +284,10 @@ public class SimpleRightForm extends javax.swing.JDialog {
    
 //    LABELS    
     LafManager.getInstance().setLabProperties(jLabel13);
-    LafManager.getInstance().setLabProperties(jLabel14);
     LafManager.getInstance().setLabProperties(jLabel15);
     
 //    TXT FIELDS
     LafManager.getInstance().setTxtProperties(txtNotationText);
-    LafManager.getInstance().setTxtProperties(txtStatus);
     
 //    FORMATTED TXT
     LafManager.getInstance().setFormattedTxtProperties(txtRegDatetime);
@@ -302,7 +301,7 @@ public class SimpleRightForm extends javax.swing.JDialog {
      */
     private void customizeForm(RrrBean.RRR_ACTION rrrAction) {
         if (rrrAction == RrrBean.RRR_ACTION.NEW) {
-            btnSave.setText("Create");
+            btnSave.setText("Create & Close");
         }
         if (rrrAction == RrrBean.RRR_ACTION.CANCEL) {
             btnSave.setText("Extinguish");
@@ -326,22 +325,26 @@ public class SimpleRightForm extends javax.swing.JDialog {
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         if (rrrBean.validate(true).size() <= 0) {
             firePropertyChange(UPDATED_RRR, null, rrrBean);
-            this.dispose();
+            close();
         }
     }//GEN-LAST:event_btnSaveActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSave;
     private javax.swing.JCheckBox cbxIsPrimary;
     private org.sola.clients.swing.ui.source.DocumentsManagementPanel documentsPanel;
+    private javax.swing.Box.Filler filler1;
+    private org.sola.clients.swing.ui.GroupPanel groupPanel1;
+    private org.sola.clients.swing.ui.HeaderPanel headerPanel;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel pnlNotation;
+    private javax.swing.JToolBar.Separator jSeparator1;
+    private javax.swing.JToolBar jToolBar1;
     private org.sola.clients.beans.administrative.RrrBean rrrBean;
     private javax.swing.JTextField txtNotationText;
     private javax.swing.JFormattedTextField txtRegDatetime;
-    private javax.swing.JTextField txtStatus;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }
