@@ -31,25 +31,18 @@
  */
 package org.sola.clients.swing.gis.ui.controlsbundle;
 
-import com.vividsolutions.jts.geom.Geometry;
-import org.geotools.geometry.jts.JTS;
 import org.sola.clients.swing.gis.beans.TransactionCadastreChangeBean;
 import java.util.List;
 import org.geotools.geometry.jts.ReferencedEnvelope;
-import org.geotools.map.extended.layer.ExtendedLayer;
-import org.sola.clients.swing.gis.Messaging;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
-import org.sola.clients.swing.gis.data.PojoFeatureSource;
 import org.sola.clients.swing.gis.layer.CadastreChangeNewCadastreObjectLayer;
 import org.sola.clients.swing.gis.layer.CadastreChangeNewSurveyPointLayer;
-import org.sola.clients.swing.gis.layer.PojoLayer;
 import org.sola.clients.swing.gis.layer.CadastreChangeTargetCadastreObjectLayer;
 import org.sola.clients.swing.gis.mapaction.CadastreChangeNewCadastreObjectListFormShow;
 import org.sola.clients.swing.gis.mapaction.CadastreChangePointSurveyListFormShow;
 import org.sola.clients.swing.gis.tool.CadastreChangeNewParcelTool;
 import org.sola.clients.swing.gis.tool.CadastreChangeNodeTool;
 import org.sola.clients.swing.gis.tool.CadastreChangeSelectParcelTool;
-import org.sola.common.messaging.GisMessage;
 import org.sola.webservices.transferobjects.cadastre.CadastreObjectTO;
 
 /**
@@ -131,6 +124,7 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
 
         this.newCadastreObjectLayer.setCadastreObjectList(
                 this.transactionBean.getCadastreObjectList());
+        super.addLayers();
     }
 
     @Override
@@ -154,6 +148,9 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
         this.getMap().addMapAction(new CadastreChangeNewCadastreObjectListFormShow(
                 this.getMap(), this.newCadastreObjectLayer.getHostForm()),
                 this.getToolbar());
+        super.addToolsAndCommands();
+        this.cadastreBoundaryEditTool.setTargetLayer(this.newCadastreObjectLayer);
+        this.cadastreBoundarySelectTool.setTargetLayer(this.newCadastreObjectLayer);
     }
 
     public void setTargetParcelsByBaUnit(String baUnitId) {

@@ -321,7 +321,7 @@ public class ExtendedDrawToolWithSnapping extends ExtendedDrawTool {
         Graphics2D g2D = (Graphics2D) this.getMapControl().getGraphics();
         g2D.setColor(Color.WHITE);
         g2D.setXORMode(this.stylePointColorNoTargetFound);
-        g2D.setStroke(new BasicStroke(1));
+        g2D.setStroke(new BasicStroke(2));
         return g2D;
     }
 
@@ -336,11 +336,10 @@ public class ExtendedDrawToolWithSnapping extends ExtendedDrawTool {
         Point2D pointShape =
                 this.getMapControl().getPointInScreen(
                 new Point2D.Double(vertex.getX(), vertex.getY()));
-        int rectWidth = 20;
-        Rectangle rect = new Rectangle(
-                (int) pointShape.getX() - rectWidth / 2,
-                (int) pointShape.getY() - rectWidth / 2,
-                rectWidth, rectWidth);
-        graphics2D.fill(rect);
+        int rectWidth = 12;        
+        graphics2D.drawLine( (int)pointShape.getX(), (int) pointShape.getY() - rectWidth/2, 
+                (int) pointShape.getX(), (int) pointShape.getY() + rectWidth/2);
+        graphics2D.drawLine( (int)pointShape.getX() - rectWidth/2, (int) pointShape.getY(), 
+                (int) pointShape.getX()  + rectWidth/2, (int) pointShape.getY());
     }
 }

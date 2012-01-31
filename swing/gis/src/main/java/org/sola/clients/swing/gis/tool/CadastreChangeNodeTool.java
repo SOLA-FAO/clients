@@ -42,7 +42,7 @@ import org.sola.common.messaging.MessageUtility;
  */
 public class CadastreChangeNodeTool extends ExtendedEditGeometryTool {
 
-    private String toolName = "nodelinking";
+    private String toolName = "node-linking";
     private String toolTip = MessageUtility.getLocalizedMessage(
                             GisMessage.CADASTRE_CHANGE_TOOLTIP_NEW_SURVEYPOINT).getMessage();
 

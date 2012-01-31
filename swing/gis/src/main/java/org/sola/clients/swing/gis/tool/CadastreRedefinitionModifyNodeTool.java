@@ -69,8 +69,8 @@ public class CadastreRedefinitionModifyNodeTool extends CadastreRedefinitionAbst
         for (SimpleFeature cadastreObjectFeature : cadastreObjects) {
             this.cadastreObjectModifiedLayer.getFeatureCollection().notifyListeners(
                     cadastreObjectFeature, CollectionEvent.FEATURES_CHANGED);
-            this.cadastreObjectNodeModifiedLayer.removeFeature(nodeFeature.getID());
         }
-        this.removeNode(nodeFeature);
+        this.cadastreObjectNodeModifiedLayer.removeFeature(nodeFeature.getID());
+        this.getMapControl().refresh();
     }
 }

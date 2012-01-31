@@ -39,7 +39,10 @@ import org.geotools.map.extended.layer.ExtendedLayer;
 import org.sola.clients.swing.gis.Messaging;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.data.PojoFeatureSource;
+import org.sola.clients.swing.gis.layer.CadastreBoundaryPointLayer;
 import org.sola.clients.swing.gis.layer.PojoLayer;
+import org.sola.clients.swing.gis.tool.CadastreBoundaryEditTool;
+import org.sola.clients.swing.gis.tool.CadastreBoundarySelectTool;
 import org.sola.common.messaging.GisMessage;
 
 /**
@@ -49,6 +52,9 @@ import org.sola.common.messaging.GisMessage;
 public abstract class ControlsBundleForTransaction extends ControlsBundleForWorkingWithCO {
 
     private PojoLayer pendingLayer = null;
+    private CadastreBoundaryPointLayer cadastreBoundaryPointLayer = null;
+    protected CadastreBoundaryEditTool cadastreBoundaryEditTool;
+    protected CadastreBoundarySelectTool cadastreBoundarySelectTool;
 
     @Override
     public void Setup(PojoDataAccess pojoDataAccess) {
@@ -70,7 +76,7 @@ public abstract class ControlsBundleForTransaction extends ControlsBundleForWork
                     }
                 }
             }
-            
+
         } catch (Exception ex) {
             Messaging.getInstance().show(GisMessage.CADASTRE_CHANGE_ERROR_SETUP);
             org.sola.common.logging.LogUtility.log(GisMessage.CADASTRE_CHANGE_ERROR_SETUP, ex);
@@ -78,7 +84,7 @@ public abstract class ControlsBundleForTransaction extends ControlsBundleForWork
     }
 
     protected void zoomToInterestingArea(
-            ReferencedEnvelope interestingArea, 
+            ReferencedEnvelope interestingArea,
             byte[] applicationLocation) {
         if (interestingArea == null && applicationLocation != null) {
             try {
@@ -98,9 +104,19 @@ public abstract class ControlsBundleForTransaction extends ControlsBundleForWork
 
     public abstract TransactionBean getTransactionBean();
 
-    protected abstract void addLayers() throws Exception;
+    protected void addLayers() throws Exception {
+        this.cadastreBoundaryPointLayer = new CadastreBoundaryPointLayer();
+        this.getMap().addLayer(this.cadastreBoundaryPointLayer);
+    }
 
-    protected abstract void addToolsAndCommands();
+    protected void addToolsAndCommands() {
+        this.cadastreBoundaryEditTool =
+                new CadastreBoundaryEditTool(this.cadastreBoundaryPointLayer);
+        this.getMap().addTool(this.cadastreBoundaryEditTool, this.getToolbar());
+        this.cadastreBoundarySelectTool = 
+                new CadastreBoundarySelectTool(this.cadastreBoundaryPointLayer);
+        this.getMap().addTool(this.cadastreBoundarySelectTool, this.getToolbar());
+    }
 
     @Override
     public void refresh(boolean force) {

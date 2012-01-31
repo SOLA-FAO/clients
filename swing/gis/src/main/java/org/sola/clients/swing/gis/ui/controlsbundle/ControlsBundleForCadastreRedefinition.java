@@ -31,21 +31,14 @@
  */
 package org.sola.clients.swing.gis.ui.controlsbundle;
 
-import com.vividsolutions.jts.geom.Geometry;
-import org.geotools.geometry.jts.JTS;
 import org.geotools.geometry.jts.ReferencedEnvelope;
-import org.geotools.map.extended.layer.ExtendedLayer;
-import org.sola.clients.swing.gis.Messaging;
 import org.sola.clients.swing.gis.beans.TransactionCadastreRedefinitionBean;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
-import org.sola.clients.swing.gis.data.PojoFeatureSource;
 import org.sola.clients.swing.gis.layer.CadastreRedefinitionObjectLayer;
 import org.sola.clients.swing.gis.layer.CadastreRedefinitionNodeLayer;
-import org.sola.clients.swing.gis.layer.PojoLayer;
 import org.sola.clients.swing.gis.mapaction.CadastreRedefinitionReset;
 import org.sola.clients.swing.gis.tool.CadastreRedefinitionModifyNodeTool;
 import org.sola.clients.swing.gis.tool.CadastreRedefinitionAddNodeTool;
-import org.sola.common.messaging.GisMessage;
 
 /**
  *
@@ -101,6 +94,8 @@ public final class ControlsBundleForCadastreRedefinition extends ControlsBundleF
         
         this.cadastreObjectNodeModifiedLayer.addNodeTargetList(
                 this.transactionBean.getCadastreObjectNodeTargetList());
+        
+        super.addLayers();
     }
 
     @Override
@@ -119,6 +114,9 @@ public final class ControlsBundleForCadastreRedefinition extends ControlsBundleF
                 this.getToolbar());
         
         this.getMap().addMapAction(new CadastreRedefinitionReset(this), this.getToolbar());
+        super.addToolsAndCommands();
+        this.cadastreBoundaryEditTool.setTargetLayer(cadastreObjectModifiedLayer);
+        this.cadastreBoundarySelectTool.setTargetLayer(cadastreObjectModifiedLayer);
     }
     
     public void reset() throws Exception{

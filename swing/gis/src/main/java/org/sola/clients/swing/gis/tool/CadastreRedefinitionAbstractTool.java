@@ -193,17 +193,6 @@ public abstract class CadastreRedefinitionAbstractTool extends ExtendedDrawRecta
                 coordinates.toCoordinateArray());
     }
     
-//    private void manipulationCancelled(SimpleFeature nodeFeature){
-//        List<SimpleFeature> cadastreObjects =
-//                this.cadastreObjectModifiedLayer.getCadastreObjectFeatures(nodeFeature);
-//
-//        for (SimpleFeature cadastreObjectFeature : cadastreObjects) {
-//            this.cadastreObjectModifiedLayer.getFeatureCollection().notifyListeners(
-//                    cadastreObjectFeature, CollectionEvent.FEATURES_CHANGED);
-//        }
-//        this.removeIfNodeNotUsed(nodeFeature);
-//    }
-
     private boolean removeIfNodeNotUsed(SimpleFeature nodeFeature){
         boolean objectsAreRemoved = false;
         List<SimpleFeature> cadastreObjects =
