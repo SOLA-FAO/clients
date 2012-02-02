@@ -41,10 +41,8 @@ import org.sola.clients.beans.referencedata.GenderTypeListBean;
 import org.sola.clients.beans.referencedata.IdTypeListBean;
 import org.sola.clients.beans.referencedata.PartyRoleTypeBean;
 import org.sola.clients.beans.referencedata.PartyRoleTypeListBean;
-import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.common.utils.BindingTools;
-import org.sola.common.RolesConstants;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
@@ -53,38 +51,19 @@ import org.sola.common.messaging.MessageUtility;
  */
 public class PartyPanel extends javax.swing.JPanel {
 
-    public static final String UPDATED_PARTY = "updatedParty";
-    public static final String CREATED_PARTY = "createdParty";
-    public static final String CANCEL_ACTION = "Cancel";
-    private String saveEventToFire = UPDATED_PARTY;
     private PartyBean partyBean;
-    private boolean closeOnSave;
-    private boolean closeOnCreate;
     static String individualString = "naturalPerson";
     static String entityString = "nonNaturalPerson";
     private static final String individualLabel = MessageUtility.getLocalizedMessage(
                             ClientMessage.GENERAL_LABELS_INDIVIDUAL).getMessage();
-//"First Name(s):";
     private static final String entityLabel = MessageUtility.getLocalizedMessage(
                             ClientMessage.GENERAL_LABELS_ENTITY).getMessage();
-//"Entity name:";
-    private boolean savePartyOnAction;
     private boolean readOnly = false;
 
     /** Default form constructor. */
     public PartyPanel() {
+        readOnly = false;
         initComponents();
-        customizeComponents();
-    }
-
-    /** 
-     * Form constructor. 
-     * @param savePartyOnAction Boolean flag to indicate whether to save party 
-     * when Save button is clicked.
-     */
-    public PartyPanel(boolean savePartyOnAction) {
-        this(savePartyOnAction, null, false);
-        customizeComponents();
     }
 
     /** 
@@ -94,15 +73,9 @@ public class PartyPanel extends javax.swing.JPanel {
      * @param partyBean {@link PartyBean} instance to display.
      * @param readOnly Indicates whether to allow any changes on the form.
      */
-    public PartyPanel(boolean savePartyOnAction, PartyBean partyBean, boolean readOnly) {
-        this.savePartyOnAction = savePartyOnAction;
-
-        if (!readOnly) {
-            this.readOnly = !SecurityBean.isInRole(RolesConstants.PARTY_SAVE);
-        }
-
+    public PartyPanel(PartyBean partyBean, boolean readOnly) {
+        this.readOnly = readOnly;
         initComponents();
-        
         setupPartyBean(partyBean);
 
         this.partyRoleTypes.addPropertyChangeListener(new PropertyChangeListener() {
@@ -120,24 +93,6 @@ public class PartyPanel extends javax.swing.JPanel {
         customizeComponents();
     }
 
-    public boolean isCloseOnCreate() {
-        return closeOnCreate;
-    }
-
-    public void setCloseOnCreate(boolean closeOnCreate) {
-        this.closeOnCreate = closeOnCreate;
-        setButtonOkCaption();
-    }
-
-    public boolean isCloseOnSave() {
-        return closeOnSave;
-    }
-
-    public void setCloseOnSave(boolean closeOnSave) {
-        this.closeOnSave = closeOnSave;
-        setButtonOkCaption();
-    }
-
     public boolean isReadOnly() {
         return readOnly;
     }
@@ -145,14 +100,6 @@ public class PartyPanel extends javax.swing.JPanel {
     public void setReadOnly(boolean readOnly) {
         this.readOnly = readOnly;
         customizePanel();
-    }
-
-    public boolean isSavePartyOnAction() {
-        return savePartyOnAction;
-    }
-
-    public void setSavePartyOnAction(boolean savePartyOnAction) {
-        this.savePartyOnAction = savePartyOnAction;
     }
 
     public PartyBean getPartyBean() {
@@ -195,10 +142,8 @@ public class PartyPanel extends javax.swing.JPanel {
         
         if (partyBean != null) {
             this.partyBean = partyBean;
-            saveEventToFire = UPDATED_PARTY;
         } else {
             this.partyBean = new PartyBean();
-            saveEventToFire = CREATED_PARTY;
         }
 
         this.partyBean.addPropertyChangeListener(new PropertyChangeListener() {
@@ -211,34 +156,9 @@ public class PartyPanel extends javax.swing.JPanel {
             }
         });
 
-        setButtonOkCaption();
         customizePanel();
         firePropertyChange("partyBean", null, this.partyBean);
         BindingTools.refreshBinding(bindingGroup, "rolesGroup");
-    }
-
-    /** Assigns OK button text label. */
-    private void setButtonOkCaption() {
-        try {
-            if (saveEventToFire.equals(UPDATED_PARTY)) {
-                if (closeOnSave) {
-                    btnSave.setText(MessageUtility.getLocalizedMessage(
-                            ClientMessage.GENERAL_LABELS_SAVE_AND_CLOSE).getMessage());
-                } else {
-                    btnSave.setText(MessageUtility.getLocalizedMessage(
-                            ClientMessage.GENERAL_LABELS_SAVE).getMessage());
-                }
-            } else {
-                if (closeOnCreate) {
-                    btnSave.setText(MessageUtility.getLocalizedMessage(
-                            ClientMessage.GENERAL_LABELS_CREATE_AND_CLOSE).getMessage());
-                } else {
-                    btnSave.setText(MessageUtility.getLocalizedMessage(
-                            ClientMessage.GENERAL_LABELS_CREATE).getMessage());
-                }
-            }
-        } catch (Exception e) {
-        }
     }
 
     /** Applies customization of component L&F. */
@@ -247,9 +167,6 @@ public class PartyPanel extends javax.swing.JPanel {
 //    BUTTONS   
         LafManager.getInstance().setBtnProperties(btnAddRole);
         LafManager.getInstance().setBtnProperties(btnRemoveRole);
-        LafManager.getInstance().setBtnProperties(btnSave);
-        LafManager.getInstance().setBtnProperties(btnCancel);
-
 
         //  RADIO  BUTTONS   
         LafManager.getInstance().setRadioProperties(entityButton);
@@ -353,7 +270,6 @@ public class PartyPanel extends javax.swing.JPanel {
             txtFax.setEnabled(false);
             txtEmail.setEnabled(false);
             txtMobile.setEnabled(false);
-            btnSave.setEnabled(false);
         }
     }
 
@@ -389,6 +305,18 @@ public class PartyPanel extends javax.swing.JPanel {
         cbxGender.setEnabled(enable);
         cbxIdType.setEnabled(enable);
         txtIdref.setEnabled(enable);
+    }
+    
+    public boolean validateParty(boolean showMessage){
+        return partyBean.validate(showMessage).size() < 1;
+    }
+    
+    public boolean saveParty(){
+        if (validateParty(true)) {
+            return partyBean.saveParty();
+        } else {
+            return false;
+        }
     }
     
     @SuppressWarnings("unchecked")
@@ -463,8 +391,6 @@ public class PartyPanel extends javax.swing.JPanel {
         groupPanel2 = new org.sola.clients.swing.ui.GroupPanel();
         entityButton = new javax.swing.JRadioButton();
         individualButton = new javax.swing.JRadioButton();
-        btnSave = new javax.swing.JButton();
-        btnCancel = new javax.swing.JButton();
 
         buttonGroup1.add(individualButton);
         buttonGroup1.add(entityButton);
@@ -551,7 +477,7 @@ public class PartyPanel extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(roleTableScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE))
+                .addComponent(roleTableScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE))
         );
 
         jPanel10.setName("jPanel10"); // NOI18N
@@ -1097,7 +1023,7 @@ public class PartyPanel extends javax.swing.JPanel {
                 .addComponent(groupPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(42, Short.MAX_VALUE))
         );
 
         detailsPanel.addTab(bundle.getString("PartyPanel.fullPanel.TabConstraints.tabTitle"), fullPanel); // NOI18N
@@ -1114,7 +1040,7 @@ public class PartyPanel extends javax.swing.JPanel {
         });
 
         buttonGroup1.add(individualButton);
-        individualButton.setFont(new java.awt.Font("Tahoma", 0, 12));
+        individualButton.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         individualButton.setText(bundle.getString("PartyPanel.individualButton.text")); // NOI18N
         individualButton.setActionCommand(bundle.getString("PartyPanel.individualButton.actionCommand")); // NOI18N
         individualButton.setName("individualButton"); // NOI18N
@@ -1124,42 +1050,18 @@ public class PartyPanel extends javax.swing.JPanel {
             }
         });
 
-        btnSave.setFont(new java.awt.Font("Tahoma", 0, 12));
-        btnSave.setText(bundle.getString("PartyPanel.btnSave.text")); // NOI18N
-        btnSave.setName("btnSave"); // NOI18N
-        btnSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveActionPerformed(evt);
-            }
-        });
-
-        btnCancel.setFont(new java.awt.Font("Tahoma", 0, 12));
-        btnCancel.setText(bundle.getString("PartyPanel.btnCancel.text")); // NOI18N
-        btnCancel.setName("btnCancel"); // NOI18N
-        btnCancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(individualButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(entityButton))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(detailsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 504, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(293, Short.MAX_VALUE)
-                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(detailsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 504, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -1169,28 +1071,12 @@ public class PartyPanel extends javax.swing.JPanel {
                     .addComponent(individualButton)
                     .addComponent(entityButton))
                 .addGap(7, 7, 7)
-                .addComponent(detailsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCancel)
-                    .addComponent(btnSave))
+                .addComponent(detailsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        if (partyBean.validate(true).size() < 1) {
-            if (this.savePartyOnAction) {
-                partyBean.saveParty();
-            }
-            if (saveEventToFire.equals(CREATED_PARTY) && !closeOnCreate) {
-                setupPartyBean(null);
-            }
-            firePropertyChange(saveEventToFire, null, partyBean);
-        }
-}//GEN-LAST:event_btnSaveActionPerformed
 
     private void individualButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_individualButtonActionPerformed
         if (individualButton.isSelected()) {
@@ -1204,15 +1090,10 @@ public class PartyPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_entityButtonActionPerformed
 
-    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        firePropertyChange(CANCEL_ACTION, false, true);
-    }//GEN-LAST:event_btnCancelActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel basicPanel;
     private javax.swing.JButton btnAddRole;
-    private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnRemoveRole;
-    private javax.swing.JButton btnSave;
     private javax.swing.ButtonGroup buttonGroup1;
     public javax.swing.JComboBox cbxCommunicationWay;
     public javax.swing.JComboBox cbxGender;

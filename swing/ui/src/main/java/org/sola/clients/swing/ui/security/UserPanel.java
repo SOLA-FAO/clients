@@ -29,7 +29,6 @@ package org.sola.clients.swing.ui.security;
 
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.beans.security.UserBean;
-import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.ui.renderers.TableCellTextAreaRenderer;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -39,18 +38,13 @@ import org.sola.common.messaging.MessageUtility;
  */
 public class UserPanel extends javax.swing.JPanel {
 
-    public static final String SAVED_USER_PROPERTY = "UserSaved";
-    public static final String CREATED_USER_PROPERTY = "UserCreated";
-    public static final String CANCEL_ACTION_PROPERTY = "Cancel";
-    
-    private String saveEventToFire = SAVED_USER_PROPERTY;
     private UserBean user;
-    
+
     /** Default constructor. */
     public UserPanel() {
         this(null);
     }
-    
+
     /** 
      * Constructs panel with predefined {@link UserBean} instance. 
      * @param user {@link UserBean} instance to bind on the form.
@@ -60,63 +54,26 @@ public class UserPanel extends javax.swing.JPanel {
         initComponents();
         postInit();
     }
-    
-         /** Applies customization of component L&F. */
-    private void customizeComponents() {
-   
-//    BUTTONS   
-    LafManager.getInstance().setBtnProperties(btnCancel);
-    LafManager.getInstance().setBtnProperties(btnOk);
 
-//     CHECKBOXES
-    LafManager.getInstance().setChkProperties(cbxActive);
-        
-    
-//    LABELS    
-    LafManager.getInstance().setLabProperties(jLabel1);
-    LafManager.getInstance().setLabProperties(jLabel2);
-    LafManager.getInstance().setLabProperties(jLabel4);
-    LafManager.getInstance().setLabProperties(jLabel5);
-    LafManager.getInstance().setLabProperties(jLabel6);
-    LafManager.getInstance().setLabProperties(jLabel7);
-    
-//    TXTAREA FIELDS
-    LafManager.getInstance().setTxtAreaProperties(txtDescription);
-
-//    PASSWORD FIELDS
-    LafManager.getInstance().setPassProperties(txtPassword);
-    LafManager.getInstance().setPassProperties(txtPasswordConfirmation);
-    
-    
-//    TXT FIELDS
-    LafManager.getInstance().setTxtProperties(txtFirstName);
-    LafManager.getInstance().setTxtProperties(txtLastName);
-    LafManager.getInstance().setTxtProperties(txtUserName);
-   
-    }
-    
     /** Setup {@link UserBean} object, used to bind data on the form. */
     private void setupUserBean(UserBean user) {
         if (user != null) {
             this.user = user;
-            saveEventToFire = SAVED_USER_PROPERTY;
         } else {
             this.user = new UserBean();
-            saveEventToFire = CREATED_USER_PROPERTY;
         }
         firePropertyChange("user", null, this.user);
     }
 
     /** Runs post initialization tasks. */
-    private void postInit(){
-        customizeComponents();
+    private void postInit() {
         userGroupHelperList.setUserGroups(this.user.getUserGroups());
-        pnlPassword.setVisible(saveEventToFire.equals(CREATED_USER_PROPERTY));
+        pnlPassword.setVisible(getUser().isNew());
         passwordBean.setPassword(null);
         passwordBean.setPasswordConfirmation(null);
-        txtUserName.setEnabled(saveEventToFire.equals(CREATED_USER_PROPERTY));
+        txtUserName.setEnabled(getUser().isNew());
     }
-    
+
     /** Returns {@link UserBean} object, bound on the form. */
     public UserBean getUser() {
         return user;
@@ -127,17 +84,45 @@ public class UserPanel extends javax.swing.JPanel {
         setupUserBean(user);
         postInit();
     }
+
+    /** Disables or enables panel components. */
+    public void lockForm(boolean isLocked) {
+        txtDescription.setEnabled(!isLocked);
+        txtFirstName.setEnabled(!isLocked);
+        txtLastName.setEnabled(!isLocked);
+        txtPassword.setEnabled(!isLocked);
+        txtPasswordConfirmation.setEnabled(!isLocked);
+    }
     
-    /** Returns text of "OK" button. */
-    public String getOkButtonText() {
-        return btnOk.getText();
+    /** Validates user. */
+    public boolean validateUser(boolean showMessage) {
+        if (user.validate(showMessage).size() < 1 && (!pnlPassword.isVisible()
+                || (pnlPassword.isVisible() && passwordBean.validate(showMessage).size() < 1))) {
+            if (user.getUserName().equals(SecurityBean.getCurrentUser().getUserName())
+                    && !user.isActive()) {
+                if (showMessage) {
+                    MessageUtility.displayMessage(ClientMessage.ADMIN_CURRENT_USER_DISABLE_ERROR);
+                }
+                return false;
+            }
+            return true;
+        }
+        return false;
     }
 
-    /** Sets text of "OK" button. */
-    public void setOkButtonText(String text) {
-        btnOk.setText(text);
+    /** Saves user. */
+    public boolean saveUser(boolean showMessage) {
+        if (validateUser(showMessage)) {
+            user.save();
+            if (pnlPassword.isVisible()) {
+                user.changePassword(passwordBean.getPassword());
+            }
+            userGroupHelperList.setChecks(user.getUserGroups());
+            return true;
+        }
+        return false;
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -158,8 +143,6 @@ public class UserPanel extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtDescription = new javax.swing.JTextArea();
-        btnOk = new javax.swing.JButton();
-        btnCancel = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
         pnlGroups = new javax.swing.JPanel();
         groupPanel1 = new org.sola.clients.swing.ui.GroupPanel();
@@ -224,9 +207,9 @@ public class UserPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
-                    .addComponent(txtFirstName, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
+                    .addComponent(txtFirstName, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
                     .addComponent(cbxActive, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtUserName, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
+                    .addComponent(txtUserName, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
                     .addComponent(jLabel5))
                 .addContainerGap())
         );
@@ -287,8 +270,8 @@ public class UserPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
-                    .addComponent(txtLastName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
+                    .addComponent(txtLastName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
                     .addComponent(jLabel4))
                 .addContainerGap())
         );
@@ -307,25 +290,6 @@ public class UserPanel extends javax.swing.JPanel {
 
         jPanel1.add(jPanel4);
 
-        btnOk.setFont(new java.awt.Font("Tahoma", 0, 12));
-        btnOk.setText(bundle.getString("UserPanel.btnOk.text")); // NOI18N
-        btnOk.setName("btnOk"); // NOI18N
-        btnOk.setNextFocusableComponent(btnCancel);
-        btnOk.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOkActionPerformed(evt);
-            }
-        });
-
-        btnCancel.setFont(new java.awt.Font("Tahoma", 0, 12));
-        btnCancel.setText(bundle.getString("UserPanel.btnCancel.text")); // NOI18N
-        btnCancel.setName("btnCancel"); // NOI18N
-        btnCancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelActionPerformed(evt);
-            }
-        });
-
         jPanel9.setName("jPanel9"); // NOI18N
         jPanel9.setLayout(new java.awt.BorderLayout());
 
@@ -339,7 +303,6 @@ public class UserPanel extends javax.swing.JPanel {
         tableGroups.setAlignmentX(0.0F);
         tableGroups.setAlignmentY(0.0F);
         tableGroups.setName("tableGroups"); // NOI18N
-        tableGroups.setNextFocusableComponent(btnOk);
 
         org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${userGroupHelpers}");
         org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, userGroupHelperList, eLProperty, tableGroups);
@@ -367,22 +330,22 @@ public class UserPanel extends javax.swing.JPanel {
         pnlGroups.setLayout(pnlGroupsLayout);
         pnlGroupsLayout.setHorizontalGroup(
             pnlGroupsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(groupPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE)
-            .addGroup(pnlGroupsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(pnlGroupsLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 529, Short.MAX_VALUE)
-                    .addContainerGap()))
+            .addGroup(pnlGroupsLayout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE)
+                .addGap(10, 10, 10))
+            .addGroup(pnlGroupsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(groupPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE)
+                .addContainerGap())
         );
         pnlGroupsLayout.setVerticalGroup(
             pnlGroupsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlGroupsLayout.createSequentialGroup()
                 .addComponent(groupPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(115, Short.MAX_VALUE))
-            .addGroup(pnlGroupsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlGroupsLayout.createSequentialGroup()
-                    .addGap(29, 29, 29)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jPanel9.add(pnlGroups, java.awt.BorderLayout.CENTER);
@@ -414,7 +377,7 @@ public class UserPanel extends javax.swing.JPanel {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
+                    .addComponent(txtPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
                     .addComponent(jLabel7))
                 .addContainerGap())
         );
@@ -451,7 +414,7 @@ public class UserPanel extends javax.swing.JPanel {
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtPasswordConfirmation, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
+                    .addComponent(txtPasswordConfirmation, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addGap(51, 51, 51)))
@@ -472,9 +435,9 @@ public class UserPanel extends javax.swing.JPanel {
         pnlPassword.setLayout(pnlPasswordLayout);
         pnlPasswordLayout.setHorizontalGroup(
             pnlPasswordLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 549, Short.MAX_VALUE)
+            .addGap(0, 455, Short.MAX_VALUE)
             .addGroup(pnlPasswordLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE))
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 455, Short.MAX_VALUE))
         );
         pnlPasswordLayout.setVerticalGroup(
             pnlPasswordLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -491,13 +454,8 @@ public class UserPanel extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(277, Short.MAX_VALUE)
-                .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 455, Short.MAX_VALUE)
+            .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 455, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -505,41 +463,13 @@ public class UserPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(7, 7, 7)
-                .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnOk)
-                    .addComponent(btnCancel)))
+                .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE))
         );
 
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
-        if (user.validate(true).size() < 1 && (!pnlPassword.isVisible() || 
-                (pnlPassword.isVisible() && passwordBean.validate(true).size() < 1))) {
-            if(user.getUserName().equals(SecurityBean.getCurrentUser().getUserName())
-                    && !user.isActive()){
-                MessageUtility.displayMessage(ClientMessage.ADMIN_CURRENT_USER_DISABLE_ERROR);
-                return;
-            }
-            user.save();
-            if(pnlPassword.isVisible()){
-                user.changePassword(passwordBean.getPassword());
-            }
-            userGroupHelperList.setChecks(user.getUserGroups());
-            firePropertyChange(saveEventToFire, null, user);
-        }
-    }//GEN-LAST:event_btnOkActionPerformed
-
-    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        setUser(null);
-        firePropertyChange(CANCEL_ACTION_PROPERTY, false, true);
-    }//GEN-LAST:event_btnCancelActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCancel;
-    private javax.swing.JButton btnOk;
     private javax.swing.JCheckBox cbxActive;
     private org.sola.clients.swing.ui.GroupPanel groupPanel1;
     private javax.swing.JLabel jLabel1;

@@ -30,7 +30,6 @@ package org.sola.clients.swing.desktop.administrative;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import javax.swing.ImageIcon;
 import javax.validation.groups.Default;
 import org.sola.clients.beans.administrative.RrrBean;
 import org.sola.clients.beans.application.ApplicationBean;
@@ -46,6 +45,8 @@ import org.sola.clients.swing.common.utils.BindingTools;
 import org.sola.clients.beans.administrative.validation.MortgageValidationGroup;
 import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.ui.ContentPanel;
+import org.sola.common.messaging.ClientMessage;
+import org.sola.common.messaging.MessageUtility;
 
 /**
  * Used to create and manage mortgages. {@link RrrBean} is used to bind the data on the form.
@@ -143,10 +144,12 @@ public class MortgagePanel extends ContentPanel {
     
     private void customizeForm(RrrBean.RRR_ACTION rrrAction) {
         if (rrrAction == RrrBean.RRR_ACTION.NEW) {
-            btnSave.setText("Create & Close");
+            btnSave.setText(MessageUtility.getLocalizedMessage(
+                            ClientMessage.GENERAL_LABELS_CREATE_AND_CLOSE).getMessage());
         }
         if (rrrAction == RrrBean.RRR_ACTION.CANCEL) {
-            btnSave.setText("Extinguish");
+            btnSave.setText(MessageUtility.getLocalizedMessage(
+                            ClientMessage.GENERAL_LABELS_EXTINGUISH_AND_CLOSE).getMessage());
         }
         
         if (rrrAction != RrrBean.RRR_ACTION.EDIT && rrrAction != RrrBean.RRR_ACTION.VIEW 

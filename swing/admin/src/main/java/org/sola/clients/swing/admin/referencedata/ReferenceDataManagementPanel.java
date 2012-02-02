@@ -60,7 +60,8 @@ import org.sola.clients.beans.referencedata.ServiceActionTypeBean;
 import org.sola.clients.beans.referencedata.ServiceStatusTypeBean;
 import org.sola.clients.beans.referencedata.SourceBaUnitRelationTypeBean;
 import org.sola.clients.beans.referencedata.SourceTypeBean;
-import org.sola.clients.swing.common.LafManager;
+import org.sola.clients.swing.ui.ContentPanel;
+import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.clients.swing.ui.referencedata.ReferenceDataPanel;
 import org.sola.clients.swing.ui.renderers.TableCellTextAreaRenderer;
 import org.sola.common.messaging.ClientMessage;
@@ -93,68 +94,19 @@ import org.sola.webservices.transferobjects.referencedata.SourceTypeTO;
 /**
  * Allows to manage different reference data tables.
  */
-public class ReferenceDataManagementPanel extends javax.swing.JPanel {
+public class ReferenceDataManagementPanel extends ContentPanel {
 
-    /** {@link ReferenceDataPanel} listener. */
-    private class ReferenceDataPanelListener implements PropertyChangeListener {
-
-        @Override
-        public void propertyChange(PropertyChangeEvent evt) {
-            if (evt.getPropertyName().equals(ReferenceDataPanel.SAVED_REFDATA_PROPERTY)
-                    || evt.getPropertyName().equals(ReferenceDataPanel.CREATED_REFDATA_PROPERTY)) {
-
-                if (evt.getPropertyName().equals(ReferenceDataPanel.CREATED_REFDATA_PROPERTY)) {
-                    pnlRefData.setReferenceDataBean(null);
-                    MessageUtility.displayMessage(ClientMessage.ADMIN_REFDATA_CREATED, new String[]{headerTitle});
-                } else if (evt.getPropertyName().equals(ReferenceDataPanel.SAVED_REFDATA_PROPERTY)) {
-                    MessageUtility.displayMessage(ClientMessage.ADMIN_OBJECT_SAVED);
-                    pnlRefData.setReferenceDataBean(null);
-                    showRefDataList();
-                    initRefDataList();
-                }
-            }
-            if (evt.getPropertyName().equals(ReferenceDataPanel.CANCEL_ACTION_PROPERTY)) {
-                showRefDataList();
-                initRefDataList();
-            }
-        }
-    }
-    
     public static final String SELECTED_REF_DATA = "selectedRefData";
     private Class<? extends AbstractCodeBean> refDataClass;
     private Class<? extends AbstractCodeTO> refDataTOClass;
-    private String headerTitle;
     private ObservableList<? extends AbstractCodeBean> refDataList;
     private AbstractCodeBean selectedRefData;
-    private ResourceBundle resourceBundle;
-
-    /** Creates {@link ReferenceDataPanel} instance. */
-    private ReferenceDataPanel createRefDataPanel() {
-        return new ReferenceDataPanel(refDataClass, refDataTOClass);
-    }
 
     /** Default panel constructor. */
     public ReferenceDataManagementPanel() {
         initComponents();
-        customizeComponents();
-    }
-    
-    
-    
-    
-     /** Applies customization of component L&F. */
-    private void customizeComponents() {
-     
-//    BUTTONS   
-    LafManager.getInstance().setBtnProperties( btnAddRefData);
-    LafManager.getInstance().setBtnProperties(btnClose);
-    LafManager.getInstance().setBtnProperties(btnEditRefData);
-    LafManager.getInstance().setBtnProperties(btnOK);
-    LafManager.getInstance().setBtnProperties(btnRemoveRefData);
-    
     }
 
-    
     /** 
      * Creates new instance of panel with predefined parameters.
      * @param refDataClass Type of reference data to load.
@@ -162,18 +114,12 @@ public class ReferenceDataManagementPanel extends javax.swing.JPanel {
      */
     public <T extends AbstractCodeBean> ReferenceDataManagementPanel(
             Class<T> refDataClass, String headerTitle) {
-
-        resourceBundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/admin/referencedata/Bundle");
-        this.headerTitle = headerTitle;
         this.refDataClass = refDataClass;
         initRefDataList();
 
         initComponents();
 
-        ReferenceDataPanelListener listener = new ReferenceDataPanelListener();
-        pnlRefData.addPropertyChangeListener(listener);
-        pnlRequestType.addPropertyChangeListener(listener);
-        pnlRrrType.addPropertyChangeListener(listener);
+        headerPanel.setTitleText(headerTitle);
         this.addPropertyChangeListener(new PropertyChangeListener() {
 
             @Override
@@ -185,7 +131,6 @@ public class ReferenceDataManagementPanel extends javax.swing.JPanel {
         });
 
         customizeRefDataButtons(null);
-        showRefDataList();
     }
 
     /** Returns selected reference data object. */
@@ -202,12 +147,12 @@ public class ReferenceDataManagementPanel extends javax.swing.JPanel {
 
     /** Returns title header for the panel. */
     public String getHeaderTitle() {
-        return headerTitle;
+        return headerPanel.getTitleText();
     }
 
     /** Sets title header for the panel. */
     public void setHeaderTitle(String headerTitle) {
-        this.headerTitle = headerTitle;
+        headerPanel.setTitleText(headerTitle);
     }
 
     /** Returns list of reference data objects, bound on the form. */
@@ -218,69 +163,66 @@ public class ReferenceDataManagementPanel extends javax.swing.JPanel {
     // Methods 
     /** Enables/disables reference data buttons. */
     private void customizeRefDataButtons(AbstractCodeBean refDataBean) {
-        btnEditRefData.getAction().setEnabled(refDataBean != null);
-        btnRemoveRefData.getAction().setEnabled(refDataBean != null);
-    }
-
-    /** Shows the panel with reference data list. */
-    private void showRefDataList() {
-        pnlRefDataList.setVisible(true);
-        pnlRefDataManagement.setVisible(false);
-        pnlRequestType.setVisible(false);
-        pnlRrrType.setVisible(false);
-        pnlHeader.setTitleText(headerTitle);
+        btnEditRefData.setEnabled(refDataBean != null);
+        btnRemoveRefData.setEnabled(refDataBean != null);
+        menuEditRefData.setEnabled(btnAddRefData.isEnabled());
+        menuRemoveRefData.setEnabled(btnRemoveRefData.isEnabled());
     }
 
     /** Shows the panel with selected reference data object. */
-    private void showRefData(AbstractCodeBean refDataBean) {
-        pnlRefDataList.setVisible(false);
-        pnlRequestType.setVisible(false);
-        pnlRrrType.setVisible(false);
-        pnlRefData.setReferenceDataBean(refDataBean);
-        pnlRefDataManagement.setVisible(true);
-        if (refDataBean != null) {
-            pnlHeader.setTitleText(MessageFormat.format("{0} - {1}", headerTitle,
-                    refDataBean.getTranslatedDisplayValue()));
+    private void showRefData(final AbstractCodeBean refDataBean) {
+        if (refDataClass == RequestTypeBean.class) {
+            RequestTypePanelForm panel = new RequestTypePanelForm((RequestTypeBean) refDataBean, 
+                    true, refDataBean != null);
+            panel.addPropertyChangeListener(new PropertyChangeListener() {
+
+                @Override
+                public void propertyChange(PropertyChangeEvent evt) {
+                    if (evt.getPropertyName().equals(ReferenceDataPanelForm.REFDATA_SAVED_PROPERTY)) {
+                        if (refDataBean == null) {
+                            ((RequestTypePanelForm) evt.getSource()).setRequestTypeBean(null);
+                        }
+                        initRefDataList();
+                    }
+                }
+            });
+            getMainContentPanel().addPanel(panel, MainContentPanel.CARD_ADMIN_REFDATA_REQUEST_TYPE, true);
+            
+        } else if (refDataClass == RrrTypeBean.class) {
+            RrrTypePanelForm panel = new RrrTypePanelForm((RrrTypeBean) refDataBean, true, refDataBean != null);
+            panel.addPropertyChangeListener(new PropertyChangeListener() {
+
+                @Override
+                public void propertyChange(PropertyChangeEvent evt) {
+                    if (evt.getPropertyName().equals(ReferenceDataPanelForm.REFDATA_SAVED_PROPERTY)) {
+                        if (refDataBean == null) {
+                            ((RrrTypePanelForm) evt.getSource()).setRrrTypeBean(null);
+                        }
+                        initRefDataList();
+                    }
+                }
+            });
+            getMainContentPanel().addPanel(panel, MainContentPanel.CARD_ADMIN_REFDATA, true);
+            
         } else {
-            pnlHeader.setTitleText(MessageFormat.format("{0} - {1}", headerTitle,
-                    resourceBundle.getString("ReferenceDataManagementPanel.NewItem.text")));
+            ReferenceDataPanelForm panel = new ReferenceDataPanelForm(refDataClass, 
+                    refDataTOClass, refDataBean, headerPanel.getTitleText(), true, refDataBean != null);
+            panel.addPropertyChangeListener(new PropertyChangeListener() {
+
+                @Override
+                public void propertyChange(PropertyChangeEvent evt) {
+                    if (evt.getPropertyName().equals(ReferenceDataPanelForm.REFDATA_SAVED_PROPERTY)) {
+                        if (refDataBean == null) {
+                            ((ReferenceDataPanelForm) evt.getSource()).setRefDataBean(refDataClass, refDataTOClass, null);
+                        }
+                        initRefDataList();
+                    }
+                }
+            });
+            getMainContentPanel().addPanel(panel, MainContentPanel.CARD_ADMIN_REFDATA, true);
         }
     }
-
-    /** Shows request type panel. */
-    private void showRequestTypePanel(RequestTypeBean requestTypeBean) {
-        pnlRefDataList.setVisible(false);
-        pnlRefDataManagement.setVisible(false);
-        pnlRrrType.setVisible(false);
-        pnlRequestType.setVisible(true);
-        pnlRequestType.setRequestTypeBean(requestTypeBean);
-
-        if (requestTypeBean != null) {
-            pnlHeader.setTitleText(MessageFormat.format("{0} - {1}", headerTitle,
-                    requestTypeBean.getTranslatedDisplayValue()));
-        } else {
-            pnlHeader.setTitleText(MessageFormat.format("{0} - {1}", headerTitle,
-                    resourceBundle.getString("ReferenceDataManagementPanel.NewItem.text")));
-        }
-    }
-
-    /** Shows RrrType panel. */
-    private void showRrrTypePanel(RrrTypeBean rrrTypeBean) {
-        pnlRefDataList.setVisible(false);
-        pnlRefDataManagement.setVisible(false);
-        pnlRequestType.setVisible(false);
-        pnlRrrType.setVisible(true);
-        pnlRrrType.setRrrTypeBean(rrrTypeBean);
-
-        if (rrrTypeBean != null) {
-            pnlHeader.setTitleText(MessageFormat.format("{0} - {1}", headerTitle,
-                    rrrTypeBean.getTranslatedDisplayValue()));
-        } else {
-            pnlHeader.setTitleText(MessageFormat.format("{0} - {1}", headerTitle,
-                    resourceBundle.getString("ReferenceDataManagementPanel.NewItem.text")));
-        }
-    }
-
+   
     /** Loads reference data list, related to provided reference data type.*/
     public final void initRefDataList() {
         createRefDataList();
@@ -336,8 +278,7 @@ public class ReferenceDataManagementPanel extends javax.swing.JPanel {
                     SourceBaUnitRelationTypeBean.class, (List) refDataList);
             CacheManager.remove(CacheManager.SOURCE_BA_UNIT_RELATION_TYPE_CODES_KEY);
             refDataTOClass = SourceBaUnitRelationTypeTO.class;
-        }
-        else if (refDataClass == BaUnitRelTypeBean.class) {
+        } else if (refDataClass == BaUnitRelTypeBean.class) {
             TypeConverters.TransferObjectListToBeanList(WSManager.getInstance().getReferenceDataService().getBaUnitRelTypes(null),
                     BaUnitRelTypeBean.class, (List) refDataList);
             CacheManager.remove(CacheManager.BA_UNIT_REL_TYPE_KEY);
@@ -418,9 +359,7 @@ public class ReferenceDataManagementPanel extends javax.swing.JPanel {
         menuAddRefData = new javax.swing.JMenuItem();
         menuEditRefData = new javax.swing.JMenuItem();
         menuRemoveRefData = new javax.swing.JMenuItem();
-        pnlHeader = new org.sola.clients.swing.ui.HeaderPanel();
-        jPanel1 = new javax.swing.JPanel();
-        pnlRequestType = new org.sola.clients.swing.ui.referencedata.RequestTypePanel();
+        headerPanel = new org.sola.clients.swing.ui.HeaderPanel();
         pnlRefDataList = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableRefData = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
@@ -428,44 +367,49 @@ public class ReferenceDataManagementPanel extends javax.swing.JPanel {
         btnAddRefData = new javax.swing.JButton();
         btnEditRefData = new javax.swing.JButton();
         btnRemoveRefData = new javax.swing.JButton();
-        pnlRefDataManagement = new javax.swing.JPanel();
-        pnlRefData = createRefDataPanel();
-        btnOK = new javax.swing.JButton();
-        btnClose = new javax.swing.JButton();
-        pnlRrrType = new org.sola.clients.swing.ui.referencedata.RrrTypePanel();
 
         popupRefData.setName("popupRefData"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(ReferenceDataManagementPanel.class, this);
-        menuAddRefData.setAction(actionMap.get("addRefData")); // NOI18N
+        menuAddRefData.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/admin/referencedata/Bundle"); // NOI18N
         menuAddRefData.setText(bundle.getString("ReferenceDataManagementPanel.menuAddRefData.text")); // NOI18N
         menuAddRefData.setName("menuAddRefData"); // NOI18N
+        menuAddRefData.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuAddRefDataActionPerformed(evt);
+            }
+        });
         popupRefData.add(menuAddRefData);
 
-        menuEditRefData.setAction(actionMap.get("editRefData")); // NOI18N
+        menuEditRefData.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/pencil.png"))); // NOI18N
         menuEditRefData.setText(bundle.getString("ReferenceDataManagementPanel.menuEditRefData.text")); // NOI18N
         menuEditRefData.setName("menuEditRefData"); // NOI18N
+        menuEditRefData.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuEditRefDataActionPerformed(evt);
+            }
+        });
         popupRefData.add(menuEditRefData);
 
-        menuRemoveRefData.setAction(actionMap.get("removeRefData")); // NOI18N
+        menuRemoveRefData.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
         menuRemoveRefData.setText(bundle.getString("ReferenceDataManagementPanel.menuRemoveRefData.text")); // NOI18N
         menuRemoveRefData.setName("menuRemoveRefData"); // NOI18N
+        menuRemoveRefData.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuRemoveRefDataActionPerformed(evt);
+            }
+        });
         popupRefData.add(menuRemoveRefData);
 
-        setMinimumSize(new java.awt.Dimension(631, 457));
+        setHeaderPanel(headerPanel);
+        setMinimumSize(new java.awt.Dimension(200, 200));
+        setPreferredSize(new java.awt.Dimension(400, 250));
 
-        pnlHeader.setName("pnlHeader"); // NOI18N
-        pnlHeader.setTitleText(bundle.getString("ReferenceDataManagementPanel.pnlHeader.titleText")); // NOI18N
-
-        jPanel1.setName("jPanel1"); // NOI18N
-        jPanel1.setLayout(new java.awt.CardLayout());
-
-        pnlRequestType.setCloseOnSave(true);
-        pnlRequestType.setName("pnlRequestType"); // NOI18N
-        jPanel1.add(pnlRequestType, "card4");
+        headerPanel.setName("headerPanel"); // NOI18N
+        headerPanel.setTitleText(bundle.getString("ReferenceDataManagementPanel.headerPanel.titleText")); // NOI18N
 
         pnlRefDataList.setName("pnlRefDataList"); // NOI18N
+        pnlRefDataList.setPreferredSize(new java.awt.Dimension(300, 200));
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
@@ -510,162 +454,118 @@ public class ReferenceDataManagementPanel extends javax.swing.JPanel {
         toolbarRefData.setRollover(true);
         toolbarRefData.setName("toolbarRefData"); // NOI18N
 
-        btnAddRefData.setAction(actionMap.get("addRefData")); // NOI18N
         btnAddRefData.setFont(new java.awt.Font("Tahoma", 0, 12));
+        btnAddRefData.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
         btnAddRefData.setText(bundle.getString("ReferenceDataManagementPanel.btnAddRefData.text")); // NOI18N
         btnAddRefData.setFocusable(false);
         btnAddRefData.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnAddRefData.setName("btnAddRefData"); // NOI18N
         btnAddRefData.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAddRefData.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddRefDataActionPerformed(evt);
+            }
+        });
         toolbarRefData.add(btnAddRefData);
 
-        btnEditRefData.setAction(actionMap.get("editRefData")); // NOI18N
         btnEditRefData.setFont(new java.awt.Font("Tahoma", 0, 12));
+        btnEditRefData.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/pencil.png"))); // NOI18N
         btnEditRefData.setText(bundle.getString("ReferenceDataManagementPanel.btnEditRefData.text")); // NOI18N
         btnEditRefData.setFocusable(false);
         btnEditRefData.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnEditRefData.setName("btnEditRefData"); // NOI18N
         btnEditRefData.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnEditRefData.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditRefDataActionPerformed(evt);
+            }
+        });
         toolbarRefData.add(btnEditRefData);
 
-        btnRemoveRefData.setAction(actionMap.get("removeRefData")); // NOI18N
         btnRemoveRefData.setFont(new java.awt.Font("Tahoma", 0, 12));
+        btnRemoveRefData.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
         btnRemoveRefData.setText(bundle.getString("ReferenceDataManagementPanel.btnRemoveRefData.text")); // NOI18N
         btnRemoveRefData.setFocusable(false);
         btnRemoveRefData.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnRemoveRefData.setName("btnRemoveRefData"); // NOI18N
         btnRemoveRefData.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnRemoveRefData.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveRefDataActionPerformed(evt);
+            }
+        });
         toolbarRefData.add(btnRemoveRefData);
 
         javax.swing.GroupLayout pnlRefDataListLayout = new javax.swing.GroupLayout(pnlRefDataList);
         pnlRefDataList.setLayout(pnlRefDataListLayout);
         pnlRefDataListLayout.setHorizontalGroup(
             pnlRefDataListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(toolbarRefData, javax.swing.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE)
+            .addComponent(toolbarRefData, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
         );
         pnlRefDataListLayout.setVerticalGroup(
             pnlRefDataListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlRefDataListLayout.createSequentialGroup()
                 .addComponent(toolbarRefData, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE))
         );
-
-        jPanel1.add(pnlRefDataList, "card3");
-
-        pnlRefDataManagement.setName("pnlRefDataManagement"); // NOI18N
-
-        pnlRefData.setName("pnlRefData"); // NOI18N
-
-        btnOK.setFont(new java.awt.Font("Tahoma", 0, 12));
-        btnOK.setText(bundle.getString("ReferenceDataManagementPanel.btnOK.text")); // NOI18N
-        btnOK.setName("btnOK"); // NOI18N
-        btnOK.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOKActionPerformed(evt);
-            }
-        });
-
-        btnClose.setFont(new java.awt.Font("Tahoma", 0, 12));
-        btnClose.setText(bundle.getString("ReferenceDataManagementPanel.btnClose.text")); // NOI18N
-        btnClose.setName("btnClose"); // NOI18N
-        btnClose.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCloseActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout pnlRefDataManagementLayout = new javax.swing.GroupLayout(pnlRefDataManagement);
-        pnlRefDataManagement.setLayout(pnlRefDataManagementLayout);
-        pnlRefDataManagementLayout.setHorizontalGroup(
-            pnlRefDataManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlRefDataManagementLayout.createSequentialGroup()
-                .addContainerGap(369, Short.MAX_VALUE)
-                .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnOK, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addComponent(pnlRefData, javax.swing.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE)
-        );
-        pnlRefDataManagementLayout.setVerticalGroup(
-            pnlRefDataManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlRefDataManagementLayout.createSequentialGroup()
-                .addComponent(pnlRefData, javax.swing.GroupLayout.DEFAULT_SIZE, 371, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(pnlRefDataManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnClose)
-                    .addComponent(btnOK)))
-        );
-
-        jPanel1.add(pnlRefDataManagement, "card3");
-
-        pnlRrrType.setName("pnlRrrType"); // NOI18N
-        jPanel1.add(pnlRrrType, "card5");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlHeader, javax.swing.GroupLayout.DEFAULT_SIZE, 631, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(9, 9, 9)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE)
-                .addGap(10, 10, 10))
+            .addComponent(headerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(pnlRefDataList, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(pnlHeader, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(headerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 405, Short.MAX_VALUE)
+                .addComponent(pnlRefDataList, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
-        pnlRefData.save();
-    }//GEN-LAST:event_btnOKActionPerformed
+    private void btnAddRefDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddRefDataActionPerformed
+        addRefData();
+    }//GEN-LAST:event_btnAddRefDataActionPerformed
 
-    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
-        showRefDataList();
-        initRefDataList();
-    }//GEN-LAST:event_btnCloseActionPerformed
+    private void btnEditRefDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditRefDataActionPerformed
+        editRefData();
+    }//GEN-LAST:event_btnEditRefDataActionPerformed
 
-    /** Shows {@link ReferenceDataPanel} to create new record in the given reference data table.*/
-    @Action
-    public void addRefData() {
-        if (refDataClass == RequestTypeBean.class) {
-            showRequestTypePanel(null);
-        } else if (refDataClass == RrrTypeBean.class) {
-            showRrrTypePanel(null);
-        } else {
-            showRefData(null);
-            btnOK.setText(MessageUtility.getLocalizedMessage(
-                    ClientMessage.GENERAL_LABELS_CREATE).getMessage());
-        }
+    private void btnRemoveRefDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveRefDataActionPerformed
+        removeRefData();
+    }//GEN-LAST:event_btnRemoveRefDataActionPerformed
+
+    private void menuAddRefDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAddRefDataActionPerformed
+        addRefData();
+    }//GEN-LAST:event_menuAddRefDataActionPerformed
+
+    private void menuEditRefDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEditRefDataActionPerformed
+        editRefData();
+    }//GEN-LAST:event_menuEditRefDataActionPerformed
+
+    private void menuRemoveRefDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRemoveRefDataActionPerformed
+        removeRefData();
+    }//GEN-LAST:event_menuRemoveRefDataActionPerformed
+
+    private void addRefData() {
+        showRefData(null);
     }
 
-    /** Shows {@link ReferenceDataPanel} and passes reference data bean for editing. */
-    @Action
-    public void editRefData() {
-        if (selectedRefData != null) {
-            if (refDataClass == RequestTypeBean.class) {
-                showRequestTypePanel((RequestTypeBean) selectedRefData);
-            } else if (refDataClass == RrrTypeBean.class) {
-                showRrrTypePanel((RrrTypeBean) selectedRefData);
-            } else {
-                showRefData(selectedRefData);
-                btnOK.setText(MessageUtility.getLocalizedMessage(
-                        ClientMessage.GENERAL_LABELS_SAVE_AND_CLOSE).getMessage());
-            }
-        }
+    private void editRefData() {
+        showRefData(selectedRefData);
     }
 
-    /** Removes selected reference data bean. */
-    @Action
-    public void removeRefData() {
+    private void removeRefData() {
         if (selectedRefData != null && MessageUtility.displayMessage(
                 ClientMessage.ADMIN_CONFIRM_DELETE_REFDATA,
                 new String[]{selectedRefData.getTranslatedDisplayValue()}) == MessageUtility.BUTTON_ONE) {
@@ -676,21 +576,14 @@ public class ReferenceDataManagementPanel extends javax.swing.JPanel {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddRefData;
-    private javax.swing.JButton btnClose;
     private javax.swing.JButton btnEditRefData;
-    private javax.swing.JButton btnOK;
     private javax.swing.JButton btnRemoveRefData;
-    private javax.swing.JPanel jPanel1;
+    private org.sola.clients.swing.ui.HeaderPanel headerPanel;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JMenuItem menuAddRefData;
     private javax.swing.JMenuItem menuEditRefData;
     private javax.swing.JMenuItem menuRemoveRefData;
-    private org.sola.clients.swing.ui.HeaderPanel pnlHeader;
-    private org.sola.clients.swing.ui.referencedata.ReferenceDataPanel pnlRefData;
     private javax.swing.JPanel pnlRefDataList;
-    private javax.swing.JPanel pnlRefDataManagement;
-    private org.sola.clients.swing.ui.referencedata.RequestTypePanel pnlRequestType;
-    private org.sola.clients.swing.ui.referencedata.RrrTypePanel pnlRrrType;
     private javax.swing.JPopupMenu popupRefData;
     private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tableRefData;
     private javax.swing.JToolBar toolbarRefData;

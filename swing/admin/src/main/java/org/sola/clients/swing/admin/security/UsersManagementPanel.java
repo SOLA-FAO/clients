@@ -29,59 +29,27 @@ package org.sola.clients.swing.admin.security;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ResourceBundle;
 import org.jdesktop.application.Action;
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.beans.security.UserBean;
 import org.sola.clients.beans.security.UserSearchAdvancedResultBean;
 import org.sola.clients.beans.security.UserSearchAdvancedResultListBean;
-import org.sola.clients.swing.common.LafManager;
-import org.sola.clients.swing.common.config.ConfigurationManager;
+import org.sola.clients.swing.ui.ContentPanel;
+import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.clients.swing.ui.renderers.TableCellTextAreaRenderer;
-import org.sola.clients.swing.ui.security.UserPanel;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
 /**
  * Allows to manage users of the application.
  */
-public class UsersManagementPanel extends javax.swing.JPanel {
-
-    /** Listens for events of {@link UserPanel} */
-    private class UserPanelListener implements PropertyChangeListener {
-
-        @Override
-        public void propertyChange(PropertyChangeEvent evt) {
-            if (evt.getPropertyName().equals(UserPanel.SAVED_USER_PROPERTY)
-                    || evt.getPropertyName().equals(UserPanel.CREATED_USER_PROPERTY)) {
-
-                if (evt.getPropertyName().equals(UserPanel.CREATED_USER_PROPERTY)) {
-                    pnlUser.setUser(null);
-                    MessageUtility.displayMessage(ClientMessage.ADMIN_USER_CREATED);
-                } else {
-                    MessageUtility.displayMessage(ClientMessage.ADMIN_USER_SAVED);
-                    pnlUser.setUser(null);
-                    showUsers();
-                    searchUsers();
-                }
-            }
-            if (evt.getPropertyName().equals(UserPanel.CANCEL_ACTION_PROPERTY)) {
-                showUsers();
-            }
-        }
-    }
-    private ResourceBundle resourceBundle;
+public class UsersManagementPanel extends ContentPanel {
 
     /** Creates new form UsersManagementPanel */
     public UsersManagementPanel() {
         initComponents();
-        customizeComponents();
-        resourceBundle = ResourceBundle.getBundle("org/sola/clients/swing/admin/security/Bundle");
-        showUsers();
         groupsList.loadGroups(true);
         comboGroups.setSelectedIndex(0);
-        pnlUser.addPropertyChangeListener(new UserPanelListener());
-
         userSearchResultList.addPropertyChangeListener(new PropertyChangeListener() {
 
             @Override
@@ -94,71 +62,42 @@ public class UsersManagementPanel extends javax.swing.JPanel {
         customizeUserButtons(null);
     }
     
-      /** Applies customization of component L&F. */
-    private void customizeComponents() {
-    //    BUTTONS   
-     LafManager.getInstance().setBtnProperties(btnAddUser);
-     LafManager.getInstance().setBtnProperties(btnEditUser);
-     LafManager.getInstance().setBtnProperties(btnRemoveUser);
-     LafManager.getInstance().setBtnProperties(btnChangePassword);
-     LafManager.getInstance().setBtnProperties(btnClosePasswordPanel);
-     LafManager.getInstance().setBtnProperties(btnSearch);
-     LafManager.getInstance().setBtnProperties(btnSetPassword);
-    
-    //    COMBOBOXES
-    LafManager.getInstance().setCmbProperties(comboGroups);
-   
-   
-//    LABELS    
-    LafManager.getInstance().setLabProperties(jLabel1);
-    LafManager.getInstance().setLabProperties(jLabel2);
-    LafManager.getInstance().setLabProperties(jLabel3);
-    LafManager.getInstance().setLabProperties(jLabel4);
-    
-//    TXT FIELDS
-    LafManager.getInstance().setTxtProperties(txtFirstName);
-    LafManager.getInstance().setTxtProperties(txtLastName);
-    LafManager.getInstance().setTxtProperties(txtUsername);
-        
-    }
-    
     /** 
      * Enables or disables user management buttons, depending on selection in 
      * the groups table and user rights. 
      */
     private void customizeUserButtons(UserSearchAdvancedResultBean userSearchResult) {
-        btnEditUser.getAction().setEnabled(userSearchResult != null);
-        btnRemoveUser.getAction().setEnabled(userSearchResult != null);
-        btnSetPassword.getAction().setEnabled(userSearchResult != null);
-    }
-
-    /** Shows list of users. */
-    private void showUsers() {
-        pnlUser.setVisible(false);
-        pnlPasswordManagement.setVisible(false);
-        pnlUsers.setVisible(true);
-        pnlHeader.setTitleText(resourceBundle.getString("UsersManagementPanel.pnlHeader.titleText"));
+        btnEditUser.setEnabled(userSearchResult != null);
+        btnRemoveUser.setEnabled(userSearchResult != null);
+        btnSetPassword.setEnabled(userSearchResult != null);
+        menuEditUser.setEnabled(btnEditUser.isEnabled());
+        menuRemoveUser.setEnabled(btnRemoveUser.isEnabled());
+        menuSetPassword.setEnabled(btnSetPassword.isEnabled());
     }
 
     /** Shows user panel. */
-    private void showUser(UserSearchAdvancedResultBean userSearchResult) {
-        pnlUsers.setVisible(false);
-        pnlPasswordManagement.setVisible(false);
-        pnlUser.setVisible(true);
-        if (userSearchResult != null) {
-            pnlHeader.setTitleText(String.format(resourceBundle.getString("UsersManagementPanel.pnlHeader.titleText.EditUser"), userSearchResult.getUserName()));
-        } else {
-            pnlHeader.setTitleText(resourceBundle.getString("UsersManagementPanel.pnlHeader.titleText.NewUser"));
-        }
+    private void showUser(final UserBean userBean) {
+        UserPanelForm panel = new UserPanelForm(userBean, true, userBean != null, false);
+        panel.addPropertyChangeListener(new PropertyChangeListener() {
+
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals(UserPanelForm.USER_SAVED_PROPERTY)) {
+                    if (userBean == null) {
+                        ((UserPanelForm) evt.getSource()).setUserBean(null);
+                    } else {
+                        searchUsers();
+                    }
+                }
+            }
+        });
+        getMainContentPanel().addPanel(panel, MainContentPanel.CARD_ADMIN_USER, true);
     }
 
     /** Shows password panel. */
     private void showPasswordPanel(String userName) {
-        pnlUser.setVisible(false);
-        pnlUsers.setVisible(false);
-        pnlPasswordManagement.setVisible(true);
-        pnlPassword.setUserName(userName);
-        pnlHeader.setTitleText(String.format(resourceBundle.getString("UsersManagementPanel.pnlHeader.titleText.ChangePassword"), userName));
+        UserPasswordPanelForm panel = new UserPasswordPanelForm(userName);
+        getMainContentPanel().addPanel(panel, MainContentPanel.CARD_ADMIN_USER_PASSWORD, true);
     }
 
     /** Searches users with the given criteria. */
@@ -202,35 +141,54 @@ public class UsersManagementPanel extends javax.swing.JPanel {
         btnEditUser = new javax.swing.JButton();
         btnSetPassword = new javax.swing.JButton();
         btnRemoveUser = new javax.swing.JButton();
-        pnlUser = new org.sola.clients.swing.ui.security.UserPanel();
-        pnlPasswordManagement = new javax.swing.JPanel();
-        pnlPassword = new org.sola.clients.swing.ui.security.UserPasswordPanel();
-        btnChangePassword = new javax.swing.JButton();
-        btnClosePasswordPanel = new javax.swing.JButton();
 
         popupUsers.setName("popupUsers"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(UsersManagementPanel.class, this);
-        menuAddUser.setAction(actionMap.get("addUser")); // NOI18N
+        menuAddUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/admin/security/Bundle"); // NOI18N
+        menuAddUser.setText(bundle.getString("UsersManagementPanel.menuAddUser.text")); // NOI18N
         menuAddUser.setName("menuAddUser"); // NOI18N
+        menuAddUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuAddUserActionPerformed(evt);
+            }
+        });
         popupUsers.add(menuAddUser);
 
-        menuEditUser.setAction(actionMap.get("editUser")); // NOI18N
+        menuEditUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/pencil.png"))); // NOI18N
+        menuEditUser.setText(bundle.getString("UsersManagementPanel.menuEditUser.text")); // NOI18N
         menuEditUser.setName("menuEditUser"); // NOI18N
+        menuEditUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuEditUserActionPerformed(evt);
+            }
+        });
         popupUsers.add(menuEditUser);
 
-        menuSetPassword.setAction(actionMap.get("editPassword")); // NOI18N
+        menuSetPassword.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/lock--pencil.png"))); // NOI18N
+        menuSetPassword.setText(bundle.getString("UsersManagementPanel.menuSetPassword.text")); // NOI18N
         menuSetPassword.setName("menuSetPassword"); // NOI18N
+        menuSetPassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuSetPasswordActionPerformed(evt);
+            }
+        });
         popupUsers.add(menuSetPassword);
 
-        menuRemoveUser.setAction(actionMap.get("removeUser")); // NOI18N
+        menuRemoveUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
+        menuRemoveUser.setText(bundle.getString("UsersManagementPanel.menuRemoveUser.text")); // NOI18N
         menuRemoveUser.setName("menuRemoveUser"); // NOI18N
+        menuRemoveUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuRemoveUserActionPerformed(evt);
+            }
+        });
         popupUsers.add(menuRemoveUser);
 
+        setHeaderPanel(pnlHeader);
         setMinimumSize(new java.awt.Dimension(617, 406));
 
         pnlHeader.setName("pnlHeader"); // NOI18N
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/admin/security/Bundle"); // NOI18N
         pnlHeader.setTitleText(bundle.getString("UsersManagementPanel.pnlHeader.titleText")); // NOI18N
 
         pnlLayout.setName("pnlLayout"); // NOI18N
@@ -353,32 +311,56 @@ public class UsersManagementPanel extends javax.swing.JPanel {
         toolbarUsers.setRollover(true);
         toolbarUsers.setName("toolbarUsers"); // NOI18N
 
-        btnAddUser.setAction(actionMap.get("addUser")); // NOI18N
+        btnAddUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
+        btnAddUser.setText(bundle.getString("UsersManagementPanel.btnAddUser.text")); // NOI18N
         btnAddUser.setFocusable(false);
         btnAddUser.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnAddUser.setName("btnAddUser"); // NOI18N
         btnAddUser.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAddUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddUserActionPerformed(evt);
+            }
+        });
         toolbarUsers.add(btnAddUser);
 
-        btnEditUser.setAction(actionMap.get("editUser")); // NOI18N
+        btnEditUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/pencil.png"))); // NOI18N
+        btnEditUser.setText(bundle.getString("UsersManagementPanel.btnEditUser.text")); // NOI18N
         btnEditUser.setFocusable(false);
         btnEditUser.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnEditUser.setName("btnEditUser"); // NOI18N
         btnEditUser.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnEditUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditUserActionPerformed(evt);
+            }
+        });
         toolbarUsers.add(btnEditUser);
 
-        btnSetPassword.setAction(actionMap.get("editPassword")); // NOI18N
+        btnSetPassword.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/lock--pencil.png"))); // NOI18N
+        btnSetPassword.setText(bundle.getString("UsersManagementPanel.btnSetPassword.text")); // NOI18N
         btnSetPassword.setFocusable(false);
         btnSetPassword.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSetPassword.setName("btnSetPassword"); // NOI18N
         btnSetPassword.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSetPassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSetPasswordActionPerformed(evt);
+            }
+        });
         toolbarUsers.add(btnSetPassword);
 
-        btnRemoveUser.setAction(actionMap.get("removeUser")); // NOI18N
+        btnRemoveUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
+        btnRemoveUser.setText(bundle.getString("UsersManagementPanel.btnRemoveUser.text")); // NOI18N
         btnRemoveUser.setFocusable(false);
         btnRemoveUser.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnRemoveUser.setName("btnRemoveUser"); // NOI18N
         btnRemoveUser.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnRemoveUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveUserActionPerformed(evt);
+            }
+        });
         toolbarUsers.add(btnRemoveUser);
 
         javax.swing.GroupLayout pnlUsersLayout = new javax.swing.GroupLayout(pnlUsers);
@@ -409,61 +391,6 @@ public class UsersManagementPanel extends javax.swing.JPanel {
 
         pnlLayout.add(pnlUsers, "card3");
 
-        pnlUser.setName("pnlUser"); // NOI18N
-        pnlLayout.add(pnlUser, "card2");
-
-        pnlPasswordManagement.setName("pnlPasswordManagement"); // NOI18N
-
-        pnlPassword.setName("pnlPassword"); // NOI18N
-        pnlPassword.setNextFocusableComponent(btnChangePassword);
-
-        btnChangePassword.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        btnChangePassword.setText(bundle.getString("UsersManagementPanel.btnChangePassword.text")); // NOI18N
-        btnChangePassword.setName("btnChangePassword"); // NOI18N
-        btnChangePassword.setNextFocusableComponent(btnClosePasswordPanel);
-        btnChangePassword.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnChangePasswordActionPerformed(evt);
-            }
-        });
-
-        btnClosePasswordPanel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        btnClosePasswordPanel.setText(bundle.getString("UsersManagementPanel.btnClosePasswordPanel.text")); // NOI18N
-        btnClosePasswordPanel.setName("btnClosePasswordPanel"); // NOI18N
-        btnClosePasswordPanel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnClosePasswordPanelActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout pnlPasswordManagementLayout = new javax.swing.GroupLayout(pnlPasswordManagement);
-        pnlPasswordManagement.setLayout(pnlPasswordManagementLayout);
-        pnlPasswordManagementLayout.setHorizontalGroup(
-            pnlPasswordManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlPasswordManagementLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pnlPasswordManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(pnlPasswordManagementLayout.createSequentialGroup()
-                        .addComponent(btnClosePasswordPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnChangePassword, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(pnlPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(311, Short.MAX_VALUE))
-        );
-        pnlPasswordManagementLayout.setVerticalGroup(
-            pnlPasswordManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlPasswordManagementLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(pnlPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(pnlPasswordManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnChangePassword)
-                    .addComponent(btnClosePasswordPanel))
-                .addContainerGap(212, Short.MAX_VALUE))
-        );
-
-        pnlLayout.add(pnlPasswordManagement, "card4");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -490,53 +417,54 @@ public class UsersManagementPanel extends javax.swing.JPanel {
         searchUsers();
     }//GEN-LAST:event_btnSearchActionPerformed
 
-    private void btnChangePasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangePasswordActionPerformed
-        if (pnlPassword.changePassword()) {
-            MessageUtility.displayMessage(ClientMessage.ADMIN_PASSWORD_CHANGED);
-            if (SecurityBean.getCurrentUser().getUserName().equals(pnlPassword.getUserName())) {
-                SecurityBean.authenticate(pnlPassword.getUserName(),
-                        pnlPassword.getPassword().toCharArray(),
-                        ConfigurationManager.getWSConfig());
-            }
-            pnlPassword.cleanPanel();
-            showUsers();
-        }
-    }//GEN-LAST:event_btnChangePasswordActionPerformed
+    private void btnAddUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddUserActionPerformed
+        addUser();
+    }//GEN-LAST:event_btnAddUserActionPerformed
 
-    private void btnClosePasswordPanelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClosePasswordPanelActionPerformed
-        showUsers();
-    }//GEN-LAST:event_btnClosePasswordPanelActionPerformed
+    private void btnEditUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditUserActionPerformed
+        editUser();
+    }//GEN-LAST:event_btnEditUserActionPerformed
 
-    /** Customizes {@link UserPanel} to create new user. */
-    @Action
-    public void addUser() {
-        pnlUser.setUser(null);
-        pnlUser.setOkButtonText(MessageUtility.getLocalizedMessage(
-                ClientMessage.GENERAL_LABELS_CREATE).getMessage());
+    private void btnSetPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetPasswordActionPerformed
+        editPassword();
+    }//GEN-LAST:event_btnSetPasswordActionPerformed
+
+    private void btnRemoveUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveUserActionPerformed
+        removeUser();
+    }//GEN-LAST:event_btnRemoveUserActionPerformed
+
+    private void menuAddUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAddUserActionPerformed
+        addUser();
+    }//GEN-LAST:event_menuAddUserActionPerformed
+
+    private void menuEditUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEditUserActionPerformed
+        editUser();
+    }//GEN-LAST:event_menuEditUserActionPerformed
+
+    private void menuSetPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSetPasswordActionPerformed
+        editPassword();
+    }//GEN-LAST:event_menuSetPasswordActionPerformed
+
+    private void menuRemoveUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRemoveUserActionPerformed
+        removeUser();
+    }//GEN-LAST:event_menuRemoveUserActionPerformed
+
+    private void addUser() {
         showUser(null);
     }
 
-    /** Customizes {@link UserPanel} to edit selected user from the search results table. */
-    @Action
-    public void editUser() {
+    private void editUser() {
         if (userSearchResultList.getSelectedUser() != null) {
-            pnlUser.setUser(UserBean.getUser(userSearchResultList.getSelectedUser().getUserName()));
-            pnlUser.setOkButtonText(MessageUtility.getLocalizedMessage(
-                    ClientMessage.GENERAL_LABELS_SAVE_AND_CLOSE).getMessage());
-            showUser(userSearchResultList.getSelectedUser());
+            showUser(UserBean.getUser(userSearchResultList.getSelectedUser().getUserName()));
         }
     }
 
-    /** Opens panel to change user password. */
-    @Action
-    public void editPassword() {
+    private void editPassword() {
         if (userSearchResultList.getSelectedUser() != null) {
             showPasswordPanel(userSearchResultList.getSelectedUser().getUserName());
         }
     }
 
-    /** Removes selected user. */
-    @Action
     public void removeUser() {
         if (userSearchResultList.getSelectedUser() != null) {
             if(userSearchResultList.getSelectedUser().getUserName().equals(SecurityBean.getCurrentUser().getUserName())){
@@ -552,8 +480,6 @@ public class UsersManagementPanel extends javax.swing.JPanel {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddUser;
-    private javax.swing.JButton btnChangePassword;
-    private javax.swing.JButton btnClosePasswordPanel;
     private javax.swing.JButton btnEditUser;
     private javax.swing.JButton btnRemoveUser;
     private javax.swing.JButton btnSearch;
@@ -571,10 +497,7 @@ public class UsersManagementPanel extends javax.swing.JPanel {
     private javax.swing.JMenuItem menuSetPassword;
     private org.sola.clients.swing.ui.HeaderPanel pnlHeader;
     private javax.swing.JPanel pnlLayout;
-    private org.sola.clients.swing.ui.security.UserPasswordPanel pnlPassword;
-    private javax.swing.JPanel pnlPasswordManagement;
     private javax.swing.JPanel pnlSearchCriteria;
-    private org.sola.clients.swing.ui.security.UserPanel pnlUser;
     private javax.swing.JPanel pnlUsers;
     private javax.swing.JPopupMenu popupUsers;
     private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tableUsers;

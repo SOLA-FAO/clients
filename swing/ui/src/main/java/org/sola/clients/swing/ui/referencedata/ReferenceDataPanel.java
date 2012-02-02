@@ -28,7 +28,6 @@
 package org.sola.clients.swing.ui.referencedata;
 
 import org.sola.clients.beans.AbstractCodeBean;
-import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.ui.renderers.TableCellTextAreaRenderer;
 import org.sola.webservices.transferobjects.AbstractCodeTO;
 
@@ -37,11 +36,6 @@ import org.sola.webservices.transferobjects.AbstractCodeTO;
  */
 public class ReferenceDataPanel extends javax.swing.JPanel {
 
-    public static final String SAVED_REFDATA_PROPERTY = "RefdataSaved";
-    public static final String CREATED_REFDATA_PROPERTY = "RefdataCreated";
-    public static final String CANCEL_ACTION_PROPERTY = "Cancel";
-    
-    private String saveEventToFire = SAVED_REFDATA_PROPERTY;
     private AbstractCodeBean referenceDataBean;
     private Class<? extends AbstractCodeBean> refDataClass;
     private Class<? extends AbstractCodeTO> refDataTOClass;
@@ -49,20 +43,6 @@ public class ReferenceDataPanel extends javax.swing.JPanel {
     /** Default constructor. */
     public ReferenceDataPanel() {
         initComponents();
-        customizeComponents();
-    }
-     /** Applies customization of component L&F. */
-    private void customizeComponents() {
-  
-//    LABELS    
-    LafManager.getInstance().setLabProperties(jLabel1);
-    LafManager.getInstance().setLabProperties(jLabel2);
-    LafManager.getInstance().setLabProperties(jLabel3);
-    LafManager.getInstance().setLabProperties(jLabel4);
-    
-//    TXT FIELDS
-    LafManager.getInstance().setTxtProperties(txtCode);
-    LafManager.getInstance().setTxtProperties(txtStatus);
     }
 
     /** 
@@ -84,13 +64,11 @@ public class ReferenceDataPanel extends javax.swing.JPanel {
         
         if (referenceDataBean != null) {
             this.referenceDataBean = referenceDataBean;
-            saveEventToFire = SAVED_REFDATA_PROPERTY;
         } else {
             try {
                 this.referenceDataBean = refDataClass.newInstance();
             } catch (Exception ex) {
             }
-            saveEventToFire = CREATED_REFDATA_PROPERTY;
         }
         
         descriptionValues.loadLocalizedValues(this.referenceDataBean.getDescription());
@@ -104,17 +82,28 @@ public class ReferenceDataPanel extends javax.swing.JPanel {
     }
 
     /** Sets reference data bean, to bind on the panel. */
-    public void setReferenceDataBean(AbstractCodeBean referenceDataBean) {
+    public <T extends AbstractCodeBean, S extends AbstractCodeTO> void 
+            setReferenceDataBean(Class<T> refDataClass, 
+            Class<S> refDataTOClass, AbstractCodeBean referenceDataBean) {
+        this.refDataTOClass = refDataTOClass;
+        this.refDataClass = refDataClass;
         setupRefDataBean(referenceDataBean);
+    }
+    
+    /** Validates reference data object. */
+    public boolean validateRefData(boolean showMessage){
+        return referenceDataBean.validate(showMessage).size()<1;
     }
 
     /** Calls saving procedure of reference data object. */
-    public void save(){
+    public boolean save(boolean showMessage){
         referenceDataBean.setDisplayValue(displayValues.buildMultilingualString());
         referenceDataBean.setDescription(descriptionValues.buildMultilingualString());
-        if(referenceDataBean.validate(true).size()<1){
+        if(validateRefData(showMessage)){
             AbstractCodeBean.saveRefData(referenceDataBean, refDataTOClass);
-            firePropertyChange(saveEventToFire, false, true);
+            return true;
+        }else {
+            return false;
         }
     }
     

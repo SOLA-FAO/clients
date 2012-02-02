@@ -69,6 +69,7 @@ public class BrSearchResultListBean extends AbstractBindingListBean {
     
     /** Searches business rules with given parameters. */
     public void search(BrSearchParamsBean params){
+        getBrSearchResults().clear();
         BrSearchParamsTO searchParams = TypeConverters.BeanToTrasferObject(params, BrSearchParamsTO.class);
         TypeConverters.TransferObjectListToBeanList(
                 WSManager.getInstance().getSearchService().searchBr(searchParams), 

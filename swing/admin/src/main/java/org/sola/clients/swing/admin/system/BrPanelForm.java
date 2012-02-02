@@ -25,9 +25,12 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-package org.sola.clients.swing.ui.system;
+package org.sola.clients.swing.admin.system;
 
 import java.awt.CardLayout;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.ResourceBundle;
 import javax.swing.JFormattedTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -45,6 +48,8 @@ import org.sola.clients.beans.system.BrDefinitionBean;
 import org.sola.clients.beans.system.BrValidationBean;
 import org.sola.clients.swing.common.controls.CalendarForm;
 import org.sola.clients.swing.common.utils.BindingTools;
+import org.sola.clients.swing.ui.ContentPanel;
+import org.sola.clients.swing.ui.HeaderPanel;
 import org.sola.clients.swing.ui.renderers.FormattersFactory;
 import org.sola.clients.swing.ui.renderers.TableCellTextAreaRenderer;
 import org.sola.common.messaging.ClientMessage;
@@ -53,25 +58,54 @@ import org.sola.common.messaging.MessageUtility;
 /**
  * Allows to create or change Business rule.
  */
-public class BrPanel extends javax.swing.JPanel {
+public class BrPanelForm extends ContentPanel {
 
-    public static final String SAVED_PROPERTY = "BrSaved";
-    public static final String CREATED_PROPERTY = "BrCreated";
-    public static final String CANCEL_ACTION_PROPERTY = "Cancel";
+    public static final String BR_SAVED_PROPERTY = "BrSaved";
     private static final String CARD_BR = "cardBr";
     private static final String CARD_BR_DEFINITION = "cardBrDefinition";
     private static final String CARD_BR_VALIDATION = "cardBrValidation";
-    
-    private String saveEventToFire = SAVED_PROPERTY;
     private BrDefinitionBean brDefinition;
     private BrValidationBean brValidation;
+    private ResourceBundle resourceBundle;
     private boolean closeOnSave;
-    private boolean closeOnCreate;
+    private boolean saveOnAction;
     private BrBean br;
 
     /** Default constructor */
-    public BrPanel() {
+    public BrPanelForm() {
         initComponents();
+    }
+
+    /** 
+     * Form constructor. 
+     * @param roleBean The role bean instance to show on the panel.
+     * @param saveOnAction If <code>true</code>, role will be saved into database. 
+     * If <code>false</code>, role will be validated and validation result returned as a value of 
+     * {@link RolePanelForm.ROLE_SAVED_PROPERTY} property change event.
+     * @param closeOnSave Indicates whether to close the form upon save action takes place.
+     * @param readOnly Indicates whether to display provided {@link RoleBean} in read only mode or not.
+     */
+    public BrPanelForm(BrBean br, boolean saveOnAction, boolean closeOnSave) {
+        this.br = br;
+        this.saveOnAction = saveOnAction;
+        this.closeOnSave = closeOnSave;
+        resourceBundle = ResourceBundle.getBundle("org/sola/clients/swing/admin/system/Bundle");
+
+        initComponents();
+        
+        PropertyChangeListener headerPanelListener = new PropertyChangeListener() {
+
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals(HeaderPanel.CLOSE_BUTTON_CLICKED)) {
+                    showPanel(CARD_BR);
+                }
+            }
+        };
+
+        headerPanelBrDefinition.addPropertyChangeListener(headerPanelListener);
+        headerPanelBrValidation.addPropertyChangeListener(headerPanelListener);
+
         tableDefinitions.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
             @Override
@@ -79,7 +113,7 @@ public class BrPanel extends javax.swing.JPanel {
                 customizeBrDefinitionFields();
             }
         });
-        
+
         tableValidations.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
             @Override
@@ -90,6 +124,8 @@ public class BrPanel extends javax.swing.JPanel {
 
         customizeBrDefinitionFields();
         customizeBrValidationFields();
+        
+        setupBrBean(this.br);
     }
 
     private BrTechnicalTypeListBean createBrTechnicalTypes() {
@@ -186,64 +222,51 @@ public class BrPanel extends javax.swing.JPanel {
         firePropertyChange("brValidation", null, this.brValidation);
     }
 
-    public boolean isCloseOnCreate() {
-        return closeOnCreate;
-    }
-
-    public void setCloseOnCreate(boolean closeOnCreate) {
-        this.closeOnCreate = closeOnCreate;
-        setButtonOkCaption();
-    }
-
     public boolean isCloseOnSave() {
         return closeOnSave;
     }
 
     public void setCloseOnSave(boolean closeOnSave) {
         this.closeOnSave = closeOnSave;
-        setButtonOkCaption();
+        customizePanel();
     }
 
     /** Shows given panel/card. */
-    private void showPanel(String cardName){
-        ((CardLayout)pnlCards.getLayout()).show(pnlCards, cardName);
+    private void showPanel(String cardName) {
+        ((CardLayout) pnlCards.getLayout()).show(pnlCards, cardName);
     }
-    
+
     /** Enables or disables BR definition fields. */
-    private void customizeBrDefinitionFields(){
+    private void customizeBrDefinitionFields() {
         boolean enabled = getBr().getSelectedBrDefinition() != null;
-        btnRemoveDefinition.getAction().setEnabled(enabled);
-        btnEditDefinition.getAction().setEnabled(enabled);
+        btnRemoveDefinition.setEnabled(enabled);
+        btnEditDefinition.setEnabled(enabled);
+        menuEditDefinition.setEnabled(btnEditDefinition.isEnabled());
+        menuRemoveDefinition.setEnabled(btnRemoveDefinition.isEnabled());
     }
-    
+
     /** Enables or disables BR validation fields. */
-    private void customizeBrValidationFields(){
+    private void customizeBrValidationFields() {
         boolean enabled = getBr().getSelectedBrValidation() != null;
-        btnRemoveValidation.getAction().setEnabled(enabled);
-        btnEditValidation.getAction().setEnabled(enabled);
+        btnRemoveValidation.setEnabled(enabled);
+        btnEditValidation.setEnabled(enabled);
+        menuRemoveValidation.setEnabled(btnRemoveValidation.isEnabled());
+        menuEditValidation.setEnabled(btnEditValidation.isEnabled());
     }
-    
-    /** Assigns OK button text label. */
-    private void setButtonOkCaption() {
-        try {
-            if (saveEventToFire.equals(SAVED_PROPERTY)) {
-                if (closeOnSave) {
-                    btnOk.setText(MessageUtility.getLocalizedMessage(
-                            ClientMessage.GENERAL_LABELS_SAVE_AND_CLOSE).getMessage());
-                } else {
-                    btnOk.setText(MessageUtility.getLocalizedMessage(
-                            ClientMessage.GENERAL_LABELS_SAVE).getMessage());
-                }
-            } else {
-                if (closeOnCreate) {
-                    btnOk.setText(MessageUtility.getLocalizedMessage(
-                            ClientMessage.GENERAL_LABELS_CREATE_AND_CLOSE).getMessage());
-                } else {
-                    btnOk.setText(MessageUtility.getLocalizedMessage(
-                            ClientMessage.GENERAL_LABELS_CREATE).getMessage());
-                }
-            }
-        } catch (Exception e) {
+
+    private void customizePanel() {
+        if (getBr().getDisplayName() != null) {
+            headerPanel.setTitleText(String.format(resourceBundle.getString("BrPanelForm.headerPanel.titleText"), getBr().getDisplayName()));
+        } else {
+            headerPanel.setTitleText(resourceBundle.getString("BrPanelForm.headerPanel.titleText.new"));
+        }
+
+        if (closeOnSave) {
+            btnSaveBr.setText(MessageUtility.getLocalizedMessage(
+                    ClientMessage.GENERAL_LABELS_SAVE_AND_CLOSE).getMessage());
+        } else {
+            btnSaveBr.setText(MessageUtility.getLocalizedMessage(
+                    ClientMessage.GENERAL_LABELS_SAVE).getMessage());
         }
     }
 
@@ -256,28 +279,40 @@ public class BrPanel extends javax.swing.JPanel {
 
         if (br != null) {
             this.br = br;
-            saveEventToFire = SAVED_PROPERTY;
         } else {
             this.br = new BrBean();
-            saveEventToFire = CREATED_PROPERTY;
         }
-    
+
         localizedFeedback.loadLocalizedValues(this.br.getFeedback());
-        setButtonOkCaption();
+        customizePanel();
         firePropertyChange("br", null, this.br);
         BindingTools.refreshBinding(bindingGroup, "BrDefinitions");
         BindingTools.refreshBinding(bindingGroup, "BrValidations");
     }
 
     /** Calls saving procedure of BR data object. */
-    public void save() {
+    public boolean validate(boolean showMessage) {
+        return getBr().validate(showMessage).size() < 1;
+    }
+
+    /** Calls saving procedure of BR data object. */
+    public void save(boolean showMessage) {
         br.setFeedback(localizedFeedback.buildMultilingualString());
-        if (br.validate(true).size() < 1) {
-            br.save();
-            firePropertyChange(saveEventToFire, false, true);
-            
-            if (saveEventToFire.equals(CREATED_PROPERTY) && !closeOnCreate) {
-                setupBrBean(null);
+        boolean isSaved = false;
+        if (validate(showMessage)) {
+            if (saveOnAction) {
+                br.save();
+                MessageUtility.displayMessage(ClientMessage.ADMIN_BR_SAVED);
+            }
+            isSaved = true;
+        }
+        
+        if (isSaved) {
+            firePropertyChange(BR_SAVED_PROPERTY, false, true);
+            if (closeOnSave) {
+                close();
+            } else {
+                customizePanel();
             }
         }
     }
@@ -369,8 +404,9 @@ public class BrPanel extends javax.swing.JPanel {
         btnRemoveValidation = new javax.swing.JButton();
         jScrollPane6 = new javax.swing.JScrollPane();
         tableValidations = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
-        btnOk = new javax.swing.JButton();
-        btnClose = new javax.swing.JButton();
+        headerPanel = new org.sola.clients.swing.ui.HeaderPanel();
+        jToolBar3 = new javax.swing.JToolBar();
+        btnSaveBr = new javax.swing.JButton();
         pnlBrValidation = new javax.swing.JPanel();
         pnlBrValidationFields = new javax.swing.JPanel();
         jPanel12 = new javax.swing.JPanel();
@@ -397,9 +433,9 @@ public class BrPanel extends javax.swing.JPanel {
         jPanel15 = new javax.swing.JPanel();
         cbxRegistrationTypes = new javax.swing.JComboBox();
         jLabel14 = new javax.swing.JLabel();
-        pnlBrValidationHeader = new org.sola.clients.swing.ui.GroupPanel();
-        btnOkBrValidation = new javax.swing.JButton();
-        btnCancelBrValidation = new javax.swing.JButton();
+        headerPanelBrValidation = new org.sola.clients.swing.ui.HeaderPanel();
+        jToolBar4 = new javax.swing.JToolBar();
+        btnSaveBrValidation = new javax.swing.JButton();
         pnlBrDefinition = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         txtActiveFrom = new javax.swing.JFormattedTextField();
@@ -410,52 +446,84 @@ public class BrPanel extends javax.swing.JPanel {
         txtActiveUntil = new javax.swing.JFormattedTextField();
         jLabel7 = new javax.swing.JLabel();
         btnActiveUntil = new javax.swing.JButton();
-        pnlBrDefinitionHeader = new org.sola.clients.swing.ui.GroupPanel();
-        btnCancelBrDefinition = new javax.swing.JButton();
-        btnOkBrDefinition = new javax.swing.JButton();
+        headerPanelBrDefinition = new org.sola.clients.swing.ui.HeaderPanel();
+        jToolBar5 = new javax.swing.JToolBar();
+        btnSaveBrDefinition = new javax.swing.JButton();
 
         popupValidations.setName("popupValidations"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(BrPanel.class, this);
-        menuAddValidation.setAction(actionMap.get("addValidation")); // NOI18N
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/system/Bundle"); // NOI18N
-        menuAddValidation.setText(bundle.getString("BrPanel.menuAddValidation.text")); // NOI18N
+        menuAddValidation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/admin/system/Bundle"); // NOI18N
+        menuAddValidation.setText(bundle.getString("BrPanelForm.menuAddValidation.text")); // NOI18N
         menuAddValidation.setName("menuAddValidation"); // NOI18N
+        menuAddValidation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuAddValidationActionPerformed(evt);
+            }
+        });
         popupValidations.add(menuAddValidation);
 
-        menuEditValidation.setAction(actionMap.get("editValidation")); // NOI18N
-        menuEditValidation.setText(bundle.getString("BrPanel.menuEditValidation.text")); // NOI18N
+        menuEditValidation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/pencil.png"))); // NOI18N
+        menuEditValidation.setText(bundle.getString("BrPanelForm.menuEditValidation.text")); // NOI18N
         menuEditValidation.setName("menuEditValidation"); // NOI18N
+        menuEditValidation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuEditValidationActionPerformed(evt);
+            }
+        });
         popupValidations.add(menuEditValidation);
 
-        menuRemoveValidation.setAction(actionMap.get("removeValidation")); // NOI18N
-        menuRemoveValidation.setText(bundle.getString("BrPanel.menuRemoveValidation.text")); // NOI18N
+        menuRemoveValidation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
+        menuRemoveValidation.setText(bundle.getString("BrPanelForm.menuRemoveValidation.text")); // NOI18N
         menuRemoveValidation.setName("menuRemoveValidation"); // NOI18N
+        menuRemoveValidation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuRemoveValidationActionPerformed(evt);
+            }
+        });
         popupValidations.add(menuRemoveValidation);
 
         popupDefinitions.setName("popupDefinitions"); // NOI18N
 
-        menuAddDefinition.setAction(actionMap.get("addDefinition")); // NOI18N
-        menuAddDefinition.setText(bundle.getString("BrPanel.menuAddDefinition.text")); // NOI18N
+        menuAddDefinition.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
+        menuAddDefinition.setText(bundle.getString("BrPanelForm.menuAddDefinition.text")); // NOI18N
         menuAddDefinition.setName("menuAddDefinition"); // NOI18N
+        menuAddDefinition.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuAddDefinitionActionPerformed(evt);
+            }
+        });
         popupDefinitions.add(menuAddDefinition);
 
-        menuEditDefinition.setAction(actionMap.get("editDefinition")); // NOI18N
-        menuEditDefinition.setText(bundle.getString("BrPanel.menuEditDefinition.text")); // NOI18N
+        menuEditDefinition.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/pencil.png"))); // NOI18N
+        menuEditDefinition.setText(bundle.getString("BrPanelForm.menuEditDefinition.text")); // NOI18N
         menuEditDefinition.setName("menuEditDefinition"); // NOI18N
+        menuEditDefinition.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuEditDefinitionActionPerformed(evt);
+            }
+        });
         popupDefinitions.add(menuEditDefinition);
 
-        menuRemoveDefinition.setAction(actionMap.get("removeDefinition")); // NOI18N
-        menuRemoveDefinition.setText(bundle.getString("BrPanel.menuRemoveDefinition.text")); // NOI18N
+        menuRemoveDefinition.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
+        menuRemoveDefinition.setText(bundle.getString("BrPanelForm.menuRemoveDefinition.text")); // NOI18N
         menuRemoveDefinition.setName("menuRemoveDefinition"); // NOI18N
+        menuRemoveDefinition.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuRemoveDefinitionActionPerformed(evt);
+            }
+        });
         popupDefinitions.add(menuRemoveDefinition);
+
+        setCloseOnHide(true);
+        setHeaderPanel(headerPanel);
 
         pnlCards.setName("pnlCards"); // NOI18N
         pnlCards.setLayout(new java.awt.CardLayout());
 
         pnlBr.setName("pnlBr"); // NOI18N
 
-        tabsPanel.setFont(new java.awt.Font("Tahoma", 0, 12));
+        tabsPanel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         tabsPanel.setName("tabsPanel"); // NOI18N
 
         jPanel6.setName("jPanel6"); // NOI18N
@@ -473,7 +541,7 @@ public class BrPanel extends javax.swing.JPanel {
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
-        jLabel1.setText(bundle.getString("BrPanel.jLabel1.text")); // NOI18N
+        jLabel1.setText(bundle.getString("BrPanelForm.jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -482,8 +550,8 @@ public class BrPanel extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addContainerGap(133, Short.MAX_VALUE))
-            .addComponent(txtDisplayName, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)
+                .addContainerGap(193, Short.MAX_VALUE))
+            .addComponent(txtDisplayName, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -500,7 +568,7 @@ public class BrPanel extends javax.swing.JPanel {
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
-        jLabel5.setText(bundle.getString("BrPanel.jLabel5.text")); // NOI18N
+        jLabel5.setText(bundle.getString("BrPanelForm.jLabel5.text")); // NOI18N
         jLabel5.setName("jLabel5"); // NOI18N
 
         cbxTechnicalType.setFont(new java.awt.Font("Tahoma", 0, 12));
@@ -518,8 +586,8 @@ public class BrPanel extends javax.swing.JPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jLabel5)
-                .addContainerGap(123, Short.MAX_VALUE))
-            .addComponent(cbxTechnicalType, 0, 221, Short.MAX_VALUE)
+                .addContainerGap(183, Short.MAX_VALUE))
+            .addComponent(cbxTechnicalType, 0, 281, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -538,7 +606,7 @@ public class BrPanel extends javax.swing.JPanel {
         jPanel4.setName("jPanel4"); // NOI18N
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12));
-        jLabel3.setText(bundle.getString("BrPanel.jLabel3.text")); // NOI18N
+        jLabel3.setText(bundle.getString("BrPanelForm.jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
 
         jScrollPane2.setFont(new java.awt.Font("Tahoma", 0, 12));
@@ -559,8 +627,8 @@ public class BrPanel extends javax.swing.JPanel {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(jLabel3)
-                .addContainerGap(393, Short.MAX_VALUE))
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 457, Short.MAX_VALUE)
+                .addContainerGap(513, Short.MAX_VALUE))
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 577, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -575,7 +643,7 @@ public class BrPanel extends javax.swing.JPanel {
         jPanel5.setName("jPanel5"); // NOI18N
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 12));
-        jLabel4.setText(bundle.getString("BrPanel.jLabel4.text")); // NOI18N
+        jLabel4.setText(bundle.getString("BrPanelForm.jLabel4.text")); // NOI18N
         jLabel4.setName("jLabel4"); // NOI18N
 
         jScrollPane3.setFont(new java.awt.Font("Tahoma", 0, 12));
@@ -597,8 +665,8 @@ public class BrPanel extends javax.swing.JPanel {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addComponent(jLabel4)
-                .addContainerGap(339, Short.MAX_VALUE))
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 457, Short.MAX_VALUE)
+                .addContainerGap(459, Short.MAX_VALUE))
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 577, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -611,7 +679,7 @@ public class BrPanel extends javax.swing.JPanel {
         jPanel10.add(jPanel5);
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12));
-        jLabel2.setText(bundle.getString("BrPanel.jLabel2.text")); // NOI18N
+        jLabel2.setText(bundle.getString("BrPanelForm.jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
 
         jScrollPane7.setName("jScrollPane7"); // NOI18N
@@ -632,8 +700,8 @@ public class BrPanel extends javax.swing.JPanel {
         jScrollPane7.setViewportView(jTableWithDefaultStyles1);
         jTableWithDefaultStyles1.getColumnModel().getColumn(0).setPreferredWidth(120);
         jTableWithDefaultStyles1.getColumnModel().getColumn(0).setMaxWidth(120);
-        jTableWithDefaultStyles1.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("BrPanel.jTableWithDefaultStyles1.columnModel.title0_2")); // NOI18N
-        jTableWithDefaultStyles1.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("BrPanel.jTableWithDefaultStyles1.columnModel.title1_2")); // NOI18N
+        jTableWithDefaultStyles1.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("BrPanelForm.jTableWithDefaultStyles1.columnModel.title0_2")); // NOI18N
+        jTableWithDefaultStyles1.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("BrPanelForm.jTableWithDefaultStyles1.columnModel.title1_2")); // NOI18N
         jTableWithDefaultStyles1.getColumnModel().getColumn(1).setCellRenderer(new TableCellTextAreaRenderer());
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
@@ -643,9 +711,9 @@ public class BrPanel extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 457, Short.MAX_VALUE)
-                    .addComponent(jPanel10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 457, Short.MAX_VALUE)
-                    .addComponent(jPanel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 457, Short.MAX_VALUE)
+                    .addComponent(jScrollPane7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 577, Short.MAX_VALUE)
+                    .addComponent(jPanel10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 577, Short.MAX_VALUE)
+                    .addComponent(jPanel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 577, Short.MAX_VALUE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING))
                 .addContainerGap())
         );
@@ -659,11 +727,11 @@ public class BrPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        tabsPanel.addTab(bundle.getString("BrPanel.jPanel6.TabConstraints.tabTitle"), jPanel6); // NOI18N
+        tabsPanel.addTab(bundle.getString("BrPanelForm.jPanel6.TabConstraints.tabTitle"), jPanel6); // NOI18N
 
         jPanel7.setName("jPanel7"); // NOI18N
 
@@ -686,38 +754,53 @@ public class BrPanel extends javax.swing.JPanel {
         bindingGroup.addBinding(binding);
 
         jScrollPane4.setViewportView(tableDefinitions);
-        tableDefinitions.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("BrPanel.tableDefinitions.columnModel.title0_1")); // NOI18N
-        tableDefinitions.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("BrPanel.tableDefinitions.columnModel.title1_1")); // NOI18N
+        tableDefinitions.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("BrPanelForm.tableDefinitions.columnModel.title0_1")); // NOI18N
+        tableDefinitions.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("BrPanelForm.tableDefinitions.columnModel.title1_1")); // NOI18N
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
         jToolBar1.setName("jToolBar1"); // NOI18N
 
-        btnAddDefinition.setAction(actionMap.get("addDefinition")); // NOI18N
-        btnAddDefinition.setFont(new java.awt.Font("Tahoma", 0, 12));
-        btnAddDefinition.setText(bundle.getString("BrPanel.btnAddDefinition.text")); // NOI18N
+        btnAddDefinition.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnAddDefinition.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
+        btnAddDefinition.setText(bundle.getString("BrPanelForm.btnAddDefinition.text")); // NOI18N
         btnAddDefinition.setFocusable(false);
         btnAddDefinition.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnAddDefinition.setName("btnAddDefinition"); // NOI18N
         btnAddDefinition.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAddDefinition.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddDefinitionActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnAddDefinition);
 
-        btnEditDefinition.setAction(actionMap.get("editDefinition")); // NOI18N
-        btnEditDefinition.setFont(new java.awt.Font("Tahoma", 0, 12));
-        btnEditDefinition.setText(bundle.getString("BrPanel.btnEditDefinition.text")); // NOI18N
+        btnEditDefinition.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnEditDefinition.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/pencil.png"))); // NOI18N
+        btnEditDefinition.setText(bundle.getString("BrPanelForm.btnEditDefinition.text")); // NOI18N
         btnEditDefinition.setFocusable(false);
         btnEditDefinition.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnEditDefinition.setName("btnEditDefinition"); // NOI18N
         btnEditDefinition.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnEditDefinition.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditDefinitionActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnEditDefinition);
 
-        btnRemoveDefinition.setAction(actionMap.get("removeDefinition")); // NOI18N
-        btnRemoveDefinition.setFont(new java.awt.Font("Tahoma", 0, 12));
-        btnRemoveDefinition.setText(bundle.getString("BrPanel.btnRemoveDefinition.text")); // NOI18N
+        btnRemoveDefinition.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnRemoveDefinition.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
+        btnRemoveDefinition.setText(bundle.getString("BrPanelForm.btnRemoveDefinition.text")); // NOI18N
         btnRemoveDefinition.setFocusable(false);
         btnRemoveDefinition.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnRemoveDefinition.setName("btnRemoveDefinition"); // NOI18N
         btnRemoveDefinition.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnRemoveDefinition.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveDefinitionActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnRemoveDefinition);
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
@@ -727,8 +810,8 @@ public class BrPanel extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 457, Short.MAX_VALUE)
-                    .addComponent(jToolBar1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 457, Short.MAX_VALUE))
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 577, Short.MAX_VALUE)
+                    .addComponent(jToolBar1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 577, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel7Layout.setVerticalGroup(
@@ -737,11 +820,11 @@ public class BrPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 266, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        tabsPanel.addTab(bundle.getString("BrPanel.jPanel7.TabConstraints.tabTitle"), jPanel7); // NOI18N
+        tabsPanel.addTab(bundle.getString("BrPanelForm.jPanel7.TabConstraints.tabTitle"), jPanel7); // NOI18N
 
         jPanel8.setName("jPanel8"); // NOI18N
 
@@ -751,31 +834,46 @@ public class BrPanel extends javax.swing.JPanel {
         jToolBar2.setRollover(true);
         jToolBar2.setName("jToolBar2"); // NOI18N
 
-        btnAddValidation.setAction(actionMap.get("addValidation")); // NOI18N
-        btnAddValidation.setFont(new java.awt.Font("Tahoma", 0, 12));
-        btnAddValidation.setText(bundle.getString("BrPanel.btnAddValidation.text")); // NOI18N
+        btnAddValidation.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnAddValidation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
+        btnAddValidation.setText(bundle.getString("BrPanelForm.btnAddValidation.text")); // NOI18N
         btnAddValidation.setFocusable(false);
         btnAddValidation.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnAddValidation.setName("btnAddValidation"); // NOI18N
         btnAddValidation.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAddValidation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddValidationActionPerformed(evt);
+            }
+        });
         jToolBar2.add(btnAddValidation);
 
-        btnEditValidation.setAction(actionMap.get("editValidation")); // NOI18N
-        btnEditValidation.setFont(new java.awt.Font("Tahoma", 0, 12));
-        btnEditValidation.setText(bundle.getString("BrPanel.btnEditValidation.text")); // NOI18N
+        btnEditValidation.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnEditValidation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/pencil.png"))); // NOI18N
+        btnEditValidation.setText(bundle.getString("BrPanelForm.btnEditValidation.text")); // NOI18N
         btnEditValidation.setFocusable(false);
         btnEditValidation.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnEditValidation.setName("btnEditValidation"); // NOI18N
         btnEditValidation.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnEditValidation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditValidationActionPerformed(evt);
+            }
+        });
         jToolBar2.add(btnEditValidation);
 
-        btnRemoveValidation.setAction(actionMap.get("removeValidation")); // NOI18N
-        btnRemoveValidation.setFont(new java.awt.Font("Tahoma", 0, 12));
-        btnRemoveValidation.setText(bundle.getString("BrPanel.btnRemoveValidation.text")); // NOI18N
+        btnRemoveValidation.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnRemoveValidation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
+        btnRemoveValidation.setText(bundle.getString("BrPanelForm.btnRemoveValidation.text")); // NOI18N
         btnRemoveValidation.setFocusable(false);
         btnRemoveValidation.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnRemoveValidation.setName("btnRemoveValidation"); // NOI18N
         btnRemoveValidation.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnRemoveValidation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveValidationActionPerformed(evt);
+            }
+        });
         jToolBar2.add(btnRemoveValidation);
 
         jScrollPane6.setName("jScrollPane6"); // NOI18N
@@ -802,23 +900,23 @@ public class BrPanel extends javax.swing.JPanel {
         bindingGroup.addBinding(binding);
 
         jScrollPane6.setViewportView(tableValidations);
-        tableValidations.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("BrPanel.tableValidations.columnModel.title0_1")); // NOI18N
-        tableValidations.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("BrPanel.tableValidations.columnModel.title1")); // NOI18N
-        tableValidations.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("BrPanel.tableValidations.columnModel.title2")); // NOI18N
+        tableValidations.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("BrPanelForm.tableValidations.columnModel.title0_1")); // NOI18N
+        tableValidations.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("BrPanelForm.tableValidations.columnModel.title1")); // NOI18N
+        tableValidations.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("BrPanelForm.tableValidations.columnModel.title2")); // NOI18N
 
         javax.swing.GroupLayout jPanel21Layout = new javax.swing.GroupLayout(jPanel21);
         jPanel21.setLayout(jPanel21Layout);
         jPanel21Layout.setHorizontalGroup(
             jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jToolBar2, javax.swing.GroupLayout.DEFAULT_SIZE, 457, Short.MAX_VALUE)
-            .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 457, Short.MAX_VALUE)
+            .addComponent(jToolBar2, javax.swing.GroupLayout.DEFAULT_SIZE, 577, Short.MAX_VALUE)
+            .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 577, Short.MAX_VALUE)
         );
         jPanel21Layout.setVerticalGroup(
             jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel21Layout.createSequentialGroup()
                 .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 266, Short.MAX_VALUE))
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
@@ -838,45 +936,46 @@ public class BrPanel extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
-        tabsPanel.addTab(bundle.getString("BrPanel.jPanel8.TabConstraints.tabTitle"), jPanel8); // NOI18N
+        tabsPanel.addTab(bundle.getString("BrPanelForm.jPanel8.TabConstraints.tabTitle"), jPanel8); // NOI18N
 
-        btnOk.setFont(new java.awt.Font("Tahoma", 0, 12));
-        btnOk.setText(bundle.getString("BrPanel.btnOk.text")); // NOI18N
-        btnOk.setName("btnOk"); // NOI18N
-        btnOk.addActionListener(new java.awt.event.ActionListener() {
+        headerPanel.setName("headerPanel"); // NOI18N
+        headerPanel.setTitleText(bundle.getString("BrPanelForm.headerPanel.titleText")); // NOI18N
+
+        jToolBar3.setFloatable(false);
+        jToolBar3.setRollover(true);
+        jToolBar3.setName("jToolBar3"); // NOI18N
+
+        btnSaveBr.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnSaveBr.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/save.png"))); // NOI18N
+        btnSaveBr.setText(bundle.getString("BrPanelForm.btnSaveBr.text")); // NOI18N
+        btnSaveBr.setName("btnSaveBr"); // NOI18N
+        btnSaveBr.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOkActionPerformed(evt);
+                btnSaveBrActionPerformed(evt);
             }
         });
-
-        btnClose.setFont(new java.awt.Font("Tahoma", 0, 12));
-        btnClose.setText(bundle.getString("BrPanel.btnClose.text")); // NOI18N
-        btnClose.setName("btnClose"); // NOI18N
-        btnClose.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCloseActionPerformed(evt);
-            }
-        });
+        jToolBar3.add(btnSaveBr);
 
         javax.swing.GroupLayout pnlBrLayout = new javax.swing.GroupLayout(pnlBr);
         pnlBr.setLayout(pnlBrLayout);
         pnlBrLayout.setHorizontalGroup(
             pnlBrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlBrLayout.createSequentialGroup()
-                .addContainerGap(233, Short.MAX_VALUE)
-                .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addComponent(tabsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE)
+            .addComponent(headerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 622, Short.MAX_VALUE)
+            .addComponent(jToolBar3, javax.swing.GroupLayout.DEFAULT_SIZE, 622, Short.MAX_VALUE)
+            .addGroup(pnlBrLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(tabsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 602, Short.MAX_VALUE)
+                .addContainerGap())
         );
         pnlBrLayout.setVerticalGroup(
             pnlBrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlBrLayout.createSequentialGroup()
-                .addComponent(tabsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE)
+                .addComponent(headerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlBrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnClose)
-                    .addComponent(btnOk)))
+                .addComponent(jToolBar3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(tabsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pnlCards.add(pnlBr, "cardBr");
@@ -890,7 +989,7 @@ public class BrPanel extends javax.swing.JPanel {
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
-        jLabel11.setText(bundle.getString("BrPanel.jLabel11.text")); // NOI18N
+        jLabel11.setText(bundle.getString("BrPanelForm.jLabel11.text")); // NOI18N
         jLabel11.setName("jLabel11"); // NOI18N
 
         cbxTargetTypes.setFont(new java.awt.Font("Tahoma", 0, 12));
@@ -908,8 +1007,8 @@ public class BrPanel extends javax.swing.JPanel {
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel12Layout.createSequentialGroup()
                 .addComponent(jLabel11)
-                .addContainerGap(60, Short.MAX_VALUE))
-            .addComponent(cbxTargetTypes, 0, 144, Short.MAX_VALUE)
+                .addContainerGap(106, Short.MAX_VALUE))
+            .addComponent(cbxTargetTypes, 0, 190, Short.MAX_VALUE)
         );
         jPanel12Layout.setVerticalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -926,7 +1025,7 @@ public class BrPanel extends javax.swing.JPanel {
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
-        jLabel12.setText(bundle.getString("BrPanel.jLabel12.text")); // NOI18N
+        jLabel12.setText(bundle.getString("BrPanelForm.jLabel12.text")); // NOI18N
         jLabel12.setName("jLabel12"); // NOI18N
 
         cbxSeverity.setFont(new java.awt.Font("Tahoma", 0, 12));
@@ -944,8 +1043,8 @@ public class BrPanel extends javax.swing.JPanel {
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel13Layout.createSequentialGroup()
                 .addComponent(jLabel12)
-                .addContainerGap(82, Short.MAX_VALUE))
-            .addComponent(cbxSeverity, 0, 144, Short.MAX_VALUE)
+                .addContainerGap(128, Short.MAX_VALUE))
+            .addComponent(cbxSeverity, 0, 190, Short.MAX_VALUE)
         );
         jPanel13Layout.setVerticalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -961,7 +1060,7 @@ public class BrPanel extends javax.swing.JPanel {
         jPanel14.setName("jPanel14"); // NOI18N
 
         txtOrder.setFormatterFactory(FormattersFactory.getInstance().getIntegerFormatterFactory());
-        txtOrder.setText(bundle.getString("BrPanel.txtOrder.text")); // NOI18N
+        txtOrder.setText(bundle.getString("BrPanelForm.txtOrder.text")); // NOI18N
         txtOrder.setFont(new java.awt.Font("Tahoma", 0, 12));
         txtOrder.setName("txtOrder"); // NOI18N
 
@@ -970,7 +1069,7 @@ public class BrPanel extends javax.swing.JPanel {
 
         jLabel13.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
-        jLabel13.setText(bundle.getString("BrPanel.jLabel13.text")); // NOI18N
+        jLabel13.setText(bundle.getString("BrPanelForm.jLabel13.text")); // NOI18N
         jLabel13.setName("jLabel13"); // NOI18N
 
         javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
@@ -979,8 +1078,8 @@ public class BrPanel extends javax.swing.JPanel {
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel14Layout.createSequentialGroup()
                 .addComponent(jLabel13)
-                .addContainerGap(95, Short.MAX_VALUE))
-            .addComponent(txtOrder, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
+                .addContainerGap(141, Short.MAX_VALUE))
+            .addComponent(txtOrder, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
         );
         jPanel14Layout.setVerticalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1005,7 +1104,7 @@ public class BrPanel extends javax.swing.JPanel {
         bindingGroup.addBinding(binding);
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 0, 12));
-        jLabel10.setText(bundle.getString("BrPanel.jLabel10.text")); // NOI18N
+        jLabel10.setText(bundle.getString("BrPanelForm.jLabel10.text")); // NOI18N
         jLabel10.setName("jLabel10"); // NOI18N
 
         javax.swing.GroupLayout jPanel18Layout = new javax.swing.GroupLayout(jPanel18);
@@ -1014,8 +1113,8 @@ public class BrPanel extends javax.swing.JPanel {
             jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel18Layout.createSequentialGroup()
                 .addComponent(jLabel10)
-                .addContainerGap(31, Short.MAX_VALUE))
-            .addComponent(cbxApplicationActions, 0, 144, Short.MAX_VALUE)
+                .addContainerGap(77, Short.MAX_VALUE))
+            .addComponent(cbxApplicationActions, 0, 190, Short.MAX_VALUE)
         );
         jPanel18Layout.setVerticalGroup(
             jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1040,7 +1139,7 @@ public class BrPanel extends javax.swing.JPanel {
         bindingGroup.addBinding(binding);
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 0, 12));
-        jLabel9.setText(bundle.getString("BrPanel.jLabel9.text")); // NOI18N
+        jLabel9.setText(bundle.getString("BrPanelForm.jLabel9.text")); // NOI18N
         jLabel9.setName("jLabel9"); // NOI18N
 
         javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
@@ -1049,8 +1148,8 @@ public class BrPanel extends javax.swing.JPanel {
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel16Layout.createSequentialGroup()
                 .addComponent(jLabel9)
-                .addContainerGap(51, Short.MAX_VALUE))
-            .addComponent(cbxServiceActions, 0, 144, Short.MAX_VALUE)
+                .addContainerGap(97, Short.MAX_VALUE))
+            .addComponent(cbxServiceActions, 0, 190, Short.MAX_VALUE)
         );
         jPanel16Layout.setVerticalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1075,7 +1174,7 @@ public class BrPanel extends javax.swing.JPanel {
         bindingGroup.addBinding(binding);
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 0, 12));
-        jLabel15.setText(bundle.getString("BrPanel.jLabel15.text")); // NOI18N
+        jLabel15.setText(bundle.getString("BrPanelForm.jLabel15.text")); // NOI18N
         jLabel15.setName("jLabel15"); // NOI18N
 
         javax.swing.GroupLayout jPanel19Layout = new javax.swing.GroupLayout(jPanel19);
@@ -1084,8 +1183,8 @@ public class BrPanel extends javax.swing.JPanel {
             jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel19Layout.createSequentialGroup()
                 .addComponent(jLabel15)
-                .addContainerGap(66, Short.MAX_VALUE))
-            .addComponent(cbxRequestTypes, 0, 144, Short.MAX_VALUE)
+                .addContainerGap(112, Short.MAX_VALUE))
+            .addComponent(cbxRequestTypes, 0, 190, Short.MAX_VALUE)
         );
         jPanel19Layout.setVerticalGroup(
             jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1110,7 +1209,7 @@ public class BrPanel extends javax.swing.JPanel {
         bindingGroup.addBinding(binding);
 
         jLabel16.setFont(new java.awt.Font("Tahoma", 0, 12));
-        jLabel16.setText(bundle.getString("BrPanel.jLabel16.text")); // NOI18N
+        jLabel16.setText(bundle.getString("BrPanelForm.jLabel16.text")); // NOI18N
         jLabel16.setName("jLabel16"); // NOI18N
 
         javax.swing.GroupLayout jPanel17Layout = new javax.swing.GroupLayout(jPanel17);
@@ -1119,8 +1218,8 @@ public class BrPanel extends javax.swing.JPanel {
             jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel17Layout.createSequentialGroup()
                 .addComponent(jLabel16)
-                .addContainerGap(96, Short.MAX_VALUE))
-            .addComponent(cbxRrrTypes, 0, 144, Short.MAX_VALUE)
+                .addContainerGap(142, Short.MAX_VALUE))
+            .addComponent(cbxRrrTypes, 0, 190, Short.MAX_VALUE)
         );
         jPanel17Layout.setVerticalGroup(
             jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1145,7 +1244,7 @@ public class BrPanel extends javax.swing.JPanel {
         bindingGroup.addBinding(binding);
 
         jLabel14.setFont(new java.awt.Font("Tahoma", 0, 12));
-        jLabel14.setText(bundle.getString("BrPanel.jLabel14.text")); // NOI18N
+        jLabel14.setText(bundle.getString("BrPanelForm.jLabel14.text")); // NOI18N
         jLabel14.setName("jLabel14"); // NOI18N
 
         javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
@@ -1154,8 +1253,8 @@ public class BrPanel extends javax.swing.JPanel {
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel15Layout.createSequentialGroup()
                 .addComponent(jLabel14)
-                .addContainerGap(26, Short.MAX_VALUE))
-            .addComponent(cbxRegistrationTypes, 0, 144, Short.MAX_VALUE)
+                .addContainerGap(72, Short.MAX_VALUE))
+            .addComponent(cbxRegistrationTypes, 0, 190, Short.MAX_VALUE)
         );
         jPanel15Layout.setVerticalGroup(
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1168,82 +1267,72 @@ public class BrPanel extends javax.swing.JPanel {
 
         pnlBrValidationFields.add(jPanel15);
 
-        pnlBrValidationHeader.setName("pnlBrValidationHeader"); // NOI18N
-        pnlBrValidationHeader.setTitleText(bundle.getString("BrPanel.pnlBrValidationHeader.titleText")); // NOI18N
+        headerPanelBrValidation.setName("headerPanelBrValidation"); // NOI18N
+        headerPanelBrValidation.setTitleText(bundle.getString("BrPanelForm.headerPanelBrValidation.titleText")); // NOI18N
 
-        btnOkBrValidation.setFont(new java.awt.Font("Tahoma", 0, 12));
-        btnOkBrValidation.setText(bundle.getString("BrPanel.btnOkBrValidation.text")); // NOI18N
-        btnOkBrValidation.setName("btnOkBrValidation"); // NOI18N
-        btnOkBrValidation.addActionListener(new java.awt.event.ActionListener() {
+        jToolBar4.setFloatable(false);
+        jToolBar4.setRollover(true);
+        jToolBar4.setName("jToolBar4"); // NOI18N
+
+        btnSaveBrValidation.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnSaveBrValidation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/save.png"))); // NOI18N
+        btnSaveBrValidation.setText(bundle.getString("BrPanelForm.btnSaveBrValidation.text")); // NOI18N
+        btnSaveBrValidation.setName("btnSaveBrValidation"); // NOI18N
+        btnSaveBrValidation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOkBrValidationActionPerformed(evt);
+                btnSaveBrValidationActionPerformed(evt);
             }
         });
-
-        btnCancelBrValidation.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        btnCancelBrValidation.setText(bundle.getString("BrPanel.btnCancelBrValidation.text")); // NOI18N
-        btnCancelBrValidation.setName("btnCancelBrValidation"); // NOI18N
-        btnCancelBrValidation.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelBrValidationActionPerformed(evt);
-            }
-        });
+        jToolBar4.add(btnSaveBrValidation);
 
         javax.swing.GroupLayout pnlBrValidationLayout = new javax.swing.GroupLayout(pnlBrValidation);
         pnlBrValidation.setLayout(pnlBrValidationLayout);
         pnlBrValidationLayout.setHorizontalGroup(
             pnlBrValidationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlBrValidationHeader, javax.swing.GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE)
+            .addComponent(headerPanelBrValidation, javax.swing.GroupLayout.DEFAULT_SIZE, 622, Short.MAX_VALUE)
+            .addComponent(jToolBar4, javax.swing.GroupLayout.DEFAULT_SIZE, 622, Short.MAX_VALUE)
             .addGroup(pnlBrValidationLayout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(pnlBrValidationFields, javax.swing.GroupLayout.DEFAULT_SIZE, 462, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlBrValidationLayout.createSequentialGroup()
-                .addContainerGap(312, Short.MAX_VALUE)
-                .addComponent(btnOkBrValidation, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnCancelBrValidation, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(pnlBrValidationFields, javax.swing.GroupLayout.DEFAULT_SIZE, 602, Short.MAX_VALUE)
                 .addContainerGap())
         );
         pnlBrValidationLayout.setVerticalGroup(
             pnlBrValidationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlBrValidationLayout.createSequentialGroup()
-                .addComponent(pnlBrValidationHeader, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(headerPanelBrValidation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jToolBar4, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(pnlBrValidationFields, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlBrValidationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCancelBrValidation)
-                    .addComponent(btnOkBrValidation))
-                .addContainerGap(164, Short.MAX_VALUE))
+                .addContainerGap(205, Short.MAX_VALUE))
         );
 
         pnlCards.add(pnlBrValidation, "cardBrValidation");
 
         pnlBrDefinition.setName("pnlBrDefinition"); // NOI18N
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12));
+        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
-        jLabel6.setText(bundle.getString("BrPanel.jLabel6.text")); // NOI18N
+        jLabel6.setText(bundle.getString("BrPanelForm.jLabel6.text")); // NOI18N
         jLabel6.setName("jLabel6"); // NOI18N
 
         txtActiveFrom.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
-        txtActiveFrom.setText(bundle.getString("BrPanel.txtActiveFrom.text")); // NOI18N
+        txtActiveFrom.setText(bundle.getString("BrPanelForm.txtActiveFrom.text")); // NOI18N
         txtActiveFrom.setFont(new java.awt.Font("Tahoma", 0, 12));
         txtActiveFrom.setName("txtActiveFrom"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${brDefinition.activeFrom}"), txtActiveFrom, org.jdesktop.beansbinding.BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12));
+        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
-        jLabel8.setText(bundle.getString("BrPanel.jLabel8.text")); // NOI18N
+        jLabel8.setText(bundle.getString("BrPanelForm.jLabel8.text")); // NOI18N
         jLabel8.setName("jLabel8"); // NOI18N
 
         jScrollPane5.setName("jScrollPane5"); // NOI18N
 
         txtBody.setColumns(20);
-        txtBody.setFont(new java.awt.Font("Tahoma", 0, 12));
+        txtBody.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtBody.setRows(5);
         txtBody.setName("txtBody"); // NOI18N
 
@@ -1253,7 +1342,7 @@ public class BrPanel extends javax.swing.JPanel {
         jScrollPane5.setViewportView(txtBody);
 
         btnActiveFrom.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/calendar.png"))); // NOI18N
-        btnActiveFrom.setText(bundle.getString("BrPanel.btnActiveFrom.text")); // NOI18N
+        btnActiveFrom.setText(bundle.getString("BrPanelForm.btnActiveFrom.text")); // NOI18N
         btnActiveFrom.setBorder(null);
         btnActiveFrom.setBorderPainted(false);
         btnActiveFrom.setName("btnActiveFrom"); // NOI18N
@@ -1264,7 +1353,7 @@ public class BrPanel extends javax.swing.JPanel {
         });
 
         txtActiveUntil.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
-        txtActiveUntil.setText(bundle.getString("BrPanel.txtActiveUntil.text")); // NOI18N
+        txtActiveUntil.setText(bundle.getString("BrPanelForm.txtActiveUntil.text")); // NOI18N
         txtActiveUntil.setFont(new java.awt.Font("Tahoma", 0, 12));
         txtActiveUntil.setName("txtActiveUntil"); // NOI18N
 
@@ -1273,11 +1362,11 @@ public class BrPanel extends javax.swing.JPanel {
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
-        jLabel7.setText(bundle.getString("BrPanel.jLabel7.text")); // NOI18N
+        jLabel7.setText(bundle.getString("BrPanelForm.jLabel7.text")); // NOI18N
         jLabel7.setName("jLabel7"); // NOI18N
 
         btnActiveUntil.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/calendar.png"))); // NOI18N
-        btnActiveUntil.setText(bundle.getString("BrPanel.btnActiveUntil.text")); // NOI18N
+        btnActiveUntil.setText(bundle.getString("BrPanelForm.btnActiveUntil.text")); // NOI18N
         btnActiveUntil.setBorder(null);
         btnActiveUntil.setBorderPainted(false);
         btnActiveUntil.setName("btnActiveUntil"); // NOI18N
@@ -1287,42 +1376,34 @@ public class BrPanel extends javax.swing.JPanel {
             }
         });
 
-        pnlBrDefinitionHeader.setName("pnlBrDefinitionHeader"); // NOI18N
-        pnlBrDefinitionHeader.setTitleText(bundle.getString("BrPanel.pnlBrDefinitionHeader.titleText")); // NOI18N
+        headerPanelBrDefinition.setName("headerPanelBrDefinition"); // NOI18N
+        headerPanelBrDefinition.setTitleText(bundle.getString("BrPanelForm.headerPanelBrDefinition.titleText")); // NOI18N
 
-        btnCancelBrDefinition.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        btnCancelBrDefinition.setText(bundle.getString("BrPanel.btnCancelBrDefinition.text")); // NOI18N
-        btnCancelBrDefinition.setName("btnCancelBrDefinition"); // NOI18N
-        btnCancelBrDefinition.addActionListener(new java.awt.event.ActionListener() {
+        jToolBar5.setFloatable(false);
+        jToolBar5.setRollover(true);
+        jToolBar5.setName("jToolBar5"); // NOI18N
+
+        btnSaveBrDefinition.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnSaveBrDefinition.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/save.png"))); // NOI18N
+        btnSaveBrDefinition.setText(bundle.getString("BrPanelForm.btnSaveBrDefinition.text")); // NOI18N
+        btnSaveBrDefinition.setName("btnSaveBrDefinition"); // NOI18N
+        btnSaveBrDefinition.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelBrDefinitionActionPerformed(evt);
+                btnSaveBrDefinitionActionPerformed(evt);
             }
         });
-
-        btnOkBrDefinition.setFont(new java.awt.Font("Tahoma", 0, 12));
-        btnOkBrDefinition.setText(bundle.getString("BrPanel.btnOkBrDefinition.text")); // NOI18N
-        btnOkBrDefinition.setName("btnOkBrDefinition"); // NOI18N
-        btnOkBrDefinition.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOkBrDefinitionActionPerformed(evt);
-            }
-        });
+        jToolBar5.add(btnSaveBrDefinition);
 
         javax.swing.GroupLayout pnlBrDefinitionLayout = new javax.swing.GroupLayout(pnlBrDefinition);
         pnlBrDefinition.setLayout(pnlBrDefinitionLayout);
         pnlBrDefinitionLayout.setHorizontalGroup(
             pnlBrDefinitionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlBrDefinitionHeader, javax.swing.GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlBrDefinitionLayout.createSequentialGroup()
-                .addContainerGap(292, Short.MAX_VALUE)
-                .addComponent(btnOkBrDefinition, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnCancelBrDefinition, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addComponent(headerPanelBrDefinition, javax.swing.GroupLayout.DEFAULT_SIZE, 622, Short.MAX_VALUE)
+            .addComponent(jToolBar5, javax.swing.GroupLayout.DEFAULT_SIZE, 622, Short.MAX_VALUE)
             .addGroup(pnlBrDefinitionLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlBrDefinitionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 462, Short.MAX_VALUE)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 602, Short.MAX_VALUE)
                     .addGroup(pnlBrDefinitionLayout.createSequentialGroup()
                         .addGroup(pnlBrDefinitionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6)
@@ -1342,7 +1423,9 @@ public class BrPanel extends javax.swing.JPanel {
         pnlBrDefinitionLayout.setVerticalGroup(
             pnlBrDefinitionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlBrDefinitionLayout.createSequentialGroup()
-                .addComponent(pnlBrDefinitionHeader, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(headerPanelBrDefinition, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jToolBar5, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pnlBrDefinitionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlBrDefinitionLayout.createSequentialGroup()
@@ -1361,11 +1444,8 @@ public class BrPanel extends javax.swing.JPanel {
                             .addComponent(txtActiveUntil, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnActiveUntil))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlBrDefinitionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCancelBrDefinition)
-                    .addComponent(btnOkBrDefinition)))
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pnlCards.add(pnlBrDefinition, "cardBrDefinition");
@@ -1374,11 +1454,11 @@ public class BrPanel extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlCards, javax.swing.GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE)
+            .addComponent(pnlCards, javax.swing.GroupLayout.DEFAULT_SIZE, 622, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlCards, javax.swing.GroupLayout.DEFAULT_SIZE, 377, Short.MAX_VALUE)
+            .addComponent(pnlCards, javax.swing.GroupLayout.DEFAULT_SIZE, 436, Short.MAX_VALUE)
         );
 
         bindingGroup.bind();
@@ -1392,89 +1472,118 @@ public class BrPanel extends javax.swing.JPanel {
         showCalendar(txtActiveUntil);
     }
 
-    @Action
-    public void addDefinition() {
+    private void addDefinition() {
         setBrDefinition(new BrDefinitionBean());
         getBrDefinition().setBrId(getBr().getId());
         showPanel(CARD_BR_DEFINITION);
     }//GEN-LAST:event_btnActiveUntilActionPerformed
 
-    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
-        firePropertyChange(CANCEL_ACTION_PROPERTY, false, true);
-    }//GEN-LAST:event_btnCloseActionPerformed
+    private void btnSaveBrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveBrActionPerformed
+        save(true);
+    }//GEN-LAST:event_btnSaveBrActionPerformed
 
-    private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
-        save();
-    }//GEN-LAST:event_btnOkActionPerformed
-
-    private void btnCancelBrValidationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelBrValidationActionPerformed
-        showPanel(CARD_BR);
-    }//GEN-LAST:event_btnCancelBrValidationActionPerformed
-
-    private void btnOkBrDefinitionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkBrDefinitionActionPerformed
-        if(getBrDefinition().validate(true).size()>0){
+    private void btnSaveBrDefinitionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveBrDefinitionActionPerformed
+        if (getBrDefinition().validate(true).size() > 0) {
             return;
         }
-        if(getBr().getBrDefinitionList().contains(getBrDefinition())){
+        if (getBr().getBrDefinitionList().contains(getBrDefinition())) {
             int index = getBr().getBrDefinitionList().indexOf(getBrDefinition());
             getBr().getBrDefinitionList().get(index).copyFromObject(getBrDefinition());
-        }else{
+        } else {
             getBr().getBrDefinitionList().addAsNew(getBrDefinition());
         }
         showPanel(CARD_BR);
-    }//GEN-LAST:event_btnOkBrDefinitionActionPerformed
+    }//GEN-LAST:event_btnSaveBrDefinitionActionPerformed
 
-    private void btnCancelBrDefinitionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelBrDefinitionActionPerformed
-        showPanel(CARD_BR);
-    }//GEN-LAST:event_btnCancelBrDefinitionActionPerformed
-
-    private void btnOkBrValidationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkBrValidationActionPerformed
-        if(getBrValidation().validate(true).size()>0){
+    private void btnSaveBrValidationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveBrValidationActionPerformed
+        if (getBrValidation().validate(true).size() > 0) {
             return;
         }
-        if(getBr().getBrValidationList().contains(getBrValidation())){
+        if (getBr().getBrValidationList().contains(getBrValidation())) {
             int index = getBr().getBrValidationList().indexOf(getBrValidation());
             getBr().getBrValidationList().get(index).copyFromObject(getBrValidation());
-        }else{
+        } else {
             getBr().getBrValidationList().addAsNew(getBrValidation());
         }
         showPanel(CARD_BR);
-    }//GEN-LAST:event_btnOkBrValidationActionPerformed
+    }//GEN-LAST:event_btnSaveBrValidationActionPerformed
 
-    @Action
-    public void removeDefinition() {
+    private void btnAddDefinitionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddDefinitionActionPerformed
+        addDefinition();
+    }//GEN-LAST:event_btnAddDefinitionActionPerformed
+
+    private void btnEditDefinitionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditDefinitionActionPerformed
+        editDefinition();
+    }//GEN-LAST:event_btnEditDefinitionActionPerformed
+
+    private void btnRemoveDefinitionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveDefinitionActionPerformed
+        removeDefinition();
+    }//GEN-LAST:event_btnRemoveDefinitionActionPerformed
+
+    private void menuAddDefinitionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAddDefinitionActionPerformed
+        addDefinition();
+    }//GEN-LAST:event_menuAddDefinitionActionPerformed
+
+    private void menuEditDefinitionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEditDefinitionActionPerformed
+        editDefinition();
+    }//GEN-LAST:event_menuEditDefinitionActionPerformed
+
+    private void menuRemoveDefinitionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRemoveDefinitionActionPerformed
+        removeDefinition();
+    }//GEN-LAST:event_menuRemoveDefinitionActionPerformed
+
+    private void btnAddValidationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddValidationActionPerformed
+        addValidation();
+    }//GEN-LAST:event_btnAddValidationActionPerformed
+
+    private void btnEditValidationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditValidationActionPerformed
+        editValidation();
+    }//GEN-LAST:event_btnEditValidationActionPerformed
+
+    private void btnRemoveValidationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveValidationActionPerformed
+        removeValidation();
+    }//GEN-LAST:event_btnRemoveValidationActionPerformed
+
+    private void menuAddValidationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAddValidationActionPerformed
+        addValidation();
+    }//GEN-LAST:event_menuAddValidationActionPerformed
+
+    private void menuEditValidationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEditValidationActionPerformed
+        editValidation();
+    }//GEN-LAST:event_menuEditValidationActionPerformed
+
+    private void menuRemoveValidationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRemoveValidationActionPerformed
+        removeValidation();
+    }//GEN-LAST:event_menuRemoveValidationActionPerformed
+
+    private void removeDefinition() {
         br.removeSelectedBrDefinition();
-        clearDefinitionFields();
     }
 
-    @Action
-    public void addValidation() {
+    private void addValidation() {
         setBrValidation(new BrValidationBean());
         getBrValidation().setBrId(getBr().getId());
         showPanel(CARD_BR_VALIDATION);
     }
 
-    @Action
-    public void removeValidation() {
+    private void removeValidation() {
         br.removeSelectedBrValidation();
-        clearValidationFields();
     }
 
-    @Action
-    public void editDefinition() {
-        if(getBr().getSelectedBrDefinition() !=null){
-            setBrDefinition((BrDefinitionBean)getBr().getSelectedBrDefinition().copy());
+    private void editDefinition() {
+        if (getBr().getSelectedBrDefinition() != null) {
+            setBrDefinition((BrDefinitionBean) getBr().getSelectedBrDefinition().copy());
             showPanel(CARD_BR_DEFINITION);
         }
     }
 
-    @Action
-    public void editValidation() {
-        if(getBr().getSelectedBrValidation() !=null){
-            setBrValidation((BrValidationBean)getBr().getSelectedBrValidation().copy());
+    private void editValidation() {
+        if (getBr().getSelectedBrValidation() != null) {
+            setBrValidation((BrValidationBean) getBr().getSelectedBrValidation().copy());
             showPanel(CARD_BR_VALIDATION);
         }
     }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.sola.clients.beans.referencedata.ApplicationActionTypeListBean applicationActionTypes;
     private org.sola.clients.beans.referencedata.BrSeverityTypeListBean brSeverityTypes;
@@ -1484,16 +1593,13 @@ public class BrPanel extends javax.swing.JPanel {
     private javax.swing.JButton btnActiveUntil;
     private javax.swing.JButton btnAddDefinition;
     private javax.swing.JButton btnAddValidation;
-    private javax.swing.JButton btnCancelBrDefinition;
-    private javax.swing.JButton btnCancelBrValidation;
-    private javax.swing.JButton btnClose;
     private javax.swing.JButton btnEditDefinition;
     private javax.swing.JButton btnEditValidation;
-    private javax.swing.JButton btnOk;
-    private javax.swing.JButton btnOkBrDefinition;
-    private javax.swing.JButton btnOkBrValidation;
     private javax.swing.JButton btnRemoveDefinition;
     private javax.swing.JButton btnRemoveValidation;
+    private javax.swing.JButton btnSaveBr;
+    private javax.swing.JButton btnSaveBrDefinition;
+    private javax.swing.JButton btnSaveBrValidation;
     private javax.swing.JComboBox cbxApplicationActions;
     private javax.swing.JComboBox cbxRegistrationTypes;
     private javax.swing.JComboBox cbxRequestTypes;
@@ -1502,6 +1608,9 @@ public class BrPanel extends javax.swing.JPanel {
     private javax.swing.JComboBox cbxSeverity;
     private javax.swing.JComboBox cbxTargetTypes;
     private javax.swing.JComboBox cbxTechnicalType;
+    private org.sola.clients.swing.ui.HeaderPanel headerPanel;
+    private org.sola.clients.swing.ui.HeaderPanel headerPanelBrDefinition;
+    private org.sola.clients.swing.ui.HeaderPanel headerPanelBrValidation;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1545,6 +1654,9 @@ public class BrPanel extends javax.swing.JPanel {
     private org.sola.clients.swing.common.controls.JTableWithDefaultStyles jTableWithDefaultStyles1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
+    private javax.swing.JToolBar jToolBar3;
+    private javax.swing.JToolBar jToolBar4;
+    private javax.swing.JToolBar jToolBar5;
     private org.sola.clients.beans.system.LocalizedValuesListBean localizedFeedback;
     private javax.swing.JMenuItem menuAddDefinition;
     private javax.swing.JMenuItem menuAddValidation;
@@ -1554,10 +1666,8 @@ public class BrPanel extends javax.swing.JPanel {
     private javax.swing.JMenuItem menuRemoveValidation;
     private javax.swing.JPanel pnlBr;
     private javax.swing.JPanel pnlBrDefinition;
-    private org.sola.clients.swing.ui.GroupPanel pnlBrDefinitionHeader;
     private javax.swing.JPanel pnlBrValidation;
     private javax.swing.JPanel pnlBrValidationFields;
-    private org.sola.clients.swing.ui.GroupPanel pnlBrValidationHeader;
     private javax.swing.JPanel pnlCards;
     private javax.swing.JPopupMenu popupDefinitions;
     private javax.swing.JPopupMenu popupValidations;
