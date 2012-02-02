@@ -255,7 +255,6 @@ public class BrBean extends AbstractBindingBean {
     public void removeSelectedBrDefinition(){
         if(selectedBrDefinition!=null){
             brDefinitionList.safeRemove(selectedBrDefinition, EntityAction.DELETE);
-            selectedBrDefinition = null;
         }
     }
     
@@ -271,7 +270,6 @@ public class BrBean extends AbstractBindingBean {
     public void removeSelectedBrValidation(){
         if(selectedBrValidation!=null){
             brValidationList.safeRemove(selectedBrValidation, EntityAction.DELETE);
-            selectedBrValidation = null;
         }
     }
     

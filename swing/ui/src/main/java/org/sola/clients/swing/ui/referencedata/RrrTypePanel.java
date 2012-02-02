@@ -30,9 +30,6 @@ package org.sola.clients.swing.ui.referencedata;
 import org.sola.clients.beans.AbstractCodeBean;
 import org.sola.clients.beans.referencedata.RrrGroupTypeListBean;
 import org.sola.clients.beans.referencedata.RrrTypeBean;
-import org.sola.clients.swing.common.LafManager;
-import org.sola.common.messaging.ClientMessage;
-import org.sola.common.messaging.MessageUtility;
 import org.sola.webservices.transferobjects.referencedata.RrrTypeTO;
 
 /**
@@ -40,82 +37,19 @@ import org.sola.webservices.transferobjects.referencedata.RrrTypeTO;
  */
 public class RrrTypePanel extends javax.swing.JPanel {
 
-    public static final String SAVED_REFDATA_PROPERTY = "RefdataSaved";
-    public static final String CREATED_REFDATA_PROPERTY = "RefdataCreated";
-    public static final String CANCEL_ACTION_PROPERTY = "Cancel";
-    private String saveEventToFire = SAVED_REFDATA_PROPERTY;
     private RrrTypeBean rrrTypeBean;
-    private boolean closeOnSave;
-    private boolean closeOnCreate;
     
     /** Creates new form RrrTypePanel */
     public RrrTypePanel() {
         initComponents();
-        customizeComponents();
         setupRrrTypeBean(null);
     }
-    
-    
-     /** Applies customization of component L&F. */
-    private void customizeComponents() {
-   
-        
-//    BUTTONS   
-    LafManager.getInstance().setBtnProperties(btnClose);
-    LafManager.getInstance().setBtnProperties(btnOk);
-    
-//     COMBOBOXES
-    LafManager.getInstance().setCmbProperties(cbxRrrGroupTypes);
-
-    
-//     CHECKBOXES
-    LafManager.getInstance().setChkProperties(chbxCheckShare);
-    LafManager.getInstance().setChkProperties(chbxPartyRequired);
-    LafManager.getInstance().setChkProperties(chbxPrimaryRight);
-    
-    
-//    LABELS    
-    LafManager.getInstance().setLabProperties(jLabel1);
-    LafManager.getInstance().setLabProperties(jLabel2);
-    LafManager.getInstance().setLabProperties(jLabel3);
-    LafManager.getInstance().setLabProperties(jLabel4);
-    LafManager.getInstance().setLabProperties(jLabel5);
-    LafManager.getInstance().setLabProperties(jLabel6);
-    LafManager.getInstance().setLabProperties(jLabel7);
-    LafManager.getInstance().setLabProperties(jLabel8);
-   
-   
-//    TXT FIELDS
-    LafManager.getInstance().setTxtProperties(txtCode);
-    LafManager.getInstance().setTxtProperties(txtStatus);
-   
-    }
-
-    
     
     private RrrGroupTypeListBean createRrrGroupTypes() {
         if (rrrGroups == null) {
             rrrGroups = new RrrGroupTypeListBean(true);
         }
         return rrrGroups;
-    }
-
-    public boolean isCloseOnCreate() {
-        return closeOnCreate;
-    }
-
-    public void setCloseOnCreate(boolean closeOnCreate) {
-        this.closeOnCreate = closeOnCreate;
-        setButtonOkCaption();
-    }
-
-    public boolean isCloseOnSave() {
-        return closeOnSave;
-    }
-
-    public void setCloseOnSave(boolean closeOnSave) {
-        this.closeOnSave = closeOnSave;
-        setButtonOkCaption();
     }
 
     public RrrTypeBean getRrrTypeBean() {
@@ -126,60 +60,37 @@ public class RrrTypePanel extends javax.swing.JPanel {
         this.rrrTypeBean = rrrTypeBean;
         setupRrrTypeBean(this.rrrTypeBean);
     }
-    
-    /** Assigns OK button text label. */
-    private void setButtonOkCaption() {
-        try {
-            if (saveEventToFire.equals(SAVED_REFDATA_PROPERTY)) {
-                if (closeOnSave) {
-                    btnOk.setText(MessageUtility.getLocalizedMessage(
-                            ClientMessage.GENERAL_LABELS_SAVE_AND_CLOSE).getMessage());
-                } else {
-                    btnOk.setText(MessageUtility.getLocalizedMessage(
-                            ClientMessage.GENERAL_LABELS_SAVE).getMessage());
-                }
-            } else {
-                if (closeOnCreate) {
-                    btnOk.setText(MessageUtility.getLocalizedMessage(
-                            ClientMessage.GENERAL_LABELS_CREATE_AND_CLOSE).getMessage());
-                } else {
-                    btnOk.setText(MessageUtility.getLocalizedMessage(
-                            ClientMessage.GENERAL_LABELS_CREATE).getMessage());
-                }
-            }
-        } catch (Exception e) {
-        }
-    }
-    
+       
     /** Setup {@link RrrTypeBean} object, used to bind data on the form. */
     private void setupRrrTypeBean(RrrTypeBean rrrTypeBean) {
         txtCode.setEnabled(rrrTypeBean == null);
 
         if (rrrTypeBean != null) {
             this.rrrTypeBean = rrrTypeBean;
-            saveEventToFire = SAVED_REFDATA_PROPERTY;
         } else {
             this.rrrTypeBean = new RrrTypeBean();
             cbxRrrGroupTypes.setSelectedIndex(0);
-            saveEventToFire = CREATED_REFDATA_PROPERTY;
         }
 
         descriptionValues.loadLocalizedValues(this.rrrTypeBean.getDescription());
         displayValues.loadLocalizedValues(this.rrrTypeBean.getDisplayValue());
-        setButtonOkCaption();
         firePropertyChange("rrrTypeBean", null, this.rrrTypeBean);
     }
 
+    /** Validates reference data object. */
+    public boolean validateRrrType(boolean showMessage){
+        return rrrTypeBean.validate(showMessage).size() < 1;
+    }
+    
     /** Calls saving procedure of RRR type data object. */
-    public void save() {
+    public boolean save(boolean showMessage) {
         rrrTypeBean.setDisplayValue(displayValues.buildMultilingualString());
         rrrTypeBean.setDescription(descriptionValues.buildMultilingualString());
-        if (rrrTypeBean.validate(true).size() < 1) {
+        if (validateRrrType(showMessage)) {
             AbstractCodeBean.saveRefData(rrrTypeBean, RrrTypeTO.class);
-            firePropertyChange(saveEventToFire, false, true);
-        }
-        if (saveEventToFire.equals(CREATED_REFDATA_PROPERTY) && !closeOnCreate) {
-            setupRrrTypeBean(null);
+            return true;
+        }else{
+            return false;
         }
     }
     
@@ -219,11 +130,8 @@ public class RrrTypePanel extends javax.swing.JPanel {
         jScrollPane2 = new javax.swing.JScrollPane();
         tableDescriptions = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
         jLabel8 = new javax.swing.JLabel();
-        jPanel11 = new javax.swing.JPanel();
-        btnOk = new javax.swing.JButton();
-        btnClose = new javax.swing.JButton();
 
-        setMinimumSize(new java.awt.Dimension(530, 385));
+        setMinimumSize(new java.awt.Dimension(200, 200));
 
         jPanel7.setName("jPanel7"); // NOI18N
         jPanel7.setLayout(new java.awt.GridLayout(2, 3, 15, 0));
@@ -477,7 +385,7 @@ public class RrrTypePanel extends javax.swing.JPanel {
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE))
         );
 
         jPanel10.add(jPanel8);
@@ -523,47 +431,10 @@ public class RrrTypePanel extends javax.swing.JPanel {
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE))
         );
 
         jPanel10.add(jPanel9);
-
-        jPanel11.setName("jPanel11"); // NOI18N
-
-        btnOk.setFont(new java.awt.Font("Tahoma", 0, 12));
-        btnOk.setText(bundle.getString("RrrTypePanel.btnOk.text")); // NOI18N
-        btnOk.setName("btnOk"); // NOI18N
-        btnOk.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOkActionPerformed(evt);
-            }
-        });
-
-        btnClose.setFont(new java.awt.Font("Tahoma", 0, 12));
-        btnClose.setText(bundle.getString("RrrTypePanel.btnClose.text")); // NOI18N
-        btnClose.setName("btnClose"); // NOI18N
-        btnClose.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCloseActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
-        jPanel11.setLayout(jPanel11Layout);
-        jPanel11Layout.setHorizontalGroup(
-            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
-                .addContainerGap(295, Short.MAX_VALUE)
-                .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        jPanel11Layout.setVerticalGroup(
-            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(btnOk)
-                .addComponent(btnClose))
-        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -571,32 +442,19 @@ public class RrrTypePanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 530, Short.MAX_VALUE)
             .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, 530, Short.MAX_VALUE)
-            .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE))
         );
 
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
-        save();
-    }//GEN-LAST:event_btnOkActionPerformed
-
-    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
-        firePropertyChange(CANCEL_ACTION_PROPERTY, false, true);
-    }//GEN-LAST:event_btnCloseActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnClose;
-    private javax.swing.JButton btnOk;
     private javax.swing.JComboBox cbxRrrGroupTypes;
     private javax.swing.JCheckBox chbxCheckShare;
     private javax.swing.JCheckBox chbxPartyRequired;
@@ -613,7 +471,6 @@ public class RrrTypePanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
-    private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;

@@ -27,11 +27,9 @@
  */
 package org.sola.clients.swing.ui.party;
 
-import java.awt.CardLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
+import javax.swing.JPanel;
 import org.jdesktop.application.Action;
 import org.sola.clients.beans.party.PartyBean;
 import org.sola.clients.beans.party.PartySearchResultListBean;
@@ -39,7 +37,6 @@ import org.sola.clients.beans.referencedata.PartyRoleTypeListBean;
 import org.sola.clients.beans.referencedata.PartyTypeListBean;
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.swing.common.LafManager;
-import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.common.RolesConstants;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -47,146 +44,175 @@ import org.sola.common.messaging.MessageUtility;
 /**
  * Allows to search parties and manage them.
  */
-public class PartySearchPanel extends ContentPanel {
-    
-    /** {@link PartyPanel} listener to capture creation save and cancel events. */
-    private class PartyPanelListener implements PropertyChangeListener {
+public class PartySearchPanel extends JPanel {
 
-        @Override
-        public void propertyChange(PropertyChangeEvent evt) {
-            if (evt.getPropertyName().equals(PartyPanel.CREATED_PARTY)) {
-                MessageUtility.displayMessage(ClientMessage.PARTY_CREATED);
-            } else if (evt.getPropertyName().equals(PartyPanel.UPDATED_PARTY)) {
-                MessageUtility.displayMessage(ClientMessage.PARTY_SAVED);
-                showPartySearch();
-                search();
-            }
-            if (evt.getPropertyName().equals(PartyPanel.CANCEL_ACTION)) {
-                showPartySearch();
-                search();
-            }
-        }
-    }
-    
-    private ResourceBundle resourceBundle;
-    private String headerTitle;
-    private final String CARD_SEARCH = "cardSearchPanel";
-    private final String CARD_PARTY = "cardPartyPanel";
-    
+    public static final String CREATE_NEW_PARTY_PROPERTY = "createNewParty";
+    public static final String EDIT_PARTY_PROPERTY = "editParty";
+    public static final String REMOVE_PARTY_PROPERTY = "removeParty";
+    public static final String SELECT_PARTY_PROPERTY = "selectParty";
+    public static final String VIEW_PARTY_PROPERTY = "viewParty";
+
     /** Creates new form PartySearchPanel */
     public PartySearchPanel() {
-        resourceBundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/party/Bundle");
         initComponents();
-        
-        headerTitle = pnlHeader.getTitleText();
-        PartyPanelListener listener = new PartyPanelListener();
-        pnlParty.addPropertyChangeListener(listener);
-        
+
         partySearchResuls.addPropertyChangeListener(new PropertyChangeListener() {
 
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                if(evt.getPropertyName().equals(PartySearchResultListBean.SELECTED_PARTY_SEARCH_RESULT)){
+                if (evt.getPropertyName().equals(PartySearchResultListBean.SELECTED_PARTY_SEARCH_RESULT)) {
                     customizePartyButtons();
                 }
             }
         });
-        showPartySearch();
         customizePartyButtons();
         customizeComponents();
     }
+
+    public boolean isShowViewButton(){
+        return btnView.isVisible();
+    }
     
+    public void setShowViewButton(boolean isVisible){
+        btnView.setVisible(isVisible);
+        menuView.setVisible(isVisible);
+        separator1.setVisible(isVisible);
+        if(!isVisible && btnSelect.isVisible()){
+            separator1.setVisible(true);
+        }
+    }
     
-     /** Applies customization of component L&F. */
+    public boolean isShowSelectButton(){
+        return btnSelect.isVisible();
+    }
+    
+    public void setShowSelectButton(boolean isVisible){
+        btnSelect.setVisible(isVisible);
+        menuSelect.setVisible(isVisible);
+        separator1.setVisible(isVisible);
+        if(!isVisible && btnView.isVisible()){
+            separator1.setVisible(true);
+        }
+    }
+    
+    public boolean isShowAddButton(){
+        return btnAddParty.isVisible();
+    }
+    
+    public void setShowAddButton(boolean isVisible){
+        btnAddParty.setVisible(isVisible);
+        menuAdd.setVisible(isVisible);
+    }
+    
+    public boolean isShowEditButton(){
+        return btnEditParty.isVisible();
+    }
+    
+    public void setShowEditButton(boolean isVisible){
+        btnEditParty.setVisible(isVisible);
+        menuEdit.setVisible(isVisible);
+    }
+    
+    public boolean isShowRemoveButton(){
+        return btnRemoveParty.isVisible();
+    }
+    
+    public void setShowRemoveButton(boolean isVisible){
+        btnRemoveParty.setVisible(isVisible);
+        menuRemove.setVisible(isVisible);
+    }
+    
+    /** Applies customization of component L&F. */
     private void customizeComponents() {
- 
+
 //    BUTTONS   
-    LafManager.getInstance().setBtnProperties(btnAddParty);
-    LafManager.getInstance().setBtnProperties(btnEditParty);
-    LafManager.getInstance().setBtnProperties(btnRemoveParty);
-    LafManager.getInstance().setBtnProperties(btnSearch);
+        LafManager.getInstance().setBtnProperties(btnAddParty);
+        LafManager.getInstance().setBtnProperties(btnEditParty);
+        LafManager.getInstance().setBtnProperties(btnRemoveParty);
+        LafManager.getInstance().setBtnProperties(btnSearch);
 //    COMBOBOXES
-    LafManager.getInstance().setCmbProperties(cbxPartyTypes);
-    LafManager.getInstance().setCmbProperties(cbxRoles);
-    
-    
-    
+        LafManager.getInstance().setCmbProperties(cbxPartyTypes);
+        LafManager.getInstance().setCmbProperties(cbxRoles);
+
+
+
 //    LABELS    
-    LafManager.getInstance().setLabProperties(jLabel1);
-    LafManager.getInstance().setLabProperties(jLabel2);
-    LafManager.getInstance().setLabProperties(jLabel3);
-   
-   
+        LafManager.getInstance().setLabProperties(jLabel1);
+        LafManager.getInstance().setLabProperties(jLabel2);
+        LafManager.getInstance().setLabProperties(jLabel3);
+
+
 //    TXT FIELDS
-    LafManager.getInstance().setTxtProperties(txtName);
+        LafManager.getInstance().setTxtProperties(txtName);
     }
 
-    
-    private PartyTypeListBean createPartyTypes(){
-        if(partyTypes == null){
+    private PartyTypeListBean createPartyTypes() {
+        if (partyTypes == null) {
             partyTypes = new PartyTypeListBean(true);
         }
         return partyTypes;
     }
-    
-    private PartyRoleTypeListBean createPartyRoleTypes(){
-        if(partyRoleTyps == null){
+
+    private PartyRoleTypeListBean createPartyRoleTypes() {
+        if (partyRoleTyps == null) {
             partyRoleTyps = new PartyRoleTypeListBean(true);
         }
         return partyRoleTyps;
     }
-    
+
     /** Enables or disables Party management buttons, based on security rights. */
-    private void customizePartyButtons(){
+    private void customizePartyButtons() {
         boolean hasPartySaveRole = SecurityBean.isInRole(RolesConstants.PARTY_SAVE);
-        boolean enabled = partySearchResuls.getSelectedPartySearchResult() != null && hasPartySaveRole;
-        
-        if(enabled && partySearchResuls.getSelectedPartySearchResult().isRightHolder()){
+        boolean enabled = partySearchResuls.getSelectedPartySearchResult() != null;
+
+        btnView.setEnabled(enabled);
+        btnSelect.setEnabled(enabled);
+        menuView.setEnabled(btnView.isEnabled());
+        menuSelect.setEnabled(btnSelect.isEnabled());
+
+        enabled = enabled && hasPartySaveRole;
+
+        if (enabled && partySearchResuls.getSelectedPartySearchResult().isRightHolder()) {
             enabled = SecurityBean.isInRole(RolesConstants.PARTY_RIGHTHOLDERS_SAVE);
         }
         btnAddParty.getAction().setEnabled(hasPartySaveRole);
         btnEditParty.getAction().setEnabled(enabled);
         btnRemoveParty.getAction().setEnabled(enabled);
     }
-  
-    /** Shows search panel. */
-    private void showPartySearch(){
-        ((CardLayout)pnlContent.getLayout()).show(pnlContent, CARD_SEARCH);
-        pnlHeader.setTitleText(headerTitle);
-        customizeComponents();
-    }
-    
-    /** Shows party panel. */
-    private void showPartyPanel(PartyBean party){
-        ((CardLayout)pnlContent.getLayout()).show(pnlContent, CARD_PARTY);
-        pnlParty.setPartyBean(party);
-        
-        if (party != null) {
-            pnlHeader.setTitleText(MessageFormat.format("{0} - {1}", headerTitle,
-                    party.getFullName()));
-        } else {
-            pnlHeader.setTitleText(MessageFormat.format("{0} - {1}", headerTitle,
-                    resourceBundle.getString("PartySearchPanel.NewParty")));
-        }
-        customizeComponents();
-    }
-    
+
     /** Searches parties with given criteria. */
-    private void search(){
+    private void search() {
         partySearchResuls.search(partySearchParams);
-        if(partySearchResuls.getPartySearchResults().size()>100){
+        if (partySearchResuls.getPartySearchResults().size() > 100) {
             MessageUtility.displayMessage(ClientMessage.SEARCH_TOO_MANY_RESULTS, new String[]{"100"});
-        }else if(partySearchResuls.getPartySearchResults().size()<1){
+        } else if (partySearchResuls.getPartySearchResults().size() < 1) {
             MessageUtility.displayMessage(ClientMessage.SEARCH_NO_RESULTS);
         }
     }
+
+    private void firePartyEvent(String propertyName) {
+        if (partySearchResuls.getSelectedPartySearchResult() != null) {
+            firePropertyChange(propertyName, null,
+                    PartyBean.getParty(partySearchResuls.getSelectedPartySearchResult().getId()));
+        }
+    }
+
+    private void selectParty() {
+        firePartyEvent(SELECT_PARTY_PROPERTY);
+    }
     
+    private void viewParty() {
+        firePartyEvent(VIEW_PARTY_PROPERTY);
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         popupParties = new javax.swing.JPopupMenu();
+        menuView = new javax.swing.JMenuItem();
+        menuSelect = new javax.swing.JMenuItem();
         menuAdd = new javax.swing.JMenuItem();
         menuEdit = new javax.swing.JMenuItem();
         menuRemove = new javax.swing.JMenuItem();
@@ -194,15 +220,15 @@ public class PartySearchPanel extends ContentPanel {
         partyRoleTyps = createPartyRoleTypes();
         partySearchParams = new org.sola.clients.beans.party.PartySearchParamsBean();
         partySearchResuls = new org.sola.clients.beans.party.PartySearchResultListBean();
-        pnlContent = new javax.swing.JPanel();
-        scrlPartyPanel = new javax.swing.JScrollPane();
-        pnlParty = new org.sola.clients.swing.ui.party.PartyPanel();
         scrlSearchPanel = new javax.swing.JScrollPane();
         pnlSearch = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableSearchResults = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
         jToolBar1 = new javax.swing.JToolBar();
+        btnView = new javax.swing.JButton();
+        btnSelect = new javax.swing.JButton();
+        separator1 = new javax.swing.JToolBar.Separator();
         btnAddParty = new javax.swing.JButton();
         btnEditParty = new javax.swing.JButton();
         btnRemoveParty = new javax.swing.JButton();
@@ -219,13 +245,32 @@ public class PartySearchPanel extends ContentPanel {
         cbxRoles = new javax.swing.JComboBox();
         jPanel5 = new javax.swing.JPanel();
         btnSearch = new javax.swing.JButton();
-        pnlHeader = new org.sola.clients.swing.ui.HeaderPanel();
 
         popupParties.setName("popupParties"); // NOI18N
 
+        menuView.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/view.png"))); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/party/Bundle"); // NOI18N
+        menuView.setText(bundle.getString("PartySearchPanel.menuView.text")); // NOI18N
+        menuView.setName("menuView"); // NOI18N
+        menuView.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuViewActionPerformed(evt);
+            }
+        });
+        popupParties.add(menuView);
+
+        menuSelect.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/select.png"))); // NOI18N
+        menuSelect.setText(bundle.getString("PartySearchPanel.menuSelect.text")); // NOI18N
+        menuSelect.setName("menuSelect"); // NOI18N
+        menuSelect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuSelectActionPerformed(evt);
+            }
+        });
+        popupParties.add(menuSelect);
+
         javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(PartySearchPanel.class, this);
         menuAdd.setAction(actionMap.get("addParty")); // NOI18N
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/party/Bundle"); // NOI18N
         menuAdd.setText(bundle.getString("PartySearchPanel.menuAdd.text")); // NOI18N
         menuAdd.setName("menuAdd"); // NOI18N
         popupParties.add(menuAdd);
@@ -239,23 +284,6 @@ public class PartySearchPanel extends ContentPanel {
         menuRemove.setText(bundle.getString("PartySearchPanel.menuRemove.text")); // NOI18N
         menuRemove.setName("menuRemove"); // NOI18N
         popupParties.add(menuRemove);
-
-        setHeaderPanel(pnlHeader);
-
-        pnlContent.setName("pnlContent"); // NOI18N
-        pnlContent.setLayout(new java.awt.CardLayout());
-
-        scrlPartyPanel.setBorder(null);
-        scrlPartyPanel.setName("scrlPartyPanel"); // NOI18N
-        scrlPartyPanel.setPreferredSize(new java.awt.Dimension(300, 425));
-
-        pnlParty.setCloseOnSave(true);
-        pnlParty.setName("pnlParty"); // NOI18N
-        pnlParty.setPreferredSize(new java.awt.Dimension(400, 440));
-        pnlParty.setSavePartyOnAction(true);
-        scrlPartyPanel.setViewportView(pnlParty);
-
-        pnlContent.add(scrlPartyPanel, "cardPartyPanel");
 
         scrlSearchPanel.setBorder(null);
         scrlSearchPanel.setName("scrlSearchPanel"); // NOI18N
@@ -300,6 +328,37 @@ public class PartySearchPanel extends ContentPanel {
         jToolBar1.setRollover(true);
         jToolBar1.setName("jToolBar1"); // NOI18N
 
+        btnView.setFont(new java.awt.Font("Tahoma", 0, 12));
+        btnView.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/view.png"))); // NOI18N
+        btnView.setText(bundle.getString("PartySearchPanel.btnView.text")); // NOI18N
+        btnView.setFocusable(false);
+        btnView.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnView.setName("btnView"); // NOI18N
+        btnView.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnView.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnView);
+
+        btnSelect.setFont(new java.awt.Font("Tahoma", 0, 12));
+        btnSelect.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/select.png"))); // NOI18N
+        btnSelect.setText(bundle.getString("PartySearchPanel.btnSelect.text")); // NOI18N
+        btnSelect.setFocusable(false);
+        btnSelect.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnSelect.setName("btnSelect"); // NOI18N
+        btnSelect.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSelect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSelectActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnSelect);
+
+        separator1.setName("separator1"); // NOI18N
+        jToolBar1.add(separator1);
+
         btnAddParty.setAction(actionMap.get("addParty")); // NOI18N
         btnAddParty.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnAddParty.setText(bundle.getString("PartySearchPanel.btnAddParty.text")); // NOI18N
@@ -331,15 +390,15 @@ public class PartySearchPanel extends ContentPanel {
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jToolBar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
+            .addComponent(jToolBar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 584, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 584, Short.MAX_VALUE)
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE))
         );
 
         jPanel8.setName("jPanel8"); // NOI18N
@@ -365,8 +424,8 @@ public class PartySearchPanel extends ContentPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addContainerGap(111, Short.MAX_VALUE))
-            .addComponent(txtName, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)
+                .addContainerGap(115, Short.MAX_VALUE))
+            .addComponent(txtName, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -400,8 +459,8 @@ public class PartySearchPanel extends ContentPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jLabel2)
-                .addContainerGap(114, Short.MAX_VALUE))
-            .addComponent(cbxPartyTypes, 0, 146, Short.MAX_VALUE)
+                .addContainerGap(118, Short.MAX_VALUE))
+            .addComponent(cbxPartyTypes, 0, 150, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -435,8 +494,8 @@ public class PartySearchPanel extends ContentPanel {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jLabel3)
-                .addContainerGap(119, Short.MAX_VALUE))
-            .addComponent(cbxRoles, 0, 146, Short.MAX_VALUE)
+                .addContainerGap(123, Short.MAX_VALUE))
+            .addComponent(cbxRoles, 0, 150, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -479,7 +538,7 @@ public class PartySearchPanel extends ContentPanel {
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -506,28 +565,15 @@ public class PartySearchPanel extends ContentPanel {
 
         scrlSearchPanel.setViewportView(pnlSearch);
 
-        pnlContent.add(scrlSearchPanel, "cardSearchPanel");
-
-        pnlHeader.setName("pnlHeader"); // NOI18N
-        pnlHeader.setTitleText(bundle.getString("PartySearchPanel.pnlHeader.titleText")); // NOI18N
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlHeader, javax.swing.GroupLayout.DEFAULT_SIZE, 594, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(pnlContent, javax.swing.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
-                .addGap(10, 10, 10))
+            .addComponent(scrlSearchPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 584, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(pnlHeader, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(pnlContent, javax.swing.GroupLayout.DEFAULT_SIZE, 442, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(scrlSearchPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 453, Short.MAX_VALUE)
         );
 
         bindingGroup.bind();
@@ -537,23 +583,39 @@ public class PartySearchPanel extends ContentPanel {
         search();
     }//GEN-LAST:event_btnSearchActionPerformed
 
+    private void btnViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewActionPerformed
+        viewParty();
+    }//GEN-LAST:event_btnViewActionPerformed
+
+    private void btnSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectActionPerformed
+        selectParty();
+    }//GEN-LAST:event_btnSelectActionPerformed
+
+    private void menuViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuViewActionPerformed
+        viewParty();
+    }//GEN-LAST:event_menuViewActionPerformed
+
+    private void menuSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSelectActionPerformed
+        selectParty();
+    }//GEN-LAST:event_menuSelectActionPerformed
+
     @Action
     public void addParty() {
-        showPartyPanel(null);
+        firePropertyChange(CREATE_NEW_PARTY_PROPERTY, false, true);
     }
 
     @Action
     public void editParty() {
-        if(partySearchResuls.getSelectedPartySearchResult()!=null){
-            showPartyPanel(PartyBean.getParty(partySearchResuls.getSelectedPartySearchResult().getId()));
-        }
+        firePartyEvent(EDIT_PARTY_PROPERTY);
     }
 
     @Action
     public void removeParty() {
-        if(partySearchResuls.getSelectedPartySearchResult()!=null && 
-                MessageUtility.displayMessage(ClientMessage.CONFIRM_DELETE_RECORD) == MessageUtility.BUTTON_ONE){
+        if (partySearchResuls.getSelectedPartySearchResult() != null
+                && MessageUtility.displayMessage(ClientMessage.CONFIRM_DELETE_RECORD) == MessageUtility.BUTTON_ONE) {
+            firePropertyChange(REMOVE_PARTY_PROPERTY, false, true);
             PartyBean.remove(partySearchResuls.getSelectedPartySearchResult().getId());
+            search();
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -561,6 +623,8 @@ public class PartySearchPanel extends ContentPanel {
     private javax.swing.JButton btnEditParty;
     private javax.swing.JButton btnRemoveParty;
     private javax.swing.JButton btnSearch;
+    private javax.swing.JButton btnSelect;
+    private javax.swing.JButton btnView;
     private javax.swing.JComboBox cbxPartyTypes;
     private javax.swing.JComboBox cbxRoles;
     private javax.swing.JLabel jLabel1;
@@ -578,17 +642,16 @@ public class PartySearchPanel extends ContentPanel {
     private javax.swing.JMenuItem menuAdd;
     private javax.swing.JMenuItem menuEdit;
     private javax.swing.JMenuItem menuRemove;
+    private javax.swing.JMenuItem menuSelect;
+    private javax.swing.JMenuItem menuView;
     private org.sola.clients.beans.referencedata.PartyRoleTypeListBean partyRoleTyps;
     private org.sola.clients.beans.party.PartySearchParamsBean partySearchParams;
     private org.sola.clients.beans.party.PartySearchResultListBean partySearchResuls;
     private org.sola.clients.beans.referencedata.PartyTypeListBean partyTypes;
-    private javax.swing.JPanel pnlContent;
-    private org.sola.clients.swing.ui.HeaderPanel pnlHeader;
-    private org.sola.clients.swing.ui.party.PartyPanel pnlParty;
     private javax.swing.JPanel pnlSearch;
     private javax.swing.JPopupMenu popupParties;
-    private javax.swing.JScrollPane scrlPartyPanel;
     private javax.swing.JScrollPane scrlSearchPanel;
+    private javax.swing.JToolBar.Separator separator1;
     private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tableSearchResults;
     private javax.swing.JTextField txtName;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;

@@ -47,6 +47,7 @@ import org.sola.clients.swing.desktop.application.ApplicationSearchPanel;
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.desktop.administrative.BaUnitSearchPanel;
+import org.sola.clients.swing.desktop.party.PartySearchForm;
 import org.sola.clients.swing.desktop.source.DocumentSearchPanel;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleViewer;
 import org.sola.clients.swing.ui.MainContentPanel;
@@ -641,11 +642,11 @@ public class MainForm extends FrameView {
 
     @Action
     public void manageParties() {
-        if (!pnlContent.isPanelOpened(MainContentPanel.CARD_PERSONS)) {
-            PartySearchPanel partySearchPanel = new PartySearchPanel();
-            pnlContent.addPanel(partySearchPanel, MainContentPanel.CARD_PERSONS);
+        if (!pnlContent.isPanelOpened(MainContentPanel.CARD_SEARCH_PERSONS)) {
+            PartySearchForm partySearchForm = new PartySearchForm();
+            pnlContent.addPanel(partySearchForm, MainContentPanel.CARD_SEARCH_PERSONS);
         }
-        pnlContent.showPanel(MainContentPanel.CARD_PERSONS);
+        pnlContent.showPanel(MainContentPanel.CARD_SEARCH_PERSONS);
     }
 
     @Action

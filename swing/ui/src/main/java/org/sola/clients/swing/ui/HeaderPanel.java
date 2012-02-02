@@ -138,14 +138,16 @@ public class HeaderPanel extends javax.swing.JPanel {
         btnClose.setFocusPainted(false);
         btnClose.setName("btnClose"); // NOI18N
         btnClose.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnCloseMouseClicked(evt);
-            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnCloseMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btnCloseMouseExited(evt);
+            }
+        });
+        btnClose.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCloseActionPerformed(evt);
             }
         });
         jPanel2.add(btnClose);
@@ -192,11 +194,9 @@ public class HeaderPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnHelpMouseClicked
 
-    private void btnCloseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCloseMouseClicked
-        if(evt.getButton() == MouseEvent.BUTTON1){
-            firePropertyChange(CLOSE_BUTTON_CLICKED, false, true);
-        }
-    }//GEN-LAST:event_btnCloseMouseClicked
+    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
+        firePropertyChange(CLOSE_BUTTON_CLICKED, false, true);
+    }//GEN-LAST:event_btnCloseActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;

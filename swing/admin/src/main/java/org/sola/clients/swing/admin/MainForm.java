@@ -28,11 +28,9 @@
 package org.sola.clients.swing.admin;
 
 import java.net.URL;
-import java.util.ResourceBundle;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JasperPrint;
-import org.jdesktop.application.Action;
 import org.sola.clients.beans.AbstractCodeBean;
 import org.sola.clients.beans.referencedata.BaUnitRelTypeBean;
 import org.sola.clients.beans.referencedata.BaUnitTypeBean;
@@ -62,6 +60,7 @@ import org.sola.clients.swing.admin.security.RolesManagementPanel;
 import org.sola.clients.swing.admin.security.UsersManagementPanel;
 import org.sola.clients.swing.admin.system.BrManagementPanel;
 import org.sola.clients.swing.common.LafManager;
+import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.common.RolesConstants;
 
 /**
@@ -76,32 +75,9 @@ public class MainForm extends javax.swing.JFrame {
         URL imgURL = this.getClass().getResource("/images/common/admin.png");
         this.setIconImage(new ImageIcon(imgURL).getImage());
         lblUserName.setText(SecurityBean.getCurrentUser().getUserName());
-        customizeComponents() ;
         customizeForm();
     }
-    
-    
-    
-       /** Applies customization of component L&F. */
-    private void customizeComponents() {
-    
-     
-//    BUTTONS   
-    LafManager.getInstance().setBtnProperties(btnGISSettings);
-    LafManager.getInstance().setBtnProperties(btnGroups);
-    LafManager.getInstance().setBtnProperties(btnLanguage);
-    LafManager.getInstance().setBtnProperties(btnRoles);
-    LafManager.getInstance().setBtnProperties(btnSystemSettings);
-    LafManager.getInstance().setBtnProperties(btnUsers);
-    
-//    LABELS    
-    LafManager.getInstance().setLabProperties(jLabel1);
-    LafManager.getInstance().setLabProperties(lblUserName);
-    
-    }
 
-    
-    
     /** Customizes main form regarding user access rights. */
     private void customizeForm(){
         boolean hasSecurityRole = SecurityBean.isInRole(RolesConstants.ADMIN_MANAGE_SECURITY);
@@ -109,14 +85,17 @@ public class MainForm extends javax.swing.JFrame {
         boolean hasSettingsRole = SecurityBean.isInRole(RolesConstants.ADMIN_MANAGE_SETTINGS);
         boolean hasBRRole = SecurityBean.isInRole(RolesConstants.ADMIN_MANAGE_BR);
         
-        btnRoles.getAction().setEnabled(hasSecurityRole);
-        btnUsers.getAction().setEnabled(hasSecurityRole);
-        btnGroups.getAction().setEnabled(hasSecurityRole);
+        btnRoles.setEnabled(hasSecurityRole);
+        btnUsers.setEnabled(hasSecurityRole);
+        btnGroups.setEnabled(hasSecurityRole);
+        menuRoles.setEnabled(btnRoles.isEnabled());
+        menuUsers.setEnabled(btnUsers.isEnabled());
+        menuGroups.setEnabled(btnGroups.isEnabled());
         
-        btnSystemSettings.getAction().setEnabled(hasSettingsRole);
-        btnGISSettings.getAction().setEnabled(hasSettingsRole);
-        btnLanguage.getAction().setEnabled(hasSettingsRole);
-        btnBr.getAction().setEnabled(hasBRRole);
+        btnSystemSettings.setEnabled(hasSettingsRole);
+        btnGISSettings.setEnabled(hasSettingsRole);
+        btnLanguage.setEnabled(hasSettingsRole);
+        btnBr.setEnabled(hasBRRole);
         
         menuRefData.setEnabled(hasRefdataRole);
     }
@@ -125,7 +104,7 @@ public class MainForm extends javax.swing.JFrame {
     private <T extends AbstractCodeBean> void openReferenceDataPanel(
             Class<T> refDataClass, String headerTitle){
         ReferenceDataManagementPanel panel = new ReferenceDataManagementPanel(refDataClass, headerTitle);
-        mainScrollPane.setViewportView(panel);
+        mainContentPanel.addPanel(panel, MainContentPanel.CARD_ADMIN_REFDATA_MANAGE, true);
     }
     
     @SuppressWarnings("unchecked")
@@ -143,12 +122,11 @@ public class MainForm extends javax.swing.JFrame {
         btnGISSettings = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JToolBar.Separator();
         btnBr = new javax.swing.JButton();
-        mainPanel = new javax.swing.JPanel();
-        mainScrollPane = new javax.swing.JScrollPane();
         statusPanel = new javax.swing.JPanel();
         taskPanel1 = new org.sola.clients.swing.common.tasks.TaskPanel();
         jLabel1 = new javax.swing.JLabel();
         lblUserName = new javax.swing.JLabel();
+        mainContentPanel = new org.sola.clients.swing.ui.MainContentPanel();
         mainMenu = new javax.swing.JMenuBar();
         menuFile = new javax.swing.JMenu();
         menuExit = new javax.swing.JMenuItem();
@@ -196,87 +174,107 @@ public class MainForm extends javax.swing.JFrame {
         mainToolbar.setRollover(true);
         mainToolbar.setName("mainToolbar"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(MainForm.class, this);
-        btnRoles.setAction(actionMap.get("manageRoles")); // NOI18N
+        btnRoles.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/roles.png"))); // NOI18N
         btnRoles.setText(bundle.getString("MainForm.btnRoles.text")); // NOI18N
         btnRoles.setFocusable(false);
         btnRoles.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnRoles.setName("btnRoles"); // NOI18N
         btnRoles.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnRoles.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRolesActionPerformed(evt);
+            }
+        });
         mainToolbar.add(btnRoles);
 
-        btnGroups.setAction(actionMap.get("manageGroups")); // NOI18N
+        btnGroups.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/group.png"))); // NOI18N
         btnGroups.setText(bundle.getString("MainForm.btnGroups.text")); // NOI18N
         btnGroups.setFocusable(false);
         btnGroups.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnGroups.setName("btnGroups"); // NOI18N
         btnGroups.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnGroups.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGroupsActionPerformed(evt);
+            }
+        });
         mainToolbar.add(btnGroups);
 
-        btnUsers.setAction(actionMap.get("manageUsers")); // NOI18N
+        btnUsers.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/user.png"))); // NOI18N
         btnUsers.setText(bundle.getString("MainForm.btnUsers.text")); // NOI18N
         btnUsers.setFocusable(false);
         btnUsers.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnUsers.setName("btnUsers"); // NOI18N
         btnUsers.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnUsers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUsersActionPerformed(evt);
+            }
+        });
         mainToolbar.add(btnUsers);
 
         jSeparator1.setName("jSeparator1"); // NOI18N
         mainToolbar.add(jSeparator1);
 
-        btnLanguage.setAction(actionMap.get("manageLanguages")); // NOI18N
+        btnLanguage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/language.png"))); // NOI18N
         btnLanguage.setText(bundle.getString("MainForm.btnLanguage.text")); // NOI18N
         btnLanguage.setFocusable(false);
         btnLanguage.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnLanguage.setName("btnLanguage"); // NOI18N
         btnLanguage.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnLanguage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLanguageActionPerformed(evt);
+            }
+        });
         mainToolbar.add(btnLanguage);
 
         jSeparator2.setName("jSeparator2"); // NOI18N
         mainToolbar.add(jSeparator2);
 
-        btnSystemSettings.setAction(actionMap.get("manageSystemSettings")); // NOI18N
+        btnSystemSettings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/settings.png"))); // NOI18N
         btnSystemSettings.setText(bundle.getString("MainForm.btnSystemSettings.text")); // NOI18N
         btnSystemSettings.setFocusable(false);
         btnSystemSettings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSystemSettings.setName("btnSystemSettings"); // NOI18N
         btnSystemSettings.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSystemSettings.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSystemSettingsActionPerformed(evt);
+            }
+        });
         mainToolbar.add(btnSystemSettings);
 
-        btnGISSettings.setAction(actionMap.get("manageGisSettings")); // NOI18N
+        btnGISSettings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/map-pencil.png"))); // NOI18N
         btnGISSettings.setText(bundle.getString("MainForm.btnGISSettings.text")); // NOI18N
         btnGISSettings.setFocusable(false);
         btnGISSettings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnGISSettings.setName("btnGISSettings"); // NOI18N
         btnGISSettings.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnGISSettings.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGISSettingsActionPerformed(evt);
+            }
+        });
         mainToolbar.add(btnGISSettings);
 
         jSeparator3.setName("jSeparator3"); // NOI18N
         mainToolbar.add(jSeparator3);
 
-        btnBr.setAction(actionMap.get("manageBr")); // NOI18N
+        btnBr.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/traffic-light.png"))); // NOI18N
         btnBr.setText(bundle.getString("MainForm.btnBr.text")); // NOI18N
         btnBr.setFocusable(false);
         btnBr.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnBr.setName("btnBr"); // NOI18N
         btnBr.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnBr.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBrActionPerformed(evt);
+            }
+        });
         mainToolbar.add(btnBr);
 
-        mainPanel.setName("mainPanel"); // NOI18N
-
-        mainScrollPane.setName("mainScrollPane"); // NOI18N
-
-        javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
-        mainPanel.setLayout(mainPanelLayout);
-        mainPanelLayout.setHorizontalGroup(
-            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 878, Short.MAX_VALUE)
-        );
-        mainPanelLayout.setVerticalGroup(
-            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE)
-        );
-
+        statusPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         statusPanel.setName("statusPanel"); // NOI18N
 
         taskPanel1.setName("taskPanel1"); // NOI18N
@@ -297,7 +295,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblUserName, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 228, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 224, Short.MAX_VALUE)
                 .addComponent(taskPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         statusPanelLayout.setVerticalGroup(
@@ -311,32 +309,53 @@ public class MainForm extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        mainContentPanel.setName("mainContentPanel"); // NOI18N
+
         mainMenu.setName("mainMenu"); // NOI18N
 
         menuFile.setText(bundle.getString("MainForm.menuFile.text")); // NOI18N
         menuFile.setName("menuFile"); // NOI18N
 
-        menuExit.setAction(actionMap.get("exit")); // NOI18N
         menuExit.setText(bundle.getString("MainForm.menuExit.text")); // NOI18N
         menuExit.setName("menuExit"); // NOI18N
+        menuExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuExitActionPerformed(evt);
+            }
+        });
         menuFile.add(menuExit);
 
         mainMenu.add(menuFile);
 
         menuSecurity.setText(bundle.getString("MainForm.menuSecurity.text")); // NOI18N
         menuSecurity.setName("menuSecurity"); // NOI18N
+        menuSecurity.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuSecurityActionPerformed(evt);
+            }
+        });
 
-        menuRoles.setAction(actionMap.get("manageRoles")); // NOI18N
+        menuRoles.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/roles.png"))); // NOI18N
         menuRoles.setText(bundle.getString("MainForm.menuRoles.text")); // NOI18N
         menuRoles.setName("menuRoles"); // NOI18N
+        menuRoles.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuRolesActionPerformed(evt);
+            }
+        });
         menuSecurity.add(menuRoles);
 
-        menuGroups.setAction(actionMap.get("manageGroups")); // NOI18N
+        menuGroups.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/group.png"))); // NOI18N
         menuGroups.setText(bundle.getString("MainForm.menuGroups.text")); // NOI18N
         menuGroups.setName("menuGroups"); // NOI18N
+        menuGroups.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuGroupsActionPerformed(evt);
+            }
+        });
         menuSecurity.add(menuGroups);
 
-        menuUsers.setAction(actionMap.get("manageUsers")); // NOI18N
+        menuUsers.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/user.png"))); // NOI18N
         menuUsers.setText(bundle.getString("MainForm.menuUsers.text")); // NOI18N
         menuUsers.setName("menuUsers"); // NOI18N
         menuSecurity.add(menuUsers);
@@ -349,29 +368,54 @@ public class MainForm extends javax.swing.JFrame {
         menuApplications.setText(bundle.getString("MainForm.menuApplications.text")); // NOI18N
         menuApplications.setName("menuApplications"); // NOI18N
 
-        menuRequestCategory.setAction(actionMap.get("manageRequestCategories")); // NOI18N
+        menuRequestCategory.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/book-open.png"))); // NOI18N
         menuRequestCategory.setText(bundle.getString("MainForm.menuRequestCategory.text")); // NOI18N
         menuRequestCategory.setName("menuRequestCategory"); // NOI18N
+        menuRequestCategory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuRequestCategoryActionPerformed(evt);
+            }
+        });
         menuApplications.add(menuRequestCategory);
 
-        menuRequestTypes.setAction(actionMap.get("manageRequestTypes")); // NOI18N
+        menuRequestTypes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/book-open.png"))); // NOI18N
         menuRequestTypes.setText(bundle.getString("MainForm.menuRequestTypes.text")); // NOI18N
         menuRequestTypes.setName("menuRequestTypes"); // NOI18N
+        menuRequestTypes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuRequestTypesActionPerformed(evt);
+            }
+        });
         menuApplications.add(menuRequestTypes);
 
-        menuTypeActions.setAction(actionMap.get("manageTypeActions")); // NOI18N
+        menuTypeActions.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/book-open.png"))); // NOI18N
         menuTypeActions.setText(bundle.getString("MainForm.menuTypeActions.text")); // NOI18N
         menuTypeActions.setName("menuTypeActions"); // NOI18N
+        menuTypeActions.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuTypeActionsActionPerformed(evt);
+            }
+        });
         menuApplications.add(menuTypeActions);
 
-        menuServiceActionTypes.setAction(actionMap.get("manageServiceActionTypes")); // NOI18N
+        menuServiceActionTypes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/book-open.png"))); // NOI18N
         menuServiceActionTypes.setText(bundle.getString("MainForm.menuServiceActionTypes.text")); // NOI18N
         menuServiceActionTypes.setName("menuServiceActionTypes"); // NOI18N
+        menuServiceActionTypes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuServiceActionTypesActionPerformed(evt);
+            }
+        });
         menuApplications.add(menuServiceActionTypes);
 
-        menuServiceStatusTypes.setAction(actionMap.get("manageServiceStatusTypes")); // NOI18N
+        menuServiceStatusTypes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/book-open.png"))); // NOI18N
         menuServiceStatusTypes.setText(bundle.getString("MainForm.menuServiceStatusTypes.text")); // NOI18N
         menuServiceStatusTypes.setName("menuServiceStatusTypes"); // NOI18N
+        menuServiceStatusTypes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuServiceStatusTypesActionPerformed(evt);
+            }
+        });
         menuApplications.add(menuServiceStatusTypes);
 
         menuRefData.add(menuApplications);
@@ -379,9 +423,14 @@ public class MainForm extends javax.swing.JFrame {
         menuAdministrative.setText(bundle.getString("MainForm.menuAdministrative.text")); // NOI18N
         menuAdministrative.setName("menuAdministrative"); // NOI18N
 
-        menuBaUnitType.setAction(actionMap.get("manageBAUnitType")); // NOI18N
+        menuBaUnitType.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/book-open.png"))); // NOI18N
         menuBaUnitType.setText(bundle.getString("MainForm.menuBaUnitType.text")); // NOI18N
         menuBaUnitType.setName("menuBaUnitType"); // NOI18N
+        menuBaUnitType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuBaUnitTypeActionPerformed(evt);
+            }
+        });
         menuAdministrative.add(menuBaUnitType);
 
         menuBaUnitRelationTypes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/book-open.png"))); // NOI18N
@@ -394,19 +443,34 @@ public class MainForm extends javax.swing.JFrame {
         });
         menuAdministrative.add(menuBaUnitRelationTypes);
 
-        menuMortgageTypes.setAction(actionMap.get("manageMortgageTypes")); // NOI18N
+        menuMortgageTypes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/book-open.png"))); // NOI18N
         menuMortgageTypes.setText(bundle.getString("MainForm.menuMortgageTypes.text")); // NOI18N
         menuMortgageTypes.setName("menuMortgageTypes"); // NOI18N
+        menuMortgageTypes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuMortgageTypesActionPerformed(evt);
+            }
+        });
         menuAdministrative.add(menuMortgageTypes);
 
-        menuRrrGroupTypes.setAction(actionMap.get("manageRrrGroupTypes")); // NOI18N
+        menuRrrGroupTypes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/book-open.png"))); // NOI18N
         menuRrrGroupTypes.setText(bundle.getString("MainForm.menuRrrGroupTypes.text")); // NOI18N
         menuRrrGroupTypes.setName("menuRrrGroupTypes"); // NOI18N
+        menuRrrGroupTypes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuRrrGroupTypesActionPerformed(evt);
+            }
+        });
         menuAdministrative.add(menuRrrGroupTypes);
 
-        menuRrrTypes.setAction(actionMap.get("manageRrrTypes")); // NOI18N
+        menuRrrTypes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/book-open.png"))); // NOI18N
         menuRrrTypes.setText(bundle.getString("MainForm.menuRrrTypes.text")); // NOI18N
         menuRrrTypes.setName("menuRrrTypes"); // NOI18N
+        menuRrrTypes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuRrrTypesActionPerformed(evt);
+            }
+        });
         menuAdministrative.add(menuRrrTypes);
 
         menuRefData.add(menuAdministrative);
@@ -414,9 +478,14 @@ public class MainForm extends javax.swing.JFrame {
         menuSources.setText(bundle.getString("MainForm.menuSources.text")); // NOI18N
         menuSources.setName("menuSources"); // NOI18N
 
-        menuSourceTypes.setAction(actionMap.get("manageSourceTypes")); // NOI18N
+        menuSourceTypes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/book-open.png"))); // NOI18N
         menuSourceTypes.setText(bundle.getString("MainForm.menuSourceTypes.text")); // NOI18N
         menuSourceTypes.setName("menuSourceTypes"); // NOI18N
+        menuSourceTypes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuSourceTypesActionPerformed(evt);
+            }
+        });
         menuSources.add(menuSourceTypes);
 
         menuRefData.add(menuSources);
@@ -424,29 +493,54 @@ public class MainForm extends javax.swing.JFrame {
         menuParty.setText(bundle.getString("MainForm.menuParty.text")); // NOI18N
         menuParty.setName("menuParty"); // NOI18N
 
-        menuCommunicationType.setAction(actionMap.get("manageCommunicationTypes")); // NOI18N
+        menuCommunicationType.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/book-open.png"))); // NOI18N
         menuCommunicationType.setText(bundle.getString("MainForm.menuCommunicationType.text")); // NOI18N
         menuCommunicationType.setName("menuCommunicationType"); // NOI18N
+        menuCommunicationType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuCommunicationTypeActionPerformed(evt);
+            }
+        });
         menuParty.add(menuCommunicationType);
 
-        menuIdTypes.setAction(actionMap.get("manageIdTypes")); // NOI18N
+        menuIdTypes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/book-open.png"))); // NOI18N
         menuIdTypes.setText(bundle.getString("MainForm.menuIdTypes.text")); // NOI18N
         menuIdTypes.setName("menuIdTypes"); // NOI18N
+        menuIdTypes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuIdTypesActionPerformed(evt);
+            }
+        });
         menuParty.add(menuIdTypes);
 
-        menuGenders.setAction(actionMap.get("manageGender")); // NOI18N
+        menuGenders.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/book-open.png"))); // NOI18N
         menuGenders.setText(bundle.getString("MainForm.menuGenders.text")); // NOI18N
         menuGenders.setName("menuGenders"); // NOI18N
+        menuGenders.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuGendersActionPerformed(evt);
+            }
+        });
         menuParty.add(menuGenders);
 
-        menuPartyRoleType.setAction(actionMap.get("managePartyRoleTypes")); // NOI18N
+        menuPartyRoleType.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/book-open.png"))); // NOI18N
         menuPartyRoleType.setText(bundle.getString("MainForm.menuPartyRoleType.text")); // NOI18N
         menuPartyRoleType.setName("menuPartyRoleType"); // NOI18N
+        menuPartyRoleType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuPartyRoleTypeActionPerformed(evt);
+            }
+        });
         menuParty.add(menuPartyRoleType);
 
-        menuPartyType.setAction(actionMap.get("managePartyTypes")); // NOI18N
+        menuPartyType.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/book-open.png"))); // NOI18N
         menuPartyType.setText(bundle.getString("MainForm.menuPartyType.text")); // NOI18N
         menuPartyType.setName("menuPartyType"); // NOI18N
+        menuPartyType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuPartyTypeActionPerformed(evt);
+            }
+        });
         menuParty.add(menuPartyType);
 
         menuRefData.add(menuParty);
@@ -454,19 +548,34 @@ public class MainForm extends javax.swing.JFrame {
         menuSystem.setText(bundle.getString("MainForm.menuSystem.text")); // NOI18N
         menuSystem.setName("menuSystem"); // NOI18N
 
-        menuBRSeverityType.setAction(actionMap.get("manageBRSeverityTypes")); // NOI18N
+        menuBRSeverityType.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/book-open.png"))); // NOI18N
         menuBRSeverityType.setText(bundle.getString("MainForm.menuBRSeverityType.text")); // NOI18N
         menuBRSeverityType.setName("menuBRSeverityType"); // NOI18N
+        menuBRSeverityType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuBRSeverityTypeActionPerformed(evt);
+            }
+        });
         menuSystem.add(menuBRSeverityType);
 
-        menuBRValidationTargetType.setAction(actionMap.get("manageBRValidationTargetTypes")); // NOI18N
+        menuBRValidationTargetType.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/book-open.png"))); // NOI18N
         menuBRValidationTargetType.setText(bundle.getString("MainForm.menuBRValidationTargetType.text")); // NOI18N
         menuBRValidationTargetType.setName("menuBRValidationTargetType"); // NOI18N
+        menuBRValidationTargetType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuBRValidationTargetTypeActionPerformed(evt);
+            }
+        });
         menuSystem.add(menuBRValidationTargetType);
 
-        menuBRTechnicalType.setAction(actionMap.get("manageBRTechnicalTypes")); // NOI18N
+        menuBRTechnicalType.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/book-open.png"))); // NOI18N
         menuBRTechnicalType.setText(bundle.getString("MainForm.menuBRTechnicalType.text")); // NOI18N
         menuBRTechnicalType.setName("menuBRTechnicalType"); // NOI18N
+        menuBRTechnicalType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuBRTechnicalTypeActionPerformed(evt);
+            }
+        });
         menuSystem.add(menuBRTechnicalType);
 
         menuRefData.add(menuSystem);
@@ -474,9 +583,14 @@ public class MainForm extends javax.swing.JFrame {
         menuTransaction.setText(bundle.getString("MainForm.menuTransaction.text")); // NOI18N
         menuTransaction.setName("menuTransaction"); // NOI18N
 
-        menuRegistrationStatusType.setAction(actionMap.get("manageRegistrationStatusTypes")); // NOI18N
+        menuRegistrationStatusType.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/book-open.png"))); // NOI18N
         menuRegistrationStatusType.setText(bundle.getString("MainForm.menuRegistrationStatusType.text")); // NOI18N
         menuRegistrationStatusType.setName("menuRegistrationStatusType"); // NOI18N
+        menuRegistrationStatusType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuRegistrationStatusTypeActionPerformed(evt);
+            }
+        });
         menuTransaction.add(menuRegistrationStatusType);
 
         menuRefData.add(menuTransaction);
@@ -518,14 +632,14 @@ public class MainForm extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(mainToolbar, javax.swing.GroupLayout.DEFAULT_SIZE, 878, Short.MAX_VALUE)
             .addComponent(statusPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(mainContentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 878, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(mainToolbar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(mainContentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(statusPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -549,147 +663,252 @@ public class MainForm extends javax.swing.JFrame {
         openReferenceDataPanel(BaUnitRelTypeBean.class, menuBaUnitRelationTypes.getText());
     }//GEN-LAST:event_menuBaUnitRelationTypesActionPerformed
 
+    private void menuExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuExitActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_menuExitActionPerformed
+
+    private void menuRolesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRolesActionPerformed
+        manageRoles();
+    }//GEN-LAST:event_menuRolesActionPerformed
+
+    private void btnRolesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRolesActionPerformed
+        manageRoles();
+    }//GEN-LAST:event_btnRolesActionPerformed
+
+    private void menuGroupsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuGroupsActionPerformed
+        manageGroups();
+    }//GEN-LAST:event_menuGroupsActionPerformed
+
+    private void btnGroupsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGroupsActionPerformed
+        manageGroups();
+    }//GEN-LAST:event_btnGroupsActionPerformed
+
+    private void menuSecurityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSecurityActionPerformed
+        manageUsers();
+    }//GEN-LAST:event_menuSecurityActionPerformed
+
+    private void btnUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsersActionPerformed
+        manageUsers();
+    }//GEN-LAST:event_btnUsersActionPerformed
+
+    private void menuRequestCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRequestCategoryActionPerformed
+        manageRequestCategories();
+    }//GEN-LAST:event_menuRequestCategoryActionPerformed
+
+    private void menuRequestTypesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRequestTypesActionPerformed
+        manageRequestTypes();
+    }//GEN-LAST:event_menuRequestTypesActionPerformed
+
+    private void menuTypeActionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuTypeActionsActionPerformed
+        manageTypeActions();
+    }//GEN-LAST:event_menuTypeActionsActionPerformed
+
+    private void menuServiceActionTypesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuServiceActionTypesActionPerformed
+        manageServiceActionTypes();
+    }//GEN-LAST:event_menuServiceActionTypesActionPerformed
+
+    private void menuServiceStatusTypesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuServiceStatusTypesActionPerformed
+        manageServiceStatusTypes();
+    }//GEN-LAST:event_menuServiceStatusTypesActionPerformed
+
+    private void menuBaUnitTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuBaUnitTypeActionPerformed
+        manageBAUnitType();
+    }//GEN-LAST:event_menuBaUnitTypeActionPerformed
+
+    private void menuMortgageTypesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuMortgageTypesActionPerformed
+        manageMortgageTypes();
+    }//GEN-LAST:event_menuMortgageTypesActionPerformed
+
+    private void menuRrrGroupTypesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRrrGroupTypesActionPerformed
+        manageRrrGroupTypes();
+    }//GEN-LAST:event_menuRrrGroupTypesActionPerformed
+
+    private void menuRrrTypesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRrrTypesActionPerformed
+        manageRrrTypes();
+    }//GEN-LAST:event_menuRrrTypesActionPerformed
+
+    private void menuSourceTypesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSourceTypesActionPerformed
+        manageSourceTypes();
+    }//GEN-LAST:event_menuSourceTypesActionPerformed
+
+    private void menuCommunicationTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCommunicationTypeActionPerformed
+        manageCommunicationTypes();
+    }//GEN-LAST:event_menuCommunicationTypeActionPerformed
+
+    private void menuIdTypesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuIdTypesActionPerformed
+        manageIdTypes();
+    }//GEN-LAST:event_menuIdTypesActionPerformed
+
+    private void menuGendersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuGendersActionPerformed
+        manageGender();
+    }//GEN-LAST:event_menuGendersActionPerformed
+
+    private void menuPartyRoleTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuPartyRoleTypeActionPerformed
+        managePartyRoleTypes();
+    }//GEN-LAST:event_menuPartyRoleTypeActionPerformed
+
+    private void menuPartyTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuPartyTypeActionPerformed
+        managePartyTypes();
+    }//GEN-LAST:event_menuPartyTypeActionPerformed
+
+    private void menuBRSeverityTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuBRSeverityTypeActionPerformed
+        manageBRSeverityTypes();
+    }//GEN-LAST:event_menuBRSeverityTypeActionPerformed
+
+    private void menuBRValidationTargetTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuBRValidationTargetTypeActionPerformed
+        manageBRValidationTargetTypes();
+    }//GEN-LAST:event_menuBRValidationTargetTypeActionPerformed
+
+    private void menuBRTechnicalTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuBRTechnicalTypeActionPerformed
+        manageBRTechnicalTypes();
+    }//GEN-LAST:event_menuBRTechnicalTypeActionPerformed
+
+    private void btnLanguageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLanguageActionPerformed
+        manageLanguages();
+    }//GEN-LAST:event_btnLanguageActionPerformed
+
+    private void btnSystemSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSystemSettingsActionPerformed
+        manageSystemSettings();
+    }//GEN-LAST:event_btnSystemSettingsActionPerformed
+
+    private void btnGISSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGISSettingsActionPerformed
+        manageGisSettings();
+    }//GEN-LAST:event_btnGISSettingsActionPerformed
+
+    private void btnBrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrActionPerformed
+        manageBr();
+    }//GEN-LAST:event_btnBrActionPerformed
+
+    private void menuRegistrationStatusTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRegistrationStatusTypeActionPerformed
+        manageRegistrationStatusTypes();
+    }//GEN-LAST:event_menuRegistrationStatusTypeActionPerformed
+
     /** Opens roles management panel. */
-    @Action
-    public void manageRoles() {
-        RolesManagementPanel panel = new RolesManagementPanel();
-        mainScrollPane.setViewportView(panel);
+    private void manageRoles() {
+        if(mainContentPanel.isPanelOpened(MainContentPanel.CARD_ADMIN_ROLES_MANAGE)){
+            mainContentPanel.showPanel(MainContentPanel.CARD_ADMIN_ROLES_MANAGE);
+        }else{
+            RolesManagementPanel panel = new RolesManagementPanel();
+            mainContentPanel.addPanel(panel, MainContentPanel.CARD_ADMIN_ROLES_MANAGE, true);
+        }
     }
 
     /** Opens groups management panel. */
-    @Action
-    public void manageGroups() {
-        GroupsManagementPanel groupManagementPanel = new GroupsManagementPanel();
-        mainScrollPane.setViewportView(groupManagementPanel);
+    private void manageGroups() {
+        if(mainContentPanel.isPanelOpened(MainContentPanel.CARD_ADMIN_GROUP_MANAGE)){
+            mainContentPanel.showPanel(MainContentPanel.CARD_ADMIN_GROUP_MANAGE);
+        }else{
+            GroupsManagementPanel groupManagementPanel = new GroupsManagementPanel();
+            mainContentPanel.addPanel(groupManagementPanel, MainContentPanel.CARD_ADMIN_GROUP_MANAGE, true);
+        }
     }
 
     /** Opens users management panel. */
-    @Action
-    public void manageUsers() {
-        UsersManagementPanel panel = new UsersManagementPanel();
-        mainScrollPane.setViewportView(panel);
+    private void manageUsers() {
+        if(mainContentPanel.isPanelOpened(MainContentPanel.CARD_ADMIN_USER_MANAGE)){
+            mainContentPanel.showPanel(MainContentPanel.CARD_ADMIN_USER_MANAGE);
+        }else{
+            UsersManagementPanel panel = new UsersManagementPanel();
+            mainContentPanel.addPanel(panel, MainContentPanel.CARD_ADMIN_USER_MANAGE, true);
+        }
     }
 
-    @Action
-    public void manageLanguages() {
+    private void manageLanguages() {
         JOptionPane.showMessageDialog(this, "Not yet implemented.");
     }
 
-    @Action
-    public void manageSystemSettings() {
+    private void manageSystemSettings() {
         JOptionPane.showMessageDialog(this, "Not yet implemented.");
     }
 
-    @Action
-    public void manageGisSettings() {
+    private void manageGisSettings() {
         JOptionPane.showMessageDialog(this, "Not yet implemented.");
     }
 
-    @Action
-    public void manageCommunicationTypes() {
+    private void manageCommunicationTypes() {
         openReferenceDataPanel(CommunicationTypeBean.class, 
                 menuCommunicationType.getText());
     }
 
-    @Action
-    public void manageBAUnitType() {
+    private void manageBAUnitType() {
         openReferenceDataPanel(BaUnitTypeBean.class, menuBaUnitType.getText());
     }
 
-    @Action
-    public void manageIdTypes() {
+    private void manageIdTypes() {
         openReferenceDataPanel(IdTypeBean.class, menuIdTypes.getText());
     }
 
-    @Action
-    public void manageGender() {
+    private void manageGender() {
         openReferenceDataPanel(GenderTypeBean.class, menuGenders.getText());
     }
 
-    @Action
-    public void managePartyRoleTypes() {
+    private void managePartyRoleTypes() {
         openReferenceDataPanel(PartyRoleTypeBean.class, menuPartyRoleType.getText());
     }
 
-    @Action
-    public void managePartyTypes() {
+    private void managePartyTypes() {
         openReferenceDataPanel(PartyTypeBean.class, menuPartyType.getText());
     }
 
-    @Action
-    public void manageMortgageTypes() {
+    private void manageMortgageTypes() {
         openReferenceDataPanel(MortgageTypeBean.class, menuMortgageTypes.getText());
     }
 
-    @Action
-    public void manageRrrGroupTypes() {
+    private void manageRrrGroupTypes() {
         openReferenceDataPanel(RrrGroupTypeBean.class, menuRrrGroupTypes.getText());
     }
 
-    @Action
-    public void manageRrrTypes() {
+    private void manageRrrTypes() {
         openReferenceDataPanel(RrrTypeBean.class, menuRrrTypes.getText());
     }
 
-    @Action
-    public void manageSourceTypes() {
+    private void manageSourceTypes() {
         openReferenceDataPanel(SourceTypeBean.class, menuSourceTypes.getText());
     }
 
-    @Action
-    public void manageRequestTypes() {
+    private void manageRequestTypes() {
         openReferenceDataPanel(RequestTypeBean.class, menuRequestTypes.getText());
     }
 
-    @Action
-    public void manageTypeActions() {
+    private void manageTypeActions() {
         openReferenceDataPanel(TypeActionBean.class, menuTypeActions.getText());
     }
 
-    @Action
-    public void manageServiceActionTypes() {
+    private void manageServiceActionTypes() {
         openReferenceDataPanel(ServiceActionTypeBean.class, menuServiceActionTypes.getText());
     }
 
-    @Action
-    public void manageServiceStatusTypes() {
+    private void manageServiceStatusTypes() {
         openReferenceDataPanel(ServiceStatusTypeBean.class, menuServiceStatusTypes.getText());
     }
 
-    @Action
-    public void exit() {
-        System.exit(0);
-    }
-
-    @Action
-    public void manageRequestCategories() {
+    private void manageRequestCategories() {
         openReferenceDataPanel(RequestCategoryTypeBean.class, menuRequestCategory.getText());
     }
 
-    @Action
-    public void manageRegistrationStatusTypes() {
+    private void manageRegistrationStatusTypes() {
         openReferenceDataPanel(RegistrationStatusTypeBean.class, menuRegistrationStatusType.getText());
     }
 
-    @Action
-    public void manageBRSeverityTypes() {
+    private void manageBRSeverityTypes() {
         openReferenceDataPanel(BrSeverityTypeBean.class, menuBRSeverityType.getText());
     }
 
-    @Action
-    public void manageBRValidationTargetTypes() {
+    private void manageBRValidationTargetTypes() {
         openReferenceDataPanel(BrValidationTargetTypeBean.class, menuBRValidationTargetType.getText());
     }
 
-    @Action
-    public void manageBRTechnicalTypes() {
+    private void manageBRTechnicalTypes() {
         openReferenceDataPanel(BrTechnicalTypeBean.class, menuBRTechnicalType.getText());
     }
 
-    @Action
-    public void manageBr() {
-        BrManagementPanel panel = new BrManagementPanel();
-        mainScrollPane.setViewportView(panel);
+    private void manageBr() {
+        if(mainContentPanel.isPanelOpened(MainContentPanel.CARD_ADMIN_BR_MANAGE)){
+            mainContentPanel.showPanel(MainContentPanel.CARD_ADMIN_BR_MANAGE);
+        }else{
+            BrManagementPanel panel = new BrManagementPanel();
+            mainContentPanel.addPanel(panel, MainContentPanel.CARD_ADMIN_BR_MANAGE, true);
+        }
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -705,9 +924,8 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JLabel lblUserName;
+    private org.sola.clients.swing.ui.MainContentPanel mainContentPanel;
     private javax.swing.JMenuBar mainMenu;
-    private javax.swing.JPanel mainPanel;
-    private javax.swing.JScrollPane mainScrollPane;
     private javax.swing.JToolBar mainToolbar;
     private javax.swing.JMenu menuAdministrative;
     private javax.swing.JMenu menuApplications;

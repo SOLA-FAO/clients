@@ -42,6 +42,7 @@ import org.sola.clients.swing.ui.source.DocumentsManagementPanel;
 import org.sola.clients.beans.administrative.validation.OwnershipValidationGroup;
 import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.ui.ContentPanel;
+import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
@@ -54,7 +55,7 @@ public class OwnershipPanel extends ContentPanel {
 
         @Override
         public void propertyChange(PropertyChangeEvent evt) {
-            if (evt.getPropertyName().equals(ShareForm.UPDATED_RRR_SHARE)
+            if (evt.getPropertyName().equals(SharePanel.UPDATED_RRR_SHARE)
                     && evt.getNewValue() != null) {
                 rrrBean.updateListItem((RrrShareBean) evt.getNewValue(),
                         rrrBean.getRrrShareList(), true);
@@ -173,10 +174,12 @@ public class OwnershipPanel extends ContentPanel {
 
     private void customizeForm() {
         if (rrrAction == RrrBean.RRR_ACTION.NEW) {
-            btnSave.setText("Create & Close");
+            btnSave.setText(MessageUtility.getLocalizedMessage(
+                            ClientMessage.GENERAL_LABELS_CREATE_AND_CLOSE).getMessage());
         }
         if (rrrAction == RrrBean.RRR_ACTION.CANCEL) {
-            btnSave.setText("Terminate");
+            btnSave.setText(MessageUtility.getLocalizedMessage(
+                            ClientMessage.GENERAL_LABELS_TERMINATE_AND_CLOSE).getMessage());
         }
 
         if (rrrAction != RrrBean.RRR_ACTION.EDIT && rrrAction != RrrBean.RRR_ACTION.VIEW
@@ -195,11 +198,10 @@ public class OwnershipPanel extends ContentPanel {
     }
 
     private void openShareForm(RrrShareBean shareBean, RrrBean.RRR_ACTION rrrAction) {
-        ShareForm shareForm = new ShareForm(null, true, shareBean, rrrAction);
+        SharePanel shareForm = new SharePanel(shareBean, rrrAction);
         ShareFormListener listener = new ShareFormListener();
-        shareForm.addPropertyChangeListener(ShareForm.UPDATED_RRR_SHARE, listener);
-        shareForm.setLocationRelativeTo(this);
-        shareForm.setVisible(true);
+        shareForm.addPropertyChangeListener(SharePanel.UPDATED_RRR_SHARE, listener);
+        getMainContentPanel().addPanel(shareForm, MainContentPanel.CARD_OWNERSHIP_SHARE, true);
     }
 
     @SuppressWarnings("unchecked")
@@ -264,7 +266,6 @@ public class OwnershipPanel extends ContentPanel {
         menuViewShare.setName("menuViewShare"); // NOI18N
         popUpShares.add(menuViewShare);
 
-        setCloseOnHide(true);
         setHeaderPanel(headerPanel);
         setName("Form"); // NOI18N
 

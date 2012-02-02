@@ -40,6 +40,7 @@ import org.sola.clients.beans.source.SourceBean;
 import org.sola.clients.beans.source.SourceSearchResultBean;
 import org.sola.clients.beans.source.SourceSummaryBean;
 import org.sola.clients.swing.common.LafManager;
+import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.common.RolesConstants;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -48,19 +49,16 @@ import org.sola.common.messaging.MessageUtility;
  * This form is used to manage transaction-driven documents. 
  * Document can be attached to transaction or detached from it.
  */
-public class TransactionedDocumentsForm extends javax.swing.JDialog {
+public class TransactionedDocumentsForm extends ContentPanel {
 
     private ApplicationBean appBean;
     private ApplicationServiceBean appService;
 
     /** Creates new form TransactionedDocumentsForm */
-    public TransactionedDocumentsForm(java.awt.Frame parent, boolean modal,
-            ApplicationBean appBean, ApplicationServiceBean appService) {
-        super(parent, modal);
+    public TransactionedDocumentsForm(ApplicationBean appBean, ApplicationServiceBean appService) {
         this.appBean = appBean;
         this.appService = appService;
         initComponents();
-        this.setIconImage(new ImageIcon(TransactionedDocumentsForm.class.getResource("/images/sola/logo_icon.jpg")).getImage());
     
         postInit();
     }
@@ -82,8 +80,8 @@ public class TransactionedDocumentsForm extends javax.swing.JDialog {
             applicationNr = appBean.getNr();
         }
         
-        this.setTitle(MessageFormat.format(this.getTitle(), applicationNr, serviceName));
-        lblSelectedDocuments.setText(MessageFormat.format(lblSelectedDocuments.getText(), serviceName));
+        headerPanel.setTitleText(MessageFormat.format(headerPanel.getTitleText(), applicationNr, serviceName));
+        groupSelectedDocuments.setTitleText(MessageFormat.format(groupSelectedDocuments.getTitleText(), serviceName));
         
         customizeRemoveButton(null);
         customizeAddFromSearchButton(null);
@@ -125,10 +123,6 @@ public class TransactionedDocumentsForm extends javax.swing.JDialog {
     LafManager.getInstance().setBtnProperties(btnAddDocumentFromApplication);
     LafManager.getInstance().setBtnProperties(btnAddDocumentFromSearch);
     LafManager.getInstance().setBtnProperties(btnRemove);
-    
-//    LABELS    
-    LafManager.getInstance().setLabProperties(jLabel2);
-    LafManager.getInstance().setLabProperties(lblSelectedDocuments);
     
 //    TABBED PANELS
      LafManager.getInstance().setTabProperties(jTabbedPane1);
@@ -173,6 +167,12 @@ public class TransactionedDocumentsForm extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        headerPanel = new org.sola.clients.swing.ui.HeaderPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jPanel3 = new javax.swing.JPanel();
+        selectedDocumentsPanel = new org.sola.clients.swing.ui.source.DocumentsPanel();
+        btnRemove = new javax.swing.JButton();
+        groupPanel1 = new org.sola.clients.swing.ui.GroupPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         applicationDocumentsPanel = new org.sola.clients.swing.ui.source.DocumentsPanel();
@@ -180,15 +180,33 @@ public class TransactionedDocumentsForm extends javax.swing.JDialog {
         jPanel2 = new javax.swing.JPanel();
         documentSeachPanel = new org.sola.clients.swing.ui.source.DocumentSearchPanel();
         btnAddDocumentFromSearch = new javax.swing.JButton();
-        selectedDocumentsPanel = new org.sola.clients.swing.ui.source.DocumentsPanel();
-        lblSelectedDocuments = new javax.swing.JLabel();
-        btnRemove = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
+        groupSelectedDocuments = new org.sola.clients.swing.ui.GroupPanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(org.sola.clients.swing.desktop.DesktopApplication.class).getContext().getResourceMap(TransactionedDocumentsForm.class);
-        setTitle(resourceMap.getString("Form.title")); // NOI18N
+        setCloseOnHide(true);
+        setHeaderPanel(headerPanel);
         setName("Form"); // NOI18N
+
+        headerPanel.setName("headerPanel"); // NOI18N
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance().getContext().getResourceMap(TransactionedDocumentsForm.class);
+        headerPanel.setTitleText(resourceMap.getString("headerPanel.titleText")); // NOI18N
+
+        jScrollPane1.setBorder(null);
+        jScrollPane1.setName("jScrollPane1"); // NOI18N
+
+        jPanel3.setName("jPanel3"); // NOI18N
+
+        selectedDocumentsPanel.setName("selectedDocumentsPanel"); // NOI18N
+
+        btnRemove.setText(resourceMap.getString("btnRemove.text")); // NOI18N
+        btnRemove.setName("btnRemove"); // NOI18N
+        btnRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveActionPerformed(evt);
+            }
+        });
+
+        groupPanel1.setName("groupPanel1"); // NOI18N
+        groupPanel1.setTitleText(resourceMap.getString("groupPanel1.titleText")); // NOI18N
 
         jTabbedPane1.setName("jTabbedPane1"); // NOI18N
 
@@ -208,21 +226,21 @@ public class TransactionedDocumentsForm extends javax.swing.JDialog {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnAddDocumentFromApplication, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(applicationDocumentsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 633, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(applicationDocumentsPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)
+                    .addComponent(btnAddDocumentFromApplication, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(applicationDocumentsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(applicationDocumentsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnAddDocumentFromApplication)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab(resourceMap.getString("jPanel1.TabConstraints.tabTitle"), jPanel1); // NOI18N
@@ -246,76 +264,72 @@ public class TransactionedDocumentsForm extends javax.swing.JDialog {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(documentSeachPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(22, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(564, Short.MAX_VALUE)
-                .addComponent(btnAddDocumentFromSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnAddDocumentFromSearch, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(documentSeachPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(documentSeachPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(documentSeachPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnAddDocumentFromSearch)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab(resourceMap.getString("jPanel2.TabConstraints.tabTitle"), jPanel2); // NOI18N
 
-        selectedDocumentsPanel.setName("selectedDocumentsPanel"); // NOI18N
+        groupSelectedDocuments.setName("groupSelectedDocuments"); // NOI18N
+        groupSelectedDocuments.setTitleText(resourceMap.getString("groupSelectedDocuments.titleText")); // NOI18N
 
-        lblSelectedDocuments.setFont(resourceMap.getFont("lblSelectedDocuments.font")); // NOI18N
-        lblSelectedDocuments.setText(resourceMap.getString("lblSelectedDocuments.text")); // NOI18N
-        lblSelectedDocuments.setName("lblSelectedDocuments"); // NOI18N
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(selectedDocumentsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 665, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 665, Short.MAX_VALUE)
+            .addComponent(groupPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 665, Short.MAX_VALUE)
+            .addComponent(groupSelectedDocuments, javax.swing.GroupLayout.DEFAULT_SIZE, 665, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addComponent(groupSelectedDocuments, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(7, 7, 7)
+                .addComponent(selectedDocumentsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnRemove)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(groupPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE))
+        );
 
-        btnRemove.setText(resourceMap.getString("btnRemove.text")); // NOI18N
-        btnRemove.setName("btnRemove"); // NOI18N
-        btnRemove.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRemoveActionPerformed(evt);
-            }
-        });
+        jScrollPane1.setViewportView(jPanel3);
 
-        jLabel2.setFont(resourceMap.getFont("jLabel2.font")); // NOI18N
-        jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
-        jLabel2.setName("jLabel2"); // NOI18N
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(headerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 685, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(selectedDocumentsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 658, Short.MAX_VALUE)
-                    .addComponent(lblSelectedDocuments)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 486, Short.MAX_VALUE)
-                        .addComponent(btnRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addContainerGap())
+                .addGap(10, 10, 10)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 665, Short.MAX_VALUE)
+                .addGap(10, 10, 10))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblSelectedDocuments)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(selectedDocumentsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnRemove)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(headerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE)
+                .addContainerGap())
         );
-
-        pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
@@ -348,11 +362,14 @@ public class TransactionedDocumentsForm extends javax.swing.JDialog {
     private javax.swing.JButton btnAddDocumentFromSearch;
     private javax.swing.JButton btnRemove;
     private org.sola.clients.swing.ui.source.DocumentSearchPanel documentSeachPanel;
-    private javax.swing.JLabel jLabel2;
+    private org.sola.clients.swing.ui.GroupPanel groupPanel1;
+    private org.sola.clients.swing.ui.GroupPanel groupSelectedDocuments;
+    private org.sola.clients.swing.ui.HeaderPanel headerPanel;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JLabel lblSelectedDocuments;
     private org.sola.clients.swing.ui.source.DocumentsPanel selectedDocumentsPanel;
     // End of variables declaration//GEN-END:variables
 }

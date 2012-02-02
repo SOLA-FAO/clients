@@ -29,53 +29,26 @@ package org.sola.clients.swing.admin.system;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
 import org.jdesktop.application.Action;
 import org.sola.clients.beans.referencedata.BrTechnicalTypeListBean;
 import org.sola.clients.beans.referencedata.BrValidationTargetTypeListBean;
 import org.sola.clients.beans.system.BrBean;
 import org.sola.clients.beans.system.BrSearchResultBean;
 import org.sola.clients.beans.system.BrSearchResultListBean;
+import org.sola.clients.swing.ui.ContentPanel;
+import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.clients.swing.ui.renderers.TableCellTextAreaRenderer;
-import org.sola.clients.swing.ui.system.BrPanel;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
 /**
  * Allows to search and manage business rules.
  */
-public class BrManagementPanel extends javax.swing.JPanel {
-
-    private class BrPanelListener implements PropertyChangeListener {
-
-        @Override
-        public void propertyChange(PropertyChangeEvent evt) {
-            if (evt.getPropertyName().equals(BrPanel.CREATED_PROPERTY)) {
-                MessageUtility.displayMessage(ClientMessage.ADMIN_BR_CREATED);
-            } else if (evt.getPropertyName().equals(BrPanel.SAVED_PROPERTY)) {
-                MessageUtility.displayMessage(ClientMessage.ADMIN_BR_SAVED);
-                searchBr();
-                showBrSearch();
-            }
-            if (evt.getPropertyName().equals(BrPanel.CANCEL_ACTION_PROPERTY)) {
-                showBrSearch();
-                searchBr();
-            }
-        }
-    }
-    
-    private ResourceBundle resourceBundle;
-    private String headerTitle;
+public class BrManagementPanel extends ContentPanel {
     
     /** Default panel constructor. */
     public BrManagementPanel() {
-        resourceBundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/admin/system/Bundle");
         initComponents();
-        
-        headerTitle = pnlHeader.getTitleText();
-        BrPanelListener listener = new BrPanelListener();
-        pnlBr.addPropertyChangeListener(listener);
         brSearchResults.addPropertyChangeListener(new PropertyChangeListener() {
 
             @Override
@@ -86,7 +59,6 @@ public class BrManagementPanel extends javax.swing.JPanel {
             }
         });
         customizeBrButtons(null);
-        showBrSearch();
     }
 
     private BrTechnicalTypeListBean createBrTechnicalTypes(){
@@ -105,30 +77,29 @@ public class BrManagementPanel extends javax.swing.JPanel {
     
     /** Enables/disables BR managements buttons. */
     private void customizeBrButtons(BrSearchResultBean brSearchResult) {
-        btnEdit.getAction().setEnabled(brSearchResult != null);
-        btnRemove.getAction().setEnabled(brSearchResult != null);
+        btnEdit.setEnabled(brSearchResult != null);
+        btnRemove.setEnabled(brSearchResult != null);
+        menuEdit.setEnabled(btnEdit.isEnabled());
+        menuRemove.setEnabled(btnRemove.isEnabled());
     }
 
     /** Shows {@link BrPanel} */
-    private void showBrPanel(BrBean br) {
-        pnlSearch.setVisible(false);
-        pnlBr.setVisible(true);
-        pnlBr.setBr(br);
+    private void showBrPanel(final BrBean br) {
+        BrPanelForm panel = new BrPanelForm(br, true, br != null);
+        panel.addPropertyChangeListener(new PropertyChangeListener() {
 
-        if (br != null) {
-            pnlHeader.setTitleText(MessageFormat.format("{0} - {1}", headerTitle,
-                    br.getDisplayName()));
-        } else {
-            pnlHeader.setTitleText(MessageFormat.format("{0} - {1}", headerTitle,
-                    resourceBundle.getString("BrManagementPanel.NewBr")));
-        }
-    }
-
-    /** Shows BR search panel. */
-    private void showBrSearch(){
-        pnlBr.setVisible(false);
-        pnlSearch.setVisible(true);
-        pnlHeader.setTitleText(headerTitle);
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals(BrPanelForm.BR_SAVED_PROPERTY)) {
+                    if (br == null) {
+                        ((BrPanelForm) evt.getSource()).setBr(null);
+                    }else{
+                        searchBr();
+                    }
+                }
+            }
+        });
+        getMainContentPanel().addPanel(panel, MainContentPanel.CARD_ADMIN_BR, true);
     }
     
     /** Searches business rules with given criteria.*/
@@ -153,7 +124,6 @@ public class BrManagementPanel extends javax.swing.JPanel {
         menuEdit = new javax.swing.JMenuItem();
         menuRemove = new javax.swing.JMenuItem();
         pnlMain = new javax.swing.JPanel();
-        pnlBr = new org.sola.clients.swing.ui.system.BrPanel();
         pnlSearch = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableSearchResults = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
@@ -178,28 +148,41 @@ public class BrManagementPanel extends javax.swing.JPanel {
 
         popupBrs.setName("popupBrs"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(org.sola.clients.swing.admin.AdminApplication.class).getContext().getActionMap(BrManagementPanel.class, this);
-        menuAdd.setAction(actionMap.get("addBr")); // NOI18N
+        menuAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/admin/system/Bundle"); // NOI18N
         menuAdd.setText(bundle.getString("BrManagementPanel.menuAdd.text")); // NOI18N
         menuAdd.setName("menuAdd"); // NOI18N
+        menuAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuAddActionPerformed(evt);
+            }
+        });
         popupBrs.add(menuAdd);
 
-        menuEdit.setAction(actionMap.get("editBr")); // NOI18N
+        menuEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/pencil.png"))); // NOI18N
         menuEdit.setText(bundle.getString("BrManagementPanel.menuEdit.text")); // NOI18N
         menuEdit.setName("menuEdit"); // NOI18N
+        menuEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuEditActionPerformed(evt);
+            }
+        });
         popupBrs.add(menuEdit);
 
-        menuRemove.setAction(actionMap.get("removeBr")); // NOI18N
+        menuRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
         menuRemove.setText(bundle.getString("BrManagementPanel.menuRemove.text")); // NOI18N
         menuRemove.setName("menuRemove"); // NOI18N
+        menuRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuRemoveActionPerformed(evt);
+            }
+        });
         popupBrs.add(menuRemove);
+
+        setHeaderPanel(pnlHeader);
 
         pnlMain.setName("pnlMain"); // NOI18N
         pnlMain.setLayout(new java.awt.CardLayout());
-
-        pnlBr.setName("pnlBr"); // NOI18N
-        pnlMain.add(pnlBr, "card3");
 
         pnlSearch.setName("pnlSearch"); // NOI18N
 
@@ -392,28 +375,43 @@ public class BrManagementPanel extends javax.swing.JPanel {
         jToolBar1.setRollover(true);
         jToolBar1.setName("jToolBar1"); // NOI18N
 
-        btnAdd.setAction(actionMap.get("addBr")); // NOI18N
+        btnAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
         btnAdd.setText(bundle.getString("BrManagementPanel.btnAdd.text")); // NOI18N
         btnAdd.setFocusable(false);
         btnAdd.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnAdd.setName("btnAdd"); // NOI18N
         btnAdd.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnAdd);
 
-        btnEdit.setAction(actionMap.get("editBr")); // NOI18N
+        btnEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/pencil.png"))); // NOI18N
         btnEdit.setText(bundle.getString("BrManagementPanel.btnEdit.text")); // NOI18N
         btnEdit.setFocusable(false);
         btnEdit.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnEdit.setName("btnEdit"); // NOI18N
         btnEdit.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnEdit);
 
-        btnRemove.setAction(actionMap.get("removeBr")); // NOI18N
+        btnRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
         btnRemove.setText(bundle.getString("BrManagementPanel.btnRemove.text")); // NOI18N
         btnRemove.setFocusable(false);
         btnRemove.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnRemove.setName("btnRemove"); // NOI18N
         btnRemove.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnRemove);
 
         javax.swing.GroupLayout pnlSearchLayout = new javax.swing.GroupLayout(pnlSearch);
@@ -431,7 +429,7 @@ public class BrManagementPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE))
         );
 
         pnlMain.add(pnlSearch, "card2");
@@ -454,7 +452,7 @@ public class BrManagementPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(pnlHeader, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE)
+                .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -465,20 +463,41 @@ public class BrManagementPanel extends javax.swing.JPanel {
         searchBr();
     }
 
-    @Action
-    public void addBr() {
+    private void addBr() {
         showBrPanel(null);
     }//GEN-LAST:event_btnSearchActionPerformed
 
-    @Action
-    public void editBr() {
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        addBr();
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+        editBr();
+    }//GEN-LAST:event_btnEditActionPerformed
+
+    private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
+        removeBr();
+    }//GEN-LAST:event_btnRemoveActionPerformed
+
+    private void menuAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAddActionPerformed
+        addBr();
+    }//GEN-LAST:event_menuAddActionPerformed
+
+    private void menuEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEditActionPerformed
+        editBr();
+    }//GEN-LAST:event_menuEditActionPerformed
+
+    private void menuRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRemoveActionPerformed
+        removeBr();
+    }//GEN-LAST:event_menuRemoveActionPerformed
+
+    private void editBr() {
         if(brSearchResults.getSelectedBrSearchResult()!=null){
             showBrPanel(brSearchResults.getBrNotLocalized());
         }
     }
 
-    @Action
-    public void removeBr() {
+    private void removeBr() {
         if (brSearchResults.getSelectedBrSearchResult() != null && MessageUtility.displayMessage(
                 ClientMessage.ADMIN_CONFIRM_DELETE_BR,
                 new String[]{brSearchResults.getSelectedBrSearchResult().getDisplayName()}) == 
@@ -518,7 +537,6 @@ public class BrManagementPanel extends javax.swing.JPanel {
     private javax.swing.JMenuItem menuAdd;
     private javax.swing.JMenuItem menuEdit;
     private javax.swing.JMenuItem menuRemove;
-    private org.sola.clients.swing.ui.system.BrPanel pnlBr;
     private org.sola.clients.swing.ui.HeaderPanel pnlHeader;
     private javax.swing.JPanel pnlMain;
     private javax.swing.JPanel pnlSearch;

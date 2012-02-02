@@ -19,10 +19,10 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="headerPanel1" alignment="0" pref="642" max="32767" attributes="0"/>
+          <Component id="headerPanel1" alignment="0" pref="652" max="32767" attributes="0"/>
           <Group type="102" attributes="0">
               <EmptySpace min="10" pref="10" max="10" attributes="0"/>
-              <Component id="jScrollPane1" pref="622" max="32767" attributes="0"/>
+              <Component id="jScrollPane1" pref="632" max="32767" attributes="0"/>
               <EmptySpace min="10" pref="10" max="10" attributes="0"/>
           </Group>
       </Group>
@@ -32,7 +32,7 @@
           <Group type="102" alignment="0" attributes="0">
               <Component id="headerPanel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jScrollPane1" pref="367" max="32767" attributes="0"/>
+              <Component id="jScrollPane1" pref="385" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>

@@ -41,20 +41,18 @@ public abstract class AbstractIdBean extends AbstractVersionedBean {
     
     public AbstractIdBean() {
         super();
+        generateId();
     }
 
     /** 
      * Generates new ID, row version and row ID. Used to produce new object 
      * instance from existing one. 
      */
-    public void generateId(){
+    public final void generateId(){
         setId(UUID.randomUUID().toString());
     }
     
     public String getId() {
-        if(id == null){
-            generateId();
-        }
         return id;
     }
     

@@ -44,7 +44,8 @@ import javax.swing.JPanel;
 public class MainContentPanel extends javax.swing.JPanel {
 
     public final static String CARD_DASHBOARD = "dashboard";
-    public final static String CARD_PERSONS = "persons";
+    public final static String CARD_SEARCH_PERSONS = "searchPersons";
+    public final static String CARD_PERSON = "person";
     public final static String CARD_APPSEARCH = "appsearch";
     public final static String CARD_BAUNIT_SEARCH = "baunitsearch";
     public final static String CARD_DOCUMENT_SEARCH = "documentsearch";
@@ -58,6 +59,22 @@ public class MainContentPanel extends javax.swing.JPanel {
     public final static String CARD_MORTGAGE = "mortgagePanel";
     public final static String CARD_SIMPLE_RIGHT = "simpleRightPanel";
     public final static String CARD_OWNERSHIP = "ownershipPanel";
+    public final static String CARD_OWNERSHIP_SHARE = "ownershipSharePanel";
+    public final static String CARD_TRANSACTIONED_DOCUMENT = "transactionedDocumentPanel";
+    
+    public final static String CARD_ADMIN_REFDATA_MANAGE = "refDataManagementPanel";
+    public final static String CARD_ADMIN_REFDATA = "refDataPanel";
+    public final static String CARD_ADMIN_REFDATA_REQUEST_TYPE = "refDataRequestTypePanel";
+    public final static String CARD_ADMIN_RRR_TYPE = "refDataRrrTypePanel";
+    public final static String CARD_ADMIN_ROLES_MANAGE = "rolesManagementPanel";
+    public final static String CARD_ADMIN_ROLE = "rolePanel";
+    public final static String CARD_ADMIN_GROUP_MANAGE = "groupManagementPanel";
+    public final static String CARD_ADMIN_GROUP = "groupPanel";
+    public final static String CARD_ADMIN_USER_MANAGE = "usersManagementPanel";
+    public final static String CARD_ADMIN_USER = "userPanel";
+    public final static String CARD_ADMIN_USER_PASSWORD = "userPasswordPanel";
+    public final static String CARD_ADMIN_BR_MANAGE = "brManagementPanel";
+    public final static String CARD_ADMIN_BR = "brPanel";
     
     private HashMap<String, Component> cards;
     private ArrayList<String> cardsIndex;

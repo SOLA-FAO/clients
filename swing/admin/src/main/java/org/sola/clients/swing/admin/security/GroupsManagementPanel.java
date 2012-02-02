@@ -29,56 +29,23 @@ package org.sola.clients.swing.admin.security;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ResourceBundle;
-import org.jdesktop.application.Action;
 import org.sola.clients.beans.security.GroupBean;
 import org.sola.clients.beans.security.GroupSummaryBean;
 import org.sola.clients.beans.security.GroupSummaryListBean;
-import org.sola.clients.swing.common.LafManager;
+import org.sola.clients.swing.ui.ContentPanel;
+import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.clients.swing.ui.renderers.TableCellTextAreaRenderer;
-import org.sola.clients.swing.ui.security.GroupPanel;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
 /**
  * Allows to manage groups.
  */
-public class GroupsManagementPanel extends javax.swing.JPanel {
+public class GroupsManagementPanel extends ContentPanel {
 
-    /** Listens for events of {@link GroupPanel} */
-    private class GroupPanelListener implements PropertyChangeListener {
-
-        @Override
-        public void propertyChange(PropertyChangeEvent evt) {
-            if (evt.getPropertyName().equals(GroupPanel.SAVED_GROUP_PROPERTY) || 
-                    evt.getPropertyName().equals(GroupPanel.CREATED_GROUP_PROPERTY)) {
-                
-                if(evt.getPropertyName().equals(GroupPanel.CREATED_GROUP_PROPERTY)){
-                    MessageUtility.displayMessage(ClientMessage.ADMIN_GROUP_CREATED);
-                }else{
-                    MessageUtility.displayMessage(ClientMessage.ADMIN_GROUP_SAVED);
-                }
-                
-                pnlGroup.setGroup(null);
-                showGroups();
-                groupSummaryList.loadGroups(false);
-            }
-            if (evt.getPropertyName().equals(GroupPanel.CANCEL_ACTION_PROPERTY)) {
-                showGroups();
-            }
-        }
-    }
-
-    private ResourceBundle resourceBundle;
-    
     /** Default constructor. */
     public GroupsManagementPanel() {
         initComponents();
-        customizeComponents();
-        resourceBundle = ResourceBundle.getBundle("org/sola/clients/swing/admin/security/Bundle"); 
-        showGroups();
-        pnlGroup.addPropertyChangeListener(new GroupPanelListener());
-
         groupSummaryList.loadGroups(false);
         groupSummaryList.addPropertyChangeListener(new PropertyChangeListener() {
 
@@ -91,48 +58,36 @@ public class GroupsManagementPanel extends javax.swing.JPanel {
         });
         customizeGroupButtons(null);
     }
-    
-    
-     /** Applies customization of component L&F. */
-    private void customizeComponents() {
-  
-//    BUTTONS   
-    LafManager.getInstance().setBtnProperties(btnAddGroup);
-    LafManager.getInstance().setBtnProperties(btnEditGroup);
-    LafManager.getInstance().setBtnProperties(btnRemoveGroup);
-    
-    }
 
-    
-    
     /** 
      * Enables or disables group management buttons, depending on selection in 
      * the groups table and user rights. 
      */
     private void customizeGroupButtons(GroupSummaryBean groupSummaryBean) {
-        btnRemoveGroup.getAction().setEnabled(groupSummaryBean != null);
-        btnEditGroup.getAction().setEnabled(groupSummaryBean != null);
-    }
-    
-    /** Shows list of groups */
-    private void showGroups(){
-        pnlGroup.setVisible(false);
-        pnlGroups.setVisible(true);
-        pnlHeader.setTitleText(resourceBundle.getString("GroupsManagementPanel.pnlHeader.titleText"));
+        btnRemoveGroup.setEnabled(groupSummaryBean != null);
+        btnEditGroup.setEnabled(groupSummaryBean != null);
+        menuEdit.setEnabled(btnEditGroup.isEnabled());
+        menuRemove.setEnabled(btnRemoveGroup.isEnabled());
     }
 
     /** Shows group panel. */
-    private void showGroup(GroupSummaryBean group){
-        pnlGroups.setVisible(false);
-        pnlGroup.setVisible(true);
-        if(group!=null){
-            pnlHeader.setTitleText(String.format(resourceBundle
-                    .getString("GroupsManagementPanel.pnlHeader.titleText.EditGroup"), group.getName()));
-        }else{
-            pnlHeader.setTitleText(resourceBundle.getString("GroupsManagementPanel.pnlHeader.titleText.NewGroup"));
-        }
+    private void showGroup(final GroupBean group) {
+        GroupPanelForm panel = new GroupPanelForm(group, true, group != null, false);
+        panel.addPropertyChangeListener(new PropertyChangeListener() {
+
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals(GroupPanelForm.GROUP_SAVED_PROPERTY)) {
+                    if (group == null) {
+                        ((GroupPanelForm) evt.getSource()).setGroupBean(null);
+                    }
+                    groupSummaryList.loadGroups(false);
+                }
+            }
+        });
+        getMainContentPanel().addPanel(panel, MainContentPanel.CARD_ADMIN_GROUP, true);
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -143,7 +98,7 @@ public class GroupsManagementPanel extends javax.swing.JPanel {
         menuEdit = new javax.swing.JMenuItem();
         menuRemove = new javax.swing.JMenuItem();
         groupSummaryList = new org.sola.clients.beans.security.GroupSummaryListBean();
-        pnlLayout = new javax.swing.JPanel();
+        pnlHeader = new org.sola.clients.swing.ui.HeaderPanel();
         pnlGroups = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
         btnAddGroup = new javax.swing.JButton();
@@ -151,32 +106,45 @@ public class GroupsManagementPanel extends javax.swing.JPanel {
         btnRemoveGroup = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableWithDefaultStyles1 = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
-        pnlGroup = new org.sola.clients.swing.ui.security.GroupPanel();
-        pnlHeader = new org.sola.clients.swing.ui.HeaderPanel();
 
         popupGroups.setName("popupGroups"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(GroupsManagementPanel.class, this);
-        menuAdd.setAction(actionMap.get("addGroup")); // NOI18N
+        menuAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/admin/security/Bundle"); // NOI18N
         menuAdd.setText(bundle.getString("GroupsManagementPanel.menuAdd.text")); // NOI18N
         menuAdd.setName("menuAdd"); // NOI18N
+        menuAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuAddActionPerformed(evt);
+            }
+        });
         popupGroups.add(menuAdd);
 
-        menuEdit.setAction(actionMap.get("editGroup")); // NOI18N
+        menuEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/pencil.png"))); // NOI18N
         menuEdit.setText(bundle.getString("GroupsManagementPanel.menuEdit.text")); // NOI18N
         menuEdit.setName("menuEdit"); // NOI18N
+        menuEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuEditActionPerformed(evt);
+            }
+        });
         popupGroups.add(menuEdit);
 
-        menuRemove.setAction(actionMap.get("removeGroup")); // NOI18N
+        menuRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
         menuRemove.setText(bundle.getString("GroupsManagementPanel.menuRemove.text")); // NOI18N
         menuRemove.setName("menuRemove"); // NOI18N
+        menuRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuRemoveActionPerformed(evt);
+            }
+        });
         popupGroups.add(menuRemove);
 
-        setMinimumSize(new java.awt.Dimension(547, 329));
+        setHeaderPanel(pnlHeader);
+        setMinimumSize(new java.awt.Dimension(100, 100));
 
-        pnlLayout.setName("pnlLayout"); // NOI18N
-        pnlLayout.setLayout(new java.awt.CardLayout());
+        pnlHeader.setName("pnlHeader"); // NOI18N
+        pnlHeader.setTitleText(bundle.getString("GroupsManagementPanel.pnlHeader.titleText")); // NOI18N
 
         pnlGroups.setName("pnlGroups"); // NOI18N
 
@@ -184,28 +152,43 @@ public class GroupsManagementPanel extends javax.swing.JPanel {
         jToolBar1.setRollover(true);
         jToolBar1.setName("jToolBar1"); // NOI18N
 
-        btnAddGroup.setAction(actionMap.get("addGroup")); // NOI18N
+        btnAddGroup.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
         btnAddGroup.setText(bundle.getString("GroupsManagementPanel.btnAddGroup.text")); // NOI18N
         btnAddGroup.setFocusable(false);
         btnAddGroup.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnAddGroup.setName("btnAddGroup"); // NOI18N
         btnAddGroup.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAddGroup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddGroupActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnAddGroup);
 
-        btnEditGroup.setAction(actionMap.get("editGroup")); // NOI18N
+        btnEditGroup.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/pencil.png"))); // NOI18N
         btnEditGroup.setText(bundle.getString("GroupsManagementPanel.btnEditGroup.text")); // NOI18N
         btnEditGroup.setFocusable(false);
         btnEditGroup.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnEditGroup.setName("btnEditGroup"); // NOI18N
         btnEditGroup.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnEditGroup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditGroupActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnEditGroup);
 
-        btnRemoveGroup.setAction(actionMap.get("removeGroup")); // NOI18N
+        btnRemoveGroup.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
         btnRemoveGroup.setText(bundle.getString("GroupsManagementPanel.btnRemoveGroup.text")); // NOI18N
         btnRemoveGroup.setFocusable(false);
         btnRemoveGroup.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnRemoveGroup.setName("btnRemoveGroup"); // NOI18N
         btnRemoveGroup.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnRemoveGroup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveGroupActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnRemoveGroup);
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
@@ -236,70 +219,74 @@ public class GroupsManagementPanel extends javax.swing.JPanel {
         pnlGroups.setLayout(pnlGroupsLayout);
         pnlGroupsLayout.setHorizontalGroup(
             pnlGroupsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 527, Short.MAX_VALUE)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 527, Short.MAX_VALUE)
+            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
         );
         pnlGroupsLayout.setVerticalGroup(
             pnlGroupsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlGroupsLayout.createSequentialGroup()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE))
         );
-
-        pnlLayout.add(pnlGroups, "card3");
-
-        pnlGroup.setName("pnlGroup"); // NOI18N
-        pnlLayout.add(pnlGroup, "card2");
-
-        pnlHeader.setName("pnlHeader"); // NOI18N
-        pnlHeader.setTitleText(bundle.getString("GroupsManagementPanel.pnlHeader.titleText")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlHeader, javax.swing.GroupLayout.DEFAULT_SIZE, 547, Short.MAX_VALUE)
+            .addComponent(pnlHeader, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addGap(10, 10, 10)
-                .addComponent(pnlLayout, javax.swing.GroupLayout.DEFAULT_SIZE, 527, Short.MAX_VALUE)
+                .addComponent(pnlGroups, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(10, 10, 10))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(pnlHeader, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlLayout, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(pnlGroups, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
 
-    /** Customizes {@link GroupPanel} to create new group. */
-    @Action
-    public void addGroup() {
-        pnlGroup.setGroup(null);
-        pnlGroup.setOkButtonText(MessageUtility.getLocalizedMessage(
-                        ClientMessage.GENERAL_LABELS_CREATE_AND_CLOSE).getMessage());
+    private void btnAddGroupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddGroupActionPerformed
+        addGroup();
+    }//GEN-LAST:event_btnAddGroupActionPerformed
+
+    private void menuAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAddActionPerformed
+        addGroup();
+    }//GEN-LAST:event_menuAddActionPerformed
+
+    private void btnEditGroupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditGroupActionPerformed
+        editGroup();
+    }//GEN-LAST:event_btnEditGroupActionPerformed
+
+    private void btnRemoveGroupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveGroupActionPerformed
+        removeGroup();
+    }//GEN-LAST:event_btnRemoveGroupActionPerformed
+
+    private void menuEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEditActionPerformed
+        editGroup();
+    }//GEN-LAST:event_menuEditActionPerformed
+
+    private void menuRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRemoveActionPerformed
+        removeGroup();
+    }//GEN-LAST:event_menuRemoveActionPerformed
+
+    private void addGroup() {
         showGroup(null);
     }
 
-    /** Customizes {@link GroupPanel} to edit selected group from the groups table. */
-    @Action
-    public void editGroup() {
+    private void editGroup() {
         if (groupSummaryList.getSelectedGroup() != null) {
-            pnlGroup.setGroup(GroupBean.getGroup(groupSummaryList.getSelectedGroup().getId()));
-            pnlGroup.setOkButtonText(MessageUtility.getLocalizedMessage(
-                        ClientMessage.GENERAL_LABELS_SAVE_AND_CLOSE).getMessage());
-            showGroup(groupSummaryList.getSelectedGroup());
+            showGroup(GroupBean.getGroup(groupSummaryList.getSelectedGroup().getId()));
         }
     }
 
-    /** Removes selected group from the list. */
-    @Action
-    public void removeGroup() {
+    private void removeGroup() {
         if (groupSummaryList.getSelectedGroup() != null
                 && MessageUtility.displayMessage(ClientMessage.ADMIN_CONFIRM_DELETE_GROUP)
                 == MessageUtility.BUTTON_ONE) {
@@ -318,10 +305,8 @@ public class GroupsManagementPanel extends javax.swing.JPanel {
     private javax.swing.JMenuItem menuAdd;
     private javax.swing.JMenuItem menuEdit;
     private javax.swing.JMenuItem menuRemove;
-    private org.sola.clients.swing.ui.security.GroupPanel pnlGroup;
     private javax.swing.JPanel pnlGroups;
     private org.sola.clients.swing.ui.HeaderPanel pnlHeader;
-    private javax.swing.JPanel pnlLayout;
     private javax.swing.JPopupMenu popupGroups;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables

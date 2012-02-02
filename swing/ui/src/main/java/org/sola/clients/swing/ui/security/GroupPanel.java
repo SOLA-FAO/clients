@@ -29,7 +29,6 @@ package org.sola.clients.swing.ui.security;
 
 import org.sola.clients.beans.security.GroupBean;
 import org.sola.clients.beans.security.GroupRoleHelperListBean;
-import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.ui.renderers.TableCellTextAreaRenderer;
 
 /**
@@ -37,11 +36,6 @@ import org.sola.clients.swing.ui.renderers.TableCellTextAreaRenderer;
  */
 public class GroupPanel extends javax.swing.JPanel {
 
-    public static final String SAVED_GROUP_PROPERTY = "GroupSaved";
-    public static final String CREATED_GROUP_PROPERTY = "GroupCreated";
-    public static final String CANCEL_ACTION_PROPERTY = "Cancel";
-    
-    private String saveEventToFire = SAVED_GROUP_PROPERTY;
     private GroupBean group;
     private GroupRoleHelperListBean groupRoleHelperList;
 
@@ -57,35 +51,14 @@ public class GroupPanel extends javax.swing.JPanel {
     public GroupPanel(GroupBean group) {
         setupGroupBean(group);
         initComponents();
-        customizeComponents();
     }
-    
-     /** Applies customization of component L&F. */
-    private void customizeComponents() {
-   
-//    BUTTONS   
-    LafManager.getInstance().setBtnProperties(btnCancel);
-    LafManager.getInstance().setBtnProperties(btnOk);
-    
-//    LABELS    
-    LafManager.getInstance().setLabProperties(jLabel1);
-    LafManager.getInstance().setLabProperties(jLabel2);
-    LafManager.getInstance().setLabProperties(jLabel3);
-    
-//    TXT FIELDS
-    LafManager.getInstance().setTxtProperties(txtDescription);
-    LafManager.getInstance().setTxtProperties(txtName);
-    }
-    
     
     /** Setup {@link GroupBean} object, used to bind data on the form. */
     private void setupGroupBean(GroupBean group) {
         if (group != null) {
             this.group = group;
-            saveEventToFire = SAVED_GROUP_PROPERTY;
         } else {
             this.group = new GroupBean();
-            saveEventToFire = CREATED_GROUP_PROPERTY;
         }
 
         if (groupRoleHelperList == null) {
@@ -111,23 +84,27 @@ public class GroupPanel extends javax.swing.JPanel {
         setupGroupBean(group);
     }
 
-    /** Returns text of "OK" button. */
-    public String getOkButtonText() {
-        return btnOk.getText();
-    }
-
-    /** Sets text of "OK" button. */
-    public void setOkButtonText(String text) {
-        btnOk.setText(text);
-    }
-
-    /** Disables or enables form. */
+    /** Disables or enables panel components. */
     public void lockForm(boolean isLocked) {
         txtName.setEnabled(!isLocked);
         txtDescription.setEnabled(!isLocked);
         tableRoles.setEnabled(!isLocked);
-        btnOk.setEnabled(!isLocked);
-        btnCancel.setEnabled(!isLocked);
+    }
+    
+    /** Validates group */
+    public boolean validateGroup(boolean showMessage){
+        return group.validate(showMessage).size() < 1;
+    }
+    
+    /** Saves group */
+    public boolean saveGroup(boolean showMessage){
+        if (validateGroup(showMessage)) {
+            group.save();
+            groupRoleHelperList.setChecks(group.getGroupRoles());
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -142,8 +119,6 @@ public class GroupPanel extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         tableRoles = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
         jLabel3 = new javax.swing.JLabel();
-        btnOk = new javax.swing.JButton();
-        btnCancel = new javax.swing.JButton();
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12));
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/security/Bundle"); // NOI18N
@@ -197,22 +172,6 @@ public class GroupPanel extends javax.swing.JPanel {
         jLabel3.setText(bundle.getString("GroupPanel.jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
 
-        btnOk.setText(bundle.getString("GroupPanel.btnOk.text")); // NOI18N
-        btnOk.setName("btnOk"); // NOI18N
-        btnOk.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOkActionPerformed(evt);
-            }
-        });
-
-        btnCancel.setText(bundle.getString("GroupPanel.btnCancel.text")); // NOI18N
-        btnCancel.setName("btnCancel"); // NOI18N
-        btnCancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -230,12 +189,7 @@ public class GroupPanel extends javax.swing.JPanel {
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 206, Short.MAX_VALUE))
                             .addComponent(txtDescription, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)))
-                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -253,31 +207,13 @@ public class GroupPanel extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnOk)
-                    .addComponent(btnCancel)))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE))
         );
 
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
-        if (group.validate(true).size() < 1) {
-            group.save();
-            groupRoleHelperList.setChecks(group.getGroupRoles());
-            firePropertyChange(saveEventToFire, null, group);
-        }
-    }//GEN-LAST:event_btnOkActionPerformed
-
-    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        setGroup(null);
-        firePropertyChange(CANCEL_ACTION_PROPERTY, false, true);
-    }//GEN-LAST:event_btnCancelActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCancel;
-    private javax.swing.JButton btnOk;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
