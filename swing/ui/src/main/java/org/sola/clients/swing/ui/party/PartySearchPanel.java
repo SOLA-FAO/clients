@@ -36,7 +36,6 @@ import org.sola.clients.beans.party.PartySearchResultListBean;
 import org.sola.clients.beans.referencedata.PartyRoleTypeListBean;
 import org.sola.clients.beans.referencedata.PartyTypeListBean;
 import org.sola.clients.beans.security.SecurityBean;
-import org.sola.clients.swing.common.LafManager;
 import org.sola.common.RolesConstants;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -66,7 +65,6 @@ public class PartySearchPanel extends JPanel {
             }
         });
         customizePartyButtons();
-        customizeComponents();
     }
 
     public boolean isShowViewButton(){
@@ -121,31 +119,7 @@ public class PartySearchPanel extends JPanel {
         btnRemoveParty.setVisible(isVisible);
         menuRemove.setVisible(isVisible);
     }
-    
-    /** Applies customization of component L&F. */
-    private void customizeComponents() {
-
-//    BUTTONS   
-        LafManager.getInstance().setBtnProperties(btnAddParty);
-        LafManager.getInstance().setBtnProperties(btnEditParty);
-        LafManager.getInstance().setBtnProperties(btnRemoveParty);
-        LafManager.getInstance().setBtnProperties(btnSearch);
-//    COMBOBOXES
-        LafManager.getInstance().setCmbProperties(cbxPartyTypes);
-        LafManager.getInstance().setCmbProperties(cbxRoles);
-
-
-
-//    LABELS    
-        LafManager.getInstance().setLabProperties(jLabel1);
-        LafManager.getInstance().setLabProperties(jLabel2);
-        LafManager.getInstance().setLabProperties(jLabel3);
-
-
-//    TXT FIELDS
-        LafManager.getInstance().setTxtProperties(txtName);
-    }
-
+   
     private PartyTypeListBean createPartyTypes() {
         if (partyTypes == null) {
             partyTypes = new PartyTypeListBean(true);
@@ -328,7 +302,6 @@ public class PartySearchPanel extends JPanel {
         jToolBar1.setRollover(true);
         jToolBar1.setName("jToolBar1"); // NOI18N
 
-        btnView.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnView.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/view.png"))); // NOI18N
         btnView.setText(bundle.getString("PartySearchPanel.btnView.text")); // NOI18N
         btnView.setFocusable(false);
@@ -342,7 +315,6 @@ public class PartySearchPanel extends JPanel {
         });
         jToolBar1.add(btnView);
 
-        btnSelect.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnSelect.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/select.png"))); // NOI18N
         btnSelect.setText(bundle.getString("PartySearchPanel.btnSelect.text")); // NOI18N
         btnSelect.setFocusable(false);
@@ -360,7 +332,6 @@ public class PartySearchPanel extends JPanel {
         jToolBar1.add(separator1);
 
         btnAddParty.setAction(actionMap.get("addParty")); // NOI18N
-        btnAddParty.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnAddParty.setText(bundle.getString("PartySearchPanel.btnAddParty.text")); // NOI18N
         btnAddParty.setFocusable(false);
         btnAddParty.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -369,7 +340,6 @@ public class PartySearchPanel extends JPanel {
         jToolBar1.add(btnAddParty);
 
         btnEditParty.setAction(actionMap.get("editParty")); // NOI18N
-        btnEditParty.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnEditParty.setText(bundle.getString("PartySearchPanel.btnEditParty.text")); // NOI18N
         btnEditParty.setFocusable(false);
         btnEditParty.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -378,7 +348,6 @@ public class PartySearchPanel extends JPanel {
         jToolBar1.add(btnEditParty);
 
         btnRemoveParty.setAction(actionMap.get("removeParty")); // NOI18N
-        btnRemoveParty.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnRemoveParty.setText(bundle.getString("PartySearchPanel.btnRemoveParty.text")); // NOI18N
         btnRemoveParty.setFocusable(false);
         btnRemoveParty.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -408,11 +377,9 @@ public class PartySearchPanel extends JPanel {
 
         jPanel1.setName("jPanel1"); // NOI18N
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel1.setText(bundle.getString("PartySearchPanel.jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
 
-        txtName.setFont(new java.awt.Font("Tahoma", 0, 12));
         txtName.setName("txtName"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, partySearchParams, org.jdesktop.beansbinding.ELProperty.create("${name}"), txtName, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -424,7 +391,7 @@ public class PartySearchPanel extends JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addContainerGap(115, Short.MAX_VALUE))
+                .addContainerGap(119, Short.MAX_VALUE))
             .addComponent(txtName, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
@@ -433,18 +400,16 @@ public class PartySearchPanel extends JPanel {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         jPanel4.add(jPanel1);
 
         jPanel2.setName("jPanel2"); // NOI18N
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel2.setText(bundle.getString("PartySearchPanel.jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
 
-        cbxPartyTypes.setFont(new java.awt.Font("Tahoma", 0, 12));
         cbxPartyTypes.setName("cbxPartyTypes"); // NOI18N
 
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${partyTypes}");
@@ -459,7 +424,7 @@ public class PartySearchPanel extends JPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jLabel2)
-                .addContainerGap(118, Short.MAX_VALUE))
+                .addContainerGap(122, Short.MAX_VALUE))
             .addComponent(cbxPartyTypes, 0, 150, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
@@ -468,18 +433,16 @@ public class PartySearchPanel extends JPanel {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbxPartyTypes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         jPanel4.add(jPanel2);
 
         jPanel3.setName("jPanel3"); // NOI18N
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel3.setText(bundle.getString("PartySearchPanel.jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
 
-        cbxRoles.setFont(new java.awt.Font("Tahoma", 0, 12));
         cbxRoles.setName("cbxRoles"); // NOI18N
 
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${partyRoleTypeList}");
@@ -494,7 +457,7 @@ public class PartySearchPanel extends JPanel {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jLabel3)
-                .addContainerGap(123, Short.MAX_VALUE))
+                .addContainerGap(125, Short.MAX_VALUE))
             .addComponent(cbxRoles, 0, 150, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
@@ -503,14 +466,13 @@ public class PartySearchPanel extends JPanel {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbxRoles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         jPanel4.add(jPanel3);
 
         jPanel5.setName("jPanel5"); // NOI18N
 
-        btnSearch.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnSearch.setText(bundle.getString("PartySearchPanel.btnSearch.text")); // NOI18N
         btnSearch.setName("btnSearch"); // NOI18N
         btnSearch.addActionListener(new java.awt.event.ActionListener() {

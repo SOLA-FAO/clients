@@ -125,11 +125,10 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
 
         jPanel1.setName("jPanel1"); // NOI18N
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12));
-        jLabel1.setText("Name first part:");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/administrative/Bundle"); // NOI18N
+        jLabel1.setText(bundle.getString("BaUnitSearchPanel.jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
 
-        txtNameFirstPart.setFont(new java.awt.Font("Tahoma", 0, 12));
         txtNameFirstPart.setName("txtNameFirstPart"); // NOI18N
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitSearchParams, org.jdesktop.beansbinding.ELProperty.create("${nameFirstPart}"), txtNameFirstPart, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -141,7 +140,7 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addContainerGap(38, Short.MAX_VALUE))
+                .addContainerGap(47, Short.MAX_VALUE))
             .addComponent(txtNameFirstPart, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
@@ -150,18 +149,16 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtNameFirstPart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         jPanel4.add(jPanel1);
 
         jPanel3.setName("jPanel3"); // NOI18N
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12));
-        jLabel3.setText("Name last part:");
+        jLabel3.setText(bundle.getString("BaUnitSearchPanel.jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
 
-        txtNameLastPart.setFont(new java.awt.Font("Tahoma", 0, 12));
         txtNameLastPart.setName("txtNameLastPart"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitSearchParams, org.jdesktop.beansbinding.ELProperty.create("${nameLastPart}"), txtNameLastPart, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -173,7 +170,7 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jLabel3)
-                .addContainerGap(40, Short.MAX_VALUE))
+                .addContainerGap(49, Short.MAX_VALUE))
             .addComponent(txtNameLastPart, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
@@ -182,18 +179,16 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtNameLastPart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         jPanel4.add(jPanel3);
 
         jPanel2.setName("jPanel2"); // NOI18N
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12));
-        jLabel2.setText("Right holder:");
+        jLabel2.setText(bundle.getString("BaUnitSearchPanel.jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
 
-        txtRightholder.setFont(new java.awt.Font("Tahoma", 0, 12));
         txtRightholder.setName("txtRightholder"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitSearchParams, org.jdesktop.beansbinding.ELProperty.create("${ownerName}"), txtRightholder, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -205,7 +200,7 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jLabel2)
-                .addContainerGap(53, Short.MAX_VALUE))
+                .addContainerGap(61, Short.MAX_VALUE))
             .addComponent(txtRightholder, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
@@ -214,15 +209,14 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtRightholder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         jPanel4.add(jPanel2);
 
         jPanel5.setName("jPanel5"); // NOI18N
 
-        btnSearch.setFont(new java.awt.Font("Tahoma", 0, 12));
-        btnSearch.setText("Search");
+        btnSearch.setText(bundle.getString("BaUnitSearchPanel.btnSearch.text")); // NOI18N
         btnSearch.setName("btnSearch"); // NOI18N
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -292,7 +286,6 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
         jToolBar1.setName("jToolBar1"); // NOI18N
 
         btnOpenBaUnit.setAction(actionMap.get("openBaUnit")); // NOI18N
-        btnOpenBaUnit.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnOpenBaUnit.setFocusable(false);
         btnOpenBaUnit.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnOpenBaUnit.setName("btnOpenBaUnit"); // NOI18N
@@ -302,13 +295,11 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
         separator1.setName("separator1"); // NOI18N
         jToolBar1.add(separator1);
 
-        lblSearchResult.setFont(new java.awt.Font("Tahoma", 0, 12));
-        lblSearchResult.setText("Search results: ");
+        lblSearchResult.setText(bundle.getString("BaUnitSearchPanel.lblSearchResult.text")); // NOI18N
         lblSearchResult.setName("lblSearchResult"); // NOI18N
         jToolBar1.add(lblSearchResult);
 
-        lblSearchResultCount.setFont(new java.awt.Font("Tahoma", 0, 12));
-        lblSearchResultCount.setText(" ");
+        lblSearchResultCount.setText(bundle.getString("BaUnitSearchPanel.lblSearchResultCount.text")); // NOI18N
         lblSearchResultCount.setName("lblSearchResultCount"); // NOI18N
         jToolBar1.add(lblSearchResultCount);
 

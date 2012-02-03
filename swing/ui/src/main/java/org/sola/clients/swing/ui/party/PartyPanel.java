@@ -90,7 +90,6 @@ public class PartyPanel extends javax.swing.JPanel {
 
         customizeAddRoleButton(null);
         customizeRoleButtons(null);
-        customizeComponents();
     }
 
     public boolean isReadOnly() {
@@ -159,61 +158,6 @@ public class PartyPanel extends javax.swing.JPanel {
         customizePanel();
         firePropertyChange("partyBean", null, this.partyBean);
         BindingTools.refreshBinding(bindingGroup, "rolesGroup");
-    }
-
-    /** Applies customization of component L&F. */
-    private void customizeComponents() {
-
-//    BUTTONS   
-        LafManager.getInstance().setBtnProperties(btnAddRole);
-        LafManager.getInstance().setBtnProperties(btnRemoveRole);
-
-        //  RADIO  BUTTONS   
-        LafManager.getInstance().setRadioProperties(entityButton);
-        LafManager.getInstance().setRadioProperties(individualButton);
-
-
-//    COMBOBOXES
-        LafManager.getInstance().setCmbProperties(cbxCommunicationWay);
-        LafManager.getInstance().setCmbProperties(cbxGender);
-        LafManager.getInstance().setCmbProperties(cbxIdType);
-        LafManager.getInstance().setCmbProperties(cbxPartyRoleTypes);
-
-
-//    LABELS    
-        LafManager.getInstance().setLabProperties(labAddress);
-        LafManager.getInstance().setLabProperties(labAlias);
-        LafManager.getInstance().setLabProperties(labEmail);
-        LafManager.getInstance().setLabProperties(labFatherFirstName);
-        LafManager.getInstance().setLabProperties(labFatherLastName);
-        LafManager.getInstance().setLabProperties(labFax);
-        LafManager.getInstance().setLabProperties(labIdType);
-        LafManager.getInstance().setLabProperties(labIdref);
-        LafManager.getInstance().setLabProperties(labLastName);
-        LafManager.getInstance().setLabProperties(labMobile);
-        LafManager.getInstance().setLabProperties(labName);
-        LafManager.getInstance().setLabProperties(labPhone);
-        LafManager.getInstance().setLabProperties(labPreferredWay);
-        LafManager.getInstance().setLabProperties(lblGender);
-
-
-//    TXT FIELDS
-        LafManager.getInstance().setTxtProperties(txtAddress);
-        LafManager.getInstance().setTxtProperties(txtAlias);
-        LafManager.getInstance().setTxtProperties(txtEmail);
-        LafManager.getInstance().setTxtProperties(txtFatherFirstName);
-        LafManager.getInstance().setTxtProperties(txtFatherLastName);
-        LafManager.getInstance().setTxtProperties(txtFax);
-        LafManager.getInstance().setTxtProperties(txtFirstName);
-        LafManager.getInstance().setTxtProperties(txtIdref);
-        LafManager.getInstance().setTxtProperties(txtLastName);
-        LafManager.getInstance().setTxtProperties(txtMobile);
-        LafManager.getInstance().setTxtProperties(txtPhone);
-
-
-//    TABBED PANELS
-        LafManager.getInstance().setTabProperties(detailsPanel);
-
     }
 
     /** 
@@ -417,7 +361,6 @@ public class PartyPanel extends javax.swing.JPanel {
         roleTableScrollPanel.setName("roleTableScrollPanel"); // NOI18N
 
         tablePartyRole.setComponentPopupMenu(popupRoles);
-        tablePartyRole.setFont(new java.awt.Font("Thaoma", 0, 12));
         tablePartyRole.setName("tablePartyRole"); // NOI18N
 
         org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${partyBean.filteredRoleList}");
@@ -437,7 +380,6 @@ public class PartyPanel extends javax.swing.JPanel {
         jToolBar1.setRollover(true);
         jToolBar1.setName("jToolBar1"); // NOI18N
 
-        cbxPartyRoleTypes.setFont(new java.awt.Font("Thaoma", 0, 12));
         cbxPartyRoleTypes.setName("cbxPartyRoleTypes"); // NOI18N
 
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${partyRoleTypeList}");
@@ -452,14 +394,12 @@ public class PartyPanel extends javax.swing.JPanel {
         jToolBar1.add(filler1);
 
         btnAddRole.setAction(actionMap.get("addRole")); // NOI18N
-        btnAddRole.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnAddRole.setText(bundle.getString("PartyPanel.btnAddRole.text")); // NOI18N
         btnAddRole.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnAddRole.setName("btnAddRole"); // NOI18N
         jToolBar1.add(btnAddRole);
 
         btnRemoveRole.setAction(actionMap.get("removeRole")); // NOI18N
-        btnRemoveRole.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnRemoveRole.setText(bundle.getString("PartyPanel.btnRemoveRole.text")); // NOI18N
         btnRemoveRole.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnRemoveRole.setName("btnRemoveRole"); // NOI18N
@@ -485,13 +425,11 @@ public class PartyPanel extends javax.swing.JPanel {
 
         jPanel4.setName("jPanel4"); // NOI18N
 
-        labName.setFont(new java.awt.Font("Tahoma", 0, 12));
         labName.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         labName.setText(bundle.getString("ApplicationForm.labName.text")); // NOI18N
         labName.setIconTextGap(1);
         labName.setName("labName"); // NOI18N
 
-        txtFirstName.setFont(new java.awt.Font("Nepali", 0, 12));
         txtFirstName.setDisabledTextColor(new java.awt.Color(240, 240, 240));
         txtFirstName.setName("txtFirstName"); // NOI18N
 
@@ -521,12 +459,10 @@ public class PartyPanel extends javax.swing.JPanel {
 
         jPanel5.setName("jPanel5"); // NOI18N
 
-        labLastName.setFont(new java.awt.Font("Tahoma", 0, 12));
         labLastName.setText(bundle.getString("ApplicationForm.labLastName.text")); // NOI18N
         labLastName.setIconTextGap(1);
         labLastName.setName("labLastName"); // NOI18N
 
-        txtLastName.setFont(new java.awt.Font("Thaoma", 0, 12));
         txtLastName.setName("txtLastName"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${partyBean.lastName}"), txtLastName, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -555,12 +491,10 @@ public class PartyPanel extends javax.swing.JPanel {
 
         jPanel6.setName("jPanel6"); // NOI18N
 
-        labIdType.setFont(new java.awt.Font("Tahoma", 0, 12));
         labIdType.setText(bundle.getString("PartyPanel.labIdType.text")); // NOI18N
         labIdType.setName("labIdType"); // NOI18N
 
         cbxIdType.setBackground(new java.awt.Color(226, 244, 224));
-        cbxIdType.setFont(new java.awt.Font("Thaoma", 0, 12));
         cbxIdType.setName("cbxIdType"); // NOI18N
         cbxIdType.setRenderer(new SimpleComboBoxRenderer("getDisplayValue"));
 
@@ -590,11 +524,9 @@ public class PartyPanel extends javax.swing.JPanel {
 
         jPanel7.setName("jPanel7"); // NOI18N
 
-        labIdref.setFont(new java.awt.Font("Tahoma", 0, 12));
         labIdref.setText(bundle.getString("PartyPanel.labIdref.text")); // NOI18N
         labIdref.setName("labIdref"); // NOI18N
 
-        txtIdref.setFont(new java.awt.Font("Thaoma", 0, 12));
         txtIdref.setName("txtIdref"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${partyBean.idNumber}"), txtIdref, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -620,13 +552,11 @@ public class PartyPanel extends javax.swing.JPanel {
 
         jPanel8.setName("jPanel8"); // NOI18N
 
-        lblGender.setFont(new java.awt.Font("Tahoma", 0, 12));
         lblGender.setText(bundle.getString("PartyPanel.labGender.text")); // NOI18N
         lblGender.setToolTipText(bundle.getString("PartyPanel.labGender.toolTipText")); // NOI18N
         lblGender.setName("labGender"); // NOI18N
 
         cbxGender.setBackground(new java.awt.Color(226, 244, 224));
-        cbxGender.setFont(new java.awt.Font("Thaoma", 0, 12));
         cbxGender.setName("cbxGender"); // NOI18N
         cbxGender.setRenderer(new SimpleComboBoxRenderer("getDisplayValue"));
 
@@ -656,11 +586,9 @@ public class PartyPanel extends javax.swing.JPanel {
 
         jPanel9.setName("jPanel9"); // NOI18N
 
-        labAddress.setFont(new java.awt.Font("Tahoma", 0, 12));
         labAddress.setText(bundle.getString("PartyPanel.labAddress.text")); // NOI18N
         labAddress.setName("labAddress"); // NOI18N
 
-        txtAddress.setFont(new java.awt.Font("Thaoma", 0, 12));
         txtAddress.setName("txtAddress"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${partyBean.address.description}"), txtAddress, org.jdesktop.beansbinding.BeanProperty.create("text"), "");
@@ -724,11 +652,9 @@ public class PartyPanel extends javax.swing.JPanel {
 
         jPanel2.setName("jPanel2"); // NOI18N
 
-        labFatherFirstName.setFont(new java.awt.Font("Tahoma", 0, 12));
         labFatherFirstName.setText(bundle.getString("PartyPanel.labFatherFirstName.text")); // NOI18N
         labFatherFirstName.setName("labFatherFirstName"); // NOI18N
 
-        txtFatherFirstName.setFont(new java.awt.Font("Thaoma", 0, 12));
         txtFatherFirstName.setName("txtFatherFirstName"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${partyBean.fathersName}"), txtFatherFirstName, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -756,11 +682,9 @@ public class PartyPanel extends javax.swing.JPanel {
 
         jPanel17.setName("jPanel17"); // NOI18N
 
-        labFatherLastName.setFont(new java.awt.Font("Tahoma", 0, 12));
         labFatherLastName.setText(bundle.getString("PartyPanel.labFatherLastName.text")); // NOI18N
         labFatherLastName.setName("labFatherLastName"); // NOI18N
 
-        txtFatherLastName.setFont(new java.awt.Font("Thaoma", 0, 12));
         txtFatherLastName.setName("txtFatherLastName"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${partyBean.fathersLastName}"), txtFatherLastName, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -772,7 +696,7 @@ public class PartyPanel extends javax.swing.JPanel {
             jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel17Layout.createSequentialGroup()
                 .addComponent(labFatherLastName)
-                .addContainerGap(132, Short.MAX_VALUE))
+                .addContainerGap(143, Short.MAX_VALUE))
             .addComponent(txtFatherLastName, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
         );
         jPanel17Layout.setVerticalGroup(
@@ -788,11 +712,9 @@ public class PartyPanel extends javax.swing.JPanel {
 
         jPanel16.setName("jPanel16"); // NOI18N
 
-        labAlias.setFont(new java.awt.Font("Tahoma", 0, 12));
         labAlias.setText(bundle.getString("PartyPanel.labAlias.text")); // NOI18N
         labAlias.setName("labAlias"); // NOI18N
 
-        txtAlias.setFont(new java.awt.Font("Thaoma", 0, 12));
         txtAlias.setName("txtAlias"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${partyBean.alias}"), txtAlias, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -804,7 +726,7 @@ public class PartyPanel extends javax.swing.JPanel {
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel16Layout.createSequentialGroup()
                 .addComponent(labAlias)
-                .addContainerGap(205, Short.MAX_VALUE))
+                .addContainerGap(206, Short.MAX_VALUE))
             .addComponent(txtAlias, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
         );
         jPanel16Layout.setVerticalGroup(
@@ -823,11 +745,9 @@ public class PartyPanel extends javax.swing.JPanel {
 
         jPanel11.setName("jPanel11"); // NOI18N
 
-        labPhone.setFont(new java.awt.Font("Tahoma", 0, 12));
         labPhone.setText(bundle.getString("PartyPanel.labPhone.text")); // NOI18N
         labPhone.setName("labPhone"); // NOI18N
 
-        txtPhone.setFont(new java.awt.Font("Thaoma", 0, 12));
         txtPhone.setMaximumSize(new java.awt.Dimension(15, 2147483647));
         txtPhone.setName("txtPhone"); // NOI18N
 
@@ -843,7 +763,7 @@ public class PartyPanel extends javax.swing.JPanel {
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel11Layout.createSequentialGroup()
                 .addComponent(labPhone)
-                .addContainerGap(193, Short.MAX_VALUE))
+                .addContainerGap(198, Short.MAX_VALUE))
             .addComponent(txtPhone, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
         );
         jPanel11Layout.setVerticalGroup(
@@ -859,13 +779,11 @@ public class PartyPanel extends javax.swing.JPanel {
 
         jPanel12.setName("jPanel12"); // NOI18N
 
-        txtMobile.setFont(new java.awt.Font("Thaoma", 0, 12));
         txtMobile.setName("txtMobile"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${partyBean.mobile}"), txtMobile, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        labMobile.setFont(new java.awt.Font("Tahoma", 0, 12));
         labMobile.setText(bundle.getString("PartyPanel.labMobile.text")); // NOI18N
         labMobile.setName("labMobile"); // NOI18N
 
@@ -875,7 +793,7 @@ public class PartyPanel extends javax.swing.JPanel {
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel12Layout.createSequentialGroup()
                 .addComponent(labMobile)
-                .addContainerGap(194, Short.MAX_VALUE))
+                .addContainerGap(198, Short.MAX_VALUE))
             .addComponent(txtMobile, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
         );
         jPanel12Layout.setVerticalGroup(
@@ -891,7 +809,6 @@ public class PartyPanel extends javax.swing.JPanel {
 
         jPanel13.setName("jPanel13"); // NOI18N
 
-        txtFax.setFont(new java.awt.Font("Thaoma", 0, 12));
         txtFax.setName("txtFax"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${partyBean.fax}"), txtFax, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -900,7 +817,6 @@ public class PartyPanel extends javax.swing.JPanel {
         txtFax.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
         txtFax.setHorizontalAlignment(JTextField.LEADING);
 
-        labFax.setFont(new java.awt.Font("Tahoma", 0, 12));
         labFax.setText(bundle.getString("PartyPanel.labFax.text")); // NOI18N
         labFax.setName("labFax"); // NOI18N
 
@@ -926,12 +842,10 @@ public class PartyPanel extends javax.swing.JPanel {
 
         jPanel15.setName("jPanel15"); // NOI18N
 
-        labPreferredWay.setFont(new java.awt.Font("Tahoma", 0, 12));
         labPreferredWay.setText(bundle.getString("PartyPanel.labPreferredWay.text")); // NOI18N
         labPreferredWay.setName("labPreferredWay"); // NOI18N
 
         cbxCommunicationWay.setBackground(new java.awt.Color(226, 244, 224));
-        cbxCommunicationWay.setFont(new java.awt.Font("Thaoma", 0, 12));
         cbxCommunicationWay.setName("cbxCommunicationWay"); // NOI18N
         cbxCommunicationWay.setRenderer(new SimpleComboBoxRenderer("getDisplayValue"));
 
@@ -965,7 +879,6 @@ public class PartyPanel extends javax.swing.JPanel {
 
         jPanel14.setName("jPanel14"); // NOI18N
 
-        txtEmail.setFont(new java.awt.Font("Thaoma", 0, 12));
         txtEmail.setName("txtEmail"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${partyBean.email}"), txtEmail, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -974,7 +887,6 @@ public class PartyPanel extends javax.swing.JPanel {
         txtEmail.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
         txtEmail.setHorizontalAlignment(JTextField.LEADING);
 
-        labEmail.setFont(new java.awt.Font("Tahoma", 0, 12));
         labEmail.setText(bundle.getString("PartyPanel.labEmail.text")); // NOI18N
         labEmail.setName("labEmail"); // NOI18N
 
@@ -984,7 +896,7 @@ public class PartyPanel extends javax.swing.JPanel {
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel14Layout.createSequentialGroup()
                 .addComponent(labEmail)
-                .addContainerGap(197, Short.MAX_VALUE))
+                .addContainerGap(200, Short.MAX_VALUE))
             .addComponent(txtEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
         );
         jPanel14Layout.setVerticalGroup(
@@ -1023,13 +935,12 @@ public class PartyPanel extends javax.swing.JPanel {
                 .addComponent(groupPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addContainerGap(47, Short.MAX_VALUE))
         );
 
         detailsPanel.addTab(bundle.getString("PartyPanel.fullPanel.TabConstraints.tabTitle"), fullPanel); // NOI18N
 
         buttonGroup1.add(entityButton);
-        entityButton.setFont(new java.awt.Font("Tahoma", 0, 12));
         entityButton.setText(bundle.getString("PartyPanel.entityButton.text")); // NOI18N
         entityButton.setActionCommand(bundle.getString("PartyPanel.entityButton.actionCommand")); // NOI18N
         entityButton.setName("entityButton"); // NOI18N
@@ -1040,7 +951,6 @@ public class PartyPanel extends javax.swing.JPanel {
         });
 
         buttonGroup1.add(individualButton);
-        individualButton.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         individualButton.setText(bundle.getString("PartyPanel.individualButton.text")); // NOI18N
         individualButton.setActionCommand(bundle.getString("PartyPanel.individualButton.actionCommand")); // NOI18N
         individualButton.setName("individualButton"); // NOI18N

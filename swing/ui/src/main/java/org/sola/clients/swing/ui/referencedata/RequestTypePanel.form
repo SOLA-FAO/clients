@@ -122,7 +122,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="137" max="32767" attributes="0"/>
+                              <EmptySpace pref="140" max="32767" attributes="0"/>
                           </Group>
                           <Component id="txtCode" alignment="0" pref="183" max="32767" attributes="0"/>
                       </Group>
@@ -133,7 +133,7 @@
                               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="txtCode" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
+                              <EmptySpace pref="12" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -141,9 +141,6 @@
                   <SubComponents>
                     <Component class="javax.swing.JTextField" name="txtCode">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
-                        </Property>
                         <Property name="name" type="java.lang.String" value="txtCode" noResource="true"/>
                         <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
                           <ComponentRef name="cbxCategory"/>
@@ -157,9 +154,6 @@
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel1">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
-                        </Property>
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                           <Image iconType="3" name="/images/common/red_asterisk.gif"/>
                         </Property>
@@ -181,7 +175,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="116" max="32767" attributes="0"/>
+                              <EmptySpace pref="120" max="32767" attributes="0"/>
                           </Group>
                           <Component id="cbxCategory" alignment="0" pref="183" max="32767" attributes="0"/>
                       </Group>
@@ -200,9 +194,6 @@
                   <SubComponents>
                     <Component class="javax.swing.JLabel" name="jLabel5">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
-                        </Property>
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                           <Image iconType="3" name="/images/common/red_asterisk.gif"/>
                         </Property>
@@ -236,7 +227,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="135" max="32767" attributes="0"/>
+                              <EmptySpace pref="138" max="32767" attributes="0"/>
                           </Group>
                           <Component id="txtSatus" alignment="0" pref="183" max="32767" attributes="0"/>
                       </Group>
@@ -247,7 +238,7 @@
                               <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="txtSatus" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
+                              <EmptySpace pref="12" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -255,9 +246,6 @@
                   <SubComponents>
                     <Component class="javax.swing.JLabel" name="jLabel2">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
-                        </Property>
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                           <Image iconType="3" name="/images/common/red_asterisk.gif"/>
                         </Property>
@@ -269,9 +257,6 @@
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtSatus">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
-                        </Property>
                         <Property name="name" type="java.lang.String" value="txtSatus" noResource="true"/>
                         <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
                           <ComponentRef name="txtBaseFee"/>
@@ -295,7 +280,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="118" max="32767" attributes="0"/>
+                              <EmptySpace pref="123" max="32767" attributes="0"/>
                           </Group>
                           <Component id="txtBaseFee" alignment="0" pref="183" max="32767" attributes="0"/>
                       </Group>
@@ -306,7 +291,7 @@
                               <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="txtBaseFee" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
+                              <EmptySpace pref="12" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -314,9 +299,6 @@
                   <SubComponents>
                     <Component class="javax.swing.JLabel" name="jLabel7">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
-                        </Property>
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                           <Image iconType="3" name="/images/common/red_asterisk.gif"/>
                         </Property>
@@ -333,9 +315,6 @@
                         </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="org/sola/clients/swing/ui/referencedata/Bundle.properties" key="RequestTypePanel.txtBaseFee.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                        </Property>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
                         </Property>
                         <Property name="name" type="java.lang.String" value="txtBaseFee" noResource="true"/>
                         <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
@@ -358,7 +337,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="89" max="32767" attributes="0"/>
+                              <EmptySpace pref="97" max="32767" attributes="0"/>
                           </Group>
                           <Component id="txtAreaFee" alignment="0" pref="183" max="32767" attributes="0"/>
                       </Group>
@@ -369,7 +348,7 @@
                               <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="txtAreaFee" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
+                              <EmptySpace pref="12" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -377,9 +356,6 @@
                   <SubComponents>
                     <Component class="javax.swing.JLabel" name="jLabel8">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
-                        </Property>
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                           <Image iconType="3" name="/images/common/red_asterisk.gif"/>
                         </Property>
@@ -396,9 +372,6 @@
                         </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="org/sola/clients/swing/ui/referencedata/Bundle.properties" key="RequestTypePanel.txtAreaFee.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                        </Property>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
                         </Property>
                         <Property name="name" type="java.lang.String" value="txtAreaFee" noResource="true"/>
                         <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
@@ -421,7 +394,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="84" max="32767" attributes="0"/>
+                              <EmptySpace pref="94" max="32767" attributes="0"/>
                           </Group>
                           <Component id="txtValueBaseFee" alignment="0" pref="183" max="32767" attributes="0"/>
                       </Group>
@@ -432,7 +405,7 @@
                               <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="txtValueBaseFee" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
+                              <EmptySpace pref="12" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -440,9 +413,6 @@
                   <SubComponents>
                     <Component class="javax.swing.JLabel" name="jLabel9">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
-                        </Property>
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                           <Image iconType="3" name="/images/common/red_asterisk.gif"/>
                         </Property>
@@ -459,9 +429,6 @@
                         </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="org/sola/clients/swing/ui/referencedata/Bundle.properties" key="RequestTypePanel.txtValueBaseFee.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                        </Property>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
                         </Property>
                         <Property name="name" type="java.lang.String" value="txtValueBaseFee" noResource="true"/>
                         <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
@@ -484,7 +451,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel6" min="-2" max="-2" attributes="1"/>
-                              <EmptySpace pref="45" max="32767" attributes="0"/>
+                              <EmptySpace pref="59" max="32767" attributes="0"/>
                           </Group>
                           <Component id="txtCompleteDays" alignment="0" pref="183" max="32767" attributes="0"/>
                       </Group>
@@ -495,7 +462,7 @@
                               <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="txtCompleteDays" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
+                              <EmptySpace pref="12" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -503,9 +470,6 @@
                   <SubComponents>
                     <Component class="javax.swing.JLabel" name="jLabel6">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
-                        </Property>
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                           <Image iconType="3" name="/images/common/red_asterisk.gif"/>
                         </Property>
@@ -522,9 +486,6 @@
                         </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="org/sola/clients/swing/ui/referencedata/Bundle.properties" key="RequestTypePanel.txtCompleteDays.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                        </Property>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
                         </Property>
                         <Property name="name" type="java.lang.String" value="txtCompleteDays" noResource="true"/>
                         <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
@@ -547,7 +508,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel10" min="-2" max="-2" attributes="1"/>
-                              <EmptySpace pref="30" max="32767" attributes="0"/>
+                              <EmptySpace pref="46" max="32767" attributes="0"/>
                           </Group>
                           <Component id="txtRequiredPropObjects" alignment="0" pref="183" max="32767" attributes="2"/>
                       </Group>
@@ -558,7 +519,7 @@
                               <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="txtRequiredPropObjects" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
+                              <EmptySpace pref="12" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -566,9 +527,6 @@
                   <SubComponents>
                     <Component class="javax.swing.JLabel" name="jLabel10">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
-                        </Property>
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                           <Image iconType="3" name="/images/common/red_asterisk.gif"/>
                         </Property>
@@ -585,9 +543,6 @@
                         </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="org/sola/clients/swing/ui/referencedata/Bundle.properties" key="RequestTypePanel.txtRequiredPropObjects.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                        </Property>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
                         </Property>
                         <Property name="name" type="java.lang.String" value="txtRequiredPropObjects" noResource="true"/>
                         <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
@@ -612,7 +567,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="488" max="32767" attributes="0"/>
+                          <EmptySpace pref="493" max="32767" attributes="0"/>
                       </Group>
                       <Component id="jScrollPane1" alignment="0" pref="579" max="32767" attributes="0"/>
                   </Group>
@@ -622,7 +577,7 @@
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jScrollPane1" pref="169" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" pref="173" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -630,9 +585,6 @@
               <SubComponents>
                 <Component class="javax.swing.JLabel" name="jLabel3">
                   <Properties>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Tahoma" size="12" style="0"/>
-                    </Property>
                     <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/images/common/red_asterisk.gif"/>
                     </Property>
@@ -734,7 +686,7 @@
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Component id="jPanel14" min="-2" max="-2" attributes="1"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jPanel17" pref="237" max="32767" attributes="0"/>
+                      <Component id="jPanel17" pref="240" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -751,7 +703,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="475" max="32767" attributes="0"/>
+                          <EmptySpace pref="489" max="32767" attributes="0"/>
                       </Group>
                       <Component id="txtNotation" alignment="0" pref="579" max="32767" attributes="0"/>
                   </Group>
@@ -770,9 +722,6 @@
               <SubComponents>
                 <Component class="javax.swing.JTextField" name="txtNotation">
                   <Properties>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Tahoma" size="12" style="0"/>
-                    </Property>
                     <Property name="name" type="java.lang.String" value="txtNotation" noResource="true"/>
                     <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
                       <ComponentRef name="tableDisplayValue"/>
@@ -786,9 +735,6 @@
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel11">
                   <Properties>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Tahoma" size="12" style="0"/>
-                    </Property>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                       <ResourceString bundle="org/sola/clients/swing/ui/referencedata/Bundle.properties" key="RequestTypePanel.jLabel11.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
@@ -818,7 +764,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="234" max="32767" attributes="0"/>
+                              <EmptySpace pref="238" max="32767" attributes="0"/>
                           </Group>
                           <Component id="cbxRrrType" alignment="0" pref="282" max="32767" attributes="0"/>
                       </Group>
@@ -837,9 +783,6 @@
                   <SubComponents>
                     <Component class="javax.swing.JLabel" name="jLabel12">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
-                        </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="org/sola/clients/swing/ui/referencedata/Bundle.properties" key="RequestTypePanel.jLabel12.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                         </Property>
@@ -870,7 +813,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel13" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="208" max="32767" attributes="0"/>
+                              <EmptySpace pref="217" max="32767" attributes="0"/>
                           </Group>
                           <Component id="cbxTypeAction" alignment="0" pref="282" max="32767" attributes="0"/>
                       </Group>
@@ -889,9 +832,6 @@
                   <SubComponents>
                     <Component class="javax.swing.JLabel" name="jLabel13">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
-                        </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="org/sola/clients/swing/ui/referencedata/Bundle.properties" key="RequestTypePanel.jLabel13.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                         </Property>
@@ -935,7 +875,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
                               <Component id="jLabel14" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="187" max="32767" attributes="0"/>
+                              <EmptySpace pref="200" max="32767" attributes="0"/>
                           </Group>
                           <Component id="jScrollPane3" alignment="0" pref="282" max="32767" attributes="0"/>
                       </Group>
@@ -945,7 +885,7 @@
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel14" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jScrollPane3" pref="216" max="32767" attributes="0"/>
+                              <Component id="jScrollPane3" pref="220" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -953,9 +893,6 @@
                   <SubComponents>
                     <Component class="javax.swing.JLabel" name="jLabel14">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
-                        </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="org/sola/clients/swing/ui/referencedata/Bundle.properties" key="RequestTypePanel.jLabel14.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                         </Property>
@@ -1026,7 +963,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="213" max="32767" attributes="0"/>
+                              <EmptySpace pref="220" max="32767" attributes="0"/>
                           </Group>
                           <Component id="jScrollPane2" alignment="0" pref="282" max="32767" attributes="0"/>
                       </Group>
@@ -1036,7 +973,7 @@
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jScrollPane2" pref="216" max="32767" attributes="0"/>
+                              <Component id="jScrollPane2" pref="220" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -1095,9 +1032,6 @@
                     </Container>
                     <Component class="javax.swing.JLabel" name="jLabel4">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
-                        </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="org/sola/clients/swing/ui/referencedata/Bundle.properties" key="RequestTypePanel.jLabel4.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                         </Property>

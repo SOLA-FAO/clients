@@ -454,7 +454,6 @@ public class ReferenceDataManagementPanel extends ContentPanel {
         toolbarRefData.setRollover(true);
         toolbarRefData.setName("toolbarRefData"); // NOI18N
 
-        btnAddRefData.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnAddRefData.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
         btnAddRefData.setText(bundle.getString("ReferenceDataManagementPanel.btnAddRefData.text")); // NOI18N
         btnAddRefData.setFocusable(false);
@@ -468,7 +467,6 @@ public class ReferenceDataManagementPanel extends ContentPanel {
         });
         toolbarRefData.add(btnAddRefData);
 
-        btnEditRefData.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnEditRefData.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/pencil.png"))); // NOI18N
         btnEditRefData.setText(bundle.getString("ReferenceDataManagementPanel.btnEditRefData.text")); // NOI18N
         btnEditRefData.setFocusable(false);
@@ -482,7 +480,6 @@ public class ReferenceDataManagementPanel extends ContentPanel {
         });
         toolbarRefData.add(btnEditRefData);
 
-        btnRemoveRefData.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnRemoveRefData.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
         btnRemoveRefData.setText(bundle.getString("ReferenceDataManagementPanel.btnRemoveRefData.text")); // NOI18N
         btnRemoveRefData.setFocusable(false);

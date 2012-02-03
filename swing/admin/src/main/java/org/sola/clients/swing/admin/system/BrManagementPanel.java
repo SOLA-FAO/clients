@@ -226,13 +226,11 @@ public class BrManagementPanel extends ContentPanel {
 
         jPanel2.setName("jPanel2"); // NOI18N
 
-        txtDisplayName.setFont(new java.awt.Font("Tahoma", 0, 12));
         txtDisplayName.setName("txtDisplayName"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, brSearchParams, org.jdesktop.beansbinding.ELProperty.create("${displayName}"), txtDisplayName, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel1.setText(bundle.getString("BrManagementPanel.jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
 
@@ -242,7 +240,7 @@ public class BrManagementPanel extends ContentPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addContainerGap(50, Short.MAX_VALUE))
+                .addContainerGap(57, Short.MAX_VALUE))
             .addComponent(txtDisplayName, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
@@ -251,18 +249,16 @@ public class BrManagementPanel extends ContentPanel {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtDisplayName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         jPanel5.add(jPanel2);
 
         jPanel3.setName("jPanel3"); // NOI18N
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel2.setText(bundle.getString("BrManagementPanel.jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
 
-        cbxTechnicalTypes.setFont(new java.awt.Font("Tahoma", 0, 12));
         cbxTechnicalTypes.setName("cbxTechnicalTypes"); // NOI18N
 
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${brTechnicalTypes}");
@@ -277,7 +273,7 @@ public class BrManagementPanel extends ContentPanel {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jLabel2)
-                .addContainerGap(40, Short.MAX_VALUE))
+                .addContainerGap(51, Short.MAX_VALUE))
             .addComponent(cbxTechnicalTypes, 0, 124, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
@@ -286,14 +282,13 @@ public class BrManagementPanel extends ContentPanel {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbxTechnicalTypes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         jPanel5.add(jPanel3);
 
         jPanel4.setName("jPanel4"); // NOI18N
 
-        cbxValidationTargets.setFont(new java.awt.Font("Tahoma", 0, 12));
         cbxValidationTargets.setName("cbxValidationTargets"); // NOI18N
 
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${brValidationTargetTypes}");
@@ -302,7 +297,6 @@ public class BrManagementPanel extends ContentPanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, brSearchParams, org.jdesktop.beansbinding.ELProperty.create("${brValidationTargetType}"), cbxValidationTargets, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel3.setText(bundle.getString("BrManagementPanel.jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
 
@@ -312,7 +306,7 @@ public class BrManagementPanel extends ContentPanel {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(jLabel3)
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(41, Short.MAX_VALUE))
             .addComponent(cbxValidationTargets, 0, 124, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
@@ -321,14 +315,13 @@ public class BrManagementPanel extends ContentPanel {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbxValidationTargets, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         jPanel5.add(jPanel4);
 
         jPanel6.setName("jPanel6"); // NOI18N
 
-        btnSearch.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnSearch.setText(bundle.getString("BrManagementPanel.btnSearch.text")); // NOI18N
         btnSearch.setName("btnSearch"); // NOI18N
         btnSearch.addActionListener(new java.awt.event.ActionListener() {

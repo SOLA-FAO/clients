@@ -28,7 +28,6 @@
 package org.sola.clients.swing.ui.cadastre;
 
 import org.sola.clients.beans.cadastre.CadastreObjectBean;
-import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.ui.renderers.SimpleComboBoxRenderer;
 
 /**
@@ -43,31 +42,8 @@ public class ParcelPanel extends javax.swing.JPanel {
     
     public ParcelPanel() {
         initComponents();
-        customizeComponents();
     }
-    
-    
-    /** Applies customization of component L&F. */
-    private void customizeComponents() {
-        
-    
-//    COMBOBOXES
-    LafManager.getInstance().setCmbProperties(cbxParcelEstateType);
-        
-//    LABELS    
-    LafManager.getInstance().setLabProperties(jLabel10);
-    LafManager.getInstance().setLabProperties(jLabel17);
-    LafManager.getInstance().setLabProperties(jLabel7);
-    LafManager.getInstance().setLabProperties(jLabel9);
-    
-    
-//    TXT FIELDS
-    LafManager.getInstance().setTxtProperties(txtParcelFirstPart);
-    LafManager.getInstance().setTxtProperties(txtParcelLastPart);
-    LafManager.getInstance().setTxtProperties(txtParcelSurveyRef);
-    
-    }
-    
+ 
     public CadastreObjectBean getCadastreObject(){
         return cadastreObjectBean1;
     }

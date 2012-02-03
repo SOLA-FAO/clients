@@ -36,7 +36,6 @@ import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.controls.SolaList;
 import org.sola.clients.beans.source.SourceBean;
 import org.sola.clients.beans.source.SourceListBean;
-import org.sola.clients.swing.common.LafManager;
 
 /** 
  * Displays documents list. This panel could be used on different forms, where
@@ -70,13 +69,10 @@ public class DocumentsManagementPanel extends javax.swing.JPanel {
         
         return panel;
     }
-
-    
     
     /** Default constructor */
     public DocumentsManagementPanel() {
         initComponents();
-        customizeComponents();
         customizeButtons(null);
     }
 
@@ -93,20 +89,8 @@ public class DocumentsManagementPanel extends javax.swing.JPanel {
         this.sourceList = sourceList;
         this.allowEdit = allowEdit;
         initComponents();
-        customizeComponents();
         customizeButtons(null);
     }
-     
-    
-      /** Applies customization of component L&F. */
-    private void customizeComponents() {
-       
-//    BUTTONS   
-    LafManager.getInstance().setBtnProperties(btnAdd);
-    LafManager.getInstance().setBtnProperties(btnRemove);
-    LafManager.getInstance().setBtnProperties(btnView);
-    }
-    
     
     /** 
      * This constructor is called to load list of {@link SourceBean} by the 

@@ -30,6 +30,7 @@ package org.sola.clients.swing.ui.source;
 import org.sola.clients.swing.ui.ImagePreview;
 import java.awt.ComponentOrientation;
 import java.awt.Desktop;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -45,7 +46,6 @@ import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 import java.util.Locale;
 import javax.swing.SwingUtilities;
-import org.sola.clients.swing.common.LafManager;
 
 /**
  * This form provides browsing of local and remote folders for the scanned images.
@@ -71,53 +71,203 @@ public class FileBrowserForm extends javax.swing.JDialog {
     public FileBrowserForm(java.awt.Frame parent, boolean modal, AttachAction attachAction) {
         super(parent, modal);
         initComponents();
-        customizeComponents();
         this.attachAction = attachAction;
         serverFiles.loadServerFileInfoList();
         serverFiles.addPropertyChangeListener(serverFilesListener());
         localFileChooser.setControlButtonsAreShown(false);
         localFileChooser.setAccessory(new ImagePreview(localFileChooser, 225, 300));
+        customizeRemoteFileButtons();
+    }
+ 
+    /**
+     * Property change listener for the {@link FileInfoListBean} to trap selected 
+     * file change in the list of scanned files in the remote folder.
+     */
+    private PropertyChangeListener serverFilesListener() {
+        PropertyChangeListener listener = new PropertyChangeListener() {
+
+            @Override
+            public void propertyChange(PropertyChangeEvent e) {
+                if (e.getPropertyName().equals(FileInfoListBean.SELECTED_FILE_INFO_BEAN_PROPERTY)) {
+                    customizeRemoteFileButtons();
+                    // Bind thumbnail
+                    if (serverFiles.getSelectedFileInfoBean() != null) {
+
+                        lblServerPreview.setIcon(null);
+                        lblServerPreview.setText(formBundle.getString("FileBrowser.LoadingThumbnailMsg"));
+                        lblServerPreview.repaint();
+
+                        Runnable loadingThumbnail = new Runnable() {
+
+                            @Override
+                            public void run() {
+                                ImageIcon thumbnail = serverFiles.getSelectedFileInfoBean().getThumbnailIcon();
+                                if (thumbnail != null) {
+                                    lblServerPreview.setIcon(thumbnail);
+                                    lblServerPreview.setText(null);
+                                } else {
+                                    lblServerPreview.setIcon(null);
+                                    lblServerPreview.setText(formBundle.getString("FileBrowser.FormatForThumbnailNotSupportedMsg"));
+                                }
+                            }
+                        };
+                        SwingUtilities.invokeLater(loadingThumbnail);
+
+                    } else {
+                        lblServerPreview.setIcon(null);
+                        lblServerPreview.setText(formBundle.getString("FileBrowser.ThumbnailPreviewCaption"));
+                    }
+                }
+            }
+        };
+        return listener;
     }
     
-      /** Applies customization of component L&F. */
-    private void customizeComponents() {
-       
-//    BUTTONS   
-    LafManager.getInstance().setBtnProperties(btnAttachFromServer);
-    LafManager.getInstance().setBtnProperties(btnAttachLocal);
-    LafManager.getInstance().setBtnProperties(btnDeleteServerFile);
-    LafManager.getInstance().setBtnProperties(btnOpenLocal);
-    LafManager.getInstance().setBtnProperties(btnOpenServerFile);
-    LafManager.getInstance().setBtnProperties(btnRefreshServerList);
-    
-//    LABELS    
-    LafManager.getInstance().setLabProperties(lblServerPreview);
-    
-//    TABBED PANELS
-     LafManager.getInstance().setTabProperties(jTabbedPane1);
+    private void customizeRemoteFileButtons(){
+        boolean enabled = serverFiles.getSelectedFileInfoBean() != null;
+        btnAttachFromServer.setEnabled(enabled);
+        btnDeleteServerFile.setEnabled(enabled);
+        btnOpenServerFile.setEnabled(enabled);
+        menuRemoteAttach.setEnabled(btnAttachFromServer.isEnabled());
+        menuRemoteDelete.setEnabled(btnDeleteServerFile.isEnabled());
+        menuRemoteOpen.setEnabled(btnOpenServerFile.isEnabled());
     }
+    
+    private void refreshRemoteFiles(){
+        serverFiles.loadServerFileInfoList();
+    }
+    
+    private void openRemoteFile(){
+        if (serverFiles.getSelectedFileInfoBean() != null) {
+            FileBinaryBean.openFile(serverFiles.getSelectedFileInfoBean().getName());
+        }
+    }
+    
+    /** 
+     * Uploads selected file into the digital archive from remote folder, 
+     * gets {@link DocumentBean} of uploaded file and calls method 
+     * {@link #fireAttachEvent(DocumentBean)} to rise attachment event.
+     */
+    private void attachRemoteFile(){
+        if (serverFiles.getSelectedFileInfoBean() != null) {
+            fireAttachEvent(DocumentBean.createDocumentFromServerFile(
+                    serverFiles.getSelectedFileInfoBean().getName()));
+        }
+    }
+    
+    /** 
+     * Checks uploaded document bean, rises {@link #ATTACHED_DOCUMENT} property 
+     * change event. Closes the window or displays the message, depending on 
+     * the {@link AttachAction} value, passed to the form constructor.
+     */
+    private void fireAttachEvent(DocumentBean documentBean) {
+        if (documentBean == null) {
+            MessageUtility.displayMessage(ClientMessage.ARCHIVE_FAILED_TO_ATTACH_FILE,
+                    new Object[]{serverFiles.getSelectedFileInfoBean().getName()});
+        } else {
+            this.firePropertyChange(ATTACHED_DOCUMENT, null, documentBean);
+            
+            if(attachAction == AttachAction.CLOSE_WINDOW){
+                this.dispose();
+            }
+            
+            if(attachAction == AttachAction.SHOW_MESSAGE){
+                MessageUtility.displayMessage(ClientMessage.ARCHIVE_FILE_ADDED,
+                    new Object[]{documentBean.getNr()});
+            }
+        }
+    }
+    
+    /** Deletes selected file from the remote folder with scanned images. */
+    private void deleteRemoteFile(){
+        if (serverFiles.getSelectedFileInfoBean() != null) {
+            if (MessageUtility.displayMessage(ClientMessage.ARCHIVE_CONFIRM_FILE_DELETION)
+                    == MessageUtility.BUTTON_ONE) {
+                if (WSManager.getInstance().getDigitalArchive().deleteFile(
+                        serverFiles.getSelectedFileInfoBean().getName())) {
+
+                    MessageUtility.displayMessage(ClientMessage.ARCHIVE_FILE_DELETED);
+                    serverFiles.loadServerFileInfoList();
+                }else{
+                    MessageUtility.displayMessage(ClientMessage.ARCHIVE_FAILED_DELETE_FILE);
+                }
+
+            }
+        }
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         serverFiles = new org.sola.clients.beans.digitalarchive.FileInfoListBean();
+        popupRemoteFiles = new javax.swing.JPopupMenu();
+        menuRemoteRefresh = new javax.swing.JMenuItem();
+        menuRemoteOpen = new javax.swing.JMenuItem();
+        menuRemoteDelete = new javax.swing.JMenuItem();
+        menuRemoteAttach = new javax.swing.JMenuItem();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         localFileChooser = new javax.swing.JFileChooser();
+        jToolBar2 = new javax.swing.JToolBar();
         btnOpenLocal = new javax.swing.JButton();
         btnAttachLocal = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbServerFiles = new javax.swing.JTable();
         lblServerPreview = new javax.swing.JLabel();
+        jToolBar1 = new javax.swing.JToolBar();
         btnRefreshServerList = new javax.swing.JButton();
         btnOpenServerFile = new javax.swing.JButton();
-        btnAttachFromServer = new javax.swing.JButton();
         btnDeleteServerFile = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JToolBar.Separator();
+        btnAttachFromServer = new javax.swing.JButton();
+
+        popupRemoteFiles.setName("popupRemoteFiles"); // NOI18N
+
+        menuRemoteRefresh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/refresh.png"))); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/source/Bundle"); // NOI18N
+        menuRemoteRefresh.setText(bundle.getString("FileBrowserForm.menuRemoteRefresh.text")); // NOI18N
+        menuRemoteRefresh.setName("menuRemoteRefresh"); // NOI18N
+        menuRemoteRefresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuRemoteRefreshActionPerformed(evt);
+            }
+        });
+        popupRemoteFiles.add(menuRemoteRefresh);
+
+        menuRemoteOpen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/folder-open-document.png"))); // NOI18N
+        menuRemoteOpen.setText(bundle.getString("FileBrowserForm.menuRemoteOpen.text")); // NOI18N
+        menuRemoteOpen.setName("menuRemoteOpen"); // NOI18N
+        menuRemoteOpen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuRemoteOpenActionPerformed(evt);
+            }
+        });
+        popupRemoteFiles.add(menuRemoteOpen);
+
+        menuRemoteDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
+        menuRemoteDelete.setText(bundle.getString("FileBrowserForm.menuRemoteDelete.text")); // NOI18N
+        menuRemoteDelete.setName("menuRemoteDelete"); // NOI18N
+        menuRemoteDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuRemoteDeleteActionPerformed(evt);
+            }
+        });
+        popupRemoteFiles.add(menuRemoteDelete);
+
+        menuRemoteAttach.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/attachment.png"))); // NOI18N
+        menuRemoteAttach.setText(bundle.getString("FileBrowserForm.menuRemoteAttach.text")); // NOI18N
+        menuRemoteAttach.setName("menuRemoteAttach"); // NOI18N
+        menuRemoteAttach.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuRemoteAttachActionPerformed(evt);
+            }
+        });
+        popupRemoteFiles.add(menuRemoteAttach);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle(null);
         setMinimumSize(new java.awt.Dimension(706, 432));
         setName("Form"); // NOI18N
         setResizable(false);
@@ -136,10 +286,14 @@ public class FileBrowserForm extends javax.swing.JDialog {
             }
         });
 
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/source/Bundle"); // NOI18N
+        jToolBar2.setFloatable(false);
+        jToolBar2.setRollover(true);
+        jToolBar2.setName("jToolBar2"); // NOI18N
+
+        btnOpenLocal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/folder-open-document.png"))); // NOI18N
         btnOpenLocal.setText(bundle.getString("FileBrowserForm.btnOpenLocal.text")); // NOI18N
         btnOpenLocal.setFocusable(false);
-        btnOpenLocal.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnOpenLocal.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnOpenLocal.setName("btnOpenLocal"); // NOI18N
         btnOpenLocal.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnOpenLocal.addActionListener(new java.awt.event.ActionListener() {
@@ -147,10 +301,12 @@ public class FileBrowserForm extends javax.swing.JDialog {
                 btnOpenLocalActionPerformed(evt);
             }
         });
+        jToolBar2.add(btnOpenLocal);
 
+        btnAttachLocal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/attachment.png"))); // NOI18N
         btnAttachLocal.setText(bundle.getString("FileBrowserForm.btnAttachLocal.text")); // NOI18N
         btnAttachLocal.setFocusable(false);
-        btnAttachLocal.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAttachLocal.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnAttachLocal.setName("btnAttachLocal"); // NOI18N
         btnAttachLocal.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnAttachLocal.addActionListener(new java.awt.event.ActionListener() {
@@ -158,28 +314,22 @@ public class FileBrowserForm extends javax.swing.JDialog {
                 btnAttachLocalActionPerformed(evt);
             }
         });
+        jToolBar2.add(btnAttachLocal);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(480, Short.MAX_VALUE)
-                .addComponent(btnOpenLocal, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnAttachLocal, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-            .addComponent(localFileChooser, javax.swing.GroupLayout.DEFAULT_SIZE, 681, Short.MAX_VALUE)
+            .addComponent(jToolBar2, javax.swing.GroupLayout.DEFAULT_SIZE, 655, Short.MAX_VALUE)
+            .addComponent(localFileChooser, javax.swing.GroupLayout.DEFAULT_SIZE, 655, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(localFileChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnOpenLocal)
-                    .addComponent(btnAttachLocal))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(localFileChooser, javax.swing.GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab(bundle.getString("FileBrowserForm.jPanel1.TabConstraints.tabTitle"), jPanel1); // NOI18N
@@ -192,6 +342,7 @@ public class FileBrowserForm extends javax.swing.JDialog {
         jScrollPane1.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
 
         tbServerFiles.setAutoCreateRowSorter(true);
+        tbServerFiles.setComponentPopupMenu(popupRemoteFiles);
         tbServerFiles.setName("tbServerFiles"); // NOI18N
         tbServerFiles.setSelectionBackground(new java.awt.Color(185, 227, 185));
         tbServerFiles.setSelectionForeground(new java.awt.Color(0, 102, 51));
@@ -233,9 +384,14 @@ public class FileBrowserForm extends javax.swing.JDialog {
         lblServerPreview.setName("lblServerPreview"); // NOI18N
         lblServerPreview.setOpaque(true);
 
+        jToolBar1.setFloatable(false);
+        jToolBar1.setRollover(true);
+        jToolBar1.setName("jToolBar1"); // NOI18N
+
+        btnRefreshServerList.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/refresh.png"))); // NOI18N
         btnRefreshServerList.setText(bundle.getString("FileBrowserForm.btnRefreshServerList.text")); // NOI18N
         btnRefreshServerList.setFocusable(false);
-        btnRefreshServerList.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnRefreshServerList.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnRefreshServerList.setName("btnRefreshServerList"); // NOI18N
         btnRefreshServerList.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnRefreshServerList.addActionListener(new java.awt.event.ActionListener() {
@@ -243,10 +399,12 @@ public class FileBrowserForm extends javax.swing.JDialog {
                 btnRefreshServerListActionPerformed(evt);
             }
         });
+        jToolBar1.add(btnRefreshServerList);
 
+        btnOpenServerFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/folder-open-document.png"))); // NOI18N
         btnOpenServerFile.setText(bundle.getString("FileBrowserForm.btnOpenServerFile.text")); // NOI18N
         btnOpenServerFile.setFocusable(false);
-        btnOpenServerFile.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnOpenServerFile.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnOpenServerFile.setName("btnOpenServerFile"); // NOI18N
         btnOpenServerFile.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnOpenServerFile.addActionListener(new java.awt.event.ActionListener() {
@@ -254,21 +412,12 @@ public class FileBrowserForm extends javax.swing.JDialog {
                 btnOpenServerFileActionPerformed(evt);
             }
         });
+        jToolBar1.add(btnOpenServerFile);
 
-        btnAttachFromServer.setText(bundle.getString("FileBrowserForm.btnAttachFromServer.text")); // NOI18N
-        btnAttachFromServer.setFocusable(false);
-        btnAttachFromServer.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnAttachFromServer.setName("btnAttachFromServer"); // NOI18N
-        btnAttachFromServer.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnAttachFromServer.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAttachFromServerActionPerformed(evt);
-            }
-        });
-
+        btnDeleteServerFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
         btnDeleteServerFile.setText(bundle.getString("FileBrowserForm.btnDeleteServerFile.text")); // NOI18N
         btnDeleteServerFile.setFocusable(false);
-        btnDeleteServerFile.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnDeleteServerFile.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnDeleteServerFile.setName("btnDeleteServerFile"); // NOI18N
         btnDeleteServerFile.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnDeleteServerFile.addActionListener(new java.awt.event.ActionListener() {
@@ -276,6 +425,23 @@ public class FileBrowserForm extends javax.swing.JDialog {
                 btnDeleteServerFileActionPerformed(evt);
             }
         });
+        jToolBar1.add(btnDeleteServerFile);
+
+        jSeparator1.setName("jSeparator1"); // NOI18N
+        jToolBar1.add(jSeparator1);
+
+        btnAttachFromServer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/attachment.png"))); // NOI18N
+        btnAttachFromServer.setText(bundle.getString("FileBrowserForm.btnAttachFromServer.text")); // NOI18N
+        btnAttachFromServer.setFocusable(false);
+        btnAttachFromServer.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnAttachFromServer.setName("btnAttachFromServer"); // NOI18N
+        btnAttachFromServer.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAttachFromServer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAttachFromServerActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnAttachFromServer);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -283,37 +449,24 @@ public class FileBrowserForm extends javax.swing.JDialog {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 419, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(btnAttachFromServer, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnRefreshServerList, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnOpenServerFile, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnDeleteServerFile, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
+                    .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE))
                 .addGap(17, 17, 17)
                 .addComponent(lblServerPreview, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
-
-        jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnAttachFromServer, btnDeleteServerFile, btnOpenServerFile, btnRefreshServerList});
-
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(lblServerPreview, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnOpenServerFile)
-                    .addComponent(btnRefreshServerList)
-                    .addComponent(btnAttachFromServer)
-                    .addComponent(btnDeleteServerFile))
-                .addGap(15, 15, 15))
+                    .addComponent(lblServerPreview, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(42, 42, 42))
         );
 
         jTabbedPane1.addTab(bundle.getString("FileBrowserForm.jPanel2.TabConstraints.tabTitle"), jPanel2); // NOI18N
@@ -324,15 +477,15 @@ public class FileBrowserForm extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 686, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 660, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         bindingGroup.bind();
@@ -341,118 +494,25 @@ public class FileBrowserForm extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRefreshServerListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshServerListActionPerformed
-        serverFiles.loadServerFileInfoList();
+        refreshRemoteFiles();
     }//GEN-LAST:event_btnRefreshServerListActionPerformed
 
     private void btnOpenServerFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenServerFileActionPerformed
-        if (serverFiles.getSelectedFileInfoBean() == null) {
-            MessageUtility.displayMessage(ClientMessage.ARCHIVE_SELECT_FILE_TO_OPEN);
-        } else {
-            FileBinaryBean.openFile(serverFiles.getSelectedFileInfoBean().getName());
-        }
+        openRemoteFile();
     }//GEN-LAST:event_btnOpenServerFileActionPerformed
 
-    /**
-     * Property change listener for the {@link FileInfoListBean} to trap selected 
-     * file change in the list of scanned files in the remote folder.
-     */
-    private PropertyChangeListener serverFilesListener() {
-        PropertyChangeListener listener = new PropertyChangeListener() {
-
-            public void propertyChange(PropertyChangeEvent e) {
-                if (e.getPropertyName().equals(FileInfoListBean.SELECTED_FILE_INFO_BEAN_PROPERTY)) {
-                    // Bind thumbnail
-                    if (serverFiles.getSelectedFileInfoBean() != null) {
-
-                        lblServerPreview.setIcon(null);
-                        lblServerPreview.setText(formBundle.getString("FileBrowser.LoadingThumbnailMsg"));
-                        lblServerPreview.repaint();
-
-                        Runnable loadingThumbnail = new Runnable() {
-
-                            @Override
-                            public void run() {
-                                ImageIcon thumbnail = serverFiles.getSelectedFileInfoBean().getThumbnailIcon();
-                                if (thumbnail != null) {
-                                    lblServerPreview.setIcon(thumbnail);
-                                    lblServerPreview.setText(null);
-                                } else {
-                                    lblServerPreview.setIcon(null);
-                                    lblServerPreview.setText(formBundle.getString("FileBrowser.FormatForThumbnailNotSupportedMsg"));
-                                }
-                            }
-                        };
-                        SwingUtilities.invokeLater(loadingThumbnail);
-
-                    } else {
-                        lblServerPreview.setIcon(null);
-                        lblServerPreview.setText(formBundle.getString("FileBrowser.ThumbnailPreviewCaption"));
-                    }
-                }
-            }
-        };
-        return listener;
-    }
-
     private void tbServerFilesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbServerFilesMouseClicked
-        if (evt.getClickCount() == 2 && serverFiles.getSelectedFileInfoBean() != null) {
-            FileBinaryBean.openFile(serverFiles.getSelectedFileInfoBean().getName());
+        if (evt.getClickCount() == 2 && evt.getButton() == MouseEvent.BUTTON1) {
+            openRemoteFile();
         }
     }//GEN-LAST:event_tbServerFilesMouseClicked
 
-    /** 
-     * Uploads selected file into the digital archive from remote folder, 
-     * gets {@link DocumentBean} of uploaded file and calls method 
-     * {@link #fireAttachEvent(DocumentBean)} to rise attachment event.
-     */
     private void btnAttachFromServerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAttachFromServerActionPerformed
-        if (serverFiles.getSelectedFileInfoBean() == null) {
-            MessageUtility.displayMessage(ClientMessage.ARCHIVE_SELECT_FILE_TO_ATTACH);
-        } else {
-            fireAttachEvent(DocumentBean.createDocumentFromServerFile(
-                    serverFiles.getSelectedFileInfoBean().getName()));
-        }
+        attachRemoteFile();
     }//GEN-LAST:event_btnAttachFromServerActionPerformed
 
-    /** 
-     * Checks uploaded document bean, rises {@link #ATTACHED_DOCUMENT} property 
-     * change event. Closes the window or displays the message, depending on 
-     * the {@link AttachAction} value, passed to the form constructor.
-     */
-    private void fireAttachEvent(DocumentBean documentBean) {
-        if (documentBean == null) {
-            MessageUtility.displayMessage(ClientMessage.ARCHIVE_FAILED_TO_ATTACH_FILE,
-                    new Object[]{serverFiles.getSelectedFileInfoBean().getName()});
-        } else {
-            this.firePropertyChange(ATTACHED_DOCUMENT, null, documentBean);
-            
-            if(attachAction == AttachAction.CLOSE_WINDOW){
-                this.dispose();
-            }
-            
-            if(attachAction == AttachAction.SHOW_MESSAGE){
-                MessageUtility.displayMessage(ClientMessage.ARCHIVE_FILE_ADDED,
-                    new Object[]{documentBean.getNr()});
-            }
-        }
-    }
-
-    /** Deletes selected file from the remote folder with scanned images. */
     private void btnDeleteServerFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteServerFileActionPerformed
-        if (serverFiles.getSelectedFileInfoBean() != null) {
-            if (MessageUtility.displayMessage(ClientMessage.ARCHIVE_CONFIRM_FILE_DELETION)
-                    == MessageUtility.BUTTON_ONE) {
-                if (WSManager.getInstance().getDigitalArchive().deleteFile(
-                        serverFiles.getSelectedFileInfoBean().getName())) {
-
-                    MessageUtility.displayMessage(ClientMessage.ARCHIVE_FILE_DELETED);
-                    serverFiles.loadServerFileInfoList();
-                }else{
-                    MessageUtility.displayMessage(ClientMessage.ARCHIVE_FAILED_DELETE_FILE);
-                }
-
-            }
-        }
+        deleteRemoteFile();
     }//GEN-LAST:event_btnDeleteServerFileActionPerformed
 
     /** Opens selected file from the local drive, by double click. */
@@ -493,6 +553,23 @@ public class FileBrowserForm extends javax.swing.JDialog {
         }
 
     }//GEN-LAST:event_btnAttachLocalActionPerformed
+
+    private void menuRemoteRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRemoteRefreshActionPerformed
+        refreshRemoteFiles();
+    }//GEN-LAST:event_menuRemoteRefreshActionPerformed
+
+    private void menuRemoteOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRemoteOpenActionPerformed
+        openRemoteFile();
+    }//GEN-LAST:event_menuRemoteOpenActionPerformed
+
+    private void menuRemoteDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRemoteDeleteActionPerformed
+        deleteRemoteFile();
+    }//GEN-LAST:event_menuRemoteDeleteActionPerformed
+
+    private void menuRemoteAttachActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRemoteAttachActionPerformed
+        attachRemoteFile();
+    }//GEN-LAST:event_menuRemoteAttachActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAttachFromServer;
     private javax.swing.JButton btnAttachLocal;
@@ -503,9 +580,17 @@ public class FileBrowserForm extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JToolBar jToolBar2;
     private javax.swing.JLabel lblServerPreview;
     private javax.swing.JFileChooser localFileChooser;
+    private javax.swing.JMenuItem menuRemoteAttach;
+    private javax.swing.JMenuItem menuRemoteDelete;
+    private javax.swing.JMenuItem menuRemoteOpen;
+    private javax.swing.JMenuItem menuRemoteRefresh;
+    private javax.swing.JPopupMenu popupRemoteFiles;
     private org.sola.clients.beans.digitalarchive.FileInfoListBean serverFiles;
     private javax.swing.JTable tbServerFiles;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;

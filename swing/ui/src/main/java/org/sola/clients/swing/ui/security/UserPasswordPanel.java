@@ -28,7 +28,6 @@
 package org.sola.clients.swing.ui.security;
 
 import org.sola.clients.beans.security.UserBean;
-import org.sola.clients.swing.common.LafManager;
 
 /**
  * Used to change user password.
@@ -40,7 +39,6 @@ public class UserPasswordPanel extends javax.swing.JPanel {
     /** Default constructor. */
     public UserPasswordPanel() {
         initComponents();
-        customizeComponents();
     }
 
     /** 
@@ -50,23 +48,7 @@ public class UserPasswordPanel extends javax.swing.JPanel {
     public UserPasswordPanel(String userName) {
         this.userName = userName;
         initComponents();
-        customizeComponents();
     }
-    
-    
-     /** Applies customization of component L&F. */
-    private void customizeComponents() {
-    
-//    LABELS    
-    LafManager.getInstance().setLabProperties(jLabel1);
-    LafManager.getInstance().setLabProperties(jLabel2);
-   
-//    PASSWORD FIELDS
-    LafManager.getInstance().setPassProperties(txtPassword);
-    LafManager.getInstance().setPassProperties(txtPasswordConfirmation);
-    
-    }
-    
     
     /** Returns username for which to set the password. */
     public String getUserName() {
@@ -112,25 +94,21 @@ public class UserPasswordPanel extends javax.swing.JPanel {
         txtPassword = new javax.swing.JPasswordField();
         txtPasswordConfirmation = new javax.swing.JPasswordField();
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/security/Bundle"); // NOI18N
         jLabel1.setText(bundle.getString("UserPasswordPanel.jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         jLabel2.setText(bundle.getString("UserPasswordPanel.jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
 
-        txtPassword.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtPassword.setName("txtPassword"); // NOI18N
         txtPassword.setNextFocusableComponent(txtPasswordConfirmation);
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, passwordBean, org.jdesktop.beansbinding.ELProperty.create("${password}"), txtPassword, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        txtPasswordConfirmation.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtPasswordConfirmation.setName("txtPasswordConfirmation"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, passwordBean, org.jdesktop.beansbinding.ELProperty.create("${passwordConfirmation}"), txtPasswordConfirmation, org.jdesktop.beansbinding.BeanProperty.create("text"));

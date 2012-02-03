@@ -190,14 +190,12 @@ public class RequestTypePanel extends javax.swing.JPanel {
 
         jPanel3.setName("jPanel3"); // NOI18N
 
-        txtCode.setFont(new java.awt.Font("Tahoma", 0, 12));
         txtCode.setName("txtCode"); // NOI18N
         txtCode.setNextFocusableComponent(cbxCategory);
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${requestTypeBean.code}"), txtCode, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/referencedata/Bundle"); // NOI18N
         jLabel1.setText(bundle.getString("RequestTypePanel.jLabel1.text")); // NOI18N
@@ -209,7 +207,7 @@ public class RequestTypePanel extends javax.swing.JPanel {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addContainerGap(137, Short.MAX_VALUE))
+                .addContainerGap(140, Short.MAX_VALUE))
             .addComponent(txtCode, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
@@ -218,14 +216,13 @@ public class RequestTypePanel extends javax.swing.JPanel {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         jPanel5.add(jPanel3);
 
         jPanel7.setName("jPanel7"); // NOI18N
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         jLabel5.setText(bundle.getString("RequestTypePanel.jLabel5.text")); // NOI18N
         jLabel5.setName("jLabel5"); // NOI18N
@@ -245,7 +242,7 @@ public class RequestTypePanel extends javax.swing.JPanel {
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addComponent(jLabel5)
-                .addContainerGap(116, Short.MAX_VALUE))
+                .addContainerGap(120, Short.MAX_VALUE))
             .addComponent(cbxCategory, 0, 183, Short.MAX_VALUE)
         );
         jPanel7Layout.setVerticalGroup(
@@ -261,12 +258,10 @@ public class RequestTypePanel extends javax.swing.JPanel {
 
         jPanel4.setName("jPanel4"); // NOI18N
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         jLabel2.setText(bundle.getString("RequestTypePanel.jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
 
-        txtSatus.setFont(new java.awt.Font("Tahoma", 0, 12));
         txtSatus.setName("txtSatus"); // NOI18N
         txtSatus.setNextFocusableComponent(txtBaseFee);
 
@@ -279,7 +274,7 @@ public class RequestTypePanel extends javax.swing.JPanel {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(jLabel2)
-                .addContainerGap(135, Short.MAX_VALUE))
+                .addContainerGap(138, Short.MAX_VALUE))
             .addComponent(txtSatus, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
@@ -288,21 +283,19 @@ public class RequestTypePanel extends javax.swing.JPanel {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtSatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         jPanel5.add(jPanel4);
 
         jPanel8.setName("jPanel8"); // NOI18N
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         jLabel7.setText(bundle.getString("RequestTypePanel.jLabel7.text")); // NOI18N
         jLabel7.setName("jLabel7"); // NOI18N
 
         txtBaseFee.setFormatterFactory(FormattersFactory.getInstance().getDecimalFormatterFactory());
         txtBaseFee.setText(bundle.getString("RequestTypePanel.txtBaseFee.text")); // NOI18N
-        txtBaseFee.setFont(new java.awt.Font("Tahoma", 0, 12));
         txtBaseFee.setName("txtBaseFee"); // NOI18N
         txtBaseFee.setNextFocusableComponent(txtAreaFee);
 
@@ -315,7 +308,7 @@ public class RequestTypePanel extends javax.swing.JPanel {
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addComponent(jLabel7)
-                .addContainerGap(118, Short.MAX_VALUE))
+                .addContainerGap(123, Short.MAX_VALUE))
             .addComponent(txtBaseFee, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
         );
         jPanel8Layout.setVerticalGroup(
@@ -324,21 +317,19 @@ public class RequestTypePanel extends javax.swing.JPanel {
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtBaseFee, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         jPanel5.add(jPanel8);
 
         jPanel9.setName("jPanel9"); // NOI18N
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         jLabel8.setText(bundle.getString("RequestTypePanel.jLabel8.text")); // NOI18N
         jLabel8.setName("jLabel8"); // NOI18N
 
         txtAreaFee.setFormatterFactory(FormattersFactory.getInstance().getDecimalFormatterFactory());
         txtAreaFee.setText(bundle.getString("RequestTypePanel.txtAreaFee.text")); // NOI18N
-        txtAreaFee.setFont(new java.awt.Font("Tahoma", 0, 12));
         txtAreaFee.setName("txtAreaFee"); // NOI18N
         txtAreaFee.setNextFocusableComponent(txtValueBaseFee);
 
@@ -351,7 +342,7 @@ public class RequestTypePanel extends javax.swing.JPanel {
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addComponent(jLabel8)
-                .addContainerGap(89, Short.MAX_VALUE))
+                .addContainerGap(97, Short.MAX_VALUE))
             .addComponent(txtAreaFee, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
         );
         jPanel9Layout.setVerticalGroup(
@@ -360,21 +351,19 @@ public class RequestTypePanel extends javax.swing.JPanel {
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtAreaFee, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         jPanel5.add(jPanel9);
 
         jPanel10.setName("jPanel10"); // NOI18N
 
-        jLabel9.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         jLabel9.setText(bundle.getString("RequestTypePanel.jLabel9.text")); // NOI18N
         jLabel9.setName("jLabel9"); // NOI18N
 
         txtValueBaseFee.setFormatterFactory(FormattersFactory.getInstance().getDecimalFormatterFactory());
         txtValueBaseFee.setText(bundle.getString("RequestTypePanel.txtValueBaseFee.text")); // NOI18N
-        txtValueBaseFee.setFont(new java.awt.Font("Tahoma", 0, 12));
         txtValueBaseFee.setName("txtValueBaseFee"); // NOI18N
         txtValueBaseFee.setNextFocusableComponent(txtCompleteDays);
 
@@ -387,7 +376,7 @@ public class RequestTypePanel extends javax.swing.JPanel {
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel10Layout.createSequentialGroup()
                 .addComponent(jLabel9)
-                .addContainerGap(84, Short.MAX_VALUE))
+                .addContainerGap(94, Short.MAX_VALUE))
             .addComponent(txtValueBaseFee, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
         );
         jPanel10Layout.setVerticalGroup(
@@ -396,21 +385,19 @@ public class RequestTypePanel extends javax.swing.JPanel {
                 .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtValueBaseFee, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         jPanel5.add(jPanel10);
 
         jPanel11.setName("jPanel11"); // NOI18N
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         jLabel6.setText(bundle.getString("RequestTypePanel.jLabel6.text")); // NOI18N
         jLabel6.setName("jLabel6"); // NOI18N
 
         txtCompleteDays.setFormatterFactory(FormattersFactory.getInstance().getIntegerFormatterFactory());
         txtCompleteDays.setText(bundle.getString("RequestTypePanel.txtCompleteDays.text")); // NOI18N
-        txtCompleteDays.setFont(new java.awt.Font("Tahoma", 0, 12));
         txtCompleteDays.setName("txtCompleteDays"); // NOI18N
         txtCompleteDays.setNextFocusableComponent(cbxRrrType);
 
@@ -423,7 +410,7 @@ public class RequestTypePanel extends javax.swing.JPanel {
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel11Layout.createSequentialGroup()
                 .addComponent(jLabel6)
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addContainerGap(59, Short.MAX_VALUE))
             .addComponent(txtCompleteDays, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
         );
         jPanel11Layout.setVerticalGroup(
@@ -432,21 +419,19 @@ public class RequestTypePanel extends javax.swing.JPanel {
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtCompleteDays, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         jPanel5.add(jPanel11);
 
         jPanel15.setName("jPanel15"); // NOI18N
 
-        jLabel10.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         jLabel10.setText(bundle.getString("RequestTypePanel.jLabel10.text")); // NOI18N
         jLabel10.setName("jLabel10"); // NOI18N
 
         txtRequiredPropObjects.setFormatterFactory(FormattersFactory.getInstance().getIntegerFormatterFactory());
         txtRequiredPropObjects.setText(bundle.getString("RequestTypePanel.txtRequiredPropObjects.text")); // NOI18N
-        txtRequiredPropObjects.setFont(new java.awt.Font("Tahoma", 0, 12));
         txtRequiredPropObjects.setName("txtRequiredPropObjects"); // NOI18N
         txtRequiredPropObjects.setNextFocusableComponent(txtNotation);
 
@@ -459,7 +444,7 @@ public class RequestTypePanel extends javax.swing.JPanel {
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel15Layout.createSequentialGroup()
                 .addComponent(jLabel10)
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(46, Short.MAX_VALUE))
             .addComponent(txtRequiredPropObjects, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
         );
         jPanel15Layout.setVerticalGroup(
@@ -468,14 +453,13 @@ public class RequestTypePanel extends javax.swing.JPanel {
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtRequiredPropObjects, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         jPanel5.add(jPanel15);
 
         jPanel1.setName("jPanel1"); // NOI18N
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         jLabel3.setText(bundle.getString("RequestTypePanel.jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
@@ -508,7 +492,7 @@ public class RequestTypePanel extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel3)
-                .addContainerGap(488, Short.MAX_VALUE))
+                .addContainerGap(493, Short.MAX_VALUE))
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 579, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
@@ -516,7 +500,7 @@ public class RequestTypePanel extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel19Layout = new javax.swing.GroupLayout(jPanel19);
@@ -546,14 +530,12 @@ public class RequestTypePanel extends javax.swing.JPanel {
 
         jPanel14.setName("jPanel14"); // NOI18N
 
-        txtNotation.setFont(new java.awt.Font("Tahoma", 0, 12));
         txtNotation.setName("txtNotation"); // NOI18N
         txtNotation.setNextFocusableComponent(tableDisplayValue);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${requestTypeBean.notationTemplate}"), txtNotation, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        jLabel11.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel11.setText(bundle.getString("RequestTypePanel.jLabel11.text")); // NOI18N
         jLabel11.setName("jLabel11"); // NOI18N
 
@@ -563,7 +545,7 @@ public class RequestTypePanel extends javax.swing.JPanel {
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel14Layout.createSequentialGroup()
                 .addComponent(jLabel11)
-                .addContainerGap(475, Short.MAX_VALUE))
+                .addContainerGap(489, Short.MAX_VALUE))
             .addComponent(txtNotation, javax.swing.GroupLayout.DEFAULT_SIZE, 579, Short.MAX_VALUE)
         );
         jPanel14Layout.setVerticalGroup(
@@ -580,7 +562,6 @@ public class RequestTypePanel extends javax.swing.JPanel {
 
         jPanel13.setName("jPanel13"); // NOI18N
 
-        jLabel12.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel12.setText(bundle.getString("RequestTypePanel.jLabel12.text")); // NOI18N
         jLabel12.setName("jLabel12"); // NOI18N
 
@@ -599,7 +580,7 @@ public class RequestTypePanel extends javax.swing.JPanel {
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel13Layout.createSequentialGroup()
                 .addComponent(jLabel12)
-                .addContainerGap(234, Short.MAX_VALUE))
+                .addContainerGap(238, Short.MAX_VALUE))
             .addComponent(cbxRrrType, 0, 282, Short.MAX_VALUE)
         );
         jPanel13Layout.setVerticalGroup(
@@ -615,7 +596,6 @@ public class RequestTypePanel extends javax.swing.JPanel {
 
         jPanel12.setName("jPanel12"); // NOI18N
 
-        jLabel13.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel13.setText(bundle.getString("RequestTypePanel.jLabel13.text")); // NOI18N
         jLabel13.setName("jLabel13"); // NOI18N
 
@@ -634,7 +614,7 @@ public class RequestTypePanel extends javax.swing.JPanel {
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel12Layout.createSequentialGroup()
                 .addComponent(jLabel13)
-                .addContainerGap(208, Short.MAX_VALUE))
+                .addContainerGap(217, Short.MAX_VALUE))
             .addComponent(cbxTypeAction, 0, 282, Short.MAX_VALUE)
         );
         jPanel12Layout.setVerticalGroup(
@@ -653,7 +633,6 @@ public class RequestTypePanel extends javax.swing.JPanel {
 
         jPanel16.setName("jPanel16"); // NOI18N
 
-        jLabel14.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel14.setText(bundle.getString("RequestTypePanel.jLabel14.text")); // NOI18N
         jLabel14.setName("jLabel14"); // NOI18N
 
@@ -685,7 +664,7 @@ public class RequestTypePanel extends javax.swing.JPanel {
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel16Layout.createSequentialGroup()
                 .addComponent(jLabel14)
-                .addContainerGap(187, Short.MAX_VALUE))
+                .addContainerGap(200, Short.MAX_VALUE))
             .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
         );
         jPanel16Layout.setVerticalGroup(
@@ -693,7 +672,7 @@ public class RequestTypePanel extends javax.swing.JPanel {
             .addGroup(jPanel16Layout.createSequentialGroup()
                 .addComponent(jLabel14)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE))
         );
 
         jPanel17.add(jPanel16);
@@ -722,7 +701,6 @@ public class RequestTypePanel extends javax.swing.JPanel {
         tableDescriptions.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("RequestTypePanel.tableDescriptions.columnModel.title1_1")); // NOI18N
         tableDescriptions.getColumnModel().getColumn(1).setCellRenderer(new TableCellTextAreaRenderer());
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel4.setText(bundle.getString("RequestTypePanel.jLabel4.text")); // NOI18N
         jLabel4.setName("jLabel4"); // NOI18N
 
@@ -732,7 +710,7 @@ public class RequestTypePanel extends javax.swing.JPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jLabel4)
-                .addContainerGap(213, Short.MAX_VALUE))
+                .addContainerGap(220, Short.MAX_VALUE))
             .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
@@ -740,7 +718,7 @@ public class RequestTypePanel extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE))
         );
 
         jPanel17.add(jPanel2);
@@ -765,7 +743,7 @@ public class RequestTypePanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
+                .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
                 .addContainerGap())
         );
 

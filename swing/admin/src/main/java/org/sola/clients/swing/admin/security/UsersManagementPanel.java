@@ -29,7 +29,6 @@ package org.sola.clients.swing.admin.security;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import org.jdesktop.application.Action;
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.beans.security.UserBean;
 import org.sola.clients.beans.security.UserSearchAdvancedResultBean;
@@ -199,27 +198,22 @@ public class UsersManagementPanel extends ContentPanel {
         pnlSearchCriteria.setName("pnlSearchCriteria"); // NOI18N
         pnlSearchCriteria.setLayout(new java.awt.GridLayout(2, 4, 15, 0));
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel2.setText(bundle.getString("UsersManagementPanel.jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
         pnlSearchCriteria.add(jLabel2);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel1.setText(bundle.getString("UsersManagementPanel.jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
         pnlSearchCriteria.add(jLabel1);
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel3.setText(bundle.getString("UsersManagementPanel.jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
         pnlSearchCriteria.add(jLabel3);
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel4.setText(bundle.getString("UsersManagementPanel.jLabel4.text")); // NOI18N
         jLabel4.setName("jLabel4"); // NOI18N
         pnlSearchCriteria.add(jLabel4);
 
-        txtUsername.setFont(new java.awt.Font("Tahoma", 0, 12));
         txtUsername.setName("txtUsername"); // NOI18N
         txtUsername.setNextFocusableComponent(txtFirstName);
 
@@ -228,7 +222,6 @@ public class UsersManagementPanel extends ContentPanel {
 
         pnlSearchCriteria.add(txtUsername);
 
-        txtFirstName.setFont(new java.awt.Font("Tahoma", 0, 12));
         txtFirstName.setName("txtFirstName"); // NOI18N
         txtFirstName.setNextFocusableComponent(txtLastName);
 
@@ -237,7 +230,6 @@ public class UsersManagementPanel extends ContentPanel {
 
         pnlSearchCriteria.add(txtFirstName);
 
-        txtLastName.setFont(new java.awt.Font("Tahoma", 0, 12));
         txtLastName.setName("txtLastName"); // NOI18N
         txtLastName.setNextFocusableComponent(comboGroups);
 
@@ -246,7 +238,6 @@ public class UsersManagementPanel extends ContentPanel {
 
         pnlSearchCriteria.add(txtLastName);
 
-        comboGroups.setFont(new java.awt.Font("Tahoma", 0, 12));
         comboGroups.setName("comboGroups"); // NOI18N
         comboGroups.setNextFocusableComponent(btnSearch);
 
@@ -258,7 +249,6 @@ public class UsersManagementPanel extends ContentPanel {
 
         pnlSearchCriteria.add(comboGroups);
 
-        btnSearch.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnSearch.setText(bundle.getString("UsersManagementPanel.btnSearch.text")); // NOI18N
         btnSearch.setName("btnSearch"); // NOI18N
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
@@ -386,7 +376,7 @@ public class UsersManagementPanel extends ContentPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(toolbarUsers, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE))
         );
 
         pnlLayout.add(pnlUsers, "card3");

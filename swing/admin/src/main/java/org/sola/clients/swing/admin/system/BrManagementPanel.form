@@ -266,7 +266,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="50" max="32767" attributes="0"/>
+                                  <EmptySpace pref="57" max="32767" attributes="0"/>
                               </Group>
                               <Component id="txtDisplayName" alignment="0" pref="124" max="32767" attributes="0"/>
                           </Group>
@@ -277,7 +277,7 @@
                                   <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="txtDisplayName" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="32767" attributes="0"/>
+                                  <EmptySpace pref="13" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -285,9 +285,6 @@
                       <SubComponents>
                         <Component class="javax.swing.JTextField" name="txtDisplayName">
                           <Properties>
-                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                              <Font name="Tahoma" size="12" style="0"/>
-                            </Property>
                             <Property name="name" type="java.lang.String" value="txtDisplayName" noResource="true"/>
                           </Properties>
                           <BindingProperties>
@@ -298,9 +295,6 @@
                         </Component>
                         <Component class="javax.swing.JLabel" name="jLabel1">
                           <Properties>
-                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                              <Font name="Tahoma" size="12" style="0"/>
-                            </Property>
                             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                               <ResourceString bundle="org/sola/clients/swing/admin/system/Bundle.properties" key="BrManagementPanel.jLabel1.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                             </Property>
@@ -319,7 +313,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="40" max="32767" attributes="0"/>
+                                  <EmptySpace pref="51" max="32767" attributes="0"/>
                               </Group>
                               <Component id="cbxTechnicalTypes" alignment="0" pref="124" max="32767" attributes="0"/>
                           </Group>
@@ -330,7 +324,7 @@
                                   <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="cbxTechnicalTypes" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="32767" attributes="0"/>
+                                  <EmptySpace pref="13" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -338,9 +332,6 @@
                       <SubComponents>
                         <Component class="javax.swing.JLabel" name="jLabel2">
                           <Properties>
-                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                              <Font name="Tahoma" size="12" style="0"/>
-                            </Property>
                             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                               <ResourceString bundle="org/sola/clients/swing/admin/system/Bundle.properties" key="BrManagementPanel.jLabel2.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                             </Property>
@@ -349,9 +340,6 @@
                         </Component>
                         <Component class="javax.swing.JComboBox" name="cbxTechnicalTypes">
                           <Properties>
-                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                              <Font name="Tahoma" size="12" style="0"/>
-                            </Property>
                             <Property name="name" type="java.lang.String" value="cbxTechnicalTypes" noResource="true"/>
                           </Properties>
                           <BindingProperties>
@@ -371,7 +359,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="30" max="32767" attributes="0"/>
+                                  <EmptySpace pref="41" max="32767" attributes="0"/>
                               </Group>
                               <Component id="cbxValidationTargets" alignment="0" pref="124" max="32767" attributes="0"/>
                           </Group>
@@ -382,7 +370,7 @@
                                   <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="cbxValidationTargets" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="32767" attributes="0"/>
+                                  <EmptySpace pref="13" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -390,9 +378,6 @@
                       <SubComponents>
                         <Component class="javax.swing.JComboBox" name="cbxValidationTargets">
                           <Properties>
-                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                              <Font name="Tahoma" size="12" style="0"/>
-                            </Property>
                             <Property name="name" type="java.lang.String" value="cbxValidationTargets" noResource="true"/>
                           </Properties>
                           <BindingProperties>
@@ -402,9 +387,6 @@
                         </Component>
                         <Component class="javax.swing.JLabel" name="jLabel3">
                           <Properties>
-                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                              <Font name="Tahoma" size="12" style="0"/>
-                            </Property>
                             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                               <ResourceString bundle="org/sola/clients/swing/admin/system/Bundle.properties" key="BrManagementPanel.jLabel3.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                             </Property>
@@ -442,9 +424,6 @@
                   <SubComponents>
                     <Component class="javax.swing.JButton" name="btnSearch">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
-                        </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="org/sola/clients/swing/admin/system/Bundle.properties" key="BrManagementPanel.btnSearch.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                         </Property>

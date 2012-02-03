@@ -51,7 +51,6 @@ import org.sola.clients.swing.desktop.party.PartySearchForm;
 import org.sola.clients.swing.desktop.source.DocumentSearchPanel;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleViewer;
 import org.sola.clients.swing.ui.MainContentPanel;
-import org.sola.clients.swing.ui.party.PartySearchPanel;
 import org.sola.common.RolesConstants;
 import org.sola.common.help.HelpUtility;
 import org.sola.common.logging.LogUtility;
@@ -101,7 +100,6 @@ public class MainForm extends FrameView {
      * form has been opened. It helps to display form with no significant delays. 
      */
     private void postInit() {
-        customizeComponents();
         // Customize buttons
         btnNewApplication.getAction().setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_CREATE_APPS));
         btnOpenMap.getAction().setEnabled(SecurityBean.isInRole(RolesConstants.GIS_VIEW_MAP));
@@ -118,21 +116,6 @@ public class MainForm extends FrameView {
         jMenuItem4.setVisible(false);
         jMenuItem5.setVisible(false);
         jMenuItem6.setVisible(false);
-
-        // Enable/disable toolbar and main menu based on users access
-    }
-
-    /** Applies customization of component L&F. */
-    private void customizeComponents() {
-        //    BUTTONS   
-        LafManager.getInstance().setBtnProperties(btnNewApplication);
-        LafManager.getInstance().setBtnProperties(btnOpenMap);
-        LafManager.getInstance().setBtnProperties(btnSearchApplications);
-        LafManager.getInstance().setBtnProperties(btnShowDashboard);
-
-//    LABELS    
-        LafManager.getInstance().setLabProperties(labStatus);
-        LafManager.getInstance().setLabProperties(txtUserName);
     }
 
     @SuppressWarnings("unchecked")
@@ -206,7 +189,6 @@ public class MainForm extends FrameView {
 
         javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(MainForm.class, this);
         btnShowDashboard.setAction(actionMap.get("openDashBoard")); // NOI18N
-        btnShowDashboard.setFont(UIManager.getFont(btnFont));
         btnShowDashboard.setFocusable(false);
         btnShowDashboard.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnShowDashboard.setName("btnShowDashboard"); // NOI18N
@@ -217,7 +199,6 @@ public class MainForm extends FrameView {
         applicationsMain.add(jSeparator2);
 
         btnNewApplication.setAction(actionMap.get("openNewApplicationForm")); // NOI18N
-        btnNewApplication.setFont(UIManager.getFont(btnFont));
         btnNewApplication.setFocusable(false);
         btnNewApplication.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnNewApplication.setName("btnNewApplication"); // NOI18N
@@ -228,7 +209,6 @@ public class MainForm extends FrameView {
         applicationsMain.add(jSeparator4);
 
         btnSearchApplications.setAction(actionMap.get("searchApplications")); // NOI18N
-        btnSearchApplications.setFont(UIManager.getFont(btnFont));
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/Bundle"); // NOI18N
         btnSearchApplications.setText(bundle.getString("MainForm.btnSearchApplications.text")); // NOI18N
         btnSearchApplications.setFocusable(false);
@@ -268,7 +248,6 @@ public class MainForm extends FrameView {
         applicationsMain.add(jSeparator1);
 
         btnOpenMap.setAction(actionMap.get("openMap")); // NOI18N
-        btnOpenMap.setFont(UIManager.getFont(btnFont));
         btnOpenMap.setText(bundle.getString("MainForm.btnOpenMap.text")); // NOI18N
         btnOpenMap.setFocusable(false);
         btnOpenMap.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -276,7 +255,6 @@ public class MainForm extends FrameView {
         btnOpenMap.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         applicationsMain.add(btnOpenMap);
 
-        pnlContent.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
         pnlContent.setName("pnlContent"); // NOI18N
 
         org.jdesktop.layout.GroupLayout mainPanelLayout = new org.jdesktop.layout.GroupLayout(mainPanel);
@@ -464,17 +442,16 @@ public class MainForm extends FrameView {
 
         menuBar.add(menuSearch);
 
+        statusPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         statusPanel.setName("statusPanel"); // NOI18N
         statusPanel.setPreferredSize(new java.awt.Dimension(1024, 24));
 
-        labStatus.setFont(new java.awt.Font("Tahoma", 0, 12));
         labStatus.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         labStatus.setText(bundle.getString("MainForm.labStatus.text_1")); // NOI18N
         labStatus.setName("labStatus"); // NOI18N
 
         taskPanel1.setName("taskPanel1"); // NOI18N
 
-        txtUserName.setFont(new java.awt.Font("Tahoma", 1, 12));
         txtUserName.setText(bundle.getString("MainForm.txtUserName.text")); // NOI18N
         txtUserName.setName("txtUserName"); // NOI18N
 
@@ -486,19 +463,20 @@ public class MainForm extends FrameView {
                 .addContainerGap()
                 .add(labStatus, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 35, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(txtUserName, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
+                .add(txtUserName, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
                 .add(52, 52, 52)
                 .add(taskPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 373, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
         );
         statusPanelLayout.setVerticalGroup(
             statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(statusPanelLayout.createSequentialGroup()
-                .add(4, 4, 4)
                 .add(statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(taskPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 17, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                        .add(txtUserName)
-                        .add(labStatus)))
+                    .add(statusPanelLayout.createSequentialGroup()
+                        .add(4, 4, 4)
+                        .add(statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(txtUserName)
+                            .add(labStatus)))
+                    .add(taskPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 21, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 

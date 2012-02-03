@@ -40,8 +40,6 @@ import org.sola.clients.beans.sorters.ServicesSorterByOrder;
 import java.util.Locale;
 import javax.swing.JFormattedTextField;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
-import org.sola.clients.swing.common.LafManager;
 /** 
  * Displays application details. This panel could be used on different forms, 
  * where application details are needed to display in the read only mode.
@@ -57,7 +55,6 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
      */
     public ApplicationDetailsPanel() {
         initComponents();
-        customizeComponents();
     }
 
     /** 
@@ -67,68 +64,8 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
     public ApplicationDetailsPanel(String applicationId) {
         this.applicationID = applicationId;
         initComponents();
-        customizeComponents();
     }
 
-      /** Applies customization of component L&F. */
-    private void customizeComponents() {
-       
-//    BUTTONS   
-       
-//     CHECKBOXES
-    LafManager.getInstance().setChkProperties(cbxPaid);
-    
-//    LABELS    
-    LafManager.getInstance().setLabProperties(labAppNr);
-    labAppNr.setFont(labAppNr.getFont().deriveFont(labAppNr.getFont().getStyle() | java.awt.Font.BOLD, labAppNr.getFont().getSize()));
-    
-    LafManager.getInstance().setLabProperties(labTxtAppNr);
-    LafManager.getInstance().setLabProperties(labAddress);
-    LafManager.getInstance().setLabProperties(labAgents);
-    LafManager.getInstance().setLabProperties(labLodgedDate);
-    LafManager.getInstance().setLabProperties(labLodgedDate1);
-    LafManager.getInstance().setLabProperties(labEmail);
-    LafManager.getInstance().setLabProperties(labFax);
-    LafManager.getInstance().setLabProperties(labFixedFee);
-    LafManager.getInstance().setLabProperties(labLastName);
-    LafManager.getInstance().setLabProperties(labName);
-    LafManager.getInstance().setLabProperties(labPhone);
-    LafManager.getInstance().setLabProperties(labPreferredWay);
-    LafManager.getInstance().setLabProperties(labStatus);
-    LafManager.getInstance().setLabProperties(labTotalFee);
-    LafManager.getInstance().setLabProperties(labTotalFee1);
-    LafManager.getInstance().setLabProperties(labTotalFee2);
-//    labTotalFee3 HAS ITS OWN CUSTOMIZATION
-    LafManager.getInstance().setLabProperties(labTotalFee3);
-    labTotalFee3.setFont(labTotalFee3.getFont().deriveFont(labTotalFee3.getFont().getStyle() | java.awt.Font.BOLD, labTotalFee3.getFont().getSize()+1));
-       
-//    TXT FIELDS
-    LafManager.getInstance().setTxtProperties(txtAgent);
-    LafManager.getInstance().setTxtProperties(txtAddress);
-    LafManager.getInstance().setTxtProperties(txtEmail);
-    LafManager.getInstance().setTxtProperties(txtFax);
-    LafManager.getInstance().setTxtProperties(txtFirstName);
-    LafManager.getInstance().setTxtProperties(txtLastName);
-    LafManager.getInstance().setTxtProperties(txtPhone);
-    LafManager.getInstance().setTxtProperties(txtPreferredWay);
-    LafManager.getInstance().setTxtProperties(txtStatus);
-    LafManager.getInstance().setTxtProperties(txtCompleteDate);
-    LafManager.getInstance().setTxtProperties(txtId);
-    LafManager.getInstance().setTxtProperties(txtLodgementDate);
-    
-//    FORMATTED TXT
-    LafManager.getInstance().setFormattedTxtProperties(formTxtFee);
-    LafManager.getInstance().setFormattedTxtProperties(formTxtPaid);
-    LafManager.getInstance().setFormattedTxtProperties(formTxtServiceFee);
-    LafManager.getInstance().setFormattedTxtProperties(formTxtTaxes);
-   
-//    TABBED PANELS
-     LafManager.getInstance().setTabProperties(tabPanels);
-   
-    }
-
-    
-    
     /** Public property to expose {@link ApplicationBean} used on the panel.*/
     public ApplicationBean getApplicationBean() {
         return appBean;
@@ -242,12 +179,12 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
         appNumberPanel.setName("appNumberPanel"); // NOI18N
         appNumberPanel.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
 
-        labAppNr.setFont(new java.awt.Font("Tahoma", 1, 12));
+        labAppNr.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/application/Bundle"); // NOI18N
         labAppNr.setText(bundle.getString("ApplicationDetailsPanel.labAppNr.text")); // NOI18N
         labAppNr.setName("labAppNr"); // NOI18N
 
-        labTxtAppNr.setFont(new java.awt.Font("Tahoma", 1, 14));
+        labTxtAppNr.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         labTxtAppNr.setName("labTxtAppNr"); // NOI18N
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, appBean, org.jdesktop.beansbinding.ELProperty.create("${nr}"), labTxtAppNr, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -258,12 +195,10 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
 
         jPanel11.setName("jPanel11"); // NOI18N
 
-        labAgents.setFont(new java.awt.Font("Tahoma", 0, 12));
         labAgents.setText(bundle.getString("ApplicationDetailsPanel.labAgents.text_1")); // NOI18N
         labAgents.setName("labAgents"); // NOI18N
 
         txtAgent.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtAgent.setBackground(new java.awt.Color(255, 255, 255));
         txtAgent.setEditable(false);
         txtAgent.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         txtAgent.setName("txtAgent"); // NOI18N
@@ -280,7 +215,7 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel11Layout.createSequentialGroup()
                 .addComponent(labAgents)
-                .addContainerGap(101, Short.MAX_VALUE))
+                .addContainerGap(106, Short.MAX_VALUE))
             .addComponent(txtAgent, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
         );
         jPanel11Layout.setVerticalGroup(
@@ -297,7 +232,6 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
         jPanel10.setName("jPanel10"); // NOI18N
 
         txtStatus.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtStatus.setBackground(new java.awt.Color(255, 255, 255));
         txtStatus.setEditable(false);
         txtStatus.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         txtStatus.setName("txtStatus"); // NOI18N
@@ -308,7 +242,6 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
         txtStatus.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
         txtStatus.setHorizontalAlignment(JTextField.LEADING);
 
-        labStatus.setFont(new java.awt.Font("Tahoma", 0, 12));
         labStatus.setText(bundle.getString("ApplicationDetailsPanel.labStatus.text_1")); // NOI18N
         labStatus.setName("labStatus"); // NOI18N
 
@@ -318,7 +251,7 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel10Layout.createSequentialGroup()
                 .addComponent(labStatus)
-                .addContainerGap(100, Short.MAX_VALUE))
+                .addContainerGap(104, Short.MAX_VALUE))
             .addComponent(txtStatus, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
         );
         jPanel10Layout.setVerticalGroup(
@@ -334,12 +267,10 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
 
         jPanel12.setName("jPanel12"); // NOI18N
 
-        labLodgedDate.setFont(new java.awt.Font("Tahoma", 0, 12));
         labLodgedDate.setText(bundle.getString("ApplicationDetailsPanel.labLodgedDate.text")); // NOI18N
         labLodgedDate.setName("labLodgedDate"); // NOI18N
 
         txtLodgementDate.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtLodgementDate.setBackground(new java.awt.Color(255, 255, 255));
         txtLodgementDate.setEditable(false);
         txtLodgementDate.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         txtLodgementDate.setName("txtLodgementDate"); // NOI18N
@@ -373,14 +304,11 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
 
         jPanel13.setName("jPanel13"); // NOI18N
 
-        labLodgedDate1.setFont(new java.awt.Font("Tahoma", 0, 12));
         labLodgedDate1.setText(bundle.getString("ApplicationDetailsPanel.labLodgedDate1.text")); // NOI18N
         labLodgedDate1.setName("labLodgedDate1"); // NOI18N
 
         txtCompleteDate.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtCompleteDate.setBackground(new java.awt.Color(255, 255, 255));
         txtCompleteDate.setEditable(false);
-        txtCompleteDate.setFont(new java.awt.Font("Tahoma", 0, 12));
         txtCompleteDate.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         txtCompleteDate.setName("txtCompleteDate"); // NOI18N
 
@@ -397,7 +325,7 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel13Layout.createSequentialGroup()
                 .addComponent(labLodgedDate1)
-                .addContainerGap(66, Short.MAX_VALUE))
+                .addContainerGap(75, Short.MAX_VALUE))
             .addComponent(txtCompleteDate, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
         );
         jPanel13Layout.setVerticalGroup(
@@ -406,7 +334,7 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
                 .addComponent(labLodgedDate1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtCompleteDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         jPanel14.add(jPanel13);
@@ -430,10 +358,9 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
                     .addComponent(labAppNr))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(1, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        tabPanels.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         tabPanels.setName("tabPanels"); // NOI18N
 
         jPanel23.setName("jPanel23"); // NOI18N
@@ -443,16 +370,13 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
 
         jPanel1.setName("jPanel1"); // NOI18N
 
-        labName.setFont(new java.awt.Font("Tahoma", 0, 12));
         labName.setText(bundle.getString("ApplicationDetailsPanel.labName.text_1")); // NOI18N
         labName.setName("labName"); // NOI18N
 
         txtFirstName.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtFirstName.setBackground(new java.awt.Color(255, 255, 255));
         txtFirstName.setEditable(false);
         txtFirstName.setForeground(new java.awt.Color(102, 102, 102));
         txtFirstName.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        txtFirstName.setEnabled(false);
         txtFirstName.setName("txtFirstName"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, appBean, org.jdesktop.beansbinding.ELProperty.create("${contactPerson.name}"), txtFirstName, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -467,7 +391,7 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(labName)
-                .addContainerGap(204, Short.MAX_VALUE))
+                .addContainerGap(212, Short.MAX_VALUE))
             .addComponent(txtFirstName, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
@@ -483,16 +407,13 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
 
         jPanel5.setName("jPanel5"); // NOI18N
 
-        labPhone.setFont(new java.awt.Font("Tahoma", 0, 12));
         labPhone.setText(bundle.getString("ApplicationDetailsPanel.labPhone.text_1")); // NOI18N
         labPhone.setName("labPhone"); // NOI18N
 
         txtPhone.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtPhone.setBackground(new java.awt.Color(255, 255, 255));
         txtPhone.setEditable(false);
         txtPhone.setForeground(new java.awt.Color(102, 102, 102));
         txtPhone.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        txtPhone.setEnabled(false);
         txtPhone.setName("txtPhone"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, appBean, org.jdesktop.beansbinding.ELProperty.create("${contactPerson.phone}"), txtPhone, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -507,7 +428,7 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addComponent(labPhone)
-                .addContainerGap(241, Short.MAX_VALUE))
+                .addContainerGap(246, Short.MAX_VALUE))
             .addComponent(txtPhone, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
@@ -523,16 +444,13 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
 
         jPanel3.setName("jPanel3"); // NOI18N
 
-        labLastName.setFont(new java.awt.Font("Tahoma", 0, 12));
         labLastName.setText(bundle.getString("ApplicationDetailsPanel.labLastName.text_1")); // NOI18N
         labLastName.setName("labLastName"); // NOI18N
 
         txtLastName.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtLastName.setBackground(new java.awt.Color(255, 255, 255));
         txtLastName.setEditable(false);
         txtLastName.setForeground(new java.awt.Color(102, 102, 102));
         txtLastName.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        txtLastName.setEnabled(false);
         txtLastName.setName("txtLastName"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, appBean, org.jdesktop.beansbinding.ELProperty.create("${contactPerson.lastName}"), txtLastName, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -547,7 +465,7 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(labLastName)
-                .addContainerGap(219, Short.MAX_VALUE))
+                .addContainerGap(226, Short.MAX_VALUE))
             .addComponent(txtLastName, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
@@ -564,11 +482,9 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
         jPanel6.setName("jPanel6"); // NOI18N
 
         txtFax.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtFax.setBackground(new java.awt.Color(255, 255, 255));
         txtFax.setEditable(false);
         txtFax.setForeground(new java.awt.Color(102, 102, 102));
         txtFax.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        txtFax.setEnabled(false);
         txtFax.setName("txtFax"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, appBean, org.jdesktop.beansbinding.ELProperty.create("${contactPerson.fax}"), txtFax, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -577,7 +493,6 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
         txtFax.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
         txtFax.setHorizontalAlignment(JTextField.LEADING);
 
-        labFax.setFont(new java.awt.Font("Tahoma", 0, 12));
         labFax.setText(bundle.getString("ApplicationDetailsPanel.labFax.text_1")); // NOI18N
         labFax.setName("labFax"); // NOI18N
 
@@ -603,16 +518,13 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
 
         jPanel4.setName("jPanel4"); // NOI18N
 
-        labPreferredWay.setFont(new java.awt.Font("Tahoma", 0, 12));
         labPreferredWay.setText(bundle.getString("ApplicationDetailsPanel.labPreferredWay.text_1")); // NOI18N
         labPreferredWay.setName("labPreferredWay"); // NOI18N
 
         txtPreferredWay.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtPreferredWay.setBackground(new java.awt.Color(255, 255, 255));
         txtPreferredWay.setEditable(false);
         txtPreferredWay.setForeground(new java.awt.Color(102, 102, 102));
         txtPreferredWay.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        txtPreferredWay.setEnabled(false);
         txtPreferredWay.setName("txtPreferredWay"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, appBean, org.jdesktop.beansbinding.ELProperty.create("${contactPerson.preferredCommunication.displayValue}"), txtPreferredWay, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -627,7 +539,7 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(labPreferredWay)
-                .addContainerGap(98, Short.MAX_VALUE))
+                .addContainerGap(121, Short.MAX_VALUE))
             .addComponent(txtPreferredWay, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
@@ -643,16 +555,13 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
 
         jPanel2.setName("jPanel2"); // NOI18N
 
-        labEmail.setFont(new java.awt.Font("Tahoma", 0, 12));
         labEmail.setText(bundle.getString("ApplicationDetailsPanel.labEmail.text_1")); // NOI18N
         labEmail.setName("labEmail"); // NOI18N
 
         txtEmail.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtEmail.setBackground(new java.awt.Color(255, 255, 255));
         txtEmail.setEditable(false);
         txtEmail.setForeground(new java.awt.Color(102, 102, 102));
         txtEmail.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        txtEmail.setEnabled(false);
         txtEmail.setName("txtEmail"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, appBean, org.jdesktop.beansbinding.ELProperty.create("${contactPerson.email}"), txtEmail, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -667,7 +576,7 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(labEmail)
-                .addContainerGap(245, Short.MAX_VALUE))
+                .addContainerGap(248, Short.MAX_VALUE))
             .addComponent(txtEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
@@ -683,16 +592,13 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
 
         jPanel7.setName("jPanel7"); // NOI18N
 
-        labAddress.setFont(new java.awt.Font("Tahoma", 0, 12));
         labAddress.setText(bundle.getString("ApplicationDetailsPanel.labAddress.text_1")); // NOI18N
         labAddress.setName("labAddress"); // NOI18N
 
         txtAddress.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtAddress.setBackground(new java.awt.Color(255, 255, 255));
         txtAddress.setEditable(false);
         txtAddress.setForeground(new java.awt.Color(102, 102, 102));
         txtAddress.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        txtAddress.setEnabled(false);
         txtAddress.setName("txtAddress"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, appBean, org.jdesktop.beansbinding.ELProperty.create("${contactPerson.address.description}"), txtAddress, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -707,7 +613,7 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addComponent(labAddress)
-                .addContainerGap(529, Short.MAX_VALUE))
+                .addContainerGap(533, Short.MAX_VALUE))
             .addComponent(txtAddress, javax.swing.GroupLayout.DEFAULT_SIZE, 576, Short.MAX_VALUE)
         );
         jPanel7Layout.setVerticalGroup(
@@ -737,7 +643,7 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         tabPanels.addTab(bundle.getString("ApplicationDetailsPanel.jPanel23.TabConstraints.tabTitle"), jPanel23); // NOI18N
@@ -788,7 +694,7 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
             jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel22Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(scrollFeeDetails1, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
+                .addComponent(scrollFeeDetails1, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -856,7 +762,7 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
             jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel24Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(scrollPropertyDetails, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
+                .addComponent(scrollPropertyDetails, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -932,7 +838,7 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
             jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel25Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(scrollDocuments, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
+                .addComponent(scrollDocuments, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1028,20 +934,15 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
         formTxtServiceFee.setHorizontalAlignment(JFormattedTextField.LEADING);
 
         labFixedFee.setBackground(new java.awt.Color(255, 255, 255));
-        labFixedFee.setFont(new java.awt.Font("Tahoma", 0, 12));
         labFixedFee.setText(bundle.getString("ApplicationDetailsPanel.labFixedFee.text")); // NOI18N
         labFixedFee.setName("labFixedFee"); // NOI18N
 
-        labTotalFee1.setFont(new java.awt.Font("Tahoma", 0, 12));
         labTotalFee1.setText(bundle.getString("ApplicationDetailsPanel.labTotalFee1.text")); // NOI18N
         labTotalFee1.setName("labTotalFee1"); // NOI18N
-        labTotalFee1.setPreferredSize(null);
 
-        labTotalFee.setFont(new java.awt.Font("Tahoma", 0, 12));
         labTotalFee.setText(bundle.getString("ApplicationDetailsPanel.labTotalFee.text")); // NOI18N
         labTotalFee.setName("labTotalFee"); // NOI18N
 
-        labTotalFee2.setFont(new java.awt.Font("Tahoma", 0, 12));
         labTotalFee2.setText(bundle.getString("ApplicationDetailsPanel.labTotalFee2.text")); // NOI18N
         labTotalFee2.setName("labTotalFee2"); // NOI18N
 
@@ -1064,21 +965,22 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(jPanel9Layout.createSequentialGroup()
-                            .addComponent(labTotalFee3, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(cbxPaid))
-                        .addComponent(formTxtPaid, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(labTotalFee2, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addComponent(labTotalFee3, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cbxPaid))
+                    .addComponent(labTotalFee1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labTotalFee, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(labTotalFee2))
                     .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(formTxtFee, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(formTxtPaid, javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(formTxtTaxes, javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(formTxtServiceFee, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(labFixedFee, javax.swing.GroupLayout.Alignment.LEADING))
-                    .addComponent(labTotalFee1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(labTotalFee, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(labFixedFee, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(formTxtFee, javax.swing.GroupLayout.Alignment.LEADING)))
+                .addContainerGap(8, Short.MAX_VALUE))
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1087,7 +989,7 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(formTxtServiceFee, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(11, 11, 11)
-                .addComponent(labTotalFee1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(labTotalFee1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(formTxtTaxes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -1096,13 +998,13 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
                 .addComponent(formTxtFee, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(11, 11, 11)
                 .addComponent(labTotalFee2)
-                .addGap(6, 6, 6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(formTxtPaid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(labTotalFee3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cbxPaid))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel26Layout = new javax.swing.GroupLayout(jPanel26);
@@ -1113,7 +1015,7 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(scrollFeeDetails, javax.swing.GroupLayout.DEFAULT_SIZE, 456, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel26Layout.setVerticalGroup(
@@ -1121,7 +1023,7 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel26Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(scrollFeeDetails, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
+                    .addComponent(scrollFeeDetails, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
                     .addComponent(jPanel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );

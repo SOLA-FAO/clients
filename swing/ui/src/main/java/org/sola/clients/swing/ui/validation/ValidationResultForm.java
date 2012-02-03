@@ -59,23 +59,9 @@ public class ValidationResultForm extends javax.swing.JDialog {
         }
         
         initComponents();
-        customizeComponents();
         lblMessage.setText(message);
         customizeForm();
     }
-    
-    
-    
-      /** Applies customization of component L&F. */
-    private void customizeComponents() {
-    
-//    LABELS    
-    LafManager.getInstance().setLabProperties(lblMessage);
-    lblMessage.setFont(lblMessage.getFont().deriveFont(lblMessage.getFont().getStyle() | java.awt.Font.BOLD, lblMessage.getFont().getSize()));
-    
-    
-    }
-
     
     public ObservableList<ValidationResultBean> getValidationResultsList() {
         return validationResultsList;

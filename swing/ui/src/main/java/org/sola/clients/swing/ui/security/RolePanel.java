@@ -112,9 +112,9 @@ public class RolePanel extends javax.swing.JPanel {
         txtDescription = new javax.swing.JTextArea();
         jLabel4 = new javax.swing.JLabel();
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
-        jLabel1.setText("Code:");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/security/Bundle"); // NOI18N
+        jLabel1.setText(bundle.getString("RolePanel.jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
 
         txtCode.setName("txtCode"); // NOI18N
@@ -122,8 +122,7 @@ public class RolePanel extends javax.swing.JPanel {
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${role.code}"), txtCode, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12));
-        jLabel2.setText("Description:");
+        jLabel2.setText(bundle.getString("RolePanel.jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
 
         txtStatus.setName("txtStatus"); // NOI18N
@@ -131,9 +130,8 @@ public class RolePanel extends javax.swing.JPanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${role.status}"), txtStatus, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
-        jLabel3.setText("Display value (name):");
+        jLabel3.setText(bundle.getString("RolePanel.jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
 
         txtName.setName("txtName"); // NOI18N
@@ -153,9 +151,8 @@ public class RolePanel extends javax.swing.JPanel {
 
         jScrollPane1.setViewportView(txtDescription);
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
-        jLabel4.setText("Status:");
+        jLabel4.setText(bundle.getString("RolePanel.jLabel4.text")); // NOI18N
         jLabel4.setName("jLabel4"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -198,7 +195,7 @@ public class RolePanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         bindingGroup.bind();

@@ -27,11 +27,11 @@
     </Container>
   </NonVisualComponents>
   <AuxValues>
-    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="1"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
-    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
@@ -87,7 +87,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="38" max="32767" attributes="0"/>
+                      <EmptySpace pref="47" max="32767" attributes="0"/>
                   </Group>
                   <Component id="txtNameFirstPart" alignment="0" pref="123" max="32767" attributes="0"/>
               </Group>
@@ -98,7 +98,7 @@
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="txtNameFirstPart" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace pref="13" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -106,18 +106,14 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="jLabel1">
               <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Tahoma" size="12" style="0"/>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="org/sola/clients/swing/ui/administrative/Bundle.properties" key="BaUnitSearchPanel.jLabel1.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Name first part:"/>
                 <Property name="name" type="java.lang.String" value="jLabel1" noResource="true"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtNameFirstPart">
               <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Tahoma" size="12" style="0"/>
-                </Property>
                 <Property name="name" type="java.lang.String" value="txtNameFirstPart" noResource="true"/>
               </Properties>
               <BindingProperties>
@@ -138,7 +134,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="40" max="32767" attributes="0"/>
+                      <EmptySpace pref="49" max="32767" attributes="0"/>
                   </Group>
                   <Component id="txtNameLastPart" alignment="0" pref="123" max="32767" attributes="0"/>
               </Group>
@@ -149,7 +145,7 @@
                       <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="txtNameLastPart" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace pref="13" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -157,18 +153,14 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="jLabel3">
               <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Tahoma" size="12" style="0"/>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="org/sola/clients/swing/ui/administrative/Bundle.properties" key="BaUnitSearchPanel.jLabel3.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Name last part:"/>
                 <Property name="name" type="java.lang.String" value="jLabel3" noResource="true"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtNameLastPart">
               <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Tahoma" size="12" style="0"/>
-                </Property>
                 <Property name="name" type="java.lang.String" value="txtNameLastPart" noResource="true"/>
               </Properties>
               <BindingProperties>
@@ -189,7 +181,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="53" max="32767" attributes="0"/>
+                      <EmptySpace pref="61" max="32767" attributes="0"/>
                   </Group>
                   <Component id="txtRightholder" alignment="0" pref="123" max="32767" attributes="0"/>
               </Group>
@@ -200,7 +192,7 @@
                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="txtRightholder" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace pref="13" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -208,18 +200,14 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="jLabel2">
               <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Tahoma" size="12" style="0"/>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="org/sola/clients/swing/ui/administrative/Bundle.properties" key="BaUnitSearchPanel.jLabel2.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Right holder:"/>
                 <Property name="name" type="java.lang.String" value="jLabel2" noResource="true"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtRightholder">
               <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Tahoma" size="12" style="0"/>
-                </Property>
                 <Property name="name" type="java.lang.String" value="txtRightholder" noResource="true"/>
               </Properties>
               <BindingProperties>
@@ -259,10 +247,9 @@
       <SubComponents>
         <Component class="javax.swing.JButton" name="btnSearch">
           <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Tahoma" size="12" style="0"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="org/sola/clients/swing/ui/administrative/Bundle.properties" key="BaUnitSearchPanel.btnSearch.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Search"/>
             <Property name="name" type="java.lang.String" value="btnSearch" noResource="true"/>
           </Properties>
           <Events>
@@ -392,9 +379,6 @@
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                   <action class="org.sola.clients.swing.ui.administrative.BaUnitSearchPanel" id="openBaUnit" methodName="openBaUnit"/>
                 </Property>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Tahoma" size="12" style="0"/>
-                </Property>
                 <Property name="focusable" type="boolean" value="false"/>
                 <Property name="horizontalAlignment" type="int" value="2"/>
                 <Property name="name" type="java.lang.String" value="btnOpenBaUnit" noResource="true"/>
@@ -408,19 +392,17 @@
             </Component>
             <Component class="javax.swing.JLabel" name="lblSearchResult">
               <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Tahoma" size="12" style="0"/>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="org/sola/clients/swing/ui/administrative/Bundle.properties" key="BaUnitSearchPanel.lblSearchResult.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Search results: "/>
                 <Property name="name" type="java.lang.String" value="lblSearchResult" noResource="true"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="lblSearchResultCount">
               <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Tahoma" size="12" style="0"/>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="org/sola/clients/swing/ui/administrative/Bundle.properties" key="BaUnitSearchPanel.lblSearchResultCount.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value=" "/>
                 <Property name="name" type="java.lang.String" value="lblSearchResultCount" noResource="true"/>
               </Properties>
             </Component>

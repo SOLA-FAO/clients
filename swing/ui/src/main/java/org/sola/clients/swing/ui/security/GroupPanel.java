@@ -120,7 +120,6 @@ public class GroupPanel extends javax.swing.JPanel {
         tableRoles = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
         jLabel3 = new javax.swing.JLabel();
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12));
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/security/Bundle"); // NOI18N
         jLabel1.setText(bundle.getString("GroupPanel.jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
@@ -130,7 +129,6 @@ public class GroupPanel extends javax.swing.JPanel {
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${group.name}"), txtName, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel2.setText(bundle.getString("GroupPanel.jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
 
@@ -168,7 +166,6 @@ public class GroupPanel extends javax.swing.JPanel {
         tableRoles.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("GroupPanel.tableRoles.columnModel.title2_1")); // NOI18N
         tableRoles.getColumnModel().getColumn(2).setCellRenderer(new TableCellTextAreaRenderer());
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel3.setText(bundle.getString("GroupPanel.jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
 
@@ -187,7 +184,7 @@ public class GroupPanel extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 206, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 213, Short.MAX_VALUE))
                             .addComponent(txtDescription, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)))
                     .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING))
                 .addContainerGap())
@@ -207,7 +204,7 @@ public class GroupPanel extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE))
         );
 
         bindingGroup.bind();

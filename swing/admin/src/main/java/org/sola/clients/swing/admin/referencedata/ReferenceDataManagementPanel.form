@@ -227,9 +227,6 @@
           <SubComponents>
             <Component class="javax.swing.JButton" name="btnAddRefData">
               <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Tahoma" size="12" style="0"/>
-                </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/images/common/add.png"/>
                 </Property>
@@ -247,9 +244,6 @@
             </Component>
             <Component class="javax.swing.JButton" name="btnEditRefData">
               <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Tahoma" size="12" style="0"/>
-                </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/images/common/pencil.png"/>
                 </Property>
@@ -267,9 +261,6 @@
             </Component>
             <Component class="javax.swing.JButton" name="btnRemoveRefData">
               <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Tahoma" size="12" style="0"/>
-                </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/images/common/remove.png"/>
                 </Property>

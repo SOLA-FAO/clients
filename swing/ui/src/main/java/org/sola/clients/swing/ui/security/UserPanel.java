@@ -165,32 +165,27 @@ public class UserPanel extends javax.swing.JPanel {
 
         jPanel5.setName("jPanel5"); // NOI18N
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/security/Bundle"); // NOI18N
         jLabel1.setText(bundle.getString("UserPanel.jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
 
-        txtFirstName.setFont(new java.awt.Font("Tahoma", 0, 12));
         txtFirstName.setName("txtFirstName"); // NOI18N
         txtFirstName.setNextFocusableComponent(txtLastName);
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${user.firstName}"), txtFirstName, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         jLabel5.setText(bundle.getString("UserPanel.jLabel5.text")); // NOI18N
         jLabel5.setName("jLabel5"); // NOI18N
 
-        txtUserName.setFont(new java.awt.Font("Tahoma", 0, 12));
         txtUserName.setName("txtUserName"); // NOI18N
         txtUserName.setNextFocusableComponent(cbxActive);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${user.userName}"), txtUserName, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        cbxActive.setFont(new java.awt.Font("Tahoma", 0, 12));
         cbxActive.setText(bundle.getString("UserPanel.cbxActive.text")); // NOI18N
         cbxActive.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         cbxActive.setName("cbxActive"); // NOI18N
@@ -225,33 +220,29 @@ public class UserPanel extends javax.swing.JPanel {
                 .addComponent(txtUserName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(cbxActive)
-                .addContainerGap(11, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         jPanel1.add(jPanel5);
 
         jPanel4.setName("jPanel4"); // NOI18N
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         jLabel2.setText(bundle.getString("UserPanel.jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
 
-        txtLastName.setFont(new java.awt.Font("Tahoma", 0, 12));
         txtLastName.setName("txtLastName"); // NOI18N
         txtLastName.setNextFocusableComponent(txtUserName);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${user.lastName}"), txtLastName, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel4.setText(bundle.getString("UserPanel.jLabel4.text")); // NOI18N
         jLabel4.setName("jLabel4"); // NOI18N
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
         txtDescription.setColumns(20);
-        txtDescription.setFont(new java.awt.Font("Tahoma", 0, 12));
         txtDescription.setLineWrap(true);
         txtDescription.setRows(2);
         txtDescription.setName("txtDescription"); // NOI18N
@@ -344,7 +335,7 @@ public class UserPanel extends javax.swing.JPanel {
             .addGroup(pnlGroupsLayout.createSequentialGroup()
                 .addComponent(groupPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -357,13 +348,11 @@ public class UserPanel extends javax.swing.JPanel {
 
         jPanel7.setName("jPanel7"); // NOI18N
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         jLabel7.setLabelFor(txtPassword);
         jLabel7.setText(bundle.getString("UserPanel.jLabel7.text")); // NOI18N
         jLabel7.setName("jLabel7"); // NOI18N
 
-        txtPassword.setFont(new java.awt.Font("Tahoma", 0, 12));
         txtPassword.setName("txtPassword"); // NOI18N
         txtPassword.setNextFocusableComponent(txtPasswordConfirmation);
 
@@ -394,13 +383,11 @@ public class UserPanel extends javax.swing.JPanel {
 
         jPanel8.setName("jPanel8"); // NOI18N
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         jLabel6.setLabelFor(txtPasswordConfirmation);
         jLabel6.setText(bundle.getString("UserPanel.jLabel6.text")); // NOI18N
         jLabel6.setName("jLabel6"); // NOI18N
 
-        txtPasswordConfirmation.setFont(new java.awt.Font("Tahoma", 0, 12));
         txtPasswordConfirmation.setName("txtPasswordConfirmation"); // NOI18N
         txtPasswordConfirmation.setNextFocusableComponent(tableGroups);
 
@@ -463,7 +450,7 @@ public class UserPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(7, 7, 7)
-                .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE))
+                .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE))
         );
 
         bindingGroup.bind();

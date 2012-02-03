@@ -136,13 +136,11 @@ public class ReferenceDataPanel extends javax.swing.JPanel {
 
         jPanel1.setName("jPanel1"); // NOI18N
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/referencedata/Bundle"); // NOI18N
         jLabel1.setText(bundle.getString("ReferenceDataPanel.jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
 
-        txtCode.setFont(new java.awt.Font("Tahoma", 0, 12));
         txtCode.setName("txtCode"); // NOI18N
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${referenceDataBean.code}"), txtCode, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -161,19 +159,17 @@ public class ReferenceDataPanel extends javax.swing.JPanel {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         jPanel5.add(jPanel1);
 
         jPanel2.setName("jPanel2"); // NOI18N
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         jLabel3.setText(bundle.getString("ReferenceDataPanel.jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
 
-        txtStatus.setFont(new java.awt.Font("Tahoma", 0, 12));
         txtStatus.setName("txtStatus"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${referenceDataBean.status}"), txtStatus, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -185,7 +181,7 @@ public class ReferenceDataPanel extends javax.swing.JPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jLabel3)
-                .addContainerGap(200, Short.MAX_VALUE))
+                .addContainerGap(204, Short.MAX_VALUE))
             .addComponent(txtStatus, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
@@ -203,7 +199,6 @@ public class ReferenceDataPanel extends javax.swing.JPanel {
 
         jPanel3.setName("jPanel3"); // NOI18N
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         jLabel4.setText(bundle.getString("ReferenceDataPanel.jLabel4.text")); // NOI18N
         jLabel4.setName("jLabel4"); // NOI18N
@@ -235,7 +230,7 @@ public class ReferenceDataPanel extends javax.swing.JPanel {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jLabel4)
-                .addContainerGap(431, Short.MAX_VALUE))
+                .addContainerGap(436, Short.MAX_VALUE))
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 522, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
@@ -243,7 +238,7 @@ public class ReferenceDataPanel extends javax.swing.JPanel {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE))
         );
 
         jPanel6.add(jPanel3);
@@ -272,7 +267,6 @@ public class ReferenceDataPanel extends javax.swing.JPanel {
         tableDescription.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("ReferenceDataPanel.tableDescription.columnModel.title1_1")); // NOI18N
         tableDescription.getColumnModel().getColumn(1).setCellRenderer(new TableCellTextAreaRenderer());
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel2.setText(bundle.getString("ReferenceDataPanel.jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
 
@@ -282,7 +276,7 @@ public class ReferenceDataPanel extends javax.swing.JPanel {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(jLabel2)
-                .addContainerGap(453, Short.MAX_VALUE))
+                .addContainerGap(460, Short.MAX_VALUE))
             .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 522, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
@@ -290,7 +284,7 @@ public class ReferenceDataPanel extends javax.swing.JPanel {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE))
         );
 
         jPanel6.add(jPanel4);

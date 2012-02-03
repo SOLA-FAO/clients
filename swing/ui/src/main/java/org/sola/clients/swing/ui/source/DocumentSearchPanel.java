@@ -39,7 +39,6 @@ import org.sola.clients.swing.ui.renderers.AttachedDocumentCellRenderer;
 import org.sola.clients.beans.source.SourceSearchParamsBean;
 import org.sola.clients.beans.source.SourceSearchResultBean;
 import org.sola.clients.beans.source.SourceSearchResultsListBean;
-import org.sola.clients.swing.common.LafManager;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
@@ -55,7 +54,6 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
     /** Default constructor to create form and initialize parameters. */
     public DocumentSearchPanel() {
         initComponents();
-        customizeComponents();
         customizePrintButton();
         cbxSourceType.setSelectedIndex(-1);
         searchResultsList.addPropertyChangeListener(new PropertyChangeListener() {
@@ -90,44 +88,6 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         }
         btnPrint.getAction().setEnabled(enabled);
         btnOpen.getAction().setEnabled(enabled);
-    }
-
-    /** Applies customization of component L&F. */
-    private void customizeComponents() {
-
-//    BUTTONS   
-        LafManager.getInstance().setBtnProperties(btnClear);
-        LafManager.getInstance().setBtnProperties(btnDateFrom);
-        LafManager.getInstance().setBtnProperties(btnDateTo);
-        LafManager.getInstance().setBtnProperties(btnSearch);
-        LafManager.getInstance().setBtnProperties(btnSubmissionDateFrom);
-        LafManager.getInstance().setBtnProperties(btnSubmissionDateTo);
-
-
-//    COMBOBOXES
-        LafManager.getInstance().setCmbProperties(cbxSourceType);
-
-
-//    LABELS    
-        LafManager.getInstance().setLabProperties(jLabel1);
-        LafManager.getInstance().setLabProperties(jLabel2);
-        LafManager.getInstance().setLabProperties(jLabel3);
-        LafManager.getInstance().setLabProperties(jLabel5);
-        LafManager.getInstance().setLabProperties(jLabel6);
-        LafManager.getInstance().setLabProperties(jLabel7);
-        LafManager.getInstance().setLabProperties(jLabel8);
-        LafManager.getInstance().setLabProperties(lblResults);
-
-//    TXT FIELDS
-        LafManager.getInstance().setTxtProperties(txtLaNr);
-        LafManager.getInstance().setTxtProperties(txtRefNumber);
-
-
-//    FORMATTED TXT
-        LafManager.getInstance().setFormattedTxtProperties(txtDateFrom);
-        LafManager.getInstance().setFormattedTxtProperties(txtDateTo);
-        LafManager.getInstance().setFormattedTxtProperties(txtSubmissionDateFrom);
-        LafManager.getInstance().setFormattedTxtProperties(txtSubmissionDateTo);
     }
 
     private void clearForm() {
@@ -339,7 +299,6 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, searchParams, org.jdesktop.beansbinding.ELProperty.create("${refNumber}"), txtRefNumber, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel8.setText(bundle.getString("DocumentSearchPanel.jLabel8.text")); // NOI18N
         jLabel8.setName("jLabel8"); // NOI18N
 
@@ -358,14 +317,13 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
                 .addComponent(jLabel8)
                 .addGap(7, 7, 7)
                 .addComponent(txtRefNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         jPanel10.add(jPanel6);
 
         jPanel7.setName("jPanel7"); // NOI18N
 
-        jLabel3.setFont(new java.awt.Font("Arial", 0, 12));
         jLabel3.setText(bundle.getString("DocumentSearchPanel.jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
 
@@ -380,7 +338,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addComponent(jLabel3)
-                .addContainerGap(75, Short.MAX_VALUE))
+                .addContainerGap(83, Short.MAX_VALUE))
             .addComponent(txtLaNr, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
         );
         jPanel7Layout.setVerticalGroup(
@@ -389,7 +347,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtLaNr, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         jPanel10.add(jPanel7);
@@ -398,7 +356,6 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
 
         jPanel8.setName("jPanel8"); // NOI18N
 
-        jLabel1.setFont(new java.awt.Font("Arial", 0, 12));
         jLabel1.setText(bundle.getString("DocumentSearchPanel.jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
 
@@ -416,7 +373,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addContainerGap(229, Short.MAX_VALUE))
+                .addContainerGap(231, Short.MAX_VALUE))
             .addComponent(cbxSourceType, 0, 255, Short.MAX_VALUE)
         );
         jPanel8Layout.setVerticalGroup(
@@ -425,7 +382,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbxSourceType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         jPanel1.add(jPanel8);
@@ -454,7 +411,6 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
             }
         });
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel2.setText(bundle.getString("DocumentSearchPanel.jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
 
@@ -478,14 +434,13 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btnSubmissionDateFrom)
                     .addComponent(txtSubmissionDateFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         jPanel11.add(jPanel4);
 
         jPanel5.setName("jPanel5"); // NOI18N
 
-        jLabel5.setFont(new java.awt.Font("Arial", 0, 12));
         jLabel5.setText(bundle.getString("DocumentSearchPanel.jLabel5.text")); // NOI18N
         jLabel5.setName("jLabel5"); // NOI18N
 
@@ -525,14 +480,13 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtSubmissionDateTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         jPanel11.add(jPanel5);
 
         jPanel3.setName("jPanel3"); // NOI18N
 
-        jLabel6.setFont(new java.awt.Font("Arial", 0, 12));
         jLabel6.setText(bundle.getString("DocumentSearchPanel.jLabel6.text")); // NOI18N
         jLabel6.setName("jLabel6"); // NOI18N
 
@@ -572,14 +526,13 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtDateTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         jPanel11.add(jPanel3);
 
         jPanel2.setName("jPanel2"); // NOI18N
 
-        jLabel7.setFont(new java.awt.Font("Arial", 0, 12));
         jLabel7.setText(bundle.getString("DocumentSearchPanel.jLabel7.text")); // NOI18N
         jLabel7.setName("jLabel7"); // NOI18N
 
@@ -619,7 +572,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtDateFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         jPanel11.add(jPanel2);
@@ -631,7 +584,6 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         jToolBar1.setName("jToolBar1"); // NOI18N
 
         btnOpen.setAction(actionMap.get("openDocument")); // NOI18N
-        btnOpen.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnOpen.setText(bundle.getString("DocumentSearchPanel.btnOpen.text")); // NOI18N
         btnOpen.setFocusable(false);
         btnOpen.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -640,7 +592,6 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         jToolBar1.add(btnOpen);
 
         btnPrint.setAction(actionMap.get("print")); // NOI18N
-        btnPrint.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnPrint.setText(bundle.getString("DocumentSearchPanel.btnPrint.text")); // NOI18N
         btnPrint.setFocusable(false);
         btnPrint.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -651,12 +602,10 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         separatorPrint.setName("separatorPrint"); // NOI18N
         jToolBar1.add(separatorPrint);
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel4.setText(bundle.getString("DocumentSearchPanel.jLabel4.text")); // NOI18N
         jLabel4.setName("jLabel4"); // NOI18N
         jToolBar1.add(jLabel4);
 
-        lblResults.setFont(new java.awt.Font("Arial", 1, 12));
         lblResults.setText(bundle.getString("DocumentSearchPanel.lblResults.text")); // NOI18N
         lblResults.setName("lblResults"); // NOI18N
         jToolBar1.add(lblResults);

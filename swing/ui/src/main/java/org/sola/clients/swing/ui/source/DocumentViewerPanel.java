@@ -28,7 +28,6 @@
 package org.sola.clients.swing.ui.source;
 
 import org.sola.clients.beans.source.SourceBean;
-import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.common.utils.BindingTools;
 
 /**
@@ -38,46 +37,13 @@ public class DocumentViewerPanel extends javax.swing.JPanel {
 
     public DocumentViewerPanel() {
         initComponents();
-        customizeComponents();
     }
 
     public DocumentViewerPanel(SourceBean sourceBean) {
         this.sourceBean = sourceBean;
         initComponents();
-        customizeComponents();
     }
-     
-    
-    
-    /** Applies customization of component L&F. */
-    private void customizeComponents() {
-    
-    
-//    LABELS    
-    LafManager.getInstance().setLabProperties(jLabel1);
-    LafManager.getInstance().setLabProperties(jLabel2);
-    LafManager.getInstance().setLabProperties(jLabel3);
-    LafManager.getInstance().setLabProperties(jLabel4);
-    LafManager.getInstance().setLabProperties(jLabel5);
-    LafManager.getInstance().setLabProperties(jLabel6);
-    LafManager.getInstance().setLabProperties(jLabel7);
-    LafManager.getInstance().setLabProperties(jLabel8);
-      
-//    TXT FIELDS
-    LafManager.getInstance().setTxtProperties(jTextField1);
-    LafManager.getInstance().setTxtProperties(jTextField2);
-    LafManager.getInstance().setTxtProperties(jTextField4);
-    LafManager.getInstance().setTxtProperties(jTextField7);
 
-//    FORMATTED TXT
-    LafManager.getInstance().setFormattedTxtProperties(jFormattedTextField1);
-    LafManager.getInstance().setFormattedTxtProperties(jFormattedTextField2);
-    LafManager.getInstance().setFormattedTxtProperties(jFormattedTextField3);
-   
-   }
-
-    
-    
     /** Creates instance of source bean. */
     private SourceBean createSource() {
         if (sourceBean == null) {
@@ -126,20 +92,16 @@ public class DocumentViewerPanel extends javax.swing.JPanel {
 
         jPanel1.setName("jPanel1"); // NOI18N
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/source/Bundle"); // NOI18N
         jLabel6.setText(bundle.getString("DocumentViewerPanel.jLabel6.text")); // NOI18N
         jLabel6.setName("jLabel6"); // NOI18N
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel3.setText(bundle.getString("DocumentViewerPanel.jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel5.setText(bundle.getString("DocumentViewerPanel.jLabel5.text")); // NOI18N
         jLabel5.setName("jLabel5"); // NOI18N
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel8.setText(bundle.getString("DocumentViewerPanel.jLabel8.text")); // NOI18N
         jLabel8.setName("jLabel8"); // NOI18N
 
@@ -178,10 +140,10 @@ public class DocumentViewerPanel extends javax.swing.JPanel {
                     .addComponent(jLabel8))
                 .addGap(22, 22, 22)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField7, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
-                    .addComponent(jFormattedTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
-                    .addComponent(jFormattedTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
-                    .addComponent(jFormattedTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)))
+                    .addComponent(jTextField7, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
+                    .addComponent(jFormattedTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
+                    .addComponent(jFormattedTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
+                    .addComponent(jFormattedTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -216,15 +178,12 @@ public class DocumentViewerPanel extends javax.swing.JPanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, sourceBean, org.jdesktop.beansbinding.ELProperty.create("${referenceNr}"), jTextField4, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel2.setText(bundle.getString("DocumentViewerPanel.jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel4.setText(bundle.getString("DocumentViewerPanel.jLabel4.text")); // NOI18N
         jLabel4.setName("jLabel4"); // NOI18N
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel1.setText(bundle.getString("DocumentViewerPanel.jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
 
@@ -240,7 +199,6 @@ public class DocumentViewerPanel extends javax.swing.JPanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, sourceBean, org.jdesktop.beansbinding.ELProperty.create("${archiveDocument.name}"), browseControl1, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel7.setText(bundle.getString("DocumentViewerPanel.jLabel7.text")); // NOI18N
         jLabel7.setName("jLabel7"); // NOI18N
 

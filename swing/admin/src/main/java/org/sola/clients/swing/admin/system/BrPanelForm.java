@@ -34,7 +34,6 @@ import java.util.ResourceBundle;
 import javax.swing.JFormattedTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import org.jdesktop.application.Action;
 import org.sola.clients.beans.referencedata.ApplicationActionTypeListBean;
 import org.sola.clients.beans.referencedata.BrSeverityTypeListBean;
 import org.sola.clients.beans.referencedata.BrTechnicalTypeListBean;
@@ -43,6 +42,7 @@ import org.sola.clients.beans.referencedata.RegistrationStatusTypeListBean;
 import org.sola.clients.beans.referencedata.RequestTypeListBean;
 import org.sola.clients.beans.referencedata.RrrTypeListBean;
 import org.sola.clients.beans.referencedata.ServiceActionTypeListBean;
+import org.sola.clients.beans.security.RoleBean;
 import org.sola.clients.beans.system.BrBean;
 import org.sola.clients.beans.system.BrDefinitionBean;
 import org.sola.clients.beans.system.BrValidationBean;
@@ -523,7 +523,6 @@ public class BrPanelForm extends ContentPanel {
 
         pnlBr.setName("pnlBr"); // NOI18N
 
-        tabsPanel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         tabsPanel.setName("tabsPanel"); // NOI18N
 
         jPanel6.setName("jPanel6"); // NOI18N
@@ -533,13 +532,11 @@ public class BrPanelForm extends ContentPanel {
 
         jPanel1.setName("jPanel1"); // NOI18N
 
-        txtDisplayName.setFont(new java.awt.Font("Tahoma", 0, 12));
         txtDisplayName.setName("txtDisplayName"); // NOI18N
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${br.displayName}"), txtDisplayName, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         jLabel1.setText(bundle.getString("BrPanelForm.jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
@@ -550,7 +547,7 @@ public class BrPanelForm extends ContentPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addContainerGap(193, Short.MAX_VALUE))
+                .addContainerGap(200, Short.MAX_VALUE))
             .addComponent(txtDisplayName, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
@@ -566,12 +563,10 @@ public class BrPanelForm extends ContentPanel {
 
         jPanel2.setName("jPanel2"); // NOI18N
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         jLabel5.setText(bundle.getString("BrPanelForm.jLabel5.text")); // NOI18N
         jLabel5.setName("jLabel5"); // NOI18N
 
-        cbxTechnicalType.setFont(new java.awt.Font("Tahoma", 0, 12));
         cbxTechnicalType.setName("cbxTechnicalType"); // NOI18N
 
         org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${brTechnicalTypes}");
@@ -586,7 +581,7 @@ public class BrPanelForm extends ContentPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jLabel5)
-                .addContainerGap(183, Short.MAX_VALUE))
+                .addContainerGap(194, Short.MAX_VALUE))
             .addComponent(cbxTechnicalType, 0, 281, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
@@ -605,14 +600,12 @@ public class BrPanelForm extends ContentPanel {
 
         jPanel4.setName("jPanel4"); // NOI18N
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel3.setText(bundle.getString("BrPanelForm.jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
 
         jScrollPane2.setFont(new java.awt.Font("Tahoma", 0, 12));
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
-        txtDescription.setFont(new java.awt.Font("Tahoma", 0, 12));
         txtDescription.setRows(2);
         txtDescription.setName("txtDescription"); // NOI18N
 
@@ -627,7 +620,7 @@ public class BrPanelForm extends ContentPanel {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(jLabel3)
-                .addContainerGap(513, Short.MAX_VALUE))
+                .addContainerGap(520, Short.MAX_VALUE))
             .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 577, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
@@ -635,21 +628,19 @@ public class BrPanelForm extends ContentPanel {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE))
         );
 
         jPanel10.add(jPanel4);
 
         jPanel5.setName("jPanel5"); // NOI18N
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel4.setText(bundle.getString("BrPanelForm.jLabel4.text")); // NOI18N
         jLabel4.setName("jLabel4"); // NOI18N
 
         jScrollPane3.setFont(new java.awt.Font("Tahoma", 0, 12));
         jScrollPane3.setName("jScrollPane3"); // NOI18N
 
-        txtTechnicalDescription.setFont(new java.awt.Font("Tahoma", 0, 12));
         txtTechnicalDescription.setRows(2);
         txtTechnicalDescription.setTabSize(2);
         txtTechnicalDescription.setName("txtTechnicalDescription"); // NOI18N
@@ -665,7 +656,7 @@ public class BrPanelForm extends ContentPanel {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addComponent(jLabel4)
-                .addContainerGap(459, Short.MAX_VALUE))
+                .addContainerGap(474, Short.MAX_VALUE))
             .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 577, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
@@ -673,12 +664,11 @@ public class BrPanelForm extends ContentPanel {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE))
         );
 
         jPanel10.add(jPanel5);
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel2.setText(bundle.getString("BrPanelForm.jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
 
@@ -727,7 +717,7 @@ public class BrPanelForm extends ContentPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE)
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -761,7 +751,6 @@ public class BrPanelForm extends ContentPanel {
         jToolBar1.setRollover(true);
         jToolBar1.setName("jToolBar1"); // NOI18N
 
-        btnAddDefinition.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnAddDefinition.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
         btnAddDefinition.setText(bundle.getString("BrPanelForm.btnAddDefinition.text")); // NOI18N
         btnAddDefinition.setFocusable(false);
@@ -775,7 +764,6 @@ public class BrPanelForm extends ContentPanel {
         });
         jToolBar1.add(btnAddDefinition);
 
-        btnEditDefinition.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnEditDefinition.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/pencil.png"))); // NOI18N
         btnEditDefinition.setText(bundle.getString("BrPanelForm.btnEditDefinition.text")); // NOI18N
         btnEditDefinition.setFocusable(false);
@@ -789,7 +777,6 @@ public class BrPanelForm extends ContentPanel {
         });
         jToolBar1.add(btnEditDefinition);
 
-        btnRemoveDefinition.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnRemoveDefinition.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
         btnRemoveDefinition.setText(bundle.getString("BrPanelForm.btnRemoveDefinition.text")); // NOI18N
         btnRemoveDefinition.setFocusable(false);
@@ -820,7 +807,7 @@ public class BrPanelForm extends ContentPanel {
                 .addContainerGap()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -834,7 +821,6 @@ public class BrPanelForm extends ContentPanel {
         jToolBar2.setRollover(true);
         jToolBar2.setName("jToolBar2"); // NOI18N
 
-        btnAddValidation.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnAddValidation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
         btnAddValidation.setText(bundle.getString("BrPanelForm.btnAddValidation.text")); // NOI18N
         btnAddValidation.setFocusable(false);
@@ -848,7 +834,6 @@ public class BrPanelForm extends ContentPanel {
         });
         jToolBar2.add(btnAddValidation);
 
-        btnEditValidation.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnEditValidation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/pencil.png"))); // NOI18N
         btnEditValidation.setText(bundle.getString("BrPanelForm.btnEditValidation.text")); // NOI18N
         btnEditValidation.setFocusable(false);
@@ -862,7 +847,6 @@ public class BrPanelForm extends ContentPanel {
         });
         jToolBar2.add(btnEditValidation);
 
-        btnRemoveValidation.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnRemoveValidation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
         btnRemoveValidation.setText(bundle.getString("BrPanelForm.btnRemoveValidation.text")); // NOI18N
         btnRemoveValidation.setFocusable(false);
@@ -916,7 +900,7 @@ public class BrPanelForm extends ContentPanel {
             .addGroup(jPanel21Layout.createSequentialGroup()
                 .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE))
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
@@ -945,7 +929,6 @@ public class BrPanelForm extends ContentPanel {
         jToolBar3.setRollover(true);
         jToolBar3.setName("jToolBar3"); // NOI18N
 
-        btnSaveBr.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnSaveBr.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/save.png"))); // NOI18N
         btnSaveBr.setText(bundle.getString("BrPanelForm.btnSaveBr.text")); // NOI18N
         btnSaveBr.setName("btnSaveBr"); // NOI18N
@@ -1274,7 +1257,7 @@ public class BrPanelForm extends ContentPanel {
         jToolBar4.setRollover(true);
         jToolBar4.setName("jToolBar4"); // NOI18N
 
-        btnSaveBrValidation.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnSaveBrValidation.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnSaveBrValidation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/save.png"))); // NOI18N
         btnSaveBrValidation.setText(bundle.getString("BrPanelForm.btnSaveBrValidation.text")); // NOI18N
         btnSaveBrValidation.setName("btnSaveBrValidation"); // NOI18N
@@ -1311,7 +1294,7 @@ public class BrPanelForm extends ContentPanel {
 
         pnlBrDefinition.setName("pnlBrDefinition"); // NOI18N
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         jLabel6.setText(bundle.getString("BrPanelForm.jLabel6.text")); // NOI18N
         jLabel6.setName("jLabel6"); // NOI18N
@@ -1324,7 +1307,7 @@ public class BrPanelForm extends ContentPanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${brDefinition.activeFrom}"), txtActiveFrom, org.jdesktop.beansbinding.BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         jLabel8.setText(bundle.getString("BrPanelForm.jLabel8.text")); // NOI18N
         jLabel8.setName("jLabel8"); // NOI18N
@@ -1332,7 +1315,7 @@ public class BrPanelForm extends ContentPanel {
         jScrollPane5.setName("jScrollPane5"); // NOI18N
 
         txtBody.setColumns(20);
-        txtBody.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtBody.setFont(new java.awt.Font("Tahoma", 0, 12));
         txtBody.setRows(5);
         txtBody.setName("txtBody"); // NOI18N
 
@@ -1383,7 +1366,7 @@ public class BrPanelForm extends ContentPanel {
         jToolBar5.setRollover(true);
         jToolBar5.setName("jToolBar5"); // NOI18N
 
-        btnSaveBrDefinition.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnSaveBrDefinition.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnSaveBrDefinition.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/save.png"))); // NOI18N
         btnSaveBrDefinition.setText(bundle.getString("BrPanelForm.btnSaveBrDefinition.text")); // NOI18N
         btnSaveBrDefinition.setName("btnSaveBrDefinition"); // NOI18N

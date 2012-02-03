@@ -199,9 +199,6 @@
                         <Property name="componentPopupMenu" type="javax.swing.JPopupMenu" editor="org.netbeans.modules.form.ComponentChooserEditor">
                           <ComponentRef name="popupRoles"/>
                         </Property>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="new java.awt.Font(&quot;Thaoma&quot;, 0, 12)" type="code"/>
-                        </Property>
                         <Property name="name" type="java.lang.String" value="tablePartyRole" noResource="true"/>
                         <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
                           <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
@@ -233,9 +230,6 @@
                   <SubComponents>
                     <Component class="javax.swing.JComboBox" name="cbxPartyRoleTypes">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="new java.awt.Font(&quot;Thaoma&quot;, 0, 12)" type="code"/>
-                        </Property>
                         <Property name="name" type="java.lang.String" value="cbxPartyRoleTypes" noResource="true"/>
                       </Properties>
                       <BindingProperties>
@@ -265,9 +259,6 @@
                         <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                           <action class="org.sola.clients.swing.ui.party.PartyPanel" id="addRole" methodName="addRole"/>
                         </Property>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
-                        </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="org/sola/clients/swing/ui/party/Bundle.properties" key="PartyPanel.btnAddRole.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                         </Property>
@@ -279,9 +270,6 @@
                       <Properties>
                         <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                           <action class="org.sola.clients.swing.ui.party.PartyPanel" id="removeRole" methodName="removeRole"/>
-                        </Property>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
                         </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="org/sola/clients/swing/ui/party/Bundle.properties" key="PartyPanel.btnRemoveRole.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
@@ -331,9 +319,6 @@
                   <SubComponents>
                     <Component class="javax.swing.JLabel" name="labName">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
-                        </Property>
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                           <Image iconType="3" name="/images/common/red_asterisk.gif"/>
                         </Property>
@@ -346,9 +331,6 @@
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtFirstName">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="new java.awt.Font(&quot;Nepali&quot;, 0, 12)" type="code"/>
-                        </Property>
                         <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="f0" green="f0" red="f0" type="rgb"/>
                         </Property>
@@ -392,9 +374,6 @@
                   <SubComponents>
                     <Component class="javax.swing.JLabel" name="labLastName">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
-                        </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="org/sola/clients/swing/ui/party/Bundle.properties" key="ApplicationForm.labLastName.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                         </Property>
@@ -404,9 +383,6 @@
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtLastName">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="new java.awt.Font(&quot;Thaoma&quot;, 0, 12)" type="code"/>
-                        </Property>
                         <Property name="name" type="java.lang.String" value="txtLastName" noResource="true"/>
                       </Properties>
                       <BindingProperties>
@@ -447,9 +423,6 @@
                   <SubComponents>
                     <Component class="javax.swing.JLabel" name="labIdType">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
-                        </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="org/sola/clients/swing/ui/party/Bundle.properties" key="PartyPanel.labIdType.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                         </Property>
@@ -460,9 +433,6 @@
                       <Properties>
                         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="e0" green="f4" red="e2" type="rgb"/>
-                        </Property>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="new java.awt.Font(&quot;Thaoma&quot;, 0, 12)" type="code"/>
                         </Property>
                         <Property name="name" type="java.lang.String" value="cbxIdType" noResource="true"/>
                         <Property name="renderer" type="javax.swing.ListCellRenderer" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -505,9 +475,6 @@
                   <SubComponents>
                     <Component class="javax.swing.JLabel" name="labIdref">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
-                        </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="org/sola/clients/swing/ui/party/Bundle.properties" key="PartyPanel.labIdref.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                         </Property>
@@ -516,9 +483,6 @@
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtIdref">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="new java.awt.Font(&quot;Thaoma&quot;, 0, 12)" type="code"/>
-                        </Property>
                         <Property name="name" type="java.lang.String" value="txtIdref" noResource="true"/>
                       </Properties>
                       <BindingProperties>
@@ -555,9 +519,6 @@
                   <SubComponents>
                     <Component class="javax.swing.JLabel" name="lblGender">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
-                        </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="org/sola/clients/swing/ui/party/Bundle.properties" key="PartyPanel.labGender.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                         </Property>
@@ -571,9 +532,6 @@
                       <Properties>
                         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="e0" green="f4" red="e2" type="rgb"/>
-                        </Property>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="new java.awt.Font(&quot;Thaoma&quot;, 0, 12)" type="code"/>
                         </Property>
                         <Property name="name" type="java.lang.String" value="cbxGender" noResource="true"/>
                         <Property name="renderer" type="javax.swing.ListCellRenderer" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -616,9 +574,6 @@
                   <SubComponents>
                     <Component class="javax.swing.JLabel" name="labAddress">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
-                        </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="org/sola/clients/swing/ui/party/Bundle.properties" key="PartyPanel.labAddress.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                         </Property>
@@ -627,9 +582,6 @@
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtAddress">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="new java.awt.Font(&quot;Thaoma&quot;, 0, 12)" type="code"/>
-                        </Property>
                         <Property name="name" type="java.lang.String" value="txtAddress" noResource="true"/>
                       </Properties>
                       <BindingProperties>
@@ -697,7 +649,7 @@
                       <Component id="groupPanel2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="jPanel18" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="42" max="32767" attributes="0"/>
+                      <EmptySpace pref="47" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -743,9 +695,6 @@
                   <SubComponents>
                     <Component class="javax.swing.JLabel" name="labFatherFirstName">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
-                        </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="org/sola/clients/swing/ui/party/Bundle.properties" key="PartyPanel.labFatherFirstName.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                         </Property>
@@ -754,9 +703,6 @@
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtFatherFirstName">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="new java.awt.Font(&quot;Thaoma&quot;, 0, 12)" type="code"/>
-                        </Property>
                         <Property name="name" type="java.lang.String" value="txtFatherFirstName" noResource="true"/>
                       </Properties>
                       <BindingProperties>
@@ -777,7 +723,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="labFatherLastName" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="132" max="32767" attributes="0"/>
+                              <EmptySpace pref="143" max="32767" attributes="0"/>
                           </Group>
                           <Component id="txtFatherLastName" alignment="0" pref="232" max="32767" attributes="1"/>
                       </Group>
@@ -796,9 +742,6 @@
                   <SubComponents>
                     <Component class="javax.swing.JLabel" name="labFatherLastName">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
-                        </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="org/sola/clients/swing/ui/party/Bundle.properties" key="PartyPanel.labFatherLastName.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                         </Property>
@@ -807,9 +750,6 @@
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtFatherLastName">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="new java.awt.Font(&quot;Thaoma&quot;, 0, 12)" type="code"/>
-                        </Property>
                         <Property name="name" type="java.lang.String" value="txtFatherLastName" noResource="true"/>
                       </Properties>
                       <BindingProperties>
@@ -830,7 +770,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
                               <Component id="labAlias" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="205" max="32767" attributes="0"/>
+                              <EmptySpace pref="206" max="32767" attributes="0"/>
                           </Group>
                           <Component id="txtAlias" alignment="0" pref="232" max="32767" attributes="1"/>
                       </Group>
@@ -849,9 +789,6 @@
                   <SubComponents>
                     <Component class="javax.swing.JLabel" name="labAlias">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
-                        </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="org/sola/clients/swing/ui/party/Bundle.properties" key="PartyPanel.labAlias.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                         </Property>
@@ -860,9 +797,6 @@
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtAlias">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="new java.awt.Font(&quot;Thaoma&quot;, 0, 12)" type="code"/>
-                        </Property>
                         <Property name="name" type="java.lang.String" value="txtAlias" noResource="true"/>
                       </Properties>
                       <BindingProperties>
@@ -897,7 +831,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="labPhone" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="193" max="32767" attributes="0"/>
+                              <EmptySpace pref="198" max="32767" attributes="0"/>
                           </Group>
                           <Component id="txtPhone" alignment="0" pref="232" max="32767" attributes="1"/>
                       </Group>
@@ -916,9 +850,6 @@
                   <SubComponents>
                     <Component class="javax.swing.JLabel" name="labPhone">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
-                        </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="org/sola/clients/swing/ui/party/Bundle.properties" key="PartyPanel.labPhone.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                         </Property>
@@ -927,9 +858,6 @@
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtPhone">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="new java.awt.Font(&quot;Thaoma&quot;, 0, 12)" type="code"/>
-                        </Property>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[15, 2147483647]"/>
                         </Property>
@@ -957,7 +885,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="labMobile" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="194" max="32767" attributes="0"/>
+                              <EmptySpace pref="198" max="32767" attributes="0"/>
                           </Group>
                           <Component id="txtMobile" alignment="0" pref="232" max="32767" attributes="1"/>
                       </Group>
@@ -976,9 +904,6 @@
                   <SubComponents>
                     <Component class="javax.swing.JTextField" name="txtMobile">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="new java.awt.Font(&quot;Thaoma&quot;, 0, 12)" type="code"/>
-                        </Property>
                         <Property name="name" type="java.lang.String" value="txtMobile" noResource="true"/>
                       </Properties>
                       <BindingProperties>
@@ -989,9 +914,6 @@
                     </Component>
                     <Component class="javax.swing.JLabel" name="labMobile">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
-                        </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="org/sola/clients/swing/ui/party/Bundle.properties" key="PartyPanel.labMobile.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                         </Property>
@@ -1029,9 +951,6 @@
                   <SubComponents>
                     <Component class="javax.swing.JTextField" name="txtFax">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="new java.awt.Font(&quot;Thaoma&quot;, 0, 12)" type="code"/>
-                        </Property>
                         <Property name="name" type="java.lang.String" value="txtFax" noResource="true"/>
                       </Properties>
                       <BindingProperties>
@@ -1046,9 +965,6 @@
                     </Component>
                     <Component class="javax.swing.JLabel" name="labFax">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
-                        </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="org/sola/clients/swing/ui/party/Bundle.properties" key="PartyPanel.labFax.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                         </Property>
@@ -1086,9 +1002,6 @@
                   <SubComponents>
                     <Component class="javax.swing.JLabel" name="labPreferredWay">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
-                        </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="org/sola/clients/swing/ui/party/Bundle.properties" key="PartyPanel.labPreferredWay.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                         </Property>
@@ -1099,9 +1012,6 @@
                       <Properties>
                         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="e0" green="f4" red="e2" type="rgb"/>
-                        </Property>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="new java.awt.Font(&quot;Thaoma&quot;, 0, 12)" type="code"/>
                         </Property>
                         <Property name="name" type="java.lang.String" value="cbxCommunicationWay" noResource="true"/>
                         <Property name="renderer" type="javax.swing.ListCellRenderer" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -1129,7 +1039,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="labEmail" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="197" max="32767" attributes="0"/>
+                              <EmptySpace pref="200" max="32767" attributes="0"/>
                           </Group>
                           <Component id="txtEmail" alignment="0" pref="232" max="32767" attributes="1"/>
                       </Group>
@@ -1148,9 +1058,6 @@
                   <SubComponents>
                     <Component class="javax.swing.JTextField" name="txtEmail">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="new java.awt.Font(&quot;Thaoma&quot;, 0, 12)" type="code"/>
-                        </Property>
                         <Property name="name" type="java.lang.String" value="txtEmail" noResource="true"/>
                       </Properties>
                       <BindingProperties>
@@ -1165,9 +1072,6 @@
                     </Component>
                     <Component class="javax.swing.JLabel" name="labEmail">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
-                        </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="org/sola/clients/swing/ui/party/Bundle.properties" key="PartyPanel.labEmail.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                         </Property>
@@ -1198,9 +1102,6 @@
         <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
           <ComponentRef name="buttonGroup1"/>
         </Property>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tahoma" size="12" style="0"/>
-        </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
           <ResourceString bundle="org/sola/clients/swing/ui/party/Bundle.properties" key="PartyPanel.entityButton.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
         </Property>
@@ -1217,9 +1118,6 @@
       <Properties>
         <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
           <ComponentRef name="buttonGroup1"/>
-        </Property>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tahoma" size="12" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
           <ResourceString bundle="org/sola/clients/swing/ui/party/Bundle.properties" key="PartyPanel.individualButton.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
