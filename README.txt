@@ -3,6 +3,6 @@ Clients repository for the Solutions for Open Land Administration
 and SOLA Admin client applications along with projects supporting
 client side functions.
 
-SOLA uses multiple Git repositories for managing its code base. These
+SOLA uses multiple Git repositories for managing its code base.
 The code repository is the super/parent repository. Refer to the 
 README in that repository for details on all SOLA Git repositories. 
