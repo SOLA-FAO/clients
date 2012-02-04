@@ -1,0 +1,14 @@
+# Nested GIT Repository folders to ignore
+
+# Identifies the subfolders and files to ignore from the 
+# Subfolders to ignore
+target/
+logs/
+wsdl/
+
+# Files to ignore 
+catalog.xml
+Thumbs.db
+thumbs.db
+*.pdf
+*.log
