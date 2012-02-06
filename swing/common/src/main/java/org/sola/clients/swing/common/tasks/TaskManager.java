@@ -27,33 +27,27 @@
  */
 package org.sola.clients.swing.common.tasks;
 
-import org.jdesktop.application.Application;
-import org.jdesktop.application.ApplicationContext;
-import org.jdesktop.application.Task;
-import org.jdesktop.application.TaskMonitor;
-import org.jdesktop.application.TaskService;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.util.HashMap;
+import javax.swing.SwingWorker.StateValue;
+import org.sola.clients.swing.common.DefaultExceptionHandler;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
 /**
- * This singleton class provides methods to add new tasks to the 
- * {@link TaskMonitor}. It holds <code>TaskMonitor</code> instance and allows to
- * check for the running tasks.
+ * This singleton class provides methods to run new tasks and monitor them to 
+ * indicate long running processes.
  */
 public class TaskManager {
 
-    private ApplicationContext appContext;
-    private TaskMonitor taskMonitor;
-    private TaskService taskService;
-
-    /** 
-     * Creates class instance and initializes {@link ApplicationContext}, 
-     * {@link TaskMonitor} and {@link TaskService} variables.
-     */
+    private HashMap<String, SolaTask> tasks;
+    protected final PropertyChangeSupport propertySupport = new PropertyChangeSupport(this);
+    
+    /** Class constructor. */
     private TaskManager() {
-        appContext = Application.getInstance().getContext();
-        taskMonitor = appContext.getTaskMonitor();
-        taskService = appContext.getTaskService();
+        tasks = new HashMap<String, SolaTask>();
     }
 
     /** Returns the instance of the class. */
@@ -69,30 +63,76 @@ public class TaskManager {
 
     /** 
      * Runs new task.
-     * @param task New task to run.
+     * @param task Task to run.
      */
-    public boolean runTask(Task task) {
-        if (task == null) {
+    public boolean runTask(SolaTask task) {
+        if (task == null || isTaskRunning(task.getId())) {
             return false;
         }
-        int tasksNum = getActiveTasks();
 
-        if (tasksNum > 0) {
+        if (getNumberOfActiveTasks() > 0) {
             MessageUtility.displayMessage(ClientMessage.GENERAL_ACTIVE_TASKS_EXIST,
-                    new Object[]{tasksNum});
+                    new Object[]{getNumberOfActiveTasks()});
             return false;
         }
-        
-        task.addTaskListener(new DefaultTaskListener());
 
-        taskService.execute(task);
-        taskMonitor.setForegroundTask(task);
+        task.addPropertyChangeListener(new PropertyChangeListener() {
 
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                handleTaskEvents(evt);
+            }
+        });
+        tasks.put(task.getId(), task);
+        task.execute();
         return true;
     }
 
+    private void handleTaskEvents(PropertyChangeEvent evt) {
+        String taskId = null;
+        if (evt.getSource() instanceof SolaTask) {
+            taskId = ((SolaTask) evt.getSource()).getId();
+        }
+
+        if (evt.getPropertyName().equals(SolaTask.EVENT_STATE)) {
+            StateValue state = (StateValue) evt.getNewValue();
+            if (state.name().equals(SolaTask.TASK_DONE) && taskId != null) {
+                tasks.remove(taskId);
+            }
+        }
+
+        if (evt.getPropertyName().equals(SolaTask.EXCEPTION_RISED)) {
+            if (Throwable.class.isAssignableFrom(evt.getNewValue().getClass())) {
+                DefaultExceptionHandler.handleException((Throwable) evt.getNewValue());
+            }
+            if (taskId != null) {
+                tasks.remove(taskId);
+            }
+        }
+
+        propertySupport.firePropertyChange(evt);
+    }
+
     /** Returns number of active tasks.*/
-    public int getActiveTasks() {
-        return taskMonitor.getTasks().size();
+    public int getNumberOfActiveTasks() {
+        return tasks.size();
+    }
+
+    /** 
+     * Returns true if task is already running. 
+     * @param taskId The ID of the task to check.
+     */
+    public boolean isTaskRunning(String taskId) {
+        return tasks.containsKey(taskId);
+    }
+
+    /** Registers property change listener. */
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        propertySupport.addPropertyChangeListener(listener);
+    }
+
+    /** Removes property change listener. */
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        propertySupport.removePropertyChangeListener(listener);
     }
 }

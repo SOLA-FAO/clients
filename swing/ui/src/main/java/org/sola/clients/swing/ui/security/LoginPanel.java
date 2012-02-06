@@ -43,18 +43,20 @@ import org.jdesktop.application.TaskListener;
 import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.common.config.ConfigurationManager;
 import org.sola.clients.swing.common.controls.LanguageCombobox;
+import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
+
 /**
  * Allows to authenticate users. 
  */
 public class LoginPanel extends javax.swing.JPanel {
-    
+
     public static final String LOGIN_RESULT = "loginResult";
     private Application application;
     protected JRadioButton previousButton;
-    
+
     /** Create combobox with languages */
     private LanguageCombobox createLanguageCombobox() {
         if (application != null) {
@@ -63,7 +65,7 @@ public class LoginPanel extends javax.swing.JPanel {
             return new LanguageCombobox();
         }
     }
-    
+
     /** Default constructor. */
     public LoginPanel() {
         initComponents();
@@ -80,18 +82,20 @@ public class LoginPanel extends javax.swing.JPanel {
         initComponents();
         pnlThems.setVisible(false);
         txtUsername.requestFocus();
-        
+
         // TODO: REMOVE IN RELEASE!!!
         txtUsername.setText("test");
         txtUserPassword.setText("test");
     }
-      
+
     /** Calls authentication procedure. */
     private void login() {
-        Task t = new Task(application) {
+        SolaTask<Boolean, Object> tw;
+        
+        SolaTask t = new SolaTask<Boolean, Object>() {
 
             @Override
-            protected Object doInBackground() throws Exception {
+            public Boolean doTask() {
                 boolean result = true;
                 try {
                     setMessage(MessageUtility.getLocalizedMessage(
@@ -103,7 +107,6 @@ public class LoginPanel extends javax.swing.JPanel {
                     }
                 } catch (Exception ex) {
                     result = false;
-                    throw ex;
                 } finally {
                     if (!result) {
                         enablePanel(true);
@@ -113,40 +116,14 @@ public class LoginPanel extends javax.swing.JPanel {
                 }
                 return result;
             }
-        };
-
-        t.addTaskListener(new TaskListener() {
+            
             @Override
-            public void doInBackground(TaskEvent te) {
-            }
-
-            @Override
-            public void process(TaskEvent te) {
-            }
-
-            @Override
-            public void succeeded(TaskEvent te) {
-                if(te.getValue()!=null && Boolean.class.isAssignableFrom(te.getValue().getClass())){
-                    fireLoginEvent((Boolean)te.getValue());
+            public void taskDone(){
+                if (get()) {
+                    fireLoginEvent(true);
                 }
             }
-
-            @Override
-            public void failed(TaskEvent te) {
-            }
-
-            @Override
-            public void cancelled(TaskEvent te) {
-            }
-
-            @Override
-            public void interrupted(TaskEvent te) {
-            }
-
-            @Override
-            public void finished(TaskEvent te) {
-            }
-        });
+        };
         TaskManager.getInstance().runTask(t);
     }
 
@@ -165,41 +142,44 @@ public class LoginPanel extends javax.swing.JPanel {
     /** Explicitely sets focus on user name text field.*/
     public void setUserNameFocus() {
         txtUsername.requestFocus();
-         this.getRootPane().setDefaultButton(btnLogin);
+        this.getRootPane().setDefaultButton(btnLogin);
     }
-    
-   /** Sets the backgroundpanel. */
-   class LNFSetter implements ActionListener {
-    String theLNFName;
-    JRadioButton thisButton;
-    String whichButton;
-    LNFSetter(String lnfName, JRadioButton me, String theme) {
-      theLNFName = lnfName;
-      whichButton = theme;
-     }
-       @Override
-    public void actionPerformed(ActionEvent e) {
-      try {
-        LafManager.getInstance().setProperties(whichButton);
-        UIManager.setLookAndFeel(theLNFName);
-        SwingUtilities.updateComponentTreeUI(mainPanel);
-        Object psswdFont = "PasswordField.background";
-        txtUsername.setBackground(UIManager.getColor(psswdFont));
-        txtUserPassword.setBackground(UIManager.getColor(psswdFont));
-        txtUsername.setBackground(UIManager.getColor(psswdFont));
-        Object foreFont = "nimbusBase";
-        jSeparator1.setForeground(UIManager.getColor(foreFont));
-        jSeparator2.setForeground(UIManager.getColor(foreFont));
-        jSeparator3.setForeground(UIManager.getColor(foreFont));
-      
-      } catch (Exception evt) {
-        JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/security/Bundle_en_US").getString("SETLOOKANDFEEL DIDN'T WORK: ") + evt, java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/security/Bundle_en_US").getString("UI FAILURE"),
-            JOptionPane.INFORMATION_MESSAGE);
-        previousButton.setSelected(true); // reset the GUI to agree
-      }
-      previousButton = thisButton;
+
+    /** Sets the backgroundpanel. */
+    class LNFSetter implements ActionListener {
+
+        String theLNFName;
+        JRadioButton thisButton;
+        String whichButton;
+
+        LNFSetter(String lnfName, JRadioButton me, String theme) {
+            theLNFName = lnfName;
+            whichButton = theme;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                LafManager.getInstance().setProperties(whichButton);
+                UIManager.setLookAndFeel(theLNFName);
+                SwingUtilities.updateComponentTreeUI(mainPanel);
+                Object psswdFont = "PasswordField.background";
+                txtUsername.setBackground(UIManager.getColor(psswdFont));
+                txtUserPassword.setBackground(UIManager.getColor(psswdFont));
+                txtUsername.setBackground(UIManager.getColor(psswdFont));
+                Object foreFont = "nimbusBase";
+                jSeparator1.setForeground(UIManager.getColor(foreFont));
+                jSeparator2.setForeground(UIManager.getColor(foreFont));
+                jSeparator3.setForeground(UIManager.getColor(foreFont));
+
+            } catch (Exception evt) {
+                JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/security/Bundle_en_US").getString("SETLOOKANDFEEL DIDN'T WORK: ") + evt, java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/security/Bundle_en_US").getString("UI FAILURE"),
+                        JOptionPane.INFORMATION_MESSAGE);
+                previousButton.setSelected(true); // reset the GUI to agree
+            }
+            previousButton = thisButton;
+        }
     }
- }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -413,7 +393,7 @@ public class LoginPanel extends javax.swing.JPanel {
 
         jSeparator3.setName("jSeparator3"); // NOI18N
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 18));
         jLabel2.setForeground(new java.awt.Color(0, 102, 51));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText(bundle.getString("LoginPanel.jLabel2.text")); // NOI18N
@@ -444,7 +424,7 @@ public class LoginPanel extends javax.swing.JPanel {
         jPanel4.setOpaque(false);
 
         labDescUp.setBackground(new java.awt.Color(153, 153, 153));
-        labDescUp.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        labDescUp.setFont(new java.awt.Font("Tahoma", 1, 10));
         labDescUp.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         labDescUp.setText(bundle.getString("LoginPanel.labDescUp.text")); // NOI18N
         labDescUp.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -505,8 +485,8 @@ public class LoginPanel extends javax.swing.JPanel {
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -540,7 +520,6 @@ public class LoginPanel extends javax.swing.JPanel {
             txtUserPassword.selectAll();
         }
     }//GEN-LAST:event_txtUsernameKeyPressed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton bAutumn;
     private javax.swing.JRadioButton bDefault;

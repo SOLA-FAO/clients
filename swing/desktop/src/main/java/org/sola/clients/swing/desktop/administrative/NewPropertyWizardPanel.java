@@ -18,7 +18,6 @@ package org.sola.clients.swing.desktop.administrative;
 import java.awt.CardLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import org.jdesktop.application.Task;
 import org.sola.clients.beans.administrative.BaUnitBean;
 import org.sola.clients.beans.administrative.BaUnitSearchResultListBean;
 import org.sola.clients.beans.administrative.RrrBean;
@@ -26,8 +25,8 @@ import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationPropertyBean;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.beans.referencedata.StatusConstants;
+import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
-import org.sola.clients.swing.desktop.DesktopApplication;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -114,10 +113,9 @@ public class NewPropertyWizardPanel extends ContentPanel {
 
     /** Sets {@link BaUnitBean} by first and last name part. */
     private void setupBaUnit(final String nameFirstPart, final String nameLastPart) {
-        Task t = new Task(DesktopApplication.getApplication()) {
-
+        SolaTask t = new SolaTask<Void, Void>() {
             @Override
-            protected Object doInBackground() throws Exception {
+            public Void doTask() {
                 setMessage("Getting property object.");
                 BaUnitTO baUnitTO = WSManager.getInstance().getAdministrative().GetBaUnitByCode(nameFirstPart, nameLastPart);
                 BaUnitBean baUnitBean1 = TypeConverters.TransferObjectToBean(baUnitTO, BaUnitBean.class, null);

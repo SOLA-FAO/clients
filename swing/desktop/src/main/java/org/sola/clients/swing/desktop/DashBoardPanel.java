@@ -44,6 +44,7 @@ import org.sola.clients.beans.application.ApplicationSearchResultBean;
 import org.sola.clients.beans.application.ApplicationSearchResultsListBean;
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.swing.common.LafManager;
+import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
@@ -205,10 +206,9 @@ public class DashBoardPanel extends ContentPanel {
             return;
         }
 
-        Task t = new Task(DesktopApplication.getApplication()) {
-
+        SolaTask t = new SolaTask<Void, Void>() {
             @Override
-            protected Object doInBackground() throws Exception {
+            public Void doTask() {
                 setMessage("Opening application form.");
                 PropertyChangeListener listener = new PropertyChangeListener() {
 
@@ -588,10 +588,9 @@ public class DashBoardPanel extends ContentPanel {
 
     /** Refreshes assigned and unassigned application lists. */
     private void refreshApplications() {
-        Task t = new Task(DesktopApplication.getApplication()) {
-
+        SolaTask t = new SolaTask<Void, Void>() {
             @Override
-            protected Object doInBackground() throws Exception {
+            public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessage(
                         ClientMessage.APPLICATION_LOADING_UNASSIGNED).getMessage());
                 unassignedAppListBean.FillUnassigned();

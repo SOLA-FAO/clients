@@ -29,11 +29,11 @@ package org.sola.clients.swing.common.tasks;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ResourceBundle;
 import javax.swing.Timer;
 import javax.swing.Icon;
-import org.jdesktop.application.Application;
-import org.jdesktop.application.ResourceMap;
-import org.jdesktop.application.TaskMonitor;
+import javax.swing.ImageIcon;
+import javax.swing.SwingWorker.StateValue;
 
 /**
  * Component to display activity of the various tasks.
@@ -44,60 +44,55 @@ public class TaskPanel extends javax.swing.JPanel {
     public TaskPanel() {
         initComponents();
 
-        // status bar initialization - message timeout, idle icon and busy animation, etc
-        ResourceMap resourceMap = Application.getInstance().getContext().
-                getResourceMap(TaskPanel.class);
-        int messageTimeout = resourceMap.getInteger("StatusBar.messageTimeout");
+        ResourceBundle resourceBundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/common/tasks/resources/TaskPanel");
 
-        messageTimer = new Timer(messageTimeout, new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                statusMessageLabel.setText("");
-            }
-        });
-
-        messageTimer.setRepeats(false);
-        int busyAnimationRate = resourceMap.getInteger("StatusBar.busyAnimationRate");
+        int busyAnimationRate = Integer.parseInt(resourceBundle.getString("StatusBar.busyAnimationRate"));
         for (int i = 0; i < busyIcons.length; i++) {
-            busyIcons[i] = resourceMap.getIcon("StatusBar.busyIcons[" + i + "]");
+            busyIcons[i] = new ImageIcon(getClass().getResource("/org/sola/clients/swing/common/tasks/resources/busyicons/busy-icon" + i + ".png"));
         }
 
         busyIconTimer = new Timer(busyAnimationRate, new ActionListener() {
+
+            @Override
             public void actionPerformed(ActionEvent e) {
                 busyIconIndex = (busyIconIndex + 1) % busyIcons.length;
                 statusAnimationLabel.setIcon(busyIcons[busyIconIndex]);
             }
         });
-        
-        idleIcon = resourceMap.getIcon("StatusBar.idleIcon");
-        statusAnimationLabel.setIcon(idleIcon);
-        progressBar.setVisible(false);
 
-        // connecting action tasks to status bar via TaskMonitor
-        TaskMonitor taskMonitor = new TaskMonitor(Application.getInstance().getContext());
-        taskMonitor.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+        idleIcon = new ImageIcon(getClass().getResource("/org/sola/clients/swing/common/tasks/resources/busyicons/idle-icon.png"));
+        statusAnimationLabel.setIcon(idleIcon);
+        pnlProgressBar.setVisible(false);
+
+        TaskManager.getInstance().addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+
+            @Override
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
                 String propertyName = evt.getPropertyName();
-                if ("started".equals(propertyName)) {
-                    if (!busyIconTimer.isRunning()) {
-                        statusAnimationLabel.setIcon(busyIcons[0]);
-                        busyIconIndex = 0;
-                        busyIconTimer.start();
+
+                if (evt.getPropertyName().equals(SolaTask.EVENT_STATE)) {
+                    StateValue state = (StateValue) evt.getNewValue();
+                    if (state.name().equals(SolaTask.TASK_STARTED)) {
+                        pnlProgressBar.setVisible(true);
+                        if (!busyIconTimer.isRunning()) {
+                            statusAnimationLabel.setIcon(busyIcons[0]);
+                            busyIconIndex = 0;
+                            busyIconTimer.start();
+                        }
+                        progressBar.setIndeterminate(true);
                     }
-                    progressBar.setVisible(true);
-                    progressBar.setIndeterminate(true);
-                } else if ("done".equals(propertyName)) {
-                    busyIconTimer.stop();
-                    statusMessageLabel.setText(null);
-                    statusAnimationLabel.setIcon(idleIcon);
-                    progressBar.setVisible(false);
-                    progressBar.setValue(0);
-                } else if ("message".equals(propertyName)) {
+                    if (state.name().equals(SolaTask.TASK_DONE)) {
+                        busyIconTimer.stop();
+                        statusMessageLabel.setText(null);
+                        statusAnimationLabel.setIcon(idleIcon);
+                        pnlProgressBar.setVisible(false);
+                        progressBar.setValue(0);
+                    }
+                } else if (SolaTask.EVENT_MESSAGE.equals(propertyName)) {
                     String text = (String) (evt.getNewValue());
                     statusMessageLabel.setText((text == null) ? "" : text);
-                    //messageTimer.restart();
-                } else if ("progress".equals(propertyName)) {
+                } else if (SolaTask.EVENT_PROGRESS.equals(propertyName)) {
                     int value = (Integer) (evt.getNewValue());
-                    progressBar.setVisible(true);
                     progressBar.setIndeterminate(false);
                     progressBar.setValue(value);
                 }
@@ -109,47 +104,79 @@ public class TaskPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        statusMessageLabel = new javax.swing.JLabel();
-        progressBar = new javax.swing.JProgressBar();
+        pnlProgressBar = new javax.swing.JPanel();
         statusAnimationLabel = new javax.swing.JLabel();
+        progressBar = new javax.swing.JProgressBar();
+        jPanel1 = new javax.swing.JPanel();
+        statusMessageLabel = new javax.swing.JLabel();
 
         setName("Form"); // NOI18N
         setOpaque(false);
 
-        statusMessageLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/common/tasks/Bundle"); // NOI18N
-        statusMessageLabel.setText(bundle.getString("TaskPanel.statusMessageLabel.text")); // NOI18N
-        statusMessageLabel.setName("statusMessageLabel"); // NOI18N
+        pnlProgressBar.setName("pnlProgressBar"); // NOI18N
+
+        statusAnimationLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        statusAnimationLabel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        statusAnimationLabel.setName("statusAnimationLabel"); // NOI18N
 
         progressBar.setName("progressBar"); // NOI18N
 
-        statusAnimationLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        statusAnimationLabel.setName("statusAnimationLabel"); // NOI18N
+        javax.swing.GroupLayout pnlProgressBarLayout = new javax.swing.GroupLayout(pnlProgressBar);
+        pnlProgressBar.setLayout(pnlProgressBarLayout);
+        pnlProgressBarLayout.setHorizontalGroup(
+            pnlProgressBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlProgressBarLayout.createSequentialGroup()
+                .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(statusAnimationLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 20, Short.MAX_VALUE))
+        );
+        pnlProgressBarLayout.setVerticalGroup(
+            pnlProgressBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(statusAnimationLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 14, Short.MAX_VALUE)
+            .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        jPanel1.setName("jPanel1"); // NOI18N
+
+        statusMessageLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/common/tasks/Bundle"); // NOI18N
+        statusMessageLabel.setText(bundle.getString("TaskPanel.statusMessageLabel.text")); // NOI18N
+        statusMessageLabel.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        statusMessageLabel.setName("statusMessageLabel"); // NOI18N
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(statusMessageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(statusMessageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 14, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(statusMessageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(statusAnimationLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pnlProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(statusAnimationLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 14, Short.MAX_VALUE)
-            .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(statusMessageLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 14, Short.MAX_VALUE)
+            .addComponent(jPanel1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlProgressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel pnlProgressBar;
     private javax.swing.JProgressBar progressBar;
     private javax.swing.JLabel statusAnimationLabel;
     private javax.swing.JLabel statusMessageLabel;
     // End of variables declaration//GEN-END:variables
-    private final Timer messageTimer;
     private final Timer busyIconTimer;
     private final Icon idleIcon;
     private final Icon[] busyIcons = new Icon[15];

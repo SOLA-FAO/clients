@@ -35,15 +35,14 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import org.jdesktop.application.Action;
-import org.jdesktop.application.Task;
 import org.sola.clients.beans.application.ApplicationSearchParamsBean;
 import org.sola.clients.beans.application.ApplicationSearchResultBean;
 import org.sola.clients.beans.application.ApplicationSearchResultsListBean;
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.common.controls.CalendarForm;
+import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
-import org.sola.clients.swing.desktop.DesktopApplication;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.common.RolesConstants;
@@ -696,11 +695,10 @@ public class ApplicationSearchPanel extends ContentPanel {
                 || appList.getSelectedApplication() == null) {
             return;
         }
-
-        Task t = new Task(DesktopApplication.getApplication()) {
-
+                
+        SolaTask t = new SolaTask<Void, Void>() {
             @Override
-            protected Object doInBackground() throws Exception {
+            public Void doTask() {
                 setMessage("Opening application form.");
                 if (getMainContentPanel() != null) {
                     ApplicationPanel applicationPanel = new ApplicationPanel(
