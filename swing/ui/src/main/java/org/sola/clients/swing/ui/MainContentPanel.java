@@ -245,13 +245,27 @@ public class MainContentPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         pnlContent = new javax.swing.JPanel();
+        dummyPanel = new javax.swing.JPanel();
 
         setName("Form"); // NOI18N
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance().getContext().getResourceMap(MainContentPanel.class);
-        pnlContent.setBackground(resourceMap.getColor("pnlContent.background")); // NOI18N
         pnlContent.setName("pnlContent"); // NOI18N
         pnlContent.setLayout(new java.awt.CardLayout());
+
+        dummyPanel.setName("dummyPanel"); // NOI18N
+
+        javax.swing.GroupLayout dummyPanelLayout = new javax.swing.GroupLayout(dummyPanel);
+        dummyPanel.setLayout(dummyPanelLayout);
+        dummyPanelLayout.setHorizontalGroup(
+            dummyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 336, Short.MAX_VALUE)
+        );
+        dummyPanelLayout.setVerticalGroup(
+            dummyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 223, Short.MAX_VALUE)
+        );
+
+        pnlContent.add(dummyPanel, "card2");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -265,6 +279,7 @@ public class MainContentPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel dummyPanel;
     private javax.swing.JPanel pnlContent;
     // End of variables declaration//GEN-END:variables
 }

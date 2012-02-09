@@ -183,8 +183,8 @@ public class NewPropertyWizardPanel extends ContentPanel {
         setHeaderPanel(headerPanel);
 
         headerPanel.setName("headerPanel"); // NOI18N
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/application/Bundle"); // NOI18N
-        headerPanel.setTitleText(bundle.getString("NewPropertyWizardPanel.headerPanel.titleText")); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
+        headerPanel.setTitleText(bundle.getString("NewPropertyWizardPanel.headerPanel.titleText_1")); // NOI18N
 
         jScrollPane5.setBorder(null);
         jScrollPane5.setName("jScrollPane5"); // NOI18N
@@ -220,16 +220,16 @@ public class NewPropertyWizardPanel extends ContentPanel {
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();
         jScrollPane2.setViewportView(tableRights);
+        java.util.ResourceBundle bundle1 = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/application/Bundle"); // NOI18N
         tableRights.getColumnModel().getColumn(0).setPreferredWidth(30);
         tableRights.getColumnModel().getColumn(0).setMaxWidth(30);
-        tableRights.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("NewPropertyWizardPanel.tableRights.columnModel.title0")); // NOI18N
-        tableRights.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("NewPropertyWizardPanel.tableRights.columnModel.title1")); // NOI18N
+        tableRights.getColumnModel().getColumn(0).setHeaderValue(bundle1.getString("NewPropertyWizardPanel.tableRights.columnModel.title0")); // NOI18N
+        tableRights.getColumnModel().getColumn(1).setHeaderValue(bundle1.getString("NewPropertyWizardPanel.tableRights.columnModel.title1")); // NOI18N
         tableRights.getColumnModel().getColumn(2).setPreferredWidth(120);
         tableRights.getColumnModel().getColumn(2).setMaxWidth(120);
-        tableRights.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("NewPropertyWizardPanel.tableRights.columnModel.title2")); // NOI18N
+        tableRights.getColumnModel().getColumn(2).setHeaderValue(bundle1.getString("NewPropertyWizardPanel.tableRights.columnModel.title2")); // NOI18N
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12));
-        jLabel1.setText(bundle.getString("NewPropertyWizardPanel.jLabel1.text")); // NOI18N
+        jLabel1.setText(bundle.getString("NewPropertyWizardPanel.jLabel1.text_1")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -246,7 +246,7 @@ public class NewPropertyWizardPanel extends ContentPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jLabel1)
                 .addGap(6, 6, 6)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE))
         );
 
         jPanel6.add(jPanel2);
@@ -279,13 +279,12 @@ public class NewPropertyWizardPanel extends ContentPanel {
         jScrollPane4.setViewportView(tableNewParcels);
         tableNewParcels.getColumnModel().getColumn(0).setPreferredWidth(30);
         tableNewParcels.getColumnModel().getColumn(0).setMaxWidth(30);
-        tableNewParcels.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("NewPropertyWizardPanel.tableNewParcels.columnModel.title0")); // NOI18N
-        tableNewParcels.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("NewPropertyWizardPanel.tableNewParcels.columnModel.title1")); // NOI18N
-        tableNewParcels.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("NewPropertyWizardPanel.tableNewParcels.columnModel.title2")); // NOI18N
-        tableNewParcels.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("NewPropertyWizardPanel.tableNewParcels.columnModel.title3")); // NOI18N
+        tableNewParcels.getColumnModel().getColumn(0).setHeaderValue(bundle1.getString("NewPropertyWizardPanel.tableNewParcels.columnModel.title0")); // NOI18N
+        tableNewParcels.getColumnModel().getColumn(1).setHeaderValue(bundle1.getString("NewPropertyWizardPanel.tableNewParcels.columnModel.title1")); // NOI18N
+        tableNewParcels.getColumnModel().getColumn(2).setHeaderValue(bundle1.getString("NewPropertyWizardPanel.tableNewParcels.columnModel.title2")); // NOI18N
+        tableNewParcels.getColumnModel().getColumn(3).setHeaderValue(bundle1.getString("NewPropertyWizardPanel.tableNewParcels.columnModel.title3")); // NOI18N
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12));
-        jLabel2.setText(bundle.getString("NewPropertyWizardPanel.jLabel2.text")); // NOI18N
+        jLabel2.setText(bundle.getString("NewPropertyWizardPanel.jLabel2.text_1")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -302,7 +301,7 @@ public class NewPropertyWizardPanel extends ContentPanel {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(jLabel2)
                 .addGap(6, 6, 6)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE))
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE))
         );
 
         jPanel6.add(jPanel4);
@@ -335,13 +334,12 @@ public class NewPropertyWizardPanel extends ContentPanel {
         jScrollPane3.setViewportView(tableCurrentParcels);
         tableCurrentParcels.getColumnModel().getColumn(0).setPreferredWidth(30);
         tableCurrentParcels.getColumnModel().getColumn(0).setMaxWidth(30);
-        tableCurrentParcels.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("NewPropertyWizardPanel.tableCurrentParcels.columnModel.title0")); // NOI18N
-        tableCurrentParcels.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("NewPropertyWizardPanel.tableCurrentParcels.columnModel.title1")); // NOI18N
-        tableCurrentParcels.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("NewPropertyWizardPanel.tableCurrentParcels.columnModel.title2")); // NOI18N
-        tableCurrentParcels.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("NewPropertyWizardPanel.tableCurrentParcels.columnModel.title3")); // NOI18N
+        tableCurrentParcels.getColumnModel().getColumn(0).setHeaderValue(bundle1.getString("NewPropertyWizardPanel.tableCurrentParcels.columnModel.title0")); // NOI18N
+        tableCurrentParcels.getColumnModel().getColumn(1).setHeaderValue(bundle1.getString("NewPropertyWizardPanel.tableCurrentParcels.columnModel.title1")); // NOI18N
+        tableCurrentParcels.getColumnModel().getColumn(2).setHeaderValue(bundle1.getString("NewPropertyWizardPanel.tableCurrentParcels.columnModel.title2")); // NOI18N
+        tableCurrentParcels.getColumnModel().getColumn(3).setHeaderValue(bundle1.getString("NewPropertyWizardPanel.tableCurrentParcels.columnModel.title3")); // NOI18N
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12));
-        jLabel3.setText(bundle.getString("NewPropertyWizardPanel.jLabel3.text")); // NOI18N
+        jLabel3.setText(bundle.getString("NewPropertyWizardPanel.jLabel3.text_1")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
@@ -358,15 +356,14 @@ public class NewPropertyWizardPanel extends ContentPanel {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addComponent(jLabel3)
                 .addGap(6, 6, 6)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE))
         );
 
         jPanel6.add(jPanel5);
 
         jPanel8.setName("jPanel8"); // NOI18N
 
-        btnFinish.setFont(new java.awt.Font("Tahoma", 0, 12));
-        btnFinish.setText(bundle.getString("NewPropertyWizardPanel.btnFinish.text")); // NOI18N
+        btnFinish.setText(bundle.getString("NewPropertyWizardPanel.btnFinish.text_1")); // NOI18N
         btnFinish.setName("btnFinish"); // NOI18N
         btnFinish.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -374,8 +371,7 @@ public class NewPropertyWizardPanel extends ContentPanel {
             }
         });
 
-        btnBackToSelection.setFont(new java.awt.Font("Tahoma", 0, 12));
-        btnBackToSelection.setText(bundle.getString("NewPropertyWizardPanel.btnBackToSelection.text")); // NOI18N
+        btnBackToSelection.setText(bundle.getString("NewPropertyWizardPanel.btnBackToSelection.text_1")); // NOI18N
         btnBackToSelection.setName("btnBackToSelection"); // NOI18N
         btnBackToSelection.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -391,9 +387,7 @@ public class NewPropertyWizardPanel extends ContentPanel {
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitRelTypeListBean, org.jdesktop.beansbinding.ELProperty.create("${selectedBaUnitRelType}"), cbxRelationType, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 12));
-        java.util.ResourceBundle bundle1 = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
-        jLabel4.setText(bundle1.getString("NewPropertyWizardPanel.jLabel4.text")); // NOI18N
+        jLabel4.setText(bundle.getString("NewPropertyWizardPanel.jLabel4.text")); // NOI18N
         jLabel4.setName("jLabel4"); // NOI18N
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
@@ -438,14 +432,13 @@ public class NewPropertyWizardPanel extends ContentPanel {
                 .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(7, 7, 7))
+                .addGap(8, 8, 8))
         );
 
         pnlCards.add(jPanel7, "cardBaUnit");
 
         jPanel1.setName("jPanel1"); // NOI18N
 
-        tabsPropertySelection.setFont(new java.awt.Font("Tahoma", 0, 12));
         tabsPropertySelection.setName("tabsPropertySelection"); // NOI18N
 
         pnlApplicationProperty.setName("pnlApplicationProperty"); // NOI18N
@@ -457,11 +450,11 @@ public class NewPropertyWizardPanel extends ContentPanel {
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${filteredPropertyList}");
         jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, applicationBean, eLProperty, tableApplicationProperty);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${nameFirstpart}"));
-        columnBinding.setColumnName("Name first part");
+        columnBinding.setColumnName("Name Firstpart");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${nameLastpart}"));
-        columnBinding.setColumnName("Name last part");
+        columnBinding.setColumnName("Name Lastpart");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${area}"));
@@ -469,7 +462,7 @@ public class NewPropertyWizardPanel extends ContentPanel {
         columnBinding.setColumnClass(java.math.BigDecimal.class);
         columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${totalValue}"));
-        columnBinding.setColumnName("Value");
+        columnBinding.setColumnName("Total Value");
         columnBinding.setColumnClass(java.math.BigDecimal.class);
         columnBinding.setEditable(false);
         bindingGroup.addBinding(jTableBinding);
@@ -477,9 +470,12 @@ public class NewPropertyWizardPanel extends ContentPanel {
         bindingGroup.addBinding(binding);
 
         jScrollPane1.setViewportView(tableApplicationProperty);
+        tableApplicationProperty.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("NewPropertyWizardPanel.tableApplicationProperty.columnModel.title0")); // NOI18N
+        tableApplicationProperty.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("NewPropertyWizardPanel.tableApplicationProperty.columnModel.title1")); // NOI18N
+        tableApplicationProperty.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("NewPropertyWizardPanel.tableApplicationProperty.columnModel.title2")); // NOI18N
+        tableApplicationProperty.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("NewPropertyWizardPanel.tableApplicationProperty.columnModel.title3")); // NOI18N
 
-        btnSelectFromApplication.setFont(new java.awt.Font("Tahoma", 0, 12));
-        btnSelectFromApplication.setText(bundle.getString("NewPropertyWizardPanel.btnSelectFromApplication.text")); // NOI18N
+        btnSelectFromApplication.setText(bundle1.getString("NewPropertyWizardPanel.btnSelectFromApplication.text")); // NOI18N
         btnSelectFromApplication.setName("btnSelectFromApplication"); // NOI18N
         btnSelectFromApplication.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -502,13 +498,13 @@ public class NewPropertyWizardPanel extends ContentPanel {
             pnlApplicationPropertyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlApplicationPropertyLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnSelectFromApplication)
                 .addContainerGap())
         );
 
-        tabsPropertySelection.addTab(bundle.getString("NewPropertyWizardPanel.pnlApplicationProperty.TabConstraints.tabTitle"), pnlApplicationProperty); // NOI18N
+        tabsPropertySelection.addTab(bundle1.getString("NewPropertyWizardPanel.pnlApplicationProperty.TabConstraints.tabTitle"), pnlApplicationProperty); // NOI18N
 
         jPanel3.setFont(new java.awt.Font("Tahoma", 0, 12));
         jPanel3.setName("jPanel3"); // NOI18N
@@ -516,8 +512,7 @@ public class NewPropertyWizardPanel extends ContentPanel {
         baUnitSearchPanel.setName("baUnitSearchPanel"); // NOI18N
         baUnitSearchPanel.setShowOpenButton(false);
 
-        btnSelectFromSearch.setFont(new java.awt.Font("Tahoma", 0, 12));
-        btnSelectFromSearch.setText(bundle.getString("NewPropertyWizardPanel.btnSelectFromSearch.text")); // NOI18N
+        btnSelectFromSearch.setText(bundle1.getString("NewPropertyWizardPanel.btnSelectFromSearch.text")); // NOI18N
         btnSelectFromSearch.setName("btnSelectFromSearch"); // NOI18N
         btnSelectFromSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -540,13 +535,13 @@ public class NewPropertyWizardPanel extends ContentPanel {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(baUnitSearchPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
+                .addComponent(baUnitSearchPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnSelectFromSearch)
                 .addContainerGap())
         );
 
-        tabsPropertySelection.addTab(bundle.getString("NewPropertyWizardPanel.jPanel3.TabConstraints.tabTitle"), jPanel3); // NOI18N
+        tabsPropertySelection.addTab(bundle1.getString("NewPropertyWizardPanel.jPanel3.TabConstraints.tabTitle"), jPanel3); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);

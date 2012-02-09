@@ -27,7 +27,6 @@
  */
 package org.sola.clients.swing.desktop.administrative;
 
-import javax.swing.ImageIcon;
 import org.sola.clients.beans.administrative.RrrBean;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationServiceBean;
@@ -93,7 +92,6 @@ public class SimpleRightPanel extends ContentPanel {
         initComponents();
 
         headerPanel.setTitleText(rrrBean.getRrrType().getDisplayValue());
-        customizeComponents();
         customizeForm(rrrAction);
     }
 
@@ -125,9 +123,9 @@ public class SimpleRightPanel extends ContentPanel {
 
         documentsPanel.setName("documentsPanel"); // NOI18N
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance().getContext().getResourceMap(SimpleRightPanel.class);
-        jLabel15.setIcon(resourceMap.getIcon("jLabel15.icon")); // NOI18N
-        jLabel15.setText(resourceMap.getString("jLabel15.text")); // NOI18N
+        jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
+        jLabel15.setText(bundle.getString("SimpleRightPanel.jLabel15.text")); // NOI18N
         jLabel15.setName("jLabel15"); // NOI18N
 
         txtNotationText.setName("txtNotationText"); // NOI18N
@@ -136,14 +134,14 @@ public class SimpleRightPanel extends ContentPanel {
         bindingGroup.addBinding(binding);
 
         headerPanel.setName("headerPanel"); // NOI18N
-        headerPanel.setTitleText(resourceMap.getString("headerPanel.titleText")); // NOI18N
+        headerPanel.setTitleText(bundle.getString("SimpleRightPanel.headerPanel.titleText")); // NOI18N
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
         jToolBar1.setName("jToolBar1"); // NOI18N
 
-        btnSave.setIcon(resourceMap.getIcon("btnSave.icon")); // NOI18N
-        btnSave.setText(resourceMap.getString("btnSave.text")); // NOI18N
+        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/save.png"))); // NOI18N
+        btnSave.setText(bundle.getString("SimpleRightPanel.btnSave.text")); // NOI18N
         btnSave.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSave.setName("btnSave"); // NOI18N
         btnSave.addActionListener(new java.awt.event.ActionListener() {
@@ -159,10 +157,11 @@ public class SimpleRightPanel extends ContentPanel {
         filler1.setName("filler1"); // NOI18N
         jToolBar1.add(filler1);
 
-        jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
+        jLabel1.setText(bundle.getString("SimpleRightPanel.jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
         jToolBar1.add(jLabel1);
 
+        jLabel2.setFont(LafManager.getInstance().getLabFontBold());
         jLabel2.setName("jLabel2"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${status.displayValue}"), jLabel2, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -172,7 +171,7 @@ public class SimpleRightPanel extends ContentPanel {
 
         jPanel1.setName("jPanel1"); // NOI18N
 
-        cbxIsPrimary.setText(resourceMap.getString("cbxIsPrimary.text")); // NOI18N
+        cbxIsPrimary.setText(bundle.getString("SimpleRightPanel.cbxIsPrimary.text")); // NOI18N
         cbxIsPrimary.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         cbxIsPrimary.setName("cbxIsPrimary"); // NOI18N
 
@@ -185,8 +184,8 @@ public class SimpleRightPanel extends ContentPanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${registrationDate}"), txtRegDatetime, org.jdesktop.beansbinding.BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
 
-        jLabel13.setIcon(resourceMap.getIcon("jLabel15.icon")); // NOI18N
-        jLabel13.setText(resourceMap.getString("jLabel13.text")); // NOI18N
+        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
+        jLabel13.setText(bundle.getString("SimpleRightPanel.jLabel13.text")); // NOI18N
         jLabel13.setName("jLabel13"); // NOI18N
 
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
@@ -196,7 +195,7 @@ public class SimpleRightPanel extends ContentPanel {
             .add(jPanel1Layout.createSequentialGroup()
                 .add(jLabel13)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(txtRegDatetime, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
+                .add(txtRegDatetime, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
                 .add(18, 18, 18)
                 .add(cbxIsPrimary, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 117, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(308, 308, 308))
@@ -212,7 +211,7 @@ public class SimpleRightPanel extends ContentPanel {
         );
 
         groupPanel1.setName("groupPanel1"); // NOI18N
-        groupPanel1.setTitleText(resourceMap.getString("groupPanel1.titleText")); // NOI18N
+        groupPanel1.setTitleText(bundle.getString("SimpleRightPanel.groupPanel1.titleText")); // NOI18N
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
@@ -270,30 +269,6 @@ public class SimpleRightPanel extends ContentPanel {
             this.rrrBean=rrrBean.makeCopyByAction(rrrAction);
         }
     }
-    
-    
-       /** Applies customization of component L&F. */
-    private void customizeComponents() {
-   
-//    BUTTONS   
-    LafManager.getInstance().setBtnProperties(btnSave);
-    
-    
-//     CHECKBOXES
-    LafManager.getInstance().setChkProperties(cbxIsPrimary);
-   
-//    LABELS    
-    LafManager.getInstance().setLabProperties(jLabel13);
-    LafManager.getInstance().setLabProperties(jLabel15);
-    
-//    TXT FIELDS
-    LafManager.getInstance().setTxtProperties(txtNotationText);
-    
-//    FORMATTED TXT
-    LafManager.getInstance().setFormattedTxtProperties(txtRegDatetime);
-    
-    }
-    
     
     /** 
      * Customizes form view, disabling or enabling different parts, depending 

@@ -30,7 +30,6 @@ package org.sola.clients.swing.ui.source;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.JFormattedTextField;
-import org.jdesktop.application.Action;
 import org.sola.clients.beans.application.ApplicationServiceBean;
 import org.sola.clients.beans.digitalarchive.DocumentBean;
 import org.sola.clients.beans.referencedata.RequestTypeBean;
@@ -39,6 +38,7 @@ import org.sola.clients.swing.ui.renderers.AttachedDocumentCellRenderer;
 import org.sola.clients.beans.source.SourceSearchParamsBean;
 import org.sola.clients.beans.source.SourceSearchResultBean;
 import org.sola.clients.beans.source.SourceSearchResultsListBean;
+import org.sola.clients.swing.common.LafManager;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
@@ -86,8 +86,10 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
                 && searchResultsList.getSelectedSource().getArchiveDocumentId().length() > 0) {
             enabled = true;
         }
-        btnPrint.getAction().setEnabled(enabled);
-        btnOpen.getAction().setEnabled(enabled);
+        btnPrint.setEnabled(enabled);
+        btnOpen.setEnabled(enabled);
+        menuOpen.setEnabled(enabled);
+        menuPrint.setEnabled(enabled);
     }
 
     private void clearForm() {
@@ -109,15 +111,13 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         return searchResultsList.getSelectedSource();
     }
 
-    @Action
-    public void print() {
+    private void print() {
         if (ApplicationServiceBean.saveInformationService(RequestTypeBean.CODE_DOCUMENT_COPY)) {
             openDocument();
         }
     }
     
-    @Action
-    public void openDocument() {
+    private void openDocument() {
         DocumentBean.openDocument(searchResultsList.getSelectedSource().getArchiveDocumentId());
     }
 
@@ -175,17 +175,26 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
 
         popUpSearchResults.setName("popUpSearchResults"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(DocumentSearchPanel.class, this);
-        menuOpen.setAction(actionMap.get("openDocument")); // NOI18N
+        menuOpen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/folder-open-document.png"))); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/source/Bundle"); // NOI18N
         menuOpen.setText(bundle.getString("DocumentSearchPanel.menuOpen.text")); // NOI18N
         menuOpen.setToolTipText(bundle.getString("DocumentSearchPanel.menuOpen.toolTipText")); // NOI18N
         menuOpen.setName("menuOpen"); // NOI18N
+        menuOpen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuOpenActionPerformed(evt);
+            }
+        });
         popUpSearchResults.add(menuOpen);
 
-        menuPrint.setAction(actionMap.get("print")); // NOI18N
+        menuPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/print.png"))); // NOI18N
         menuPrint.setText(bundle.getString("DocumentSearchPanel.menuPrint.text")); // NOI18N
         menuPrint.setName("menuPrint"); // NOI18N
+        menuPrint.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuPrintActionPerformed(evt);
+            }
+        });
         popUpSearchResults.add(menuPrint);
 
         setName("Form"); // NOI18N
@@ -431,7 +440,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(jLabel2)
                 .addGap(7, 7, 7)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(btnSubmissionDateFrom)
                     .addComponent(txtSubmissionDateFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(13, Short.MAX_VALUE))
@@ -474,12 +483,11 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(btnSubmissionDateTo)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtSubmissionDateTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(txtSubmissionDateTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(14, Short.MAX_VALUE))
         );
 
@@ -520,12 +528,11 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(btnDateTo)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtDateTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(txtDateTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(14, Short.MAX_VALUE))
         );
 
@@ -566,12 +573,11 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(btnDateFrom)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtDateFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(txtDateFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(14, Short.MAX_VALUE))
         );
 
@@ -583,20 +589,30 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         jToolBar1.setRollover(true);
         jToolBar1.setName("jToolBar1"); // NOI18N
 
-        btnOpen.setAction(actionMap.get("openDocument")); // NOI18N
+        btnOpen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/folder-open-document.png"))); // NOI18N
         btnOpen.setText(bundle.getString("DocumentSearchPanel.btnOpen.text")); // NOI18N
         btnOpen.setFocusable(false);
         btnOpen.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnOpen.setName("btnOpen"); // NOI18N
         btnOpen.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnOpen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOpenActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnOpen);
 
-        btnPrint.setAction(actionMap.get("print")); // NOI18N
+        btnPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/print.png"))); // NOI18N
         btnPrint.setText(bundle.getString("DocumentSearchPanel.btnPrint.text")); // NOI18N
         btnPrint.setFocusable(false);
         btnPrint.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnPrint.setName("btnPrint"); // NOI18N
         btnPrint.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnPrint.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrintActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnPrint);
 
         separatorPrint.setName("separatorPrint"); // NOI18N
@@ -606,6 +622,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         jLabel4.setName("jLabel4"); // NOI18N
         jToolBar1.add(jLabel4);
 
+        lblResults.setFont(LafManager.getInstance().getLabFontBold());
         lblResults.setText(bundle.getString("DocumentSearchPanel.lblResults.text")); // NOI18N
         lblResults.setName("lblResults"); // NOI18N
         jToolBar1.add(lblResults);
@@ -669,6 +686,23 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
             openDocument();
         }
     }//GEN-LAST:event_tblSearchResultsMouseClicked
+
+    private void btnOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
+        openDocument();
+    }//GEN-LAST:event_btnOpenActionPerformed
+
+    private void menuOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpenActionPerformed
+        openDocument();
+    }//GEN-LAST:event_menuOpenActionPerformed
+
+    private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
+        print();
+    }//GEN-LAST:event_btnPrintActionPerformed
+
+    private void menuPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuPrintActionPerformed
+        print();
+    }//GEN-LAST:event_menuPrintActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnDateFrom;

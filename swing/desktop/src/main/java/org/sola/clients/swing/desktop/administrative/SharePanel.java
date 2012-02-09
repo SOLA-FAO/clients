@@ -29,7 +29,6 @@ package org.sola.clients.swing.desktop.administrative;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import org.jdesktop.application.Action;
 import org.sola.clients.beans.administrative.RrrBean;
 import org.sola.clients.beans.administrative.RrrShareBean;
 import org.sola.clients.swing.desktop.party.PartyPanel;
@@ -66,7 +65,6 @@ public class SharePanel extends ContentPanel {
     
         initComponents();
         
-        customizeComponents();
         customizeForm(rrrAction);
         customizeOwnersButtons(null);
     }
@@ -84,27 +82,6 @@ public class SharePanel extends ContentPanel {
         } else {
             this.rrrShareBean = rrrShareBean.copy();
         }
-    }
-     
-       /** Applies customization of component L&F. */
-    private void customizeComponents() {
-   
-//    BUTTONS   
-    LafManager.getInstance().setBtnProperties(btnAddOwner);
-    LafManager.getInstance().setBtnProperties(btnEditOwner);
-    LafManager.getInstance().setBtnProperties(btnRemoveOwner);
-    LafManager.getInstance().setBtnProperties(btnViewOwner);
-    LafManager.getInstance().setBtnProperties(btnSave);
-    
-    
-//    LABELS    
-    LafManager.getInstance().setLabProperties(jLabel1);
-    LafManager.getInstance().setLabProperties(jLabel2);
-    
-//    FORMATTED TXT
-    LafManager.getInstance().setFormattedTxtProperties(txtDenominator);
-    LafManager.getInstance().setFormattedTxtProperties(txtNominator);
-    
     }
     
     private void customizeForm(RrrBean.RRR_ACTION rrrAction) {
@@ -137,10 +114,15 @@ public class SharePanel extends ContentPanel {
     private void customizeOwnersButtons(PartySummaryBean party) {
         boolean isReadOnly = rrrAction == RrrBean.RRR_ACTION.VIEW;
         
-        btnAddOwner.getAction().setEnabled(!isReadOnly);
-        btnEditOwner.getAction().setEnabled(party != null && !isReadOnly);
-        btnRemoveOwner.getAction().setEnabled(party != null && !isReadOnly);
-        btnViewOwner.getAction().setEnabled(party != null);
+        btnAddOwner.setEnabled(!isReadOnly);
+        btnEditOwner.setEnabled(party != null && !isReadOnly);
+        btnRemoveOwner.setEnabled(party != null && !isReadOnly);
+        btnViewOwner.setEnabled(party != null);
+        
+        menuAddOwner.setEnabled(btnAddOwner.isEnabled());
+        menuEditOwner.setEnabled(btnEditOwner.isEnabled());
+        menuRemoveOwner.setEnabled(btnRemoveOwner.isEnabled());
+        menuViewOwner.setEnabled(btnViewOwner.isEnabled());
     }
 
     private void openRightHolderForm(PartySummaryBean partySummaryBean, boolean isReadOnly) {
@@ -165,8 +147,8 @@ public class SharePanel extends ContentPanel {
         rrrShareBean = CreateRrrShareBean();
         popupOwners = new javax.swing.JPopupMenu();
         menuAddOwner = new javax.swing.JMenuItem();
-        menuRemoveOwner = new javax.swing.JMenuItem();
         menuEditOwner = new javax.swing.JMenuItem();
+        menuRemoveOwner = new javax.swing.JMenuItem();
         menuViewOwner = new javax.swing.JMenuItem();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -176,8 +158,8 @@ public class SharePanel extends ContentPanel {
         groupPanel1 = new org.sola.clients.swing.ui.GroupPanel();
         jToolBar1 = new javax.swing.JToolBar();
         btnAddOwner = new javax.swing.JButton();
-        btnRemoveOwner = new javax.swing.JButton();
         btnEditOwner = new javax.swing.JButton();
+        btnRemoveOwner = new javax.swing.JButton();
         btnViewOwner = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableOwners = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
@@ -186,37 +168,56 @@ public class SharePanel extends ContentPanel {
 
         popupOwners.setName("popupOwners"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(SharePanel.class, this);
-        menuAddOwner.setAction(actionMap.get("addOwner")); // NOI18N
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance().getContext().getResourceMap(SharePanel.class);
-        menuAddOwner.setText(resourceMap.getString("menuAddOwner.text")); // NOI18N
+        menuAddOwner.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
+        menuAddOwner.setText(bundle.getString("SharePanel.menuAddOwner.text")); // NOI18N
         menuAddOwner.setName("menuAddOwner"); // NOI18N
+        menuAddOwner.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuAddOwnerActionPerformed(evt);
+            }
+        });
         popupOwners.add(menuAddOwner);
 
-        menuRemoveOwner.setAction(actionMap.get("removeOwner")); // NOI18N
-        menuRemoveOwner.setText(resourceMap.getString("menuRemoveOwner.text")); // NOI18N
-        menuRemoveOwner.setName("menuRemoveOwner"); // NOI18N
-        popupOwners.add(menuRemoveOwner);
-
-        menuEditOwner.setAction(actionMap.get("editOwner")); // NOI18N
-        menuEditOwner.setText(resourceMap.getString("menuEditOwner.text")); // NOI18N
+        menuEditOwner.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/pencil.png"))); // NOI18N
+        menuEditOwner.setText(bundle.getString("SharePanel.menuEditOwner.text")); // NOI18N
         menuEditOwner.setName("menuEditOwner"); // NOI18N
+        menuEditOwner.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuEditOwnerActionPerformed(evt);
+            }
+        });
         popupOwners.add(menuEditOwner);
 
-        menuViewOwner.setAction(actionMap.get("viewOwner")); // NOI18N
-        menuViewOwner.setText(resourceMap.getString("menuViewOwner.text")); // NOI18N
+        menuRemoveOwner.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
+        menuRemoveOwner.setText(bundle.getString("SharePanel.menuRemoveOwner.text")); // NOI18N
+        menuRemoveOwner.setName("menuRemoveOwner"); // NOI18N
+        menuRemoveOwner.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuRemoveOwnerActionPerformed(evt);
+            }
+        });
+        popupOwners.add(menuRemoveOwner);
+
+        menuViewOwner.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/view.png"))); // NOI18N
+        menuViewOwner.setText(bundle.getString("SharePanel.menuViewOwner.text")); // NOI18N
         menuViewOwner.setName("menuViewOwner"); // NOI18N
+        menuViewOwner.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuViewOwnerActionPerformed(evt);
+            }
+        });
         popupOwners.add(menuViewOwner);
 
         setHeaderPanel(headerPanel);
         setName("Form"); // NOI18N
 
-        jLabel1.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
-        jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
+        jLabel1.setFont(LafManager.getInstance().getLabFontBold());
+        jLabel1.setText(bundle.getString("SharePanel.jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
 
-        jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
-        jLabel2.setToolTipText(resourceMap.getString("jLabel2.toolTipText")); // NOI18N
+        jLabel2.setText(bundle.getString("SharePanel.jLabel2.text")); // NOI18N
+        jLabel2.setToolTipText(bundle.getString("SharePanel.jLabel2.toolTipText")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
 
         txtDenominator.setFormatterFactory(FormattersFactory.getInstance().getShortFormatterFactory());
@@ -232,35 +233,56 @@ public class SharePanel extends ContentPanel {
         bindingGroup.addBinding(binding);
 
         headerPanel.setName("headerPanel"); // NOI18N
-        headerPanel.setTitleText(resourceMap.getString("headerPanel.titleText")); // NOI18N
+        headerPanel.setTitleText(bundle.getString("SharePanel.headerPanel.titleText")); // NOI18N
 
         groupPanel1.setName("groupPanel1"); // NOI18N
-        groupPanel1.setTitleText(resourceMap.getString("groupPanel1.titleText")); // NOI18N
+        groupPanel1.setTitleText(bundle.getString("SharePanel.groupPanel1.titleText")); // NOI18N
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
         jToolBar1.setName("jToolBar1"); // NOI18N
 
-        btnAddOwner.setAction(actionMap.get("addOwner")); // NOI18N
-        btnAddOwner.setText(resourceMap.getString("btnAddOwner.text")); // NOI18N
+        btnAddOwner.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
+        btnAddOwner.setText(bundle.getString("SharePanel.btnAddOwner.text")); // NOI18N
         btnAddOwner.setName("btnAddOwner"); // NOI18N
+        btnAddOwner.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddOwnerActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnAddOwner);
 
-        btnRemoveOwner.setAction(actionMap.get("removeOwner")); // NOI18N
-        btnRemoveOwner.setText(resourceMap.getString("btnRemoveOwner.text")); // NOI18N
-        btnRemoveOwner.setName("btnRemoveOwner"); // NOI18N
-        jToolBar1.add(btnRemoveOwner);
-
-        btnEditOwner.setAction(actionMap.get("editOwner")); // NOI18N
+        btnEditOwner.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/pencil.png"))); // NOI18N
+        btnEditOwner.setText(bundle.getString("SharePanel.btnEditOwner.text")); // NOI18N
         btnEditOwner.setFocusable(false);
         btnEditOwner.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnEditOwner.setName("btnEditOwner"); // NOI18N
         btnEditOwner.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnEditOwner.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditOwnerActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnEditOwner);
 
-        btnViewOwner.setAction(actionMap.get("viewOwner")); // NOI18N
-        btnViewOwner.setText(resourceMap.getString("btnViewOwner.text")); // NOI18N
+        btnRemoveOwner.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
+        btnRemoveOwner.setText(bundle.getString("SharePanel.btnRemoveOwner.text")); // NOI18N
+        btnRemoveOwner.setName("btnRemoveOwner"); // NOI18N
+        btnRemoveOwner.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveOwnerActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnRemoveOwner);
+
+        btnViewOwner.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/view.png"))); // NOI18N
+        btnViewOwner.setText(bundle.getString("SharePanel.btnViewOwner.text")); // NOI18N
         btnViewOwner.setName("btnViewOwner"); // NOI18N
+        btnViewOwner.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewOwnerActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnViewOwner);
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
@@ -283,13 +305,15 @@ public class SharePanel extends ContentPanel {
         bindingGroup.addBinding(binding);
 
         jScrollPane1.setViewportView(tableOwners);
+        tableOwners.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("SharePanel.tableOwners.columnModel.title0")); // NOI18N
+        tableOwners.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("SharePanel.tableOwners.columnModel.title1")); // NOI18N
 
         jToolBar2.setFloatable(false);
         jToolBar2.setRollover(true);
         jToolBar2.setName("jToolBar2"); // NOI18N
 
-        btnSave.setIcon(resourceMap.getIcon("btnSave.icon")); // NOI18N
-        btnSave.setText(resourceMap.getString("btnSave.text")); // NOI18N
+        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/save.png"))); // NOI18N
+        btnSave.setText(bundle.getString("SharePanel.btnSave.text")); // NOI18N
         btnSave.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSave.setName("btnSave"); // NOI18N
         btnSave.addActionListener(new java.awt.event.ActionListener() {
@@ -321,7 +345,7 @@ public class SharePanel extends ContentPanel {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtDenominator, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(163, Short.MAX_VALUE))
+                .addContainerGap(187, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -354,28 +378,56 @@ public class SharePanel extends ContentPanel {
         }
     }//GEN-LAST:event_btnSaveActionPerformed
 
-    @Action
-    public void viewOwner() {
+    private void btnAddOwnerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddOwnerActionPerformed
+        addOwner();
+    }//GEN-LAST:event_btnAddOwnerActionPerformed
+
+    private void btnRemoveOwnerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveOwnerActionPerformed
+        removeOwner();
+    }//GEN-LAST:event_btnRemoveOwnerActionPerformed
+
+    private void btnEditOwnerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditOwnerActionPerformed
+        editOwner();
+    }//GEN-LAST:event_btnEditOwnerActionPerformed
+
+    private void btnViewOwnerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewOwnerActionPerformed
+        viewOwner();
+    }//GEN-LAST:event_btnViewOwnerActionPerformed
+
+    private void menuAddOwnerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAddOwnerActionPerformed
+        addOwner();
+    }//GEN-LAST:event_menuAddOwnerActionPerformed
+
+    private void menuEditOwnerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEditOwnerActionPerformed
+        editOwner();
+    }//GEN-LAST:event_menuEditOwnerActionPerformed
+
+    private void menuRemoveOwnerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRemoveOwnerActionPerformed
+        removeOwner();
+    }//GEN-LAST:event_menuRemoveOwnerActionPerformed
+
+    private void menuViewOwnerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuViewOwnerActionPerformed
+        viewOwner();
+    }//GEN-LAST:event_menuViewOwnerActionPerformed
+
+    private void viewOwner() {
         if (rrrShareBean.getSelectedRightHolder() != null) {
             openRightHolderForm(rrrShareBean.getSelectedRightHolder(), true);
         }
     }
 
-    @Action
-    public void removeOwner() {
+    private void removeOwner() {
         if (rrrShareBean.getSelectedRightHolder() != null
                 && MessageUtility.displayMessage(ClientMessage.CONFIRM_DELETE_RECORD) == MessageUtility.BUTTON_ONE) {
             rrrShareBean.removeSelectedRightHolder();
         }
     }
 
-    @Action
-    public void addOwner() {
+    private void addOwner() {
         openRightHolderForm(null, false);
     }
 
-    @Action
-    public void editOwner() {
+    private void editOwner() {
         if (rrrShareBean.getSelectedRightHolder() != null) {
             openRightHolderForm(rrrShareBean.getSelectedRightHolder(), false);
         }

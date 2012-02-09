@@ -3,7 +3,6 @@
 <Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
-    <Property name="title" type="java.lang.String" resourceKey="title"/>
     <Property name="modal" type="boolean" value="true"/>
     <Property name="name" type="java.lang.String" value="aboutBox" noResource="true"/>
     <Property name="resizable" type="boolean" value="false"/>
@@ -49,7 +48,7 @@
                               <Component id="appTitleLabel" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="appDescLabel" pref="232" max="32767" attributes="0"/>
+                          <Component id="appDescLabel" pref="206" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -98,11 +97,14 @@
   <SubComponents>
     <Component class="javax.swing.JButton" name="closeButton">
       <Properties>
-        <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-          <action class="org.sola.clients.desktop.AboutBox" id="closeAboutBox" methodName="closeAboutBox"/>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+          <ResourceString bundle="org/sola/clients/swing/desktop/Bundle.properties" key="AboutForm.closeButton.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
         </Property>
         <Property name="name" type="java.lang.String" value="closeButton" noResource="true"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="closeButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="appTitleLabel">
       <Properties>

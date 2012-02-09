@@ -51,8 +51,8 @@ public class DocumentSearchPanel extends ContentPanel {
         setName("Form"); // NOI18N
 
         headerPanel1.setName("headerPanel1"); // NOI18N
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance().getContext().getResourceMap(DocumentSearchPanel.class);
-        headerPanel1.setTitleText(resourceMap.getString("headerPanel1.titleText")); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/source/Bundle"); // NOI18N
+        headerPanel1.setTitleText(bundle.getString("DocumentSearchPanel.headerPanel1.titleText")); // NOI18N
 
         jScrollPane1.setBorder(null);
         jScrollPane1.setName("jScrollPane1"); // NOI18N

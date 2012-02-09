@@ -30,7 +30,6 @@ package org.sola.clients.swing.desktop;
 import java.awt.ComponentOrientation;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import org.jdesktop.application.Action;
 import org.sola.clients.swing.desktop.application.ApplicationAssignmentPanel;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationSummaryBean;
@@ -38,7 +37,6 @@ import org.sola.clients.swing.ui.renderers.DateTimeRenderer;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 import java.util.Locale;
-import org.jdesktop.application.Task;
 import org.sola.clients.swing.desktop.application.ApplicationPanel;
 import org.sola.clients.beans.application.ApplicationSearchResultBean;
 import org.sola.clients.beans.application.ApplicationSearchResultsListBean;
@@ -83,11 +81,12 @@ public class DashBoardPanel extends ContentPanel {
     /** Runs post initialization tasks to add listeners. */
     private void postInit() {
 
-        customizeComponents();
         setHeaderPanel(headerPanel1);
-        btnRefreshAssigned.getAction().setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_VIEW_APPS));
-        btnRefreshUnassigned.getAction().setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_VIEW_APPS));
-
+        btnRefreshAssigned.setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_VIEW_APPS));
+        btnRefreshUnassigned.setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_VIEW_APPS));
+        menuRefreshAssignApplication.setEnabled(btnRefreshAssigned.isEnabled());
+        menuRefreshUnassignApplication.setEnabled(btnRefreshUnassigned.isEnabled());
+        
         refreshApplications();
         customizeAssignedAppButtons(null);
         customizeUnassignedAppButtons(null);
@@ -113,22 +112,6 @@ public class DashBoardPanel extends ContentPanel {
         });
     }
 
-    /** Applies customization of component L&F. */
-    private void customizeComponents() {
-
-//    BUTTONS   
-        LafManager.getInstance().setBtnProperties(btnAssignApplication);
-        LafManager.getInstance().setBtnProperties(btnOpenAssignedApplication);
-        LafManager.getInstance().setBtnProperties(btnOpenUnassignedApplication);
-        LafManager.getInstance().setBtnProperties(btnRefreshAssigned);
-        LafManager.getInstance().setBtnProperties(btnRefreshUnassigned);
-        LafManager.getInstance().setBtnProperties(btnUnassignApplication);
-
-//    LABELS    
-        LafManager.getInstance().setLabProperties(jLabel1);
-        LafManager.getInstance().setLabProperties(jLabel2);
-    }
-
     /** Enables or disables toolbar buttons for assigned applications list, . */
     private void customizeAssignedAppButtons(ApplicationSearchResultBean app) {
         boolean isUnassignEnabled = true;
@@ -146,8 +129,10 @@ public class DashBoardPanel extends ContentPanel {
             isEditEnabled = SecurityBean.isInRole(RolesConstants.APPLICATION_EDIT_APPS);
         }
 
-        btnUnassignApplication.getAction().setEnabled(isUnassignEnabled);
-        btnOpenAssignedApplication.getAction().setEnabled(isEditEnabled);
+        btnUnassignApplication.setEnabled(isUnassignEnabled);
+        btnOpenAssignedApplication.setEnabled(isEditEnabled);
+        menuUnassignApplication.setEnabled(isUnassignEnabled);
+        menuOpenAssignedApplication.setEnabled(isEditEnabled);
     }
 
     /** Enables or disables toolbar buttons for unassigned applications list. */
@@ -168,8 +153,10 @@ public class DashBoardPanel extends ContentPanel {
             isEditEnabled = SecurityBean.isInRole(RolesConstants.APPLICATION_EDIT_APPS);
         }
 
-        btnAssignApplication.getAction().setEnabled(isAssignEnabled);
-        btnOpenUnassignedApplication.getAction().setEnabled(isEditEnabled);
+        btnAssignApplication.setEnabled(isAssignEnabled);
+        btnOpenUnassignedApplication.setEnabled(isEditEnabled);
+        menuAssignApplication.setEnabled(isAssignEnabled);
+        menuOpenUnassignedApplication.setEnabled(isEditEnabled);
     }
 
     /** 
@@ -267,41 +254,70 @@ public class DashBoardPanel extends ContentPanel {
 
         popUpUnassignedApplications.setName("popUpUnassignedApplications"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(DashBoardPanel.class, this);
-        menuAssignApplication.setAction(actionMap.get("assignApplication")); // NOI18N
+        menuAssignApplication.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/assign.png"))); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/Bundle"); // NOI18N
         menuAssignApplication.setText(bundle.getString("DashBoardPanel.menuAssignApplication.text")); // NOI18N
         menuAssignApplication.setName("menuAssignApplication"); // NOI18N
+        menuAssignApplication.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuAssignApplicationActionPerformed(evt);
+            }
+        });
         popUpUnassignedApplications.add(menuAssignApplication);
 
-        menuOpenUnassignedApplication.setAction(actionMap.get("editUnassignedApplication")); // NOI18N
-        menuOpenUnassignedApplication.setLabel(bundle.getString("DashBoardPanel.menuOpenUnassignedApplication.label")); // NOI18N
+        menuOpenUnassignedApplication.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/folder-open-document.png"))); // NOI18N
+        menuOpenUnassignedApplication.setText(bundle.getString("DashBoardPanel.menuOpenUnassignedApplication.text_1")); // NOI18N
         menuOpenUnassignedApplication.setName("menuOpenUnassignedApplication"); // NOI18N
+        menuOpenUnassignedApplication.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuOpenUnassignedApplicationActionPerformed(evt);
+            }
+        });
         popUpUnassignedApplications.add(menuOpenUnassignedApplication);
 
-        menuRefreshUnassignApplication.setAction(actionMap.get("refreshUnassignedApplications")); // NOI18N
+        menuRefreshUnassignApplication.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/refresh.png"))); // NOI18N
         menuRefreshUnassignApplication.setText(bundle.getString("DashBoardPanel.menuRefreshUnassignApplication.text")); // NOI18N
         menuRefreshUnassignApplication.setName("menuRefreshUnassignApplication"); // NOI18N
+        menuRefreshUnassignApplication.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuRefreshUnassignApplicationActionPerformed(evt);
+            }
+        });
         popUpUnassignedApplications.add(menuRefreshUnassignApplication);
 
         popUpAssignedApplications.setName("popUpAssignedApplications"); // NOI18N
 
-        menuUnassignApplication.setAction(actionMap.get("unassignApplication")); // NOI18N
+        menuUnassignApplication.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/unassign.png"))); // NOI18N
         menuUnassignApplication.setText(bundle.getString("DashBoardPanel.menuUnassignApplication.text")); // NOI18N
         menuUnassignApplication.setToolTipText(bundle.getString("DashBoardPanel.menuUnassignApplication.toolTipText")); // NOI18N
         menuUnassignApplication.setName("menuUnassignApplication"); // NOI18N
+        menuUnassignApplication.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuUnassignApplicationActionPerformed(evt);
+            }
+        });
         popUpAssignedApplications.add(menuUnassignApplication);
 
-        menuOpenAssignedApplication.setAction(actionMap.get("editAssignedApplication")); // NOI18N
+        menuOpenAssignedApplication.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/folder-open-document.png"))); // NOI18N
         menuOpenAssignedApplication.setText(bundle.getString("DashBoardPanel.menuOpenAssignedApplication.text")); // NOI18N
         menuOpenAssignedApplication.setToolTipText(bundle.getString("DashBoardPanel.menuOpenAssignedApplication.toolTipText")); // NOI18N
         menuOpenAssignedApplication.setName("menuOpenAssignedApplication"); // NOI18N
+        menuOpenAssignedApplication.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuOpenAssignedApplicationActionPerformed(evt);
+            }
+        });
         popUpAssignedApplications.add(menuOpenAssignedApplication);
 
-        menuRefreshAssignApplication.setAction(actionMap.get("refreshUnassignedApplications")); // NOI18N
+        menuRefreshAssignApplication.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/refresh.png"))); // NOI18N
         menuRefreshAssignApplication.setText(bundle.getString("DashBoardPanel.menuRefreshAssignApplication.text")); // NOI18N
         menuRefreshAssignApplication.setToolTipText(bundle.getString("DashBoardPanel.menuRefreshAssignApplication.toolTipText")); // NOI18N
         menuRefreshAssignApplication.setName("menuRefreshAssignApplication"); // NOI18N
+        menuRefreshAssignApplication.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuRefreshAssignApplicationActionPerformed(evt);
+            }
+        });
         popUpAssignedApplications.add(menuRefreshAssignApplication);
 
         setMinimumSize(new java.awt.Dimension(354, 249));
@@ -379,7 +395,7 @@ public class DashBoardPanel extends ContentPanel {
         tbUnassignedApplications.setRollover(true);
         tbUnassignedApplications.setName("tbUnassignedApplications"); // NOI18N
 
-        jLabel1.setFont(new java.awt.Font("Arial", 1, 12));
+        jLabel1.setFont(LafManager.getInstance().getLabFontBold());
         jLabel1.setText(bundle.getString("DashBoardPanel.jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
         tbUnassignedApplications.add(jLabel1);
@@ -387,31 +403,44 @@ public class DashBoardPanel extends ContentPanel {
         jSeparator1.setName("jSeparator1"); // NOI18N
         tbUnassignedApplications.add(jSeparator1);
 
-        btnAssignApplication.setAction(actionMap.get("assignApplication")); // NOI18N
-        btnAssignApplication.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnAssignApplication.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/assign.png"))); // NOI18N
         btnAssignApplication.setText(bundle.getString("DashBoardPanel.btnAssignApplication.text")); // NOI18N
+        btnAssignApplication.setToolTipText(bundle.getString("DashBoardPanel.btnAssignApplication.toolTipText")); // NOI18N
         btnAssignApplication.setFocusable(false);
         btnAssignApplication.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnAssignApplication.setName("btnAssignApplication"); // NOI18N
         btnAssignApplication.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAssignApplication.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAssignApplicationActionPerformed(evt);
+            }
+        });
         tbUnassignedApplications.add(btnAssignApplication);
 
-        btnOpenUnassignedApplication.setAction(actionMap.get("editUnassignedApplication")); // NOI18N
-        btnOpenUnassignedApplication.setFont(new java.awt.Font("Arial", 0, 12));
+        btnOpenUnassignedApplication.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/folder-open-document.png"))); // NOI18N
         btnOpenUnassignedApplication.setText(bundle.getString("DashBoardPanel.btnOpenUnassignedApplication.text")); // NOI18N
         btnOpenUnassignedApplication.setFocusable(false);
         btnOpenUnassignedApplication.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnOpenUnassignedApplication.setName("btnOpenUnassignedApplication"); // NOI18N
         btnOpenUnassignedApplication.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnOpenUnassignedApplication.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOpenUnassignedApplicationActionPerformed(evt);
+            }
+        });
         tbUnassignedApplications.add(btnOpenUnassignedApplication);
 
-        btnRefreshUnassigned.setAction(actionMap.get("refreshUnassignedApplications")); // NOI18N
-        btnRefreshUnassigned.setFont(new java.awt.Font("Arial", 0, 12));
+        btnRefreshUnassigned.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/refresh.png"))); // NOI18N
         btnRefreshUnassigned.setText(bundle.getString("DashBoardPanel.btnRefreshUnassigned.text")); // NOI18N
         btnRefreshUnassigned.setFocusable(false);
         btnRefreshUnassigned.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnRefreshUnassigned.setName("btnRefreshUnassigned"); // NOI18N
         btnRefreshUnassigned.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnRefreshUnassigned.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshUnassignedActionPerformed(evt);
+            }
+        });
         tbUnassignedApplications.add(btnRefreshUnassigned);
 
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
@@ -437,7 +466,7 @@ public class DashBoardPanel extends ContentPanel {
         tbAssignedApplications.setRollover(true);
         tbAssignedApplications.setName("tbAssignedApplications"); // NOI18N
 
-        jLabel2.setFont(new java.awt.Font("Arial", 1, 12));
+        jLabel2.setFont(LafManager.getInstance().getLabFontBold());
         jLabel2.setText(bundle.getString("DashBoardPanel.jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
         tbAssignedApplications.add(jLabel2);
@@ -445,29 +474,45 @@ public class DashBoardPanel extends ContentPanel {
         jSeparator2.setName("jSeparator2"); // NOI18N
         tbAssignedApplications.add(jSeparator2);
 
-        btnUnassignApplication.setAction(actionMap.get("unassignApplication")); // NOI18N
-        btnUnassignApplication.setFont(new java.awt.Font("Arial", 0, 12));
+        btnUnassignApplication.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/unassign.png"))); // NOI18N
+        btnUnassignApplication.setText(bundle.getString("DashBoardPanel.btnUnassignApplication.text")); // NOI18N
+        btnUnassignApplication.setToolTipText(bundle.getString("DashBoardPanel.btnUnassignApplication.toolTipText")); // NOI18N
         btnUnassignApplication.setFocusable(false);
         btnUnassignApplication.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnUnassignApplication.setName("btnUnassignApplication"); // NOI18N
         btnUnassignApplication.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnUnassignApplication.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUnassignApplicationActionPerformed(evt);
+            }
+        });
         tbAssignedApplications.add(btnUnassignApplication);
 
-        btnOpenAssignedApplication.setAction(actionMap.get("editAssignedApplication")); // NOI18N
-        btnOpenAssignedApplication.setFont(new java.awt.Font("Arial", 0, 12));
+        btnOpenAssignedApplication.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/folder-open-document.png"))); // NOI18N
         btnOpenAssignedApplication.setText(bundle.getString("DashBoardPanel.btnOpenAssignedApplication.text")); // NOI18N
         btnOpenAssignedApplication.setFocusable(false);
         btnOpenAssignedApplication.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnOpenAssignedApplication.setName("btnOpenAssignedApplication"); // NOI18N
         btnOpenAssignedApplication.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnOpenAssignedApplication.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOpenAssignedApplicationActionPerformed(evt);
+            }
+        });
         tbAssignedApplications.add(btnOpenAssignedApplication);
 
-        btnRefreshAssigned.setAction(actionMap.get("refreshAssignedApplications")); // NOI18N
-        btnRefreshAssigned.setFont(new java.awt.Font("Arial", 0, 12));
+        btnRefreshAssigned.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/refresh.png"))); // NOI18N
+        btnRefreshAssigned.setText(bundle.getString("DashBoardPanel.btnRefreshAssigned.text")); // NOI18N
+        btnRefreshAssigned.setToolTipText(bundle.getString("DashBoardPanel.btnRefreshAssigned.toolTipText")); // NOI18N
         btnRefreshAssigned.setFocusable(false);
         btnRefreshAssigned.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnRefreshAssigned.setName("btnRefreshAssigned"); // NOI18N
         btnRefreshAssigned.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnRefreshAssigned.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshAssignedActionPerformed(evt);
+            }
+        });
         tbAssignedApplications.add(btnRefreshAssigned);
 
         inprogressScrollPanel.setName("inprogressScrollPanel"); // NOI18N
@@ -575,16 +620,64 @@ public class DashBoardPanel extends ContentPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tbUnassignedMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbUnassignedMouseClicked
-        if (evt.getClickCount() == 2 && btnOpenUnassignedApplication.getAction().isEnabled()) {
+        if (evt.getClickCount() == 2 && btnOpenUnassignedApplication.isEnabled()) {
             editUnassignedApplication();
         }
     }//GEN-LAST:event_tbUnassignedMouseClicked
 
     private void tbAssignedMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbAssignedMouseClicked
-        if (evt.getClickCount() == 2 && btnOpenAssignedApplication.getAction().isEnabled()) {
+        if (evt.getClickCount() == 2 && btnOpenAssignedApplication.isEnabled()) {
             openApplication(assignedAppListBean.getSelectedApplication());
         }
     }//GEN-LAST:event_tbAssignedMouseClicked
+
+    private void btnAssignApplicationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAssignApplicationActionPerformed
+        assignApplication();
+    }//GEN-LAST:event_btnAssignApplicationActionPerformed
+
+    private void btnOpenUnassignedApplicationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenUnassignedApplicationActionPerformed
+        editUnassignedApplication();
+    }//GEN-LAST:event_btnOpenUnassignedApplicationActionPerformed
+
+    private void btnRefreshUnassignedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshUnassignedActionPerformed
+        refreshUnassignedApplications();
+    }//GEN-LAST:event_btnRefreshUnassignedActionPerformed
+
+    private void btnUnassignApplicationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnassignApplicationActionPerformed
+        unassignApplication();
+    }//GEN-LAST:event_btnUnassignApplicationActionPerformed
+
+    private void btnOpenAssignedApplicationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenAssignedApplicationActionPerformed
+        editAssignedApplication();
+    }//GEN-LAST:event_btnOpenAssignedApplicationActionPerformed
+
+    private void btnRefreshAssignedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshAssignedActionPerformed
+        refreshAssignedApplications();
+    }//GEN-LAST:event_btnRefreshAssignedActionPerformed
+
+    private void menuAssignApplicationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAssignApplicationActionPerformed
+        assignApplication();
+    }//GEN-LAST:event_menuAssignApplicationActionPerformed
+
+    private void menuOpenUnassignedApplicationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpenUnassignedApplicationActionPerformed
+        editUnassignedApplication();
+    }//GEN-LAST:event_menuOpenUnassignedApplicationActionPerformed
+
+    private void menuRefreshUnassignApplicationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRefreshUnassignApplicationActionPerformed
+        refreshUnassignedApplications();
+    }//GEN-LAST:event_menuRefreshUnassignApplicationActionPerformed
+
+    private void menuUnassignApplicationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuUnassignApplicationActionPerformed
+        unassignApplication();
+    }//GEN-LAST:event_menuUnassignApplicationActionPerformed
+
+    private void menuOpenAssignedApplicationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpenAssignedApplicationActionPerformed
+        editAssignedApplication();
+    }//GEN-LAST:event_menuOpenAssignedApplicationActionPerformed
+
+    private void menuRefreshAssignApplicationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRefreshAssignApplicationActionPerformed
+        refreshAssignedApplications();
+    }//GEN-LAST:event_menuRefreshAssignApplicationActionPerformed
 
     /** Refreshes assigned and unassigned application lists. */
     private void refreshApplications() {
@@ -604,38 +697,32 @@ public class DashBoardPanel extends ContentPanel {
     }
 
     /** Opens application form for the selected application from unassigned list. */
-    @Action
-    public void editUnassignedApplication() {
+    private void editUnassignedApplication() {
         openApplication(unassignedAppListBean.getSelectedApplication());
     }
 
     /** Opens form to assign application. */
-    @Action
-    public void assignApplication() {
+    private void assignApplication() {
         openAssignmentForm(unassignedAppListBean.getSelectedApplication());
     }
 
     /** Refreshes the list of unassigned applications. */
-    @Action
-    public void refreshUnassignedApplications() {
+    private void refreshUnassignedApplications() {
         refreshApplications();
     }
 
     /** Opens form to unassign application. */
-    @Action
-    public void unassignApplication() {
+    private void unassignApplication() {
         openAssignmentForm(assignedAppListBean.getSelectedApplication());
     }
 
     /** Opens application form for the selected application from assigned list. */
-    @Action
-    public void editAssignedApplication() {
+    private void editAssignedApplication() {
         openApplication(assignedAppListBean.getSelectedApplication());
     }
 
     /** Refreshes the list of assigned applications. */
-    @Action
-    public void refreshAssignedApplications() {
+    private void refreshAssignedApplications() {
         refreshApplications();
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables

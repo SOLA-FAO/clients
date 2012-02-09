@@ -28,15 +28,11 @@
 package org.sola.clients.swing.desktop.application;
 
 import java.awt.ComponentOrientation;
-import java.util.Iterator;
 import java.util.Locale;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import org.sola.clients.beans.application.ApplicationBean;
-import org.sola.clients.beans.application.ApplicationServiceBean;
 import org.sola.clients.beans.referencedata.RequestTypeListBean;
-import org.sola.common.messaging.ClientMessage;
-import org.sola.common.messaging.MessageUtility;
 
 /**
  * Pop-up form with the list of request types. {@link RequestTypeListBean} is used

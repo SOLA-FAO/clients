@@ -93,7 +93,6 @@ public class MortgagePanel extends ContentPanel {
         initComponents();
     
         headerPanel.setTitleText(rrrBean.getRrrType().getDisplayValue());
-        customizeComponents();
         customizeForm(rrrAction);
     }
      
@@ -105,43 +104,7 @@ public class MortgagePanel extends ContentPanel {
             this.rrrBean = rrrBean.makeCopyByAction(rrrAction);
         }
     }
-    
-    
-      /** Applies customization of component L&F. */
-    private void customizeComponents() {
-    
-   
-//    BUTTONS   
-    LafManager.getInstance().setBtnProperties(btnSave);
-    
-//    COMBOBOXES
-    LafManager.getInstance().setCmbProperties(cbxType);
-    
-//    LABELS    
-    LafManager.getInstance().setLabProperties(jLabel1);
-    LafManager.getInstance().setLabProperties(jLabel13);
-    LafManager.getInstance().setLabProperties(jLabel14);
-    LafManager.getInstance().setLabProperties(jLabel16);
-    LafManager.getInstance().setLabProperties(jLabel2);
-    LafManager.getInstance().setLabProperties(jLabel3);
-    LafManager.getInstance().setLabProperties(jLabel4);
-    LafManager.getInstance().setLabProperties(jLabel5);
-    LafManager.getInstance().setLabProperties(jLabel6);
-    
-//    TXT FIELDS
-    LafManager.getInstance().setTxtProperties(txtNotationText);
-
-//    FORMATTED TXT
-    LafManager.getInstance().setFormattedTxtProperties(txtAmount);
-    LafManager.getInstance().setFormattedTxtProperties(txtExpiryDate);
-    LafManager.getInstance().setFormattedTxtProperties(txtInterestRate);
-    LafManager.getInstance().setFormattedTxtProperties(txtRanking);
-    LafManager.getInstance().setFormattedTxtProperties(txtRegDatetime);
-}   
-    
-    
-    
-    
+ 
     private void customizeForm(RrrBean.RRR_ACTION rrrAction) {
         if (rrrAction == RrrBean.RRR_ACTION.NEW) {
             btnSave.setText(MessageUtility.getLocalizedMessage(
@@ -261,15 +224,15 @@ public class MortgagePanel extends ContentPanel {
         setName("Form"); // NOI18N
 
         headerPanel.setName("headerPanel"); // NOI18N
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance().getContext().getResourceMap(MortgagePanel.class);
-        headerPanel.setTitleText(resourceMap.getString("headerPanel.titleText")); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
+        headerPanel.setTitleText(bundle.getString("MortgagePanel.headerPanel.titleText")); // NOI18N
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
         jToolBar1.setName("jToolBar1"); // NOI18N
 
-        btnSave.setIcon(resourceMap.getIcon("btnSave.icon")); // NOI18N
-        btnSave.setText(resourceMap.getString("btnSave.text")); // NOI18N
+        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/save.png"))); // NOI18N
+        btnSave.setText(bundle.getString("MortgagePanel.btnSave.text")); // NOI18N
         btnSave.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSave.setName("btnSave"); // NOI18N
         btnSave.addActionListener(new java.awt.event.ActionListener() {
@@ -285,11 +248,11 @@ public class MortgagePanel extends ContentPanel {
         filler1.setName("filler1"); // NOI18N
         jToolBar1.add(filler1);
 
-        jLabel14.setText(resourceMap.getString("jLabel14.text")); // NOI18N
+        jLabel14.setText(bundle.getString("MortgagePanel.jLabel14.text")); // NOI18N
         jLabel14.setName("jLabel14"); // NOI18N
         jToolBar1.add(jLabel14);
 
-        lblStatus.setFont(resourceMap.getFont("lblStatus.font")); // NOI18N
+        lblStatus.setFont(LafManager.getInstance().getLabFontBold());
         lblStatus.setName("lblStatus"); // NOI18N
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${status.displayValue}"), lblStatus, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -307,9 +270,8 @@ public class MortgagePanel extends ContentPanel {
 
         jPanel2.setName("jPanel2"); // NOI18N
 
-        jLabel13.setFont(resourceMap.getFont("jLabel13.font")); // NOI18N
-        jLabel13.setIcon(resourceMap.getIcon("jLabel13.icon")); // NOI18N
-        jLabel13.setText(resourceMap.getString("jLabel13.text")); // NOI18N
+        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
+        jLabel13.setText(bundle.getString("MortgagePanel.jLabel13.text")); // NOI18N
         jLabel13.setName("jLabel13"); // NOI18N
 
         txtRegDatetime.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
@@ -340,13 +302,11 @@ public class MortgagePanel extends ContentPanel {
 
         jPanel5.setName("jPanel5"); // NOI18N
 
-        jLabel3.setFont(resourceMap.getFont("jLabel3.font")); // NOI18N
-        jLabel3.setIcon(resourceMap.getIcon("jLabel3.icon")); // NOI18N
-        jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
+        jLabel3.setText(bundle.getString("MortgagePanel.jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
 
         txtExpiryDate.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
-        txtExpiryDate.setText(resourceMap.getString("txtExpiryDate.text")); // NOI18N
         txtExpiryDate.setName("txtExpiryDate"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${expirationDate}"), txtExpiryDate, org.jdesktop.beansbinding.BeanProperty.create("value"));
@@ -374,9 +334,8 @@ public class MortgagePanel extends ContentPanel {
 
         jPanel1.setName("jPanel1"); // NOI18N
 
-        jLabel2.setFont(resourceMap.getFont("jLabel3.font")); // NOI18N
-        jLabel2.setIcon(resourceMap.getIcon("jLabel3.icon")); // NOI18N
-        jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
+        jLabel2.setText(bundle.getString("MortgagePanel.jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
 
         cbxType.setName("cbxType"); // NOI18N
@@ -410,14 +369,13 @@ public class MortgagePanel extends ContentPanel {
 
         jPanel3.setName("jPanel3"); // NOI18N
 
-        jLabel6.setFont(resourceMap.getFont("jLabel3.font")); // NOI18N
-        jLabel6.setIcon(resourceMap.getIcon("jLabel3.icon")); // NOI18N
-        jLabel6.setText(resourceMap.getString("jLabel6.text")); // NOI18N
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
+        jLabel6.setText(bundle.getString("MortgagePanel.jLabel6.text")); // NOI18N
         jLabel6.setName("jLabel6"); // NOI18N
 
-        browseLender.setBrowseButtonTooltip(resourceMap.getString("browseLender.browseButtonTooltip")); // NOI18N
-        browseLender.setDeleteButtonIcon(resourceMap.getIcon("browseLender.deleteButtonIcon")); // NOI18N
-        browseLender.setDeleteButtonTooltip(resourceMap.getString("browseLender.deleteButtonTooltip")); // NOI18N
+        browseLender.setBrowseButtonTooltip(bundle.getString("MortgagePanel.browseLender.browseButtonTooltip")); // NOI18N
+        browseLender.setDeleteButtonIcon(null);
+        browseLender.setDeleteButtonTooltip(bundle.getString("MortgagePanel.browseLender.deleteButtonTooltip")); // NOI18N
         browseLender.setDisplayDeleteButton(false);
         browseLender.setName("browseLender"); // NOI18N
 
@@ -446,13 +404,11 @@ public class MortgagePanel extends ContentPanel {
 
         jPanel6.setName("jPanel6"); // NOI18N
 
-        jLabel4.setFont(resourceMap.getFont("jLabel3.font")); // NOI18N
-        jLabel4.setIcon(resourceMap.getIcon("jLabel3.icon")); // NOI18N
-        jLabel4.setText(resourceMap.getString("jLabel4.text")); // NOI18N
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
+        jLabel4.setText(bundle.getString("MortgagePanel.jLabel4.text")); // NOI18N
         jLabel4.setName("jLabel4"); // NOI18N
 
         txtAmount.setFormatterFactory(FormattersFactory.getInstance().getDecimalFormatterFactory());
-        txtAmount.setText(resourceMap.getString("txtAmount.text")); // NOI18N
         txtAmount.setName("txtAmount"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${mortgageAmount}"), txtAmount, org.jdesktop.beansbinding.BeanProperty.create("value"));
@@ -483,7 +439,7 @@ public class MortgagePanel extends ContentPanel {
 
         jPanel4.setName("jPanel4"); // NOI18N
 
-        jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
+        jLabel1.setText(bundle.getString("MortgagePanel.jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
 
         txtRanking.setFormatterFactory(FormattersFactory.getInstance().getIntegerFormatterFactory());
@@ -514,7 +470,7 @@ public class MortgagePanel extends ContentPanel {
 
         jPanel7.setName("jPanel7"); // NOI18N
 
-        jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
+        jLabel5.setText(bundle.getString("MortgagePanel.jLabel5.text")); // NOI18N
         jLabel5.setName("jLabel5"); // NOI18N
 
         txtInterestRate.setFormatterFactory(FormattersFactory.getInstance().getDecimalFormatterFactory());
@@ -545,9 +501,9 @@ public class MortgagePanel extends ContentPanel {
 
         jPanel8.add(jPanel9);
 
-        jLabel16.setFont(resourceMap.getFont("jLabel16.font")); // NOI18N
-        jLabel16.setIcon(resourceMap.getIcon("jLabel16.icon")); // NOI18N
-        jLabel16.setText(resourceMap.getString("jLabel16.text")); // NOI18N
+        jLabel16.setFont(LafManager.getInstance().getLabFontBold());
+        jLabel16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
+        jLabel16.setText(bundle.getString("MortgagePanel.jLabel16.text")); // NOI18N
         jLabel16.setName("jLabel16"); // NOI18N
 
         txtNotationText.setName("txtNotationText"); // NOI18N
@@ -556,7 +512,7 @@ public class MortgagePanel extends ContentPanel {
         bindingGroup.addBinding(binding);
 
         groupPanel1.setName("groupPanel1"); // NOI18N
-        groupPanel1.setTitleText(resourceMap.getString("groupPanel1.titleText")); // NOI18N
+        groupPanel1.setTitleText(bundle.getString("MortgagePanel.groupPanel1.titleText")); // NOI18N
 
         documentsManagementPanel1.setName("documentsManagementPanel1"); // NOI18N
 
@@ -587,7 +543,7 @@ public class MortgagePanel extends ContentPanel {
                 .addGap(18, 18, 18)
                 .addComponent(groupPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(documentsManagementPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
+                .addComponent(documentsManagementPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -608,7 +564,7 @@ public class MortgagePanel extends ContentPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 381, Short.MAX_VALUE))
         );
 
         bindingGroup.bind();

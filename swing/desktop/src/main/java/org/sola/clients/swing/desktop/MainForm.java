@@ -27,65 +27,48 @@
  */
 package org.sola.clients.swing.desktop;
 
-import java.awt.event.WindowEvent;
-import org.jdesktop.application.Action;
-import org.jdesktop.application.SingleFrameApplication;
-import org.jdesktop.application.FrameView;
-import javax.swing.JFrame;
-import javax.swing.ImageIcon;
 import java.awt.ComponentOrientation;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.event.WindowEvent;
 import java.net.URL;
 import java.util.Locale;
 import java.util.logging.Level;
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import org.sola.clients.swing.desktop.application.ApplicationPanel;
-import org.sola.clients.swing.desktop.application.ApplicationSearchPanel;
+import javax.swing.ImageIcon;
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.swing.common.LafManager;
+import org.sola.clients.swing.common.LocalizationManager;
+import org.sola.clients.swing.common.tasks.SolaTask;
+import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.desktop.administrative.BaUnitSearchPanel;
-import org.sola.clients.swing.desktop.party.PartySearchForm;
+import org.sola.clients.swing.desktop.application.ApplicationPanel;
+import org.sola.clients.swing.desktop.application.ApplicationSearchPanel;
+import org.sola.clients.swing.desktop.cadastre.MapPanelForm;
+import org.sola.clients.swing.desktop.party.PartySearchPanelForm;
 import org.sola.clients.swing.desktop.source.DocumentSearchPanel;
-import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleViewer;
 import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.common.RolesConstants;
 import org.sola.common.help.HelpUtility;
 import org.sola.common.logging.LogUtility;
+import org.sola.common.messaging.ClientMessage;
+import org.sola.common.messaging.MessageUtility;
 
 /**
- * The main form of the application.
+ * Main form of the application.
  */
-public class MainForm extends FrameView {
+public class MainForm extends javax.swing.JFrame {
 
-    Object foreFont = LafManager.getInstance().getForeFont();
-    Object labFont = LafManager.getInstance().getLabFont();
-    Object bgFont = LafManager.getInstance().getBgFont();
-    Object txtFont = LafManager.getInstance().getTxtFont();
-    Object txtAreaFont = LafManager.getInstance().getTxtAreaFont();
-    Object btnFont = LafManager.getInstance().getBtnFont();
-    Object tabFont = LafManager.getInstance().getTabFont();
-    Object cmbFont = LafManager.getInstance().getCmbFont();
-    Object btnBackground = LafManager.getInstance().getBtnBackground();
-
-    /** Main form constructor. Initializes resources, help context and tasks. */
-    public MainForm(SingleFrameApplication app) {
-        super(app);
+    /** Default constructor. */
+    public MainForm() {
         URL imgURL = this.getClass().getResource("/images/sola/logo_icon.jpg");
-        this.getFrame().setIconImage(new ImageIcon(imgURL).getImage());
+        this.setIconImage(new ImageIcon(imgURL).getImage());
 
         initComponents();
-        /**
-         * Get an instance of HelpUtility and obtain <code>ActionListener<code/>s for the Help Menu Item 
-         * and the Help Button components. Register them on the the help menu item and the Help Button
-         * 
-         */
+
         HelpUtility hu = HelpUtility.getInstance();
         jmiContextHelp.addActionListener(hu.getHelpListener(jmiContextHelp, "overview"));
 
-        this.getFrame().addWindowListener(new java.awt.event.WindowAdapter() {
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
 
             @Override
             public void windowOpened(WindowEvent e) {
@@ -100,29 +83,137 @@ public class MainForm extends FrameView {
      * form has been opened. It helps to display form with no significant delays. 
      */
     private void postInit() {
+        // Set center screen location 
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = ((dim.width) / 2);
+        int y = ((dim.height) / 2);
+
+        this.setLocation(x - (this.getWidth() / 2), y - (this.getHeight() / 2));
+
         // Customize buttons
-        btnNewApplication.getAction().setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_CREATE_APPS));
-        btnOpenMap.getAction().setEnabled(SecurityBean.isInRole(RolesConstants.GIS_VIEW_MAP));
-        btnSearchApplications.getAction().setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_VIEW_APPS));
-        btnShowDashboard.getAction().setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_VIEW_APPS));
-        btnManageParties.getAction().setEnabled(SecurityBean.isInRole(RolesConstants.PARTY_SAVE));
+        btnNewApplication.setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_CREATE_APPS));
+        btnOpenMap.setEnabled(SecurityBean.isInRole(RolesConstants.GIS_VIEW_MAP));
+        btnSearchApplications.setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_VIEW_APPS));
+        btnShowDashboard.setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_VIEW_APPS));
+        btnManageParties.setEnabled(SecurityBean.isInRole(RolesConstants.PARTY_SAVE));
+
+        menuSearchApplication.setEnabled(btnSearchApplications.isEnabled());
+        menuNewApplication.setEnabled(btnNewApplication.isEnabled());
 
         // Load dashboard
         openDashBoard();
 
         txtUserName.setText(SecurityBean.getCurrentUser().getUserName());
+    }
 
-        jMenuItem3.setVisible(false);
-        jMenuItem4.setVisible(false);
-        jMenuItem5.setVisible(false);
-        jMenuItem6.setVisible(false);
+    private void setAllLogLevel() {
+        LogUtility.setLogLevel(Level.ALL);
+    }
+
+    private void setDefaultLogLevel() {
+        LogUtility.setLogLevel(Level.INFO);
+    }
+
+    private void setOffLogLevel() {
+        LogUtility.setLogLevel(Level.OFF);
+    }
+
+    private void openNewApplicationForm() {
+        SolaTask t = new SolaTask<Void, Void>() {
+
+            @Override
+            public Void doTask() {
+                setMessage("Opening new application form...");
+                ApplicationPanel applicationPanel = new ApplicationPanel();
+                pnlContent.addPanel(applicationPanel, MainContentPanel.CARD_APPLICATION, true);
+                return null;
+            }
+        };
+        TaskManager.getInstance().runTask(t);
+    }
+
+    private void openMap() {
+        SolaTask t = new SolaTask<Void, Void>() {
+
+            @Override
+            public Void doTask() {
+                setMessage("Opening map...");
+                if (!pnlContent.isPanelOpened(MainContentPanel.CARD_MAP)) {
+                    MapPanelForm mapPanel = new MapPanelForm();
+                    pnlContent.addPanel(mapPanel, MainContentPanel.CARD_MAP);
+                }
+                pnlContent.showPanel(MainContentPanel.CARD_MAP);
+                return null;
+            }
+        };
+        TaskManager.getInstance().runTask(t);
+    }
+
+    private void searchApplications() {
+        SolaTask t = new SolaTask<Void, Void>() {
+
+            @Override
+            public Void doTask() {
+                setMessage("Opening application search...");
+                if (!pnlContent.isPanelOpened(MainContentPanel.CARD_APPSEARCH)) {
+                    ApplicationSearchPanel searchApplicationPanel = new ApplicationSearchPanel();
+                    pnlContent.addPanel(searchApplicationPanel, MainContentPanel.CARD_APPSEARCH);
+                }
+                pnlContent.showPanel(MainContentPanel.CARD_APPSEARCH);
+                return null;
+            }
+        };
+        TaskManager.getInstance().runTask(t);
+    }
+
+    private void searchBaUnit() {
+        if (!pnlContent.isPanelOpened(MainContentPanel.CARD_BAUNIT_SEARCH)) {
+            BaUnitSearchPanel baUnitSearchPanel = new BaUnitSearchPanel();
+            pnlContent.addPanel(baUnitSearchPanel, MainContentPanel.CARD_BAUNIT_SEARCH);
+        }
+        pnlContent.showPanel(MainContentPanel.CARD_BAUNIT_SEARCH);
+    }
+
+    private void searchDocuments() {
+        if (!pnlContent.isPanelOpened(MainContentPanel.CARD_DOCUMENT_SEARCH)) {
+            DocumentSearchPanel documentSearchPanel = new DocumentSearchPanel();
+            pnlContent.addPanel(documentSearchPanel, MainContentPanel.CARD_DOCUMENT_SEARCH);
+        }
+        pnlContent.showPanel(MainContentPanel.CARD_DOCUMENT_SEARCH);
+    }
+
+    private void openSearchParties() {
+        if (!pnlContent.isPanelOpened(MainContentPanel.CARD_SEARCH_PERSONS)) {
+            PartySearchPanelForm partySearchPanelForm = new PartySearchPanelForm();
+            pnlContent.addPanel(partySearchPanelForm, MainContentPanel.CARD_SEARCH_PERSONS, true);
+        }else{
+            pnlContent.showPanel(MainContentPanel.CARD_SEARCH_PERSONS);
+        }
+    }
+
+    private void openDashBoard() {
+        if (!pnlContent.isPanelOpened(MainContentPanel.CARD_DASHBOARD)) {
+            DashBoardPanel dashBoard = new DashBoardPanel();
+            pnlContent.addPanel(dashBoard, MainContentPanel.CARD_DASHBOARD);
+        }
+        pnlContent.showPanel(MainContentPanel.CARD_DASHBOARD);
+    }
+
+    private void showAboutBox() {
+        AboutForm aboutBox = new AboutForm(this);
+        aboutBox.setLocationRelativeTo(this);
+        aboutBox.setVisible(true);
+    }
+
+    private void setLanguage(String code, String country) {
+        LocalizationManager.setLanguage(DesktopApplication.class, code, country);
+        MessageUtility.displayMessage(ClientMessage.GENERAL_UPDATE_LANG);
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        mainPanel = new javax.swing.JPanel();
         applicationsMain = new javax.swing.JToolBar();
         btnShowDashboard = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JToolBar.Separator();
@@ -130,11 +221,15 @@ public class MainForm extends FrameView {
         jSeparator4 = new javax.swing.JToolBar.Separator();
         btnSearchApplications = new javax.swing.JButton();
         btnOpenBaUnitSearch = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        btnDocumentSearch = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JToolBar.Separator();
         btnManageParties = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JToolBar.Separator();
         btnOpenMap = new javax.swing.JButton();
+        statusPanel = new javax.swing.JPanel();
+        labStatus = new javax.swing.JLabel();
+        taskPanel1 = new org.sola.clients.swing.common.tasks.TaskPanel();
+        txtUserName = new javax.swing.JLabel();
         pnlContent = new org.sola.clients.swing.ui.MainContentPanel();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
@@ -143,263 +238,237 @@ public class MainForm extends FrameView {
         menuLanguage = new javax.swing.JMenu();
         menuLangEN = new javax.swing.JMenuItem();
         menuLangIT = new javax.swing.JMenuItem();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
-        jMenuItem5 = new javax.swing.JMenuItem();
-        jMenuItem6 = new javax.swing.JMenuItem();
         menuLogLevel = new javax.swing.JMenu();
         menuAllLogLevel = new javax.swing.JMenuItem();
         menuDefaultLogLevel = new javax.swing.JMenuItem();
         menuOffLogLevel = new javax.swing.JMenuItem();
-        javax.swing.JMenu homeDashboard = new javax.swing.JMenu();
-        menuDashboardItem = new javax.swing.JMenuItem();
-        menuReports = new javax.swing.JMenu();
         menuApplications = new javax.swing.JMenu();
         menuNewApplication = new javax.swing.JMenuItem();
-        menuRegistration = new javax.swing.JMenu();
         menuMap = new javax.swing.JMenu();
         menuShowMap = new javax.swing.JMenuItem();
-        javax.swing.JMenu helpMenu = new javax.swing.JMenu();
-        javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
-        jmiContextHelp = new javax.swing.JMenuItem();
         menuSearch = new javax.swing.JMenu();
         menuSearchApplication = new javax.swing.JMenuItem();
         menuBaUnitSearch = new javax.swing.JMenuItem();
         menuDocumentSearch = new javax.swing.JMenuItem();
-        statusPanel = new javax.swing.JPanel();
-        labStatus = new javax.swing.JLabel();
-        taskPanel1 = new org.sola.clients.swing.common.tasks.TaskPanel();
-        txtUserName = new javax.swing.JLabel();
+        javax.swing.JMenu helpMenu = new javax.swing.JMenu();
+        javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
+        jmiContextHelp = new javax.swing.JMenuItem();
 
-        mainPanel.setName("mainPanel"); // NOI18N
-        mainPanel.setPreferredSize(new java.awt.Dimension(700, 550));
-        mainPanel.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/Bundle"); // NOI18N
+        setTitle(bundle.getString("MainForm.title")); // NOI18N
 
         applicationsMain.setFloatable(false);
         applicationsMain.setRollover(true);
-        applicationsMain.setFont(new java.awt.Font("Tahoma", 0, 12));
+        applicationsMain.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         applicationsMain.setMaximumSize(new java.awt.Dimension(32769, 32769));
         applicationsMain.setMinimumSize(new java.awt.Dimension(90, 45));
-        applicationsMain.setName("applicationsMain"); // NOI18N
         applicationsMain.setPreferredSize(new java.awt.Dimension(980, 45));
         applicationsMain.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(MainForm.class, this);
-        btnShowDashboard.setAction(actionMap.get("openDashBoard")); // NOI18N
+        btnShowDashboard.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/home.png"))); // NOI18N
+        btnShowDashboard.setText(bundle.getString("MainForm.btnShowDashboard.text")); // NOI18N
         btnShowDashboard.setFocusable(false);
         btnShowDashboard.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnShowDashboard.setName("btnShowDashboard"); // NOI18N
         btnShowDashboard.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnShowDashboard.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnShowDashboardActionPerformed(evt);
+            }
+        });
         applicationsMain.add(btnShowDashboard);
-
-        jSeparator2.setName("jSeparator2"); // NOI18N
         applicationsMain.add(jSeparator2);
 
-        btnNewApplication.setAction(actionMap.get("openNewApplicationForm")); // NOI18N
+        btnNewApplication.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/new.png"))); // NOI18N
+        btnNewApplication.setText(bundle.getString("MainForm.btnNewApplication.text")); // NOI18N
         btnNewApplication.setFocusable(false);
         btnNewApplication.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnNewApplication.setName("btnNewApplication"); // NOI18N
         btnNewApplication.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnNewApplication.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNewApplicationActionPerformed(evt);
+            }
+        });
         applicationsMain.add(btnNewApplication);
-
-        jSeparator4.setName("jSeparator4"); // NOI18N
         applicationsMain.add(jSeparator4);
 
-        btnSearchApplications.setAction(actionMap.get("searchApplications")); // NOI18N
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/Bundle"); // NOI18N
+        btnSearchApplications.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/search.png"))); // NOI18N
         btnSearchApplications.setText(bundle.getString("MainForm.btnSearchApplications.text")); // NOI18N
         btnSearchApplications.setFocusable(false);
         btnSearchApplications.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnSearchApplications.setName("btnSearchApplications"); // NOI18N
         btnSearchApplications.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSearchApplications.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchApplicationsActionPerformed(evt);
+            }
+        });
         applicationsMain.add(btnSearchApplications);
 
-        btnOpenBaUnitSearch.setAction(actionMap.get("searchBaUnit")); // NOI18N
-        btnOpenBaUnitSearch.setText(bundle.getString("MainForm.btnOpenBaUnitSearch.text_1")); // NOI18N
+        btnOpenBaUnitSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/search.png"))); // NOI18N
+        btnOpenBaUnitSearch.setText(bundle.getString("MainForm.btnOpenBaUnitSearch.text")); // NOI18N
         btnOpenBaUnitSearch.setFocusable(false);
         btnOpenBaUnitSearch.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnOpenBaUnitSearch.setName("btnOpenBaUnitSearch"); // NOI18N
         btnOpenBaUnitSearch.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnOpenBaUnitSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOpenBaUnitSearchActionPerformed(evt);
+            }
+        });
         applicationsMain.add(btnOpenBaUnitSearch);
 
-        jButton1.setAction(actionMap.get("searchDocuments")); // NOI18N
-        jButton1.setText(bundle.getString("MainForm.jButton1.text_1")); // NOI18N
-        jButton1.setFocusable(false);
-        jButton1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jButton1.setName("jButton1"); // NOI18N
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        applicationsMain.add(jButton1);
-
-        jSeparator3.setName("jSeparator3"); // NOI18N
+        btnDocumentSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/search.png"))); // NOI18N
+        btnDocumentSearch.setText(bundle.getString("MainForm.btnDocumentSearch.text")); // NOI18N
+        btnDocumentSearch.setFocusable(false);
+        btnDocumentSearch.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnDocumentSearch.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnDocumentSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDocumentSearchActionPerformed(evt);
+            }
+        });
+        applicationsMain.add(btnDocumentSearch);
         applicationsMain.add(jSeparator3);
 
-        btnManageParties.setAction(actionMap.get("manageParties")); // NOI18N
-        btnManageParties.setText(bundle.getString("MainForm.btnManageParties.text_1")); // NOI18N
+        btnManageParties.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/users.png"))); // NOI18N
+        btnManageParties.setText(bundle.getString("MainForm.btnManageParties.text")); // NOI18N
         btnManageParties.setFocusable(false);
         btnManageParties.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnManageParties.setName("btnManageParties"); // NOI18N
         btnManageParties.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnManageParties.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnManagePartiesActionPerformed(evt);
+            }
+        });
         applicationsMain.add(btnManageParties);
-
-        jSeparator1.setName("jSeparator1"); // NOI18N
         applicationsMain.add(jSeparator1);
 
-        btnOpenMap.setAction(actionMap.get("openMap")); // NOI18N
+        btnOpenMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/network.png"))); // NOI18N
         btnOpenMap.setText(bundle.getString("MainForm.btnOpenMap.text")); // NOI18N
         btnOpenMap.setFocusable(false);
         btnOpenMap.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnOpenMap.setName("btnOpenMap"); // NOI18N
         btnOpenMap.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnOpenMap.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOpenMapActionPerformed(evt);
+            }
+        });
         applicationsMain.add(btnOpenMap);
 
-        pnlContent.setName("pnlContent"); // NOI18N
+        statusPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        statusPanel.setPreferredSize(new java.awt.Dimension(1024, 24));
 
-        org.jdesktop.layout.GroupLayout mainPanelLayout = new org.jdesktop.layout.GroupLayout(mainPanel);
-        mainPanel.setLayout(mainPanelLayout);
-        mainPanelLayout.setHorizontalGroup(
-            mainPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(applicationsMain, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 625, Short.MAX_VALUE)
-            .add(pnlContent, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 625, Short.MAX_VALUE)
+        labStatus.setFont(LafManager.getInstance().getLabFontBold());
+        labStatus.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        labStatus.setText(bundle.getString("MainForm.labStatus.text")); // NOI18N
+
+        txtUserName.setText(bundle.getString("MainForm.txtUserName.text")); // NOI18N
+
+        javax.swing.GroupLayout statusPanelLayout = new javax.swing.GroupLayout(statusPanel);
+        statusPanel.setLayout(statusPanelLayout);
+        statusPanelLayout.setHorizontalGroup(
+            statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(statusPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(labStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtUserName, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(taskPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 624, Short.MAX_VALUE))
         );
-        mainPanelLayout.setVerticalGroup(
-            mainPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(mainPanelLayout.createSequentialGroup()
-                .add(applicationsMain, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 28, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(pnlContent, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE))
+        statusPanelLayout.setVerticalGroup(
+            statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(labStatus, javax.swing.GroupLayout.DEFAULT_SIZE, 20, Short.MAX_VALUE)
+            .addComponent(txtUserName, javax.swing.GroupLayout.DEFAULT_SIZE, 20, Short.MAX_VALUE)
+            .addComponent(taskPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 20, Short.MAX_VALUE)
         );
 
         menuBar.setFont(new java.awt.Font("Tahoma", 0, 12));
-        menuBar.setName("menuBar"); // NOI18N
         menuBar.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
 
-        fileMenu.setText(bundle.getString("MainForm.fileMenu.text_1")); // NOI18N
-        fileMenu.setName("fileMenu"); // NOI18N
+        fileMenu.setText(bundle.getString("MainForm.fileMenu.text")); // NOI18N
 
-        menuExitItem.setAction(actionMap.get("quit")); // NOI18N
-        menuExitItem.setText(bundle.getString("MainForm.menuExitItem.text")); // NOI18N
         menuExitItem.setText(bundle.getString("MainForm.menuExitItem.text")); // NOI18N
         menuExitItem.setToolTipText(bundle.getString("MainForm.menuExitItem.toolTipText")); // NOI18N
-        menuExitItem.setName("menuExitItem"); // NOI18N
+        menuExitItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuExitItemActionPerformed(evt);
+            }
+        });
         fileMenu.add(menuExitItem);
 
         menuBar.add(fileMenu);
 
-        menuView.setText(bundle.getString("MainForm.menuView.text_1")); // NOI18N
-        menuView.setName("menuView"); // NOI18N
+        menuView.setText(bundle.getString("MainForm.menuView.text")); // NOI18N
 
-        menuLanguage.setText(bundle.getString("MainForm.menuLanguage.text_1")); // NOI18N
-        menuLanguage.setName("menuLanguage"); // NOI18N
+        menuLanguage.setText(bundle.getString("MainForm.menuLanguage.text")); // NOI18N
 
         menuLangEN.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/flags/en.jpg"))); // NOI18N
-        menuLangEN.setText(bundle.getString("MainForm.menuLangEN.text_1")); // NOI18N
-        menuLangEN.setName("menuLangEN"); // NOI18N
+        menuLangEN.setText(bundle.getString("MainForm.menuLangEN.text")); // NOI18N
+        menuLangEN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuLangENActionPerformed(evt);
+            }
+        });
         menuLanguage.add(menuLangEN);
 
         menuLangIT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/flags/it.jpg"))); // NOI18N
-        menuLangIT.setText(bundle.getString("MainForm.menuLangIT.text_1")); // NOI18N
-        menuLangIT.setName("menuLangIT"); // NOI18N
+        menuLangIT.setText(bundle.getString("MainForm.menuLangIT.text")); // NOI18N
+        menuLangIT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuLangITActionPerformed(evt);
+            }
+        });
         menuLanguage.add(menuLangIT);
 
         menuView.add(menuLanguage);
 
-        jMenu1.setText(bundle.getString("MainForm.jMenu1.text")); // NOI18N
-        jMenu1.setName("jMenu1"); // NOI18N
-
-        jMenuItem1.addActionListener(new LNFSetter("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel","green"));
-        jMenuItem1.setText(bundle.getString("MainForm.jMenuItem1.text")); // NOI18N
-        jMenuItem1.setName("jMenuItem1"); // NOI18N
-        jMenu1.add(jMenuItem1);
-
-        jMenuItem2.addActionListener(new LNFSetter("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel","autumn"));
-        jMenuItem2.setText(bundle.getString("MainForm.jMenuItem2.text")); // NOI18N
-        jMenuItem2.setName("jMenuItem2"); // NOI18N
-        jMenu1.add(jMenuItem2);
-
-        jMenuItem3.addActionListener(new LNFSetter("javax.swing.plaf.metal.MetalLookAndFeel", "default"));
-        jMenuItem3.setText(bundle.getString("MainForm.jMenuItem3.text")); // NOI18N
-        jMenuItem3.setName("jMenuItem3"); // NOI18N
-        jMenu1.add(jMenuItem3);
-
-        jMenuItem4.addActionListener(new LNFSetter("com.sun.java.swing.plaf.windows.WindowsLookAndFeel", "default"));
-        jMenuItem4.setText(bundle.getString("MainForm.jMenuItem4.text")); // NOI18N
-        jMenuItem4.setName("jMenuItem4"); // NOI18N
-        jMenu1.add(jMenuItem4);
-
-        jMenuItem5.addActionListener(new LNFSetter("com.sun.java.swing.plaf.motif.MotifLookAndFeel", "default"));
-        jMenuItem5.setText(bundle.getString("MainForm.jMenuItem5.text")); // NOI18N
-        jMenuItem5.setName("jMenuItem5"); // NOI18N
-        jMenu1.add(jMenuItem5);
-
-        String defaultLookAndFeel = UIManager.getSystemLookAndFeelClassName();
-        jMenuItem6.addActionListener(new LNFSetter(defaultLookAndFeel,  "default"));
-        jMenuItem6.setText(bundle.getString("MainForm.jMenuItem6.text")); // NOI18N
-        jMenuItem6.setName("jMenuItem6"); // NOI18N
-        jMenu1.add(jMenuItem6);
-
-        menuView.add(jMenu1);
-
         menuLogLevel.setText(bundle.getString("MainForm.menuLogLevel.text")); // NOI18N
-        menuLogLevel.setName("menuLogLevel"); // NOI18N
 
-        menuAllLogLevel.setAction(actionMap.get("setAllLogLevel")); // NOI18N
         menuAllLogLevel.setText(bundle.getString("MainForm.menuAllLogLevel.text")); // NOI18N
-        menuAllLogLevel.setActionCommand(bundle.getString("MainForm.menuAllLogLevel.actionCommand")); // NOI18N
-        menuAllLogLevel.setName("menuAllLogLevel"); // NOI18N
+        menuAllLogLevel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuAllLogLevelActionPerformed(evt);
+            }
+        });
         menuLogLevel.add(menuAllLogLevel);
 
-        menuDefaultLogLevel.setAction(actionMap.get("setDefaultLogLevel")); // NOI18N
         menuDefaultLogLevel.setText(bundle.getString("MainForm.menuDefaultLogLevel.text")); // NOI18N
-        menuDefaultLogLevel.setActionCommand(bundle.getString("MainForm.menuDefaultLogLevel.actionCommand")); // NOI18N
-        menuDefaultLogLevel.setName("menuDefaultLogLevel"); // NOI18N
+        menuDefaultLogLevel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuDefaultLogLevelActionPerformed(evt);
+            }
+        });
         menuLogLevel.add(menuDefaultLogLevel);
 
-        menuOffLogLevel.setAction(actionMap.get("setOffLogLevel")); // NOI18N
         menuOffLogLevel.setText(bundle.getString("MainForm.menuOffLogLevel.text")); // NOI18N
-        menuOffLogLevel.setActionCommand(bundle.getString("MainForm.menuOffLogLevel.actionCommand")); // NOI18N
-        menuOffLogLevel.setName("menuOffLogLevel"); // NOI18N
+        menuOffLogLevel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuOffLogLevelActionPerformed(evt);
+            }
+        });
         menuLogLevel.add(menuOffLogLevel);
 
         menuView.add(menuLogLevel);
 
         menuBar.add(menuView);
 
-        homeDashboard.setText(bundle.getString("MainForm.homeDashboard.text_1")); // NOI18N
-        homeDashboard.setName("homeDashboard"); // NOI18N
+        menuApplications.setText(bundle.getString("MainForm.menuApplications.text")); // NOI18N
 
-        menuDashboardItem.setAction(actionMap.get("openDashBoard")); // NOI18N
-        menuDashboardItem.setText(bundle.getString("MainForm.menuDashboardItem.text_1")); // NOI18N
-        menuDashboardItem.setName("menuDashboardItem"); // NOI18N
-        homeDashboard.add(menuDashboardItem);
-
-        menuReports.setText(bundle.getString("MainForm.menuReports.text_1")); // NOI18N
-        menuReports.setName("menuReports"); // NOI18N
-        homeDashboard.add(menuReports);
-
-        menuBar.add(homeDashboard);
-
-        menuApplications.setText(bundle.getString("MainForm.menuApplications.text_1")); // NOI18N
-        menuApplications.setName("menuApplications"); // NOI18N
-
-        menuNewApplication.setAction(actionMap.get("openNewApplicationForm")); // NOI18N
+        menuNewApplication.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/new.png"))); // NOI18N
         menuNewApplication.setText(bundle.getString("MainForm.menuNewApplication.text")); // NOI18N
-        menuNewApplication.setName("menuNewApplication"); // NOI18N
+        menuNewApplication.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuNewApplicationActionPerformed(evt);
+            }
+        });
         menuApplications.add(menuNewApplication);
 
         menuBar.add(menuApplications);
 
-        menuRegistration.setText(bundle.getString("MainForm.menuRegistration.text_1")); // NOI18N
-        menuRegistration.setName("menuRegistration"); // NOI18N
-        menuBar.add(menuRegistration);
+        menuMap.setText(bundle.getString("MainForm.menuMap.text")); // NOI18N
 
-        menuMap.setText(bundle.getString("MainForm.menuMap.text_1")); // NOI18N
-        menuMap.setName("menuMap"); // NOI18N
-
-        menuShowMap.setAction(actionMap.get("openMap")); // NOI18N
-        menuShowMap.setName("menuShowMap"); // NOI18N
+        menuShowMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/network.png"))); // NOI18N
+        menuShowMap.setText(bundle.getString("MainForm.menuShowMap.text")); // NOI18N
         menuShowMap.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuShowMapActionPerformed(evt);
@@ -409,80 +478,155 @@ public class MainForm extends FrameView {
 
         menuBar.add(menuMap);
 
-        helpMenu.setText(bundle.getString("MainForm.helpMenu.text_1")); // NOI18N
-        helpMenu.setName("helpMenu"); // NOI18N
-
-        aboutMenuItem.setAction(actionMap.get("showAboutBox")); // NOI18N
-        aboutMenuItem.setName("aboutMenuItem"); // NOI18N
-        helpMenu.add(aboutMenuItem);
-
-        jmiContextHelp.setText(bundle.getString("MainForm.jmiContextHelp.text_1")); // NOI18N
-        jmiContextHelp.setName("jmiContextHelp"); // NOI18N
-        helpMenu.add(jmiContextHelp);
-
-        menuBar.add(helpMenu);
-
         menuSearch.setText(bundle.getString("MainForm.menuSearch.text")); // NOI18N
-        menuSearch.setName("menuSearch"); // NOI18N
 
-        menuSearchApplication.setAction(actionMap.get("searchApplications")); // NOI18N
-        menuSearchApplication.setText(bundle.getString("MainForm.menuSearchApplication.text_1")); // NOI18N
-        menuSearchApplication.setName("menuSearchApplication"); // NOI18N
+        menuSearchApplication.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/search.png"))); // NOI18N
+        menuSearchApplication.setText(bundle.getString("MainForm.menuSearchApplication.text")); // NOI18N
+        menuSearchApplication.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuSearchApplicationActionPerformed(evt);
+            }
+        });
         menuSearch.add(menuSearchApplication);
 
-        menuBaUnitSearch.setAction(actionMap.get("searchBaUnit")); // NOI18N
+        menuBaUnitSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/search.png"))); // NOI18N
         menuBaUnitSearch.setText(bundle.getString("MainForm.menuBaUnitSearch.text")); // NOI18N
-        menuBaUnitSearch.setName("menuBaUnitSearch"); // NOI18N
+        menuBaUnitSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuBaUnitSearchActionPerformed(evt);
+            }
+        });
         menuSearch.add(menuBaUnitSearch);
 
-        menuDocumentSearch.setAction(actionMap.get("searchDocuments")); // NOI18N
+        menuDocumentSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/search.png"))); // NOI18N
         menuDocumentSearch.setText(bundle.getString("MainForm.menuDocumentSearch.text")); // NOI18N
-        menuDocumentSearch.setName("menuDocumentSearch"); // NOI18N
+        menuDocumentSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuDocumentSearchActionPerformed(evt);
+            }
+        });
         menuSearch.add(menuDocumentSearch);
 
         menuBar.add(menuSearch);
 
-        statusPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        statusPanel.setName("statusPanel"); // NOI18N
-        statusPanel.setPreferredSize(new java.awt.Dimension(1024, 24));
+        helpMenu.setText(bundle.getString("MainForm.helpMenu.text")); // NOI18N
 
-        labStatus.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        labStatus.setText(bundle.getString("MainForm.labStatus.text_1")); // NOI18N
-        labStatus.setName("labStatus"); // NOI18N
+        aboutMenuItem.setText(bundle.getString("MainForm.aboutMenuItem.text")); // NOI18N
+        aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                aboutMenuItemActionPerformed(evt);
+            }
+        });
+        helpMenu.add(aboutMenuItem);
 
-        taskPanel1.setName("taskPanel1"); // NOI18N
+        jmiContextHelp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/help.png"))); // NOI18N
+        jmiContextHelp.setText(bundle.getString("MainForm.jmiContextHelp.text")); // NOI18N
+        helpMenu.add(jmiContextHelp);
 
-        txtUserName.setText(bundle.getString("MainForm.txtUserName.text")); // NOI18N
-        txtUserName.setName("txtUserName"); // NOI18N
+        menuBar.add(helpMenu);
 
-        org.jdesktop.layout.GroupLayout statusPanelLayout = new org.jdesktop.layout.GroupLayout(statusPanel);
-        statusPanel.setLayout(statusPanelLayout);
-        statusPanelLayout.setHorizontalGroup(
-            statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, statusPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .add(labStatus, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 35, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(txtUserName, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(taskPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 498, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+        setJMenuBar(menuBar);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(statusPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 876, Short.MAX_VALUE)
+            .addComponent(applicationsMain, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 876, Short.MAX_VALUE)
+            .addComponent(pnlContent, javax.swing.GroupLayout.DEFAULT_SIZE, 876, Short.MAX_VALUE)
         );
-        statusPanelLayout.setVerticalGroup(
-            statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(labStatus, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
-            .add(txtUserName, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
-            .add(taskPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(applicationsMain, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pnlContent, javax.swing.GroupLayout.DEFAULT_SIZE, 469, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(statusPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        setComponent(mainPanel);
-        setMenuBar(menuBar);
-        setStatusBar(statusPanel);
+        pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void menuShowMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuShowMapActionPerformed
+        openMap();
     }//GEN-LAST:event_menuShowMapActionPerformed
+
+    private void menuExitItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuExitItemActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_menuExitItemActionPerformed
+
+    private void menuAllLogLevelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAllLogLevelActionPerformed
+        setAllLogLevel();
+    }//GEN-LAST:event_menuAllLogLevelActionPerformed
+
+    private void menuDefaultLogLevelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuDefaultLogLevelActionPerformed
+        setDefaultLogLevel();
+    }//GEN-LAST:event_menuDefaultLogLevelActionPerformed
+
+    private void menuOffLogLevelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOffLogLevelActionPerformed
+        setOffLogLevel();
+    }//GEN-LAST:event_menuOffLogLevelActionPerformed
+
+    private void menuNewApplicationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuNewApplicationActionPerformed
+        openNewApplicationForm();
+    }//GEN-LAST:event_menuNewApplicationActionPerformed
+
+    private void menuSearchApplicationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSearchApplicationActionPerformed
+        searchApplications();
+    }//GEN-LAST:event_menuSearchApplicationActionPerformed
+
+    private void menuBaUnitSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuBaUnitSearchActionPerformed
+        searchBaUnit();
+    }//GEN-LAST:event_menuBaUnitSearchActionPerformed
+
+    private void menuDocumentSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuDocumentSearchActionPerformed
+        searchDocuments();
+    }//GEN-LAST:event_menuDocumentSearchActionPerformed
+
+    private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuItemActionPerformed
+        showAboutBox();
+    }//GEN-LAST:event_aboutMenuItemActionPerformed
+
+    private void btnShowDashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowDashboardActionPerformed
+        openDashBoard();
+    }//GEN-LAST:event_btnShowDashboardActionPerformed
+
+    private void btnNewApplicationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewApplicationActionPerformed
+        openNewApplicationForm();
+    }//GEN-LAST:event_btnNewApplicationActionPerformed
+
+    private void btnSearchApplicationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchApplicationsActionPerformed
+        searchApplications();
+    }//GEN-LAST:event_btnSearchApplicationsActionPerformed
+
+    private void btnDocumentSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDocumentSearchActionPerformed
+        searchDocuments();
+    }//GEN-LAST:event_btnDocumentSearchActionPerformed
+
+    private void btnManagePartiesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManagePartiesActionPerformed
+        openSearchParties();
+    }//GEN-LAST:event_btnManagePartiesActionPerformed
+
+    private void btnOpenMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenMapActionPerformed
+        openMap();
+    }//GEN-LAST:event_btnOpenMapActionPerformed
+
+    private void menuLangENActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuLangENActionPerformed
+        setLanguage("en", "US");
+    }//GEN-LAST:event_menuLangENActionPerformed
+
+    private void menuLangITActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuLangITActionPerformed
+        setLanguage("it", "IT");
+    }//GEN-LAST:event_menuLangITActionPerformed
+
+    private void btnOpenBaUnitSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenBaUnitSearchActionPerformed
+        searchBaUnit();
+    }//GEN-LAST:event_btnOpenBaUnitSearchActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToolBar applicationsMain;
+    private javax.swing.JButton btnDocumentSearch;
     private javax.swing.JButton btnManageParties;
     private javax.swing.JButton btnNewApplication;
     private javax.swing.JButton btnOpenBaUnitSearch;
@@ -490,26 +634,16 @@ public class MainForm extends FrameView {
     private javax.swing.JButton btnSearchApplications;
     private javax.swing.JButton btnShowDashboard;
     private javax.swing.JMenu fileMenu;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JToolBar.Separator jSeparator4;
     private javax.swing.JMenuItem jmiContextHelp;
     private javax.swing.JLabel labStatus;
-    private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuItem menuAllLogLevel;
     private javax.swing.JMenu menuApplications;
     private javax.swing.JMenuItem menuBaUnitSearch;
     private javax.swing.JMenuBar menuBar;
-    private javax.swing.JMenuItem menuDashboardItem;
     private javax.swing.JMenuItem menuDefaultLogLevel;
     private javax.swing.JMenuItem menuDocumentSearch;
     private javax.swing.JMenuItem menuLangEN;
@@ -519,8 +653,6 @@ public class MainForm extends FrameView {
     private javax.swing.JMenu menuMap;
     private javax.swing.JMenuItem menuNewApplication;
     private javax.swing.JMenuItem menuOffLogLevel;
-    private javax.swing.JMenu menuRegistration;
-    private javax.swing.JMenu menuReports;
     private javax.swing.JMenu menuSearch;
     private javax.swing.JMenuItem menuSearchApplication;
     private javax.swing.JMenuItem menuShowMap;
@@ -530,127 +662,4 @@ public class MainForm extends FrameView {
     private org.sola.clients.swing.common.tasks.TaskPanel taskPanel1;
     private javax.swing.JLabel txtUserName;
     // End of variables declaration//GEN-END:variables
-
-    /** Shows {@link AboutForm}. */
-    @Action
-    public void showAboutBox() {
-        JFrame mainFrame = DesktopApplication.getApplication().getMainFrame();
-        AboutForm aboutBox = new AboutForm(mainFrame);
-        aboutBox.setLocationRelativeTo(mainFrame);
-        DesktopApplication.getApplication().show(aboutBox);
-    }
-
-    /** Opens and embeds dashboard into the main form. */
-    @Action
-    public void openDashBoard() {
-        if (!pnlContent.isPanelOpened(MainContentPanel.CARD_DASHBOARD)) {
-            DashBoardPanel dashBoard = new DashBoardPanel();
-            pnlContent.addPanel(dashBoard, MainContentPanel.CARD_DASHBOARD);
-        }
-        pnlContent.showPanel(MainContentPanel.CARD_DASHBOARD);
-    }
-
-    class LNFSetter implements ActionListener {
-
-        String theLNFName;
-        String whichButton;
-
-//    LoginForm loginform;
-        LNFSetter(String lnfName, String theme) {
-            theLNFName = lnfName;
-            whichButton = theme;
-
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            try {
-                LafManager.getInstance().setProperties(whichButton);
-                UIManager.setLookAndFeel(theLNFName);
-
-                SwingUtilities.updateComponentTreeUI(mainPanel);
-                SwingUtilities.updateComponentTreeUI(menuBar);
-                SwingUtilities.updateComponentTreeUI(statusPanel);
-                openDashBoard();
-
-            } catch (Exception evt) {
-                JOptionPane.showMessageDialog(null, "setLookAndFeel didn't work: " + evt, "UI Failure",
-                        JOptionPane.INFORMATION_MESSAGE);
-            }
-        }
-    }
-
-    /** Opens empty {@link ApplicationPanel} to create new application. */
-    @Action
-    public void openNewApplicationForm() {
-        if (pnlContent.isPanelOpened(MainContentPanel.CARD_APPLICATION)) {
-            pnlContent.closePanel(MainContentPanel.CARD_APPLICATION);
-        }
-        ApplicationPanel applicationPanel = new ApplicationPanel();
-        pnlContent.addPanel(applicationPanel, MainContentPanel.CARD_APPLICATION);
-        pnlContent.showPanel(MainContentPanel.CARD_APPLICATION);
-    }
-
-    /** Opens map. */
-    @Action
-    public void openMap() {
-        if (!pnlContent.isPanelOpened(MainContentPanel.CARD_MAP)) {
-            ControlsBundleViewer mapCtrl = new ControlsBundleViewer();
-            pnlContent.addPanel(mapCtrl, MainContentPanel.CARD_MAP);
-            mapCtrl.getMap().zoomToFullExtent();
-        }
-        pnlContent.showPanel(MainContentPanel.CARD_MAP);
-    }
-
-    /** Opens {@link ApplicationSearchForm}. */
-    @Action
-    public void searchApplications() {
-        if (!pnlContent.isPanelOpened(MainContentPanel.CARD_APPSEARCH)) {
-            ApplicationSearchPanel searchApplicationPanel = new ApplicationSearchPanel();
-            pnlContent.addPanel(searchApplicationPanel, MainContentPanel.CARD_APPSEARCH);
-        }
-        pnlContent.showPanel(MainContentPanel.CARD_APPSEARCH);
-    }
-
-    @Action
-    public void manageParties() {
-        if (!pnlContent.isPanelOpened(MainContentPanel.CARD_SEARCH_PERSONS)) {
-            PartySearchForm partySearchForm = new PartySearchForm();
-            pnlContent.addPanel(partySearchForm, MainContentPanel.CARD_SEARCH_PERSONS);
-        }
-        pnlContent.showPanel(MainContentPanel.CARD_SEARCH_PERSONS);
-    }
-
-    @Action
-    public void searchBaUnit() {
-        if (!pnlContent.isPanelOpened(MainContentPanel.CARD_BAUNIT_SEARCH)) {
-            BaUnitSearchPanel baUnitSearchPanel = new BaUnitSearchPanel();
-            pnlContent.addPanel(baUnitSearchPanel, MainContentPanel.CARD_BAUNIT_SEARCH);
-        }
-        pnlContent.showPanel(MainContentPanel.CARD_BAUNIT_SEARCH);
-    }
-
-    @Action
-    public void searchDocuments() {
-        if (!pnlContent.isPanelOpened(MainContentPanel.CARD_DOCUMENT_SEARCH)) {
-            DocumentSearchPanel documentSearchPanel = new DocumentSearchPanel();
-            pnlContent.addPanel(documentSearchPanel, MainContentPanel.CARD_DOCUMENT_SEARCH);
-        }
-        pnlContent.showPanel(MainContentPanel.CARD_DOCUMENT_SEARCH);
-    }
-
-    @Action
-    public void setAllLogLevel() {
-         LogUtility.setLogLevel(Level.ALL);
-    }
-
-    @Action
-    public void setDefaultLogLevel() {
-        LogUtility.setLogLevel(Level.INFO);
-    }
-
-    @Action
-    public void setOffLogLevel() {
-        LogUtility.setLogLevel(Level.OFF);
-    }
 }

@@ -34,7 +34,6 @@ import java.util.Locale;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import org.jdesktop.application.Action;
 import org.sola.clients.beans.application.ApplicationSearchParamsBean;
 import org.sola.clients.beans.application.ApplicationSearchResultBean;
 import org.sola.clients.beans.application.ApplicationSearchResultsListBean;
@@ -71,43 +70,11 @@ public class ApplicationSearchPanel extends ContentPanel {
         });
         customizeOpenButton(null);
         btnFind.setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_VIEW_APPS));
-        customizeComponents();
     }
 
     private void customizeOpenButton(ApplicationSearchResultBean searchResult) {
-        btnOpenApplication.getAction().setEnabled(searchResult != null);
-    }
-
-    /** Applies customization of component L&F. */
-    private void customizeComponents() {
-
-//    BUTTONS   
-        LafManager.getInstance().setBtnProperties(btnClear);
-        LafManager.getInstance().setBtnProperties(btnOpenApplication);
-        LafManager.getInstance().setBtnProperties(btnFind);
-        LafManager.getInstance().setBtnProperties(btnShowCalendarFrom);
-        LafManager.getInstance().setBtnProperties(btnShowCalendarTo);
-
-//    LABELS    
-        LafManager.getInstance().setLabProperties(labAgentName);
-        LafManager.getInstance().setLabProperties(labAppNumber);
-        LafManager.getInstance().setLabProperties(labContactPerson);
-        LafManager.getInstance().setLabProperties(labFrom);
-        LafManager.getInstance().setLabProperties(labResults);
-        LafManager.getInstance().setLabProperties(labTo);
-        LafManager.getInstance().setLabProperties(lblSearchResults);
-
-
-//    TXT FIELDS
-        LafManager.getInstance().setTxtProperties(txtAgentName);
-        LafManager.getInstance().setTxtProperties(txtAppNumber);
-        LafManager.getInstance().setTxtProperties(txtContactPerson);
-
-
-//    FORMATTED TXT
-        LafManager.getInstance().setFormattedTxtProperties(txtFromDate);
-        LafManager.getInstance().setFormattedTxtProperties(txtToDate);
-
+        btnOpenApplication.setEnabled(searchResult != null);
+        menuOpenApplication.setEnabled(btnOpenApplication.isEnabled());
     }
 
     private void showCalendar(JFormattedTextField dateField) {
@@ -126,11 +93,11 @@ public class ApplicationSearchPanel extends ContentPanel {
         menuOpenApplication = new javax.swing.JMenuItem();
         appListPanel = new javax.swing.JScrollPane();
         tbAppList = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
-        searchResultsPanel = new javax.swing.JPanel();
-        lblSearchResults = new javax.swing.JLabel();
-        labResults = new javax.swing.JLabel();
         jToolBar1 = new javax.swing.JToolBar();
         btnOpenApplication = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JToolBar.Separator();
+        lblSearchResults = new javax.swing.JLabel();
+        labResults = new javax.swing.JLabel();
         headerPanel1 = new org.sola.clients.swing.ui.HeaderPanel();
         jPanel10 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
@@ -145,34 +112,42 @@ public class ApplicationSearchPanel extends ContentPanel {
         btnShowCalendarFrom = new javax.swing.JButton();
         txtFromDate = new javax.swing.JFormattedTextField();
         jPanel9 = new javax.swing.JPanel();
-        jPanel7 = new javax.swing.JPanel();
-        labAppNumber = new javax.swing.JLabel();
-        txtAppNumber = new javax.swing.JTextField();
+        jPanel12 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         labAgentName = new javax.swing.JLabel();
         txtAgentName = new javax.swing.JTextField();
+        jPanel7 = new javax.swing.JPanel();
+        labAppNumber = new javax.swing.JLabel();
+        txtAppNumber = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         labContactPerson = new javax.swing.JLabel();
         txtContactPerson = new javax.swing.JTextField();
         jPanel11 = new javax.swing.JPanel();
+        jPanel13 = new javax.swing.JPanel();
         btnClear = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jPanel14 = new javax.swing.JPanel();
         btnFind = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
 
         popupSearchResults.setName("popupSearchResults"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(ApplicationSearchPanel.class, this);
-        menuOpenApplication.setAction(actionMap.get("openApplication")); // NOI18N
+        menuOpenApplication.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/folder-open-document.png"))); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/application/Bundle"); // NOI18N
         menuOpenApplication.setText(bundle.getString("ApplicationSearchPanel.menuOpenApplication.text")); // NOI18N
         menuOpenApplication.setName("menuOpenApplication"); // NOI18N
+        menuOpenApplication.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuOpenApplicationActionPerformed(evt);
+            }
+        });
         popupSearchResults.add(menuOpenApplication);
 
         setMinimumSize(new java.awt.Dimension(512, 351));
         setName("Form"); // NOI18N
 
-        java.util.ResourceBundle bundle1 = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/application/resources/ApplicationSearchPanel"); // NOI18N
-        appListPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, bundle1.getString("ApplicationSearchPanel.appListPanel.border.title"), javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
-        appListPanel.setFont(new java.awt.Font("Tahoma", 0, 12));
+        appListPanel.setBorder(null);
+        appListPanel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         appListPanel.setName("appListPanel"); // NOI18N
         appListPanel.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
 
@@ -229,57 +204,44 @@ public class ApplicationSearchPanel extends ContentPanel {
         tbAppList.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("ApplicationSearchPanel.tbAppList.columnModel.title5_1")); // NOI18N
         tbAppList.getColumnModel().getColumn(6).setHeaderValue(bundle.getString("ApplicationSearchPanel.tbAppList.columnModel.title6_1")); // NOI18N
 
-        searchResultsPanel.setName("searchResultsPanel"); // NOI18N
-        searchResultsPanel.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-
-        lblSearchResults.setFont(new java.awt.Font("Tahoma", 1, 12));
-        lblSearchResults.setText(bundle.getString("ApplicationSearchPanel.lblSearchResults.text")); // NOI18N
-        lblSearchResults.setName("lblSearchResults"); // NOI18N
-
-        labResults.setFont(new java.awt.Font("Tahoma", 0, 12));
-        labResults.setText(bundle.getString("ApplicationSearchPanel.labResults.text")); // NOI18N
-        labResults.setName("labResults"); // NOI18N
-        labResults.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-        labResults.setHorizontalAlignment(JLabel.LEADING);
-
-        javax.swing.GroupLayout searchResultsPanelLayout = new javax.swing.GroupLayout(searchResultsPanel);
-        searchResultsPanel.setLayout(searchResultsPanelLayout);
-        searchResultsPanelLayout.setHorizontalGroup(
-            searchResultsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(searchResultsPanelLayout.createSequentialGroup()
-                .addComponent(lblSearchResults)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(labResults, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(423, Short.MAX_VALUE))
-        );
-        searchResultsPanelLayout.setVerticalGroup(
-            searchResultsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(searchResultsPanelLayout.createSequentialGroup()
-                .addGroup(searchResultsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(labResults, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblSearchResults, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
         jToolBar1.setName("jToolBar1"); // NOI18N
 
-        btnOpenApplication.setAction(actionMap.get("openApplication")); // NOI18N
-        btnOpenApplication.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnOpenApplication.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/folder-open-document.png"))); // NOI18N
+        btnOpenApplication.setText(bundle.getString("ApplicationSearchPanel.btnOpenApplication.text")); // NOI18N
         btnOpenApplication.setFocusable(false);
         btnOpenApplication.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnOpenApplication.setName("btnOpenApplication"); // NOI18N
         btnOpenApplication.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnOpenApplication.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOpenApplicationActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnOpenApplication);
+
+        jSeparator1.setName("jSeparator1"); // NOI18N
+        jToolBar1.add(jSeparator1);
+
+        lblSearchResults.setFont(LafManager.getInstance().getLabFontBold());
+        lblSearchResults.setText(bundle.getString("ApplicationSearchPanel.lblSearchResults.text")); // NOI18N
+        lblSearchResults.setName("lblSearchResults"); // NOI18N
+        jToolBar1.add(lblSearchResults);
+
+        labResults.setText(bundle.getString("ApplicationSearchPanel.labResults.text")); // NOI18N
+        labResults.setName("labResults"); // NOI18N
+        labResults.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
+        labResults.setHorizontalAlignment(JLabel.LEADING);
+        jToolBar1.add(labResults);
 
         headerPanel1.setName("headerPanel1"); // NOI18N
         headerPanel1.setTitleText(bundle.getString("ApplicationSearchPanel.headerPanel1.titleText")); // NOI18N
 
-        jPanel10.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         jPanel10.setName("jPanel10"); // NOI18N
 
         jPanel8.setName("jPanel8"); // NOI18N
+        jPanel8.setLayout(new java.awt.GridLayout(2, 1));
 
         jPanel3.setName("jPanel3"); // NOI18N
 
@@ -310,17 +272,17 @@ public class ApplicationSearchPanel extends ContentPanel {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addComponent(txtToDate, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtToDate, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnShowCalendarTo))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btnShowCalendarTo)
-            .addComponent(txtToDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                .addComponent(btnShowCalendarTo)
+                .addComponent(txtToDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        labTo.setFont(new java.awt.Font("Tahoma", 0, 12));
         labTo.setText(bundle.getString("ApplicationSearchPanel.labTo.text")); // NOI18N
         labTo.setName("labTo"); // NOI18N
 
@@ -329,9 +291,10 @@ public class ApplicationSearchPanel extends ContentPanel {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(labTo)
-                .addContainerGap(105, Short.MAX_VALUE))
-            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(labTo)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -339,12 +302,13 @@ public class ApplicationSearchPanel extends ContentPanel {
                 .addComponent(labTo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
+
+        jPanel8.add(jPanel3);
 
         jPanel6.setName("jPanel6"); // NOI18N
 
-        labFrom.setFont(new java.awt.Font("Tahoma", 0, 12));
         labFrom.setText(bundle.getString("ApplicationSearchPanel.labFrom.text")); // NOI18N
         labFrom.setName("labFrom"); // NOI18N
 
@@ -374,25 +338,25 @@ public class ApplicationSearchPanel extends ContentPanel {
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addComponent(txtFromDate, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnShowCalendarFrom))
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addComponent(txtFromDate, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnShowCalendarFrom)
+                .addGap(2, 2, 2))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btnShowCalendarFrom)
-            .addComponent(txtFromDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                .addComponent(txtFromDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnShowCalendarFrom))
         );
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addComponent(labFrom)
-                .addContainerGap(93, Short.MAX_VALUE))
-            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(labFrom)
+            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -400,70 +364,22 @@ public class ApplicationSearchPanel extends ContentPanel {
                 .addComponent(labFrom)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
-        jPanel8.setLayout(jPanel8Layout);
-        jPanel8Layout.setHorizontalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel8Layout.createSequentialGroup()
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jPanel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        jPanel8Layout.setVerticalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel8Layout.createSequentialGroup()
-                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
+        jPanel8.add(jPanel6);
 
         jPanel9.setName("jPanel9"); // NOI18N
+        jPanel9.setLayout(new java.awt.GridLayout(2, 1));
 
-        jPanel7.setName("jPanel7"); // NOI18N
-
-        labAppNumber.setFont(new java.awt.Font("Tahoma", 0, 12));
-        labAppNumber.setText(bundle.getString("ApplicationSearchPanel.labAppNumber.text")); // NOI18N
-        labAppNumber.setName("labAppNumber"); // NOI18N
-
-        txtAppNumber.setFont(new java.awt.Font("Tahoma", 0, 12));
-        txtAppNumber.setName("txtAppNumber"); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, searchParams, org.jdesktop.beansbinding.ELProperty.create("${nr}"), txtAppNumber, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        txtAppNumber.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-        txtAppNumber.setHorizontalAlignment(JTextField.LEADING);
-
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addComponent(labAppNumber)
-                .addContainerGap(73, Short.MAX_VALUE))
-            .addComponent(txtAppNumber, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
-        );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addComponent(labAppNumber)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtAppNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        jPanel12.setName("jPanel12"); // NOI18N
 
         jPanel2.setName("jPanel2"); // NOI18N
 
-        labAgentName.setFont(new java.awt.Font("Tahoma", 0, 12));
         labAgentName.setText(bundle.getString("ApplicationSearchPanel.labAgentName.text")); // NOI18N
         labAgentName.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         labAgentName.setName("labAgentName"); // NOI18N
 
-        txtAgentName.setFont(new java.awt.Font("Tahoma", 0, 12));
         txtAgentName.setName("txtAgentName"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, searchParams, org.jdesktop.beansbinding.ELProperty.create("${agent}"), txtAgentName, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -478,8 +394,8 @@ public class ApplicationSearchPanel extends ContentPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(labAgentName)
-                .addContainerGap(121, Short.MAX_VALUE))
-            .addComponent(txtAgentName, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)
+                .addContainerGap(94, Short.MAX_VALUE))
+            .addComponent(txtAgentName, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -490,13 +406,62 @@ public class ApplicationSearchPanel extends ContentPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jPanel7.setName("jPanel7"); // NOI18N
+
+        labAppNumber.setText(bundle.getString("ApplicationSearchPanel.labAppNumber.text")); // NOI18N
+        labAppNumber.setName("labAppNumber"); // NOI18N
+
+        txtAppNumber.setName("txtAppNumber"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, searchParams, org.jdesktop.beansbinding.ELProperty.create("${nr}"), txtAppNumber, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        txtAppNumber.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
+        txtAppNumber.setHorizontalAlignment(JTextField.LEADING);
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addComponent(labAppNumber)
+                .addContainerGap(56, Short.MAX_VALUE))
+            .addComponent(txtAppNumber, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addComponent(labAppNumber)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtAppNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
+        jPanel12.setLayout(jPanel12Layout);
+        jPanel12Layout.setHorizontalGroup(
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel12Layout.createSequentialGroup()
+                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel12Layout.setVerticalGroup(
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel12Layout.createSequentialGroup()
+                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        jPanel9.add(jPanel12);
+
         jPanel1.setName("jPanel1"); // NOI18N
 
-        labContactPerson.setFont(new java.awt.Font("Tahoma", 0, 12));
         labContactPerson.setText(bundle.getString("ApplicationSearchPanel.labContactPerson.text")); // NOI18N
         labContactPerson.setName("labContactPerson"); // NOI18N
 
-        txtContactPerson.setFont(new java.awt.Font("Tahoma", 0, 12));
         txtContactPerson.setName("txtContactPerson"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, searchParams, org.jdesktop.beansbinding.ELProperty.create("${contactPerson}"), txtContactPerson, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -511,8 +476,8 @@ public class ApplicationSearchPanel extends ContentPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(labContactPerson, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(207, Short.MAX_VALUE))
-            .addComponent(txtContactPerson, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE)
+                .addContainerGap(199, Short.MAX_VALUE))
+            .addComponent(txtContactPerson, javax.swing.GroupLayout.DEFAULT_SIZE, 289, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -520,32 +485,16 @@ public class ApplicationSearchPanel extends ContentPanel {
                 .addComponent(labContactPerson)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtContactPerson, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
-        jPanel9.setLayout(jPanel9Layout);
-        jPanel9Layout.setHorizontalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel9Layout.createSequentialGroup()
-                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        jPanel9Layout.setVerticalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel9Layout.createSequentialGroup()
-                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
+        jPanel9.add(jPanel1);
 
         jPanel11.setName("jPanel11"); // NOI18N
+        jPanel11.setLayout(new java.awt.GridLayout(2, 1));
 
-        btnClear.setFont(new java.awt.Font("Tahoma", 0, 12));
+        jPanel13.setName("jPanel13"); // NOI18N
+
         btnClear.setText(bundle.getString("ApplicationSearchPanel.btnClear.text")); // NOI18N
         btnClear.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnClear.setName("btnClear"); // NOI18N
@@ -555,7 +504,31 @@ public class ApplicationSearchPanel extends ContentPanel {
             }
         });
 
-        btnFind.setFont(new java.awt.Font("Tahoma", 0, 12));
+        jLabel1.setText(bundle.getString("ApplicationSearchPanel.jLabel1.text")); // NOI18N
+        jLabel1.setName("jLabel1"); // NOI18N
+
+        javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
+        jPanel13.setLayout(jPanel13Layout);
+        jPanel13Layout.setHorizontalGroup(
+            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel13Layout.createSequentialGroup()
+                .addComponent(jLabel1)
+                .addContainerGap(88, Short.MAX_VALUE))
+            .addComponent(btnClear, javax.swing.GroupLayout.DEFAULT_SIZE, 91, Short.MAX_VALUE)
+        );
+        jPanel13Layout.setVerticalGroup(
+            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel13Layout.createSequentialGroup()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnClear)
+                .addContainerGap(13, Short.MAX_VALUE))
+        );
+
+        jPanel11.add(jPanel13);
+
+        jPanel14.setName("jPanel14"); // NOI18N
+
         btnFind.setText(bundle.getString("ApplicationSearchPanel.btnFind.text")); // NOI18N
         btnFind.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnFind.setName("btnFind"); // NOI18N
@@ -565,68 +538,66 @@ public class ApplicationSearchPanel extends ContentPanel {
             }
         });
 
-        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
-        jPanel11.setLayout(jPanel11Layout);
-        jPanel11Layout.setHorizontalGroup(
-            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(btnClear, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(btnFind, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
+        jLabel2.setText(bundle.getString("ApplicationSearchPanel.jLabel2.text")); // NOI18N
+        jLabel2.setName("jLabel2"); // NOI18N
+
+        javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
+        jPanel14.setLayout(jPanel14Layout);
+        jPanel14Layout.setHorizontalGroup(
+            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel14Layout.createSequentialGroup()
+                .addComponent(jLabel2)
+                .addContainerGap(88, Short.MAX_VALUE))
+            .addComponent(btnFind, javax.swing.GroupLayout.DEFAULT_SIZE, 91, Short.MAX_VALUE)
         );
-        jPanel11Layout.setVerticalGroup(
-            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel11Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(btnClear)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+        jPanel14Layout.setVerticalGroup(
+            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel14Layout.createSequentialGroup()
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnFind)
-                .addContainerGap())
+                .addContainerGap(13, Short.MAX_VALUE))
         );
+
+        jPanel11.add(jPanel14);
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel10Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 289, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
+            .addGroup(jPanel10Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel9, javax.swing.GroupLayout.Alignment.LEADING, 0, 112, Short.MAX_VALUE)
-                    .addComponent(jPanel11, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(13, 13, 13))
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE)
+                    .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE)
+                    .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(headerPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 608, Short.MAX_VALUE)
+            .addComponent(headerPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 607, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(searchResultsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 587, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 588, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(appListPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 588, Short.MAX_VALUE)
+                .addComponent(appListPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 587, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -636,11 +607,9 @@ public class ApplicationSearchPanel extends ContentPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(searchResultsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(appListPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)
+                .addComponent(appListPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -688,9 +657,16 @@ public class ApplicationSearchPanel extends ContentPanel {
         txtAppNumber.requestFocus();
     }//GEN-LAST:event_btnClearActionPerformed
 
+    private void btnOpenApplicationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenApplicationActionPerformed
+        openApplication();
+    }//GEN-LAST:event_btnOpenApplicationActionPerformed
+
+    private void menuOpenApplicationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpenApplicationActionPerformed
+        openApplication();
+    }//GEN-LAST:event_menuOpenApplicationActionPerformed
+
     /** Opens {@link ApplicationForm} for selected application in search results.*/
-    @Action
-    public void openApplication() {
+    private void openApplication() {
         if (!SecurityBean.isInRole(RolesConstants.APPLICATION_EDIT_APPS)
                 || appList.getSelectedApplication() == null) {
             return;
@@ -719,9 +695,14 @@ public class ApplicationSearchPanel extends ContentPanel {
     private javax.swing.JButton btnShowCalendarFrom;
     private javax.swing.JButton btnShowCalendarTo;
     private org.sola.clients.swing.ui.HeaderPanel headerPanel1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel13;
+    private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -730,6 +711,7 @@ public class ApplicationSearchPanel extends ContentPanel {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
+    private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel labAgentName;
     private javax.swing.JLabel labAppNumber;
@@ -741,7 +723,6 @@ public class ApplicationSearchPanel extends ContentPanel {
     private javax.swing.JMenuItem menuOpenApplication;
     private javax.swing.JPopupMenu popupSearchResults;
     private org.sola.clients.beans.application.ApplicationSearchParamsBean searchParams;
-    private javax.swing.JPanel searchResultsPanel;
     private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tbAppList;
     private javax.swing.JTextField txtAgentName;
     private javax.swing.JTextField txtAppNumber;

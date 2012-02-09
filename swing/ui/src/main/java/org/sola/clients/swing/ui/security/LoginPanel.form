@@ -27,7 +27,7 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="mainPanel" alignment="0" max="32767" attributes="0"/>
+          <Component id="mainPanel" alignment="0" pref="556" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -46,20 +46,18 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
+              <Component id="jPanel2" alignment="1" pref="563" max="32767" attributes="1"/>
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="jPanel5" alignment="1" max="32767" attributes="1"/>
-                      <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                          <Component id="jPanel3" alignment="0" max="32767" attributes="1"/>
-                          <Component id="pnlThems" alignment="0" pref="0" max="32767" attributes="1"/>
-                      </Group>
-                      <Component id="jPanel1" alignment="0" max="32767" attributes="0"/>
-                      <Component id="jPanel4" alignment="0" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                      <Component id="jPanel3" alignment="0" min="0" pref="535" max="32767" attributes="1"/>
+                      <Component id="pnlThems" alignment="0" min="0" pref="0" max="32767" attributes="1"/>
+                      <Component id="jPanel4" alignment="0" max="32767" attributes="1"/>
+                      <Component id="jPanel5" alignment="0" max="32767" attributes="1"/>
+                      <Component id="jPanel1" alignment="0" max="32767" attributes="1"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
               </Group>
-              <Component id="jPanel2" alignment="1" pref="563" max="32767" attributes="1"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -74,7 +72,7 @@
                   <Component id="jPanel5" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jPanel4" min="-2" pref="46" max="-2" attributes="0"/>
-                  <EmptySpace pref="31" max="32767" attributes="0"/>
+                  <EmptySpace pref="10" max="32767" attributes="0"/>
                   <Component id="jPanel2" min="-2" pref="20" max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -216,7 +214,7 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Component id="btnLogin" alignment="1" min="-2" pref="79" max="-2" attributes="0"/>
                           <Group type="102" alignment="1" attributes="0">
@@ -227,11 +225,11 @@
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="txtUserPassword" max="32767" attributes="1"/>
-                                  <Component id="txtUsername" alignment="0" pref="329" max="32767" attributes="1"/>
+                                  <Component id="txtUsername" alignment="0" min="-2" pref="329" max="-2" attributes="1"/>
                               </Group>
                           </Group>
                       </Group>
-                      <EmptySpace pref="79" max="32767" attributes="0"/>
+                      <EmptySpace pref="62" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -328,8 +326,9 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="languageCombobox" pref="155" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -374,11 +373,11 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jSeparator1" alignment="0" pref="543" max="32767" attributes="1"/>
-                  <Component id="jSeparator3" alignment="0" pref="543" max="32767" attributes="1"/>
+                  <Component id="jSeparator1" alignment="0" pref="535" max="32767" attributes="1"/>
+                  <Component id="jSeparator3" alignment="0" pref="535" max="32767" attributes="1"/>
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jLabel2" pref="523" max="32767" attributes="0"/>
+                      <Component id="jLabel2" pref="515" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -432,9 +431,9 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="labDescDown" alignment="1" pref="543" max="32767" attributes="0"/>
-                  <Component id="labDescUp" alignment="1" pref="543" max="32767" attributes="0"/>
-                  <Component id="jSeparator2" alignment="1" pref="543" max="32767" attributes="1"/>
+                  <Component id="labDescDown" alignment="1" pref="535" max="32767" attributes="0"/>
+                  <Component id="labDescUp" alignment="1" pref="535" max="32767" attributes="0"/>
+                  <Component id="jSeparator2" alignment="1" pref="535" max="32767" attributes="1"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">

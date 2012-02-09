@@ -73,7 +73,8 @@ public class BaUnitsListPanel extends ContentPanel {
         setHeaderPanel(headerPanel);
 
         headerPanel.setName("headerPanel"); // NOI18N
-        headerPanel.setTitleText("Select property");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/application/Bundle"); // NOI18N
+        headerPanel.setTitleText(bundle.getString("BaUnitsListPanel.headerPanel.titleText")); // NOI18N
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 

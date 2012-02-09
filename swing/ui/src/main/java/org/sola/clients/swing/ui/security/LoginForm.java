@@ -30,23 +30,22 @@ package org.sola.clients.swing.ui.security;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.ImageIcon;
-import org.jdesktop.application.Application;
 
 /**
  * Login form. Allows to authenticate user.
  */
 public class LoginForm extends javax.swing.JFrame {
 
-    private Application application;
+    private Class<?> mainClass;
     
     /** Creates {@link LoginPanel} instance.*/
     private LoginPanel createLoginPanel() {
-        return new LoginPanel(application);
+        return new LoginPanel(mainClass);
     }
 
     /** Creates new form LoginForm */
-    public LoginForm(Application application) {
-        this.application = application;
+    public LoginForm(Class<?> mainClass) {
+        this.mainClass = mainClass;
         initComponents();
         this.setIconImage(new ImageIcon(LoginForm.class.getResource("/images/common/key.png")).getImage());
         loginPanel.addPropertyChangeListener(new PropertyChangeListener() {
@@ -94,7 +93,7 @@ public class LoginForm extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(43, Short.MAX_VALUE)
+                .addContainerGap(39, Short.MAX_VALUE)
                 .addComponent(loginPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(37, 37, 37))
         );

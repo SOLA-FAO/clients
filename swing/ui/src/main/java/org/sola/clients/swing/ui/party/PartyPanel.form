@@ -13,6 +13,9 @@
       </AuxValues>
     </Component>
     <Component class="org.sola.clients.beans.referencedata.PartyRoleTypeListBean" name="partyRoleTypes">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="createPartyRolesList()"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.ButtonGroup" name="buttonGroup1">
       <AuxValues>
@@ -30,14 +33,17 @@
       <SubComponents>
         <MenuItem class="javax.swing.JMenuItem" name="menuRemoveRole">
           <Properties>
-            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-              <action class="org.sola.clients.swing.ui.party.PartyPanel" id="removeRole" methodName="removeRole"/>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/images/common/remove.png"/>
             </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
               <ResourceString bundle="org/sola/clients/swing/ui/party/Bundle.properties" key="PartyPanel.menuRemoveRole.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
             </Property>
             <Property name="name" type="java.lang.String" value="menuRemoveRole" noResource="true"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuRemoveRoleActionPerformed"/>
+          </Events>
         </MenuItem>
       </SubComponents>
     </Container>
@@ -256,8 +262,8 @@
                     </Component>
                     <Component class="javax.swing.JButton" name="btnAddRole">
                       <Properties>
-                        <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                          <action class="org.sola.clients.swing.ui.party.PartyPanel" id="addRole" methodName="addRole"/>
+                        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                          <Image iconType="3" name="/images/common/add.png"/>
                         </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="org/sola/clients/swing/ui/party/Bundle.properties" key="PartyPanel.btnAddRole.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
@@ -265,11 +271,14 @@
                         <Property name="horizontalAlignment" type="int" value="2"/>
                         <Property name="name" type="java.lang.String" value="btnAddRole" noResource="true"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddRoleActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="btnRemoveRole">
                       <Properties>
-                        <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                          <action class="org.sola.clients.swing.ui.party.PartyPanel" id="removeRole" methodName="removeRole"/>
+                        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                          <Image iconType="3" name="/images/common/remove.png"/>
                         </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="org/sola/clients/swing/ui/party/Bundle.properties" key="PartyPanel.btnRemoveRole.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
@@ -277,6 +286,9 @@
                         <Property name="horizontalAlignment" type="int" value="2"/>
                         <Property name="name" type="java.lang.String" value="btnRemoveRole" noResource="true"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRemoveRoleActionPerformed"/>
+                      </Events>
                     </Component>
                   </SubComponents>
                 </Container>

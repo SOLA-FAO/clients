@@ -38,7 +38,6 @@ public class ReportViewerForm extends javax.swing.JFrame {
     public ReportViewerForm(JasperPrint jasperPrint) {
         initComponents();
         this.setIconImage(new ImageIcon(ReportViewerForm.class.getResource("/images/sola/logo_icon.jpg")).getImage());
-      
         postInit(jasperPrint);
     }
     
@@ -64,8 +63,8 @@ public class ReportViewerForm extends javax.swing.JFrame {
         reportViewerPanel = new org.sola.clients.swing.ui.reports.ReportViewerPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(org.sola.clients.swing.desktop.DesktopApplication.class).getContext().getResourceMap(ReportViewerForm.class);
-        setTitle(resourceMap.getString("Form.title")); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/Bundle"); // NOI18N
+        setTitle(bundle.getString("ReportViewerForm.title")); // NOI18N
         setName("Form"); // NOI18N
 
         reportViewerPanel.setName("reportViewerPanel"); // NOI18N

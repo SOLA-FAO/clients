@@ -32,7 +32,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Locale;
 import javax.swing.JTextField;
-import org.jdesktop.application.Action;
 import org.sola.clients.swing.ui.renderers.SimpleComboBoxRenderer;
 import org.sola.clients.beans.party.PartyBean;
 import org.sola.clients.beans.party.PartyRoleBean;
@@ -41,7 +40,6 @@ import org.sola.clients.beans.referencedata.GenderTypeListBean;
 import org.sola.clients.beans.referencedata.IdTypeListBean;
 import org.sola.clients.beans.referencedata.PartyRoleTypeBean;
 import org.sola.clients.beans.referencedata.PartyRoleTypeListBean;
-import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.common.utils.BindingTools;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -92,6 +90,13 @@ public class PartyPanel extends javax.swing.JPanel {
         customizeRoleButtons(null);
     }
 
+    private PartyRoleTypeListBean createPartyRolesList(){
+        if(partyRoleTypes == null){
+            partyRoleTypes = new PartyRoleTypeListBean(true);
+        }
+        return partyRoleTypes;
+    }
+    
     public boolean isReadOnly() {
         return readOnly;
     }
@@ -165,7 +170,7 @@ public class PartyPanel extends javax.swing.JPanel {
      * types and user rights. 
      */
     private void customizeAddRoleButton(PartyRoleTypeBean partyRoleType) {
-        btnAddRole.getAction().setEnabled(partyRoleType != null && !readOnly);
+        btnAddRole.setEnabled(partyRoleType != null && !readOnly && partyRoleType.getCode()!=null);
     }
 
     /** 
@@ -173,7 +178,8 @@ public class PartyPanel extends javax.swing.JPanel {
      * selection in the roles list and user rights. 
      */
     private void customizeRoleButtons(PartyRoleBean partyRole) {
-        btnRemoveRole.getAction().setEnabled(partyRole != null && !readOnly);
+        btnRemoveRole.setEnabled(partyRole != null && !readOnly);
+        menuRemoveRole.setEnabled(btnRemoveRole.isEnabled());
     }
 
     /** Applies post initialization settings. */
@@ -205,8 +211,9 @@ public class PartyPanel extends javax.swing.JPanel {
             cbxPartyRoleTypes.setEnabled(false);
             txtIdref.setEnabled(false);
             txtAddress.setEnabled(false);
-            btnAddRole.getAction().setEnabled(false);
-            btnRemoveRole.getAction().setEnabled(false);
+            btnAddRole.setEnabled(false);
+            btnRemoveRole.setEnabled(false);
+            menuRemoveRole.setEnabled(false);
             txtFatherFirstName.setEnabled(false);
             txtFatherLastName.setEnabled(false);
             txtAlias.setEnabled(false);
@@ -270,7 +277,7 @@ public class PartyPanel extends javax.swing.JPanel {
 
         communicationTypes = createCommunicationTypes();
         idTypes = createIdTypes();
-        partyRoleTypes = new org.sola.clients.beans.referencedata.PartyRoleTypeListBean();
+        partyRoleTypes = createPartyRolesList();
         buttonGroup1 = new javax.swing.ButtonGroup();
         popupRoles = new javax.swing.JPopupMenu();
         menuRemoveRole = new javax.swing.JMenuItem();
@@ -341,11 +348,15 @@ public class PartyPanel extends javax.swing.JPanel {
 
         popupRoles.setName("popupRoles"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(PartyPanel.class, this);
-        menuRemoveRole.setAction(actionMap.get("removeRole")); // NOI18N
+        menuRemoveRole.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/party/Bundle"); // NOI18N
         menuRemoveRole.setText(bundle.getString("PartyPanel.menuRemoveRole.text")); // NOI18N
         menuRemoveRole.setName("menuRemoveRole"); // NOI18N
+        menuRemoveRole.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuRemoveRoleActionPerformed(evt);
+            }
+        });
         popupRoles.add(menuRemoveRole);
 
         setMinimumSize(new java.awt.Dimension(300, 425));
@@ -393,16 +404,26 @@ public class PartyPanel extends javax.swing.JPanel {
         filler1.setName("filler1"); // NOI18N
         jToolBar1.add(filler1);
 
-        btnAddRole.setAction(actionMap.get("addRole")); // NOI18N
+        btnAddRole.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
         btnAddRole.setText(bundle.getString("PartyPanel.btnAddRole.text")); // NOI18N
         btnAddRole.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnAddRole.setName("btnAddRole"); // NOI18N
+        btnAddRole.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddRoleActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnAddRole);
 
-        btnRemoveRole.setAction(actionMap.get("removeRole")); // NOI18N
+        btnRemoveRole.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
         btnRemoveRole.setText(bundle.getString("PartyPanel.btnRemoveRole.text")); // NOI18N
         btnRemoveRole.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnRemoveRole.setName("btnRemoveRole"); // NOI18N
+        btnRemoveRole.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveRoleActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnRemoveRole);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -1000,6 +1021,18 @@ public class PartyPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_entityButtonActionPerformed
 
+    private void btnAddRoleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddRoleActionPerformed
+        addRole();
+    }//GEN-LAST:event_btnAddRoleActionPerformed
+
+    private void btnRemoveRoleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveRoleActionPerformed
+        removeRole();
+    }//GEN-LAST:event_btnRemoveRoleActionPerformed
+
+    private void menuRemoveRoleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRemoveRoleActionPerformed
+        removeRole();
+    }//GEN-LAST:event_menuRemoveRoleActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel basicPanel;
     private javax.swing.JButton btnAddRole;
@@ -1071,8 +1104,7 @@ public class PartyPanel extends javax.swing.JPanel {
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
-    @Action
-    public void addRole() {
+    private void addRole() {
         if (partyRoleTypes.getSelectedPartyRoleType() == null) {
             MessageUtility.displayMessage(ClientMessage.PARTY_SELECT_ROLE);
             return;
@@ -1085,8 +1117,7 @@ public class PartyPanel extends javax.swing.JPanel {
         partyBean.addRole(partyRoleTypes.getSelectedPartyRoleType());
     }
 
-    @Action
-    public void removeRole() {
+    private void removeRole() {
         partyBean.removeSelectedRole();
     }
 }

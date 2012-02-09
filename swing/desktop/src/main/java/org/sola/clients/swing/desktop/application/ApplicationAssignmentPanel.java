@@ -49,16 +49,7 @@ import org.sola.common.messaging.MessageUtility;
 public class ApplicationAssignmentPanel extends ContentPanel {
 
     private String applicationId;
-    Object foreFont = LafManager.getInstance().getForeFont();
-    Object labFont = LafManager.getInstance().getLabFont();
-    Object bgFont = LafManager.getInstance().getBgFont();
-    Object txtFont = LafManager.getInstance().getTxtFont();
-    Object txtAreaFont = LafManager.getInstance().getTxtAreaFont();
-    Object btnFont = LafManager.getInstance().getBtnFont();
-    Object tabFont = LafManager.getInstance().getTabFont();
-    Object cmbFont = LafManager.getInstance().getCmbFont();
-    Object btnBackground = LafManager.getInstance().getBtnBackground();
-
+    
     /** This method is used by the dialog designer to create application details component. 
      * It uses <code>applicationId</code> parameter passed to the dialog constructor.<br />
      * <code>applicationId</code> should be initialized before 
@@ -83,7 +74,6 @@ public class ApplicationAssignmentPanel extends ContentPanel {
         super();
         this.applicationId = applicationId;
         initComponents();
-        customizeComponents();
 
         if (pnlApplicationDetails.getApplicationBean().getAssigneeId() != null
                 && !pnlApplicationDetails.getApplicationBean().getAssigneeId().equals("")) {
@@ -94,22 +84,6 @@ public class ApplicationAssignmentPanel extends ContentPanel {
             usersListBean1.setSelectedUserById(SecurityBean.getCurrentUser().getId());
         }
         customizeForm();
-    }
-    
-    
-     /** Applies customization of component L&F. */
-    private void customizeComponents() {
-       
-     
-//    BUTTONS   
-    LafManager.getInstance().setBtnProperties(btnAssign);
-    
-//    COMBOBOXES
-    LafManager.getInstance().setCmbProperties(cbxUsers);
-    
-//    LABELS    
-    LafManager.getInstance().setLabProperties(labAssignto);
-
     }
 
     /** Enables or disables button, depending on user rights. */
@@ -139,20 +113,19 @@ public class ApplicationAssignmentPanel extends ContentPanel {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         usersListBean1 = new org.sola.clients.beans.security.UserSearchResultListBean();
-        headerPanel1 = new org.sola.clients.swing.ui.HeaderPanel();
+        headerPanel = new org.sola.clients.swing.ui.HeaderPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         pnlApplicationDetails = createAppDetailsPanel();
-        groupPanel1 = new org.sola.clients.swing.ui.GroupPanel();
         btnAssign = new javax.swing.JButton();
         cbxUsers = new javax.swing.JComboBox();
         labAssignto = new javax.swing.JLabel();
 
-        setHeaderPanel(headerPanel1);
+        setHeaderPanel(headerPanel);
         setName("Form"); // NOI18N
 
-        headerPanel1.setName("headerPanel1"); // NOI18N
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance().getContext().getResourceMap(ApplicationAssignmentPanel.class);
-        headerPanel1.setTitleText(resourceMap.getString("headerPanel1.titleText")); // NOI18N
+        headerPanel.setName("headerPanel"); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/application/Bundle"); // NOI18N
+        headerPanel.setTitleText(bundle.getString("ApplicationAssignmentPanel.headerPanel.titleText")); // NOI18N
 
         jScrollPane1.setBorder(null);
         jScrollPane1.setName("jScrollPane1"); // NOI18N
@@ -161,13 +134,7 @@ public class ApplicationAssignmentPanel extends ContentPanel {
         pnlApplicationDetails.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
         jScrollPane1.setViewportView(pnlApplicationDetails);
 
-        groupPanel1.setName("groupPanel1"); // NOI18N
-        groupPanel1.setTitleText(resourceMap.getString("groupPanel1.titleText")); // NOI18N
-
-        btnAssign.setBackground(UIManager.getColor(btnBackground));
-        btnAssign.setFont(UIManager.getFont(cmbFont));
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/application/Bundle"); // NOI18N
-        btnAssign.setText(bundle.getString("ApplicationDetailsForm.btnAssign.text")); // NOI18N
+        btnAssign.setText(bundle.getString("ApplicationAssignmentPanel.btnAssign.text")); // NOI18N
         btnAssign.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnAssign.setName("btnAssign"); // NOI18N
         btnAssign.addActionListener(new java.awt.event.ActionListener() {
@@ -176,8 +143,6 @@ public class ApplicationAssignmentPanel extends ContentPanel {
             }
         });
 
-        cbxUsers.setFont(UIManager.getFont(cmbFont)); // NOI18N
-        cbxUsers.setForeground(resourceMap.getColor("cbxUsers.foreground")); // NOI18N
         cbxUsers.setEnabled(false);
         cbxUsers.setName("cbxUsers"); // NOI18N
         cbxUsers.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
@@ -207,15 +172,15 @@ public class ApplicationAssignmentPanel extends ContentPanel {
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, usersListBean1, org.jdesktop.beansbinding.ELProperty.create("${selectedUser}"), cbxUsers, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
-        labAssignto.setFont(resourceMap.getFont("labAssignto.font")); // NOI18N
-        labAssignto.setText(bundle.getString("ApplicationDetailsForm.labAssignto.text")); // NOI18N
+        labAssignto.setFont(LafManager.getInstance().getLabFontBold());
+        labAssignto.setText(bundle.getString("ApplicationAssignmentPanel.labAssignto.text")); // NOI18N
         labAssignto.setName("labAssignto"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(headerPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 667, Short.MAX_VALUE)
+            .addComponent(headerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 826, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(labAssignto)
@@ -223,28 +188,22 @@ public class ApplicationAssignmentPanel extends ContentPanel {
                 .addComponent(cbxUsers, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnAssign, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(225, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(groupPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 647, Short.MAX_VALUE)
-                .addContainerGap())
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 667, Short.MAX_VALUE)
+                .addContainerGap(420, Short.MAX_VALUE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 826, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(headerPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(headerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(48, 48, 48)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(labAssignto)
                             .addComponent(cbxUsers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnAssign))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(groupPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE))
         );
 
         bindingGroup.bind();
@@ -307,8 +266,7 @@ public class ApplicationAssignmentPanel extends ContentPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAssign;
     private javax.swing.JComboBox cbxUsers;
-    private org.sola.clients.swing.ui.GroupPanel groupPanel1;
-    private org.sola.clients.swing.ui.HeaderPanel headerPanel1;
+    private org.sola.clients.swing.ui.HeaderPanel headerPanel;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel labAssignto;
     private org.sola.clients.swing.ui.application.ApplicationDetailsPanel pnlApplicationDetails;

@@ -28,15 +28,12 @@
 package org.sola.clients.swing.desktop.administrative;
 
 import java.awt.BorderLayout;
-import java.awt.Window;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JasperPrint;
-import org.jdesktop.application.Action;
 import org.sola.services.boundary.wsclients.WSManager;
-import org.sola.clients.swing.desktop.DesktopApplication;
 import org.sola.clients.beans.administrative.BaUnitBean;
 import org.sola.clients.beans.administrative.BaUnitNotationBean;
 import org.sola.clients.beans.administrative.RelatedBaUnitInfoBean;
@@ -198,50 +195,8 @@ public class PropertyPanel extends ContentPanel {
         portInit();
     }
 
-    /** Applies customization of component L&F. */
-    private void customizeComponents() {
-
-//    BUTTONS   
-        LafManager.getInstance().setBtnProperties(btnAddNotation);
-        LafManager.getInstance().setBtnProperties(btnAddParcel);
-        LafManager.getInstance().setBtnProperties(btnChangeRight);
-        LafManager.getInstance().setBtnProperties(btnCreateRight);
-        LafManager.getInstance().setBtnProperties(btnEditRight);
-        LafManager.getInstance().setBtnProperties(btnExtinguish);
-        LafManager.getInstance().setBtnProperties(btnLinkPaperTitle);
-        LafManager.getInstance().setBtnProperties(btnRemoveNotation);
-        LafManager.getInstance().setBtnProperties(btnRemoveParcel);
-        LafManager.getInstance().setBtnProperties(btnRemoveRight);
-        LafManager.getInstance().setBtnProperties(btnSave);
-        LafManager.getInstance().setBtnProperties(btnViewPaperTitle);
-
-//    COMBOBOXES
-        LafManager.getInstance().setCmbProperties(cbxRightType);
-
-
-//    LABELS    
-        LafManager.getInstance().setLabProperties(jLabel1);
-        LafManager.getInstance().setLabProperties(jLabel15);
-        LafManager.getInstance().setLabProperties(jLabel16);
-        LafManager.getInstance().setLabProperties(jLabel2);
-        LafManager.getInstance().setLabProperties(jLabel4);
-        LafManager.getInstance().setLabProperties(jLabel5);
-
-//    TXT FIELDS
-        LafManager.getInstance().setTxtProperties(txtEstateType);
-        LafManager.getInstance().setTxtProperties(txtFirstPart);
-        LafManager.getInstance().setTxtProperties(txtLastPart);
-        LafManager.getInstance().setTxtProperties(txtName);
-        LafManager.getInstance().setTxtProperties(txtNotationText);
-
-//    TABBED PANELS
-        LafManager.getInstance().setTabProperties(tabsMain);
-
-    }
-
     /** Makes post initialization tasks. */
     private void portInit(){
-        customizeComponents();
         customizeForm();
         
         rrrTypes.addPropertyChangeListener(new PropertyChangeListener() {
@@ -455,17 +410,17 @@ public class PropertyPanel extends ContentPanel {
 
     /** Enables or disables print button if row version of {@link BaUnitBean} > 0 . */
     private void customizePrintButton() {
-        btnPrintBaUnit.getAction().setEnabled(baUnitBean1.getRowVersion() > 0);
+        btnPrintBaUnit.setEnabled(baUnitBean1.getRowVersion() > 0);
     }
 
     /** Enables or disables paper title buttons, depending on the form state. */
     private void customizePaperTitleButtons(SourceBean source) {
         if (source != null && source.getArchiveDocument() != null) {
-            btnViewPaperTitle.getAction().setEnabled(true);
+            btnViewPaperTitle.setEnabled(true);
         } else {
-            btnViewPaperTitle.getAction().setEnabled(false);
+            btnViewPaperTitle.setEnabled(false);
         }
-        btnLinkPaperTitle.getAction().setEnabled(!readOnly);
+        btnLinkPaperTitle.setEnabled(!readOnly);
     }
 
     /** Enables or disables notation buttons, depending on the form state. */
@@ -474,11 +429,12 @@ public class PropertyPanel extends ContentPanel {
                 || notation.getBaUnitId() == null
                 || !notation.getBaUnitId().equals(baUnitBean1.getId())
                 || notation.isLocked() || readOnly) {
-            btnRemoveNotation.getAction().setEnabled(false);
+            btnRemoveNotation.setEnabled(false);
         } else {
-            btnRemoveNotation.getAction().setEnabled(true);
+            btnRemoveNotation.setEnabled(true);
         }
-        btnAddNotation.getAction().setEnabled(!readOnly);
+        btnAddNotation.setEnabled(!readOnly);
+        menuRemoveNotation.setEnabled(btnRemoveNotation.isEnabled());
     }
 
     /** Enables or disables termination button, depending on the form state. */
@@ -516,13 +472,14 @@ public class PropertyPanel extends ContentPanel {
      * selection in the list of parcel. 
      */
     private void customizeParcelButtons(CadastreObjectBean cadastreBean) {
-        if (cadastreBean == null || !cadastreBean.getStatusCode().equals(StatusConstants.PENDING)
-                || cadastreBean.isLocked() || readOnly) {
-            btnRemoveParcel.getAction().setEnabled(false);
+        if (cadastreBean == null || cadastreBean.isLocked() || readOnly) {
+            btnRemoveParcel.setEnabled(false);
         } else {
-            btnRemoveParcel.getAction().setEnabled(true);
+            btnRemoveParcel.setEnabled(true);
         }
-        btnAddParcel.getAction().setEnabled(!readOnly);
+        btnAddParcel.setEnabled(!readOnly);
+        menuAddParcel.setEnabled(btnAddParcel.isEnabled());
+        menuRemoveParcel.setEnabled(btnRemoveParcel.isEnabled());
     }
 
     /** Enables or disables combobox list of right types, depending on the form state.*/
@@ -554,9 +511,9 @@ public class PropertyPanel extends ContentPanel {
     private void customizeCreateRightButton(RrrTypeBean rrrTypeBean) {
         if (rrrTypeBean != null && rrrTypeBean.getCode() != null
                 && !readOnly && isActionAllowed(RrrTypeActionConstants.NEW)) {
-            btnCreateRight.getAction().setEnabled(true);
+            btnCreateRight.setEnabled(true);
         } else {
-            btnCreateRight.getAction().setEnabled(false);
+            btnCreateRight.setEnabled(false);
         }
     }
 
@@ -565,20 +522,19 @@ public class PropertyPanel extends ContentPanel {
      * form state, selected right and it's state. 
      */
     private void customizeRightsButtons(RrrBean rrrBean) {
-        btnEditRight.getAction().setEnabled(false);
-        btnRemoveRight.getAction().setEnabled(false);
-        btnChangeRight.getAction().setEnabled(false);
-        btnExtinguish.getAction().setEnabled(false);
+        btnEditRight.setEnabled(false);
+        btnRemoveRight.setEnabled(false);
+        btnChangeRight.setEnabled(false);
+        btnExtinguish.setEnabled(false);
         btnViewRight.setEnabled(rrrBean != null);
-        menuViewRight.setEnabled(btnViewRight.isEnabled());
         
         if (rrrBean != null && !rrrBean.isLocked() && !readOnly) {
             boolean isPending = rrrBean.getStatusCode().equals(StatusConstants.PENDING);
 
             // Control pending state and allowed types of RRR for edit/remove buttons
             if (isPending && isRightTypeAllowed(rrrBean.getTypeCode())) {
-                btnEditRight.getAction().setEnabled(true);
-                btnRemoveRight.getAction().setEnabled(true);
+                btnEditRight.setEnabled(true);
+                btnRemoveRight.setEnabled(true);
             }
 
             // Control the record state, duplication of pending records,
@@ -587,13 +543,19 @@ public class PropertyPanel extends ContentPanel {
                     && !baUnitBean1.isPendingRrrExists(rrrBean)
                     && isRightTypeAllowed(rrrBean.getTypeCode())) {
                 if (isActionAllowed(RrrTypeActionConstants.VARY)) {
-                    btnChangeRight.getAction().setEnabled(true);
+                    btnChangeRight.setEnabled(true);
                 }
                 if (isActionAllowed(RrrTypeActionConstants.CANCEL)) {
-                    btnExtinguish.getAction().setEnabled(true);
+                    btnExtinguish.setEnabled(true);
                 }
             }
         }
+        
+        menuEditRight.setEnabled(btnEditRight.isEnabled());
+        menuRemoveRight.setEnabled(btnRemoveRight.isEnabled());
+        menuVaryRight.setEnabled(btnChangeRight.isEnabled());
+        menuExtinguishRight.setEnabled(btnExtinguish.isEnabled());
+        menuViewRight.setEnabled(btnViewRight.isEnabled());
     }
 
     /** Checks if certain action is allowed on the form. */
@@ -631,8 +593,7 @@ public class PropertyPanel extends ContentPanel {
     }
 
     /** Open form to add new parcel. */
-    @Action
-    public void addParcel() {
+    private void addParcel() {
 
         PropertyChangeListener listener = new PropertyChangeListener() {
 
@@ -654,8 +615,7 @@ public class PropertyPanel extends ContentPanel {
     }
 
     /** Removes selected parcel from the list of parcels. */
-    @Action
-    public void removeParcel() {
+    private void removeParcel() {
         if (baUnitBean1.getSelectedParcel() != null
                 && MessageUtility.displayMessage(ClientMessage.CONFIRM_DELETE_RECORD) == MessageUtility.BUTTON_ONE) {
             baUnitBean1.removeSelectedParcel();
@@ -663,8 +623,7 @@ public class PropertyPanel extends ContentPanel {
     }
 
     /** Removes selected right from the list of rights. */
-    @Action
-    public void removeRight() {
+    private void removeRight() {
         if (baUnitBean1.getSelectedRight() != null
                 && MessageUtility.displayMessage(ClientMessage.CONFIRM_DELETE_RECORD) == MessageUtility.BUTTON_ONE) {
             baUnitBean1.removeSelectedRight();
@@ -672,8 +631,7 @@ public class PropertyPanel extends ContentPanel {
     }
 
     /** Opens appropriate right form for editing. */
-    @Action
-    public void editRight() {
+    private void editRight() {
 
         if (baUnitBean1.getSelectedRight() != null) {
             openRightForm(baUnitBean1.getSelectedRight(), RrrBean.RRR_ACTION.EDIT);
@@ -681,8 +639,7 @@ public class PropertyPanel extends ContentPanel {
     }
 
     /** Opens appropriate right form to extinguish selected right. */
-    @Action
-    public void extinguishRight() {
+    private void extinguishRight() {
 
         if (baUnitBean1.getSelectedRight() != null) {
             openRightForm(baUnitBean1.getSelectedRight(), RrrBean.RRR_ACTION.CANCEL);
@@ -690,38 +647,33 @@ public class PropertyPanel extends ContentPanel {
     }
 
     /** Opens appropriate right form to create new right. */
-    @Action
-    public void createRight() {
+    private void createRight() {
         openRightForm(null, RrrBean.RRR_ACTION.NEW);
     }
 
     /** Opens appropriate right form to vary selected right. */
-    @Action
-    public void varyRight() {
+    private void varyRight() {
         if (baUnitBean1.getSelectedRight() != null) {
             openRightForm(baUnitBean1.getSelectedRight(), RrrBean.RRR_ACTION.VARY);
         }
     }
 
     /** Adds new notation on the BaUnit. */
-    @Action
-    public void addNotation() {
+    private void addNotation() {
         if (baUnitBean1.addBaUnitNotation(txtNotationText.getText())) {
             txtNotationText.setText(null);
         }
     }
 
     /** Removes selected notation. */
-    @Action
-    public void removeNotation() {
+    private void removeNotation() {
         if (MessageUtility.displayMessage(ClientMessage.CONFIRM_DELETE_RECORD) == MessageUtility.BUTTON_ONE) {
             baUnitBean1.removeSelectedBaUnitNotation();
         }
     }
 
     /** Opens paper title attachment. */
-    @Action
-    public void viewDocument() {
+    private void viewDocument() {
 
         if (documentsPanel1.getSourceListBean().getSelectedSource() != null) {
             documentsPanel1.getSourceListBean().getSelectedSource().openDocument();
@@ -729,8 +681,7 @@ public class PropertyPanel extends ContentPanel {
     }
 
     /** Prints BA unit certificate. */
-    @Action
-    public void print() {
+    private void print() {
         if (ApplicationServiceBean.saveInformationService(RequestTypeBean.CODE_TITLE_SERACH)) {
             showReport(ReportManager.getBaUnitReport(getBaUnit(
                     baUnitBean1.getNameFirstpart(), baUnitBean1.getNameLastpart())));
@@ -738,8 +689,7 @@ public class PropertyPanel extends ContentPanel {
     }
 
     /** Links document as a paper title on the BaUnit object. */
-    @Action
-    public void linkDocument() {
+    private void linkDocument() {
         openDocumentsForm();
     }
 
@@ -819,7 +769,7 @@ public class PropertyPanel extends ContentPanel {
         applicationDocumentsForm.setLocationRelativeTo(this);
         applicationDocumentsForm.addPropertyChangeListener(
                 SourceListBean.SELECTED_SOURCE_PROPERTY, listener);
-        DesktopApplication.getApplication().show(applicationDocumentsForm);
+        applicationDocumentsForm.setVisible(true);
         applicationDocumentsForm.removePropertyChangeListener(
                 SourceListBean.SELECTED_SOURCE_PROPERTY, listener);
     }
@@ -850,9 +800,10 @@ public class PropertyPanel extends ContentPanel {
         popupRights = new javax.swing.JPopupMenu();
         menuVaryRight = new javax.swing.JMenuItem();
         menuExtinguishRight = new javax.swing.JMenuItem();
+        jSeparator5 = new javax.swing.JPopupMenu.Separator();
+        menuViewRight = new javax.swing.JMenuItem();
         menuEditRight = new javax.swing.JMenuItem();
         menuRemoveRight = new javax.swing.JMenuItem();
-        menuViewRight = new javax.swing.JMenuItem();
         popupNotations = new javax.swing.JPopupMenu();
         menuRemoveNotation = new javax.swing.JMenuItem();
         popupParentBaUnits = new javax.swing.JPopupMenu();
@@ -946,50 +897,89 @@ public class PropertyPanel extends ContentPanel {
 
         popupParcels.setName("popupParcels"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(PropertyPanel.class, this);
-        menuAddParcel.setAction(actionMap.get("addParcel")); // NOI18N
+        menuAddParcel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
         menuAddParcel.setText(bundle.getString("PropertyPanel.menuAddParcel.text")); // NOI18N
         menuAddParcel.setName("menuAddParcel"); // NOI18N
+        menuAddParcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuAddParcelActionPerformed(evt);
+            }
+        });
         popupParcels.add(menuAddParcel);
 
-        menuRemoveParcel.setAction(actionMap.get("removeParcel")); // NOI18N
-        menuRemoveParcel.setText(bundle.getString("PropertyPanel.menuRemoveParcel.text")); // NOI18N
+        menuRemoveParcel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
+        menuRemoveParcel.setText(bundle.getString("PropertyPanel.btnRemoveParcel.text")); // NOI18N
+        menuRemoveParcel.setToolTipText(bundle.getString("PropertyPanel.menuRemoveParcel.toolTipText")); // NOI18N
         menuRemoveParcel.setName("menuRemoveParcel"); // NOI18N
+        menuRemoveParcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuRemoveParcelActionPerformed(evt);
+            }
+        });
         popupParcels.add(menuRemoveParcel);
 
         popupRights.setName("popupRights"); // NOI18N
 
-        menuVaryRight.setAction(actionMap.get("varyRight")); // NOI18N
+        menuVaryRight.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/vary.png"))); // NOI18N
         menuVaryRight.setText(bundle.getString("PropertyPanel.menuVaryRight.text")); // NOI18N
         menuVaryRight.setName("menuVaryRight"); // NOI18N
+        menuVaryRight.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuVaryRightActionPerformed(evt);
+            }
+        });
         popupRights.add(menuVaryRight);
 
-        menuExtinguishRight.setAction(actionMap.get("extinguishRight")); // NOI18N
+        menuExtinguishRight.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/flag.png"))); // NOI18N
         menuExtinguishRight.setText(bundle.getString("PropertyPanel.menuExtinguishRight.text")); // NOI18N
+        menuExtinguishRight.setToolTipText(bundle.getString("PropertyPanel.menuExtinguishRight.toolTipText")); // NOI18N
         menuExtinguishRight.setName("menuExtinguishRight"); // NOI18N
+        menuExtinguishRight.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuExtinguishRightActionPerformed(evt);
+            }
+        });
         popupRights.add(menuExtinguishRight);
 
-        menuEditRight.setAction(actionMap.get("editRight")); // NOI18N
-        menuEditRight.setText(bundle.getString("PropertyPanel.menuEditRight.text")); // NOI18N
-        menuEditRight.setName("menuEditRight"); // NOI18N
-        popupRights.add(menuEditRight);
-
-        menuRemoveRight.setAction(actionMap.get("removeRight")); // NOI18N
-        menuRemoveRight.setText(bundle.getString("PropertyPanel.menuRemoveRight.text")); // NOI18N
-        menuRemoveRight.setName("menuRemoveRight"); // NOI18N
-        popupRights.add(menuRemoveRight);
+        jSeparator5.setName("jSeparator5"); // NOI18N
+        popupRights.add(jSeparator5);
 
         menuViewRight.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/view.png"))); // NOI18N
         menuViewRight.setText(bundle.getString("PropertyPanel.menuViewRight.text")); // NOI18N
         menuViewRight.setName("menuViewRight"); // NOI18N
         popupRights.add(menuViewRight);
 
+        menuEditRight.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/document--pencil.png"))); // NOI18N
+        menuEditRight.setText(bundle.getString("PropertyPanel.menuEditRight.text")); // NOI18N
+        menuEditRight.setName("menuEditRight"); // NOI18N
+        menuEditRight.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuEditRightActionPerformed(evt);
+            }
+        });
+        popupRights.add(menuEditRight);
+
+        menuRemoveRight.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
+        menuRemoveRight.setText(bundle.getString("PropertyPanel.menuRemoveRight.text")); // NOI18N
+        menuRemoveRight.setName("menuRemoveRight"); // NOI18N
+        menuRemoveRight.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuRemoveRightActionPerformed(evt);
+            }
+        });
+        popupRights.add(menuRemoveRight);
+
         popupNotations.setName("popupNotations"); // NOI18N
 
-        menuRemoveNotation.setAction(actionMap.get("removeNotation")); // NOI18N
+        menuRemoveNotation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
         menuRemoveNotation.setText(bundle.getString("PropertyPanel.menuRemoveNotation.text")); // NOI18N
         menuRemoveNotation.setName("menuRemoveNotation"); // NOI18N
+        menuRemoveNotation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuRemoveNotationActionPerformed(evt);
+            }
+        });
         popupNotations.add(menuRemoveNotation);
 
         popupParentBaUnits.setName("popupParentBaUnits"); // NOI18N
@@ -1048,7 +1038,6 @@ public class PropertyPanel extends ContentPanel {
         jToolBar5.setRollover(true);
         jToolBar5.setName("jToolBar5"); // NOI18N
 
-        btnSave.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/save.png"))); // NOI18N
         btnSave.setText(bundle.getString("PropertyPanel.btnSave.text")); // NOI18N
         btnSave.setToolTipText(bundle.getString("PropertyPanel.btnSave.toolTipText")); // NOI18N
@@ -1060,7 +1049,6 @@ public class PropertyPanel extends ContentPanel {
         });
         jToolBar5.add(btnSave);
 
-        btnTerminate.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnTerminate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/stop.png"))); // NOI18N
         btnTerminate.setText(bundle.getString("PropertyPanel.btnTerminate.text")); // NOI18N
         btnTerminate.setFocusable(false);
@@ -1077,13 +1065,17 @@ public class PropertyPanel extends ContentPanel {
         jSeparator4.setName("jSeparator4"); // NOI18N
         jToolBar5.add(jSeparator4);
 
-        btnPrintBaUnit.setAction(actionMap.get("print")); // NOI18N
-        btnPrintBaUnit.setFont(new java.awt.Font("Tahoma", 0, 12));
+        btnPrintBaUnit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/print.png"))); // NOI18N
         btnPrintBaUnit.setText(bundle.getString("PropertyPanel.btnPrintBaUnit.text")); // NOI18N
         btnPrintBaUnit.setFocusable(false);
         btnPrintBaUnit.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnPrintBaUnit.setName("btnPrintBaUnit"); // NOI18N
         btnPrintBaUnit.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnPrintBaUnit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrintBaUnitActionPerformed(evt);
+            }
+        });
         jToolBar5.add(btnPrintBaUnit);
 
         jScrollPane6.setBorder(null);
@@ -1253,12 +1245,24 @@ public class PropertyPanel extends ContentPanel {
         jToolBar4.setRollover(true);
         jToolBar4.setName("jToolBar4"); // NOI18N
 
-        btnViewPaperTitle.setAction(actionMap.get("viewDocument")); // NOI18N
+        btnViewPaperTitle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/view.png"))); // NOI18N
+        btnViewPaperTitle.setText(bundle.getString("PropertyPanel.btnViewPaperTitle.text")); // NOI18N
         btnViewPaperTitle.setName("btnViewPaperTitle"); // NOI18N
+        btnViewPaperTitle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewPaperTitleActionPerformed(evt);
+            }
+        });
         jToolBar4.add(btnViewPaperTitle);
 
-        btnLinkPaperTitle.setAction(actionMap.get("linkDocument")); // NOI18N
+        btnLinkPaperTitle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/document-link.png"))); // NOI18N
+        btnLinkPaperTitle.setText(bundle.getString("PropertyPanel.btnLinkPaperTitle.text")); // NOI18N
         btnLinkPaperTitle.setName("btnLinkPaperTitle"); // NOI18N
+        btnLinkPaperTitle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLinkPaperTitleActionPerformed(evt);
+            }
+        });
         jToolBar4.add(btnLinkPaperTitle);
 
         documentsPanel1.setName("documentsPanel1"); // NOI18N
@@ -1270,14 +1274,14 @@ public class PropertyPanel extends ContentPanel {
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel7Layout.createSequentialGroup()
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel12, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(groupPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
-                    .add(jToolBar4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
-                    .add(documentsPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
-                    .add(jPanel13, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE))
+                .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, documentsPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel12, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, groupPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jToolBar4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel13, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel7Layout.setVerticalGroup(
@@ -1292,8 +1296,8 @@ public class PropertyPanel extends ContentPanel {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jToolBar4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(documentsPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 60, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(42, Short.MAX_VALUE))
+                .add(documentsPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 70, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         tabsMain.addTab(bundle.getString("PropertyPanel.jPanel7.TabConstraints.tabTitle"), jPanel7); // NOI18N
@@ -1350,12 +1354,25 @@ public class PropertyPanel extends ContentPanel {
         jToolBar1.setRollover(true);
         jToolBar1.setName("jToolBar1"); // NOI18N
 
-        btnAddParcel.setAction(actionMap.get("addParcel")); // NOI18N
+        btnAddParcel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
+        btnAddParcel.setText(bundle.getString("PropertyPanel.btnAddParcel.text")); // NOI18N
         btnAddParcel.setName("btnAddParcel"); // NOI18N
+        btnAddParcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddParcelActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnAddParcel);
 
-        btnRemoveParcel.setAction(actionMap.get("removeParcel")); // NOI18N
+        btnRemoveParcel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
+        btnRemoveParcel.setText(bundle.getString("PropertyPanel.btnRemoveParcel.text")); // NOI18N
+        btnRemoveParcel.setToolTipText(bundle.getString("PropertyPanel.btnRemoveParcel.toolTipText")); // NOI18N
         btnRemoveParcel.setName("btnRemoveParcel"); // NOI18N
+        btnRemoveParcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveParcelActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnRemoveParcel);
 
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
@@ -1452,16 +1469,35 @@ public class PropertyPanel extends ContentPanel {
         filler2.setName("filler2"); // NOI18N
         jToolBar2.add(filler2);
 
-        btnCreateRight.setAction(actionMap.get("createRight")); // NOI18N
+        btnCreateRight.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/create.png"))); // NOI18N
+        btnCreateRight.setText(bundle.getString("PropertyPanel.btnCreateRight.text")); // NOI18N
         btnCreateRight.setName("btnCreateRight"); // NOI18N
+        btnCreateRight.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCreateRightActionPerformed(evt);
+            }
+        });
         jToolBar2.add(btnCreateRight);
 
-        btnChangeRight.setAction(actionMap.get("varyRight")); // NOI18N
+        btnChangeRight.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/vary.png"))); // NOI18N
+        btnChangeRight.setText(bundle.getString("PropertyPanel.btnChangeRight.text")); // NOI18N
         btnChangeRight.setName("btnChangeRight"); // NOI18N
+        btnChangeRight.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnChangeRightActionPerformed(evt);
+            }
+        });
         jToolBar2.add(btnChangeRight);
 
-        btnExtinguish.setAction(actionMap.get("extinguishRight")); // NOI18N
+        btnExtinguish.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/flag.png"))); // NOI18N
+        btnExtinguish.setText(bundle.getString("PropertyPanel.btnExtinguish.text")); // NOI18N
+        btnExtinguish.setToolTipText(bundle.getString("PropertyPanel.btnExtinguish.toolTipText")); // NOI18N
         btnExtinguish.setName("btnExtinguish"); // NOI18N
+        btnExtinguish.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExtinguishActionPerformed(evt);
+            }
+        });
         jToolBar2.add(btnExtinguish);
 
         jSeparator1.setName("jSeparator1"); // NOI18N
@@ -1479,12 +1515,24 @@ public class PropertyPanel extends ContentPanel {
         });
         jToolBar2.add(btnViewRight);
 
-        btnEditRight.setAction(actionMap.get("editRight")); // NOI18N
+        btnEditRight.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/document--pencil.png"))); // NOI18N
+        btnEditRight.setText(bundle.getString("PropertyPanel.btnEditRight.text")); // NOI18N
         btnEditRight.setName("btnEditRight"); // NOI18N
+        btnEditRight.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditRightActionPerformed(evt);
+            }
+        });
         jToolBar2.add(btnEditRight);
 
-        btnRemoveRight.setAction(actionMap.get("removeRight")); // NOI18N
+        btnRemoveRight.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
+        btnRemoveRight.setText(bundle.getString("PropertyPanel.btnRemoveRight.text")); // NOI18N
         btnRemoveRight.setName("btnRemoveRight"); // NOI18N
+        btnRemoveRight.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveRightActionPerformed(evt);
+            }
+        });
         jToolBar2.add(btnRemoveRight);
 
         org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
@@ -1611,18 +1659,29 @@ public class PropertyPanel extends ContentPanel {
         filler4.setName("filler4"); // NOI18N
         jToolBar3.add(filler4);
 
-        btnAddNotation.setAction(actionMap.get("addNotation")); // NOI18N
+        btnAddNotation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
+        btnAddNotation.setText(bundle.getString("PropertyPanel.btnAddNotation.text")); // NOI18N
         btnAddNotation.setName("btnAddNotation"); // NOI18N
+        btnAddNotation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddNotationActionPerformed(evt);
+            }
+        });
         jToolBar3.add(btnAddNotation);
 
-        btnRemoveNotation.setAction(actionMap.get("removeNotation")); // NOI18N
+        btnRemoveNotation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
+        btnRemoveNotation.setText(bundle.getString("PropertyPanel.btnRemoveNotation.text")); // NOI18N
         btnRemoveNotation.setName("btnRemoveNotation"); // NOI18N
+        btnRemoveNotation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveNotationActionPerformed(evt);
+            }
+        });
         jToolBar3.add(btnRemoveNotation);
 
         txtNotationText.setMinimumSize(new java.awt.Dimension(150, 20));
         txtNotationText.setName("txtNotationText"); // NOI18N
 
-        jLabel15.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel15.setText(bundle.getString("PropertyPanel.jLabel15.text")); // NOI18N
         jLabel15.setName("jLabel15"); // NOI18N
 
@@ -1637,7 +1696,7 @@ public class PropertyPanel extends ContentPanel {
                     .add(jPanel4Layout.createSequentialGroup()
                         .add(jLabel15)
                         .add(9, 9, 9)
-                        .add(txtNotationText, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
+                        .add(txtNotationText, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jToolBar3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 139, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -1669,7 +1728,7 @@ public class PropertyPanel extends ContentPanel {
         jToolBar6.setRollover(true);
         jToolBar6.setName("jToolBar6"); // NOI18N
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12));
+        jLabel6.setFont(LafManager.getInstance().getLabFontBold());
         jLabel6.setText(bundle.getString("PropertyPanel.jLabel6.text")); // NOI18N
         jLabel6.setName("jLabel6"); // NOI18N
         jToolBar6.add(jLabel6);
@@ -1677,7 +1736,6 @@ public class PropertyPanel extends ContentPanel {
         jSeparator3.setName("jSeparator3"); // NOI18N
         jToolBar6.add(jSeparator3);
 
-        btnOpenParent.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnOpenParent.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/folder-open-document.png"))); // NOI18N
         btnOpenParent.setText(bundle.getString("PropertyPanel.btnOpenParent.text")); // NOI18N
         btnOpenParent.setToolTipText(bundle.getString("PropertyPanel.btnOpenParent.toolTipText")); // NOI18N
@@ -1692,7 +1750,6 @@ public class PropertyPanel extends ContentPanel {
         });
         jToolBar6.add(btnOpenParent);
 
-        btnAddParent.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnAddParent.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
         btnAddParent.setText(bundle.getString("PropertyPanel.btnAddParent.text")); // NOI18N
         btnAddParent.setFocusable(false);
@@ -1706,8 +1763,7 @@ public class PropertyPanel extends ContentPanel {
         });
         jToolBar6.add(btnAddParent);
 
-        btnRemoveParent.setAction(actionMap.get("removePriorProperties")); // NOI18N
-        btnRemoveParent.setFont(new java.awt.Font("Tahoma", 0, 12));
+        btnRemoveParent.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
         btnRemoveParent.setText(bundle.getString("PropertyPanel.btnRemoveParent.text")); // NOI18N
         btnRemoveParent.setFocusable(false);
         btnRemoveParent.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -1779,7 +1835,7 @@ public class PropertyPanel extends ContentPanel {
         jToolBar7.setRollover(true);
         jToolBar7.setName("jToolBar7"); // NOI18N
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12));
+        jLabel3.setFont(LafManager.getInstance().getLabFontBold());
         jLabel3.setText(bundle.getString("PropertyPanel.jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
         jToolBar7.add(jLabel3);
@@ -1787,7 +1843,6 @@ public class PropertyPanel extends ContentPanel {
         jSeparator2.setName("jSeparator2"); // NOI18N
         jToolBar7.add(jSeparator2);
 
-        btnOpenChild.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnOpenChild.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/folder-open-document.png"))); // NOI18N
         btnOpenChild.setText(bundle.getString("PropertyPanel.btnOpenChild.text")); // NOI18N
         btnOpenChild.setFocusable(false);
@@ -1999,6 +2054,82 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
         }
     }//GEN-LAST:event_btnViewRightActionPerformed
 
+    private void btnPrintBaUnitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintBaUnitActionPerformed
+        print();
+    }//GEN-LAST:event_btnPrintBaUnitActionPerformed
+
+    private void btnViewPaperTitleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewPaperTitleActionPerformed
+        viewDocument();
+    }//GEN-LAST:event_btnViewPaperTitleActionPerformed
+
+    private void btnLinkPaperTitleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLinkPaperTitleActionPerformed
+        linkDocument();
+    }//GEN-LAST:event_btnLinkPaperTitleActionPerformed
+
+    private void menuAddParcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAddParcelActionPerformed
+        addParcel();
+    }//GEN-LAST:event_menuAddParcelActionPerformed
+
+    private void btnAddParcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddParcelActionPerformed
+        addParcel();
+    }//GEN-LAST:event_btnAddParcelActionPerformed
+
+    private void btnRemoveParcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveParcelActionPerformed
+        removeParcel();
+    }//GEN-LAST:event_btnRemoveParcelActionPerformed
+
+    private void menuRemoveParcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRemoveParcelActionPerformed
+        removeParcel();
+    }//GEN-LAST:event_menuRemoveParcelActionPerformed
+
+    private void menuVaryRightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuVaryRightActionPerformed
+        varyRight();
+    }//GEN-LAST:event_menuVaryRightActionPerformed
+
+    private void btnChangeRightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangeRightActionPerformed
+        varyRight();
+    }//GEN-LAST:event_btnChangeRightActionPerformed
+
+    private void menuExtinguishRightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuExtinguishRightActionPerformed
+        extinguishRight();
+    }//GEN-LAST:event_menuExtinguishRightActionPerformed
+
+    private void btnExtinguishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExtinguishActionPerformed
+        extinguishRight();
+    }//GEN-LAST:event_btnExtinguishActionPerformed
+
+    private void menuEditRightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEditRightActionPerformed
+        editRight();
+    }//GEN-LAST:event_menuEditRightActionPerformed
+
+    private void btnEditRightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditRightActionPerformed
+        editRight();
+    }//GEN-LAST:event_btnEditRightActionPerformed
+
+    private void menuRemoveRightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRemoveRightActionPerformed
+        removeRight();
+    }//GEN-LAST:event_menuRemoveRightActionPerformed
+
+    private void btnRemoveRightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveRightActionPerformed
+        removeRight();
+    }//GEN-LAST:event_btnRemoveRightActionPerformed
+
+    private void btnCreateRightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateRightActionPerformed
+        createRight();
+    }//GEN-LAST:event_btnCreateRightActionPerformed
+
+    private void menuRemoveNotationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRemoveNotationActionPerformed
+        removeNotation();
+    }//GEN-LAST:event_menuRemoveNotationActionPerformed
+
+    private void btnRemoveNotationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveNotationActionPerformed
+        removeNotation();
+    }//GEN-LAST:event_btnRemoveNotationActionPerformed
+
+    private void btnAddNotationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddNotationActionPerformed
+        addNotation();
+    }//GEN-LAST:event_btnAddNotationActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.sola.clients.beans.administrative.BaUnitBean baUnitBean1;
     private org.sola.clients.beans.referencedata.RrrTypeListBean baUnitRrrTypes;
@@ -2062,6 +2193,7 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JToolBar.Separator jSeparator4;
+    private javax.swing.JPopupMenu.Separator jSeparator5;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
     private javax.swing.JToolBar jToolBar3;

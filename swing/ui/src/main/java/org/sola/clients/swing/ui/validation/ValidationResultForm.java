@@ -97,7 +97,7 @@ public class ValidationResultForm extends javax.swing.JDialog {
         lblMessage = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/application/Bundle"); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/validation/Bundle"); // NOI18N
         setTitle(bundle.getString("ValidationResultForm.title")); // NOI18N
         setName("Form"); // NOI18N
 
@@ -122,22 +122,21 @@ public class ValidationResultForm extends javax.swing.JDialog {
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();
         jScrollPane1.setViewportView(tableValidations);
-        java.util.ResourceBundle bundle1 = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/validation/Bundle"); // NOI18N
-        tableValidations.getColumnModel().getColumn(0).setHeaderValue(bundle1.getString("ValidationResultForm.tableValidations.columnModel.title0")); // NOI18N
+        tableValidations.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("ValidationResultForm.tableValidations.columnModel.title0")); // NOI18N
         tableValidations.getColumnModel().getColumn(0).setCellRenderer(new TableCellTextAreaRenderer());
         tableValidations.getColumnModel().getColumn(1).setPreferredWidth(100);
         tableValidations.getColumnModel().getColumn(1).setMaxWidth(100);
-        tableValidations.getColumnModel().getColumn(1).setHeaderValue(bundle1.getString("ValidationResultForm.tableValidations.columnModel.title1")); // NOI18N
+        tableValidations.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("ValidationResultForm.tableValidations.columnModel.title1")); // NOI18N
         tableValidations.getColumnModel().getColumn(2).setPreferredWidth(45);
         tableValidations.getColumnModel().getColumn(2).setMaxWidth(45);
-        tableValidations.getColumnModel().getColumn(2).setHeaderValue(bundle1.getString("ValidationResultForm.tableValidations.columnModel.title2")); // NOI18N
+        tableValidations.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("ValidationResultForm.tableValidations.columnModel.title2")); // NOI18N
         tableValidations.getColumnModel().getColumn(2).setCellRenderer(new ViolationCellRenderer());
 
         lblMessage.setBackground(new java.awt.Color(153, 255, 153));
-        lblMessage.setFont(new java.awt.Font("Tahoma", 1, 12));
+        lblMessage.setFont(LafManager.getInstance().getLabFontBold());
         lblMessage.setForeground(new java.awt.Color(0, 102, 0));
         lblMessage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/ball_green.png"))); // NOI18N
-        lblMessage.setText(bundle1.getString("ValidationResultForm.lblMessage.text")); // NOI18N
+        lblMessage.setText(bundle.getString("ValidationResultForm.lblMessage.text")); // NOI18N
         lblMessage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 102, 0)));
         lblMessage.setName("lblMessage"); // NOI18N
         lblMessage.setOpaque(true);

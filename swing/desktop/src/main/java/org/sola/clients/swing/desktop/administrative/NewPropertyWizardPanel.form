@@ -55,7 +55,7 @@
       <Properties>
         <Property name="name" type="java.lang.String" value="headerPanel" noResource="true"/>
         <Property name="titleText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="NewPropertyWizardPanel.headerPanel.titleText" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+          <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="NewPropertyWizardPanel.headerPanel.titleText_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
         </Property>
       </Properties>
     </Component>
@@ -103,7 +103,7 @@
                           <Component id="jPanel6" pref="284" max="32767" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jPanel8" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -140,7 +140,7 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-                                  <Component id="jScrollPane2" pref="65" max="32767" attributes="0"/>
+                                  <Component id="jScrollPane2" pref="66" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -208,11 +208,8 @@
                         </Container>
                         <Component class="javax.swing.JLabel" name="jLabel1">
                           <Properties>
-                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                              <Font name="Tahoma" size="12" style="0"/>
-                            </Property>
                             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                              <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="NewPropertyWizardPanel.jLabel1.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                              <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="NewPropertyWizardPanel.jLabel1.text_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                             </Property>
                             <Property name="name" type="java.lang.String" value="jLabel1" noResource="true"/>
                           </Properties>
@@ -239,7 +236,7 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-                                  <Component id="jScrollPane4" pref="65" max="32767" attributes="0"/>
+                                  <Component id="jScrollPane4" pref="66" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -318,11 +315,8 @@
                         </Container>
                         <Component class="javax.swing.JLabel" name="jLabel2">
                           <Properties>
-                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                              <Font name="Tahoma" size="12" style="0"/>
-                            </Property>
                             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                              <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="NewPropertyWizardPanel.jLabel2.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                              <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="NewPropertyWizardPanel.jLabel2.text_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                             </Property>
                             <Property name="name" type="java.lang.String" value="jLabel2" noResource="true"/>
                           </Properties>
@@ -349,7 +343,7 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-                                  <Component id="jScrollPane3" pref="65" max="32767" attributes="0"/>
+                                  <Component id="jScrollPane3" pref="66" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -428,11 +422,8 @@
                         </Container>
                         <Component class="javax.swing.JLabel" name="jLabel3">
                           <Properties>
-                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                              <Font name="Tahoma" size="12" style="0"/>
-                            </Property>
                             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                              <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="NewPropertyWizardPanel.jLabel3.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                              <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="NewPropertyWizardPanel.jLabel3.text_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                             </Property>
                             <Property name="name" type="java.lang.String" value="jLabel3" noResource="true"/>
                           </Properties>
@@ -479,11 +470,8 @@
                   <SubComponents>
                     <Component class="javax.swing.JButton" name="btnFinish">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
-                        </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="NewPropertyWizardPanel.btnFinish.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                          <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="NewPropertyWizardPanel.btnFinish.text_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                         </Property>
                         <Property name="name" type="java.lang.String" value="btnFinish" noResource="true"/>
                       </Properties>
@@ -493,11 +481,8 @@
                     </Component>
                     <Component class="javax.swing.JButton" name="btnBackToSelection">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
-                        </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="NewPropertyWizardPanel.btnBackToSelection.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                          <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="NewPropertyWizardPanel.btnBackToSelection.text_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                         </Property>
                         <Property name="name" type="java.lang.String" value="btnBackToSelection" noResource="true"/>
                       </Properties>
@@ -516,9 +501,6 @@
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel4">
                       <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="12" style="0"/>
-                        </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="NewPropertyWizardPanel.jLabel4.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                         </Property>
@@ -554,9 +536,6 @@
               <SubComponents>
                 <Container class="javax.swing.JTabbedPane" name="tabsPropertySelection">
                   <Properties>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Tahoma" size="12" style="0"/>
-                    </Property>
                     <Property name="name" type="java.lang.String" value="tabsPropertySelection" noResource="true"/>
                   </Properties>
 
@@ -593,7 +572,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="1" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jScrollPane1" pref="277" max="32767" attributes="0"/>
+                                  <Component id="jScrollPane1" pref="278" max="32767" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="btnSelectFromApplication" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
@@ -617,22 +596,30 @@
                                 <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                                   <TableColumnModel selectionModel="0">
                                     <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                      <Title/>
+                                      <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                                        <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="NewPropertyWizardPanel.tableApplicationProperty.columnModel.title0" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                                      </Title>
                                       <Editor/>
                                       <Renderer/>
                                     </Column>
                                     <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                      <Title/>
+                                      <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                                        <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="NewPropertyWizardPanel.tableApplicationProperty.columnModel.title1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                                      </Title>
                                       <Editor/>
                                       <Renderer/>
                                     </Column>
                                     <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                      <Title/>
+                                      <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                                        <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="NewPropertyWizardPanel.tableApplicationProperty.columnModel.title2" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                                      </Title>
                                       <Editor/>
                                       <Renderer/>
                                     </Column>
                                     <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                      <Title/>
+                                      <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                                        <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="NewPropertyWizardPanel.tableApplicationProperty.columnModel.title3" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                                      </Title>
                                       <Editor/>
                                       <Renderer/>
                                     </Column>
@@ -646,22 +633,18 @@
                               <BindingProperties>
                                 <BindingProperty name="elements" source="applicationBean" sourcePath="${filteredPropertyList}" target="tableApplicationProperty" targetPath="elements" updateStrategy="0" immediately="true">
                                   <Subbinding sourcePath="${nameFirstpart}">
-                                    <BindingParameter name="NAME" value="Name first part"/>
                                     <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
                                     <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
                                   </Subbinding>
                                   <Subbinding sourcePath="${nameLastpart}">
-                                    <BindingParameter name="NAME" value="Name last part"/>
                                     <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
                                     <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
                                   </Subbinding>
                                   <Subbinding sourcePath="${area}">
-                                    <BindingParameter name="NAME" value="Area"/>
                                     <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="java.math.BigDecimal.class"/>
                                     <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
                                   </Subbinding>
                                   <Subbinding sourcePath="${totalValue}">
-                                    <BindingParameter name="NAME" value="Value"/>
                                     <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="java.math.BigDecimal.class"/>
                                     <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
                                   </Subbinding>
@@ -675,9 +658,6 @@
                         </Container>
                         <Component class="javax.swing.JButton" name="btnSelectFromApplication">
                           <Properties>
-                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                              <Font name="Tahoma" size="12" style="0"/>
-                            </Property>
                             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                               <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="NewPropertyWizardPanel.btnSelectFromApplication.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                             </Property>
@@ -698,7 +678,7 @@
                       </Properties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                          <JTabbedPaneConstraints tabName="Property search">
+                          <JTabbedPaneConstraints tabName="Search property">
                             <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                               <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="NewPropertyWizardPanel.jPanel3.TabConstraints.tabTitle" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                             </Property>
@@ -723,7 +703,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="1" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="baUnitSearchPanel" pref="277" max="32767" attributes="0"/>
+                                  <Component id="baUnitSearchPanel" pref="278" max="32767" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="btnSelectFromSearch" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
@@ -740,9 +720,6 @@
                         </Component>
                         <Component class="javax.swing.JButton" name="btnSelectFromSearch">
                           <Properties>
-                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                              <Font name="Tahoma" size="12" style="0"/>
-                            </Property>
                             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                               <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="NewPropertyWizardPanel.btnSelectFromSearch.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                             </Property>

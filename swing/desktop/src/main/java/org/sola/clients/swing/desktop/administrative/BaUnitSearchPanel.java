@@ -30,7 +30,6 @@ package org.sola.clients.swing.desktop.administrative;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import org.sola.clients.beans.administrative.BaUnitSearchResultBean;
-import org.sola.clients.swing.desktop.DesktopApplication;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
 
@@ -75,8 +74,8 @@ public class BaUnitSearchPanel extends ContentPanel {
         setName("Form"); // NOI18N
 
         headerPanel1.setName("headerPanel1"); // NOI18N
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(org.sola.clients.swing.desktop.DesktopApplication.class).getContext().getResourceMap(BaUnitSearchPanel.class);
-        headerPanel1.setTitleText(resourceMap.getString("headerPanel1.titleText")); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
+        headerPanel1.setTitleText(bundle.getString("BaUnitSearchPanel.headerPanel1.titleText")); // NOI18N
 
         baUnitSearchPanel.setName("baUnitSearchPanel"); // NOI18N
 

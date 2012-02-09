@@ -52,15 +52,12 @@ package org.sola.clients.swing.admin;
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  *  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 import org.sola.clients.swing.ui.security.LoginForm;
 import org.sola.clients.swing.ui.DesktopClientExceptionHandler;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import org.jdesktop.application.Application;
-import org.jdesktop.application.SingleFrameApplication;
 import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.common.LocalizationManager;
 import org.sola.clients.swing.ui.security.LoginPanel;
@@ -72,76 +69,13 @@ import org.sola.services.boundary.wsclients.WSManager;
 /**
  * The main class of the application.
  */
-public class AdminApplication extends SingleFrameApplication {
-
-    /** Listens for {@link LoginForm} {@code login} event.*/
-    private class LoginFormListener implements PropertyChangeListener {
-
-        private LoginForm loginForm;
-        private SingleFrameApplication app;
-
-        public LoginFormListener(LoginForm loginForm, SingleFrameApplication app) {
-            this.loginForm = loginForm;
-            this.app = app;
-        }
-
-        @Override
-        public void propertyChange(PropertyChangeEvent evt) {
-            if (evt.getPropertyName().equals(LoginPanel.LOGIN_RESULT)) {
-                if (((Boolean) evt.getNewValue())) {
-                    // Check admin roles
-                    if(!WSManager.getInstance().getAdminService().isUserAdmin()){
-                        MessageUtility.displayMessage(ClientMessage.ADMIN_NO_ADMIN_RIGHTS);
-                        loginForm.enableLoginPanel(true);
-                    }else{
-                        loginForm.dispose();
-                        app.show(new MainForm());
-                    }
-                }
-            }
-        }
-    }
-    
-    /**
-     * Creates and shows the main form of the application.
-     */
-    @Override
-    protected void startup() {
-        Thread.setDefaultUncaughtExceptionHandler(new DesktopClientExceptionHandler());
-        LocalizationManager.loadLanguage(AdminApplication.class);
-        LogUtility.initialize(AdminApplication.class);
-        LafManager.getInstance().setProperties("green");
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        int x = ((dim.width) / 2);
-        int y = ((dim.height) / 2);
-
-        LoginForm loginForm = new LoginForm(this);
-        loginForm.addPropertyChangeListener(new LoginFormListener(loginForm, this));
-        loginForm.setLocation(x - (loginForm.getWidth() / 2), y - (loginForm.getHeight() / 2));
-        loginForm.setVisible(true);
-    }
-
-    /** 
-     * This method is to initialize the specified window by injecting resources.
-     * Windows shown in our application come fully initialized from the GUI
-     * builder, so this additional configuration is not needed.
-     */
-    @Override
-    protected void configureWindow(java.awt.Window root) {
-    }
-
-    /**
-     * A convenient static getter for the application instance.
-     * @return the instance of AdminApplication
-     */
-    public static AdminApplication getApplication() {
-        return Application.getInstance(AdminApplication.class);
-    }
+public class AdminApplication {
 
     /** Main method to run the application. 
      * @param args Array of input parameters.
      */
     public static void main(String[] args) {
+        // Show splash screen
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         int x = ((dim.width) / 2);
         int y = ((dim.height) / 2);
@@ -158,6 +92,42 @@ public class AdminApplication extends SingleFrameApplication {
         splash.setVisible(false);
         splash.dispose();
 
-        launch(AdminApplication.class, args);
+        java.awt.EventQueue.invokeLater(new Runnable() {
+
+            @Override
+            public void run() {
+                Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+                int x = ((dim.width) / 2);
+                int y = ((dim.height) / 2);
+
+                Thread.setDefaultUncaughtExceptionHandler(new DesktopClientExceptionHandler());
+                LocalizationManager.loadLanguage(AdminApplication.class);
+                LogUtility.initialize(AdminApplication.class);
+                LafManager.getInstance().setProperties("green");
+
+                final LoginForm loginForm = new LoginForm(AdminApplication.class);
+                loginForm.addPropertyChangeListener(new PropertyChangeListener() {
+
+                    @Override
+                    public void propertyChange(PropertyChangeEvent evt) {
+                        if (evt.getPropertyName().equals(LoginPanel.LOGIN_RESULT)) {
+                            if (((Boolean) evt.getNewValue())) {
+                                // Check admin roles
+                                if (!WSManager.getInstance().getAdminService().isUserAdmin()) {
+                                    MessageUtility.displayMessage(ClientMessage.ADMIN_NO_ADMIN_RIGHTS);
+                                    loginForm.enableLoginPanel(true);
+                                } else {
+                                    loginForm.dispose();
+                                    MainForm mainForm = new MainForm();
+                                    mainForm.setVisible(true);
+                                }
+                            }
+                        }
+                    }
+                });
+                loginForm.setLocation(x - (loginForm.getWidth() / 2), y - (loginForm.getHeight() / 2));
+                loginForm.setVisible(true);
+            }
+        });
     }
 }

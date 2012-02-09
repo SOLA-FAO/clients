@@ -27,6 +27,8 @@
  */
 package org.sola.clients.swing.ui;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -81,6 +83,14 @@ public class DesktopClientExceptionHandler extends DefaultExceptionHandler {
 
                 ValidationResultForm resultForm = new ValidationResultForm(
                         null, true, results, false, message);
+                
+                Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+                int x = ((dim.width) / 2);
+                int y = ((dim.height) / 2);
+                x = x - (resultForm.getWidth() / 2);
+                y = y - (resultForm.getHeight() / 2);
+                
+                resultForm.setLocation(x, y);
                 resultForm.setVisible(true);
 
             } else {

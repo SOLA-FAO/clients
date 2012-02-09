@@ -27,45 +27,15 @@
  */
 package org.sola.clients.swing.desktop;
 
-import javax.swing.JLabel;
-import org.jdesktop.application.Action;
-import org.sola.clients.swing.common.LafManager;
-
 /** Simple dialog form to display product information */
 public class AboutForm extends javax.swing.JDialog {
 
     public AboutForm(java.awt.Frame parent) {
         super(parent);
         initComponents();
-        customizeComponents();
         getRootPane().setDefaultButton(closeButton);
     }
     
-      /** Applies customization of component L&F. */
-    private void customizeComponents() {
-        
-//    BUTTONS   
-    LafManager.getInstance().setBtnProperties(closeButton);
-    
-//    LABELS    
-    LafManager.getInstance().setLabProperties(jLabel1);
-    LafManager.getInstance().setLabProperties(appTitleLabel);
-    LafManager.getInstance().setLabProperties(versionLabel);
-    LafManager.getInstance().setLabProperties(appVersionLabel);
-    LafManager.getInstance().setLabProperties(vendorLabel);
-    LafManager.getInstance().setLabProperties(appVendorLabel);
-    LafManager.getInstance().setLabProperties(homepageLabel);
-    LafManager.getInstance().setLabProperties(appHomepageLabel);
-    LafManager.getInstance().setLabProperties(appDescLabel);
-//    LafManager.getInstance().setLabProperties(imageLabel);
-    }
-
-    
-    /** Action to close the dialog. */
-    @Action public void closeAboutBox() {
-        dispose();
-    }
-
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -82,21 +52,23 @@ public class AboutForm extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance().getContext().getResourceMap(AboutForm.class);
-        setTitle(resourceMap.getString("title")); // NOI18N
         setModal(true);
         setName("aboutBox"); // NOI18N
         setResizable(false);
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(AboutForm.class, this);
-        closeButton.setAction(actionMap.get("closeAboutBox")); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/Bundle"); // NOI18N
+        closeButton.setText(bundle.getString("AboutForm.closeButton.text")); // NOI18N
         closeButton.setName("closeButton"); // NOI18N
+        closeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                closeButtonActionPerformed(evt);
+            }
+        });
 
         appTitleLabel.setFont(appTitleLabel.getFont().deriveFont(appTitleLabel.getFont().getStyle() | java.awt.Font.BOLD, appTitleLabel.getFont().getSize()+4));
         appTitleLabel.setName("appTitleLabel"); // NOI18N
 
         versionLabel.setFont(versionLabel.getFont().deriveFont(versionLabel.getFont().getStyle() | java.awt.Font.BOLD));
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/Bundle"); // NOI18N
         versionLabel.setText(bundle.getString("AboutForm.versionLabel.text")); // NOI18N
         versionLabel.setName("versionLabel"); // NOI18N
 
@@ -150,7 +122,7 @@ public class AboutForm extends javax.swing.JDialog {
                             .add(layout.createSequentialGroup()
                                 .add(appTitleLabel)
                                 .add(44, 44, 44))
-                            .add(appDescLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE))
+                            .add(appDescLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE))
                         .add(16, 16, 16)
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(jLabel1)
@@ -186,6 +158,10 @@ public class AboutForm extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
+        dispose();
+    }//GEN-LAST:event_closeButtonActionPerformed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel appDescLabel;

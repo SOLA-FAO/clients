@@ -29,9 +29,7 @@ package org.sola.clients.swing.desktop.administrative;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import javax.swing.ImageIcon;
 import javax.validation.groups.Default;
-import org.jdesktop.application.Action;
 import org.sola.clients.beans.administrative.RrrBean;
 import org.sola.clients.beans.administrative.RrrShareBean;
 import org.sola.clients.beans.application.ApplicationBean;
@@ -105,7 +103,6 @@ public class OwnershipPanel extends ContentPanel {
         initComponents();
 
         headerPanel.setTitleText(rrrBean.getRrrType().getDisplayValue());
-        customizeComponents();
         customizeForm();
         customizeSharesButtons(null);
     }
@@ -127,30 +124,6 @@ public class OwnershipPanel extends ContentPanel {
             }
         });
     }
-      /** Applies customization of component L&F. */
-    private void customizeComponents() {
-      
-//    BUTTONS   
-    LafManager.getInstance().setBtnProperties(btnAddShare);
-    LafManager.getInstance().setBtnProperties(btnChangeShare);
-    LafManager.getInstance().setBtnProperties(btnRemoveShare);
-    LafManager.getInstance().setBtnProperties(btnSave);
-    LafManager.getInstance().setBtnProperties(btnViewShare);
-    
-//     CHECKBOXES
-    LafManager.getInstance().setChkProperties(cbxIsPrimary);
-    
-//    LABELS    
-    LafManager.getInstance().setLabProperties(jLabel13);
-    LafManager.getInstance().setLabProperties(jLabel15);
-     
-//    TXT FIELDS
-    LafManager.getInstance().setTxtProperties(txtNotationText);
-   
-//    FORMATTED TXT
-    LafManager.getInstance().setFormattedTxtProperties(txtRegDatetime);
-   
-    }
 
     private void customizeSharesButtons(RrrShareBean rrrShare) {
         boolean isChangesAllowed = false;
@@ -159,17 +132,22 @@ public class OwnershipPanel extends ContentPanel {
             isChangesAllowed = true;
         }
 
-        btnAddShare.getAction().setEnabled(isChangesAllowed);
+        btnAddShare.setEnabled(isChangesAllowed);
 
         if (rrrShare == null) {
-            btnRemoveShare.getAction().setEnabled(false);
-            btnChangeShare.getAction().setEnabled(false);
-            btnViewShare.getAction().setEnabled(false);
+            btnRemoveShare.setEnabled(false);
+            btnChangeShare.setEnabled(false);
+            btnViewShare.setEnabled(false);
         } else {
-            btnRemoveShare.getAction().setEnabled(isChangesAllowed);
-            btnChangeShare.getAction().setEnabled(isChangesAllowed);
-            btnViewShare.getAction().setEnabled(true);
+            btnRemoveShare.setEnabled(isChangesAllowed);
+            btnChangeShare.setEnabled(isChangesAllowed);
+            btnViewShare.setEnabled(true);
         }
+        
+        menuAddShare.setEnabled(btnAddShare.isEnabled());
+        menuRemoveShare.setEnabled(btnRemoveShare.isEnabled());
+        menuChangeShare.setEnabled(btnChangeShare.isEnabled());
+        menuViewShare.setEnabled(btnViewShare.isEnabled());
     }
 
     private void customizeForm() {
@@ -244,26 +222,45 @@ public class OwnershipPanel extends ContentPanel {
 
         popUpShares.setName("popUpShares"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(OwnershipPanel.class, this);
-        menuAddShare.setAction(actionMap.get("addShare")); // NOI18N
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance().getContext().getResourceMap(OwnershipPanel.class);
-        menuAddShare.setText(resourceMap.getString("menuAddShare.text")); // NOI18N
+        menuAddShare.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
+        menuAddShare.setText(bundle.getString("OwnershipPanel.menuAddShare.text")); // NOI18N
         menuAddShare.setName("menuAddShare"); // NOI18N
+        menuAddShare.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuAddShareActionPerformed(evt);
+            }
+        });
         popUpShares.add(menuAddShare);
 
-        menuRemoveShare.setAction(actionMap.get("removeShare")); // NOI18N
-        menuRemoveShare.setText(resourceMap.getString("menuRemoveShare.text")); // NOI18N
+        menuRemoveShare.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
+        menuRemoveShare.setText(bundle.getString("OwnershipPanel.menuRemoveShare.text")); // NOI18N
         menuRemoveShare.setName("menuRemoveShare"); // NOI18N
+        menuRemoveShare.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuRemoveShareActionPerformed(evt);
+            }
+        });
         popUpShares.add(menuRemoveShare);
 
-        menuChangeShare.setAction(actionMap.get("changeShare")); // NOI18N
-        menuChangeShare.setText(resourceMap.getString("menuChangeShare.text")); // NOI18N
+        menuChangeShare.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/change-share.png"))); // NOI18N
+        menuChangeShare.setText(bundle.getString("OwnershipPanel.menuChangeShare.text")); // NOI18N
         menuChangeShare.setName("menuChangeShare"); // NOI18N
+        menuChangeShare.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuChangeShareActionPerformed(evt);
+            }
+        });
         popUpShares.add(menuChangeShare);
 
-        menuViewShare.setAction(actionMap.get("viewShare")); // NOI18N
-        menuViewShare.setText(resourceMap.getString("menuViewShare.text")); // NOI18N
+        menuViewShare.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/view.png"))); // NOI18N
+        menuViewShare.setText(bundle.getString("OwnershipPanel.menuViewShare.text")); // NOI18N
         menuViewShare.setName("menuViewShare"); // NOI18N
+        menuViewShare.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuViewShareActionPerformed(evt);
+            }
+        });
         popUpShares.add(menuViewShare);
 
         setHeaderPanel(headerPanel);
@@ -271,9 +268,9 @@ public class OwnershipPanel extends ContentPanel {
 
         jPanel3.setName("jPanel3"); // NOI18N
 
-        jLabel13.setIcon(resourceMap.getIcon("jLabel13.icon")); // NOI18N
-        jLabel13.setText(resourceMap.getString("jLabel13.text")); // NOI18N
-        jLabel13.setToolTipText(resourceMap.getString("jLabel13.toolTipText")); // NOI18N
+        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
+        jLabel13.setText(bundle.getString("OwnershipPanel.jLabel13.text")); // NOI18N
+        jLabel13.setToolTipText(bundle.getString("OwnershipPanel.jLabel13.toolTipText")); // NOI18N
         jLabel13.setName("jLabel13"); // NOI18N
 
         txtRegDatetime.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
@@ -282,8 +279,8 @@ public class OwnershipPanel extends ContentPanel {
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${registrationDate}"), txtRegDatetime, org.jdesktop.beansbinding.BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
 
-        cbxIsPrimary.setText(resourceMap.getString("cbxIsPrimary.text")); // NOI18N
-        cbxIsPrimary.setToolTipText(resourceMap.getString("cbxIsPrimary.toolTipText")); // NOI18N
+        cbxIsPrimary.setText(bundle.getString("OwnershipPanel.cbxIsPrimary.text")); // NOI18N
+        cbxIsPrimary.setToolTipText(bundle.getString("OwnershipPanel.cbxIsPrimary.toolTipText")); // NOI18N
         cbxIsPrimary.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         cbxIsPrimary.setName("cbxIsPrimary"); // NOI18N
 
@@ -313,14 +310,14 @@ public class OwnershipPanel extends ContentPanel {
         );
 
         headerPanel.setName("headerPanel"); // NOI18N
-        headerPanel.setTitleText(resourceMap.getString("headerPanel.titleText")); // NOI18N
+        headerPanel.setTitleText(bundle.getString("OwnershipPanel.headerPanel.titleText")); // NOI18N
 
         jToolBar2.setFloatable(false);
         jToolBar2.setRollover(true);
         jToolBar2.setName("jToolBar2"); // NOI18N
 
-        btnSave.setIcon(resourceMap.getIcon("btnSave.icon")); // NOI18N
-        btnSave.setText(resourceMap.getString("btnSave.text")); // NOI18N
+        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/save.png"))); // NOI18N
+        btnSave.setText(bundle.getString("OwnershipPanel.btnSave.text")); // NOI18N
         btnSave.setName("btnSave"); // NOI18N
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -335,11 +332,11 @@ public class OwnershipPanel extends ContentPanel {
         filler1.setName("filler1"); // NOI18N
         jToolBar2.add(filler1);
 
-        jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
+        jLabel1.setText(bundle.getString("OwnershipPanel.jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
         jToolBar2.add(jLabel1);
 
-        lblStatus.setFont(resourceMap.getFont("lblStatus.font")); // NOI18N
+        lblStatus.setFont(LafManager.getInstance().getLabFontBold());
         lblStatus.setName("lblStatus"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${status.displayValue}"), lblStatus, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -347,9 +344,8 @@ public class OwnershipPanel extends ContentPanel {
 
         jToolBar2.add(lblStatus);
 
-        jLabel15.setFont(resourceMap.getFont("jLabel15.font")); // NOI18N
-        jLabel15.setIcon(resourceMap.getIcon("jLabel15.icon")); // NOI18N
-        jLabel15.setText(resourceMap.getString("jLabel15.text")); // NOI18N
+        jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
+        jLabel15.setText(bundle.getString("OwnershipPanel.jLabel15.text")); // NOI18N
         jLabel15.setName("jLabel15"); // NOI18N
 
         txtNotationText.setName("txtNotationText"); // NOI18N
@@ -366,24 +362,47 @@ public class OwnershipPanel extends ContentPanel {
         jToolBar1.setRollover(true);
         jToolBar1.setName("jToolBar1"); // NOI18N
 
-        btnAddShare.setAction(actionMap.get("addShare")); // NOI18N
+        btnAddShare.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
+        btnAddShare.setText(bundle.getString("OwnershipPanel.btnAddShare.text")); // NOI18N
         btnAddShare.setName("btnAddShare"); // NOI18N
+        btnAddShare.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddShareActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnAddShare);
 
-        btnRemoveShare.setAction(actionMap.get("removeShare")); // NOI18N
+        btnRemoveShare.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
+        btnRemoveShare.setText(bundle.getString("OwnershipPanel.btnRemoveShare.text")); // NOI18N
         btnRemoveShare.setName("btnRemoveShare"); // NOI18N
+        btnRemoveShare.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveShareActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnRemoveShare);
 
-        btnChangeShare.setAction(actionMap.get("changeShare")); // NOI18N
+        btnChangeShare.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/change-share.png"))); // NOI18N
+        btnChangeShare.setText(bundle.getString("OwnershipPanel.btnChangeShare.text")); // NOI18N
         btnChangeShare.setName("btnChangeShare"); // NOI18N
+        btnChangeShare.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnChangeShareActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnChangeShare);
 
-        btnViewShare.setAction(actionMap.get("viewShare")); // NOI18N
-        btnViewShare.setText(resourceMap.getString("btnViewShare.text")); // NOI18N
+        btnViewShare.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/view.png"))); // NOI18N
+        btnViewShare.setText(bundle.getString("OwnershipPanel.btnViewShare.text")); // NOI18N
         btnViewShare.setFocusable(false);
         btnViewShare.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnViewShare.setName("btnViewShare"); // NOI18N
         btnViewShare.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnViewShare.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewShareActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnViewShare);
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
@@ -411,15 +430,15 @@ public class OwnershipPanel extends ContentPanel {
             }
         });
         jScrollPane1.setViewportView(tableShares);
-        tableShares.getColumnModel().getColumn(0).setHeaderValue(resourceMap.getString("tableShares.columnModel.title0")); // NOI18N
+        tableShares.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("OwnershipPanel.tableShares.columnModel.title0")); // NOI18N
         tableShares.getColumnModel().getColumn(0).setCellRenderer(new TableCellListRenderer("getName", "getLastName"));
         tableShares.getColumnModel().getColumn(1).setMinWidth(150);
         tableShares.getColumnModel().getColumn(1).setPreferredWidth(150);
         tableShares.getColumnModel().getColumn(1).setMaxWidth(150);
-        tableShares.getColumnModel().getColumn(1).setHeaderValue(resourceMap.getString("tableShares.columnModel.title1")); // NOI18N
+        tableShares.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("OwnershipPanel.tableShares.columnModel.title1")); // NOI18N
 
         groupPanel1.setName("groupPanel1"); // NOI18N
-        groupPanel1.setTitleText(resourceMap.getString("groupPanel1.titleText")); // NOI18N
+        groupPanel1.setTitleText(bundle.getString("OwnershipPanel.groupPanel1.titleText")); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -444,7 +463,7 @@ public class OwnershipPanel extends ContentPanel {
         jPanel1.setName("jPanel1"); // NOI18N
 
         groupPanel2.setName("groupPanel2"); // NOI18N
-        groupPanel2.setTitleText(resourceMap.getString("groupPanel2.titleText")); // NOI18N
+        groupPanel2.setTitleText(bundle.getString("OwnershipPanel.groupPanel2.titleText")); // NOI18N
 
         documentsPanel.setName("documentsPanel"); // NOI18N
 
@@ -519,28 +538,56 @@ public class OwnershipPanel extends ContentPanel {
         }
     }//GEN-LAST:event_btnSaveActionPerformed
 
-    @Action
-    public void changeShare() {
+    private void btnAddShareActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddShareActionPerformed
+        addShare();
+    }//GEN-LAST:event_btnAddShareActionPerformed
+
+    private void btnRemoveShareActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveShareActionPerformed
+        removeShare();
+    }//GEN-LAST:event_btnRemoveShareActionPerformed
+
+    private void btnChangeShareActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangeShareActionPerformed
+        changeShare();
+    }//GEN-LAST:event_btnChangeShareActionPerformed
+
+    private void btnViewShareActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewShareActionPerformed
+        viewShare();
+    }//GEN-LAST:event_btnViewShareActionPerformed
+
+    private void menuAddShareActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAddShareActionPerformed
+        addShare();
+    }//GEN-LAST:event_menuAddShareActionPerformed
+
+    private void menuRemoveShareActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRemoveShareActionPerformed
+        removeShare();
+    }//GEN-LAST:event_menuRemoveShareActionPerformed
+
+    private void menuChangeShareActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuChangeShareActionPerformed
+        changeShare();
+    }//GEN-LAST:event_menuChangeShareActionPerformed
+
+    private void menuViewShareActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuViewShareActionPerformed
+        viewShare();
+    }//GEN-LAST:event_menuViewShareActionPerformed
+
+    private void changeShare() {
         if (rrrBean.getSelectedShare() != null) {
             openShareForm(rrrBean.getSelectedShare(), RrrBean.RRR_ACTION.VARY);
         }
     }
 
-    @Action
-    public void removeShare() {
+    private void removeShare() {
         if (rrrBean.getSelectedShare() != null
                 && MessageUtility.displayMessage(ClientMessage.CONFIRM_DELETE_RECORD) == MessageUtility.BUTTON_ONE) {
             rrrBean.removeSelectedRrrShare();
         }
     }
 
-    @Action
-    public void addShare() {
+    private void addShare() {
         openShareForm(null, RrrBean.RRR_ACTION.NEW);
     }
 
-    @Action
-    public void viewShare() {
+    private void viewShare() {
         if (rrrBean.getSelectedShare() != null) {
             openShareForm(rrrBean.getSelectedShare(), RrrBean.RRR_ACTION.VIEW);
         }

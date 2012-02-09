@@ -39,7 +39,6 @@ import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationPropertyBean;
 import org.sola.clients.beans.application.ApplicationServiceBean;
 import org.sola.clients.beans.referencedata.RequestTypeBean;
-import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.gis.beans.TransactionCadastreChangeBean;
 import org.sola.clients.swing.gis.beans.TransactionCadastreRedefinitionBean;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForCadastreChange;
@@ -51,8 +50,7 @@ import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.webservices.transferobjects.administrative.BaUnitTO;
 
 /**
- *
- * @author rizzom
+ * Used to produce cadastre changes.
  */
 public class CadastreTransactionMapPanel extends ContentPanel {
 
@@ -72,7 +70,6 @@ public class CadastreTransactionMapPanel extends ContentPanel {
         this.initializeMap();
 
         initComponents();
-        customizeComponents();
         customizeForm();
         this.addMapToForm();
     }
@@ -101,14 +98,6 @@ public class CadastreTransactionMapPanel extends ContentPanel {
     private void addMapToForm() {
         this.mapPanel.setLayout(new BorderLayout());
         this.mapPanel.add(this.mapControl, BorderLayout.CENTER);
-    }
-
-    /** Applies customization of component L&F. */
-    private void customizeComponents() {
-
-//    BUTTONS   
-        LafManager.getInstance().setBtnProperties(btnSave);
-
     }
 
     private void customizeForm() {
@@ -197,7 +186,6 @@ public class CadastreTransactionMapPanel extends ContentPanel {
         jToolBar1.setRollover(true);
         jToolBar1.setName("jToolBar1"); // NOI18N
 
-        btnSave.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/save.png"))); // NOI18N
         btnSave.setText(bundle.getString("CadastreTransactionMapPanel.btnSave.text")); // NOI18N
         btnSave.setToolTipText(bundle.getString("CadastreTransactionMapPanel.btnSave.toolTipText")); // NOI18N

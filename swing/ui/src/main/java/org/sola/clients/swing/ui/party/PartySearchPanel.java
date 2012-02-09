@@ -30,7 +30,6 @@ package org.sola.clients.swing.ui.party;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.JPanel;
-import org.jdesktop.application.Action;
 import org.sola.clients.beans.party.PartyBean;
 import org.sola.clients.beans.party.PartySearchResultListBean;
 import org.sola.clients.beans.referencedata.PartyRoleTypeListBean;
@@ -149,9 +148,13 @@ public class PartySearchPanel extends JPanel {
         if (enabled && partySearchResuls.getSelectedPartySearchResult().isRightHolder()) {
             enabled = SecurityBean.isInRole(RolesConstants.PARTY_RIGHTHOLDERS_SAVE);
         }
-        btnAddParty.getAction().setEnabled(hasPartySaveRole);
-        btnEditParty.getAction().setEnabled(enabled);
-        btnRemoveParty.getAction().setEnabled(enabled);
+        btnAddParty.setEnabled(hasPartySaveRole);
+        btnEditParty.setEnabled(enabled);
+        btnRemoveParty.setEnabled(enabled);
+        
+        menuAdd.setEnabled(btnAddParty.isEnabled());
+        menuEdit.setEnabled(btnEditParty.isEnabled());
+        menuRemove.setEnabled(btnRemoveParty.isEnabled());
     }
 
     /** Searches parties with given criteria. */
@@ -243,20 +246,34 @@ public class PartySearchPanel extends JPanel {
         });
         popupParties.add(menuSelect);
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(PartySearchPanel.class, this);
-        menuAdd.setAction(actionMap.get("addParty")); // NOI18N
+        menuAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
         menuAdd.setText(bundle.getString("PartySearchPanel.menuAdd.text")); // NOI18N
         menuAdd.setName("menuAdd"); // NOI18N
+        menuAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuAddActionPerformed(evt);
+            }
+        });
         popupParties.add(menuAdd);
 
-        menuEdit.setAction(actionMap.get("editParty")); // NOI18N
+        menuEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/pencil.png"))); // NOI18N
         menuEdit.setText(bundle.getString("PartySearchPanel.menuEdit.text")); // NOI18N
         menuEdit.setName("menuEdit"); // NOI18N
+        menuEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuEditActionPerformed(evt);
+            }
+        });
         popupParties.add(menuEdit);
 
-        menuRemove.setAction(actionMap.get("removeParty")); // NOI18N
+        menuRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
         menuRemove.setText(bundle.getString("PartySearchPanel.menuRemove.text")); // NOI18N
         menuRemove.setName("menuRemove"); // NOI18N
+        menuRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuRemoveActionPerformed(evt);
+            }
+        });
         popupParties.add(menuRemove);
 
         scrlSearchPanel.setBorder(null);
@@ -331,28 +348,43 @@ public class PartySearchPanel extends JPanel {
         separator1.setName("separator1"); // NOI18N
         jToolBar1.add(separator1);
 
-        btnAddParty.setAction(actionMap.get("addParty")); // NOI18N
+        btnAddParty.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
         btnAddParty.setText(bundle.getString("PartySearchPanel.btnAddParty.text")); // NOI18N
         btnAddParty.setFocusable(false);
         btnAddParty.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnAddParty.setName("btnAddParty"); // NOI18N
         btnAddParty.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAddParty.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddPartyActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnAddParty);
 
-        btnEditParty.setAction(actionMap.get("editParty")); // NOI18N
+        btnEditParty.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/pencil.png"))); // NOI18N
         btnEditParty.setText(bundle.getString("PartySearchPanel.btnEditParty.text")); // NOI18N
         btnEditParty.setFocusable(false);
         btnEditParty.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnEditParty.setName("btnEditParty"); // NOI18N
         btnEditParty.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnEditParty.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditPartyActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnEditParty);
 
-        btnRemoveParty.setAction(actionMap.get("removeParty")); // NOI18N
+        btnRemoveParty.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
         btnRemoveParty.setText(bundle.getString("PartySearchPanel.btnRemoveParty.text")); // NOI18N
         btnRemoveParty.setFocusable(false);
         btnRemoveParty.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnRemoveParty.setName("btnRemoveParty"); // NOI18N
         btnRemoveParty.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnRemoveParty.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemovePartyActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnRemoveParty);
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
@@ -367,7 +399,7 @@ public class PartySearchPanel extends JPanel {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE))
         );
 
         jPanel8.setName("jPanel8"); // NOI18N
@@ -535,7 +567,7 @@ public class PartySearchPanel extends JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrlSearchPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 453, Short.MAX_VALUE)
+            .addComponent(scrlSearchPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
         );
 
         bindingGroup.bind();
@@ -561,18 +593,39 @@ public class PartySearchPanel extends JPanel {
         selectParty();
     }//GEN-LAST:event_menuSelectActionPerformed
 
-    @Action
-    public void addParty() {
+    private void btnAddPartyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddPartyActionPerformed
+        addParty();
+    }//GEN-LAST:event_btnAddPartyActionPerformed
+
+    private void menuAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAddActionPerformed
+        addParty();
+    }//GEN-LAST:event_menuAddActionPerformed
+
+    private void btnEditPartyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditPartyActionPerformed
+        editParty();
+    }//GEN-LAST:event_btnEditPartyActionPerformed
+
+    private void menuEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEditActionPerformed
+        editParty();
+    }//GEN-LAST:event_menuEditActionPerformed
+
+    private void btnRemovePartyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemovePartyActionPerformed
+        removeParty();
+    }//GEN-LAST:event_btnRemovePartyActionPerformed
+
+    private void menuRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRemoveActionPerformed
+        removeParty();
+    }//GEN-LAST:event_menuRemoveActionPerformed
+
+    private void addParty() {
         firePropertyChange(CREATE_NEW_PARTY_PROPERTY, false, true);
     }
 
-    @Action
-    public void editParty() {
+    private void editParty() {
         firePartyEvent(EDIT_PARTY_PROPERTY);
     }
 
-    @Action
-    public void removeParty() {
+    private void removeParty() {
         if (partySearchResuls.getSelectedPartySearchResult() != null
                 && MessageUtility.displayMessage(ClientMessage.CONFIRM_DELETE_RECORD) == MessageUtility.BUTTON_ONE) {
             firePropertyChange(REMOVE_PARTY_PROPERTY, false, true);
