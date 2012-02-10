@@ -32,11 +32,14 @@
 package org.sola.clients.swing.gis.ui.controlsbundle;
 
 import org.geotools.geometry.jts.ReferencedEnvelope;
+import org.geotools.swing.mapaction.extended.ExtendedAction;
 import org.sola.clients.swing.gis.beans.TransactionCadastreRedefinitionBean;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.layer.CadastreRedefinitionObjectLayer;
 import org.sola.clients.swing.gis.layer.CadastreRedefinitionNodeLayer;
 import org.sola.clients.swing.gis.mapaction.CadastreRedefinitionReset;
+import org.sola.clients.swing.gis.tool.CadastreBoundarySelectTool;
+import org.sola.clients.swing.gis.tool.CadastreRedefinitionBoundarySelectTool;
 import org.sola.clients.swing.gis.tool.CadastreRedefinitionModifyNodeTool;
 import org.sola.clients.swing.gis.tool.CadastreRedefinitionAddNodeTool;
 
@@ -91,10 +94,10 @@ public final class ControlsBundleForCadastreRedefinition extends ControlsBundleF
 
         this.cadastreObjectNodeModifiedLayer = new CadastreRedefinitionNodeLayer();
         this.getMap().addLayer(this.cadastreObjectNodeModifiedLayer);
-        
+
         this.cadastreObjectNodeModifiedLayer.addNodeTargetList(
                 this.transactionBean.getCadastreObjectNodeTargetList());
-        
+
         super.addLayers();
     }
 
@@ -105,22 +108,37 @@ public final class ControlsBundleForCadastreRedefinition extends ControlsBundleF
                 this.getPojoDataAccess(),
                 this.cadastreObjectNodeModifiedLayer,
                 this.cadastreObjectModifiedLayer),
-                this.getToolbar());
+                this.getToolbar(),
+                true);
         this.getMap().addTool(
                 new CadastreRedefinitionModifyNodeTool(
                 this.getPojoDataAccess(),
                 this.cadastreObjectNodeModifiedLayer,
                 this.cadastreObjectModifiedLayer),
-                this.getToolbar());
-        
-        this.getMap().addMapAction(new CadastreRedefinitionReset(this), this.getToolbar());
+                this.getToolbar(),
+                true);
+
+        this.getMap().addMapAction(new CadastreRedefinitionReset(this), this.getToolbar(), true);
         super.addToolsAndCommands();
         this.cadastreBoundaryEditTool.setTargetLayer(cadastreObjectModifiedLayer);
-        this.cadastreBoundarySelectTool.setTargetLayer(cadastreObjectModifiedLayer);
+
+        CadastreBoundarySelectTool cadastreBoundarySelectTool = 
+                new CadastreRedefinitionBoundarySelectTool(
+                        this.getPojoDataAccess(), 
+                        this.cadastreBoundaryPointLayer,
+                        this.cadastreObjectModifiedLayer,
+                        this.cadastreObjectNodeModifiedLayer);
+        this.getMap().addTool(cadastreBoundarySelectTool, this.getToolbar(), true);
     }
-    
-    public void reset() throws Exception{
+
+    public void reset() throws Exception {
         this.cadastreObjectModifiedLayer.removeFeatures();
         this.cadastreObjectNodeModifiedLayer.removeFeatures();
+            ExtendedAction action = this.getMap().getMapActionByName(CadastreBoundarySelectTool.NAME);
+            if (action != null) {
+                ((CadastreBoundarySelectTool) action.getAttachedTool()).clearSelection();
+                this.getMap().refresh();
+            }
+        
     }
 }

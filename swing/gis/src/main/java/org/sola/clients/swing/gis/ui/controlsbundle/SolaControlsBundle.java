@@ -73,9 +73,9 @@ public abstract class SolaControlsBundle extends ControlsBundle {
             super.Setup(mapDefinition.getSrid(), mapDefinition.getWktOfCrs(), true);
             this.addSearchPanel();
             InformationTool infoTool = new InformationTool(this.pojoDataAccess);
-            this.getMap().addTool(infoTool, this.getToolbar());
+            this.getMap().addTool(infoTool, this.getToolbar(), true);
             this.solaPrint = new SolaPrint(this.getMap());
-            this.getMap().addMapAction(this.solaPrint, this.getToolbar());
+            this.getMap().addMapAction(this.solaPrint, this.getToolbar(), true);
             
             this.getMap().setFullExtent(
                     mapDefinition.getEast(),

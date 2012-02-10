@@ -47,6 +47,7 @@ import org.geotools.swing.tool.extended.ExtendedTool;
  */
 public class ExtendedAction extends AbstractAction{
 
+    private String name;
     private Map mapControl;
     private ExtendedTool attachedTool;
     
@@ -83,8 +84,6 @@ public class ExtendedAction extends AbstractAction{
     private void init(Map mapControl, String name, String toolTip, 
             Class<?> resourceClass, String iconImage) {
         this.mapControl = mapControl;
-
-
         this.putValue(Action.SHORT_DESCRIPTION, toolTip);
 
         java.net.URL imageURL = null;
@@ -104,8 +103,16 @@ public class ExtendedAction extends AbstractAction{
         if (imageURL == null && name != null) {
             this.putValue(Action.NAME, name);
         }
+        this.name = name;
     }
 
+    /**
+     * Gets name of action
+     * @return 
+     */
+    public String getName(){
+        return this.name;
+    }
     /**
      * Gets the map control
      * @return 
@@ -129,7 +136,7 @@ public class ExtendedAction extends AbstractAction{
         }
     }
 
-    private void activateTool(){
+    public void activateTool(){
         if (this.getAttachedTool() != null){
             this.getMapControl().setCursorTool(this.getAttachedTool());
         }

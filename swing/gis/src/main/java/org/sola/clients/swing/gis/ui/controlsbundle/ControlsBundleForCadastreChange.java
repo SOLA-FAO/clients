@@ -40,6 +40,7 @@ import org.sola.clients.swing.gis.layer.CadastreChangeNewSurveyPointLayer;
 import org.sola.clients.swing.gis.layer.CadastreChangeTargetCadastreObjectLayer;
 import org.sola.clients.swing.gis.mapaction.CadastreChangeNewCadastreObjectListFormShow;
 import org.sola.clients.swing.gis.mapaction.CadastreChangePointSurveyListFormShow;
+import org.sola.clients.swing.gis.tool.CadastreBoundarySelectTool;
 import org.sola.clients.swing.gis.tool.CadastreChangeNewParcelTool;
 import org.sola.clients.swing.gis.tool.CadastreChangeNodeTool;
 import org.sola.clients.swing.gis.tool.CadastreChangeSelectParcelTool;
@@ -129,28 +130,39 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
 
     @Override
     protected void addToolsAndCommands() {
-        CadastreChangeSelectParcelTool selectParcelTool = new CadastreChangeSelectParcelTool(this.getPojoDataAccess());
+        CadastreChangeSelectParcelTool selectParcelTool = 
+                new CadastreChangeSelectParcelTool(this.getPojoDataAccess());
         selectParcelTool.setTargetParcelsLayer(targetParcelsLayer);
-        this.getMap().addTool(selectParcelTool, this.getToolbar());
+        this.getMap().addTool(selectParcelTool, this.getToolbar(), true);
 
         this.getMap().addMapAction(
-                new CadastreChangePointSurveyListFormShow(this.getMap(), this.newPointsLayer.getHostForm()),
-                this.getToolbar());
+                new CadastreChangePointSurveyListFormShow(
+                        this.getMap(), this.newPointsLayer.getHostForm()),
+                this.getToolbar(),
+                true);
 
         CadastreChangeNodeTool nodelinkingTool = new CadastreChangeNodeTool(newPointsLayer);
         nodelinkingTool.getTargetSnappingLayers().add(this.targetParcelsLayer);
-        this.getMap().addTool(nodelinkingTool, this.getToolbar());
+        this.getMap().addTool(nodelinkingTool, this.getToolbar(), true);
 
-        CadastreChangeNewParcelTool newParcelTool = new CadastreChangeNewParcelTool(this.newCadastreObjectLayer);
+        CadastreChangeNewParcelTool newParcelTool = 
+                new CadastreChangeNewParcelTool(this.newCadastreObjectLayer);
         newParcelTool.getTargetSnappingLayers().add(newPointsLayer);
-        this.getMap().addTool(newParcelTool, this.getToolbar());
+        this.getMap().addTool(newParcelTool, this.getToolbar(), true);
 
         this.getMap().addMapAction(new CadastreChangeNewCadastreObjectListFormShow(
                 this.getMap(), this.newCadastreObjectLayer.getHostForm()),
-                this.getToolbar());
+                this.getToolbar(),
+                true);
         super.addToolsAndCommands();
         this.cadastreBoundaryEditTool.setTargetLayer(this.newCadastreObjectLayer);
-        this.cadastreBoundarySelectTool.setTargetLayer(this.newCadastreObjectLayer);
+
+        CadastreBoundarySelectTool cadastreBoundarySelectTool = 
+                new CadastreBoundarySelectTool(
+                        this.cadastreBoundaryPointLayer,
+                        this.newCadastreObjectLayer,
+                        this.newPointsLayer);
+        this.getMap().addTool(cadastreBoundarySelectTool, this.getToolbar(), true);
     }
 
     public void setTargetParcelsByBaUnit(String baUnitId) {

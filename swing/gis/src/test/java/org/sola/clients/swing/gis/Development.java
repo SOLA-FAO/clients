@@ -129,7 +129,7 @@ public class Development {
                 PojoDataAccess.getInstance().getTransactionCadastreChange("4001");
         ControlsBundleForCadastreChange ctrl =
                 new ControlsBundleForCadastreChange("333", cadastreChangeBean, "3068323", null);
-        ctrl.getMap().addMapAction(new TestCadastreTransactionChange(ctrl), ctrl.getToolbar());
+        ctrl.getMap().addMapAction(new TestCadastreTransactionChange(ctrl), ctrl.getToolbar(), true);
 
         this.displayControlsBundleForm(ctrl);
     }
@@ -145,7 +145,8 @@ public class Development {
                   PojoDataAccess.getInstance().getTransactionCadastreRedefinition("4000");
         ControlsBundleForCadastreRedefinition ctrl =
                 new ControlsBundleForCadastreRedefinition(transactionBean, "3068323", null);
-        ctrl.getMap().addMapAction(new TestCadastreTransactionRedefinition(ctrl), ctrl.getToolbar());
+        ctrl.getMap().addMapAction(
+                new TestCadastreTransactionRedefinition(ctrl), ctrl.getToolbar(), true);
         this.displayControlsBundleForm(ctrl);
     }
 

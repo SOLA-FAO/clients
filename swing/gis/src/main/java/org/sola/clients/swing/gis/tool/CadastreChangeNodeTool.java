@@ -32,7 +32,6 @@ import org.geotools.geometry.DirectPosition2D;
 import org.geotools.geometry.jts.Geometries;
 import org.opengis.feature.simple.SimpleFeature;
 import org.sola.clients.swing.gis.layer.CadastreChangeNewSurveyPointLayer;
-import org.geotools.swing.tool.extended.ExtendedEditGeometryTool;
 import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.MessageUtility;
 
@@ -40,7 +39,7 @@ import org.sola.common.messaging.MessageUtility;
  *
  * @author rizzom
  */
-public class CadastreChangeNodeTool extends ExtendedEditGeometryTool {
+public class CadastreChangeNodeTool extends CadastreChangeEditAbstractTool {
 
     private String toolName = "node-linking";
     private String toolTip = MessageUtility.getLocalizedMessage(

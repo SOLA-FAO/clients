@@ -44,7 +44,7 @@ import org.sola.common.messaging.MessageUtility;
  *
  * @author rizzom
  */
-public class CadastreChangeNewParcelTool extends ExtendedEditGeometryTool{
+public class CadastreChangeNewParcelTool extends CadastreChangeEditAbstractTool{
     
      private String toolName = "new-parcel";
      private String toolTip =  MessageUtility.getLocalizedMessage(

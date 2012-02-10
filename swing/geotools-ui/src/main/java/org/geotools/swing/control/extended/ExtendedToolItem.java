@@ -33,6 +33,7 @@ package org.geotools.swing.control.extended;
 
 import javax.swing.AbstractAction;
 import javax.swing.JToggleButton;
+import org.geotools.swing.mapaction.extended.ExtendedAction;
 
 /**
  * Control used in the toolbar to represent a tool.
@@ -43,5 +44,13 @@ public class ExtendedToolItem extends JToggleButton {
 
     public ExtendedToolItem(AbstractAction action) {
         super(action);
+    }
+
+    @Override
+    public void setSelected(boolean b) {
+        super.setSelected(b);
+        if (b){
+            ((ExtendedAction)this.getAction()).activateTool();
+        }
     }
 }

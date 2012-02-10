@@ -12,6 +12,8 @@ import org.sola.clients.swing.gis.beans.CadastreObjectNodeBean;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.layer.CadastreRedefinitionObjectLayer;
 import org.sola.clients.swing.gis.layer.CadastreRedefinitionNodeLayer;
+import org.sola.clients.swing.gis.to.CadastreObjectNodeExtraTO;
+import org.sola.common.MappingManager;
 import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.MessageUtility;
 import org.sola.webservices.transferobjects.cadastre.CadastreObjectNodeTO;
@@ -20,7 +22,7 @@ import org.sola.webservices.transferobjects.cadastre.CadastreObjectNodeTO;
  *
  * @author Elton Manoku
  */
-public class CadastreRedefinitionModifyNodeTool extends CadastreRedefinitionAbstractTool {
+public class CadastreRedefinitionModifyNodeTool extends CadastreRedefinitionAbstractNodeTool {
 
     private String toolName = "change-node";
     private String toolTip = MessageUtility.getLocalizedMessage(
@@ -57,10 +59,18 @@ public class CadastreRedefinitionModifyNodeTool extends CadastreRedefinitionAbst
     }
 
     @Override
-    protected CadastreObjectNodeTO getNodeFromServer(Envelope2D env) {
-        return this.dataAccess.getCadastreService().getCadastreObjectNode(
+    protected CadastreObjectNodeBean getNodeFromServer(Envelope2D env) {
+        CadastreObjectNodeTO nodeTO =
+                this.dataAccess.getCadastreService().getCadastreObjectNode(
                 env.getMinX(), env.getMinY(), env.getMaxX(), env.getMaxY(),
                 this.getMapControl().getSrid());
+        
+        if (nodeTO == null) {
+            return null;
+        }
+        CadastreObjectNodeBean nodeBean = MappingManager.getMapper().map(
+                new CadastreObjectNodeExtraTO(nodeTO), CadastreObjectNodeBean.class);
+        return nodeBean;
     }
 
     private void removeNewServerNodesAfterCancellation(SimpleFeature nodeFeature) {

@@ -41,6 +41,7 @@ import javax.swing.JToolBar;
 import org.geotools.swing.control.JCoordsStatusBarItem;
 import org.geotools.swing.control.JMapStatusBar;
 import org.geotools.swing.control.JRendererStatusBarItem;
+import org.geotools.swing.control.extended.ExtendedToolItem;
 import org.geotools.swing.extended.util.Messaging;
 import org.geotools.swing.mapaction.extended.FullExtent;
 import org.geotools.swing.tool.extended.ExtendedPan;
@@ -78,6 +79,8 @@ public class ControlsBundle extends javax.swing.JPanel {
      */
     public void Setup(int srid, String wktOfReferenceSystem, boolean withToc) throws Exception {
         this.initialize(srid, wktOfReferenceSystem);
+        //Set default tool
+        this.getMap().getToolItemByName(ExtendedPan.NAME).setSelected(true);
         this.setupLeftPanel();
     }
 
@@ -123,12 +126,12 @@ public class ControlsBundle extends javax.swing.JPanel {
      * It starts up the statusbar. It adds the basic navigation commands and tools.
      */
     private void setupToolbar() {
-        this.getMap().addMapAction(new FullExtent(this.getMap()), this.mapToolbar);
+        this.getMap().addMapAction(new FullExtent(this.getMap()), this.mapToolbar, true);
         this.getMap().addMapAction(
                 new org.geotools.swing.mapaction.extended.ZoomOutAction(this.getMap()),
-                this.mapToolbar);
-        this.getMap().addTool(new ExtendedZoominTool(), this.mapToolbar);
-        this.getMap().addTool(new ExtendedPan(), this.mapToolbar);
+                this.mapToolbar, true);
+        this.getMap().addTool(new ExtendedZoominTool(), this.mapToolbar, true);
+        this.getMap().addTool(new ExtendedPan(), this.mapToolbar, true);
     }
 
     /**

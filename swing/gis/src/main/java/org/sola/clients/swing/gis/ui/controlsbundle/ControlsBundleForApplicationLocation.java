@@ -63,9 +63,9 @@ public final class ControlsBundleForApplicationLocation extends SolaControlsBund
         super.Setup(pojoDataAccess);
         try {
             locationTool = new LocateApplicationTool();
-            this.getMap().addTool(locationTool, this.getToolbar());
+            this.getMap().addTool(locationTool, this.getToolbar(), true);
             this.getMap().addMapAction(
-                    new LocateApplicationRemove(this), this.getToolbar());
+                    new LocateApplicationRemove(this), this.getToolbar(), true);
 
             //Initialize a writter that can be used when saving the location
             wkbWritter = new WKBWriter();

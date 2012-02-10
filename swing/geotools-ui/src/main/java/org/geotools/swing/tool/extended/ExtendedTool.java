@@ -58,7 +58,6 @@ public abstract class ExtendedTool extends CursorTool {
         if (mapControl == null) {
             throw new IllegalArgumentException("mapControl is null. Give it....");
         }
-
         this.setMapPane(mapControl);
     }
 

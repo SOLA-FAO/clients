@@ -52,9 +52,9 @@ import org.sola.common.messaging.GisMessage;
 public abstract class ControlsBundleForTransaction extends ControlsBundleForWorkingWithCO {
 
     private PojoLayer pendingLayer = null;
-    private CadastreBoundaryPointLayer cadastreBoundaryPointLayer = null;
+    protected CadastreBoundaryPointLayer cadastreBoundaryPointLayer = null;
     protected CadastreBoundaryEditTool cadastreBoundaryEditTool;
-    protected CadastreBoundarySelectTool cadastreBoundarySelectTool;
+    //protected CadastreBoundarySelectTool cadastreBoundarySelectTool;
 
     @Override
     public void Setup(PojoDataAccess pojoDataAccess) {
@@ -112,10 +112,10 @@ public abstract class ControlsBundleForTransaction extends ControlsBundleForWork
     protected void addToolsAndCommands() {
         this.cadastreBoundaryEditTool =
                 new CadastreBoundaryEditTool(this.cadastreBoundaryPointLayer);
-        this.getMap().addTool(this.cadastreBoundaryEditTool, this.getToolbar());
-        this.cadastreBoundarySelectTool = 
-                new CadastreBoundarySelectTool(this.cadastreBoundaryPointLayer);
-        this.getMap().addTool(this.cadastreBoundarySelectTool, this.getToolbar());
+        this.getMap().addTool(this.cadastreBoundaryEditTool, this.getToolbar(), false);
+        //this.cadastreBoundarySelectTool = new CadastreBoundarySelectTool(
+        //        this.getPojoDataAccess(), this.cadastreBoundaryPointLayer);
+        //this.getMap().addTool(this.cadastreBoundarySelectTool, this.getToolbar());
     }
 
     @Override

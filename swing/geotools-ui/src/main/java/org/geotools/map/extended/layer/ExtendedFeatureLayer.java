@@ -39,6 +39,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.data.simple.SimpleFeatureSource;
 import org.geotools.factory.CommonFactoryFinder;
 import org.geotools.feature.FeatureCollection;
@@ -299,5 +300,26 @@ public class ExtendedFeatureLayer extends ExtendedLayer {
                     Messaging.Ids.GEOTOOL_GET_FEATURE_IN_RANGLE_ERROR.toString(), ex.getMessage());
         }
         return null;
+    }
+    
+    /**
+     * Gets first feature within bounding box.
+     * @param bbox
+     * @return first feature found or null.
+     */
+    public SimpleFeature getFirstFeatureInRange(ReferencedEnvelope bbox){
+        SimpleFeature feature = null;
+        FeatureCollection featureCollection = this.getFeaturesInRange(bbox, null);
+        if (featureCollection != null) {
+            SimpleFeatureIterator featureIterator =
+                    (SimpleFeatureIterator) featureCollection.features();
+            while (featureIterator.hasNext()) {
+                feature = featureIterator.next();
+                break;
+            }
+            featureIterator.close();
+        }
+        return feature;
+        
     }
 }

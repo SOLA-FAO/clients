@@ -32,22 +32,15 @@
 package org.geotools.swing.extended;
 
 import java.awt.Component;
-import org.geotools.swing.extended.ControlsBundle;
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.io.File;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.geotools.map.extended.layer.ExtendedFeatureLayer;
 import org.geotools.map.extended.layer.ExtendedLayer;
-import org.geotools.map.extended.layer.ExtendedLayerEditor;
-import org.geotools.map.extended.layer.MapDecorationsLayer;
 import org.geotools.swing.mapaction.extended.Print;
 import org.geotools.swing.tool.extended.ExtendedDrawPolygon;
 import org.geotools.swing.tool.extended.ExtendedDrawToolWithSnapping;
-import org.geotools.swing.tool.extended.ExtendedDrawRectangle;
 
 /**
  *
@@ -88,9 +81,9 @@ public class Development {
 //            mapCtrl.addLayerShapefile("Shape layer", "C:\\dev\\projects\\sola\\data\\Samoa_Parcels.shp", "parcel.sld");
 //            mapCtrl.addTool(new SolaInfoTool());
         //mapCtrl.addTool(new SolaSplitParcelTool());
-        mapCtrl.getMap().addMapAction(new Print(mapCtrl.getMap()), mapCtrl.getToolbar());
+        mapCtrl.getMap().addMapAction(new Print(mapCtrl.getMap()), mapCtrl.getToolbar(), true);
         ExtendedDrawPolygon solaDrawTool = new ExtendedDrawPolygon();
-        mapCtrl.getMap().addTool(solaDrawTool, mapCtrl.getToolbar());
+        mapCtrl.getMap().addTool(solaDrawTool, mapCtrl.getToolbar(), true);
         
         ExtendedDrawToolWithSnapping snapTool = new ExtendedDrawToolWithSnapping();
 //        snapTool.getTargetSnappingLayers().add(
@@ -98,7 +91,7 @@ public class Development {
         snapTool.getTargetSnappingLayers().add(
                 (ExtendedFeatureLayer)mapCtrl.getMap().getSolaLayers().get(solaDrawTool.getLayerName()));
         
-        mapCtrl.getMap().addTool(snapTool, mapCtrl.getToolbar());
+        mapCtrl.getMap().addTool(snapTool, mapCtrl.getToolbar(), true);
        // mapCtrl.getToc().afterNodesAdded();
 //            mapCtrl.addTool(new SolaDrawLinestring());
 //            // mapCtrl.addLayerGraphics("Point layer");

@@ -42,13 +42,13 @@ import org.geotools.swing.extended.util.Messaging;
  */
 public class ExtendedPan extends ExtendedTool {
 
-    private String toolName = "pan";
+    public static final String NAME = "pan";
     private boolean panning = false;
     private Point panePos;
     private String toolTip =  Messaging.getInstance().getMessageText(Messaging.Ids.GEOTOOL_TOOLTIP_PAN.toString());
    
     public ExtendedPan() {
-        this.setToolName(toolName);
+        this.setToolName(NAME);
         this.setToolTip(toolTip);
     }
 

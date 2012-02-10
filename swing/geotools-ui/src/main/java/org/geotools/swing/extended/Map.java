@@ -31,6 +31,8 @@
  */
 package org.geotools.swing.extended;
 
+import java.awt.Component;
+import java.util.Enumeration;
 import java.util.concurrent.TimeUnit;
 import org.geotools.map.event.MapLayerEvent;
 import org.geotools.map.event.MapLayerListEvent;
@@ -50,6 +52,7 @@ import java.util.List;
 import java.util.Properties;
 import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
+import javax.swing.Action;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
@@ -590,14 +593,16 @@ public class Map extends JMapPane {
      * @param hasTool if the action activates a map tool
      * @param inToolbar the toolbar where the action will be added
      */
-    public void addMapAction(AbstractAction action, boolean hasTool, JToolBar inToolbar) {
+    public void addMapAction(
+            AbstractAction action, boolean hasTool, JToolBar inToolbar, boolean enabled) {
+        action.setEnabled(enabled);
         AbstractButton btn = null;
         if (hasTool) {
             btn = new ExtendedToolItem(action);
-            this.toolsGroup.add(btn);
         } else {
             btn = new JButton(action);
         }
+        this.toolsGroup.add(btn);
         inToolbar.add(btn);
     }
 
@@ -606,8 +611,8 @@ public class Map extends JMapPane {
      * @param tool the tool
      * @param inToolbar the toolbar
      */
-    public void addTool(ExtendedTool tool, JToolBar inToolbar) {
-        this.addMapAction(new ExtendedAction(this, tool), inToolbar);
+    public void addTool(ExtendedTool tool, JToolBar inToolbar, boolean enabled) {
+        this.addMapAction(new ExtendedAction(this, tool), inToolbar, enabled);
     }
 
     /**
@@ -615,10 +620,47 @@ public class Map extends JMapPane {
      * @param action the action 
      * @param inToolbar the toolbar
      */
-    public void addMapAction(ExtendedAction action, JToolBar inToolbar) {
-        this.addMapAction(action, action.getAttachedTool() != null, inToolbar);
+    public void addMapAction(ExtendedAction action, JToolBar inToolbar, boolean enabled) {
+        this.addMapAction(action, action.getAttachedTool() != null, inToolbar, enabled);
     }
 
+    public AbstractButton getBaritemByActionName(String actionName) {
+        Enumeration mapBtnEnum = this.toolsGroup.getElements();
+        while(mapBtnEnum.hasMoreElements()){
+            AbstractButton btn = (AbstractButton) mapBtnEnum.nextElement();
+            ExtendedAction btnAction = (ExtendedAction) btn.getAction();
+            if (btnAction.getName().equals(actionName)){
+                return btn;
+            }
+        }
+        return null;
+    }
+
+    public ExtendedAction getMapActionByName(String actionName) {
+        AbstractButton btn = this.getBaritemByActionName(actionName);
+        if (btn== null){
+            return null;
+        }
+        return (ExtendedAction) btn.getAction();
+    }
+    
+    public ExtendedToolItem getToolItemByName(String name){
+        AbstractButton btn = this.getBaritemByActionName(name);
+        ExtendedToolItem toolItem = null;
+        if (btn== null){
+            return null;
+        }else if (btn instanceof ExtendedToolItem){
+            toolItem = (ExtendedToolItem) btn;
+        }
+        return toolItem;
+        
+    }
+
+    public void setActiveTool(String toolName){
+        ExtendedToolItem toolItem = this.getToolItemByName(toolName);
+        toolItem.setSelected(true);
+    }
+    
     /**
      * Sets the Table of Contents.
      * @param toc 
