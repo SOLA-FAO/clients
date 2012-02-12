@@ -39,7 +39,7 @@ import org.sola.common.messaging.MessageUtility;
 /**
  * Used to create or edit party object.
  */
-public class PartyPanel extends ContentPanel {
+public class PartyPanelForm extends ContentPanel {
 
     public static final String PARTY_SAVED = "partySaved";
     
@@ -50,7 +50,7 @@ public class PartyPanel extends ContentPanel {
     private ResourceBundle resourceBundle;
 
     /** Default form constructor. */
-    public PartyPanel() {
+    public PartyPanelForm() {
         this(true);
     }
 
@@ -60,7 +60,7 @@ public class PartyPanel extends ContentPanel {
      * If <code>false</code>, party will be validated and validation result returned as a value of 
      * {@link PartyPanel.PARTY_SAVED} property change event.
      */
-    public PartyPanel(boolean savePartyOnAction) {
+    public PartyPanelForm(boolean savePartyOnAction) {
         this(savePartyOnAction, null, false, false);
     }
 
@@ -73,7 +73,7 @@ public class PartyPanel extends ContentPanel {
      * @param readOnly Indicates whether to display provided {@link PartyBean} in read only mode or not.
      * @param closeOnSave Indicates whether to close the form upon save action takes place.
      */
-    public PartyPanel(boolean savePartyOnAction, PartyBean partyBean, boolean readOnly, boolean closeOnSave) {
+    public PartyPanelForm(boolean savePartyOnAction, PartyBean partyBean, boolean readOnly, boolean closeOnSave) {
         this.readOnly = readOnly;
         this.partyBean = partyBean;
         this.savePartyOnAction = savePartyOnAction;
@@ -93,7 +93,7 @@ public class PartyPanel extends ContentPanel {
      * @param readOnly Indicates whether to display provided {@link PartyBean} in read only mode or not.
      * @param closeOnSave Indicates whether to close the form upon save action takes place.
      */
-    public PartyPanel(boolean savePartyOnAction, PartySummaryBean partySummaryBean,
+    public PartyPanelForm(boolean savePartyOnAction, PartySummaryBean partySummaryBean,
             boolean readOnly, boolean closeOnSave) {
         this.savePartyOnAction = savePartyOnAction;
         this.closeOnSave = closeOnSave;
@@ -148,10 +148,10 @@ public class PartyPanel extends ContentPanel {
         btnSave.setEnabled(!readOnly);
 
         if (partyBean != null) {
-            headerPanel.setTitleText(String.format(resourceBundle.getString("PartyPanel.headerPanel.titleText2"),
+            headerPanel.setTitleText(String.format(resourceBundle.getString("PartyPanelForm.headerPanel.titleText2"),
                     partyBean.getName(), partyBean.getLastName()));
         } else {
-            headerPanel.setTitleText(resourceBundle.getString("PartyPanel.headerPanel.titleText"));
+            headerPanel.setTitleText(resourceBundle.getString("PartyPanelForm.headerPanel.titleText"));
         }
 
         if (closeOnSave) {
@@ -178,14 +178,14 @@ public class PartyPanel extends ContentPanel {
 
         headerPanel.setName("headerPanel"); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/party/Bundle"); // NOI18N
-        headerPanel.setTitleText(bundle.getString("PartyPanel.headerPanel.titleText")); // NOI18N
+        headerPanel.setTitleText(bundle.getString("PartyPanelForm.headerPanel.titleText")); // NOI18N
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
         jToolBar1.setName("jToolBar1"); // NOI18N
 
         btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/save.png"))); // NOI18N
-        btnSave.setText(bundle.getString("PartyPanel.btnSave.text")); // NOI18N
+        btnSave.setText(bundle.getString("PartyPanelForm.btnSave.text")); // NOI18N
         btnSave.setFocusable(false);
         btnSave.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSave.setName("btnSave"); // NOI18N

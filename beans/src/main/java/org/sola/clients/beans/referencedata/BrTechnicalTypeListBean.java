@@ -27,18 +27,17 @@
  */
 package org.sola.clients.beans.referencedata;
 
-import java.util.ArrayList;
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingListBean;
 import org.sola.clients.beans.cache.CacheManager;
+import org.sola.clients.beans.controls.SolaCodeList;
 
 /**
  * Holds list of {@link BrTechnicalTypeBean} objects.
  */
 public class BrTechnicalTypeListBean extends AbstractBindingListBean {
     public static final String SELECTED_BR_TECNICAL_TYPE_PROPERTY = "selectedBrTechnicalType";
-    private ObservableList<BrTechnicalTypeBean> brTechnicalTypes;
+    private SolaCodeList<BrTechnicalTypeBean> brTechnicalTypes;
     private BrTechnicalTypeBean selectedBrTechnicalType;
 
     /** Default constructor. */
@@ -51,7 +50,17 @@ public class BrTechnicalTypeListBean extends AbstractBindingListBean {
      * @param createDummy Indicates whether to add empty object on the list.
      */
     public BrTechnicalTypeListBean(boolean createDummy) {
+        this(createDummy, (String) null);
+    }
+    
+    /** 
+     * Creates object instance.
+     * @param createDummy Indicates whether to add empty object on the list.
+     * @param excludedCodes Codes, which should be skipped while filtering.
+     */
+    public BrTechnicalTypeListBean(boolean createDummy, String ... excludedCodes) {
         super();
+        brTechnicalTypes = new SolaCodeList<BrTechnicalTypeBean>(excludedCodes);
         loadList(createDummy);
     }
     
@@ -60,17 +69,18 @@ public class BrTechnicalTypeListBean extends AbstractBindingListBean {
      * @param createDummy Indicates whether to add empty object on the list.
      */
     public final void loadList(boolean createDummy) {
-        if (brTechnicalTypes == null) {
-            brTechnicalTypes = ObservableCollections.observableList(new ArrayList<BrTechnicalTypeBean>());
-        }
         loadCodeList(BrTechnicalTypeBean.class, brTechnicalTypes, 
                 CacheManager.getBrTechnicalTypes(), createDummy);
     }
 
     public ObservableList<BrTechnicalTypeBean> getBrTechnicalTypes() {
-        return brTechnicalTypes;
+        return brTechnicalTypes.getFilteredList();
     }
 
+    public void setExcludedCodes(String ... codes){
+        brTechnicalTypes.setExcludedCodes(codes);
+    }
+     
     public BrTechnicalTypeBean getSelectedBrTechnicalType() {
         return selectedBrTechnicalType;
     }

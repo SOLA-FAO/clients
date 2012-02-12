@@ -27,11 +27,10 @@
  */
 package org.sola.clients.beans.referencedata;
 
-import java.util.ArrayList;
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingListBean;
 import org.sola.clients.beans.cache.CacheManager;
+import org.sola.clients.beans.controls.SolaCodeList;
 
 /**
  * Holds list of {@link ServiceActionTypeBean} objects.
@@ -39,7 +38,7 @@ import org.sola.clients.beans.cache.CacheManager;
 public class ServiceActionTypeListBean extends AbstractBindingListBean {
     
     public static final String SELECTED_SERVICE_ACTION_TYPE_PROPERTY = "selectedServiceActionType";
-    private ObservableList<ServiceActionTypeBean> serviceActionTypes;
+    private SolaCodeList<ServiceActionTypeBean> serviceActionTypes;
     private ServiceActionTypeBean selectedServiceActionType;
     
     public ServiceActionTypeListBean(){
@@ -50,8 +49,18 @@ public class ServiceActionTypeListBean extends AbstractBindingListBean {
      * Creates object instance.
      * @param createDummy Indicates whether to add empty object on the list.
      */
-    public ServiceActionTypeListBean(boolean createDummy){
+    public ServiceActionTypeListBean(boolean createDummy) {
+        this(createDummy, (String) null);
+    }
+    
+    /** 
+     * Creates object instance.
+     * @param createDummy Indicates whether to add empty object on the list.
+     * @param excludedCodes Codes, which should be skipped while filtering.
+     */
+    public ServiceActionTypeListBean(boolean createDummy, String ... excludedCodes) {
         super();
+        serviceActionTypes = new SolaCodeList<ServiceActionTypeBean>(excludedCodes);
         loadList(createDummy);
     }
     
@@ -60,9 +69,6 @@ public class ServiceActionTypeListBean extends AbstractBindingListBean {
      * @param createDummy Indicates whether to add empty object on the list.
      */
     public final void loadList(boolean createDummy) {
-        if (serviceActionTypes == null) {
-            serviceActionTypes = ObservableCollections.observableList(new ArrayList<ServiceActionTypeBean>());
-        }
         loadCodeList(ServiceActionTypeBean.class, serviceActionTypes, 
                 CacheManager.getAppServiceActionTypes(), createDummy);
     }
@@ -78,6 +84,10 @@ public class ServiceActionTypeListBean extends AbstractBindingListBean {
     }
 
     public ObservableList<ServiceActionTypeBean> getServiceActionTypes() {
-        return serviceActionTypes;
+        return serviceActionTypes.getFilteredList();
+    }
+    
+    public void setExcludedCodes(String ... codes){
+        serviceActionTypes.setExcludedCodes(codes);
     }
 }

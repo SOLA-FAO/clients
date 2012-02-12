@@ -27,18 +27,17 @@
  */
 package org.sola.clients.beans.referencedata;
 
-import java.util.ArrayList;
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingListBean;
 import org.sola.clients.beans.cache.CacheManager;
+import org.sola.clients.beans.controls.SolaCodeList;
 
 /**
  * Holds list of {@link BrSeverityTypeBean} objects.
  */
 public class BrSeverityTypeListBean extends AbstractBindingListBean {
     public static final String SELECTED_BR_SEVERITY_TYPE_PROPERTY = "selectedBrSeverityType";
-    private ObservableList<BrSeverityTypeBean> brSeverityTypes;
+    private SolaCodeList<BrSeverityTypeBean> brSeverityTypes;
     private BrSeverityTypeBean selectedBrSeverityType;
 
     /** Default constructor. */
@@ -51,7 +50,17 @@ public class BrSeverityTypeListBean extends AbstractBindingListBean {
      * @param createDummy Indicates whether to add empty object on the list.
      */
     public BrSeverityTypeListBean(boolean createDummy) {
+        this(createDummy, (String) null);
+    }
+    
+    /** 
+     * Creates object instance.
+     * @param createDummy Indicates whether to add empty object on the list.
+     * @param excludedCodes Codes, which should be skipped while filtering.
+     */
+    public BrSeverityTypeListBean(boolean createDummy, String ... excludedCodes) {
         super();
+        brSeverityTypes = new SolaCodeList<BrSeverityTypeBean>(excludedCodes);
         loadList(createDummy);
     }
     
@@ -60,15 +69,16 @@ public class BrSeverityTypeListBean extends AbstractBindingListBean {
      * @param createDummy Indicates whether to add empty object on the list.
      */
     public final void loadList(boolean createDummy) {
-        if (brSeverityTypes == null) {
-            brSeverityTypes = ObservableCollections.observableList(new ArrayList<BrSeverityTypeBean>());
-        }
         loadCodeList(BrSeverityTypeBean.class, brSeverityTypes, 
                 CacheManager.getBrSeverityTypes(), createDummy);
     }
 
     public ObservableList<BrSeverityTypeBean> getBrSeverityTypes() {
-        return brSeverityTypes;
+        return brSeverityTypes.getFilteredList();
+    }
+    
+    public void setExcludedCodes(String ... codes){
+        brSeverityTypes.setExcludedCodes(codes);
     }
 
     public BrSeverityTypeBean getSelectedBrSeverityType() {

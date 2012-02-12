@@ -27,11 +27,10 @@
  */
 package org.sola.clients.beans.referencedata;
 
-import java.util.ArrayList;
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingListBean;
 import org.sola.clients.beans.cache.CacheManager;
+import org.sola.clients.beans.controls.SolaCodeList;
 
 /**
  * Holds the list of {@link CommunicationTypeBean} objects and used to bound the
@@ -40,15 +39,29 @@ import org.sola.clients.beans.cache.CacheManager;
 public class CommunicationTypeListBean extends AbstractBindingListBean {
     
     public static final String SELECTED_COMMUNICATIONTYPE_PROPERTY = "selectedCommunicationType";
-    private ObservableList<CommunicationTypeBean> communicationTypeListBean;
+    private SolaCodeList<CommunicationTypeBean> communicationTypeListBean;
     private CommunicationTypeBean selectedCommunicationTypeBean;
     
     public CommunicationTypeListBean() {
         this(false);
     }
-    
+
+    /** 
+     * Creates object instance.
+     * @param createDummy Indicates whether to add empty object on the list.
+     */
     public CommunicationTypeListBean(boolean createDummy) {
+        this(createDummy, (String) null);
+    }
+    
+    /** 
+     * Creates object instance.
+     * @param createDummy Indicates whether to add empty object on the list.
+     * @param excludedCodes Codes, which should be skipped while filtering.
+     */
+    public CommunicationTypeListBean(boolean createDummy, String ... excludedCodes) {
         super();
+        communicationTypeListBean = new SolaCodeList<CommunicationTypeBean>(excludedCodes);
         loadList(createDummy);
     }
     
@@ -57,15 +70,16 @@ public class CommunicationTypeListBean extends AbstractBindingListBean {
      * @param createDummy Indicates whether to add empty object on the list.
      */
     public final void loadList(boolean createDummy) {
-        if (communicationTypeListBean == null) {
-            communicationTypeListBean = ObservableCollections.observableList(new ArrayList<CommunicationTypeBean>());
-        }
         loadCodeList(CommunicationTypeBean.class, communicationTypeListBean, 
                 CacheManager.getCommunicationTypes(), createDummy);
     }
     
     public ObservableList<CommunicationTypeBean> getCommunicationTypeList() {
-        return communicationTypeListBean;
+        return communicationTypeListBean.getFilteredList();
+    }
+    
+    public void setExcludedCodes(String ... codes){
+        communicationTypeListBean.setExcludedCodes(codes);
     }
     
     public CommunicationTypeBean getSelectedCommunicationType() {

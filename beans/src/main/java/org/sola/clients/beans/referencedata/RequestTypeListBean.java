@@ -27,15 +27,13 @@
  */
 package org.sola.clients.beans.referencedata;
 
-import java.util.ArrayList;
-import org.sola.clients.beans.application.ApplicationServiceBean;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingListBean;
+import org.sola.clients.beans.application.ApplicationServiceBean;
 import org.sola.clients.beans.cache.CacheManager;
+import org.sola.clients.beans.controls.SolaCodeList;
 
 /**
  * Holds list of {@link RequestTypeBean} objects.
@@ -43,7 +41,7 @@ import org.sola.clients.beans.cache.CacheManager;
 public class RequestTypeListBean extends AbstractBindingListBean {
 
     public static final String SELECTED_REQUEST_TYPE_PROPERTY = "selectedRequestType";
-    private ObservableList<RequestTypeBean> requestTypeListBean;
+    private SolaCodeList<RequestTypeBean> requestTypeListBean;
     private RequestTypeBean selectedRequestTypeBean;
 
     /** 
@@ -53,13 +51,23 @@ public class RequestTypeListBean extends AbstractBindingListBean {
     public RequestTypeListBean() {
         this(false);
     }
-
+    
     /** 
      * Creates object instance.
      * @param createDummy Indicates whether to add empty object on the list.
      */
     public RequestTypeListBean(boolean createDummy) {
+        this(createDummy, (String) null);
+    }
+
+    /** 
+     * Creates object instance.
+     * @param createDummy Indicates whether to add empty object on the list.
+     * @param excludedCodes Codes, which should be skipped while filtering.
+     */
+    public RequestTypeListBean(boolean createDummy, String ... excludedCodes) {
         super();
+        requestTypeListBean = new SolaCodeList<RequestTypeBean>(excludedCodes);
         loadList(createDummy);
     }
     
@@ -68,17 +76,18 @@ public class RequestTypeListBean extends AbstractBindingListBean {
      * @param createDummy Indicates whether to add empty object on the list.
      */
     public final void loadList(boolean createDummy) {
-        if (requestTypeListBean == null) {
-            requestTypeListBean = ObservableCollections.observableList(new ArrayList<RequestTypeBean>());
-        }
         loadCodeList(RequestTypeBean.class, requestTypeListBean, 
                 CacheManager.getRequestTypes(), createDummy);
     }
     
     public ObservableList<RequestTypeBean> getRequestTypeList() {
-        return requestTypeListBean;
+        return requestTypeListBean.getFilteredList();
     }
 
+    public void setExcludedCodes(String ... codes){
+        requestTypeListBean.setExcludedCodes(codes);
+    }
+    
     public RequestTypeBean getSelectedRequestType() {
         return selectedRequestTypeBean;
     }

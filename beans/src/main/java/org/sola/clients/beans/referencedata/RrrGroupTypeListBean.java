@@ -27,26 +27,39 @@
  */
 package org.sola.clients.beans.referencedata;
 
-import java.util.ArrayList;
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingListBean;
 import org.sola.clients.beans.cache.CacheManager;
+import org.sola.clients.beans.controls.SolaCodeList;
 
 /**
  * Holds the list of {@link RrrGroupTypeBean} objects.
  */
 public class RrrGroupTypeListBean extends AbstractBindingListBean {
     public static final String SELECTED_RRR_GROUP_TYPE_PROPERTY = "selectedRrrGroupType";
-    private ObservableList<RrrGroupTypeBean> rrrGroupTypes;
+    private SolaCodeList<RrrGroupTypeBean> rrrGroupTypes;
     private RrrGroupTypeBean selectedRrrGroupType;
     
     public RrrGroupTypeListBean(){
         this(false);
     }
     
-    public RrrGroupTypeListBean(boolean createDummy){
+    /** 
+     * Creates object instance.
+     * @param createDummy Indicates whether to add empty object on the list.
+     */
+    public RrrGroupTypeListBean(boolean createDummy) {
+        this(createDummy, (String) null);
+    }
+    
+    /** 
+     * Creates object instance.
+     * @param createDummy Indicates whether to add empty object on the list.
+     * @param excludedCodes Codes, which should be skipped while filtering.
+     */
+    public RrrGroupTypeListBean(boolean createDummy, String ... excludedCodes) {
         super();
+        rrrGroupTypes = new SolaCodeList<RrrGroupTypeBean>(excludedCodes);
         loadList(createDummy);
     }
     
@@ -55,16 +68,17 @@ public class RrrGroupTypeListBean extends AbstractBindingListBean {
      * @param createDummy Indicates whether to add empty object on the list.
      */
     public final void loadList(boolean createDummy){
-        if(rrrGroupTypes == null){
-            rrrGroupTypes = ObservableCollections.observableList(new ArrayList<RrrGroupTypeBean>());
-        }
         loadCodeList(RrrGroupTypeBean.class, rrrGroupTypes, CacheManager.getRrrGroupTypes(), createDummy);
     }
 
     public ObservableList<RrrGroupTypeBean> getRrrGroupTypes() {
-        return rrrGroupTypes;
+        return rrrGroupTypes.getFilteredList();
     }
 
+    public void setExcludedCodes(String ... codes){
+        rrrGroupTypes.setExcludedCodes(codes);
+    }
+    
     public RrrGroupTypeBean getSelectedRrrGroupType() {
         return selectedRrrGroupType;
     }

@@ -27,8 +27,6 @@
  */
 package org.sola.clients.beans;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.TypeVariable;
 import java.util.List;
 import org.sola.webservices.transferobjects.EntityAction;
 
@@ -62,9 +60,7 @@ public abstract class AbstractBindingListBean extends AbstractBindingBean {
         if (createDummy) {
 
             try {
-                T dummy = null;
-
-                dummy = (T) codeBeanClass.newInstance();
+                T dummy = (T) codeBeanClass.newInstance();
                 
                 if (dummy != null) {
                     dummy.setDisplayValue(" ");
@@ -72,7 +68,6 @@ public abstract class AbstractBindingListBean extends AbstractBindingBean {
                     loadToList.add(0, dummy);
                 }
             } catch (Exception ex) {
-                return;
             }
         }
     }

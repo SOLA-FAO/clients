@@ -27,11 +27,10 @@
  */
 package org.sola.clients.beans.referencedata;
 
-import java.util.ArrayList;
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingListBean;
 import org.sola.clients.beans.cache.CacheManager;
+import org.sola.clients.beans.controls.SolaCodeList;
 
 /**
  * Holds list of {@link ApplicationActionTypeBean} objects.
@@ -39,7 +38,7 @@ import org.sola.clients.beans.cache.CacheManager;
 public class ApplicationActionTypeListBean extends AbstractBindingListBean {
     
     public static final String SELECTED_APPLICATION_ACTION_TYPE_PROPERTY = "selectedApplicationActionType";
-    private ObservableList<ApplicationActionTypeBean> applicationActionTypes;
+    private SolaCodeList<ApplicationActionTypeBean> applicationActionTypes;
     private ApplicationActionTypeBean selectedApplicationActionType;
     
     public ApplicationActionTypeListBean(){
@@ -51,7 +50,17 @@ public class ApplicationActionTypeListBean extends AbstractBindingListBean {
      * @param createDummy Indicates whether to add empty object on the list.
      */
     public ApplicationActionTypeListBean(boolean createDummy) {
+        this(createDummy, (String) null);
+    }
+    
+    /** 
+     * Creates object instance.
+     * @param createDummy Indicates whether to add empty object on the list.
+     * @param excludedCodes Codes, which should be skipped while filtering.
+     */
+    public ApplicationActionTypeListBean(boolean createDummy, String ... excludedCodes) {
         super();
+        applicationActionTypes = new SolaCodeList<ApplicationActionTypeBean>(excludedCodes);
         loadList(createDummy);
     }
     
@@ -60,17 +69,18 @@ public class ApplicationActionTypeListBean extends AbstractBindingListBean {
      * @param createDummy Indicates whether to add empty object on the list.
      */
     public final void loadList(boolean createDummy) {
-        if (applicationActionTypes == null) {
-            applicationActionTypes = ObservableCollections.observableList(new ArrayList<ApplicationActionTypeBean>());
-        }
         loadCodeList(ApplicationActionTypeBean.class, applicationActionTypes, 
                 CacheManager.getApplicationActionTypes(), createDummy);
     }
 
     public ObservableList<ApplicationActionTypeBean> getApplicationActionTypes() {
-        return applicationActionTypes;
+        return applicationActionTypes.getFilteredList();
     }
 
+    public void setExcludedCodes(String ... codes){
+        applicationActionTypes.setExcludedCodes(codes);
+    }
+    
     public ApplicationActionTypeBean getSelectedApplicationActionType() {
         return selectedApplicationActionType;
     }
