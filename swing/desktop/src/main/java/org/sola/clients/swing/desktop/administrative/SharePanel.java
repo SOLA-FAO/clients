@@ -31,7 +31,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import org.sola.clients.beans.administrative.RrrBean;
 import org.sola.clients.beans.administrative.RrrShareBean;
-import org.sola.clients.swing.desktop.party.PartyPanel;
+import org.sola.clients.swing.desktop.party.PartyPanelForm;
 import org.sola.clients.beans.party.PartySummaryBean;
 import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.ui.ContentPanel;
@@ -49,9 +49,9 @@ public class SharePanel extends ContentPanel {
 
         @Override
         public void propertyChange(PropertyChangeEvent evt) {
-            if (evt.getPropertyName().equals(PartyPanel.PARTY_SAVED)) {
+            if (evt.getPropertyName().equals(PartyPanelForm.PARTY_SAVED)) {
                 rrrShareBean.addOrUpdateRightholder((PartySummaryBean) 
-                        ((PartyPanel)evt.getSource()).getParty());
+                        ((PartyPanelForm)evt.getSource()).getParty());
                 tableOwners.clearSelection();
             }
         }
@@ -126,12 +126,12 @@ public class SharePanel extends ContentPanel {
     }
 
     private void openRightHolderForm(PartySummaryBean partySummaryBean, boolean isReadOnly) {
-        PartyPanel partyForm;
+        PartyPanelForm partyForm;
 
         if (partySummaryBean != null) {
-            partyForm = new PartyPanel(true, partySummaryBean, isReadOnly, true);
+            partyForm = new PartyPanelForm(true, partySummaryBean, isReadOnly, true);
         } else {
-            partyForm = new PartyPanel(true, null, isReadOnly, true);
+            partyForm = new PartyPanelForm(true, null, isReadOnly, true);
         }
 
         RightHolderFormListener listener = new RightHolderFormListener();

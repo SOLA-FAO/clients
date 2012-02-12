@@ -27,11 +27,10 @@
  */
 package org.sola.clients.beans.referencedata;
 
-import java.util.ArrayList;
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingListBean;
 import org.sola.clients.beans.cache.CacheManager;
+import org.sola.clients.beans.controls.SolaCodeList;
 
 /**
  * Holds list of {@link RegistrationStatusTypeBean} objects.
@@ -39,7 +38,7 @@ import org.sola.clients.beans.cache.CacheManager;
 public class RegistrationStatusTypeListBean extends AbstractBindingListBean {
     
     public static final String SELECTED_REGISTRATION_STATUS_TYPE_PROPERTY = "selectedRegistrationStatusType";
-    private ObservableList<RegistrationStatusTypeBean> registrationStatusTypes;
+    private SolaCodeList<RegistrationStatusTypeBean> registrationStatusTypes;
     private RegistrationStatusTypeBean selectedRegistrationStatusType;
     
     public RegistrationStatusTypeListBean(){
@@ -51,7 +50,17 @@ public class RegistrationStatusTypeListBean extends AbstractBindingListBean {
      * @param createDummy Indicates whether to add empty object on the list.
      */
     public RegistrationStatusTypeListBean(boolean createDummy) {
+        this(createDummy, (String) null);
+    }
+    
+    /** 
+     * Creates object instance.
+     * @param createDummy Indicates whether to add empty object on the list.
+     * @param excludedCodes Codes, which should be skipped while filtering.
+     */
+    public RegistrationStatusTypeListBean(boolean createDummy, String ... excludedCodes) {
         super();
+        registrationStatusTypes = new SolaCodeList<RegistrationStatusTypeBean>(excludedCodes);
         loadList(createDummy);
     }
     
@@ -60,17 +69,18 @@ public class RegistrationStatusTypeListBean extends AbstractBindingListBean {
      * @param createDummy Indicates whether to add empty object on the list.
      */
     public final void loadList(boolean createDummy) {
-        if (registrationStatusTypes == null) {
-            registrationStatusTypes = ObservableCollections.observableList(new ArrayList<RegistrationStatusTypeBean>());
-        }
         loadCodeList(RegistrationStatusTypeBean.class, registrationStatusTypes, 
                 CacheManager.getRegistrationStatusTypes(), createDummy);
     }
 
     public ObservableList<RegistrationStatusTypeBean> getRegistrationStatusTypes() {
-        return registrationStatusTypes;
+        return registrationStatusTypes.getFilteredList();
     }
 
+    public void setExcludedCodes(String ... codes){
+        registrationStatusTypes.setExcludedCodes(codes);
+    }
+    
     public RegistrationStatusTypeBean getSelectedRegistrationStatusType() {
         return selectedRegistrationStatusType;
     }

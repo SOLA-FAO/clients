@@ -157,7 +157,7 @@ public class DocumentPanel extends javax.swing.JPanel {
     private void initComponents() {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        sourceTypeListBean = new org.sola.clients.beans.source.SourceTypeListBean();
+        sourceTypeListBean = new org.sola.clients.beans.referencedata.SourceTypeListBean();
         sourceBean = createSource();
         jPanel1 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
@@ -374,7 +374,7 @@ public class DocumentPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private org.sola.clients.beans.source.SourceBean sourceBean;
-    private org.sola.clients.beans.source.SourceTypeListBean sourceTypeListBean;
+    private org.sola.clients.beans.referencedata.SourceTypeListBean sourceTypeListBean;
     private javax.swing.JFormattedTextField txtDocRecordDate;
     private javax.swing.JTextField txtDocRefNumber;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;

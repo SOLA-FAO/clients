@@ -33,7 +33,6 @@ import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.AbstractIdBean;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.converters.TypeConverters;
-import org.sola.clients.beans.party.validation.PartyEntityValidationGroup;
 import org.sola.clients.beans.party.validation.PartyIndividualValidationGroup;
 import org.sola.clients.beans.referencedata.PartyTypeBean;
 import org.sola.clients.beans.validation.Localized;

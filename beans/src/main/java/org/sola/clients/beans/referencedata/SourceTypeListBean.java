@@ -25,37 +25,67 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-package org.sola.clients.beans.source;
+package org.sola.clients.beans.referencedata;
 
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
-import org.sola.clients.beans.AbstractBindingBean;
+import org.sola.clients.beans.AbstractBindingListBean;
 import org.sola.clients.beans.cache.CacheManager;
-import org.sola.clients.beans.referencedata.SourceTypeBean;
+import org.sola.clients.beans.controls.SolaCodeList;
 
 /**
  * Holds the list of {@link SourceTypeBean} objects and used to bind the data
  * on the comboboxes or listboxes controls.
  */
-public class SourceTypeListBean extends AbstractBindingBean {
+public class SourceTypeListBean extends AbstractBindingListBean {
     
     public static final String SELECTED_SOURCE_TYPE_PROPERTY = "selectedSourceType";
-    private ObservableList<SourceTypeBean> sourceTypeListBean;
+    private SolaCodeList<SourceTypeBean> sourceTypeListBean;
     private SourceTypeBean selectedSourceType;
     
     /** 
      * Creates object instance and populates source type list with reference 
      * data from the cache.
      */
-    public SourceTypeListBean() {
-        // Load from the cache by default
-        sourceTypeListBean = ObservableCollections.observableList(CacheManager.getSourceTypes());
+    /** Default constructor. */
+    public SourceTypeListBean(){
+        this(false);
+    }
+    
+    /** 
+     * Creates object instance.
+     * @param createDummy Indicates whether to add empty object on the list.
+     */
+    public SourceTypeListBean(boolean createDummy) {
+        this(createDummy, (String) null);
+    }
+    
+    /** 
+     * Creates object instance.
+     * @param createDummy Indicates whether to add empty object on the list.
+     * @param excludedCodes Codes, which should be skipped while filtering.
+     */
+    public SourceTypeListBean(boolean createDummy, String ... excludedCodes) {
+        super();
+        sourceTypeListBean = new SolaCodeList<SourceTypeBean>(excludedCodes);
+        loadList(createDummy);
+    }
+    
+    /** 
+     * Loads list of {@link RequestCategoryTypeBean}.
+     * @param createDummy Indicates whether to add empty object on the list.
+     */
+    public final void loadList(boolean createDummy) {
+        loadCodeList(SourceTypeBean.class, sourceTypeListBean, CacheManager.getSourceTypes(), createDummy);
     }
     
     public ObservableList<SourceTypeBean> getSourceTypeList() {
-        return sourceTypeListBean;
+        return sourceTypeListBean.getFilteredList();
     }
 
+    public void setExcludedCodes(String ... codes){
+        sourceTypeListBean.setExcludedCodes(codes);
+    }
+    
     public SourceTypeBean getSelectedSourceType() {
         return selectedSourceType;
     }

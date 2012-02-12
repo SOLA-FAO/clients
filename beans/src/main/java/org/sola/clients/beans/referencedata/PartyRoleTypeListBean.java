@@ -27,11 +27,10 @@
  */
 package org.sola.clients.beans.referencedata;
 
-import java.util.ArrayList;
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingListBean;
 import org.sola.clients.beans.cache.CacheManager;
+import org.sola.clients.beans.controls.SolaCodeList;
 
 /**
  * Holds the list of {@link PartyRoleTypeBean} objects and used to bound the
@@ -40,7 +39,7 @@ import org.sola.clients.beans.cache.CacheManager;
 public class PartyRoleTypeListBean extends AbstractBindingListBean {
     
     public static final String SELECTED_PARTYROLETYPE_PROPERTY = "selectedPartyRoleType";
-    private ObservableList<PartyRoleTypeBean> partyRoleTypeListBean;
+    private SolaCodeList<PartyRoleTypeBean> partyRoleTypeListBean;
     private PartyRoleTypeBean selectedPartyRoleTypeBean;
     
     public PartyRoleTypeListBean() {
@@ -52,7 +51,17 @@ public class PartyRoleTypeListBean extends AbstractBindingListBean {
      * @param createDummy Indicates whether to add empty object on the list.
      */
     public PartyRoleTypeListBean(boolean createDummy) {
+        this(createDummy, (String) null);
+    }
+    
+    /** 
+     * Creates object instance.
+     * @param createDummy Indicates whether to add empty object on the list.
+     * @param excludedCodes Codes, which should be skipped while filtering.
+     */
+    public PartyRoleTypeListBean(boolean createDummy, String ... excludedCodes) {
         super();
+        partyRoleTypeListBean = new SolaCodeList<PartyRoleTypeBean>(excludedCodes);
         loadList(createDummy);
     }
     
@@ -61,15 +70,16 @@ public class PartyRoleTypeListBean extends AbstractBindingListBean {
      * @param createDummy Indicates whether to add empty object on the list.
      */
     public final void loadList(boolean createDummy) {
-        if (partyRoleTypeListBean == null) {
-            partyRoleTypeListBean = ObservableCollections.observableList(new ArrayList<PartyRoleTypeBean>());
-        }
         loadCodeList(PartyRoleTypeBean.class, partyRoleTypeListBean, 
                 CacheManager.getPartyRoles(), createDummy);
     }
     
     public ObservableList<PartyRoleTypeBean> getPartyRoleTypeList() {
-        return partyRoleTypeListBean;
+        return partyRoleTypeListBean.getFilteredList();
+    }
+    
+    public void setExcludedCodes(String ... codes){
+        partyRoleTypeListBean.setExcludedCodes(codes);
     }
     
     public PartyRoleTypeBean getSelectedPartyRoleType() {

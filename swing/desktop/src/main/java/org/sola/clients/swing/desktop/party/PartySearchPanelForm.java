@@ -40,22 +40,22 @@ public class PartySearchPanelForm extends ContentPanel {
     }
     
     private void handleSearchPanelEvents(PropertyChangeEvent evt){
-        PartyPanel panel = null; 
+        PartyPanelForm panel = null; 
         
         if(evt.getPropertyName().equals(PartySearchPanel.CREATE_NEW_PARTY_PROPERTY)){
-            panel = new PartyPanel(true, null, false, false);
+            panel = new PartyPanelForm(true, null, false, false);
             panel.addPropertyChangeListener(new PropertyChangeListener() {
                 @Override
                 public void propertyChange(PropertyChangeEvent evt) {
-                    if(evt.getPropertyName().equals(PartyPanel.PARTY_SAVED)){
-                        ((PartyPanel)evt.getSource()).setParty(null);
+                    if(evt.getPropertyName().equals(PartyPanelForm.PARTY_SAVED)){
+                        ((PartyPanelForm)evt.getSource()).setParty(null);
                     }
                 }
             });
         } else if(evt.getPropertyName().equals(PartySearchPanel.EDIT_PARTY_PROPERTY)){
-            panel = new PartyPanel(true, (PartyBean)evt.getNewValue(), false, true);
+            panel = new PartyPanelForm(true, (PartyBean)evt.getNewValue(), false, true);
         } else if(evt.getPropertyName().equals(PartySearchPanel.VIEW_PARTY_PROPERTY)){
-            panel = new PartyPanel(true, (PartyBean)evt.getNewValue(), true, true);
+            panel = new PartyPanelForm(true, (PartyBean)evt.getNewValue(), true, true);
         }
         
         if(panel!=null){

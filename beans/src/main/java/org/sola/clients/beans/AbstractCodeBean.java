@@ -33,7 +33,6 @@ import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.beans.system.LanguageBean;
 import org.sola.clients.beans.validation.Localized;
 import org.sola.common.messaging.ClientMessage;
-import org.sola.common.messaging.MessageUtility;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.AbstractCodeTO;
 
