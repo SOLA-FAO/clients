@@ -33,13 +33,15 @@ import java.beans.*;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import ognl.Ognl;
 import ognl.OgnlContext;
 import ognl.OgnlException;
 import org.jdesktop.beansbinding.PropertyResolutionException;
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.jdesktop.observablecollections.ObservableListListener;
 
@@ -529,12 +531,12 @@ public class ExtendedList<E> extends AbstractList<E> implements ObservableList<E
     /**
      * Observable list class with support of filtering.
      */
-    private class FilteredList<E> extends AbstractList<E> implements ObservableList<E> {
+    private class FilteredList<E> extends AbstractList<E> implements ObservableList<E>, Serializable {
 
         private final boolean supportsElementPropertyChanged;
         private List<E> list;
         private ExtendedList<E> parentList;
-        private List<ObservableListListener> listeners;
+        private transient List<ObservableListListener> listeners;
 
         /**
          * Class constructor to create new list.
@@ -542,7 +544,7 @@ public class ExtendedList<E> extends AbstractList<E> implements ObservableList<E
          * @param parentList Unfiltered parent list, holding all elements.
          */
         public FilteredList(ExtendedList<E> parentList) {
-            this.list = ObservableCollections.observableList(new LinkedList<E>());
+            this.list = new ArrayList<E>();
             this.parentList = parentList;
             listeners = new CopyOnWriteArrayList<ObservableListListener>();
             this.supportsElementPropertyChanged = false;

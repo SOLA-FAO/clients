@@ -27,13 +27,12 @@
  */
 package org.sola.clients.beans.application;
 
-import java.util.LinkedList;
 import java.util.List;
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
-import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.clients.beans.AbstractBindingBean;
+import org.sola.clients.beans.controls.SolaObservableList;
 import org.sola.clients.beans.converters.TypeConverters;
+import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.search.ApplicationSearchParamsTO;
 import org.sola.webservices.transferobjects.search.ApplicationSearchResultTO;
 
@@ -44,13 +43,12 @@ import org.sola.webservices.transferobjects.search.ApplicationSearchResultTO;
 public class ApplicationSearchResultsListBean extends AbstractBindingBean {
 
     public static final String SELECTED_APPLICATION_PROPERTY = "selectedApplication";
-    private ObservableList<ApplicationSearchResultBean> applicationSearchResultsList;
+    private SolaObservableList<ApplicationSearchResultBean> applicationSearchResultsList;
     private ApplicationSearchResultBean selectedApplication;
 
     /** Creates object's instance and initializes collection of {@link ApplicationSearchResultBean}.*/
     public ApplicationSearchResultsListBean() {
-        applicationSearchResultsList = ObservableCollections.observableList(
-                new LinkedList<ApplicationSearchResultBean>());
+        applicationSearchResultsList = new SolaObservableList<ApplicationSearchResultBean>();
     }
 
     /** Fills application search result list with unassigned applications. */

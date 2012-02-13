@@ -27,8 +27,8 @@
  */
 package org.sola.clients.beans.digitalarchive;
 
-import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.common.FileUtility;
+import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.digitalarchive.FileBinaryTO;
 
 /** 

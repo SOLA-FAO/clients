@@ -27,19 +27,18 @@
  */
 package org.sola.clients.beans.administrative;
 
-import org.sola.clients.beans.administrative.validation.MortgageValidationGroup;
-import org.sola.clients.beans.administrative.validation.OwnershipValidationGroup;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.UUID;
 import javax.validation.Valid;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.jdesktop.observablecollections.ObservableList;
-import org.sola.clients.beans.administrative.validation.TotalShareSize;
 import org.sola.clients.beans.AbstractTransactionedBean;
+import org.sola.clients.beans.administrative.validation.MortgageValidationGroup;
+import org.sola.clients.beans.administrative.validation.OwnershipValidationGroup;
+import org.sola.clients.beans.administrative.validation.TotalShareSize;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.controls.SolaList;
 import org.sola.clients.beans.party.PartySummaryBean;
@@ -80,6 +79,7 @@ public class RrrBean extends AbstractTransactionedBean {
     public static final String FIRST_RIGHTHOLDER_PROPERTY = "firstRightholder";
     public static final String SELECTED_SHARE_PROPERTY = "selectedShare";
     public static final String SELECTED_PROPERTY = "selected";
+    
     private String baUnitId;
     private String nr;
     private Date registrationDate;
@@ -104,8 +104,8 @@ public class RrrBean extends AbstractTransactionedBean {
     private boolean primary = false;
     @Valid
     private SolaList<PartySummaryBean> rightHolderList;
-    private RrrShareBean selectedShare;
-    private boolean selected;
+    private transient RrrShareBean selectedShare;
+    private transient boolean selected;
 
     public RrrBean() {
         super();

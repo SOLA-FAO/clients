@@ -30,10 +30,10 @@ package org.sola.clients.beans.source;
 import java.util.ArrayList;
 import java.util.List;
 import org.jdesktop.observablecollections.ObservableList;
-import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.clients.beans.controls.SolaList;
 import org.sola.clients.beans.converters.TypeConverters;
+import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.EntityAction;
 
 /**

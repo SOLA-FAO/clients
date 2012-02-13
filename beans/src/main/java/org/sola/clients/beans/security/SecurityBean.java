@@ -28,11 +28,11 @@
 package org.sola.clients.beans.security;
 
 import java.util.HashMap;
-import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.common.SOLAException;
 import org.sola.common.messaging.ClientMessage;
+import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.services.boundary.wsclients.exception.WebServiceClientException;
 
 /**

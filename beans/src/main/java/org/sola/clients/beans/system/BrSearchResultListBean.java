@@ -27,11 +27,10 @@
  */
 package org.sola.clients.beans.system;
 
-import java.util.ArrayList;
 import java.util.List;
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingListBean;
+import org.sola.clients.beans.controls.SolaObservableList;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.search.BrSearchParamsTO;
@@ -41,7 +40,7 @@ import org.sola.webservices.transferobjects.search.BrSearchParamsTO;
  */
 public class BrSearchResultListBean extends AbstractBindingListBean {
     public static final String SELECTED_BR_SEARCH_RESULT_PROPERTY = "selectedBrSearchResult";
-    private ObservableList<BrSearchResultBean> brSearchResults;
+    private SolaObservableList<BrSearchResultBean> brSearchResults;
     private BrSearchResultBean selectedBrSearchResult;
 
     /** Default constructor. */
@@ -51,7 +50,7 @@ public class BrSearchResultListBean extends AbstractBindingListBean {
 
     public ObservableList<BrSearchResultBean> getBrSearchResults() {
         if(brSearchResults == null){
-            brSearchResults = ObservableCollections.observableList(new ArrayList<BrSearchResultBean>());
+            brSearchResults = new SolaObservableList<BrSearchResultBean>();
         }
         return brSearchResults;
     }

@@ -27,10 +27,10 @@
  */
 package org.sola.clients.beans.referencedata;
 
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.clients.beans.cache.CacheManager;
+import org.sola.clients.beans.controls.SolaObservableList;
 
 /**
  * Holds the list of {@link MortgageTypeBean} objects.
@@ -38,18 +38,18 @@ import org.sola.clients.beans.cache.CacheManager;
 public class MortgageTypeListBean extends AbstractBindingBean {
     
     public static final String SELECTED_MORTGAGE_TYPE_PROPERTY = "selectedMortgageType";
-    private ObservableList<MortgageTypeBean> mortgageTypeListBean;
+    private SolaObservableList<MortgageTypeBean> mortgageTypeListBean;
     private MortgageTypeBean selectedMortgageType;
     
     public MortgageTypeListBean() {
-        mortgageTypeListBean = ObservableCollections.observableList(CacheManager.getMortgageTypes());
+        mortgageTypeListBean = new SolaObservableList(CacheManager.getMortgageTypes());
     }
 
     public ObservableList<MortgageTypeBean> getMortgageTypeListBean() {
         return mortgageTypeListBean;
     }
 
-    public void setMortgageTypeListBean(ObservableList<MortgageTypeBean> mortgageTypeListBean) {
+    public void setMortgageTypeListBean(SolaObservableList<MortgageTypeBean> mortgageTypeListBean) {
         this.mortgageTypeListBean = mortgageTypeListBean;
     }
 

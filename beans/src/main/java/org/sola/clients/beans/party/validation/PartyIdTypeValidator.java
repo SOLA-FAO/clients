@@ -25,10 +25,11 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-package org.sola.clients.beans.party;
+package org.sola.clients.beans.party.validation;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import org.sola.clients.beans.party.PartyBean;
 
 /**
  * Used to make validation for {@link PartyIdTypeCheck}.

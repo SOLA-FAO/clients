@@ -32,6 +32,7 @@ import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationServiceBean;
 import org.sola.clients.beans.referencedata.StatusConstants;
 import org.sola.clients.swing.common.LafManager;
+import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.source.DocumentsManagementPanel;
 
@@ -93,8 +94,67 @@ public class SimpleRightPanel extends ContentPanel {
 
         headerPanel.setTitleText(rrrBean.getRrrType().getDisplayValue());
         customizeForm(rrrAction);
+        saveRrrState();
     }
 
+    /** Checks provided {@link RrrBean} and makes a copy if needed. */
+    private void prepareRrrBean(RrrBean rrrBean, RrrBean.RRR_ACTION rrrAction) {
+        if (rrrBean == null) {
+            this.rrrBean = new RrrBean();
+            this.rrrBean.setStatusCode(StatusConstants.PENDING);
+        } else {
+            this.rrrBean=rrrBean.makeCopyByAction(rrrAction);
+        }
+    }
+    
+    /** 
+     * Customizes form view, disabling or enabling different parts, depending 
+     * on the given {@link RrrBean#RRR_ACTION} and user rights. 
+     */
+    private void customizeForm(RrrBean.RRR_ACTION rrrAction) {
+        if (rrrAction == RrrBean.RRR_ACTION.NEW) {
+            btnSave.setText("Create & Close");
+        }
+        if (rrrAction == RrrBean.RRR_ACTION.CANCEL) {
+            btnSave.setText("Extinguish");
+        }
+
+        if (rrrAction != RrrBean.RRR_ACTION.EDIT && rrrAction != RrrBean.RRR_ACTION.VIEW 
+                && appService!=null) {
+            // Set default noation text from the selected application service
+            txtNotationText.setText(appService.getRequestType().getNotationTemplate());
+        }
+        
+        if (rrrAction == RrrBean.RRR_ACTION.VIEW) {
+            btnSave.setVisible(false);
+            txtNotationText.setEditable(false);
+            cbxIsPrimary.setEnabled(false);
+            txtRegDatetime.setEditable(false);
+            cbxIsPrimary.setEnabled(false);
+        }
+    }
+    
+    private boolean saveRrr() {
+        if (rrrBean.validate(true).size() <= 0) {
+            firePropertyChange(UPDATED_RRR, null, rrrBean);
+            close();
+            return true;
+        }
+        return false;
+    }
+    
+    private void saveRrrState() {
+        MainForm.saveBeanState(rrrBean);
+    }
+
+    @Override
+    protected boolean panelClosing() {
+        if (btnSave.isEnabled() && MainForm.checkSaveBeforeClose(rrrBean)) {
+            return saveRrr();
+        }
+        return true;
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -260,48 +320,8 @@ public class SimpleRightPanel extends ContentPanel {
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
 
-    /** Checks provided {@link RrrBean} and makes a copy if needed. */
-    private void prepareRrrBean(RrrBean rrrBean, RrrBean.RRR_ACTION rrrAction) {
-        if (rrrBean == null) {
-            this.rrrBean = new RrrBean();
-            this.rrrBean.setStatusCode(StatusConstants.PENDING);
-        } else {
-            this.rrrBean=rrrBean.makeCopyByAction(rrrAction);
-        }
-    }
-    
-    /** 
-     * Customizes form view, disabling or enabling different parts, depending 
-     * on the given {@link RrrBean#RRR_ACTION} and user rights. 
-     */
-    private void customizeForm(RrrBean.RRR_ACTION rrrAction) {
-        if (rrrAction == RrrBean.RRR_ACTION.NEW) {
-            btnSave.setText("Create & Close");
-        }
-        if (rrrAction == RrrBean.RRR_ACTION.CANCEL) {
-            btnSave.setText("Extinguish");
-        }
-
-        if (rrrAction != RrrBean.RRR_ACTION.EDIT && rrrAction != RrrBean.RRR_ACTION.VIEW 
-                && appService!=null) {
-            // Set default noation text from the selected application service
-            txtNotationText.setText(appService.getRequestType().getNotationTemplate());
-        }
-        
-        if (rrrAction == RrrBean.RRR_ACTION.VIEW) {
-            btnSave.setVisible(false);
-            txtNotationText.setEditable(false);
-            cbxIsPrimary.setEnabled(false);
-            txtRegDatetime.setEditable(false);
-            cbxIsPrimary.setEnabled(false);
-        }
-    }
-
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        if (rrrBean.validate(true).size() <= 0) {
-            firePropertyChange(UPDATED_RRR, null, rrrBean);
-            close();
-        }
+        saveRrr();
     }//GEN-LAST:event_btnSaveActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSave;

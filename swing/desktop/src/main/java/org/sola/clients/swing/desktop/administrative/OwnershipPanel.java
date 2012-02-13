@@ -32,15 +32,16 @@ import java.beans.PropertyChangeListener;
 import javax.validation.groups.Default;
 import org.sola.clients.beans.administrative.RrrBean;
 import org.sola.clients.beans.administrative.RrrShareBean;
+import org.sola.clients.beans.administrative.validation.OwnershipValidationGroup;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationServiceBean;
 import org.sola.clients.beans.referencedata.StatusConstants;
-import org.sola.clients.swing.ui.renderers.TableCellListRenderer;
-import org.sola.clients.swing.ui.source.DocumentsManagementPanel;
-import org.sola.clients.beans.administrative.validation.OwnershipValidationGroup;
 import org.sola.clients.swing.common.LafManager;
+import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
+import org.sola.clients.swing.ui.renderers.TableCellListRenderer;
+import org.sola.clients.swing.ui.source.DocumentsManagementPanel;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
@@ -105,6 +106,7 @@ public class OwnershipPanel extends ContentPanel {
         headerPanel.setTitleText(rrrBean.getRrrType().getDisplayValue());
         customizeForm();
         customizeSharesButtons(null);
+        saveRrrState();
     }
 
     private void prepareRrrBean(RrrBean rrrBean, RrrBean.RRR_ACTION rrrAction) {
@@ -182,6 +184,27 @@ public class OwnershipPanel extends ContentPanel {
         getMainContentPanel().addPanel(shareForm, MainContentPanel.CARD_OWNERSHIP_SHARE, true);
     }
 
+    private boolean saveRrr() {
+        if (rrrBean.validate(true, Default.class, OwnershipValidationGroup.class).size() < 1) {
+            firePropertyChange(UPDATED_RRR, null, rrrBean);
+            close();
+            return true;
+        }
+        return false;
+    }
+    
+    private void saveRrrState() {
+        MainForm.saveBeanState(rrrBean);
+    }
+
+    @Override
+    protected boolean panelClosing() {
+        if (btnSave.isEnabled() && MainForm.checkSaveBeforeClose(rrrBean)) {
+            return saveRrr();
+        }
+        return true;
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -532,10 +555,7 @@ public class OwnershipPanel extends ContentPanel {
     }//GEN-LAST:event_tableSharesMouseClicked
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        if (rrrBean.validate(true, Default.class, OwnershipValidationGroup.class).size() < 1) {
-            firePropertyChange(UPDATED_RRR, null, rrrBean);
-            close();
-        }
+        saveRrr();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnAddShareActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddShareActionPerformed

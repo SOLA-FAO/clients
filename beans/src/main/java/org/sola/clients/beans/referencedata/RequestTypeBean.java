@@ -29,8 +29,8 @@ package org.sola.clients.beans.referencedata;
 
 import java.math.BigDecimal;
 import javax.validation.constraints.NotNull;
-import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.AbstractCodeBean;
+import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.controls.SolaList;
 import org.sola.clients.beans.validation.CodeBeanNotEmpty;

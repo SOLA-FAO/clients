@@ -63,7 +63,7 @@ public class CadastreObjectBean extends AbstractTransactionedBean {
     @NotNull(message =  ClientMessage.CHECK_NOTNULL_CADOBJTYPE, payload=Localized.class)
     private CadastreObjectTypeBean cadastreObjectType;
     private byte[] geomPolygon;
-    private boolean selected;
+    private transient boolean selected;
     
     public CadastreObjectBean() {
         super();

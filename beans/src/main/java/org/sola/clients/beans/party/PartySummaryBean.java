@@ -28,15 +28,15 @@
 package org.sola.clients.beans.party;
 
 import org.hibernate.validator.constraints.NotEmpty;
-import org.sola.services.boundary.wsclients.WSManager;
-import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.AbstractIdBean;
+import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.beans.party.validation.PartyIndividualValidationGroup;
 import org.sola.clients.beans.referencedata.PartyTypeBean;
 import org.sola.clients.beans.validation.Localized;
 import org.sola.common.messaging.ClientMessage;
+import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.casemanagement.PartySummaryTO;
 import org.sola.webservices.transferobjects.casemanagement.PartyTO;
 

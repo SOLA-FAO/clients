@@ -31,6 +31,7 @@ package org.sola.clients.beans.referencedata;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.Serializable;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingListBean;
 import org.sola.clients.beans.cache.CacheManager;
@@ -45,7 +46,7 @@ import org.sola.webservices.transferobjects.EntityAction;
  */
 public class SourceTypeHelperListBean extends AbstractBindingListBean {
 
-    private class SourceTypeHelperListener implements PropertyChangeListener {
+    private class SourceTypeHelperListener implements PropertyChangeListener, Serializable {
 
         @Override
         public void propertyChange(PropertyChangeEvent evt) {

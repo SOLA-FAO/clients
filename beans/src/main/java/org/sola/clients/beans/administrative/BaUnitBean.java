@@ -27,6 +27,7 @@
  */
 package org.sola.clients.beans.administrative;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,6 +38,7 @@ import org.sola.clients.beans.cache.CacheManager;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.clients.beans.cadastre.CadastreObjectBean;
 import org.sola.clients.beans.controls.SolaList;
+import org.sola.clients.beans.controls.SolaObservableList;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.beans.referencedata.StatusConstants;
 import org.sola.clients.beans.referencedata.TypeActionBean;
@@ -51,7 +53,7 @@ import org.sola.webservices.transferobjects.search.CadastreObjectSearchResultTO;
  */
 public class BaUnitBean extends BaUnitSummaryBean {
 
-    private class RrrListListener implements ObservableListListener {
+    private class RrrListListener implements ObservableListListener, Serializable {
 
         @Override
         public void listElementsAdded(ObservableList ol, int i, int i1) {
@@ -116,7 +118,7 @@ public class BaUnitBean extends BaUnitSummaryBean {
         }
     }
 
-    private class AllBaUnitNotationsListUpdater implements ObservableListListener {
+    private class AllBaUnitNotationsListUpdater implements ObservableListListener, Serializable {
 
         @Override
         public void listElementsAdded(ObservableList ol, int i, int i1) {
@@ -171,16 +173,16 @@ public class BaUnitBean extends BaUnitSummaryBean {
     private SolaList<BaUnitNotationBean> baUnitNotationList;
     private SolaList<CadastreObjectBean> cadastreObjectList;
     private SolaList<CadastreObjectBean> newCadastreObjectList;
-    private ObservableList<BaUnitNotationBean> allBaUnitNotationList;
+    private SolaObservableList<BaUnitNotationBean> allBaUnitNotationList;
     private SolaList<SourceBean> sourceList;
-    private ObservableList<RrrShareWithStatus> rrrSharesList;
+    private SolaObservableList<RrrShareWithStatus> rrrSharesList;
     private SolaList<RelatedBaUnitInfoBean> childBaUnits;
     private SolaList<RelatedBaUnitInfoBean> parentBaUnits;
-    private CadastreObjectBean selectedParcel;
-    private RrrBean selectedRight;
-    private BaUnitNotationBean selectedBaUnitNotation;
-    private RelatedBaUnitInfoBean selectedParentBaUnit;
-    private RelatedBaUnitInfoBean selectedChildBaUnit;
+    private transient CadastreObjectBean selectedParcel;
+    private transient RrrBean selectedRight;
+    private transient BaUnitNotationBean selectedBaUnitNotation;
+    private transient RelatedBaUnitInfoBean selectedParentBaUnit;
+    private transient RelatedBaUnitInfoBean selectedChildBaUnit;
     private String estateType;
     private TypeActionBean pendingTypeAction;
     
@@ -192,8 +194,8 @@ public class BaUnitBean extends BaUnitSummaryBean {
         childBaUnits = new SolaList();
         parentBaUnits = new SolaList();
         sourceList = new SolaList();
-        allBaUnitNotationList = ObservableCollections.observableList(new LinkedList<BaUnitNotationBean>());
-        rrrSharesList = ObservableCollections.observableList(new LinkedList<RrrShareWithStatus>());
+        allBaUnitNotationList = new SolaObservableList<BaUnitNotationBean>();
+        rrrSharesList = new SolaObservableList<RrrShareWithStatus>();
         rrrList.getFilteredList().addObservableListListener(new RrrListListener());
         
         sourceList.setExcludedStatuses(new String[]{StatusConstants.HISTORIC});

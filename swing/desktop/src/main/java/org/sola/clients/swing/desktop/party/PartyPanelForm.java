@@ -31,6 +31,7 @@ import java.util.ResourceBundle;
 import org.sola.clients.beans.party.PartyBean;
 import org.sola.clients.beans.party.PartySummaryBean;
 import org.sola.clients.beans.security.SecurityBean;
+import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.common.RolesConstants;
 import org.sola.common.messaging.ClientMessage;
@@ -82,6 +83,7 @@ public class PartyPanelForm extends ContentPanel {
 
         initComponents();
         customizePanel();
+        savePartyState();
     }
 
     /** 
@@ -105,8 +107,9 @@ public class PartyPanelForm extends ContentPanel {
 
         initComponents();
         customizePanel();
+        savePartyState();
     }
-
+    
     public boolean isCloseOnSave() {
         return closeOnSave;
     }
@@ -132,6 +135,7 @@ public class PartyPanelForm extends ContentPanel {
         this.partyBean = partyBean;
         partyPanel.setPartyBean(partyBean);
         customizePanel();
+        savePartyState();
     }
 
     private org.sola.clients.swing.ui.party.PartyPanel createPartyPanel() {
@@ -163,6 +167,44 @@ public class PartyPanelForm extends ContentPanel {
         }
     }
 
+    private boolean saveParty(boolean allowClose){
+        if (savePartyOnAction) {
+            if (partyPanel.saveParty()) {
+                MessageUtility.displayMessage(ClientMessage.PARTY_SAVED);
+                customizePanel();
+                firePropertyChange(PARTY_SAVED, false, true);
+                if (closeOnSave && allowClose) {
+                    close();
+                } else {
+                    savePartyState();
+                }
+                return true;
+            }
+        } else {
+            if (partyPanel.validateParty(true)) {
+                customizePanel();
+                firePropertyChange(PARTY_SAVED, false, true);
+                if (closeOnSave && allowClose) {
+                    close();
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private void savePartyState(){
+        MainForm.saveBeanState(partyPanel.getPartyBean());
+    }
+    
+    @Override
+    protected boolean panelClosing() {
+        if(btnSave.isEnabled() && savePartyOnAction && MainForm.checkSaveBeforeClose(partyPanel.getPartyBean())){
+            return saveParty(false);
+        }
+        return true;
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -223,24 +265,7 @@ public class PartyPanelForm extends ContentPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        if (savePartyOnAction) {
-            if (partyPanel.saveParty()) {
-                MessageUtility.displayMessage(ClientMessage.PARTY_SAVED);
-                customizePanel();
-                firePropertyChange(PARTY_SAVED, false, true);
-                if (closeOnSave) {
-                    close();
-                } 
-            }
-        } else {
-            if (partyPanel.validateParty(true)) {
-                customizePanel();
-                firePropertyChange(PARTY_SAVED, false, true);
-                if (closeOnSave) {
-                    close();
-                }
-            }
-        }
+        saveParty(true);
     }//GEN-LAST:event_btnSaveActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSave;
