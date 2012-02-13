@@ -31,6 +31,7 @@
  */
 package org.geotools.map.extended.layer;
 
+import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import org.geotools.data.collection.CollectionFeatureSource;
 import org.geotools.data.simple.SimpleFeatureSource;
@@ -38,6 +39,7 @@ import org.geotools.geometry.jts.Geometries;
 import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.opengis.feature.simple.SimpleFeature;
 import org.geotools.data.collection.extended.GraphicsFeatureCollection;
+import org.geotools.feature.CollectionEvent;
 import org.geotools.swing.extended.util.Messaging;
 
 /**
@@ -127,10 +129,10 @@ public class ExtendedLayerGraphics extends ExtendedFeatureLayer {
      * @param fid The fid to search for
      * @return The removed feature
      */
-    public SimpleFeature removeFeature(String fid){
+    public SimpleFeature removeFeature(String fid) {
         return this.getFeatureCollection().removeFeature(fid);
     }
-    
+
     /**
      * It removes all features.
      * @throws Exception 
@@ -157,5 +159,40 @@ public class ExtendedLayerGraphics extends ExtendedFeatureLayer {
      */
     public GeometryFactory getGeometryFactory() {
         return geometryFactory;
+    }
+
+    /**
+     * It replaces a geometry of an existing feature
+     * @param ofFeature the target feature
+     * @param newGeometry the new geometry
+     * @return true if the geometry is successfully changed
+     * @throws Exception 
+     */
+    public boolean replaceFeatureGeometry(
+            SimpleFeature ofFeature, Geometry newGeometry) {
+        if (!this.getFeatureCollection().contains(ofFeature)) {
+            return false;
+        }
+        if (!this.validateGeometry(newGeometry)) {
+            Messaging.getInstance().show(
+                    Messaging.Ids.DRAWINGTOOL_GEOMETRY_NOT_VALID_ERROR.toString());
+            return false;
+        }
+        newGeometry.normalize();
+        ofFeature.setDefaultGeometry(newGeometry);
+        newGeometry.geometryChanged();
+        this.getFeatureCollection().notifyListeners(ofFeature, CollectionEvent.FEATURES_CHANGED);
+        return true;
+    }
+
+    /**
+     * It checks if the geometry to be used for the feature is valid.
+     * @param geom
+     * @return 
+     */
+    protected final boolean validateGeometry(Geometry geom) {
+        boolean result = true;
+        result = geom.isSimple() && geom.isValid();
+        return result;
     }
 }

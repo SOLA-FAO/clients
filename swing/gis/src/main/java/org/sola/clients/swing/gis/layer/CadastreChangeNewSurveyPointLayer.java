@@ -288,7 +288,7 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
     @Override
     public SimpleFeature changeVertex(VertexInformation vertexInformation, DirectPosition2D newPosition) {
         for (VertexInformation vertexCOInformation : this.newCadastreObjectLayer.getVertexList()) {
-            if (vertexInformation.getVertex().equals2D(vertexCOInformation.getVertex())) {
+            if (vertexInformation.getVertex().distance(vertexCOInformation.getVertex()) <= 0.01) {
                 if (this.newCadastreObjectLayer.changeVertex(vertexCOInformation, newPosition) == null) {
                     return null;
                 }

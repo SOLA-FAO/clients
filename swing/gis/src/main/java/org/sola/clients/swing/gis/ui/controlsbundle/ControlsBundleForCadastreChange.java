@@ -161,7 +161,7 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
                 new CadastreBoundarySelectTool(
                         this.cadastreBoundaryPointLayer,
                         this.newCadastreObjectLayer,
-                        this.newPointsLayer);
+                        this.newCadastreObjectLayer.getVerticesLayer());
         this.getMap().addTool(cadastreBoundarySelectTool, this.getToolbar(), true);
     }
 

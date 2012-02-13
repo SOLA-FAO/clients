@@ -70,7 +70,8 @@ public class Messaging {
         PRINT_LAYOUT_NOT_SELECTED,
         PRINT_SCALE_NOT_CORRECT,
         LEFT_PANEL_TAB_LAYERS_TITLE,
-        GEOTOOL_GET_FEATURE_IN_RANGLE_ERROR
+        GEOTOOL_GET_FEATURE_IN_RANGLE_ERROR,
+        LAYER_EDITOR_VERTEX_MAINTAIN_ERROR
     };
 
     private static Messaging messaging = new Messaging();
@@ -169,6 +170,8 @@ public class Messaging {
             msgBody = "Layers";
         } else if(messageId.equals(Messaging.Ids.GEOTOOL_GET_FEATURE_IN_RANGLE_ERROR.toString())){
             msgBody = "Error while getting features in range. \n Error : %s";
+        } else if(messageId.equals(Messaging.Ids.LAYER_EDITOR_VERTEX_MAINTAIN_ERROR.toString())){
+            msgBody = "Error while maintaining vertexes of the feature. \n Error : %s";
         }
         return msgBody;
     }

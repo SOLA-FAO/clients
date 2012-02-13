@@ -205,6 +205,5 @@ public class GraphicsFeatureCollection extends ListFeatureCollection {
             listener.collectionChanged(
                     new CollectionEvent(this, features, actionOnFeature));
         }
-
     }
 }
