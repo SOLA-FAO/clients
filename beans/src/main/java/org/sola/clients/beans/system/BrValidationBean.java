@@ -31,13 +31,7 @@ import java.util.UUID;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.clients.beans.cache.CacheManager;
-import org.sola.clients.beans.referencedata.ApplicationActionTypeBean;
-import org.sola.clients.beans.referencedata.BrSeverityTypeBean;
-import org.sola.clients.beans.referencedata.BrValidationTargetTypeBean;
-import org.sola.clients.beans.referencedata.RegistrationStatusTypeBean;
-import org.sola.clients.beans.referencedata.RequestTypeBean;
-import org.sola.clients.beans.referencedata.RrrTypeBean;
-import org.sola.clients.beans.referencedata.ServiceActionTypeBean;
+import org.sola.clients.beans.referencedata.*;
 import org.sola.clients.beans.system.validation.BrValidationCheck;
 import org.sola.clients.beans.validation.CodeBeanNotEmpty;
 import org.sola.clients.beans.validation.Localized;
@@ -69,6 +63,7 @@ public class BrValidationBean extends AbstractBindingBean {
     public static final String TARGET_RRR_TYPE_CODE_PROPERTY = "targetRrrTypeCode";
     public static final String RRR_TYPE_PROPERTY = "rrrType";
     public static final String ORDER_OF_EXECUTION_PROPERTY = "orderOfExecution";
+    
     private String id;
     @NotEmpty(message = ClientMessage.CHECK_NOTNULL_BRVALID, payload = Localized.class)
     private String brId;

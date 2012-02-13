@@ -27,10 +27,9 @@
  */
 package org.sola.clients.beans.party;
 
-import java.util.LinkedList;
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingBean;
+import org.sola.clients.beans.controls.SolaObservableList;
 
 /**
  * Holds the list of {@link PartyBean} objects.
@@ -39,12 +38,12 @@ public class PartyListBean extends AbstractBindingBean {
     
     public static final String SELECTED_PARTY_PROPERTY = "selectedParty";
     public static final String PARTY_LIST_PROPERTY = "partyBeanList";
-    private ObservableList<PartyBean> partyListBean;
+    private SolaObservableList<PartyBean> partyListBean;
     private PartyBean selectedParty;
     
     /** Creates new instance of object and initializes {@link PartyBean} list.*/
     public PartyListBean() {
-        partyListBean = ObservableCollections.observableList(new LinkedList<PartyBean>());
+        partyListBean = new SolaObservableList<PartyBean>();
     }
 
     public ObservableList<PartyBean> getPartyBeanList()

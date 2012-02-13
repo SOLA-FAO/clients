@@ -30,10 +30,10 @@ package org.sola.clients.beans.system;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.clients.beans.cache.CacheManager;
+import org.sola.clients.beans.controls.SolaObservableList;
 import org.sola.clients.beans.sorters.LanguageBeanSorter;
 import org.sola.clients.beans.sorters.LocalizedValueBeanSorter;
 import org.sola.services.boundary.wsclients.WSManager;
@@ -45,11 +45,11 @@ import org.sola.services.boundary.wsclients.WSManager;
 public class LocalizedValuesListBean extends AbstractBindingBean {
 
     
-    private ObservableList<LocalizedValueBean> localizedValues;
+    private SolaObservableList<LocalizedValueBean> localizedValues;
             
     public LocalizedValuesListBean(){
         super();
-        localizedValues = ObservableCollections.observableList(new ArrayList<LocalizedValueBean>());
+        localizedValues = new SolaObservableList<LocalizedValueBean>();
     }
 
     public ObservableList<LocalizedValueBean> getLocalizedValues() {

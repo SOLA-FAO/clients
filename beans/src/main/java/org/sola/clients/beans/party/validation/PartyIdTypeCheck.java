@@ -25,7 +25,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-package org.sola.clients.beans.party;
+package org.sola.clients.beans.party.validation;
 
 import javax.validation.Payload;
 import java.lang.annotation.Documented;

@@ -27,6 +27,7 @@
  */
 package org.sola.clients.beans.controls;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import org.sola.clients.beans.AbstractBindingBean;
@@ -46,7 +47,7 @@ public class SolaList<E extends AbstractBindingBean> extends ExtendedList<E> {
      * Implementation of {@link ExtendedListFilter} to filter elements by status 
      * field and {@link EntityAction}.
      */
-    private class StatusAndActionFilter implements ExtendedListFilter {
+    private class StatusAndActionFilter implements ExtendedListFilter, Serializable {
 
         public StatusAndActionFilter() {
         }

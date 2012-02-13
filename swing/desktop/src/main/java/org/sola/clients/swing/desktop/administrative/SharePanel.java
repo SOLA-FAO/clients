@@ -31,9 +31,10 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import org.sola.clients.beans.administrative.RrrBean;
 import org.sola.clients.beans.administrative.RrrShareBean;
-import org.sola.clients.swing.desktop.party.PartyPanelForm;
 import org.sola.clients.beans.party.PartySummaryBean;
 import org.sola.clients.swing.common.LafManager;
+import org.sola.clients.swing.desktop.MainForm;
+import org.sola.clients.swing.desktop.party.PartyPanelForm;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.clients.swing.ui.renderers.FormattersFactory;
@@ -67,6 +68,7 @@ public class SharePanel extends ContentPanel {
         
         customizeForm(rrrAction);
         customizeOwnersButtons(null);
+        saveRrrShareState();
     }
 
     private RrrShareBean CreateRrrShareBean() {
@@ -139,6 +141,27 @@ public class SharePanel extends ContentPanel {
         getMainContentPanel().addPanel(partyForm, MainContentPanel.CARD_PERSON, true);
     }
 
+    private boolean saveRrrShare() {
+        if (rrrShareBean.validate(true).size() < 1) {
+            firePropertyChange(UPDATED_RRR_SHARE, null, rrrShareBean);
+            close();
+            return true;
+        }
+        return false;
+    }
+    
+    private void saveRrrShareState() {
+        MainForm.saveBeanState(rrrShareBean);
+    }
+
+    @Override
+    protected boolean panelClosing() {
+        if (btnSave.isEnabled() && MainForm.checkSaveBeforeClose(rrrShareBean)) {
+            return saveRrrShare();
+        }
+        return true;
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -372,10 +395,7 @@ public class SharePanel extends ContentPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        if (rrrShareBean.validate(true).size() < 1) {
-            firePropertyChange(UPDATED_RRR_SHARE, null, rrrShareBean);
-            close();
-        }
+        saveRrrShare();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnAddOwnerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddOwnerActionPerformed

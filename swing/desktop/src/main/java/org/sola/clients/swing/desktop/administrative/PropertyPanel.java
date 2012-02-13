@@ -33,39 +33,34 @@ import java.beans.PropertyChangeListener;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JasperPrint;
-import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.clients.beans.administrative.BaUnitBean;
 import org.sola.clients.beans.administrative.BaUnitNotationBean;
 import org.sola.clients.beans.administrative.RelatedBaUnitInfoBean;
 import org.sola.clients.beans.administrative.RrrBean;
-import org.sola.clients.swing.ui.application.ApplicationDocumentsForm;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationServiceBean;
 import org.sola.clients.beans.cadastre.CadastreObjectBean;
 import org.sola.clients.beans.converters.TypeConverters;
-import org.sola.clients.beans.referencedata.BaUnitRelTypeBean;
-import org.sola.clients.beans.referencedata.RequestTypeBean;
-import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForBaUnit;
-import org.sola.clients.beans.referencedata.RrrTypeActionConstants;
-import org.sola.clients.beans.referencedata.RrrTypeBean;
-import org.sola.clients.beans.referencedata.RrrTypeListBean;
-import org.sola.clients.beans.referencedata.StatusConstants;
-import org.sola.clients.beans.referencedata.TypeActionBean;
+import org.sola.clients.beans.referencedata.*;
 import org.sola.clients.beans.security.SecurityBean;
-import org.sola.clients.swing.ui.renderers.LockCellRenderer;
-import org.sola.clients.swing.ui.renderers.SimpleComboBoxRenderer;
-import org.sola.clients.swing.ui.renderers.TableCellListRenderer;
-import org.sola.clients.swing.ui.source.DocumentsPanel;
 import org.sola.clients.beans.source.SourceBean;
 import org.sola.clients.beans.source.SourceListBean;
 import org.sola.clients.reports.ReportManager;
 import org.sola.clients.swing.common.LafManager;
+import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.desktop.ReportViewerForm;
+import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForBaUnit;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
+import org.sola.clients.swing.ui.application.ApplicationDocumentsForm;
+import org.sola.clients.swing.ui.renderers.LockCellRenderer;
+import org.sola.clients.swing.ui.renderers.SimpleComboBoxRenderer;
+import org.sola.clients.swing.ui.renderers.TableCellListRenderer;
+import org.sola.clients.swing.ui.source.DocumentsPanel;
 import org.sola.common.RolesConstants;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
+import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.administrative.BaUnitTO;
 
 /**
@@ -239,6 +234,8 @@ public class PropertyPanel extends ContentPanel {
                 }
             }
         });
+        
+        saveBaUnitState();
     }
     
     /** 
@@ -743,6 +740,9 @@ public class PropertyPanel extends ContentPanel {
                 JOptionPane.showMessageDialog(this, "Failed to save property.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
+        if(result){
+            saveBaUnitState();
+        }
         return result;
     }
 
@@ -786,6 +786,18 @@ public class PropertyPanel extends ContentPanel {
         }
     }
 
+    private void saveBaUnitState(){
+        MainForm.saveBeanState(baUnitBean1);
+    }
+    
+    @Override
+    protected boolean panelClosing() {
+        if(btnSave.isEnabled() && MainForm.checkSaveBeforeClose(baUnitBean1)){
+            return saveBaUnit(true);
+        }
+        return true;
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

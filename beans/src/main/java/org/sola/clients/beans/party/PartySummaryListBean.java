@@ -27,13 +27,12 @@
  */
 package org.sola.clients.beans.party;
 
-import java.util.LinkedList;
 import java.util.List;
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
-import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.clients.beans.AbstractBindingBean;
+import org.sola.clients.beans.controls.SolaObservableList;
 import org.sola.clients.beans.converters.TypeConverters;
+import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.EntityAction;
 import org.sola.webservices.transferobjects.casemanagement.PartySummaryTO;
 
@@ -44,12 +43,12 @@ import org.sola.webservices.transferobjects.casemanagement.PartySummaryTO;
 public class PartySummaryListBean extends AbstractBindingBean {
 
     public static final String SELECTED_PARTYSUMMARY_PROPERTY = "selectedPartySummaryBean";
-    private ObservableList<PartySummaryBean> partySummaryListBean;
+    private SolaObservableList<PartySummaryBean> partySummaryListBean;
     private PartySummaryBean selectedPartySummary;
 
     /** Creates new instance of the object and initializes the list of {@link PartySummaryBean} objects. */
     public PartySummaryListBean() {
-        partySummaryListBean = ObservableCollections.observableList(new LinkedList<PartySummaryBean>());
+        partySummaryListBean = new SolaObservableList<PartySummaryBean>();
     }
     
     /** 

@@ -27,16 +27,14 @@
  */
 package org.sola.clients.beans.security;
 
-import java.util.LinkedList;
 import java.util.List;
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingBean;
+import org.sola.clients.beans.controls.SolaObservableList;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.search.UserSearchAdvancedResultTO;
 import org.sola.webservices.transferobjects.search.UserSearchParamsTO;
-import org.sola.webservices.transferobjects.search.UserSearchResultTO;
 
 /**
  * Holds the list of {@link UserSearchAdvancedResultBean} objects and used to 
@@ -45,13 +43,13 @@ import org.sola.webservices.transferobjects.search.UserSearchResultTO;
 public class UserSearchAdvancedResultListBean extends AbstractBindingBean {
     
     public static final String SELECTED_USER_PROPERTY = "selectedUser";
-    private ObservableList<UserSearchAdvancedResultBean> usersList;
+    private SolaObservableList<UserSearchAdvancedResultBean> usersList;
     private UserSearchAdvancedResultBean selectedUser;
     
     /** Creates object instance. */
     public UserSearchAdvancedResultListBean(){
         super();
-        usersList = ObservableCollections.observableList(new LinkedList<UserSearchAdvancedResultBean>());
+        usersList = new SolaObservableList<UserSearchAdvancedResultBean>();
     }
 
     public UserSearchAdvancedResultBean getSelectedUser() {

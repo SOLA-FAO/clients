@@ -31,8 +31,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.jdesktop.observablecollections.ObservableList;
-import org.sola.clients.beans.administrative.validation.RrrShareCheck;
 import org.sola.clients.beans.AbstractVersionedBean;
+import org.sola.clients.beans.administrative.validation.RrrShareCheck;
 import org.sola.clients.beans.controls.SolaList;
 import org.sola.clients.beans.party.PartySummaryBean;
 import org.sola.clients.beans.validation.Localized;
@@ -57,7 +57,7 @@ public class RrrShareBean extends AbstractVersionedBean {
     @NotNull(message = ClientMessage.CHECK_NOTNULL_DENOMINATOR, payload = Localized.class)
     private Short denominator;
     private SolaList<PartySummaryBean> rightHolderList;
-    private PartySummaryBean selectedRightHolder;
+    private transient PartySummaryBean selectedRightHolder;
 
     public RrrShareBean() {
         super();

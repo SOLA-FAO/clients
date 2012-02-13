@@ -27,11 +27,10 @@
  */
 package org.sola.clients.beans.security;
 
-import java.util.ArrayList;
 import java.util.List;
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingBean;
+import org.sola.clients.beans.controls.SolaObservableList;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.services.boundary.wsclients.WSManager;
 
@@ -41,12 +40,12 @@ import org.sola.services.boundary.wsclients.WSManager;
 public class GroupSummaryListBean extends AbstractBindingBean {
     public static final String SELECTED_GROUP_PROPERTY = "selectedGroup";
     
-    private ObservableList<GroupSummaryBean> groupSummaryList;
+    private SolaObservableList<GroupSummaryBean> groupSummaryList;
     private GroupSummaryBean selectedGroup;
     
     public GroupSummaryListBean() {
         super();
-        groupSummaryList = ObservableCollections.observableList(new ArrayList<GroupSummaryBean>());
+        groupSummaryList = new SolaObservableList<GroupSummaryBean>();
     }
 
     public final void loadGroups(boolean createDummyGroup){

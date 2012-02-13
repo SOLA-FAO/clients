@@ -27,23 +27,19 @@
  */
 package org.sola.clients.beans.party;
 
-import java.io.Serializable;
+import org.sola.clients.beans.party.validation.PartyIdTypeCheck;
 import java.util.UUID;
 import org.hibernate.validator.constraints.Email;
 import org.jdesktop.observablecollections.ObservableList;
-import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.clients.beans.address.AddressBean;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.controls.SolaList;
 import org.sola.clients.beans.converters.TypeConverters;
-import org.sola.clients.beans.referencedata.CommunicationTypeBean;
-import org.sola.clients.beans.referencedata.GenderTypeBean;
-import org.sola.clients.beans.referencedata.PartyRoleTypeBean;
-import org.sola.clients.beans.referencedata.IdTypeBean;
-import org.sola.clients.beans.referencedata.PartyTypeBean;
+import org.sola.clients.beans.referencedata.*;
 import org.sola.clients.beans.validation.Localized;
 import org.sola.common.messaging.ClientMessage;
+import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.EntityAction;
 import org.sola.webservices.transferobjects.casemanagement.PartyTO;
 
@@ -54,7 +50,7 @@ import org.sola.webservices.transferobjects.casemanagement.PartyTO;
  * <br />This bean is used as a part of {@link ApplicationBean}.
  */
 @PartyIdTypeCheck(message="Enter ID document reference number.")
-public class PartyBean extends PartySummaryBean implements Serializable {
+public class PartyBean extends PartySummaryBean {
 
     public static final String EMAIL_PROPERTY = "email";
     public static final String PREFERRED_COMMUNICATION_CODE_PROPERTY = "preferredCommunicationCode";
@@ -71,6 +67,7 @@ public class PartyBean extends PartySummaryBean implements Serializable {
     public static final String FATHERSNAME_PROPERTY = "fathersName";
     public static final String GRANDFATHERSNAME_PROPERTY = "fathersLastName";
     public static final String ALIAS_PROPERTY = "alias";
+    
     @Email(message = ClientMessage.CHECK_INVALID_EMAIL, payload=Localized.class)
     private String email;
     private String phone;
@@ -85,7 +82,7 @@ public class PartyBean extends PartySummaryBean implements Serializable {
     private IdTypeBean idTypeBean;
     private CommunicationTypeBean communicationTypeBean;
     private SolaList<PartyRoleBean> roleList;
-    private PartyRoleBean selectedRole;
+    private transient PartyRoleBean selectedRole;
 
     /** 
      * Default constructor to create party bean. Initializes 

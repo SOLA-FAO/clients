@@ -28,9 +28,9 @@
 package org.sola.clients.beans.system;
 
 import org.sola.clients.beans.AbstractIdBean;
-import org.sola.clients.beans.converters.TypeConverters;
-import org.sola.services.boundary.wsclients.WSManager;
-import org.sola.webservices.transferobjects.casemanagement.BrReportTO;
+import org.sola.clients.beans.application.ApplicationBean;
+import org.sola.clients.beans.referencedata.CommunicationTypeBean;
+import org.sola.webservices.transferobjects.casemanagement.PartyTO;
 
 /** 
  * Represents party object in the domain model. 

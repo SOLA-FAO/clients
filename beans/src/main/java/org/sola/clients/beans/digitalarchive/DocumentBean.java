@@ -31,10 +31,10 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import org.sola.clients.beans.AbstractIdBean;
-import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.clients.beans.AbstractVersionedBean;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.common.FileUtility;
+import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.EntityAction;
 import org.sola.webservices.transferobjects.digitalarchive.DocumentBinaryTO;
 import org.sola.webservices.transferobjects.digitalarchive.DocumentTO;
@@ -53,7 +53,6 @@ public class DocumentBean extends AbstractIdBean {
     private String description;
     private String extension;
     private String nr;
-    private String name;
 
     public DocumentBean() {
         super();

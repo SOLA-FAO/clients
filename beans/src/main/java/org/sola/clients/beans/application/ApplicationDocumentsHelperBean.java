@@ -28,16 +28,15 @@
 package org.sola.clients.beans.application;
 
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
-import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.clients.beans.AbstractBindingBean;
-import org.sola.clients.beans.source.SourceBean;
 import org.sola.clients.beans.cache.CacheManager;
+import org.sola.clients.beans.controls.SolaObservableList;
 import org.sola.clients.beans.referencedata.RequestTypeBean;
 import org.sola.clients.beans.referencedata.RequestTypeSourceTypeBean;
+import org.sola.clients.beans.source.SourceBean;
+import org.sola.services.boundary.wsclients.WSManager;
 /** 
  * Provides methods and properties to manage documents check list to assist the
  * user while entering application documents.
@@ -45,14 +44,14 @@ import org.sola.clients.beans.referencedata.RequestTypeSourceTypeBean;
 public class ApplicationDocumentsHelperBean extends AbstractBindingBean {
 
     private List<RequestTypeBean> requestTypeSourceList;
-    private ObservableList<ApplicationDocumentCheckerBean> checkList;
+    private SolaObservableList<ApplicationDocumentCheckerBean> checkList;
 
     /** 
      * Creates object's instance and initializes documents check list 
-     * ({@link ObservableCollections}&lt;{@link ApplicationDocumentCheckerBean}&gt;).
+     * ({@link SolaObservableList}&lt;{@link ApplicationDocumentCheckerBean}&gt;).
      */
     public ApplicationDocumentsHelperBean() {
-        checkList = ObservableCollections.observableList(new LinkedList<ApplicationDocumentCheckerBean>());
+        checkList = new SolaObservableList<ApplicationDocumentCheckerBean>();
         if(WSManager.getInstance().getReferenceDataService()!=null){
             requestTypeSourceList = CacheManager.getRequestTypes();
         }

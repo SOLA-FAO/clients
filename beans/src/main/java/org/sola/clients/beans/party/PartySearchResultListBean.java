@@ -27,15 +27,13 @@
  */
 package org.sola.clients.beans.party;
 
-import java.util.ArrayList;
 import java.util.List;
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingListBean;
+import org.sola.clients.beans.controls.SolaObservableList;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.search.PartySearchParamsTO;
-import org.sola.webservices.transferobjects.search.PartySearchResultTO;
 
 /**
  * Holds the list of {@link PartySearchResultBean} objects and used to bound 
@@ -44,7 +42,7 @@ import org.sola.webservices.transferobjects.search.PartySearchResultTO;
 public class PartySearchResultListBean extends AbstractBindingListBean {
     
     public static final String SELECTED_PARTY_SEARCH_RESULT = "selectedPartySearchResult";
-    private ObservableList<PartySearchResultBean> partySearchResults;
+    private SolaObservableList<PartySearchResultBean> partySearchResults;
     private PartySearchResultBean selectedPartySearchResult;
     
     public PartySearchResultListBean(){
@@ -53,7 +51,7 @@ public class PartySearchResultListBean extends AbstractBindingListBean {
 
     public ObservableList<PartySearchResultBean> getPartySearchResults() {
         if(partySearchResults == null){
-            partySearchResults = ObservableCollections.observableList(new ArrayList<PartySearchResultBean>());
+            partySearchResults = new SolaObservableList<PartySearchResultBean>();
         }
         return partySearchResults;
     }

@@ -27,29 +27,28 @@
  */
 package org.sola.clients.beans.application;
 
-import org.sola.clients.beans.validation.ValidationResultBean;
-import org.sola.clients.beans.referencedata.ApplicationActionTypeBean;
-import org.sola.clients.beans.referencedata.ApplicationStatusTypeBean;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
-import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.clients.beans.applicationlog.ApplicationLogBean;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.controls.SolaList;
+import org.sola.clients.beans.controls.SolaObservableList;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.beans.party.PartyBean;
 import org.sola.clients.beans.party.PartySummaryBean;
+import org.sola.clients.beans.referencedata.ApplicationActionTypeBean;
+import org.sola.clients.beans.referencedata.ApplicationStatusTypeBean;
 import org.sola.clients.beans.referencedata.RequestTypeBean;
-import org.sola.clients.beans.source.SourceBean;
 import org.sola.clients.beans.referencedata.StatusConstants;
-import org.sola.clients.beans.sorters.ServicesSorterByOrder;
+import org.sola.clients.beans.source.SourceBean;
+import org.sola.clients.beans.validation.ValidationResultBean;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
+import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.EntityAction;
 import org.sola.webservices.transferobjects.casemanagement.ApplicationTO;
 import org.sola.webservices.transferobjects.search.PropertyVerifierTO;
@@ -77,6 +76,7 @@ public class ApplicationBean extends ApplicationSummaryBean {
     public static final String ASSIGNEE_ID_PROPERTY = "assigneeId";
     public static final String STATUS_TYPE_PROPERTY = "statusType";
     public static final String APPLICATION_PROPERTY = "application";
+    
     private ApplicationActionTypeBean actionBean;
     private String actionNotes;
     private SolaList<ApplicationPropertyBean> propertyList;
@@ -86,12 +86,12 @@ public class ApplicationBean extends ApplicationSummaryBean {
     private BigDecimal tax;
     private BigDecimal totalAmountPaid;
     private BigDecimal totalFee;
-    private ObservableList<ApplicationServiceBean> serviceList;
+    private SolaObservableList<ApplicationServiceBean> serviceList;
     private SolaList<SourceBean> sourceList;
-    private ObservableList<ApplicationLogBean> appLogList;
-    private ApplicationServiceBean selectedService;
-    private ApplicationPropertyBean selectedProperty;
-    private SourceBean selectedSource;
+    private SolaObservableList<ApplicationLogBean> appLogList;
+    private transient ApplicationServiceBean selectedService;
+    private transient ApplicationPropertyBean selectedProperty;
+    private transient SourceBean selectedSource;
     private PartySummaryBean agent;
     private String assigneeId;
     private ApplicationStatusTypeBean statusBean;
@@ -110,14 +110,11 @@ public class ApplicationBean extends ApplicationSummaryBean {
         super();
         actionBean = new ApplicationActionTypeBean();
         statusBean = new ApplicationStatusTypeBean();
-        //agent = new PartySummaryBean();
         propertyList = new SolaList();
         contactPerson = new PartyBean();
-        serviceList = ObservableCollections.observableList(
-                new LinkedList<ApplicationServiceBean>());
+        serviceList = new SolaObservableList<ApplicationServiceBean>();
         sourceList = new SolaList();
-        appLogList = ObservableCollections.observableList(
-                new LinkedList<ApplicationLogBean>());
+        appLogList = new SolaObservableList<ApplicationLogBean>();
     }
 
     public boolean canArchive() {
@@ -363,7 +360,7 @@ public class ApplicationBean extends ApplicationSummaryBean {
         return selectedService;
     }
 
-    public void setAppLogList(ObservableList<ApplicationLogBean> appLogList) {
+    public void setAppLogList(SolaObservableList<ApplicationLogBean> appLogList) {
         this.appLogList = appLogList;
     }
 
@@ -371,7 +368,7 @@ public class ApplicationBean extends ApplicationSummaryBean {
         this.propertyList = propertyList;
     }
 
-    public void setServiceList(ObservableList<ApplicationServiceBean> serviceList) {
+    public void setServiceList(SolaObservableList<ApplicationServiceBean> serviceList) {
         this.serviceList = serviceList;
     }
 
@@ -749,8 +746,7 @@ public class ApplicationBean extends ApplicationSummaryBean {
      * Reloads application from the database. 
      */
     public void reload() {
-        ApplicationTO app = TypeConverters.BeanToTrasferObject(this, ApplicationTO.class);
-        app = WSManager.getInstance().getCaseManagementService().getApplication(this.getId());
+        ApplicationTO app = WSManager.getInstance().getCaseManagementService().getApplication(this.getId());
         TypeConverters.TransferObjectToBean(app, ApplicationBean.class, this);
     }
 
