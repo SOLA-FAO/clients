@@ -81,7 +81,7 @@ public class DashBoardPanel extends ContentPanel {
     /** Runs post initialization tasks to add listeners. */
     private void postInit() {
 
-        setHeaderPanel(headerPanel1);
+        setHeaderPanel(headerPanel);
         btnRefreshAssigned.setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_VIEW_APPS));
         btnRefreshUnassigned.setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_VIEW_APPS));
         menuRefreshAssignApplication.setEnabled(btnRefreshAssigned.isEnabled());
@@ -250,7 +250,7 @@ public class DashBoardPanel extends ContentPanel {
         btnRefreshAssigned = new javax.swing.JButton();
         inprogressScrollPanel = new javax.swing.JScrollPane();
         tbAssigned = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
-        headerPanel1 = new org.sola.clients.swing.ui.HeaderPanel();
+        headerPanel = new org.sola.clients.swing.ui.HeaderPanel();
 
         popUpUnassignedApplications.setName("popUpUnassignedApplications"); // NOI18N
 
@@ -320,6 +320,7 @@ public class DashBoardPanel extends ContentPanel {
         });
         popUpAssignedApplications.add(menuRefreshAssignApplication);
 
+        setHelpTopic(bundle.getString("DashBoardPanel.helpTopic")); // NOI18N
         setMinimumSize(new java.awt.Dimension(354, 249));
         setName("Form"); // NOI18N
 
@@ -594,23 +595,23 @@ public class DashBoardPanel extends ContentPanel {
 
         jPanel3.add(jPanel2);
 
-        headerPanel1.setName("headerPanel1"); // NOI18N
-        headerPanel1.setTitleText(bundle.getString("DashBoardPanel.headerPanel1.titleText")); // NOI18N
+        headerPanel.setName("headerPanel"); // NOI18N
+        headerPanel.setTitleText(bundle.getString("DashBoardPanel.headerPanel.titleText")); // NOI18N
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(headerPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 583, Short.MAX_VALUE)
+            .add(headerPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .add(layout.createSequentialGroup()
                 .add(10, 10, 10)
-                .add(jPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 563, Short.MAX_VALUE)
+                .add(jPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
-                .add(headerPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(headerPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 359, Short.MAX_VALUE)
                 .addContainerGap())
@@ -733,7 +734,7 @@ public class DashBoardPanel extends ContentPanel {
     private javax.swing.JButton btnRefreshAssigned;
     private javax.swing.JButton btnRefreshUnassigned;
     private javax.swing.JButton btnUnassignApplication;
-    private org.sola.clients.swing.ui.HeaderPanel headerPanel1;
+    private org.sola.clients.swing.ui.HeaderPanel headerPanel;
     private javax.swing.JScrollPane inprogressScrollPanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

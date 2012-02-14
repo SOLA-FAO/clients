@@ -163,6 +163,8 @@ public class CadastreTransactionMapPanel extends ContentPanel {
         documentsPanel = createDocumentsPanel();
 
         setHeaderPanel(headerPanel);
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/cadastre/Bundle"); // NOI18N
+        setHelpTopic(bundle.getString("CadastreTransactionMapPanel.helpTopic")); // NOI18N
         setName("Form"); // NOI18N
 
         mapPanel.setName("mapPanel"); // NOI18N
@@ -179,7 +181,6 @@ public class CadastreTransactionMapPanel extends ContentPanel {
         );
 
         headerPanel.setName("headerPanel"); // NOI18N
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/cadastre/Bundle"); // NOI18N
         headerPanel.setTitleText(bundle.getString("CadastreTransactionMapPanel.headerPanel.titleText")); // NOI18N
 
         jToolBar1.setFloatable(false);
@@ -210,15 +211,10 @@ public class CadastreTransactionMapPanel extends ContentPanel {
             .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 692, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(groupPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 672, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(documentsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 672, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(mapPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(groupPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 672, Short.MAX_VALUE)
+                    .addComponent(documentsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 672, Short.MAX_VALUE)
+                    .addComponent(mapPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(

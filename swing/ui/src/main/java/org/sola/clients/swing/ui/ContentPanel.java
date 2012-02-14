@@ -3,6 +3,7 @@ package org.sola.clients.swing.ui;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.JPanel;
+import org.sola.common.help.HelpUtility;
 
 /**
  * Basic class for the panel forms, used to display application logic.
@@ -13,7 +14,8 @@ public class ContentPanel extends JPanel {
     private HeaderPanel headerPanel;
     private PropertyChangeListener headerPanelListener;
     private boolean closeOnHide = false;
-
+    private String helpTopic;
+    
     public ContentPanel() {
         super();
         headerPanelListener = new PropertyChangeListener() {
@@ -25,6 +27,20 @@ public class ContentPanel extends JPanel {
         };
     }
 
+    /**
+     * Returns help topic name, related to this panel.
+     */
+    public String getHelpTopic() {
+        return helpTopic;
+    }
+
+    /**
+     * Sets help topic name, related to this panel.
+     */
+    public void setHelpTopic(String helpTopic) {
+        this.helpTopic = helpTopic;
+    }
+    
     public HeaderPanel getHeaderPanel() {
         return headerPanel;
     }
@@ -67,8 +83,18 @@ public class ContentPanel extends JPanel {
                 close();
             }
         }
+        if (evt.getPropertyName().equals(HeaderPanel.HELP_BUTTON_CLICKED)) {
+            showHelp();
+        }
     }
-
+    
+    /** Shows help topic, related to this panel. */
+    public void showHelp(){
+        if(helpTopic!=null){
+            HelpUtility.getInstance().showTopic(helpTopic);
+        }
+    }
+    
     /**
      * Close the panel from the {@link MainContentPanel}
      */

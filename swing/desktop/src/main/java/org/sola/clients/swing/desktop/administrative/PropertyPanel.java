@@ -1039,6 +1039,7 @@ public class PropertyPanel extends ContentPanel {
         popupChildBaUnits.add(menuOpenChildBaUnit);
 
         setHeaderPanel(headerPanel);
+        setHelpTopic(bundle.getString("PropertyPanel.helpTopic")); // NOI18N
         setName("Form"); // NOI18N
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
@@ -1929,7 +1930,7 @@ public class PropertyPanel extends ContentPanel {
             pnlPriorPropertiesLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(pnlPriorPropertiesLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel14, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
+                .add(jPanel14, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         pnlPriorPropertiesLayout.setVerticalGroup(

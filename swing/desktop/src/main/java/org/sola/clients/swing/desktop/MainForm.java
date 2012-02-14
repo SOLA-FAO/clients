@@ -38,7 +38,6 @@ import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.util.Locale;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.clients.beans.security.SecurityBean;
@@ -73,10 +72,8 @@ public class MainForm extends javax.swing.JFrame {
         this.setIconImage(new ImageIcon(imgURL).getImage());
 
         initComponents();
-
-        HelpUtility hu = HelpUtility.getInstance();
-        jmiContextHelp.addActionListener(hu.getHelpListener(jmiContextHelp, "overview"));
-
+        HelpUtility.getInstance().registerHelpMenu(jmiContextHelp, "overview");
+        
         this.addWindowListener(new java.awt.event.WindowAdapter() {
 
             @Override
@@ -441,7 +438,7 @@ public class MainForm extends javax.swing.JFrame {
             .addComponent(taskPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 20, Short.MAX_VALUE)
         );
 
-        menuBar.setFont(new java.awt.Font("Tahoma", 0, 12));
+        menuBar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         menuBar.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
 
         fileMenu.setText(bundle.getString("MainForm.fileMenu.text")); // NOI18N
