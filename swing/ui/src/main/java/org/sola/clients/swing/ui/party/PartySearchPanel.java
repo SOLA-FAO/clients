@@ -1,28 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.ui.party;
@@ -35,6 +37,8 @@ import org.sola.clients.beans.party.PartySearchResultListBean;
 import org.sola.clients.beans.referencedata.PartyRoleTypeListBean;
 import org.sola.clients.beans.referencedata.PartyTypeListBean;
 import org.sola.clients.beans.security.SecurityBean;
+import org.sola.clients.swing.common.tasks.SolaTask;
+import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.common.RolesConstants;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -50,7 +54,9 @@ public class PartySearchPanel extends JPanel {
     public static final String SELECT_PARTY_PROPERTY = "selectParty";
     public static final String VIEW_PARTY_PROPERTY = "viewParty";
 
-    /** Creates new form PartySearchPanel */
+    /**
+     * Creates new form PartySearchPanel
+     */
     public PartySearchPanel() {
         initComponents();
 
@@ -66,59 +72,59 @@ public class PartySearchPanel extends JPanel {
         customizePartyButtons();
     }
 
-    public boolean isShowViewButton(){
+    public boolean isShowViewButton() {
         return btnView.isVisible();
     }
-    
-    public void setShowViewButton(boolean isVisible){
+
+    public void setShowViewButton(boolean isVisible) {
         btnView.setVisible(isVisible);
         menuView.setVisible(isVisible);
         separator1.setVisible(isVisible);
-        if(!isVisible && btnSelect.isVisible()){
+        if (!isVisible && btnSelect.isVisible()) {
             separator1.setVisible(true);
         }
     }
-    
-    public boolean isShowSelectButton(){
+
+    public boolean isShowSelectButton() {
         return btnSelect.isVisible();
     }
-    
-    public void setShowSelectButton(boolean isVisible){
+
+    public void setShowSelectButton(boolean isVisible) {
         btnSelect.setVisible(isVisible);
         menuSelect.setVisible(isVisible);
         separator1.setVisible(isVisible);
-        if(!isVisible && btnView.isVisible()){
+        if (!isVisible && btnView.isVisible()) {
             separator1.setVisible(true);
         }
     }
-    
-    public boolean isShowAddButton(){
+
+    public boolean isShowAddButton() {
         return btnAddParty.isVisible();
     }
-    
-    public void setShowAddButton(boolean isVisible){
+
+    public void setShowAddButton(boolean isVisible) {
         btnAddParty.setVisible(isVisible);
         menuAdd.setVisible(isVisible);
     }
-    
-    public boolean isShowEditButton(){
+
+    public boolean isShowEditButton() {
         return btnEditParty.isVisible();
     }
-    
-    public void setShowEditButton(boolean isVisible){
+
+    public void setShowEditButton(boolean isVisible) {
         btnEditParty.setVisible(isVisible);
         menuEdit.setVisible(isVisible);
     }
-    
-    public boolean isShowRemoveButton(){
+
+    public boolean isShowRemoveButton() {
         return btnRemoveParty.isVisible();
     }
-    
-    public void setShowRemoveButton(boolean isVisible){
+
+    public void setShowRemoveButton(boolean isVisible) {
         btnRemoveParty.setVisible(isVisible);
         menuRemove.setVisible(isVisible);
     }
-   
+
     private PartyTypeListBean createPartyTypes() {
         if (partyTypes == null) {
             partyTypes = new PartyTypeListBean(true);
@@ -133,7 +139,9 @@ public class PartySearchPanel extends JPanel {
         return partyRoleTyps;
     }
 
-    /** Enables or disables Party management buttons, based on security rights. */
+    /**
+     * Enables or disables Party management buttons, based on security rights.
+     */
     private void customizePartyButtons() {
         boolean hasPartySaveRole = SecurityBean.isInRole(RolesConstants.PARTY_SAVE);
         boolean enabled = partySearchResuls.getSelectedPartySearchResult() != null;
@@ -151,20 +159,35 @@ public class PartySearchPanel extends JPanel {
         btnAddParty.setEnabled(hasPartySaveRole);
         btnEditParty.setEnabled(enabled);
         btnRemoveParty.setEnabled(enabled);
-        
+
         menuAdd.setEnabled(btnAddParty.isEnabled());
         menuEdit.setEnabled(btnEditParty.isEnabled());
         menuRemove.setEnabled(btnRemoveParty.isEnabled());
     }
 
-    /** Searches parties with given criteria. */
+    /**
+     * Searches parties with given criteria.
+     */
     private void search() {
-        partySearchResuls.search(partySearchParams);
-        if (partySearchResuls.getPartySearchResults().size() > 100) {
-            MessageUtility.displayMessage(ClientMessage.SEARCH_TOO_MANY_RESULTS, new String[]{"100"});
-        } else if (partySearchResuls.getPartySearchResults().size() < 1) {
-            MessageUtility.displayMessage(ClientMessage.SEARCH_NO_RESULTS);
-        }
+        SolaTask t = new SolaTask<Void, Void>() {
+
+            @Override
+            public Void doTask() {
+                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_PERSON_SEARCHING));
+                partySearchResuls.search(partySearchParams);
+                return null;
+            }
+
+            @Override
+            public void taskDone() {
+                if (partySearchResuls.getPartySearchResults().size() > 100) {
+                    MessageUtility.displayMessage(ClientMessage.SEARCH_TOO_MANY_RESULTS, new String[]{"100"});
+                } else if (partySearchResuls.getPartySearchResults().size() < 1) {
+                    MessageUtility.displayMessage(ClientMessage.SEARCH_NO_RESULTS);
+                }
+            }
+        };
+        TaskManager.getInstance().runTask(t);
     }
 
     private void firePartyEvent(String propertyName) {
@@ -177,7 +200,7 @@ public class PartySearchPanel extends JPanel {
     private void selectParty() {
         firePartyEvent(SELECT_PARTY_PROPERTY);
     }
-    
+
     private void viewParty() {
         firePartyEvent(VIEW_PARTY_PROPERTY);
     }

@@ -181,12 +181,12 @@ public class MortgagePanel extends ContentPanel {
     }
 
     private boolean saveRrr() {
-        if (rrrBean.validate(true, Default.class, MortgageValidationGroup.class).size() <= 0) {
-            firePropertyChange(UPDATED_RRR, null, rrrBean);
-            close();
-            return true;
+        if (rrrBean.validate(true, Default.class, MortgageValidationGroup.class).size() > 0) {
+            return false;
         }
-        return false;
+        firePropertyChange(UPDATED_RRR, null, rrrBean);
+        close();
+        return true;
     }
 
     private void saveRrrState() {

@@ -133,12 +133,15 @@ public abstract class SolaTask<T, V> {
 
         swingTask = new SwingWorker() {
 
+            Throwable exception;
+            
             @Override
             protected T doInBackground() throws Exception {
                 try {
+                    exception = null;
                     return doTask();
                 } catch (Throwable e) {
-                    propertySupport.firePropertyChange(EXCEPTION_RISED, null, e);
+                    exception = e;
                     return null;
                 }
             }
@@ -146,6 +149,10 @@ public abstract class SolaTask<T, V> {
             @Override
             protected void done() {
                 try {
+                    if(exception != null){
+                        propertySupport.firePropertyChange(EXCEPTION_RISED, null, exception);
+                        return;
+                    }
                     taskDone();
                 } catch (Throwable e) {
                     propertySupport.firePropertyChange(EXCEPTION_RISED, null, e);

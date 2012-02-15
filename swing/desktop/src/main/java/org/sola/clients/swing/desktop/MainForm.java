@@ -73,7 +73,7 @@ public class MainForm extends javax.swing.JFrame {
 
         initComponents();
         HelpUtility.getInstance().registerHelpMenu(jmiContextHelp, "overview");
-        
+
         this.addWindowListener(new java.awt.event.WindowAdapter() {
 
             @Override
@@ -129,7 +129,7 @@ public class MainForm extends javax.swing.JFrame {
 
             @Override
             public Void doTask() {
-                setMessage("Opening new application form...");
+                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_APPNEW));
                 ApplicationPanel applicationPanel = new ApplicationPanel();
                 pnlContent.addPanel(applicationPanel, MainContentPanel.CARD_APPLICATION, true);
                 return null;
@@ -143,7 +143,7 @@ public class MainForm extends javax.swing.JFrame {
 
             @Override
             public Void doTask() {
-                setMessage("Opening map...");
+                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_MAP));
                 if (!pnlContent.isPanelOpened(MainContentPanel.CARD_MAP)) {
                     MapPanelForm mapPanel = new MapPanelForm();
                     pnlContent.addPanel(mapPanel, MainContentPanel.CARD_MAP);
@@ -160,7 +160,7 @@ public class MainForm extends javax.swing.JFrame {
 
             @Override
             public Void doTask() {
-                setMessage("Opening application search...");
+                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_APPSEARCH));
                 if (!pnlContent.isPanelOpened(MainContentPanel.CARD_APPSEARCH)) {
                     ApplicationSearchPanel searchApplicationPanel = new ApplicationSearchPanel();
                     pnlContent.addPanel(searchApplicationPanel, MainContentPanel.CARD_APPSEARCH);
@@ -173,28 +173,55 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     private void searchBaUnit() {
-        if (!pnlContent.isPanelOpened(MainContentPanel.CARD_BAUNIT_SEARCH)) {
-            BaUnitSearchPanel baUnitSearchPanel = new BaUnitSearchPanel();
-            pnlContent.addPanel(baUnitSearchPanel, MainContentPanel.CARD_BAUNIT_SEARCH);
-        }
-        pnlContent.showPanel(MainContentPanel.CARD_BAUNIT_SEARCH);
+        SolaTask t = new SolaTask<Void, Void>() {
+
+            @Override
+            public Void doTask() {
+                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PROPERTYSEARCH));
+                if (!pnlContent.isPanelOpened(MainContentPanel.CARD_BAUNIT_SEARCH)) {
+                    BaUnitSearchPanel baUnitSearchPanel = new BaUnitSearchPanel();
+                    pnlContent.addPanel(baUnitSearchPanel, MainContentPanel.CARD_BAUNIT_SEARCH);
+                }
+                pnlContent.showPanel(MainContentPanel.CARD_BAUNIT_SEARCH);
+                return null;
+            }
+        };
+        TaskManager.getInstance().runTask(t);
     }
 
     private void searchDocuments() {
-        if (!pnlContent.isPanelOpened(MainContentPanel.CARD_DOCUMENT_SEARCH)) {
-            DocumentSearchPanel documentSearchPanel = new DocumentSearchPanel();
-            pnlContent.addPanel(documentSearchPanel, MainContentPanel.CARD_DOCUMENT_SEARCH);
-        }
-        pnlContent.showPanel(MainContentPanel.CARD_DOCUMENT_SEARCH);
+        SolaTask t = new SolaTask<Void, Void>() {
+
+            @Override
+            public Void doTask() {
+                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_DOCUMENTSEARCH));
+                if (!pnlContent.isPanelOpened(MainContentPanel.CARD_DOCUMENT_SEARCH)) {
+                    DocumentSearchPanel documentSearchPanel = new DocumentSearchPanel();
+                    pnlContent.addPanel(documentSearchPanel, MainContentPanel.CARD_DOCUMENT_SEARCH);
+                }
+                pnlContent.showPanel(MainContentPanel.CARD_DOCUMENT_SEARCH);
+                return null;
+            }
+        };
+        TaskManager.getInstance().runTask(t);
     }
 
     private void openSearchParties() {
-        if (!pnlContent.isPanelOpened(MainContentPanel.CARD_SEARCH_PERSONS)) {
-            PartySearchPanelForm partySearchPanelForm = new PartySearchPanelForm();
-            pnlContent.addPanel(partySearchPanelForm, MainContentPanel.CARD_SEARCH_PERSONS, true);
-        } else {
-            pnlContent.showPanel(MainContentPanel.CARD_SEARCH_PERSONS);
-        }
+        SolaTask t = new SolaTask<Void, Void>() {
+
+            @Override
+            public Void doTask() {
+                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PERSONSEARCH));
+                if (!pnlContent.isPanelOpened(MainContentPanel.CARD_SEARCH_PERSONS)) {
+                    PartySearchPanelForm partySearchPanelForm = new PartySearchPanelForm();
+                    pnlContent.addPanel(partySearchPanelForm, MainContentPanel.CARD_SEARCH_PERSONS, true);
+                } else {
+                    pnlContent.showPanel(MainContentPanel.CARD_SEARCH_PERSONS);
+                }
+                return null;
+            }
+        };
+        TaskManager.getInstance().runTask(t);
     }
 
     private void openDashBoard() {
@@ -249,10 +276,11 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     /**
-     * Calls {@link MainForm#checkBeanState(org.sola.clients.beans.AbstractBindingBean)} 
-     * method to detect if there are any changes on the provided bean. 
-     * If it returns true, warning message is shown and the result of user selection is returned.
-     * If user clicks <b>Yes</b> button to confirm saving changes, true is returned.
+     * Calls {@link MainForm#checkBeanState(org.sola.clients.beans.AbstractBindingBean)}
+     * method to detect if there are any changes on the provided bean. If it
+     * returns true, warning message is shown and the result of user selection
+     * is returned. If user clicks <b>Yes</b> button to confirm saving changes,
+     * true is returned.
      */
     public static boolean checkSaveBeforeClose(AbstractBindingBean bean) {
         boolean hasChanges = false;

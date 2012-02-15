@@ -1,28 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.beans.application;
@@ -53,10 +55,10 @@ import org.sola.webservices.transferobjects.EntityAction;
 import org.sola.webservices.transferobjects.casemanagement.ApplicationTO;
 import org.sola.webservices.transferobjects.search.PropertyVerifierTO;
 
-/** 
- * Represents full object of the application in the domain model. 
- * Could be populated from the {@link ApplicationTO} object.<br />
- * For more information see data dictionary <b>Application</b> schema.
+/**
+ * Represents full object of the application in the domain model. Could be
+ * populated from the {@link ApplicationTO} object.<br /> For more information
+ * see data dictionary <b>Application</b> schema.
  */
 public class ApplicationBean extends ApplicationSummaryBean {
 
@@ -76,7 +78,6 @@ public class ApplicationBean extends ApplicationSummaryBean {
     public static final String ASSIGNEE_ID_PROPERTY = "assigneeId";
     public static final String STATUS_TYPE_PROPERTY = "statusType";
     public static final String APPLICATION_PROPERTY = "application";
-    
     private ApplicationActionTypeBean actionBean;
     private String actionNotes;
     private SolaList<ApplicationPropertyBean> propertyList;
@@ -96,12 +97,10 @@ public class ApplicationBean extends ApplicationSummaryBean {
     private String assigneeId;
     private ApplicationStatusTypeBean statusBean;
 
-    /** 
-     * Default constructor to create application bean. Initializes the following 
-     * list of beans which are the parts of the application bean:
-     * <br /> {@link ApplicationActionTypeBean}
-     * <br /> {@link ApplicationStatusTypeBean}
-     * <br /> {@link PartySummaryBean}
+    /**
+     * Default constructor to create application bean. Initializes the following
+     * list of beans which are the parts of the application bean: <br /> {@link ApplicationActionTypeBean}
+     * <br /> {@link ApplicationStatusTypeBean} <br /> {@link PartySummaryBean}
      * <br /> {@link ObservableCollections}&lt;{@link ApplicationPropertyBean}&gt;
      * <br /> {@link ObservableCollections}&lt;{@link ApplicationServiceBean}&gt;
      * <br /> {@link ObservableCollections}&lt;{@link SourceBean}&gt;
@@ -134,8 +133,9 @@ public class ApplicationBean extends ApplicationSummaryBean {
 
     /**
      * Allow approval if the Application is assigned, has a status of lodged and
-     * all of the services are in an finalized state. 
-     * @return 
+     * all of the services are in an finalized state.
+     *
+     * @return
      */
     public boolean canApprove() {
         if (!isAssigned() || !isLodged()) {
@@ -186,7 +186,9 @@ public class ApplicationBean extends ApplicationSummaryBean {
         return getAssigneeId() != null;
     }
 
-    /** Indicates whether editing of application is allowed or not */
+    /**
+     * Indicates whether editing of application is allowed or not
+     */
     public boolean isEditingAllowed() {
         return isNew() || isLodged();
 //        boolean result = true;
@@ -200,7 +202,9 @@ public class ApplicationBean extends ApplicationSummaryBean {
 //        return result;
     }
 
-    /** Indicates whether application management is allowed or not */
+    /**
+     * Indicates whether application management is allowed or not
+     */
     public boolean isManagementAllowed() {
         String appStatus = getStatusCode();
         boolean result = true;
@@ -239,9 +243,10 @@ public class ApplicationBean extends ApplicationSummaryBean {
         }
     }
 
-    /** 
-     * Sets application status code and retrieves {@link ApplicationStatusTypeBean} 
-     * from the cache. 
+    /**
+     * Sets application status code and retrieves {@link ApplicationStatusTypeBean}
+     * from the cache.
+     *
      * @param value Application status code.
      */
     public void setStatusCode(String value) {
@@ -259,9 +264,9 @@ public class ApplicationBean extends ApplicationSummaryBean {
         propertySupport.firePropertyChange(ASSIGNEE_ID_PROPERTY, old, value);
     }
 
-    /** 
-     * Returns collection of {@link ApplicationBean} objects. This method is 
-     * used by Jasper report designer to extract properties of application bean 
+    /**
+     * Returns collection of {@link ApplicationBean} objects. This method is
+     * used by Jasper report designer to extract properties of application bean
      * to help design a report.
      */
     public static java.util.Collection generateCollection() {
@@ -287,9 +292,10 @@ public class ApplicationBean extends ApplicationSummaryBean {
         return actionBean.getCode();
     }
 
-    /** 
-     * Sets application action code and retrieves {@link ApplicationActionTypeBean} 
-     * from the cache. 
+    /**
+     * Sets application action code and retrieves {@link ApplicationActionTypeBean}
+     * from the cache.
+     *
      * @param value Application action code.
      */
     public void setActionCode(String value) {
@@ -446,9 +452,12 @@ public class ApplicationBean extends ApplicationSummaryBean {
         propertySupport.firePropertyChange(TOTAL_FEE_PROPERTY, old, value);
     }
 
-    /** 
-     * Adds new service ({@link ApplicationServiceBean}) into the application services list.
-     * @param requestTypeBean Request type (service) from available services list.
+    /**
+     * Adds new service ({@link ApplicationServiceBean}) into the application
+     * services list.
+     *
+     * @param requestTypeBean Request type (service) from available services
+     * list.
      */
     public void addService(RequestTypeBean requestTypeBean) {
         if (requestTypeBean != null && serviceList != null) {
@@ -469,7 +478,9 @@ public class ApplicationBean extends ApplicationSummaryBean {
         }
     }
 
-    /** Removes selected service from the application services list.*/
+    /**
+     * Removes selected service from the application services list.
+     */
     public void removeSelectedService() {
         if (selectedService != null && serviceList != null) {
             serviceList.remove(selectedService);
@@ -477,7 +488,9 @@ public class ApplicationBean extends ApplicationSummaryBean {
         }
     }
 
-    /** Numerates services order after the changes in the services list. */
+    /**
+     * Numerates services order after the changes in the services list.
+     */
     private void renumerateServices() {
         int i = 1;
         for (Iterator<ApplicationServiceBean> it = serviceList.iterator(); it.hasNext();) {
@@ -487,7 +500,9 @@ public class ApplicationBean extends ApplicationSummaryBean {
         }
     }
 
-    /** Moves selected service up in the list of services.*/
+    /**
+     * Moves selected service up in the list of services.
+     */
     public boolean moveServiceUp() {
         if (serviceList != null && selectedService != null) {
             int i = 0;
@@ -506,7 +521,9 @@ public class ApplicationBean extends ApplicationSummaryBean {
         return false;
     }
 
-    /** Moves selected service down in the list of services.*/
+    /**
+     * Moves selected service down in the list of services.
+     */
     public boolean moveServiceDown() {
         if (serviceList != null && selectedService != null) {
             int i = 0;
@@ -527,16 +544,19 @@ public class ApplicationBean extends ApplicationSummaryBean {
         return false;
     }
 
-    /** Removes selected document from the list of application documents.*/
+    /**
+     * Removes selected document from the list of application documents.
+     */
     public void removeSelectedSource() {
         if (selectedSource != null && sourceList != null) {
             sourceList.safeRemove(selectedSource, EntityAction.DELETE);
         }
     }
 
-    /** 
-     * Adds new property object ({@link ApplicationPropertyBean}) into the list 
+    /**
+     * Adds new property object ({@link ApplicationPropertyBean}) into the list
      * of application properties.
+     *
      * @param firstPart First part of the property's identification code.
      * @param lastPart Second part of the property's identification code.
      * @param area The area of parcel.
@@ -553,17 +573,19 @@ public class ApplicationBean extends ApplicationSummaryBean {
         }
     }
 
-    /** Removes selected property object from the list of properties.*/
+    /**
+     * Removes selected property object from the list of properties.
+     */
     public void removeSelectedProperty() {
         if (selectedProperty != null && propertyList != null) {
             propertyList.safeRemove(selectedProperty, EntityAction.DELETE);
         }
     }
 
-    /** 
-     * Verifies selected property object. Checks if object exists in the database
-    and on the map. Checks for the list of incomplete applications, related to the
-    selected property object.
+    /**
+     * Verifies selected property object. Checks if object exists in the
+     * database and on the map. Checks for the list of incomplete applications,
+     * related to the selected property object.
      */
     public boolean verifyProperty() {
         if (selectedProperty != null) {
@@ -597,7 +619,9 @@ public class ApplicationBean extends ApplicationSummaryBean {
         return false;
     }
 
-    /** Calculates payment fee for selected services, based on application data.*/
+    /**
+     * Calculates payment fee for selected services, based on application data.
+     */
     public boolean calculateFee() {
         ApplicationTO app = TypeConverters.BeanToTrasferObject(this, ApplicationTO.class);
         app = WSManager.getInstance().getCaseManagementService().calculateFee(app);
@@ -606,7 +630,9 @@ public class ApplicationBean extends ApplicationSummaryBean {
         return true;
     }
 
-    /** Validates application against business rules */
+    /**
+     * Validates application against business rules
+     */
     public ObservableList<ValidationResultBean> validate() {
         ObservableList<ValidationResultBean> validationResults =
                 ObservableCollections.observableList(
@@ -619,7 +645,9 @@ public class ApplicationBean extends ApplicationSummaryBean {
         return validationResults;
     }
 
-    /** Approves application */
+    /**
+     * Approves application
+     */
     public List<ValidationResultBean> approve() {
         List<ValidationResultBean> result = TypeConverters.TransferObjectListToBeanList(
                 WSManager.getInstance().getCaseManagementService().applicationActionApprove(this.getId(), this.getRowVersion()),
@@ -628,7 +656,9 @@ public class ApplicationBean extends ApplicationSummaryBean {
         return result;
     }
 
-    /** Rejects application */
+    /**
+     * Rejects application
+     */
     public List<ValidationResultBean> reject() {
         List<ValidationResultBean> result = TypeConverters.TransferObjectListToBeanList(
                 WSManager.getInstance().getCaseManagementService().applicationActionCancel(this.getId(), this.getRowVersion()),
@@ -637,7 +667,9 @@ public class ApplicationBean extends ApplicationSummaryBean {
         return result;
     }
 
-    /** Withdraws application */
+    /**
+     * Withdraws application
+     */
     public List<ValidationResultBean> withdraw() {
         List<ValidationResultBean> result = TypeConverters.TransferObjectListToBeanList(
                 WSManager.getInstance().getCaseManagementService().applicationActionWithdraw(this.getId(), this.getRowVersion()),
@@ -646,7 +678,9 @@ public class ApplicationBean extends ApplicationSummaryBean {
         return result;
     }
 
-    /** Requisitions application */
+    /**
+     * Requisitions application
+     */
     public List<ValidationResultBean> requisition() {
         List<ValidationResultBean> result = TypeConverters.TransferObjectListToBeanList(
                 WSManager.getInstance().getCaseManagementService().applicationActionRequisition(this.getId(), this.getRowVersion()),
@@ -655,7 +689,9 @@ public class ApplicationBean extends ApplicationSummaryBean {
         return result;
     }
 
-    /** Archives application */
+    /**
+     * Archives application
+     */
     public List<ValidationResultBean> archive() {
         List<ValidationResultBean> result = TypeConverters.TransferObjectListToBeanList(
                 WSManager.getInstance().getCaseManagementService().applicationActionArchive(this.getId(), this.getRowVersion()),
@@ -664,7 +700,9 @@ public class ApplicationBean extends ApplicationSummaryBean {
         return result;
     }
 
-    /** Despatches application */
+    /**
+     * Despatches application
+     */
     public List<ValidationResultBean> despatch() {
         List<ValidationResultBean> result = TypeConverters.TransferObjectListToBeanList(
                 WSManager.getInstance().getCaseManagementService().applicationActionDespatch(this.getId(), this.getRowVersion()),
@@ -673,7 +711,9 @@ public class ApplicationBean extends ApplicationSummaryBean {
         return result;
     }
 
-    /** Lapses application */
+    /**
+     * Lapses application
+     */
     public List<ValidationResultBean> lapse() {
         List<ValidationResultBean> result = TypeConverters.TransferObjectListToBeanList(
                 WSManager.getInstance().getCaseManagementService().applicationActionLapse(
@@ -683,7 +723,9 @@ public class ApplicationBean extends ApplicationSummaryBean {
         return result;
     }
 
-    /** Lapses application */
+    /**
+     * Lapses application
+     */
     public List<ValidationResultBean> resubmit() {
         List<ValidationResultBean> result = TypeConverters.TransferObjectListToBeanList(
                 WSManager.getInstance().getCaseManagementService().applicationActionResubmit(
@@ -693,8 +735,9 @@ public class ApplicationBean extends ApplicationSummaryBean {
         return result;
     }
 
-    /** 
+    /**
      * Assigns application to the user.
+     *
      * @param userId ID of the user.
      */
     public boolean assignUser(String userId) {
@@ -710,73 +753,37 @@ public class ApplicationBean extends ApplicationSummaryBean {
         return true;
     }
 
-    /** 
-     * Creates new application in the database. 
+    /**
+     * Creates new application in the database.
+     *
      * @throws Exception
      */
-    public boolean lodgeApplication() throws Exception {
-        if (checkFields()) {
-            ApplicationTO app = TypeConverters.BeanToTrasferObject(this, ApplicationTO.class);
-            app = WSManager.getInstance().getCaseManagementService().createApplication(app);
-            TypeConverters.TransferObjectToBean(app, ApplicationBean.class, this);
-            propertySupport.firePropertyChange(APPLICATION_PROPERTY, null, this);
-            return true;
-        } else {
-            return false;
-        }
+    public boolean lodgeApplication() {
+        ApplicationTO app = TypeConverters.BeanToTrasferObject(this, ApplicationTO.class);
+        app = WSManager.getInstance().getCaseManagementService().createApplication(app);
+        TypeConverters.TransferObjectToBean(app, ApplicationBean.class, this);
+        propertySupport.firePropertyChange(APPLICATION_PROPERTY, null, this);
+        return true;
     }
 
-    /** 
-     * Saves application into the database. 
+    /**
+     * Saves application into the database.
+     *
      * @throws Exception
      */
-    public boolean saveApplication() throws Exception {
-        if (checkFields()) {
-            ApplicationTO app = TypeConverters.BeanToTrasferObject(this, ApplicationTO.class);
-            app = WSManager.getInstance().getCaseManagementService().saveApplication(app);
-            TypeConverters.TransferObjectToBean(app, ApplicationBean.class, this);
-            propertySupport.firePropertyChange(APPLICATION_PROPERTY, null, this);
-            return true;
-        } else {
-            return false;
-        }
+    public boolean saveApplication() {
+        ApplicationTO app = TypeConverters.BeanToTrasferObject(this, ApplicationTO.class);
+        app = WSManager.getInstance().getCaseManagementService().saveApplication(app);
+        TypeConverters.TransferObjectToBean(app, ApplicationBean.class, this);
+        propertySupport.firePropertyChange(APPLICATION_PROPERTY, null, this);
+        return true;
     }
 
-    /** 
-     * Reloads application from the database. 
+    /**
+     * Reloads application from the database.
      */
     public void reload() {
         ApplicationTO app = WSManager.getInstance().getCaseManagementService().getApplication(this.getId());
         TypeConverters.TransferObjectToBean(app, ApplicationBean.class, this);
-    }
-
-    /** 
-     * Checks obligatory fields before creating or saving application. 
-     * Throws exception if there are some missing values.
-     * @throws Exception
-     */
-    private boolean checkFields() throws Exception {
-        StringBuilder error = new StringBuilder();
-        if (contactPerson.getName() == null || contactPerson.getName().equals("")) {
-            error.append("- Name is empty\n");
-        }
-
-        if (contactPerson.getLastName() == null || contactPerson.getLastName().equals("")) {
-            error.append("- Last name is empty\n");
-        }
-
-        if (contactPerson.getAddress().getDescription() == null || contactPerson.getAddress().getDescription().equals("")) {
-            error.append("- Address is empty\n");
-        }
-
-        if (serviceList.size() <= 0) {
-            error.append("- Select services\n");
-        }
-
-        if (error.length() > 0) {
-            throw new Exception(error.toString());
-        }
-
-        return true;
     }
 }

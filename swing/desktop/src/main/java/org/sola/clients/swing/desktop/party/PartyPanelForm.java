@@ -1,28 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.desktop.party;
@@ -31,6 +33,8 @@ import java.util.ResourceBundle;
 import org.sola.clients.beans.party.PartyBean;
 import org.sola.clients.beans.party.PartySummaryBean;
 import org.sola.clients.beans.security.SecurityBean;
+import org.sola.clients.swing.common.tasks.SolaTask;
+import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.common.RolesConstants;
@@ -43,36 +47,45 @@ import org.sola.common.messaging.MessageUtility;
 public class PartyPanelForm extends ContentPanel {
 
     public static final String PARTY_SAVED = "partySaved";
-    
     private boolean savePartyOnAction;
     private boolean readOnly;
     private boolean closeOnSave;
     private PartyBean partyBean;
     private ResourceBundle resourceBundle;
 
-    /** Default form constructor. */
+    /**
+     * Default form constructor.
+     */
     public PartyPanelForm() {
         this(true);
     }
 
-    /** 
-     * Form constructor. 
-     * @param savePartyOnAction If <code>true</code>, party will be saved into database. 
-     * If <code>false</code>, party will be validated and validation result returned as a value of 
+    /**
+     * Form constructor.
+     *
+     * @param savePartyOnAction If
+     * <code>true</code>, party will be saved into database. If
+     * <code>false</code>, party will be validated and validation result
+     * returned as a value of
      * {@link PartyPanel.PARTY_SAVED} property change event.
      */
     public PartyPanelForm(boolean savePartyOnAction) {
         this(savePartyOnAction, null, false, false);
     }
 
-    /** 
-     * Form constructor. 
-     * @param savePartyOnAction If <code>true</code>, party will be saved into database. 
-     * If <code>false</code>, party will be validated and validation result returned as a value of 
+    /**
+     * Form constructor.
+     *
+     * @param savePartyOnAction If
+     * <code>true</code>, party will be saved into database. If
+     * <code>false</code>, party will be validated and validation result
+     * returned as a value of
      * {@link PartyPanel.PARTY_SAVED} property change event.
      * @param partyBean The party bean instance to show on the panel.
-     * @param readOnly Indicates whether to display provided {@link PartyBean} in read only mode or not.
-     * @param closeOnSave Indicates whether to close the form upon save action takes place.
+     * @param readOnly Indicates whether to display provided {@link PartyBean}
+     * in read only mode or not.
+     * @param closeOnSave Indicates whether to close the form upon save action
+     * takes place.
      */
     public PartyPanelForm(boolean savePartyOnAction, PartyBean partyBean, boolean readOnly, boolean closeOnSave) {
         this.readOnly = readOnly;
@@ -86,14 +99,20 @@ public class PartyPanelForm extends ContentPanel {
         savePartyState();
     }
 
-    /** 
-     * Form constructor. 
-     * @param savePartyOnAction If <code>true</code>, party will be saved into database. 
-     * If <code>false</code>, party will be validated and validation result returned as a value of 
+    /**
+     * Form constructor.
+     *
+     * @param savePartyOnAction If
+     * <code>true</code>, party will be saved into database. If
+     * <code>false</code>, party will be validated and validation result
+     * returned as a value of
      * {@link PartyPanel.PARTY_SAVED} property change event.
-     * @param partySummaryBean The party summary bean instance to retrieve actual {@link PartyBean} to show on the panel.
-     * @param readOnly Indicates whether to display provided {@link PartyBean} in read only mode or not.
-     * @param closeOnSave Indicates whether to close the form upon save action takes place.
+     * @param partySummaryBean The party summary bean instance to retrieve
+     * actual {@link PartyBean} to show on the panel.
+     * @param readOnly Indicates whether to display provided {@link PartyBean}
+     * in read only mode or not.
+     * @param closeOnSave Indicates whether to close the form upon save action
+     * takes place.
      */
     public PartyPanelForm(boolean savePartyOnAction, PartySummaryBean partySummaryBean,
             boolean readOnly, boolean closeOnSave) {
@@ -109,7 +128,7 @@ public class PartyPanelForm extends ContentPanel {
         customizePanel();
         savePartyState();
     }
-    
+
     public boolean isCloseOnSave() {
         return closeOnSave;
     }
@@ -167,19 +186,31 @@ public class PartyPanelForm extends ContentPanel {
         }
     }
 
-    private boolean saveParty(boolean allowClose){
+    private void saveParty(final boolean allowClose) {
         if (savePartyOnAction) {
-            if (partyPanel.saveParty()) {
-                MessageUtility.displayMessage(ClientMessage.PARTY_SAVED);
-                customizePanel();
-                firePropertyChange(PARTY_SAVED, false, true);
-                if (closeOnSave && allowClose) {
-                    close();
-                } else {
-                    savePartyState();
+            SolaTask<Boolean, Boolean> t = new SolaTask<Boolean, Boolean>() {
+
+                @Override
+                public Boolean doTask() {
+                    setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_SAVING));
+                    return partyPanel.saveParty();
                 }
-                return true;
-            }
+
+                @Override
+                public void taskDone() {
+                    if (get() != null && get()) {
+                        customizePanel();
+                        firePropertyChange(PARTY_SAVED, false, true);
+                        if (closeOnSave || allowClose) {
+                            close();
+                        } else {
+                            MessageUtility.displayMessage(ClientMessage.PARTY_SAVED);
+                            savePartyState();
+                        }
+                    }
+                }
+            };
+            TaskManager.getInstance().runTask(t);
         } else {
             if (partyPanel.validateParty(true)) {
                 customizePanel();
@@ -187,24 +218,23 @@ public class PartyPanelForm extends ContentPanel {
                 if (closeOnSave && allowClose) {
                     close();
                 }
-                return true;
             }
         }
-        return false;
     }
-    
-    private void savePartyState(){
+
+    private void savePartyState() {
         MainForm.saveBeanState(partyPanel.getPartyBean());
     }
-    
+
     @Override
     protected boolean panelClosing() {
-        if(btnSave.isEnabled() && savePartyOnAction && MainForm.checkSaveBeforeClose(partyPanel.getPartyBean())){
-            return saveParty(false);
+        if (btnSave.isEnabled() && savePartyOnAction && MainForm.checkSaveBeforeClose(partyPanel.getPartyBean())) {
+            saveParty(true);
+            return false;
         }
         return true;
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -266,7 +296,7 @@ public class PartyPanelForm extends ContentPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        saveParty(true);
+        saveParty(false);
     }//GEN-LAST:event_btnSaveActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSave;
