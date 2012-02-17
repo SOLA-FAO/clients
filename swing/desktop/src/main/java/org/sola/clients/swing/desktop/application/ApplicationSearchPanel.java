@@ -107,16 +107,16 @@ public class ApplicationSearchPanel extends ContentPanel {
         headerPanel1 = new org.sola.clients.swing.ui.HeaderPanel();
         jPanel10 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
-        btnShowCalendarTo = new javax.swing.JButton();
-        txtToDate = new javax.swing.JFormattedTextField();
-        labTo = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         labFrom = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         btnShowCalendarFrom = new javax.swing.JButton();
         txtFromDate = new javax.swing.JFormattedTextField();
+        jPanel3 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        btnShowCalendarTo = new javax.swing.JButton();
+        txtToDate = new javax.swing.JFormattedTextField();
+        labTo = new javax.swing.JLabel();
         jPanel9 = new javax.swing.JPanel();
         jPanel12 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -250,6 +250,68 @@ public class ApplicationSearchPanel extends ContentPanel {
         jPanel8.setName("jPanel8"); // NOI18N
         jPanel8.setLayout(new java.awt.GridLayout(2, 1));
 
+        jPanel6.setName("jPanel6"); // NOI18N
+
+        labFrom.setText(bundle.getString("ApplicationSearchPanel.labFrom.text")); // NOI18N
+        labFrom.setName("labFrom"); // NOI18N
+
+        jPanel5.setName("jPanel5"); // NOI18N
+
+        btnShowCalendarFrom.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/calendar.png"))); // NOI18N
+        btnShowCalendarFrom.setText(bundle.getString("ApplicationSearchPanel.btnShowCalendarFrom.text")); // NOI18N
+        btnShowCalendarFrom.setBorder(null);
+        btnShowCalendarFrom.setName("btnShowCalendarFrom"); // NOI18N
+        btnShowCalendarFrom.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnShowCalendarFromActionPerformed(evt);
+            }
+        });
+
+        txtFromDate.setFont(new java.awt.Font("Tahoma", 0, 12));
+        txtFromDate.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
+        txtFromDate.setName("txtFromDate"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, searchParams, org.jdesktop.beansbinding.ELProperty.create("${fromDate}"), txtFromDate, org.jdesktop.beansbinding.BeanProperty.create("value"));
+        bindingGroup.addBinding(binding);
+
+        txtFromDate.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
+        txtFromDate.setHorizontalAlignment(JTextField.LEADING);
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addComponent(txtFromDate, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnShowCalendarFrom)
+                .addGap(2, 2, 2))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                .addComponent(txtFromDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnShowCalendarFrom))
+        );
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(labFrom)
+            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addComponent(labFrom)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(16, Short.MAX_VALUE))
+        );
+
+        jPanel8.add(jPanel6);
+
         jPanel3.setName("jPanel3"); // NOI18N
 
         jPanel4.setName("jPanel4"); // NOI18N
@@ -313,68 +375,6 @@ public class ApplicationSearchPanel extends ContentPanel {
         );
 
         jPanel8.add(jPanel3);
-
-        jPanel6.setName("jPanel6"); // NOI18N
-
-        labFrom.setText(bundle.getString("ApplicationSearchPanel.labFrom.text")); // NOI18N
-        labFrom.setName("labFrom"); // NOI18N
-
-        jPanel5.setName("jPanel5"); // NOI18N
-
-        btnShowCalendarFrom.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/calendar.png"))); // NOI18N
-        btnShowCalendarFrom.setText(bundle.getString("ApplicationSearchPanel.btnShowCalendarFrom.text")); // NOI18N
-        btnShowCalendarFrom.setBorder(null);
-        btnShowCalendarFrom.setName("btnShowCalendarFrom"); // NOI18N
-        btnShowCalendarFrom.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnShowCalendarFromActionPerformed(evt);
-            }
-        });
-
-        txtFromDate.setFont(new java.awt.Font("Tahoma", 0, 12));
-        txtFromDate.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
-        txtFromDate.setName("txtFromDate"); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, searchParams, org.jdesktop.beansbinding.ELProperty.create("${fromDate}"), txtFromDate, org.jdesktop.beansbinding.BeanProperty.create("value"));
-        bindingGroup.addBinding(binding);
-
-        txtFromDate.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-        txtFromDate.setHorizontalAlignment(JTextField.LEADING);
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addComponent(txtFromDate, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnShowCalendarFrom)
-                .addGap(2, 2, 2))
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                .addComponent(txtFromDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(btnShowCalendarFrom))
-        );
-
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(labFrom)
-            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addComponent(labFrom)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
-        );
-
-        jPanel8.add(jPanel6);
 
         jPanel9.setName("jPanel9"); // NOI18N
         jPanel9.setLayout(new java.awt.GridLayout(2, 1));

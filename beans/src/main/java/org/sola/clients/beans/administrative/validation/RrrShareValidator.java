@@ -30,6 +30,8 @@ package org.sola.clients.beans.administrative.validation;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import org.sola.clients.beans.administrative.RrrShareBean;
+import org.sola.common.messaging.ClientMessage;
+import org.sola.common.messaging.MessageUtility;
 
 /**
  * Validates {@link RrrShareBean} object for extra logic validation
@@ -54,7 +56,8 @@ public class RrrShareValidator implements ConstraintValidator<RrrShareCheck, Rrr
                 && shareBean.getNominator() > shareBean.getDenominator()){
             result = false;
             constraintContext.buildConstraintViolationWithTemplate(
-                    "Numerator should be less or equal than denominator.").addConstraintViolation();
+                    MessageUtility.getLocalizedMessageText(
+                        ClientMessage.CHECK_PROP_SHARE)).addConstraintViolation();
         }
         
         return result;
