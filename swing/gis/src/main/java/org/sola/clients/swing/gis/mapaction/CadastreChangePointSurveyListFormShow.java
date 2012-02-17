@@ -31,15 +31,20 @@ import org.sola.clients.swing.gis.ui.control.CadastreChangePointSurveyListForm;
 import org.geotools.swing.extended.Map;
 import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.MessageUtility;
+
 /**
  *
  * @author rizzom
  */
-public class CadastreChangePointSurveyListFormShow extends ComponentShow{
-    
- public CadastreChangePointSurveyListFormShow(Map mapObj, CadastreChangePointSurveyListForm pointSurveyListForm) {
-     super(mapObj, pointSurveyListForm, "point-show", 
-                MessageUtility.getLocalizedMessage(GisMessage.CADASTRE_CHANGE_POINTS_SHOW).getMessage(), 
+public class CadastreChangePointSurveyListFormShow extends ComponentShow {
+
+    public final static String MAPACTION_NAME = "point-show";
+
+    public CadastreChangePointSurveyListFormShow(
+            Map mapObj, CadastreChangePointSurveyListForm pointSurveyListForm) {
+        super(mapObj, pointSurveyListForm, "point-show",
+                MessageUtility.getLocalizedMessage(
+                GisMessage.CADASTRE_CHANGE_POINTS_SHOW).getMessage(),
                 "resources/point-show.png");
-  } 
+    }
 }

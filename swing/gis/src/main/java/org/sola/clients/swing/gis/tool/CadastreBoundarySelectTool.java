@@ -57,7 +57,6 @@ public class CadastreBoundarySelectTool extends ExtendedDrawRectangle {
     public void onSelectionChanged(boolean selected) {
         super.onSelectionChanged(selected);
         if (selected) {
-            //if (stepNumber == 1) {
             if (this.isFirstStep()){
                 Messaging.getInstance().show(
                         GisMessage.CADASTRE_BOUNDARY_SELECT_FIRST_BOUNDARY_POINT);
