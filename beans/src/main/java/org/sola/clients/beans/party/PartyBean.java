@@ -27,7 +27,6 @@
  */
 package org.sola.clients.beans.party;
 
-import org.sola.clients.beans.party.validation.PartyIdTypeCheck;
 import java.util.UUID;
 import org.hibernate.validator.constraints.Email;
 import org.jdesktop.observablecollections.ObservableList;
@@ -36,6 +35,7 @@ import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.controls.SolaList;
 import org.sola.clients.beans.converters.TypeConverters;
+import org.sola.clients.beans.party.validation.PartyIdTypeCheck;
 import org.sola.clients.beans.referencedata.*;
 import org.sola.clients.beans.validation.Localized;
 import org.sola.common.messaging.ClientMessage;
@@ -49,7 +49,7 @@ import org.sola.webservices.transferobjects.casemanagement.PartyTO;
  * For more information see data dictionary <b>Party</b> schema.
  * <br />This bean is used as a part of {@link ApplicationBean}.
  */
-@PartyIdTypeCheck(message="Enter ID document reference number.")
+@PartyIdTypeCheck(message = ClientMessage.CHECK_PERSON_ID_DOC_NUMBER, payload=Localized.class)
 public class PartyBean extends PartySummaryBean {
 
     public static final String EMAIL_PROPERTY = "email";

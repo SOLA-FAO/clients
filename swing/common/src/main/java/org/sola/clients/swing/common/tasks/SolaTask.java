@@ -41,12 +41,23 @@ public abstract class SolaTask<T, V> {
     private String id = UUID.randomUUID().toString();
 
     /** Code logic to be executed. */
-    public abstract T doTask();
+    protected abstract T doTask();
 
-    /** Code logic to be executed upon task completion. */
-    public void taskDone() {
+    /** 
+     * Code logic to be executed upon task completion. 
+     * This method will be called only if task completed successfully. 
+     */
+    protected void taskDone() {
     }
 
+    /** 
+     * Code logic to be executed in case of exception. 
+     * This method is called upon any unhandled exception rise.
+     * @param e The exception, thrown from {@link #taskDone()} method.
+     */
+    protected void taskFailed(Throwable e) {
+    }
+    
     /** 
      * Executes task. 
      * @see SwingWorker
@@ -151,6 +162,7 @@ public abstract class SolaTask<T, V> {
                 try {
                     if(exception != null){
                         propertySupport.firePropertyChange(EXCEPTION_RISED, null, exception);
+                        taskFailed(exception);
                         return;
                     }
                     taskDone();

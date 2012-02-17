@@ -278,9 +278,9 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="statusPanel" alignment="0" pref="876" max="32767" attributes="0"/>
-          <Component id="applicationsMain" alignment="1" pref="876" max="32767" attributes="0"/>
-          <Component id="pnlContent" alignment="0" pref="876" max="32767" attributes="0"/>
+          <Component id="statusPanel" alignment="0" pref="935" max="32767" attributes="0"/>
+          <Component id="applicationsMain" alignment="1" pref="935" max="32767" attributes="0"/>
+          <Component id="pnlContent" alignment="0" pref="935" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -288,7 +288,7 @@
           <Group type="102" alignment="1" attributes="0">
               <Component id="applicationsMain" min="-2" pref="27" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="pnlContent" pref="469" max="32767" attributes="0"/>
+              <Component id="pnlContent" pref="535" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="statusPanel" min="-2" max="-2" attributes="0"/>
           </Group>
@@ -462,7 +462,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="txtUserName" min="-2" pref="193" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="taskPanel1" pref="624" max="32767" attributes="0"/>
+                  <Component id="taskPanel1" pref="683" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>

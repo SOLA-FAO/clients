@@ -33,7 +33,6 @@ import java.awt.BorderLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JasperPrint;
 import org.sola.clients.beans.administrative.BaUnitBean;
 import org.sola.clients.beans.administrative.BaUnitNotationBean;

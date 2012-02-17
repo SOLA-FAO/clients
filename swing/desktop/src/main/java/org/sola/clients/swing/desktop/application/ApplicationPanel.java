@@ -361,6 +361,7 @@ public class ApplicationPanel extends ContentPanel {
         btnCancelService.setEnabled(false);
         btnStartService.setEnabled(false);
         btnViewService.setEnabled(false);
+        btnRevertService.setEnabled(false);
 
         if (servicesManagementAllowed) {
             if (selectedService != null) {
@@ -2918,8 +2919,16 @@ public class ApplicationPanel extends ContentPanel {
     private void openAttachment() {
         if (appBean.getSelectedSource() != null
                 && appBean.getSelectedSource().getArchiveDocument() != null) {
-            // Try to open attached file
-            DocumentBean.openDocument(appBean.getSelectedSource().getArchiveDocument().getId());
+            SolaTask t = new SolaTask<Void, Void>() {
+
+                @Override
+                public Void doTask() {
+                    setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_DOCUMENT_OPENING));
+                    DocumentBean.openDocument(appBean.getSelectedSource().getArchiveDocument().getId());
+                    return null;
+                }
+            };
+            TaskManager.getInstance().runTask(t);
         }
     }
 
@@ -3087,21 +3096,37 @@ public class ApplicationPanel extends ContentPanel {
     private void completeService() {
         if (appBean.getSelectedService() != null) {
 
-            String serviceName = appBean.getSelectedService().getRequestType().getDisplayValue();
+            final String serviceName = appBean.getSelectedService().getRequestType().getDisplayValue();
 
             if (MessageUtility.displayMessage(ClientMessage.APPLICATION_SERVICE_COMPLETE_WARNING,
                     new String[]{serviceName}) == MessageUtility.BUTTON_ONE) {
 
-                List<ValidationResultBean> result = appBean.getSelectedService().complete();
+                SolaTask t = new SolaTask<Void, Void>() {
 
-                String message = MessageUtility.getLocalizedMessage(
-                        ClientMessage.APPLICATION_SERVICE_COMPLETE_SUCCESS,
-                        new String[]{serviceName}).getMessage();
+                    List<ValidationResultBean> result;
 
-                appBean.reload();
-                customizeApplicationForm();
-                saveAppState();
-                openValidationResultForm(result, true, message);
+                    @Override
+                    protected Void doTask() {
+                        setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_SERVICE_COMPLETING));
+                        result = appBean.getSelectedService().complete();
+                        return null;
+                    }
+
+                    @Override
+                    protected void taskDone() {
+                        String message = MessageUtility.getLocalizedMessage(
+                                ClientMessage.APPLICATION_SERVICE_COMPLETE_SUCCESS,
+                                new String[]{serviceName}).getMessage();
+
+                        appBean.reload();
+                        customizeApplicationForm();
+                        saveAppState();
+                        if (result != null) {
+                            openValidationResultForm(result, true, message);
+                        }
+                    }
+                };
+                TaskManager.getInstance().runTask(t);
             }
         }
     }
@@ -3109,19 +3134,37 @@ public class ApplicationPanel extends ContentPanel {
     private void revertService() {
         if (appBean.getSelectedService() != null) {
 
-            String serviceName = appBean.getSelectedService().getRequestType().getDisplayValue();
+            final String serviceName = appBean.getSelectedService().getRequestType().getDisplayValue();
 
             if (MessageUtility.displayMessage(ClientMessage.APPLICATION_SERVICE_REVERT_WARNING,
                     new String[]{serviceName}) == MessageUtility.BUTTON_ONE) {
 
-                List<ValidationResultBean> result = appBean.getSelectedService().revert();
-                String message = MessageUtility.getLocalizedMessage(
-                        ClientMessage.APPLICATION_SERVICE_REVERT_SUCCESS,
-                        new String[]{serviceName}).getMessage();
-                appBean.reload();
-                customizeApplicationForm();
-                saveAppState();
-                openValidationResultForm(result, true, message);
+                SolaTask t = new SolaTask<Void, Void>() {
+
+                    List<ValidationResultBean> result;
+
+                    @Override
+                    protected Void doTask() {
+                        setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_SERVICE_REVERTING));
+                        result = appBean.getSelectedService().revert();
+                        return null;
+                    }
+
+                    @Override
+                    protected void taskDone() {
+                        String message = MessageUtility.getLocalizedMessage(
+                                ClientMessage.APPLICATION_SERVICE_REVERT_SUCCESS,
+                                new String[]{serviceName}).getMessage();
+
+                        appBean.reload();
+                        customizeApplicationForm();
+                        saveAppState();
+                        if (result != null) {
+                            openValidationResultForm(result, true, message);
+                        }
+                    }
+                };
+                TaskManager.getInstance().runTask(t);
             }
         }
     }
@@ -3129,20 +3172,37 @@ public class ApplicationPanel extends ContentPanel {
     private void cancelService() {
         if (appBean.getSelectedService() != null) {
 
-            String serviceName = appBean.getSelectedService().getRequestType().getDisplayValue();
+            final String serviceName = appBean.getSelectedService().getRequestType().getDisplayValue();
             if (MessageUtility.displayMessage(ClientMessage.APPLICATION_SERVICE_CANCEL_WARNING,
                     new String[]{serviceName}) == MessageUtility.BUTTON_ONE) {
 
-                List<ValidationResultBean> result = appBean.getSelectedService().cancel();
-                String message;
+                SolaTask t = new SolaTask<Void, Void>() {
 
-                message = MessageUtility.getLocalizedMessage(
-                        ClientMessage.APPLICATION_SERVICE_CANCEL_SUCCESS,
-                        new String[]{serviceName}).getMessage();
-                appBean.reload();
-                customizeApplicationForm();
-                saveAppState();
-                openValidationResultForm(result, true, message);
+                    List<ValidationResultBean> result;
+
+                    @Override
+                    protected Void doTask() {
+                        setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_SERVICE_CANCELING));
+                        result = appBean.getSelectedService().cancel();
+                        return null;
+                    }
+
+                    @Override
+                    protected void taskDone() {
+                        String message;
+
+                        message = MessageUtility.getLocalizedMessage(
+                                ClientMessage.APPLICATION_SERVICE_CANCEL_SUCCESS,
+                                new String[]{serviceName}).getMessage();
+                        appBean.reload();
+                        customizeApplicationForm();
+                        saveAppState();
+                        if (result != null) {
+                            openValidationResultForm(result, true, message);
+                        }
+                    }
+                };
+                TaskManager.getInstance().runTask(t);
             }
         }
     }
@@ -3172,7 +3232,6 @@ public class ApplicationPanel extends ContentPanel {
         if (appBean.getSelectedSource() != null) {
             if (MessageUtility.displayMessage(ClientMessage.CONFIRM_DELETE_RECORD) == MessageUtility.BUTTON_ONE) {
                 appBean.removeSelectedSource();
-                applicationDocumentsHelper.verifyCheckList(appBean.getSourceList());
             }
         }
     }

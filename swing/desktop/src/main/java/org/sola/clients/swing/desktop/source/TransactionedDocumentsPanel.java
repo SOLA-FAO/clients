@@ -109,11 +109,16 @@ public class TransactionedDocumentsPanel extends ContentPanel {
         });
     }
 
+    private boolean isReadOnly(){
+        return appService!=null && !appService.isManagementAllowed();
+    }
+    
     private void customizeRemoveButton(SourceBean source){
         if(source == null){
             btnRemove.setEnabled(false);
         } else {
-            btnRemove.setEnabled(SecurityBean.isInRole(RolesConstants.SOURCE_TRANSACTIONAL));
+            btnRemove.setEnabled(
+                    SecurityBean.isInRole(RolesConstants.SOURCE_TRANSACTIONAL) && !isReadOnly());
         }
     }
     
@@ -121,7 +126,8 @@ public class TransactionedDocumentsPanel extends ContentPanel {
         if(source == null){
             btnAddDocumentFromApplication.setEnabled(false);
         } else {
-            btnAddDocumentFromApplication.setEnabled(SecurityBean.isInRole(RolesConstants.SOURCE_TRANSACTIONAL));
+            btnAddDocumentFromApplication.setEnabled(
+                    SecurityBean.isInRole(RolesConstants.SOURCE_TRANSACTIONAL) && !isReadOnly());
         }
     }
     
@@ -129,7 +135,8 @@ public class TransactionedDocumentsPanel extends ContentPanel {
         if(source == null){
             btnAddDocumentFromSearch.setEnabled(false);
         } else {
-            btnAddDocumentFromSearch.setEnabled(SecurityBean.isInRole(RolesConstants.SOURCE_TRANSACTIONAL));
+            btnAddDocumentFromSearch.setEnabled(
+                    SecurityBean.isInRole(RolesConstants.SOURCE_TRANSACTIONAL) && !isReadOnly());
         }
     }
     
