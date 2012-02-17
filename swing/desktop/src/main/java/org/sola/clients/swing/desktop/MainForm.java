@@ -40,6 +40,7 @@ import java.util.Locale;
 import java.util.logging.Level;
 import javax.swing.ImageIcon;
 import net.sf.jasperreports.engine.JasperPrint;
+import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.clients.beans.application.LodgementBean;
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.reports.ReportManager;
