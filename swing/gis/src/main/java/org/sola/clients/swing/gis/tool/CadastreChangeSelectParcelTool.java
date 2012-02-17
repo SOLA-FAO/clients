@@ -43,14 +43,14 @@ import org.sola.webservices.transferobjects.cadastre.CadastreObjectTO;
  */
 public class CadastreChangeSelectParcelTool extends ExtendedTool {
 
-    private String toolName = "select-parcel";
+    public final static String NAME = "select-parcel";
     private String toolTip = MessageUtility.getLocalizedMessage(
                             GisMessage.CADASTRE_CHANGE_TOOLTIP_SELECT_PARCEL).getMessage();
     private ExtendedLayerGraphics targetParcelsLayer = null;
     private PojoDataAccess dataAccess;
 
     public CadastreChangeSelectParcelTool(PojoDataAccess dataAccess) {
-        this.setToolName(toolName);
+        this.setToolName(NAME);
         this.setIconImage("resources/select-parcel.png");
         this.setToolTip(toolTip);
         this.dataAccess = dataAccess;

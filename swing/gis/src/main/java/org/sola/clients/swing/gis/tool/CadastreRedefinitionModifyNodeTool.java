@@ -24,7 +24,7 @@ import org.sola.webservices.transferobjects.cadastre.CadastreObjectNodeTO;
  */
 public class CadastreRedefinitionModifyNodeTool extends CadastreRedefinitionAbstractNodeTool {
 
-    private String toolName = "change-node";
+    public final static String NAME = "change-node";
     private String toolTip = MessageUtility.getLocalizedMessage(
             GisMessage.CADASTRE_TOOLTIP_CHANGE_NODE).getMessage();
 
@@ -32,7 +32,7 @@ public class CadastreRedefinitionModifyNodeTool extends CadastreRedefinitionAbst
             CadastreRedefinitionNodeLayer cadastreObjectNodeModifiedLayer,
             CadastreRedefinitionObjectLayer cadastreObjectModifiedLayer) {
         super(dataAccess, cadastreObjectNodeModifiedLayer, cadastreObjectModifiedLayer);
-        this.setToolName(toolName);
+        this.setToolName(NAME);
         this.setToolTip(toolTip);
     }
 

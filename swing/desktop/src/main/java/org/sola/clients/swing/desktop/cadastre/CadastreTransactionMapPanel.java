@@ -93,6 +93,7 @@ public class CadastreTransactionMapPanel extends ContentPanel {
                     this.applicationBean.getLocation());
         }
         this.mapControl.setApplicationId(this.applicationBean.getId());
+        this.mapControl.setReadOnly(!this.applicationService.isManagementAllowed());
     }
 
     private void addMapToForm() {

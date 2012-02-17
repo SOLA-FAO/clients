@@ -41,12 +41,12 @@ import org.sola.common.messaging.MessageUtility;
  */
 public class CadastreChangeNodeTool extends CadastreChangeEditAbstractTool {
 
-    private String toolName = "node-linking";
+    public final static String NAME = "node-linking";
     private String toolTip = MessageUtility.getLocalizedMessage(
                             GisMessage.CADASTRE_CHANGE_TOOLTIP_NEW_SURVEYPOINT).getMessage();
 
     public CadastreChangeNodeTool(CadastreChangeNewSurveyPointLayer targetLayer) {
-        this.setToolName(toolName);
+        this.setToolName(NAME);
         this.setGeometryType(Geometries.POINT);
         this.setIconImage("resources/node-linking.png");
         this.setToolTip(toolTip);

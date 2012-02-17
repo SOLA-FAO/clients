@@ -177,4 +177,16 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
 
         this.addCadastreObjectsInLayer(targetParcelsLayer, cadastreObjects);
     }
+
+    @Override
+    public void setReadOnly(boolean readOnly){
+        super.setReadOnly(readOnly);
+        this.getMap().getMapActionByName(CadastreChangeSelectParcelTool.NAME).setEnabled(!readOnly);
+        this.getMap().getMapActionByName(
+                CadastreChangePointSurveyListFormShow.MAPACTION_NAME).setEnabled(!readOnly);
+        this.getMap().getMapActionByName(CadastreChangeNodeTool.NAME).setEnabled(!readOnly);
+        this.getMap().getMapActionByName(CadastreChangeNewParcelTool.NAME).setEnabled(!readOnly);
+        this.getMap().getMapActionByName(
+                CadastreChangeNewCadastreObjectListFormShow.MAPACTION_NAME).setEnabled(!readOnly);
+    }
 }

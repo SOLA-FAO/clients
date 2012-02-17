@@ -54,7 +54,6 @@ public abstract class ControlsBundleForTransaction extends ControlsBundleForWork
     private PojoLayer pendingLayer = null;
     protected CadastreBoundaryPointLayer cadastreBoundaryPointLayer = null;
     protected CadastreBoundaryEditTool cadastreBoundaryEditTool;
-    //protected CadastreBoundarySelectTool cadastreBoundarySelectTool;
 
     @Override
     public void Setup(PojoDataAccess pojoDataAccess) {
@@ -113,14 +112,15 @@ public abstract class ControlsBundleForTransaction extends ControlsBundleForWork
         this.cadastreBoundaryEditTool =
                 new CadastreBoundaryEditTool(this.cadastreBoundaryPointLayer);
         this.getMap().addTool(this.cadastreBoundaryEditTool, this.getToolbar(), false);
-        //this.cadastreBoundarySelectTool = new CadastreBoundarySelectTool(
-        //        this.getPojoDataAccess(), this.cadastreBoundaryPointLayer);
-        //this.getMap().addTool(this.cadastreBoundarySelectTool, this.getToolbar());
     }
 
     @Override
     public void refresh(boolean force) {
         this.pendingLayer.setForceRefresh(force);
         super.refresh(force);
+    }
+    
+    public void setReadOnly(boolean readOnly){
+        this.getMap().getMapActionByName(CadastreBoundarySelectTool.NAME).setEnabled(!readOnly);
     }
 }

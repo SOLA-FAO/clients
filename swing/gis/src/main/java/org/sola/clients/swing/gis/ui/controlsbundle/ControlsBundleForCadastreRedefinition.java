@@ -122,23 +122,33 @@ public final class ControlsBundleForCadastreRedefinition extends ControlsBundleF
         super.addToolsAndCommands();
         this.cadastreBoundaryEditTool.setTargetLayer(cadastreObjectModifiedLayer);
 
-        CadastreBoundarySelectTool cadastreBoundarySelectTool = 
+        CadastreBoundarySelectTool cadastreBoundarySelectTool =
                 new CadastreRedefinitionBoundarySelectTool(
-                        this.getPojoDataAccess(), 
-                        this.cadastreBoundaryPointLayer,
-                        this.cadastreObjectModifiedLayer,
-                        this.cadastreObjectNodeModifiedLayer);
+                this.getPojoDataAccess(),
+                this.cadastreBoundaryPointLayer,
+                this.cadastreObjectModifiedLayer,
+                this.cadastreObjectNodeModifiedLayer);
         this.getMap().addTool(cadastreBoundarySelectTool, this.getToolbar(), true);
     }
 
     public void reset() throws Exception {
         this.cadastreObjectModifiedLayer.removeFeatures();
         this.cadastreObjectNodeModifiedLayer.removeFeatures();
-            ExtendedAction action = this.getMap().getMapActionByName(CadastreBoundarySelectTool.NAME);
-            if (action != null) {
-                ((CadastreBoundarySelectTool) action.getAttachedTool()).clearSelection();
-                this.getMap().refresh();
-            }
-        
+        ExtendedAction action = this.getMap().getMapActionByName(CadastreBoundarySelectTool.NAME);
+        if (action != null) {
+            ((CadastreBoundarySelectTool) action.getAttachedTool()).clearSelection();
+            this.getMap().refresh();
+        }
+    }
+
+    @Override
+    public void setReadOnly(boolean readOnly){
+        super.setReadOnly(readOnly);
+        this.getMap().getMapActionByName(
+                CadastreRedefinitionAddNodeTool.NAME).setEnabled(!readOnly);
+        this.getMap().getMapActionByName(
+                CadastreRedefinitionModifyNodeTool.NAME).setEnabled(!readOnly);
+        this.getMap().getMapActionByName(
+                CadastreRedefinitionReset.MAPACTION_NAME).setEnabled(!readOnly);
     }
 }

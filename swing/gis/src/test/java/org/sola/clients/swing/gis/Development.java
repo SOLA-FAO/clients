@@ -118,7 +118,7 @@ public class Development {
     /**
      * Test the controls bundle for cadastre change
      */
-    //@Ignore
+    @Ignore
     @Test
     public void testUIControlsBundleForCadastreChange() throws Exception {
         System.out.println("Test ControlsBundle for cadastre change");
@@ -130,11 +130,13 @@ public class Development {
         ControlsBundleForCadastreChange ctrl =
                 new ControlsBundleForCadastreChange("333", cadastreChangeBean, "3068323", null);
         ctrl.getMap().addMapAction(new TestCadastreTransactionChange(ctrl), ctrl.getToolbar(), true);
+        
+        ctrl.setReadOnly(true);
 
         this.displayControlsBundleForm(ctrl);
     }
 
-    @Ignore
+    //@Ignore
     @Test
     public void testUIControlsBundleForCadastreRedefinition() throws Exception {
         System.out.println("Test ControlsBundle for cadastre redefinition");
@@ -147,6 +149,7 @@ public class Development {
                 new ControlsBundleForCadastreRedefinition(transactionBean, "3068323", null);
         ctrl.getMap().addMapAction(
                 new TestCadastreTransactionRedefinition(ctrl), ctrl.getToolbar(), true);
+        ctrl.setReadOnly(true);
         this.displayControlsBundleForm(ctrl);
     }
 

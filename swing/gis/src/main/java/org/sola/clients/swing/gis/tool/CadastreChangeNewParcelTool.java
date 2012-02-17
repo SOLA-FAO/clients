@@ -45,12 +45,12 @@ import org.sola.common.messaging.MessageUtility;
  */
 public class CadastreChangeNewParcelTool extends CadastreChangeEditAbstractTool{
     
-     private String toolName = "new-parcel";
+     public final static String NAME = "new-parcel";
      private String toolTip =  MessageUtility.getLocalizedMessage(
                             GisMessage.CADASTRE_CHANGE_TOOLTIP_NEW_PARCEL).getMessage();
 
     public CadastreChangeNewParcelTool(CadastreChangeNewCadastreObjectLayer newCadastreObjectLayer) {
-        this.setToolName(toolName);
+        this.setToolName(NAME);
         this.setIconImage("resources/new-parcel.png");
         this.setToolTip(toolTip);
         this.setGeometryType(Geometries.POLYGON);

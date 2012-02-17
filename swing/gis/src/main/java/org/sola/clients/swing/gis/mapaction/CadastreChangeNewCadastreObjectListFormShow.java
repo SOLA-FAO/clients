@@ -55,16 +55,19 @@ import org.sola.clients.swing.gis.ui.control.CadastreChangeNewCadastreObjectList
 import org.geotools.swing.extended.Map;
 import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.MessageUtility;
+
 /**
  *
  * @author rizzom
  */
-public class CadastreChangeNewCadastreObjectListFormShow extends ComponentShow{
- 
- public CadastreChangeNewCadastreObjectListFormShow(
-         Map mapObj, CadastreChangeNewCadastreObjectListForm formToShow){        
-       super(mapObj, formToShow, "newcadastralobjectformshow", 
-                MessageUtility.getLocalizedMessage(GisMessage.CADASTRE_OBJ_LIST_SHOW).getMessage(), 
+public class CadastreChangeNewCadastreObjectListFormShow extends ComponentShow {
+
+    public final static String MAPACTION_NAME = "newcadastralobjectformshow";
+
+    public CadastreChangeNewCadastreObjectListFormShow(
+            Map mapObj, CadastreChangeNewCadastreObjectListForm formToShow) {
+        super(mapObj, formToShow, "newcadastralobjectformshow",
+                MessageUtility.getLocalizedMessage(GisMessage.CADASTRE_OBJ_LIST_SHOW).getMessage(),
                 "resources/undo-new-parcelmaking.png");
-    }    
+    }
 }
