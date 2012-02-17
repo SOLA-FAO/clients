@@ -1,28 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.desktop.administrative;
@@ -33,50 +35,47 @@ import java.beans.PropertyChangeListener;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JasperPrint;
-import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.clients.beans.administrative.BaUnitBean;
 import org.sola.clients.beans.administrative.BaUnitNotationBean;
 import org.sola.clients.beans.administrative.RelatedBaUnitInfoBean;
 import org.sola.clients.beans.administrative.RrrBean;
-import org.sola.clients.swing.ui.application.ApplicationDocumentsForm;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationServiceBean;
 import org.sola.clients.beans.cadastre.CadastreObjectBean;
 import org.sola.clients.beans.converters.TypeConverters;
-import org.sola.clients.beans.referencedata.BaUnitRelTypeBean;
-import org.sola.clients.beans.referencedata.RequestTypeBean;
-import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForBaUnit;
-import org.sola.clients.beans.referencedata.RrrTypeActionConstants;
-import org.sola.clients.beans.referencedata.RrrTypeBean;
-import org.sola.clients.beans.referencedata.RrrTypeListBean;
-import org.sola.clients.beans.referencedata.StatusConstants;
-import org.sola.clients.beans.referencedata.TypeActionBean;
+import org.sola.clients.beans.referencedata.*;
 import org.sola.clients.beans.security.SecurityBean;
-import org.sola.clients.swing.ui.renderers.LockCellRenderer;
-import org.sola.clients.swing.ui.renderers.SimpleComboBoxRenderer;
-import org.sola.clients.swing.ui.renderers.TableCellListRenderer;
-import org.sola.clients.swing.ui.source.DocumentsPanel;
 import org.sola.clients.beans.source.SourceBean;
 import org.sola.clients.beans.source.SourceListBean;
 import org.sola.clients.reports.ReportManager;
 import org.sola.clients.swing.common.LafManager;
+import org.sola.clients.swing.common.tasks.SolaTask;
+import org.sola.clients.swing.common.tasks.TaskManager;
+import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.desktop.ReportViewerForm;
+import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForBaUnit;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
+import org.sola.clients.swing.ui.application.ApplicationDocumentsForm;
+import org.sola.clients.swing.ui.renderers.LockCellRenderer;
+import org.sola.clients.swing.ui.renderers.SimpleComboBoxRenderer;
+import org.sola.clients.swing.ui.renderers.TableCellListRenderer;
+import org.sola.clients.swing.ui.source.DocumentsPanel;
 import org.sola.common.RolesConstants;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
+import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.administrative.BaUnitTO;
 
 /**
- * This form is used to manage property object ({@codeBaUnit}). 
+ * This form is used to manage property object ({@codeBaUnit}).
  * {@link BaUnitBean} is used to bind data on the form.
  */
 public class PropertyPanel extends ContentPanel {
 
-    /** 
-     * Listens for events of different right forms, to add created right into 
-     * the list of rights or update existing one. 
+    /**
+     * Listens for events of different right forms, to add created right into
+     * the list of rights or update existing one.
      */
     private class RightFormListener implements PropertyChangeListener {
 
@@ -100,7 +99,9 @@ public class PropertyPanel extends ContentPanel {
     java.util.ResourceBundle resourceBundle;
     private PropertyChangeListener newPropertyWizardListener;
 
-    /** Creates {@link BaUnitBean} used to bind form components. */
+    /**
+     * Creates {@link BaUnitBean} used to bind form components.
+     */
     private BaUnitBean createBaUnitBean() {
         if (baUnitBean1 == null) {
             BaUnitBean baUnitBean = null;
@@ -127,7 +128,9 @@ public class PropertyPanel extends ContentPanel {
         return baUnitBean1;
     }
 
-    /** Creates documents table to show paper title documents. */
+    /**
+     * Creates documents table to show paper title documents.
+     */
     private DocumentsPanel createDocumentsPanel() {
         DocumentsPanel panel;
         if (baUnitBean1 != null) {
@@ -138,8 +141,9 @@ public class PropertyPanel extends ContentPanel {
         return panel;
     }
 
-    /** 
+    /**
      * Form constructor. Creates and open form in read only mode.
+     *
      * @param nameFirstPart First part of the property code.
      * @param nameLastPart Last part of the property code.
      */
@@ -147,11 +151,12 @@ public class PropertyPanel extends ContentPanel {
         this(null, null, nameFirstPart, nameLastPart, true);
     }
 
-    /** 
+    /**
      * Form constructor.
+     *
      * @param applicationBean {@link ApplicationBean} instance, used to get data
      * on BaUnit and provide list of documents.
-     * @param applicationService {@link ApplicationServiceBean} instance, used 
+     * @param applicationService {@link ApplicationServiceBean} instance, used
      * to determine what actions should be taken on this form.
      * @param nameFirstPart First part of the property code.
      * @param nameLastPart Last part of the property code.
@@ -170,13 +175,15 @@ public class PropertyPanel extends ContentPanel {
         portInit();
     }
 
-    /** 
+    /**
      * Form constructor.
-     * @param applicationBean {@link ApplicationBean} instance, used to get 
-     * list of documents.
-     * @param applicationService {@link ApplicationServiceBean} instance, used 
+     *
+     * @param applicationBean {@link ApplicationBean} instance, used to get list
+     * of documents.
+     * @param applicationService {@link ApplicationServiceBean} instance, used
      * to determine what actions should be taken on this form.
-     * @param BaUnitBean Instance of {@link BaUnitBean}, used to bind data on the form.
+     * @param BaUnitBean Instance of {@link BaUnitBean}, used to bind data on
+     * the form.
      * @param readOnly If true, opens form in read only mode.
      */
     public PropertyPanel(ApplicationBean applicationBean,
@@ -195,10 +202,12 @@ public class PropertyPanel extends ContentPanel {
         portInit();
     }
 
-    /** Makes post initialization tasks. */
-    private void portInit(){
+    /**
+     * Makes post initialization tasks.
+     */
+    private void portInit() {
         customizeForm();
-        
+
         rrrTypes.addPropertyChangeListener(new PropertyChangeListener() {
 
             @Override
@@ -239,10 +248,12 @@ public class PropertyPanel extends ContentPanel {
                 }
             }
         });
+
+        saveBaUnitState();
     }
-    
-    /** 
-     * Runs form customization, to restrict certain actions, bind listeners on 
+
+    /**
+     * Runs form customization, to restrict certain actions, bind listeners on
      * the {@link BaUnitBean} and other components.
      */
     private void customizeForm() {
@@ -275,7 +286,9 @@ public class PropertyPanel extends ContentPanel {
         customizeTerminationButton();
     }
 
-    /** Shows {@link NewTitleWizardPanel} to select parent property. */
+    /**
+     * Shows {@link NewTitleWizardPanel} to select parent property.
+     */
     private void showNewTitleWizard(boolean showMessage) {
         if (baUnitBean1 == null || (baUnitBean1.getStatusCode() != null
                 && !baUnitBean1.getStatusCode().equals(StatusConstants.PENDING))) {
@@ -299,9 +312,19 @@ public class PropertyPanel extends ContentPanel {
                         }
                     };
                 }
-                NewPropertyWizardPanel newPropertyWizardPanel = new NewPropertyWizardPanel(applicationBean);
-                newPropertyWizardPanel.addPropertyChangeListener(newPropertyWizardListener);
-                getMainContentPanel().addPanel(newPropertyWizardPanel, MainContentPanel.CARD_NEW_PROPERTY_WIZARD, true);
+
+                SolaTask t = new SolaTask<Void, Void>() {
+
+                    @Override
+                    public Void doTask() {
+                        setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PROPERTYLINK));
+                        NewPropertyWizardPanel newPropertyWizardPanel = new NewPropertyWizardPanel(applicationBean);
+                        newPropertyWizardPanel.addPropertyChangeListener(newPropertyWizardListener);
+                        getMainContentPanel().addPanel(newPropertyWizardPanel, MainContentPanel.CARD_NEW_PROPERTY_WIZARD, true);
+                        return null;
+                    }
+                };
+                TaskManager.getInstance().runTask(t);
             }
         }
     }
@@ -314,11 +337,13 @@ public class PropertyPanel extends ContentPanel {
         }
     }
 
-    /** 
-     * Populates rights, parcels and parent Properties lists from provided result object. 
-     * @param selectedResult Array of selected result from the wizard form. First 
-     * item of array contains selected {@link BaUnitBean}, 
-     * second item contains {@link BaUnitRelTypeBean}.
+    /**
+     * Populates rights, parcels and parent Properties lists from provided
+     * result object.
+     *
+     * @param selectedResult Array of selected result from the wizard form.
+     * First item of array contains selected {@link BaUnitBean}, second item
+     * contains {@link BaUnitRelTypeBean}.
      */
     private boolean addParentProperty(Object[] selectedResult) {
         if (selectedResult == null) {
@@ -385,7 +410,10 @@ public class PropertyPanel extends ContentPanel {
         return true;
     }
 
-    /** Enables or disables "open", "add" and "remove" buttons for the parent Properties list. */
+    /**
+     * Enables or disables "open", "add" and "remove" buttons for the parent
+     * Properties list.
+     */
     private void customizeParentPropertyButtons() {
         boolean enabled = !readOnly;
         if (baUnitBean1 == null || (baUnitBean1.getStatusCode() != null
@@ -402,18 +430,25 @@ public class PropertyPanel extends ContentPanel {
         menuRemoveParentBaUnit.setEnabled(btnRemoveParent.isEnabled());
     }
 
-    /** Enables or disables "open" button for the child Properties list. */
+    /**
+     * Enables or disables "open" button for the child Properties list.
+     */
     private void customizeChildPropertyButtons() {
         btnOpenChild.setEnabled(baUnitBean1.getSelectedChildBaUnit() != null);
         menuOpenChildBaUnit.setEnabled(btnOpenChild.isEnabled());
     }
 
-    /** Enables or disables print button if row version of {@link BaUnitBean} > 0 . */
+    /**
+     * Enables or disables print button if row version of {@link BaUnitBean} > 0
+     * .
+     */
     private void customizePrintButton() {
         btnPrintBaUnit.setEnabled(baUnitBean1.getRowVersion() > 0);
     }
 
-    /** Enables or disables paper title buttons, depending on the form state. */
+    /**
+     * Enables or disables paper title buttons, depending on the form state.
+     */
     private void customizePaperTitleButtons(SourceBean source) {
         if (source != null && source.getArchiveDocument() != null) {
             btnViewPaperTitle.setEnabled(true);
@@ -423,7 +458,9 @@ public class PropertyPanel extends ContentPanel {
         btnLinkPaperTitle.setEnabled(!readOnly);
     }
 
-    /** Enables or disables notation buttons, depending on the form state. */
+    /**
+     * Enables or disables notation buttons, depending on the form state.
+     */
     private void customizeNotationButtons(BaUnitNotationBean notation) {
         if (notation == null || !notation.getStatusCode().equals(StatusConstants.PENDING)
                 || notation.getBaUnitId() == null
@@ -437,25 +474,26 @@ public class PropertyPanel extends ContentPanel {
         menuRemoveNotation.setEnabled(btnRemoveNotation.isEnabled());
     }
 
-    /** Enables or disables termination button, depending on the form state. */
-    private void customizeTerminationButton(){
+    /**
+     * Enables or disables termination button, depending on the form state.
+     */
+    private void customizeTerminationButton() {
         boolean enabled = !readOnly;
-        
+
         // Check BaUnit status to be current
-        if(baUnitBean1.getStatusCode() == null || !baUnitBean1.getStatusCode().equals(StatusConstants.CURRENT)){
+        if (baUnitBean1.getStatusCode() == null || !baUnitBean1.getStatusCode().equals(StatusConstants.CURRENT)) {
             enabled = false;
         }
-        
+
         // Check RequestType to have cancel action.
-        if(applicationService == null || applicationService.getRequestType() == null ||
-                applicationService.getRequestType().getTypeActionCode() == null || 
-                !applicationService.getRequestType().getTypeActionCode().equals(TypeActionBean.CODE_CANCEL)){
+        if (applicationService == null || applicationService.getRequestType() == null
+                || applicationService.getRequestType().getTypeActionCode() == null
+                || !applicationService.getRequestType().getTypeActionCode().equals(TypeActionBean.CODE_CANCEL)) {
             enabled = false;
         }
-        
+
         // Determine what should be shown on the button, terminate or cancelling of termination.
-        if (baUnitBean1.getPendingActionCode() != null && baUnitBean1
-                .getPendingActionCode().equals(TypeActionBean.CODE_CANCEL)) {
+        if (baUnitBean1.getPendingActionCode() != null && baUnitBean1.getPendingActionCode().equals(TypeActionBean.CODE_CANCEL)) {
             // Show cancel
             btnTerminate.setIcon(new ImageIcon(getClass().getResource("/images/common/undo.png")));
             btnTerminate.setText(resourceBundle.getString("PropertyPanel.btnTerminate.text2"));
@@ -466,10 +504,10 @@ public class PropertyPanel extends ContentPanel {
         }
         btnTerminate.setEnabled(enabled);
     }
-    
-    /** 
-     * Enables or disables parcel buttons, depending on the form state and 
-     * selection in the list of parcel. 
+
+    /**
+     * Enables or disables parcel buttons, depending on the form state and
+     * selection in the list of parcel.
      */
     private void customizeParcelButtons(CadastreObjectBean cadastreBean) {
         if (cadastreBean == null || cadastreBean.isLocked() || readOnly) {
@@ -482,7 +520,10 @@ public class PropertyPanel extends ContentPanel {
         menuRemoveParcel.setEnabled(btnRemoveParcel.isEnabled());
     }
 
-    /** Enables or disables combobox list of right types, depending on the form state.*/
+    /**
+     * Enables or disables combobox list of right types, depending on the form
+     * state.
+     */
     private void customizeRightTypesList() {
         cbxRightType.setSelectedIndex(-1);
         rrrTypes.setSelectedRrrType(null);
@@ -504,9 +545,9 @@ public class PropertyPanel extends ContentPanel {
         customizeCreateRightButton(rrrTypes.getSelectedRrrType());
     }
 
-    /** 
-     * Enables or disables button for creating new right, depending on 
-     * the form state. 
+    /**
+     * Enables or disables button for creating new right, depending on the form
+     * state.
      */
     private void customizeCreateRightButton(RrrTypeBean rrrTypeBean) {
         if (rrrTypeBean != null && rrrTypeBean.getCode() != null
@@ -517,9 +558,9 @@ public class PropertyPanel extends ContentPanel {
         }
     }
 
-    /** 
-     * Enables or disables buttons for managing list of rights, depending on the 
-     * form state, selected right and it's state. 
+    /**
+     * Enables or disables buttons for managing list of rights, depending on the
+     * form state, selected right and it's state.
      */
     private void customizeRightsButtons(RrrBean rrrBean) {
         btnEditRight.setEnabled(false);
@@ -527,7 +568,7 @@ public class PropertyPanel extends ContentPanel {
         btnChangeRight.setEnabled(false);
         btnExtinguish.setEnabled(false);
         btnViewRight.setEnabled(rrrBean != null);
-        
+
         if (rrrBean != null && !rrrBean.isLocked() && !readOnly) {
             boolean isPending = rrrBean.getStatusCode().equals(StatusConstants.PENDING);
 
@@ -550,7 +591,7 @@ public class PropertyPanel extends ContentPanel {
                 }
             }
         }
-        
+
         menuEditRight.setEnabled(btnEditRight.isEnabled());
         menuRemoveRight.setEnabled(btnRemoveRight.isEnabled());
         menuVaryRight.setEnabled(btnChangeRight.isEnabled());
@@ -558,7 +599,9 @@ public class PropertyPanel extends ContentPanel {
         menuViewRight.setEnabled(btnViewRight.isEnabled());
     }
 
-    /** Checks if certain action is allowed on the form. */
+    /**
+     * Checks if certain action is allowed on the form.
+     */
     private boolean isActionAllowed(String action) {
         boolean result = true;
         if (applicationService != null && applicationService.getRequestType() != null
@@ -568,7 +611,9 @@ public class PropertyPanel extends ContentPanel {
         return result;
     }
 
-    /** Checks what type of rights are allowed to create/manage on the form. */
+    /**
+     * Checks what type of rights are allowed to create/manage on the form.
+     */
     private boolean isRightTypeAllowed(String rrrTypeCode) {
         boolean result = true;
         if (rrrTypeCode != null && applicationService != null
@@ -579,20 +624,26 @@ public class PropertyPanel extends ContentPanel {
         return result;
     }
 
-    /** Returns {@link BaUnitBean} by first and last name part. */
+    /**
+     * Returns {@link BaUnitBean} by first and last name part.
+     */
     private BaUnitBean getBaUnit(String nameFirstPart, String nameLastPart) {
         BaUnitTO baUnitTO = WSManager.getInstance().getAdministrative().GetBaUnitByCode(nameFirstPart, nameLastPart);
         return TypeConverters.TransferObjectToBean(baUnitTO, BaUnitBean.class, null);
     }
 
-    /** Opens {@link ReportViewerForm} to display report.*/
+    /**
+     * Opens {@link ReportViewerForm} to display report.
+     */
     private void showReport(JasperPrint report) {
         ReportViewerForm form = new ReportViewerForm(report);
         form.setLocationRelativeTo(this);
         form.setVisible(true);
     }
 
-    /** Open form to add new parcel. */
+    /**
+     * Open form to add new parcel.
+     */
     private void addParcel() {
 
         PropertyChangeListener listener = new PropertyChangeListener() {
@@ -614,7 +665,9 @@ public class PropertyPanel extends ContentPanel {
 
     }
 
-    /** Removes selected parcel from the list of parcels. */
+    /**
+     * Removes selected parcel from the list of parcels.
+     */
     private void removeParcel() {
         if (baUnitBean1.getSelectedParcel() != null
                 && MessageUtility.displayMessage(ClientMessage.CONFIRM_DELETE_RECORD) == MessageUtility.BUTTON_ONE) {
@@ -622,7 +675,9 @@ public class PropertyPanel extends ContentPanel {
         }
     }
 
-    /** Removes selected right from the list of rights. */
+    /**
+     * Removes selected right from the list of rights.
+     */
     private void removeRight() {
         if (baUnitBean1.getSelectedRight() != null
                 && MessageUtility.displayMessage(ClientMessage.CONFIRM_DELETE_RECORD) == MessageUtility.BUTTON_ONE) {
@@ -630,7 +685,9 @@ public class PropertyPanel extends ContentPanel {
         }
     }
 
-    /** Opens appropriate right form for editing. */
+    /**
+     * Opens appropriate right form for editing.
+     */
     private void editRight() {
 
         if (baUnitBean1.getSelectedRight() != null) {
@@ -638,7 +695,9 @@ public class PropertyPanel extends ContentPanel {
         }
     }
 
-    /** Opens appropriate right form to extinguish selected right. */
+    /**
+     * Opens appropriate right form to extinguish selected right.
+     */
     private void extinguishRight() {
 
         if (baUnitBean1.getSelectedRight() != null) {
@@ -646,33 +705,43 @@ public class PropertyPanel extends ContentPanel {
         }
     }
 
-    /** Opens appropriate right form to create new right. */
+    /**
+     * Opens appropriate right form to create new right.
+     */
     private void createRight() {
         openRightForm(null, RrrBean.RRR_ACTION.NEW);
     }
 
-    /** Opens appropriate right form to vary selected right. */
+    /**
+     * Opens appropriate right form to vary selected right.
+     */
     private void varyRight() {
         if (baUnitBean1.getSelectedRight() != null) {
             openRightForm(baUnitBean1.getSelectedRight(), RrrBean.RRR_ACTION.VARY);
         }
     }
 
-    /** Adds new notation on the BaUnit. */
+    /**
+     * Adds new notation on the BaUnit.
+     */
     private void addNotation() {
         if (baUnitBean1.addBaUnitNotation(txtNotationText.getText())) {
             txtNotationText.setText(null);
         }
     }
 
-    /** Removes selected notation. */
+    /**
+     * Removes selected notation.
+     */
     private void removeNotation() {
         if (MessageUtility.displayMessage(ClientMessage.CONFIRM_DELETE_RECORD) == MessageUtility.BUTTON_ONE) {
             baUnitBean1.removeSelectedBaUnitNotation();
         }
     }
 
-    /** Opens paper title attachment. */
+    /**
+     * Opens paper title attachment.
+     */
     private void viewDocument() {
 
         if (documentsPanel1.getSourceListBean().getSelectedSource() != null) {
@@ -680,7 +749,9 @@ public class PropertyPanel extends ContentPanel {
         }
     }
 
-    /** Prints BA unit certificate. */
+    /**
+     * Prints BA unit certificate.
+     */
     private void print() {
         if (ApplicationServiceBean.saveInformationService(RequestTypeBean.CODE_TITLE_SERACH)) {
             showReport(ReportManager.getBaUnitReport(getBaUnit(
@@ -688,14 +759,17 @@ public class PropertyPanel extends ContentPanel {
         }
     }
 
-    /** Links document as a paper title on the BaUnit object. */
+    /**
+     * Links document as a paper title on the BaUnit object.
+     */
     private void linkDocument() {
         openDocumentsForm();
     }
 
-    /** 
-     * Opens right form, depending on given {@link RrrBean} and action. 
-     * @param rrrBean {@link RrrBean} instance to figure out what form to open 
+    /**
+     * Opens right form, depending on given {@link RrrBean} and action.
+     *
+     * @param rrrBean {@link RrrBean} instance to figure out what form to open
      * and pass this bean as a parameter.
      * @param action {@link RrrBean#RRR_ACTION} is passed to the right form for
      * further form customization.
@@ -729,24 +803,42 @@ public class PropertyPanel extends ContentPanel {
         getMainContentPanel().addPanel(panel, cardName, true);
     }
 
-    private boolean saveBaUnit(boolean showMessage) {
-        boolean result = false;
-        if (this.baUnitID != null && !this.baUnitID.equals("")) {
-            result = baUnitBean1.saveBaUnit(applicationService.getId());
-        } else {
-            result = baUnitBean1.createBaUnit(applicationService.getId());
+    private void saveBaUnit(final boolean showMessage, final boolean closeOnSave) {
+        if (baUnitBean1.validate(true).size() > 0) {
+            return;
         }
-        if (showMessage) {
-            if (result) {
-                JOptionPane.showMessageDialog(this, "Changes successfully saved.");
-            } else {
-                JOptionPane.showMessageDialog(this, "Failed to save property.", "Error", JOptionPane.ERROR_MESSAGE);
+
+        SolaTask<Void, Void> t = new SolaTask<Void, Void>() {
+
+            @Override
+            public Void doTask() {
+                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_SAVING));
+                if (baUnitID != null && !baUnitID.equals("")) {
+                    baUnitBean1.saveBaUnit(applicationService.getId());
+                } else {
+                    baUnitBean1.createBaUnit(applicationService.getId());
+                }
+                if (closeOnSave) {
+                    close();
+                }
+                return null;
             }
-        }
-        return result;
+
+            @Override
+            public void taskDone() {
+                if (showMessage) {
+                    MessageUtility.displayMessage(ClientMessage.BAUNIT_SAVED);
+                }
+                saveBaUnitState();
+            }
+        };
+        TaskManager.getInstance().runTask(t);
     }
 
-    /** Opens form to select or create document to be used as a paper title document. */
+    /**
+     * Opens form to select or create document to be used as a paper title
+     * document.
+     */
     private void openDocumentsForm() {
         if (applicationDocumentsForm != null) {
             applicationDocumentsForm.dispose();
@@ -774,16 +866,40 @@ public class PropertyPanel extends ContentPanel {
                 SourceListBean.SELECTED_SOURCE_PROPERTY, listener);
     }
 
-    /** Opens property form in read only mode for a given BaUnit. */
-    private void openPropertyForm(RelatedBaUnitInfoBean relatedBaUnit) {
+    /**
+     * Opens property form in read only mode for a given BaUnit.
+     */
+    private void openPropertyForm(final RelatedBaUnitInfoBean relatedBaUnit) {
         if (relatedBaUnit != null && relatedBaUnit.getRelatedBaUnit() != null) {
-            PropertyPanel propertyPnl = new PropertyPanel(
-                    relatedBaUnit.getRelatedBaUnit().getNameFirstpart(),
-                    relatedBaUnit.getRelatedBaUnit().getNameLastpart());
-            getMainContentPanel().addPanel(propertyPnl,
-                    MainContentPanel.CARD_PROPERTY_PANEL + "_"
-                    + relatedBaUnit.getRelatedBaUnit().getId(), true);
+            SolaTask t = new SolaTask<Void, Void>() {
+
+                @Override
+                public Void doTask() {
+                    setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PROPERTY));
+                    PropertyPanel propertyPnl = new PropertyPanel(
+                            relatedBaUnit.getRelatedBaUnit().getNameFirstpart(),
+                            relatedBaUnit.getRelatedBaUnit().getNameLastpart());
+                    getMainContentPanel().addPanel(propertyPnl,
+                            MainContentPanel.CARD_PROPERTY_PANEL + "_"
+                            + relatedBaUnit.getRelatedBaUnit().getId(), true);
+                    return null;
+                }
+            };
+            TaskManager.getInstance().runTask(t);
         }
+    }
+
+    private void saveBaUnitState() {
+        MainForm.saveBeanState(baUnitBean1);
+    }
+
+    @Override
+    protected boolean panelClosing() {
+        if (btnSave.isEnabled() && MainForm.checkSaveBeforeClose(baUnitBean1)) {
+            saveBaUnit(true, true);
+            return false;
+        }
+        return true;
     }
 
     @SuppressWarnings("unchecked")
@@ -1027,6 +1143,7 @@ public class PropertyPanel extends ContentPanel {
         popupChildBaUnits.add(menuOpenChildBaUnit);
 
         setHeaderPanel(headerPanel);
+        setHelpTopic(bundle.getString("PropertyPanel.helpTopic")); // NOI18N
         setName("Form"); // NOI18N
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
@@ -1917,7 +2034,7 @@ public class PropertyPanel extends ContentPanel {
             pnlPriorPropertiesLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(pnlPriorPropertiesLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel14, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
+                .add(jPanel14, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         pnlPriorPropertiesLayout.setVerticalGroup(
@@ -1976,7 +2093,7 @@ public class PropertyPanel extends ContentPanel {
     }// </editor-fold>//GEN-END:initComponents
 
 private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-    saveBaUnit(true);
+    saveBaUnit(true, false);
     customizeForm();
 }//GEN-LAST:event_btnSaveActionPerformed
 
@@ -2032,15 +2149,14 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     }//GEN-LAST:event_menuOpenChildBaUnitActionPerformed
 
     private void btnTerminateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTerminateActionPerformed
-        if (baUnitBean1.getPendingActionCode() != null && baUnitBean1
-                .getPendingActionCode().equals(TypeActionBean.CODE_CANCEL)) {
-            saveBaUnit(false);
+        if (baUnitBean1.getPendingActionCode() != null && baUnitBean1.getPendingActionCode().equals(TypeActionBean.CODE_CANCEL)) {
+            saveBaUnit(false, false);
             baUnitBean1.cancelBaUnitTermination();
             MessageUtility.displayMessage(ClientMessage.BAUNIT_TERMINATION_CANCELED);
             customizeForm();
         } else {
             if (MessageUtility.displayMessage(ClientMessage.BAUNIT_CONFIRM_TERMINATION) == MessageUtility.BUTTON_ONE) {
-                saveBaUnit(false);
+                saveBaUnit(false, false);
                 baUnitBean1.terminateBaUnit(applicationService.getId());
                 MessageUtility.displayMessage(ClientMessage.BAUNIT_TERMINATED);
                 customizeForm();
@@ -2129,7 +2245,6 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private void btnAddNotationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddNotationActionPerformed
         addNotation();
     }//GEN-LAST:event_btnAddNotationActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.sola.clients.beans.administrative.BaUnitBean baUnitBean1;
     private org.sola.clients.beans.referencedata.RrrTypeListBean baUnitRrrTypes;

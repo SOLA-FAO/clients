@@ -26,11 +26,10 @@
  * *********************************************************************************************
  */
 package org.sola.clients.beans.referencedata;
-import java.util.ArrayList;
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingListBean;
 import org.sola.clients.beans.cache.CacheManager;
+import org.sola.clients.beans.controls.SolaCodeList;
 
 /**
  * Holds the list of {@link GenderTypeBean} objects and used to bound the
@@ -39,15 +38,29 @@ import org.sola.clients.beans.cache.CacheManager;
 public class GenderTypeListBean extends AbstractBindingListBean {
     
     public static final String SELECTED_GENDERTYPE_PROPERTY = "selectedGenderType";
-    private ObservableList<GenderTypeBean> genderTypeListBean;
+    private SolaCodeList<GenderTypeBean> genderTypeListBean;
     private GenderTypeBean selectedGenderTypeBean;
     
     public GenderTypeListBean() {
         this(false);
     }
     
+    /** 
+     * Creates object instance.
+     * @param createDummy Indicates whether to add empty object on the list.
+     */
     public GenderTypeListBean(boolean createDummy) {
+        this(createDummy, (String) null);
+    }
+    
+    /** 
+     * Creates object instance.
+     * @param createDummy Indicates whether to add empty object on the list.
+     * @param excludedCodes Codes, which should be skipped while filtering.
+     */
+    public GenderTypeListBean(boolean createDummy, String ... excludedCodes) {
         super();
+        genderTypeListBean = new SolaCodeList<GenderTypeBean>(excludedCodes);
         loadList(createDummy);
     }
     
@@ -56,15 +69,16 @@ public class GenderTypeListBean extends AbstractBindingListBean {
      * @param createDummy Indicates whether to add empty object on the list.
      */
     public final void loadList(boolean createDummy) {
-        if (genderTypeListBean == null) {
-            genderTypeListBean = ObservableCollections.observableList(new ArrayList<GenderTypeBean>());
-        }
         loadCodeList(GenderTypeBean.class, genderTypeListBean, 
                 CacheManager.getGenderTypes(), createDummy);
     }
     
     public ObservableList<GenderTypeBean> getGenderTypeList() {
-        return genderTypeListBean;
+        return genderTypeListBean.getFilteredList();
+    }
+    
+    public void setExcludedCodes(String ... codes){
+        genderTypeListBean.setExcludedCodes(codes);
     }
     
     public GenderTypeBean getSelectedGenderType() {

@@ -27,12 +27,10 @@
  */
 package org.sola.clients.beans.referencedata;
 
-import java.util.ArrayList;
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingListBean;
-import org.sola.clients.beans.AbstractCodeBean;
 import org.sola.clients.beans.cache.CacheManager;
+import org.sola.clients.beans.controls.SolaCodeList;
 
 /**
  * Holds list of {@link TypeActionBean} objects.
@@ -40,7 +38,7 @@ import org.sola.clients.beans.cache.CacheManager;
 public class TypeActionListBean extends AbstractBindingListBean {
 
     public static final String SELECTED_TYPE_ACTION_PROPERTY = "selectedTypeAction";
-    private ObservableList<TypeActionBean> typeActions;
+    private SolaCodeList<TypeActionBean> typeActions;
     private TypeActionBean selectedTypeAction;
     
     /** Default constructor. */
@@ -52,8 +50,18 @@ public class TypeActionListBean extends AbstractBindingListBean {
      * Creates object instance.
      * @param createDummy Indicates whether to add empty object on the list.
      */
-    public TypeActionListBean(boolean createDummy){
+    public TypeActionListBean(boolean createDummy) {
+        this(createDummy, (String) null);
+    }
+    
+    /** 
+     * Creates object instance.
+     * @param createDummy Indicates whether to add empty object on the list.
+     * @param excludedCodes Codes, which should be skipped while filtering.
+     */
+    public TypeActionListBean(boolean createDummy, String ... excludedCodes) {
         super();
+        typeActions = new SolaCodeList<TypeActionBean>(excludedCodes);
         loadList(createDummy);
     }
     
@@ -62,16 +70,17 @@ public class TypeActionListBean extends AbstractBindingListBean {
      * @param createDummy Indicates whether to add empty object on the list.
      */
     public final void loadList(boolean createDummy) {
-        if (typeActions == null) {
-            typeActions = ObservableCollections.observableList(new ArrayList<TypeActionBean>());
-        }
         loadCodeList(TypeActionBean.class, typeActions, CacheManager.getTypeActions(), createDummy);
     }
 
     public ObservableList<TypeActionBean> getTypeActions() {
-        return typeActions;
+        return typeActions.getFilteredList();
     }
 
+    public void setExcludedCodes(String ... codes){
+        typeActions.setExcludedCodes(codes);
+    }
+    
     public TypeActionBean getSelectedTypeAction() {
         return selectedTypeAction;
     }

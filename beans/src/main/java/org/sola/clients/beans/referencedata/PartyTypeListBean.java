@@ -27,11 +27,10 @@
  */
 package org.sola.clients.beans.referencedata;
 
-import java.util.ArrayList;
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingListBean;
 import org.sola.clients.beans.cache.CacheManager;
+import org.sola.clients.beans.controls.SolaCodeList;
 
 /**
  * Holds the list of {@link PartyTypeBean} objects and used to bound the
@@ -40,7 +39,7 @@ import org.sola.clients.beans.cache.CacheManager;
 public class PartyTypeListBean extends AbstractBindingListBean {
     
     public static final String SELECTED_PARTY_TYPE_PROPERTY = "selectedPartyType";
-    private ObservableList<PartyTypeBean> partyTypes;
+    private SolaCodeList<PartyTypeBean> partyTypes;
     private PartyTypeBean selectedPartyType;
     
     public PartyTypeListBean(){
@@ -52,7 +51,17 @@ public class PartyTypeListBean extends AbstractBindingListBean {
      * @param createDummy Indicates whether to add empty object on the list.
      */
     public PartyTypeListBean(boolean createDummy) {
+        this(createDummy, (String) null);
+    }
+    
+    /** 
+     * Creates object instance.
+     * @param createDummy Indicates whether to add empty object on the list.
+     * @param excludedCodes Codes, which should be skipped while filtering.
+     */
+    public PartyTypeListBean(boolean createDummy, String ... excludedCodes) {
         super();
+        partyTypes = new SolaCodeList<PartyTypeBean>(excludedCodes);
         loadList(createDummy);
     }
     
@@ -61,17 +70,18 @@ public class PartyTypeListBean extends AbstractBindingListBean {
      * @param createDummy Indicates whether to add empty object on the list.
      */
     public final void loadList(boolean createDummy) {
-        if (partyTypes == null) {
-            partyTypes = ObservableCollections.observableList(new ArrayList<PartyTypeBean>());
-        }
         loadCodeList(PartyTypeBean.class, partyTypes, 
                 CacheManager.getPartyTypes(), createDummy);
     }
 
     public ObservableList<PartyTypeBean> getPartyTypes() {
-        return partyTypes;
+        return partyTypes.getFilteredList();
     }
 
+    public void setExcludedCodes(String ... codes){
+        partyTypes.setExcludedCodes(codes);
+    }
+    
     public PartyTypeBean getSelectedPartyType() {
         return selectedPartyType;
     }

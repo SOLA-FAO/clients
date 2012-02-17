@@ -27,14 +27,13 @@
  */
 package org.sola.clients.beans.source;
 
-import java.util.LinkedList;
 import java.util.List;
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
-import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.clients.beans.AbstractBindingBean;
+import org.sola.clients.beans.controls.SolaObservableList;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.beans.digitalarchive.DocumentBean;
+import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.search.SourceSearchParamsTO;
 import org.sola.webservices.transferobjects.search.SourceSearchResultTO;
 
@@ -44,13 +43,12 @@ import org.sola.webservices.transferobjects.search.SourceSearchResultTO;
  */
 public class SourceSearchResultsListBean extends AbstractBindingBean {
     public static final String SELECTED_SOURCE_PROPERTY = "selectedSource";
-    private ObservableList<SourceSearchResultBean> sourceSearchResultsList;
+    private SolaObservableList<SourceSearchResultBean> sourceSearchResultsList;
     private SourceSearchResultBean selectedSource;
 
     /** Creates object's instance and initializes collection of {@link SourceSearchResultBean}.*/
     public SourceSearchResultsListBean() {
-        sourceSearchResultsList = ObservableCollections.observableList(
-                new LinkedList<SourceSearchResultBean>());
+        sourceSearchResultsList = new SolaObservableList<SourceSearchResultBean>();
     }
     
     /** Runs source search with a given search criteria. */
@@ -85,7 +83,7 @@ public class SourceSearchResultsListBean extends AbstractBindingBean {
         return sourceSearchResultsList;
     }
 
-    public void setSourceSearchResultsList(ObservableList<SourceSearchResultBean> sourceSearchResultsList) {
+    public void setSourceSearchResultsList(SolaObservableList<SourceSearchResultBean> sourceSearchResultsList) {
         this.sourceSearchResultsList = sourceSearchResultsList;
     }
 }

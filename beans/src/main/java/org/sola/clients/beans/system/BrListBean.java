@@ -27,12 +27,13 @@
  */
 package org.sola.clients.beans.system;
 
-import java.util.LinkedList;
 import java.util.List;
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingBean;
+import org.sola.clients.beans.controls.SolaObservableList;
 import org.sola.clients.beans.converters.TypeConverters;
+import org.sola.clients.beans.party.PartyBean;
+import org.sola.clients.beans.party.PartySummaryBean;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.casemanagement.BrReportTO;
 
@@ -43,12 +44,12 @@ public class BrListBean extends AbstractBindingBean {
     
     public static final String SELECTED_BR_PROPERTY = "selectedBr";
     public static final String BR_LIST_PROPERTY = "brBeanList";
-    private ObservableList<BrReportBean> brListBean;
+    private SolaObservableList<BrReportBean> brListBean;
     private BrReportBean selectedBr;
     
     /** Creates new instance of object and initializes {@link BrReportBean} list.*/
     public BrListBean() {
-        brListBean = ObservableCollections.observableList(new LinkedList<BrReportBean>());
+        brListBean = new SolaObservableList<BrReportBean>();
     }
 
     public ObservableList<BrReportBean> getBrBeanList()

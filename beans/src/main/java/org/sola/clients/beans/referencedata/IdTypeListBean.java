@@ -28,11 +28,10 @@
 package org.sola.clients.beans.referencedata;
 
 
-import java.util.ArrayList;
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingListBean;
 import org.sola.clients.beans.cache.CacheManager;
+import org.sola.clients.beans.controls.SolaCodeList;
 
 /**
  * Holds the list of {@link IdTypeBean} objects and used to bound the
@@ -41,15 +40,29 @@ import org.sola.clients.beans.cache.CacheManager;
 public class IdTypeListBean extends AbstractBindingListBean {
     
     public static final String SELECTED_IDTYPE_PROPERTY = "selectedIdType";
-    private ObservableList<IdTypeBean> idTypeListBean;
+    private SolaCodeList<IdTypeBean> idTypeListBean;
     private IdTypeBean selectedIdTypeBean;
     
     public IdTypeListBean() {
         this(false);
     }
     
+    /** 
+     * Creates object instance.
+     * @param createDummy Indicates whether to add empty object on the list.
+     */
     public IdTypeListBean(boolean createDummy) {
+        this(createDummy, (String) null);
+    }
+    
+    /** 
+     * Creates object instance.
+     * @param createDummy Indicates whether to add empty object on the list.
+     * @param excludedCodes Codes, which should be skipped while filtering.
+     */
+    public IdTypeListBean(boolean createDummy, String ... excludedCodes) {
         super();
+        idTypeListBean = new SolaCodeList<IdTypeBean>(excludedCodes);
         loadList(createDummy);
     }
     
@@ -58,15 +71,16 @@ public class IdTypeListBean extends AbstractBindingListBean {
      * @param createDummy Indicates whether to add empty object on the list.
      */
     public final void loadList(boolean createDummy) {
-        if (idTypeListBean == null) {
-            idTypeListBean = ObservableCollections.observableList(new ArrayList<IdTypeBean>());
-        }
         loadCodeList(IdTypeBean.class, idTypeListBean, 
                 CacheManager.getIdTypes(), createDummy);
     }
     
     public ObservableList<IdTypeBean> getIdTypeList() {
-        return idTypeListBean;
+        return idTypeListBean.getFilteredList();
+    }
+    
+    public void setExcludedCodes(String ... codes){
+        idTypeListBean.setExcludedCodes(codes);
     }
     
     public IdTypeBean getSelectedIdType() {

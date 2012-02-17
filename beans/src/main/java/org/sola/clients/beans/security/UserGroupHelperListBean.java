@@ -29,11 +29,11 @@ package org.sola.clients.beans.security;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import org.jdesktop.observablecollections.ObservableCollections;
+import java.io.Serializable;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.clients.beans.controls.SolaList;
+import org.sola.clients.beans.controls.SolaObservableList;
 import org.sola.webservices.transferobjects.EntityAction;
 
 /**
@@ -41,7 +41,7 @@ import org.sola.webservices.transferobjects.EntityAction;
  */
 public class UserGroupHelperListBean extends AbstractBindingBean {
     
-    private class UserGroupHelperListener implements PropertyChangeListener{
+    private class UserGroupHelperListener implements PropertyChangeListener, Serializable{
         @Override
         public void propertyChange(PropertyChangeEvent evt) {
             if(evt.getPropertyName().equals(UserGroupHelperBean.IS_IN_USER_GROUPS_PROPERTY) && 
@@ -70,13 +70,13 @@ public class UserGroupHelperListBean extends AbstractBindingBean {
         }
     }
     
-    private ObservableList<UserGroupHelperBean> userGroupHelpers;
+    private SolaObservableList<UserGroupHelperBean> userGroupHelpers;
     private SolaList<UserGroupBean> userGroups;
     private boolean triggerUserGroupUpdates = true;
     
     public UserGroupHelperListBean() {
         super();
-        userGroupHelpers = ObservableCollections.observableList(new ArrayList<UserGroupHelperBean>());
+        userGroupHelpers = new SolaObservableList<UserGroupHelperBean>();
         UserGroupHelperListener listener = new  UserGroupHelperListener();
         
         GroupSummaryListBean groupsSummaryList = new GroupSummaryListBean();

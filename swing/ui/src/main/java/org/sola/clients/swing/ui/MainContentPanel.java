@@ -1,34 +1,39 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.ui;
 
 import java.awt.CardLayout;
 import java.awt.Component;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
+import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -61,7 +66,6 @@ public class MainContentPanel extends javax.swing.JPanel {
     public final static String CARD_OWNERSHIP = "ownershipPanel";
     public final static String CARD_OWNERSHIP_SHARE = "ownershipSharePanel";
     public final static String CARD_TRANSACTIONED_DOCUMENT = "transactionedDocumentPanel";
-    
     public final static String CARD_ADMIN_REFDATA_MANAGE = "refDataManagementPanel";
     public final static String CARD_ADMIN_REFDATA = "refDataPanel";
     public final static String CARD_ADMIN_REFDATA_REQUEST_TYPE = "refDataRequestTypePanel";
@@ -75,12 +79,13 @@ public class MainContentPanel extends javax.swing.JPanel {
     public final static String CARD_ADMIN_USER_PASSWORD = "userPasswordPanel";
     public final static String CARD_ADMIN_BR_MANAGE = "brManagementPanel";
     public final static String CARD_ADMIN_BR = "brPanel";
-    
     private HashMap<String, Component> cards;
     private ArrayList<String> cardsIndex;
     private PropertyChangeListener panelListener;
 
-    /** Default constructor. */
+    /**
+     * Default constructor.
+     */
     public MainContentPanel() {
         cardsIndex = new ArrayList<String>();
         cards = new HashMap<String, Component>();
@@ -92,25 +97,49 @@ public class MainContentPanel extends javax.swing.JPanel {
             }
         };
         initComponents();
+
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
+
+            @Override
+            public boolean dispatchKeyEvent(KeyEvent e) {
+                handleKeyPress(e);
+                return false;
+            }
+        });
     }
 
-    /** Listens to the panel property changes to trap close button click. */
+    private void handleKeyPress(KeyEvent e) {
+        // Catch F1 key press
+        if (e.getID() == KeyEvent.KEY_RELEASED && e.getKeyCode() == KeyEvent.VK_F1) {
+            Component panel = getTopCard();
+            if(panel!=null && ContentPanel.class.isAssignableFrom(panel.getClass())){
+                ((ContentPanel)panel).showHelp();
+            }
+        }
+        getTopCard();
+    }
+
+    /**
+     * Listens to the panel property changes to trap close button click.
+     */
     private void handlePanelPropertyChanges(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals(HeaderPanel.CLOSE_BUTTON_CLICKED)) {
             closePanel((JPanel) evt.getSource());
         }
     }
 
-    /** 
-     * Checks if panel already opened. 
+    /**
+     * Checks if panel already opened.
+     *
      * @param panelClass Class of the panel to search for.
      */
     public boolean isPanelOpened(String cardName) {
         return cards.containsKey(cardName);
     }
 
-    /** 
+    /**
      * Adds panel into cards panels collection.
+     *
      * @param panel Panel object to add into the cards collection.
      * @param cardName Name of the card to assign to the added panel.
      * @param showPanel Indicates whether to show added panel.
@@ -142,8 +171,9 @@ public class MainContentPanel extends javax.swing.JPanel {
         }
     }
 
-    /** 
-     * Adds panel into cards panels collection. 
+    /**
+     * Adds panel into cards panels collection.
+     *
      * @param panel Panel object to add into the cards collection.
      * @param cardName Name of the card to assign to the added panel.
      */
@@ -151,16 +181,18 @@ public class MainContentPanel extends javax.swing.JPanel {
         addPanel(panel, cardName, false);
     }
 
-    /** 
-     * Returns card/panel by the given card name. 
+    /**
+     * Returns card/panel by the given card name.
+     *
      * @param cardName Name of the card to search by.
      */
     public Component getPanel(String cardName) {
         return cards.get(cardName);
     }
 
-    /** 
-     * Closes panel by component object. 
+    /**
+     * Closes panel by component object.
+     *
      * @param panel Panel object to remove from the cards collection.
      */
     public void closePanel(Component panel) {
@@ -176,8 +208,9 @@ public class MainContentPanel extends javax.swing.JPanel {
         }
     }
 
-    /** 
-     * Closes panel by card name. 
+    /**
+     * Closes panel by card name.
+     *
      * @param cardName Name of the card to close.
      */
     public void closePanel(String cardName) {
@@ -189,7 +222,7 @@ public class MainContentPanel extends javax.swing.JPanel {
         }
     }
 
-    private void closeAutoClosablePanels() {
+    private void closeAutoCollapsiblePanels() {
         Iterator<Entry<String, Component>> it = cards.entrySet().iterator();
         ArrayList<String> keys = new ArrayList<String>();
 
@@ -207,14 +240,22 @@ public class MainContentPanel extends javax.swing.JPanel {
         }
     }
 
+    private Component getTopCard() {
+        if (cardsIndex.size() > 0) {
+            return cards.get(cardsIndex.get(cardsIndex.size() - 1));
+        }
+        return null;
+    }
+
     private void showLastCard() {
         if (cardsIndex.size() > 0) {
             ((CardLayout) pnlContent.getLayout()).show(pnlContent, cardsIndex.get(cardsIndex.size() - 1));
         }
     }
 
-    /** 
-     * Shows panel by the given card name. 
+    /**
+     * Shows panel by the given card name.
+     *
      * @param cardName Name of the card to search by.
      */
     public void showPanel(String cardName) {
@@ -233,7 +274,7 @@ public class MainContentPanel extends javax.swing.JPanel {
         }
 
         // close autoclosable panels
-        closeAutoClosablePanels();
+        closeAutoCollapsiblePanels();
 
         if (ContentPanel.class.isAssignableFrom(cards.get(cardName).getClass())) {
             ((ContentPanel) cards.get(cardName)).panelShown();

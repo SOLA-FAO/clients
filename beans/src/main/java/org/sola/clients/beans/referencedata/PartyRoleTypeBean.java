@@ -29,7 +29,7 @@ package org.sola.clients.beans.referencedata;
 
 import org.sola.clients.beans.AbstractCodeBean;
 import org.sola.clients.beans.party.PartyBean;
-import org.sola.webservices.transferobjects.referencedata.PartyRoleTypeTO;
+import org.sola.webservices.transferobjects.referencedata.PartyTypeTO;
 
 /** 
  * Represents reference data object of the <b>party_type</b> table. 

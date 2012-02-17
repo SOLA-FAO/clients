@@ -27,11 +27,10 @@
  */
 package org.sola.clients.beans.digitalarchive;
 
-import java.util.LinkedList;
 import java.util.List;
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingBean;
+import org.sola.clients.beans.controls.SolaObservableList;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.services.boundary.wsclients.WSManager;
 
@@ -44,7 +43,7 @@ public class FileInfoListBean extends AbstractBindingBean {
     /** Property name for the selected file in the remote folder files list. */
     public static final String SELECTED_FILE_INFO_BEAN_PROPERTY = "selectedFileInfoBean";
     
-    private ObservableList<FileInfoBean> lstFileInfo;
+    private SolaObservableList<FileInfoBean> lstFileInfo;
     private FileInfoBean selectedFileInfoBean;
     
     /** 
@@ -52,7 +51,7 @@ public class FileInfoListBean extends AbstractBindingBean {
      * &lt;{@link FileInfoBean}&gt; object.
      */
     public FileInfoListBean() {
-        lstFileInfo = ObservableCollections.observableList(new LinkedList<FileInfoBean>());
+        lstFileInfo = new SolaObservableList<FileInfoBean>();
     }
     
     /** 

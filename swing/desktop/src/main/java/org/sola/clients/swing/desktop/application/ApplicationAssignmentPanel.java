@@ -121,10 +121,11 @@ public class ApplicationAssignmentPanel extends ContentPanel {
         labAssignto = new javax.swing.JLabel();
 
         setHeaderPanel(headerPanel);
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/application/Bundle"); // NOI18N
+        setHelpTopic(bundle.getString("ApplicationAssignmentPanel.helpTopic")); // NOI18N
         setName("Form"); // NOI18N
 
         headerPanel.setName("headerPanel"); // NOI18N
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/application/Bundle"); // NOI18N
         headerPanel.setTitleText(bundle.getString("ApplicationAssignmentPanel.headerPanel.titleText")); // NOI18N
 
         jScrollPane1.setBorder(null);

@@ -37,7 +37,7 @@ import org.sola.common.messaging.MessageUtility;
 
 /**
  *
- * @author rizzom
+ * @author Elton Manoku
  */
 public class CadastreChangeNodeTool extends CadastreChangeEditAbstractTool {
 

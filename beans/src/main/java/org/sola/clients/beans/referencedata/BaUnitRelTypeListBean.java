@@ -15,18 +15,17 @@
  */
 package org.sola.clients.beans.referencedata;
 
-import java.util.ArrayList;
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingListBean;
 import org.sola.clients.beans.cache.CacheManager;
+import org.sola.clients.beans.controls.SolaCodeList;
 
 /**
  * Holds list of {@link BaUnitRelTypeBean} objects.
  */
 public class BaUnitRelTypeListBean extends AbstractBindingListBean {
     public static final String SELECTED_BA_UNIT_REL_TYPE_PROPERTY = "selectedBaUnitRelType";
-    private ObservableList<BaUnitRelTypeBean> baUnitRelTypes;
+    private SolaCodeList<BaUnitRelTypeBean> baUnitRelTypes;
     private BaUnitRelTypeBean selectedBaUnitRelType;
 
     /** Default constructor. */
@@ -39,7 +38,17 @@ public class BaUnitRelTypeListBean extends AbstractBindingListBean {
      * @param createDummy Indicates whether to add empty object on the list.
      */
     public BaUnitRelTypeListBean(boolean createDummy) {
+        this(createDummy, (String) null);
+    }
+    
+    /** 
+     * Creates object instance.
+     * @param createDummy Indicates whether to add empty object on the list.
+     * @param excludedCodes Codes, which should be skipped while filtering.
+     */
+    public BaUnitRelTypeListBean(boolean createDummy, String ... excludedCodes) {
         super();
+        baUnitRelTypes = new SolaCodeList<BaUnitRelTypeBean>(excludedCodes);
         loadList(createDummy);
     }
 
@@ -48,17 +57,18 @@ public class BaUnitRelTypeListBean extends AbstractBindingListBean {
      * @param createDummy Indicates whether to add empty object on the list.
      */
     public final void loadList(boolean createDummy) {
-        if (baUnitRelTypes == null) {
-            baUnitRelTypes = ObservableCollections.observableList(new ArrayList<BaUnitRelTypeBean>());
-        }
         loadCodeList(BaUnitRelTypeBean.class, baUnitRelTypes, 
                 CacheManager.getBaUnitRelTypes(), createDummy);
     }
     
     public ObservableList<BaUnitRelTypeBean> getBaUnitRelTypes() {
-        return baUnitRelTypes;
+        return baUnitRelTypes.getFilteredList();
     }
 
+    public void setExcludedCodes(String ... codes){
+        baUnitRelTypes.setExcludedCodes(codes);
+    }
+    
     public BaUnitRelTypeBean getSelectedBaUnitRelType() {
         return selectedBaUnitRelType;
     }

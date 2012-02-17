@@ -1,59 +1,55 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.beans.controls;
 
-import java.beans.BeanInfo;
-import java.beans.EventSetDescriptor;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.beans.*;
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import ognl.Ognl;
 import ognl.OgnlContext;
 import ognl.OgnlException;
 import org.jdesktop.beansbinding.PropertyResolutionException;
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.jdesktop.observablecollections.ObservableListListener;
 
 /**
- * Provides observable list, together with filtered list excluding beans marked 
+ * Provides observable list, together with filtered list excluding beans marked
  * for removal as well as beans with a given status.
  */
-public class ExtendedList<E> extends AbstractList<E> implements ObservableList<E> {
+public class ExtendedList<E> extends AbstractList<E> implements ObservableList<E>, Serializable {
 
     private class ListElementListener implements PropertyChangeListener {
 
@@ -66,18 +62,21 @@ public class ExtendedList<E> extends AbstractList<E> implements ObservableList<E
     private List<E> list;
     private List<E> newItemsList;
     private final FilteredList<E> filteredList;
-    private List<ObservableListListener> listeners;
+    private transient List<ObservableListListener> listeners;
     private ExtendedListFilter filter;
     private String filterExpression;
     private PropertyChangeListener elementListener;
 
-    /** Default class constructor */
+    /**
+     * Default class constructor
+     */
     public ExtendedList() {
         this(new ArrayList<E>(), null);
     }
 
     /**
      * Class constructor.
+     *
      * @param filter Filer instance.
      */
     public ExtendedList(ExtendedListFilter filter) {
@@ -86,6 +85,7 @@ public class ExtendedList<E> extends AbstractList<E> implements ObservableList<E
 
     /**
      * Class constructor.
+     *
      * @param list Initial unfiltered list
      */
     public ExtendedList(List<E> list) {
@@ -94,6 +94,7 @@ public class ExtendedList<E> extends AbstractList<E> implements ObservableList<E
 
     /**
      * Class constructor.
+     *
      * @param list Initial unfiltered list
      * @param filter Filer instance.
      */
@@ -110,80 +111,87 @@ public class ExtendedList<E> extends AbstractList<E> implements ObservableList<E
         initElementListener();
     }
 
-    /** Creates new instance of element property change listener. */
+    /**
+     * Creates new instance of element property change listener.
+     */
     private void initElementListener() {
         if (supportsElementPropertyChanged) {
             elementListener = new ListElementListener();
         }
     }
 
-    /** 
-     * Returns filter expression, used to filter items. If filter expression 
-     * is set together with {@link ExtendedListFilter} instance, 
-     * both expression and filter will be evaluated.
+    /**
+     * Returns filter expression, used to filter items. If filter expression is
+     * set together with {@link ExtendedListFilter} instance, both expression
+     * and filter will be evaluated.
      */
     public String getFilterExpression() {
         return filterExpression;
     }
 
-    /** 
-     * Sets filter expression, used to filter items. OGNL language is used for 
-     * building expressions read more at 
-     * <a href="http://commons.apache.org/ognl/">
-     * http://commons.apache.org/ognl/</a>.<br />
-     * If filter expression is set together with {@link ExtendedListFilter} 
-     * instance, both expression and filter will be evaluated.
+    /**
+     * Sets filter expression, used to filter items. OGNL language is used for
+     * building expressions read more at <a
+     * href="http://commons.apache.org/ognl/">
+     * http://commons.apache.org/ognl/</a>.<br /> If filter expression is set
+     * together with {@link ExtendedListFilter} instance, both expression and
+     * filter will be evaluated.
      */
     public void setFilterExpression(String filterExpression) {
         this.filterExpression = filterExpression;
         filter();
     }
 
-    /** 
-     * Returns {@link ExtendedListFilter} implementation instance, used to 
+    /**
+     * Returns {@link ExtendedListFilter} implementation instance, used to
      * filter elements in the list.
      */
     public ExtendedListFilter getFilter() {
         return filter;
     }
 
-    /** 
-     * Sets {@link ExtendedListFilter} implementation instance, used to 
-     * to filter elements in the list.
+    /**
+     * Sets {@link ExtendedListFilter} implementation instance, used to to
+     * filter elements in the list.
      */
     public void setFilter(ExtendedListFilter filter) {
         this.filter = filter;
         filter();
     }
 
-    /** Returns filtered list. */
+    /**
+     * Returns filtered list.
+     */
     public ObservableList<E> getFilteredList() {
         return filteredList;
     }
 
-    /** 
-     * Returns real index of the element in the list using {@code equals} 
-     * method and reference address of the object. 
-     * @param element Element of the list. 
+    /**
+     * Returns real index of the element in the list using {@code equals} method
+     * and reference address of the object.
+     *
+     * @param element Element of the list.
      */
     public int getRealIndex(E element) {
         return getRealIndex(list.indexOf(element));
     }
 
-    /** 
-     * Returns real index of the element in the list using {@code equals} 
-     * method and reference address of the object. 
-     * @param element Index of the element in the list. 
+    /**
+     * Returns real index of the element in the list using {@code equals} method
+     * and reference address of the object.
+     *
+     * @param element Index of the element in the list.
      */
     public int getRealIndex(int index) {
         return getRealIndex(index, this.list);
     }
 
-    /** 
-     * Static method to returns real index of the element in the list 
-     * using {@code equals} method and reference address of the object. 
-     * @param element Index of the element in the list. 
-     * @param list List to use for searching 
+    /**
+     * Static method to returns real index of the element in the list using {@code equals}
+     * method and reference address of the object.
+     *
+     * @param element Index of the element in the list.
+     * @param list List to use for searching
      */
     public static int getRealIndex(int index, List list) {
         if (index > -1 && index < list.size()) {
@@ -275,7 +283,9 @@ public class ExtendedList<E> extends AbstractList<E> implements ObservableList<E
                 + method + " on " + object, reason);
     }
 
-    /** Removes property change listener for the list element. */
+    /**
+     * Removes property change listener for the list element.
+     */
     private void removePropertyChangeListener(E element) {
         if (element != null && elementListener != null && supportsElementPropertyChanged) {
             EventSetDescriptor ed = getEventSetDescriptor(element);
@@ -288,7 +298,10 @@ public class ExtendedList<E> extends AbstractList<E> implements ObservableList<E
         }
     }
 
-    /** Adds property change listener for the list element to trigger filtering check. */
+    /**
+     * Adds property change listener for the list element to trigger filtering
+     * check.
+     */
     private void addPropertyChangeListener(E element) {
         if (element != null && elementListener != null && supportsElementPropertyChanged) {
             EventSetDescriptor ed = getEventSetDescriptor(element);
@@ -315,7 +328,10 @@ public class ExtendedList<E> extends AbstractList<E> implements ObservableList<E
             listener.listElementsAdded(this, index, 1);
         }
         if (fireFilteredListEvent) {
-            filteredList.add(filteredList.size(), element, false);
+            if (index >= filteredList.size()) {
+                index = filteredList.size();
+            }
+            filteredList.add(index, element, false);
         }
     }
 
@@ -324,9 +340,10 @@ public class ExtendedList<E> extends AbstractList<E> implements ObservableList<E
         this.add(index, element, true);
     }
 
-    /** 
-     * Adds new element into the list and tracks it as newly added. This helps 
+    /**
+     * Adds new element into the list and tracks it as newly added. This helps
      * to take a decision whether to remove element from list or not.
+     *
      * @param element Object to add.
      */
     public void addAsNew(E element) {
@@ -336,14 +353,18 @@ public class ExtendedList<E> extends AbstractList<E> implements ObservableList<E
         }
     }
 
-    /** Removes element from the list of newly added elements. */
+    /**
+     * Removes element from the list of newly added elements.
+     */
     private void removeFromNewItemsList(E element) {
         if (isNewlyAdded(element)) {
             newItemsList.remove(getRealIndex(newItemsList.indexOf(element), newItemsList));
         }
     }
 
-    /** Checks element existence in the list of newly added elements. */
+    /**
+     * Checks element existence in the list of newly added elements.
+     */
     public boolean isNewlyAdded(E element) {
         for (E bean : newItemsList) {
             if (bean == element) {
@@ -380,35 +401,39 @@ public class ExtendedList<E> extends AbstractList<E> implements ObservableList<E
         return this.remove(list.indexOf(o)) != null;
     }
 
-    /** 
-     * Checks given element of the list against filtering conditions.
-     * If element doesn't conform to the filer criteria, it will be removed from the filtered list.
-     * If element conforms to the filter criteria and not in the filtered list, it will be added.
+    /**
+     * Checks given element of the list against filtering conditions. If element
+     * doesn't conform to the filer criteria, it will be removed from the
+     * filtered list. If element conforms to the filter criteria and not in the
+     * filtered list, it will be added.
+     *
      * @param element Element object to refresh
-     * @see #filter() 
-     * @see #filterElement(int) 
+     * @see #filter()
+     * @see #filterElement(int)
      */
     public void filterElement(E element) {
         filterElement(getRealIndex(element));
     }
 
-    /** 
-     * Checks given element of the list against filtering conditions.
-     * If element doesn't conform to the filer criteria, it will be removed from the filtered list.
-     * If element conforms to the filter criteria and not in the filtered list, it will be added.
+    /**
+     * Checks given element of the list against filtering conditions. If element
+     * doesn't conform to the filer criteria, it will be removed from the
+     * filtered list. If element conforms to the filter criteria and not in the
+     * filtered list, it will be added.
+     *
      * @param index Index of the element to refresh.
-     * @see #filter() 
-     * @see #filterElement(java.lang.Object) 
+     * @see #filter()
+     * @see #filterElement(java.lang.Object)
      */
     public void filterElement(int index) {
         if (index > -1) {
             E element = list.get(index);
-            boolean isInFilteredList = filteredList.isAllowedByFilter(element);
+            boolean isAllowedByFilter = filteredList.isAllowedByFilter(element);
             int indexInFilteredList = filteredList.indexOf(element);
 
-            if (isInFilteredList && indexInFilteredList < 0) {
+            if (isAllowedByFilter && indexInFilteredList < 0) {
                 filteredList.add(filteredList.size(), element, false);
-            } else if (!isInFilteredList && indexInFilteredList > -1) {
+            } else if (!isAllowedByFilter && indexInFilteredList > -1) {
                 filteredList.remove(indexInFilteredList, false);
             }
         }
@@ -456,9 +481,10 @@ public class ExtendedList<E> extends AbstractList<E> implements ObservableList<E
         this.clear(true);
     }
 
-    /** 
+    /**
      * Forcibly applies filtering conditions to all elements of the list.
-     * @see #filterElement(java.lang.Object) 
+     *
+     * @see #filterElement(java.lang.Object)
      */
     public void filter() {
         for (int i = 0; i < list.size(); i++) {
@@ -502,20 +528,23 @@ public class ExtendedList<E> extends AbstractList<E> implements ObservableList<E
         return supportsElementPropertyChanged;
     }
 
-    /** Observable list class with support of filtering. */
-    private class FilteredList<E> extends AbstractList<E> implements ObservableList<E> {
+    /**
+     * Observable list class with support of filtering.
+     */
+    private class FilteredList<E> extends AbstractList<E> implements ObservableList<E>, Serializable {
 
         private final boolean supportsElementPropertyChanged;
         private List<E> list;
         private ExtendedList<E> parentList;
-        private List<ObservableListListener> listeners;
+        private transient List<ObservableListListener> listeners;
 
-        /** 
+        /**
          * Class constructor to create new list.
+         *
          * @param parentList Unfiltered parent list, holding all elements.
          */
         public FilteredList(ExtendedList<E> parentList) {
-            this.list = ObservableCollections.observableList(new LinkedList<E>());
+            this.list = new ArrayList<E>();
             this.parentList = parentList;
             listeners = new CopyOnWriteArrayList<ObservableListListener>();
             this.supportsElementPropertyChanged = false;
@@ -568,7 +597,10 @@ public class ExtendedList<E> extends AbstractList<E> implements ObservableList<E
             }
 
             if (fireMainListEvent) {
-                parentList.add(parentList.size(), element, false);
+                if (index >= parentList.size()) {
+                    index = parentList.size();
+                }
+                parentList.add(index, element, false);
             }
         }
 
@@ -577,11 +609,12 @@ public class ExtendedList<E> extends AbstractList<E> implements ObservableList<E
             this.add(index, element, true);
         }
 
-        /** 
+        /**
          * Removes element from the filtered list at specified position.
+         *
          * @param index Index of element in the list
-         * @param fireMainListEvent Boolean value indicating whether to
-         * trigger removal event on the the parent list or not.
+         * @param fireMainListEvent Boolean value indicating whether to trigger
+         * removal event on the the parent list or not.
          */
         private E remove(int index, boolean fireMainListEvent) {
             E oldValue = null;
@@ -624,7 +657,9 @@ public class ExtendedList<E> extends AbstractList<E> implements ObservableList<E
             return false;
         }
 
-        /** Removes all elements from the list. */
+        /**
+         * Removes all elements from the list.
+         */
         private void clear(boolean fireMainListEvent) {
             List<E> dup = new ArrayList<E>(list);
             list.clear();
@@ -646,9 +681,9 @@ public class ExtendedList<E> extends AbstractList<E> implements ObservableList<E
             this.clear(true);
         }
 
-        /** 
-         * Checks filter criteria against the given element. 
-         * Returns true if element conforms to the criteria. 
+        /**
+         * Checks filter criteria against the given element. Returns true if
+         * element conforms to the criteria.
          */
         private boolean isAllowedByFilter(E element) {
             boolean result = true;

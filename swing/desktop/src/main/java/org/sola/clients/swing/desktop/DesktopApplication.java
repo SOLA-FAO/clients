@@ -27,14 +27,14 @@
  */
 package org.sola.clients.swing.desktop;
 
-import org.sola.clients.swing.ui.security.LoginForm;
-import org.sola.clients.swing.ui.DesktopClientExceptionHandler;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.common.LocalizationManager;
+import org.sola.clients.swing.ui.DesktopClientExceptionHandler;
+import org.sola.clients.swing.ui.security.LoginForm;
 import org.sola.clients.swing.ui.security.LoginPanel;
 import org.sola.common.logging.LogUtility;
 import org.sola.common.messaging.ClientMessage;

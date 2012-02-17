@@ -27,11 +27,10 @@
  */
 package org.sola.clients.beans.referencedata;
 
-import java.util.ArrayList;
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingListBean;
 import org.sola.clients.beans.cache.CacheManager;
+import org.sola.clients.beans.controls.SolaCodeList;
 
 /**
  * Holds the list of {@link RrrTypeBean} objects.
@@ -39,7 +38,7 @@ import org.sola.clients.beans.cache.CacheManager;
 public class RrrTypeListBean extends AbstractBindingListBean {
 
     public static final String SELECTED_RRR_TYPE_PROPERTY = "selectedRrrType";
-    private ObservableList<RrrTypeBean> rrrTypeBeanList;
+    private SolaCodeList<RrrTypeBean> rrrTypeBeanList;
     private RrrTypeBean selectedRrrType;
 
     /** 
@@ -51,12 +50,21 @@ public class RrrTypeListBean extends AbstractBindingListBean {
     }
     
     /** 
-     * Initializes object's instance and populates {@link ObservableList}&lt;
-     * {@link RrrTypeBean} &gt; with values from the cache. 
+     * Creates object instance.
      * @param createDummy Indicates whether to add empty object on the list.
      */
     public RrrTypeListBean(boolean createDummy) {
+        this(createDummy, (String) null);
+    }
+    
+    /** 
+     * Creates object instance.
+     * @param createDummy Indicates whether to add empty object on the list.
+     * @param excludedCodes Codes, which should be skipped while filtering.
+     */
+    public RrrTypeListBean(boolean createDummy, String ... excludedCodes) {
         super();
+        rrrTypeBeanList = new SolaCodeList<RrrTypeBean>(excludedCodes);
         loadList(createDummy);
     }
     
@@ -65,14 +73,15 @@ public class RrrTypeListBean extends AbstractBindingListBean {
      * @param createDummy Indicates whether to add empty object on the list.
      */
     public final void loadList(boolean createDummy){
-        if(rrrTypeBeanList == null){
-            rrrTypeBeanList = ObservableCollections.observableList(new ArrayList<RrrTypeBean>());
-        }
         loadCodeList(RrrTypeBean.class, rrrTypeBeanList, CacheManager.getRrrTypes(), createDummy);
     }
 
     public RrrTypeBean getSelectedRrrType() {
         return selectedRrrType;
+    }
+    
+    public void setExcludedCodes(String ... codes){
+        rrrTypeBeanList.setExcludedCodes(codes);
     }
 
     public void setSelectedRrrType(RrrTypeBean rrrType) {
@@ -81,7 +90,7 @@ public class RrrTypeListBean extends AbstractBindingListBean {
     }
 
     public ObservableList<RrrTypeBean> getRrrTypeBeanList() {
-        return rrrTypeBeanList;
+        return rrrTypeBeanList.getFilteredList();
     }
 
     public void setSelectedRightByCode(String rrrTypeCode) {

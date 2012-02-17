@@ -27,11 +27,10 @@
  */
 package org.sola.clients.beans.referencedata;
 
-import java.util.ArrayList;
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingListBean;
 import org.sola.clients.beans.cache.CacheManager;
+import org.sola.clients.beans.controls.SolaCodeList;
 
 /**
  * Holds list of {@link RequestCategoryTypeBean} objects.
@@ -39,7 +38,7 @@ import org.sola.clients.beans.cache.CacheManager;
 public class RequestCategoryTypeListBean extends AbstractBindingListBean {
 
     public static final String SELECTED_REQUEST_CATEGORY_TYPE_PROPERTY = "selectedRequestCategoryType";
-    private ObservableList<RequestCategoryTypeBean> requestCategoryTypes;
+    private SolaCodeList<RequestCategoryTypeBean> requestCategoryTypes;
     private RequestCategoryTypeBean selectedRequestCategoryType;
 
     /** Default constructor. */
@@ -52,7 +51,17 @@ public class RequestCategoryTypeListBean extends AbstractBindingListBean {
      * @param createDummy Indicates whether to add empty object on the list.
      */
     public RequestCategoryTypeListBean(boolean createDummy) {
+        this(createDummy, (String) null);
+    }
+    
+    /** 
+     * Creates object instance.
+     * @param createDummy Indicates whether to add empty object on the list.
+     * @param excludedCodes Codes, which should be skipped while filtering.
+     */
+    public RequestCategoryTypeListBean(boolean createDummy, String ... excludedCodes) {
         super();
+        requestCategoryTypes = new SolaCodeList<RequestCategoryTypeBean>(excludedCodes);
         loadList(createDummy);
     }
 
@@ -61,17 +70,18 @@ public class RequestCategoryTypeListBean extends AbstractBindingListBean {
      * @param createDummy Indicates whether to add empty object on the list.
      */
     public final void loadList(boolean createDummy) {
-        if (requestCategoryTypes == null) {
-            requestCategoryTypes = ObservableCollections.observableList(new ArrayList<RequestCategoryTypeBean>());
-        }
         loadCodeList(RequestCategoryTypeBean.class, requestCategoryTypes, 
                 CacheManager.getRequestCategoryTypes(), createDummy);
     }
 
     public ObservableList<RequestCategoryTypeBean> getRequestCategoryTypes() {
-        return requestCategoryTypes;
+        return requestCategoryTypes.getFilteredList();
     }
 
+    public void setExcludedCodes(String ... codes){
+        requestCategoryTypes.setExcludedCodes(codes);
+    }
+    
     public RequestCategoryTypeBean getSelectedRequestCategoryType() {
         return selectedRequestCategoryType;
     }

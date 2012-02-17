@@ -6,6 +6,7 @@ package org.sola.clients.swing.gis.tool;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.CoordinateList;
+import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
@@ -38,22 +39,33 @@ public class CadastreBoundarySelectTool extends ExtendedDrawRectangle {
     protected CadastreBoundaryPointLayer pointLayer;
     private ExtendedLayerGraphics targetLayer;
     private ExtendedLayerGraphics targetNodeLayer;
-    private int stepNumber = 1;
+    //private int stepNumber = 1;
     protected List<String> targetCadastreObjectIds = new ArrayList<String>();
 
     public CadastreBoundarySelectTool(
-            //PojoDataAccess dataAccess,
-            //            CadastreRedefinitionNodeLayer cadastreObjectNodeModifiedLayer,
-            //            CadastreRedefinitionObjectLayer cadastreObjectModifiedLayer,
             CadastreBoundaryPointLayer pointLayer,
             ExtendedLayerGraphics targetLayer,
             ExtendedLayerGraphics targetNodeLayer) {
-        //this.dataAccess = dataAccess;
         this.setToolName(NAME);
         this.setToolTip(toolTip);
         this.pointLayer = pointLayer;
         this.targetLayer = targetLayer;
         this.targetNodeLayer = targetNodeLayer;
+    }
+
+    @Override
+    public void onSelectionChanged(boolean selected) {
+        super.onSelectionChanged(selected);
+        if (selected) {
+            //if (stepNumber == 1) {
+            if (this.isFirstStep()){
+                Messaging.getInstance().show(
+                        GisMessage.CADASTRE_BOUNDARY_SELECT_FIRST_BOUNDARY_POINT);
+            } else {
+                Messaging.getInstance().show(
+                        GisMessage.CADASTRE_BOUNDARY_SELECT_SECOND_BOUNDARY_POINT);
+            }
+        }
     }
 
     protected ExtendedLayerGraphics getTargetLayer() {
@@ -62,25 +74,23 @@ public class CadastreBoundarySelectTool extends ExtendedDrawRectangle {
 
     @Override
     protected void onRectangleFinished(Envelope2D env) {
-        boolean refreshMap = false;
-        if (stepNumber == 1) {
+        if (this.isFirstStep()) {
             //Select starting point
             this.step1(env);
             if (this.pointLayer.getStartPoint() != null) {
-                stepNumber = 2;
-                refreshMap = true;
+                this.getMapControl().refresh();
+                Messaging.getInstance().show(
+                        GisMessage.CADASTRE_BOUNDARY_SELECT_SECOND_BOUNDARY_POINT);
             }
-        } else if (stepNumber == 2) {
+        } else {
             //Select ending point
             this.step2(env);
-            if (this.pointLayer.getEndPoint() != null) {
-                stepNumber = 1;
-            }
-            refreshMap = true;
-        }
-        if (refreshMap) {
             this.getMapControl().refresh();
         }
+    }
+    
+    private boolean isFirstStep(){
+        return (this.pointLayer.getStartPoint() == null || this.pointLayer.getEndPoint()!= null);
     }
 
     protected final SimpleFeature getFirstPointFeature(Envelope2D env) {
@@ -103,6 +113,11 @@ public class CadastreBoundarySelectTool extends ExtendedDrawRectangle {
         if (pointFeature == null) {
             return false;
         }
+        Point geom = (Point) pointFeature.getDefaultGeometry();
+        if (this.pointLayer.getStartPoint().equals(geom)){
+            Messaging.getInstance().show(GisMessage.CADASTRE_BOUNDARY_START_END_POINT_SAME);
+            return true;
+        }
         List<String> targetCadastreObjectIdsTmp = new ArrayList<String>();
         List<String> targetIds = getCadastreObjectTargetIdsFromNodeFeature(pointFeature);
         for (String id : targetIds) {
@@ -117,7 +132,7 @@ public class CadastreBoundarySelectTool extends ExtendedDrawRectangle {
                 || this.targetCadastreObjectIds.size() > 2) {
             this.clearSelection();
         } else {
-            this.pointLayer.setEndPoint((Point) pointFeature.getDefaultGeometry());
+            this.pointLayer.setEndPoint(geom);
             this.defineTargetBoundary();
         }
         return true;
@@ -162,7 +177,6 @@ public class CadastreBoundarySelectTool extends ExtendedDrawRectangle {
                 }
             }
             this.targetCadastreObjectIds.clear();
-            this.stepNumber = 1;
             //Disactivate editing of boundary
             this.getMapControl().getMapActionByName(CadastreBoundaryEditTool.NAME).setEnabled(false);
         } catch (Exception ex) {

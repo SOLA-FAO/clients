@@ -32,6 +32,7 @@ import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationServiceBean;
 import org.sola.clients.beans.referencedata.StatusConstants;
 import org.sola.clients.swing.common.LafManager;
+import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.source.DocumentsManagementPanel;
 
@@ -93,8 +94,67 @@ public class SimpleRightPanel extends ContentPanel {
 
         headerPanel.setTitleText(rrrBean.getRrrType().getDisplayValue());
         customizeForm(rrrAction);
+        saveRrrState();
     }
 
+    /** Checks provided {@link RrrBean} and makes a copy if needed. */
+    private void prepareRrrBean(RrrBean rrrBean, RrrBean.RRR_ACTION rrrAction) {
+        if (rrrBean == null) {
+            this.rrrBean = new RrrBean();
+            this.rrrBean.setStatusCode(StatusConstants.PENDING);
+        } else {
+            this.rrrBean=rrrBean.makeCopyByAction(rrrAction);
+        }
+    }
+    
+    /** 
+     * Customizes form view, disabling or enabling different parts, depending 
+     * on the given {@link RrrBean#RRR_ACTION} and user rights. 
+     */
+    private void customizeForm(RrrBean.RRR_ACTION rrrAction) {
+        if (rrrAction == RrrBean.RRR_ACTION.NEW) {
+            btnSave.setText("Create & Close");
+        }
+        if (rrrAction == RrrBean.RRR_ACTION.CANCEL) {
+            btnSave.setText("Extinguish");
+        }
+
+        if (rrrAction != RrrBean.RRR_ACTION.EDIT && rrrAction != RrrBean.RRR_ACTION.VIEW 
+                && appService!=null) {
+            // Set default noation text from the selected application service
+            txtNotationText.setText(appService.getRequestType().getNotationTemplate());
+        }
+        
+        if (rrrAction == RrrBean.RRR_ACTION.VIEW) {
+            btnSave.setVisible(false);
+            txtNotationText.setEditable(false);
+            cbxIsPrimary.setEnabled(false);
+            txtRegDatetime.setEditable(false);
+            cbxIsPrimary.setEnabled(false);
+        }
+    }
+    
+    private boolean saveRrr() {
+        if (rrrBean.validate(true).size() <= 0) {
+            firePropertyChange(UPDATED_RRR, null, rrrBean);
+            close();
+            return true;
+        }
+        return false;
+    }
+    
+    private void saveRrrState() {
+        MainForm.saveBeanState(rrrBean);
+    }
+
+    @Override
+    protected boolean panelClosing() {
+        if (btnSave.isEnabled() && MainForm.checkSaveBeforeClose(rrrBean)) {
+            return saveRrr();
+        }
+        return true;
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -119,12 +179,13 @@ public class SimpleRightPanel extends ContentPanel {
 
         setCloseOnHide(true);
         setHeaderPanel(headerPanel);
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
+        setHelpTopic(bundle.getString("SimpleRightPanel.helpTopic")); // NOI18N
         setName("Form"); // NOI18N
 
         documentsPanel.setName("documentsPanel"); // NOI18N
 
         jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
         jLabel15.setText(bundle.getString("SimpleRightPanel.jLabel15.text")); // NOI18N
         jLabel15.setName("jLabel15"); // NOI18N
 
@@ -195,7 +256,7 @@ public class SimpleRightPanel extends ContentPanel {
             .add(jPanel1Layout.createSequentialGroup()
                 .add(jLabel13)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(txtRegDatetime, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
+                .add(txtRegDatetime, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 67, Short.MAX_VALUE)
                 .add(18, 18, 18)
                 .add(cbxIsPrimary, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 117, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(308, 308, 308))
@@ -217,25 +278,16 @@ public class SimpleRightPanel extends ContentPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(headerPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 706, Short.MAX_VALUE)
-            .add(jToolBar1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 706, Short.MAX_VALUE)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+            .add(headerPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 662, Short.MAX_VALUE)
+            .add(jToolBar1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 662, Short.MAX_VALUE)
+            .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(txtNotationText, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 686, Short.MAX_VALUE)
-                    .add(jLabel15))
-                .addContainerGap())
-            .add(layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-            .add(layout.createSequentialGroup()
-                .addContainerGap()
-                .add(groupPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 686, Short.MAX_VALUE)
-                .addContainerGap())
-            .add(layout.createSequentialGroup()
-                .addContainerGap()
-                .add(documentsPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 686, Short.MAX_VALUE)
+                    .add(txtNotationText, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE)
+                    .add(jLabel15)
+                    .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(groupPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE)
+                    .add(documentsPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -260,48 +312,8 @@ public class SimpleRightPanel extends ContentPanel {
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
 
-    /** Checks provided {@link RrrBean} and makes a copy if needed. */
-    private void prepareRrrBean(RrrBean rrrBean, RrrBean.RRR_ACTION rrrAction) {
-        if (rrrBean == null) {
-            this.rrrBean = new RrrBean();
-            this.rrrBean.setStatusCode(StatusConstants.PENDING);
-        } else {
-            this.rrrBean=rrrBean.makeCopyByAction(rrrAction);
-        }
-    }
-    
-    /** 
-     * Customizes form view, disabling or enabling different parts, depending 
-     * on the given {@link RrrBean#RRR_ACTION} and user rights. 
-     */
-    private void customizeForm(RrrBean.RRR_ACTION rrrAction) {
-        if (rrrAction == RrrBean.RRR_ACTION.NEW) {
-            btnSave.setText("Create & Close");
-        }
-        if (rrrAction == RrrBean.RRR_ACTION.CANCEL) {
-            btnSave.setText("Extinguish");
-        }
-
-        if (rrrAction != RrrBean.RRR_ACTION.EDIT && rrrAction != RrrBean.RRR_ACTION.VIEW 
-                && appService!=null) {
-            // Set default noation text from the selected application service
-            txtNotationText.setText(appService.getRequestType().getNotationTemplate());
-        }
-        
-        if (rrrAction == RrrBean.RRR_ACTION.VIEW) {
-            btnSave.setVisible(false);
-            txtNotationText.setEditable(false);
-            cbxIsPrimary.setEnabled(false);
-            txtRegDatetime.setEditable(false);
-            cbxIsPrimary.setEnabled(false);
-        }
-    }
-
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        if (rrrBean.validate(true).size() <= 0) {
-            firePropertyChange(UPDATED_RRR, null, rrrBean);
-            close();
-        }
+        saveRrr();
     }//GEN-LAST:event_btnSaveActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSave;

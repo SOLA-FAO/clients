@@ -2,7 +2,7 @@
 
 <Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <NonVisualComponents>
-    <Component class="org.sola.clients.beans.source.SourceTypeListBean" name="sourceTypeListBean">
+    <Component class="org.sola.clients.beans.referencedata.SourceTypeListBean" name="sourceTypeListBean">
     </Component>
     <Component class="org.sola.clients.beans.source.SourceBean" name="sourceBean">
       <AuxValues>

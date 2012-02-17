@@ -27,14 +27,14 @@
  */
 package org.sola.clients.beans.system.validation;
 
-import org.sola.clients.beans.system.BrValidationBean;
-import javax.validation.Payload;
 import java.lang.annotation.Documented;
+import static java.lang.annotation.ElementType.*;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import javax.validation.Constraint;
-import static java.lang.annotation.ElementType.*;
+import javax.validation.Payload;
+import org.sola.clients.beans.system.BrValidationBean;
 
 /**
  * Class level validation annotation to make checks on {@link BrValidationBean}.

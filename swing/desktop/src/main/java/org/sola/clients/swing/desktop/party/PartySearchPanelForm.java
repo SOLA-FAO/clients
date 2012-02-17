@@ -18,9 +18,14 @@ package org.sola.clients.swing.desktop.party;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import org.sola.clients.beans.party.PartyBean;
+import org.sola.clients.swing.common.tasks.SolaTask;
+import org.sola.clients.swing.common.tasks.TaskManager;
+import org.sola.clients.swing.desktop.application.ApplicationPanel;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.clients.swing.ui.party.PartySearchPanel;
+import org.sola.common.messaging.ClientMessage;
+import org.sola.common.messaging.MessageUtility;
 //import org.sola.clients.swing.ui.party.PartySearchPanel;
 
 /**
@@ -28,39 +33,56 @@ import org.sola.clients.swing.ui.party.PartySearchPanel;
  */
 public class PartySearchPanelForm extends ContentPanel {
 
-    /** Default constructor. */
+    /**
+     * Default constructor.
+     */
     public PartySearchPanelForm() {
         initComponents();
         partySearchPanel.addPropertyChangeListener(new PropertyChangeListener() {
+
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                handleSearchPanelEvents(evt);
+                if (evt.getPropertyName().equals(PartySearchPanel.CREATE_NEW_PARTY_PROPERTY)
+                        || evt.getPropertyName().equals(PartySearchPanel.EDIT_PARTY_PROPERTY)
+                        || evt.getPropertyName().equals(PartySearchPanel.VIEW_PARTY_PROPERTY)) {
+                    handleSearchPanelEvents(evt);
+                }
             }
         });
     }
-    
-    private void handleSearchPanelEvents(PropertyChangeEvent evt){
-        PartyPanel panel = null; 
-        
-        if(evt.getPropertyName().equals(PartySearchPanel.CREATE_NEW_PARTY_PROPERTY)){
-            panel = new PartyPanel(true, null, false, false);
-            panel.addPropertyChangeListener(new PropertyChangeListener() {
-                @Override
-                public void propertyChange(PropertyChangeEvent evt) {
-                    if(evt.getPropertyName().equals(PartyPanel.PARTY_SAVED)){
-                        ((PartyPanel)evt.getSource()).setParty(null);
-                    }
+
+    private void handleSearchPanelEvents(final PropertyChangeEvent evt) {
+        SolaTask t = new SolaTask<Void, Void>() {
+
+            @Override
+            public Void doTask() {
+                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PERSON));
+                PartyPanelForm panel = null;
+
+                if (evt.getPropertyName().equals(PartySearchPanel.CREATE_NEW_PARTY_PROPERTY)) {
+                    panel = new PartyPanelForm(true, null, false, false);
+                    panel.addPropertyChangeListener(new PropertyChangeListener() {
+
+                        @Override
+                        public void propertyChange(PropertyChangeEvent evt) {
+                            if (evt.getPropertyName().equals(PartyPanelForm.PARTY_SAVED)) {
+                                ((PartyPanelForm) evt.getSource()).setParty(null);
+                            }
+                        }
+                    });
+                } else if (evt.getPropertyName().equals(PartySearchPanel.EDIT_PARTY_PROPERTY)) {
+                    panel = new PartyPanelForm(true, (PartyBean) evt.getNewValue(), false, true);
+                } else if (evt.getPropertyName().equals(PartySearchPanel.VIEW_PARTY_PROPERTY)) {
+                    panel = new PartyPanelForm(true, (PartyBean) evt.getNewValue(), true, true);
                 }
-            });
-        } else if(evt.getPropertyName().equals(PartySearchPanel.EDIT_PARTY_PROPERTY)){
-            panel = new PartyPanel(true, (PartyBean)evt.getNewValue(), false, true);
-        } else if(evt.getPropertyName().equals(PartySearchPanel.VIEW_PARTY_PROPERTY)){
-            panel = new PartyPanel(true, (PartyBean)evt.getNewValue(), true, true);
-        }
-        
-        if(panel!=null){
-            getMainContentPanel().addPanel(panel, MainContentPanel.CARD_PERSON, true);
-        }
+
+                if (panel != null) {
+                    getMainContentPanel().addPanel(panel, MainContentPanel.CARD_PERSON, true);
+                }
+                return null;
+            }
+        };
+        TaskManager.getInstance().runTask(t);
     }
 
     @SuppressWarnings("unchecked")
@@ -71,12 +93,14 @@ public class PartySearchPanelForm extends ContentPanel {
         partySearchPanel = new org.sola.clients.swing.ui.party.PartySearchPanel();
 
         setHeaderPanel(headerPanel);
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/party/Bundle"); // NOI18N
+        setHelpTopic(bundle.getString("PartySearchPanelForm.helpTopic")); // NOI18N
 
         headerPanel.setName("headerPanel"); // NOI18N
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/party/Bundle"); // NOI18N
         headerPanel.setTitleText(bundle.getString("PartySearchPanelForm.headerPanel.titleText")); // NOI18N
 
         partySearchPanel.setName("partySearchPanel"); // NOI18N
+        partySearchPanel.setShowSelectButton(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);

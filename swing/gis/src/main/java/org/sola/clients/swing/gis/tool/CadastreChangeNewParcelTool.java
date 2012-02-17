@@ -34,7 +34,6 @@ import org.geotools.geometry.jts.Geometries;
 import org.geotools.swing.event.MapMouseEvent;
 import org.opengis.feature.simple.SimpleFeature;
 import org.sola.clients.swing.gis.layer.CadastreChangeNewCadastreObjectLayer;
-import org.geotools.swing.tool.extended.ExtendedEditGeometryTool;
 import org.geotools.swing.extended.util.Messaging;
 import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.MessageUtility;

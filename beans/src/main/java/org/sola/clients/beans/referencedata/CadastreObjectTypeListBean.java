@@ -27,28 +27,28 @@
  */
 package org.sola.clients.beans.referencedata;
 
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.clients.beans.cache.CacheManager;
+import org.sola.clients.beans.controls.SolaCodeList;
 
 /**
  * Holds the list of {@link RrrTypeBean} objects.
  */
 public class CadastreObjectTypeListBean extends AbstractBindingBean {
     public static final String SELECTED_CADASTRE_OBJECT_TYPE_PROPERTY = "selectedCadastreObjectType";
-    private ObservableList<CadastreObjectTypeBean> cadastreObjectTypeList;
+    private SolaCodeList<CadastreObjectTypeBean> cadastreObjectTypeList;
     private CadastreObjectTypeBean selectedCadastreObjectType;
 
     /** Initializes object's instance and populates {@link ObservableList}&lt;
      * {@link RrrTypeBean} &gt; with values from the cache. */
     public CadastreObjectTypeListBean() {
         // Load from cache by default
-        cadastreObjectTypeList = ObservableCollections.observableList(CacheManager.getCadastreObjectTypes());
+        cadastreObjectTypeList = new SolaCodeList<CadastreObjectTypeBean>(CacheManager.getCadastreObjectTypes());
     }
 
     public ObservableList<CadastreObjectTypeBean> getCadastreObjectTypeList() {
-        return cadastreObjectTypeList;
+        return cadastreObjectTypeList.getFilteredList();
     }
 
     public CadastreObjectTypeBean getSelectedCadastreObjectType() {

@@ -37,7 +37,6 @@ import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.controls.SolaList;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.beans.referencedata.BrTechnicalTypeBean;
-import org.sola.clients.beans.referencedata.BrValidationTargetTypeBean;
 import org.sola.clients.beans.validation.CodeBeanNotEmpty;
 import org.sola.clients.beans.validation.Localized;
 import org.sola.common.messaging.ClientMessage;
@@ -77,8 +76,8 @@ public class BrBean extends AbstractBindingBean {
     //@Size(min=1, message=ClientMessage.CHECK_SIZE_BRVALLIST, payload=Localized.class)
     private SolaList<BrValidationBean> brValidationList;
     private String technicalDescription;
-    private BrDefinitionBean selectedBrDefinition;
-    private BrValidationBean selectedBrValidation;
+    private transient BrDefinitionBean selectedBrDefinition;
+    private transient BrValidationBean selectedBrValidation;
     
     public BrBean(){
         super();

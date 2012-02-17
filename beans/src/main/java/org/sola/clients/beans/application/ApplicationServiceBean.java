@@ -27,17 +27,17 @@
  */
 package org.sola.clients.beans.application;
 
-import org.sola.clients.beans.validation.ValidationResultBean;
-import org.sola.clients.beans.referencedata.ServiceActionTypeBean;
-import org.sola.clients.beans.referencedata.ServiceStatusTypeBean;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.beans.referencedata.RequestTypeBean;
+import org.sola.clients.beans.referencedata.ServiceActionTypeBean;
+import org.sola.clients.beans.referencedata.ServiceStatusTypeBean;
 import org.sola.clients.beans.referencedata.StatusConstants;
+import org.sola.clients.beans.validation.ValidationResultBean;
+import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.casemanagement.ServiceTO;
 
 /**
@@ -57,6 +57,7 @@ public class ApplicationServiceBean extends ApplicationServiceSummaryBean {
     public static final String STATUS_CODE_PROPERTY = "statusCode";
     public static final String STATUS_PROPERTY = "status";
     public static final String VALUE_FEE_PROPERTY = "valueFee";
+    
     private ServiceActionTypeBean actionBean;
     private ServiceStatusTypeBean statusBean;
     private String actionNotes;

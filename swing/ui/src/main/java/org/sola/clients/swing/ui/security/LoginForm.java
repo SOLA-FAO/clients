@@ -27,6 +27,9 @@
  */
 package org.sola.clients.swing.ui.security;
 
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
+import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.ImageIcon;
@@ -58,8 +61,24 @@ public class LoginForm extends javax.swing.JFrame {
             }
         });
         loginPanel.setUserNameFocus();
+        
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
+
+            @Override
+            public boolean dispatchKeyEvent(KeyEvent e) {
+                // Catch ESC key press
+                if(e.getKeyCode() == KeyEvent.VK_ESCAPE && e.getID() == KeyEvent.KEY_RELEASED){
+                    exitSystem();
+                }
+                return false;
+            }
+        });
     }
 
+    private void exitSystem(){
+        System.exit(0);
+    }
+    
     /** Enables or disables login panel*/
     public void enableLoginPanel(boolean isEnabled){
         loginPanel.enablePanel(isEnabled);
@@ -120,7 +139,7 @@ public class LoginForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        System.exit(0);
+        exitSystem();
     }//GEN-LAST:event_formWindowClosing
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JPanel jPanel1;

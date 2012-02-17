@@ -27,11 +27,10 @@
  */
 package org.sola.clients.beans.referencedata;
 
-import java.util.ArrayList;
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingListBean;
 import org.sola.clients.beans.cache.CacheManager;
+import org.sola.clients.beans.controls.SolaCodeList;
 
 /**
  * Holds list of {@link BrValidationTargetTypeBean} objects.
@@ -39,7 +38,7 @@ import org.sola.clients.beans.cache.CacheManager;
 public class BrValidationTargetTypeListBean extends AbstractBindingListBean {
     
     public static final String SELECTED_BR_VALIDATION_TARGET_TYPE_PROPERTY = "selectedBrValidationTargetType";
-    private ObservableList<BrValidationTargetTypeBean> brValidationTargetTypes;
+    private SolaCodeList<BrValidationTargetTypeBean> brValidationTargetTypes;
     private BrValidationTargetTypeBean selectedBrValidationTargetType;
 
     /** Default constructor. */
@@ -52,7 +51,17 @@ public class BrValidationTargetTypeListBean extends AbstractBindingListBean {
      * @param createDummy Indicates whether to add empty object on the list.
      */
     public BrValidationTargetTypeListBean(boolean createDummy) {
+        this(createDummy, (String) null);
+    }
+    
+    /** 
+     * Creates object instance.
+     * @param createDummy Indicates whether to add empty object on the list.
+     * @param excludedCodes Codes, which should be skipped while filtering.
+     */
+    public BrValidationTargetTypeListBean(boolean createDummy, String ... excludedCodes) {
         super();
+        brValidationTargetTypes = new SolaCodeList<BrValidationTargetTypeBean>(excludedCodes);
         loadList(createDummy);
     }
     
@@ -61,17 +70,18 @@ public class BrValidationTargetTypeListBean extends AbstractBindingListBean {
      * @param createDummy Indicates whether to add empty object on the list.
      */
     public final void loadList(boolean createDummy) {
-        if (brValidationTargetTypes == null) {
-            brValidationTargetTypes = ObservableCollections.observableList(new ArrayList<BrValidationTargetTypeBean>());
-        }
         loadCodeList(BrValidationTargetTypeBean.class, brValidationTargetTypes, 
                 CacheManager.getBrValidationTargetTypes(), createDummy);
     }
 
     public ObservableList<BrValidationTargetTypeBean> getBrValidationTargetTypes() {
-        return brValidationTargetTypes;
+        return brValidationTargetTypes.getFilteredList();
     }
 
+    public void setExcludedCodes(String ... codes){
+        brValidationTargetTypes.setExcludedCodes(codes);
+    }
+    
     public BrValidationTargetTypeBean getSelectedBrValidationTargetType() {
         return selectedBrValidationTargetType;
     }

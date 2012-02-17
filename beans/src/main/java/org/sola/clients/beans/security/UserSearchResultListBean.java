@@ -28,13 +28,12 @@
 package org.sola.clients.beans.security;
 
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
-import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.clients.beans.AbstractBindingBean;
+import org.sola.clients.beans.controls.SolaObservableList;
 import org.sola.clients.beans.converters.TypeConverters;
+import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.search.UserSearchResultTO;
 
 /**
@@ -44,13 +43,13 @@ import org.sola.webservices.transferobjects.search.UserSearchResultTO;
 public class UserSearchResultListBean extends AbstractBindingBean {
 
     public static final String SELECTED_USER_PROPERTY = "selectedUser";
-    private ObservableList<UserSearchResultBean> usersList;
+    private SolaObservableList<UserSearchResultBean> usersList;
     private UserSearchResultBean selectedUser;
 
     /** Creates object instance and populates user's list with active users. */
     public UserSearchResultListBean() {
         super();
-        usersList = ObservableCollections.observableList(new LinkedList<UserSearchResultBean>());
+        usersList = new SolaObservableList<UserSearchResultBean>();
         loadActiveUsers();
     }
 

@@ -55,7 +55,6 @@ public class ExtendedLayerEditor extends ExtendedLayerGraphics {
 
     private static String VERTICES_LAYER_NAME_POSTFIX = " vertices";
     private static String VERTICES_LAYER_STYLE_RESOURCE = "editor_vertices.xml";
-    
     private ExtendedLayerGraphics verticesLayer = null;
     /**
      * The list of {@see VertexInformation} for the features in this layer
@@ -79,7 +78,6 @@ public class ExtendedLayerEditor extends ExtendedLayerGraphics {
         this(name, geometryType, styleResource, VERTICES_LAYER_STYLE_RESOURCE, extraFieldsFormat);
     }
 
-    
     public ExtendedLayerEditor(
             String name,
             Geometries geometryType,
@@ -89,7 +87,7 @@ public class ExtendedLayerEditor extends ExtendedLayerGraphics {
         super(name, geometryType, styleResource, extraFieldsFormat);
         this.verticesLayer = new ExtendedLayerGraphics(
                 name + VERTICES_LAYER_NAME_POSTFIX,
-                Geometries.POINT, 
+                Geometries.POINT,
                 styleResourceForVertexes);
         this.getMapLayers().addAll(this.verticesLayer.getMapLayers());
     }
@@ -114,19 +112,7 @@ public class ExtendedLayerEditor extends ExtendedLayerGraphics {
             java.util.HashMap<String, Object> fieldsWithValues) throws Exception {
 
         SimpleFeature featureAdded = super.addFeature(fid, geom, fieldsWithValues);
-
-        com.vividsolutions.jts.geom.CoordinateList coordinates =
-                new CoordinateList(geom.getCoordinates(), false);
-
-        Coordinate coordinate;
-        for (Object coordinateObj : coordinates) {
-            coordinate = (Coordinate) coordinateObj;
-            Point vertex = this.verticesLayer.getGeometryFactory().createPoint(coordinate);
-
-            this.vertexList.add(new VertexInformation(
-                    coordinate, featureAdded, this.verticesLayer.addFeature(null, vertex, null)));
-        }
-
+        this.addVertexes(featureAdded);
         this.getMapControl().refresh();
         return featureAdded;
     }
@@ -141,16 +127,9 @@ public class ExtendedLayerEditor extends ExtendedLayerGraphics {
     public SimpleFeature removeFeature(String fid) {
         SimpleFeature result = super.removeFeature(fid);
         if (result != null) {
-            List<VertexInformation> vertexesToRemove = new ArrayList<VertexInformation>();
-            for (VertexInformation vertexInfo : this.vertexList) {
-                if (vertexInfo.getFeature().equals(result)) {
-                    vertexesToRemove.add(vertexInfo);
-                    this.verticesLayer.removeFeature(vertexInfo.getVertexFeature().getID());
-                }
-            }
-            this.vertexList.removeAll(vertexesToRemove);
-            this.getMapControl().refresh();
+            this.removeVertexes(result);
         }
+        this.getMapControl().refresh();
         return result;
     }
 
@@ -206,6 +185,9 @@ public class ExtendedLayerEditor extends ExtendedLayerGraphics {
             ((Geometry) featureChanged.getDefaultGeometry()).geometryChanged();
             this.getFeatureCollection().notifyListeners(
                     vertexInformation.getFeature(), CollectionEvent.FEATURES_CHANGED);
+            ((Geometry) vertexInformation.getVertexFeature().getDefaultGeometry()).geometryChanged();
+            this.verticesLayer.getFeatureCollection().notifyListeners(
+                    vertexInformation.getVertexFeature(), CollectionEvent.FEATURES_CHANGED);
             this.getMapControl().refresh();
         } else {
             featureChanged = null;
@@ -217,14 +199,45 @@ public class ExtendedLayerEditor extends ExtendedLayerGraphics {
         return featureChanged;
     }
 
-    /**
-     * It checks if the geometry to be used for the feature is valid.
-     * @param geom
-     * @return 
-     */
-    private boolean validateGeometry(Geometry geom) {
-        boolean result = true;
-        result = geom.isSimple() && geom.isValid();
-        return result;
+    @Override
+    public boolean replaceFeatureGeometry(
+            SimpleFeature ofFeature, Geometry newGeometry) {
+        if (!super.replaceFeatureGeometry(ofFeature, newGeometry)) {
+            return false;
+        }
+        this.removeVertexes(ofFeature);
+        try {
+            this.addVertexes(ofFeature);
+        } catch (Exception ex) {
+            Messaging.getInstance().show(
+                    Messaging.Ids.LAYER_EDITOR_VERTEX_MAINTAIN_ERROR.toString(), ex.getMessage());
+        }
+        return true;
+    }
+
+    private void addVertexes(SimpleFeature ofFeature) throws Exception {
+        Geometry geom = (Geometry) ofFeature.getDefaultGeometry();
+        com.vividsolutions.jts.geom.CoordinateList coordinates =
+                new CoordinateList(geom.getCoordinates(), false);
+
+        Coordinate coordinate;
+        for (Object coordinateObj : coordinates) {
+            coordinate = (Coordinate) coordinateObj;
+            Point vertex = this.verticesLayer.getGeometryFactory().createPoint(coordinate);
+
+            this.vertexList.add(new VertexInformation(
+                    coordinate, ofFeature, this.verticesLayer.addFeature(null, vertex, null)));
+        }
+    }
+
+    private void removeVertexes(SimpleFeature ofFeature) {
+        List<VertexInformation> vertexesToRemove = new ArrayList<VertexInformation>();
+        for (VertexInformation vertexInfo : this.vertexList) {
+            if (vertexInfo.getFeature().equals(ofFeature)) {
+                vertexesToRemove.add(vertexInfo);
+                this.verticesLayer.removeFeature(vertexInfo.getVertexFeature().getID());
+            }
+        }
+        this.vertexList.removeAll(vertexesToRemove);
     }
 }

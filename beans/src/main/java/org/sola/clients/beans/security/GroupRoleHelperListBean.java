@@ -29,12 +29,12 @@ package org.sola.clients.beans.security;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import org.jdesktop.observablecollections.ObservableCollections;
+import java.io.Serializable;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.controls.SolaList;
+import org.sola.clients.beans.controls.SolaObservableList;
 import org.sola.webservices.transferobjects.EntityAction;
 
 /**
@@ -42,7 +42,7 @@ import org.sola.webservices.transferobjects.EntityAction;
  */
 public class GroupRoleHelperListBean extends AbstractBindingBean {
 
-    private class GroupRoleHelperListener implements PropertyChangeListener{
+    private class GroupRoleHelperListener implements PropertyChangeListener, Serializable{
         @Override
         public void propertyChange(PropertyChangeEvent evt) {
             if(evt.getPropertyName().equals(GroupRoleHelperBean.IS_IN_GROUP_PROPERTY) && 
@@ -72,13 +72,13 @@ public class GroupRoleHelperListBean extends AbstractBindingBean {
         }
     }
     
-    private ObservableList<GroupRoleHelperBean> groupRoleHelpers;
+    private SolaObservableList<GroupRoleHelperBean> groupRoleHelpers;
     private SolaList<GroupRoleBean> groupRoles;
     private boolean triggerGroupRoleUpdates = true;
     
     public GroupRoleHelperListBean() {
         super();
-        groupRoleHelpers = ObservableCollections.observableList(new ArrayList<GroupRoleHelperBean>());
+        groupRoleHelpers = new SolaObservableList<GroupRoleHelperBean>();
         GroupRoleHelperListener listener = new  GroupRoleHelperListener();
         
         if (CacheManager.getRoles() != null) {

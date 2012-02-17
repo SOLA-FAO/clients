@@ -1,28 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.ui.administrative;
@@ -30,9 +32,14 @@ package org.sola.clients.swing.ui.administrative;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.sola.clients.beans.administrative.BaUnitSearchResultBean;
 import org.sola.clients.beans.administrative.BaUnitSearchResultListBean;
 import org.sola.clients.swing.common.LafManager;
+import org.sola.clients.swing.common.tasks.SolaTask;
+import org.sola.clients.swing.common.tasks.TaskManager;
+import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.clients.swing.ui.renderers.CellDelimitedListRenderer;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -41,49 +48,56 @@ import org.sola.common.messaging.MessageUtility;
  * Allows to search BA Units.
  */
 public class BaUnitSearchPanel extends javax.swing.JPanel {
-    
+
     public static final String SELECTED_BAUNIT_SEARCH_RESULT = "selectedBaUnitSearchResultOpen";
-    
-    /** Default constructor. */
+
+    /**
+     * Default constructor.
+     */
     public BaUnitSearchPanel() {
         initComponents();
-        
+
         customieOpenButton(null);
         baUnitSearchResults.addPropertyChangeListener(new PropertyChangeListener() {
 
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                if(evt.getPropertyName().equals(BaUnitSearchResultListBean
-                        .SELECTED_BAUNIT_SEARCH_RESULT_PROPERTY)){
+                if (evt.getPropertyName().equals(BaUnitSearchResultListBean.SELECTED_BAUNIT_SEARCH_RESULT_PROPERTY)) {
                     firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
-                    customieOpenButton((BaUnitSearchResultBean)evt.getNewValue());
+                    customieOpenButton((BaUnitSearchResultBean) evt.getNewValue());
                 }
             }
         });
     }
 
-    private void customieOpenButton(BaUnitSearchResultBean searchResult){
-        btnOpenBaUnit.setEnabled(searchResult!=null);
+    private void customieOpenButton(BaUnitSearchResultBean searchResult) {
+        btnOpenBaUnit.setEnabled(searchResult != null);
         menuOpenBaUnit.setEnabled(btnOpenBaUnit.isEnabled());
     }
-    
-    /** Indicates whether open button is shown or not. */
+
+    /**
+     * Indicates whether open button is shown or not.
+     */
     public boolean isShowOpenButton() {
         return btnOpenBaUnit.isVisible();
     }
 
-    /** Sets visibility of open button. */
+    /**
+     * Sets visibility of open button.
+     */
     public void setShowOpenButton(boolean showPrintButton) {
         btnOpenBaUnit.setVisible(showPrintButton);
         menuOpenBaUnit.setVisible(showPrintButton);
         separator1.setVisible(showPrintButton);
     }
-    
-    /** Returns selected search result. */
-    public BaUnitSearchResultBean getSelectedSearchResult(){
+
+    /**
+     * Returns selected search result.
+     */
+    public BaUnitSearchResultBean getSelectedSearchResult() {
         return baUnitSearchResults.getSelectedBaUnitSearchResult();
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -346,17 +360,30 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-        baUnitSearchResults.search(baUnitSearchParams);
-        lblSearchResultCount.setText(Integer.toString(baUnitSearchResults.getBaUnitSearchResults().size()));
-        if(baUnitSearchResults.getBaUnitSearchResults().size()<1){
-            MessageUtility.displayMessage(ClientMessage.SEARCH_NO_RESULTS);
-        } else if(baUnitSearchResults.getBaUnitSearchResults().size()>100){
-            MessageUtility.displayMessage(ClientMessage.SEARCH_TOO_MANY_RESULTS, new String[]{"100"});
-        }
+        SolaTask t = new SolaTask<Void, Void>() {
+
+            @Override
+            public Void doTask() {
+                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_PROPERTY_SEARCHING));
+                baUnitSearchResults.search(baUnitSearchParams);
+                return null;
+            }
+
+            @Override
+            public void taskDone() {
+                lblSearchResultCount.setText(Integer.toString(baUnitSearchResults.getBaUnitSearchResults().size()));
+                if (baUnitSearchResults.getBaUnitSearchResults().size() < 1) {
+                    MessageUtility.displayMessage(ClientMessage.SEARCH_NO_RESULTS);
+                } else if (baUnitSearchResults.getBaUnitSearchResults().size() > 100) {
+                    MessageUtility.displayMessage(ClientMessage.SEARCH_TOO_MANY_RESULTS, new String[]{"100"});
+                }
+            }
+        };
+        TaskManager.getInstance().runTask(t);
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void tableSearchResultsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableSearchResultsMouseClicked
-        if(evt.getClickCount() == 2 && evt.getButton() == MouseEvent.BUTTON1){
+        if (evt.getClickCount() == 2 && evt.getButton() == MouseEvent.BUTTON1) {
             openBaUnit();
         }
     }//GEN-LAST:event_tableSearchResultsMouseClicked
@@ -370,7 +397,7 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_menuOpenBaUnitActionPerformed
 
     private void openBaUnit() {
-        if(baUnitSearchResults.getSelectedBaUnitSearchResult()!=null){
+        if (baUnitSearchResults.getSelectedBaUnitSearchResult() != null) {
             firePropertyChange(SELECTED_BAUNIT_SEARCH_RESULT, null, baUnitSearchResults.getSelectedBaUnitSearchResult());
         }
     }

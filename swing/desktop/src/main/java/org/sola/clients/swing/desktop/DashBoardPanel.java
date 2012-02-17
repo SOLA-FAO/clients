@@ -1,28 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.desktop;
@@ -48,8 +50,8 @@ import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.common.RolesConstants;
 
-/** 
- * This panel displays assigned and unassigned applications.<br /> 
+/**
+ * This panel displays assigned and unassigned applications.<br />
  * {@link ApplicationSummaryListBean} is used to bind the data on the panel.
  */
 public class DashBoardPanel extends ContentPanel {
@@ -68,8 +70,9 @@ public class DashBoardPanel extends ContentPanel {
     }
     private AssignmentPanelListener assignmentPanelListener;
 
-    /** 
+    /**
      * Panel constructor.
+     *
      * @param mainForm Parent form.
      */
     public DashBoardPanel() {
@@ -78,15 +81,17 @@ public class DashBoardPanel extends ContentPanel {
         postInit();
     }
 
-    /** Runs post initialization tasks to add listeners. */
+    /**
+     * Runs post initialization tasks to add listeners.
+     */
     private void postInit() {
 
-        setHeaderPanel(headerPanel1);
+        setHeaderPanel(headerPanel);
         btnRefreshAssigned.setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_VIEW_APPS));
         btnRefreshUnassigned.setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_VIEW_APPS));
         menuRefreshAssignApplication.setEnabled(btnRefreshAssigned.isEnabled());
         menuRefreshUnassignApplication.setEnabled(btnRefreshUnassigned.isEnabled());
-        
+
         refreshApplications();
         customizeAssignedAppButtons(null);
         customizeUnassignedAppButtons(null);
@@ -112,7 +117,9 @@ public class DashBoardPanel extends ContentPanel {
         });
     }
 
-    /** Enables or disables toolbar buttons for assigned applications list, . */
+    /**
+     * Enables or disables toolbar buttons for assigned applications list, .
+     */
     private void customizeAssignedAppButtons(ApplicationSearchResultBean app) {
         boolean isUnassignEnabled = true;
         boolean isEditEnabled = true;
@@ -135,7 +142,9 @@ public class DashBoardPanel extends ContentPanel {
         menuOpenAssignedApplication.setEnabled(isEditEnabled);
     }
 
-    /** Enables or disables toolbar buttons for unassigned applications list. */
+    /**
+     * Enables or disables toolbar buttons for unassigned applications list.
+     */
     private void customizeUnassignedAppButtons(ApplicationSearchResultBean app) {
         boolean isAssignEnabled = true;
         boolean isEditEnabled = true;
@@ -159,8 +168,9 @@ public class DashBoardPanel extends ContentPanel {
         menuOpenUnassignedApplication.setEnabled(isEditEnabled);
     }
 
-    /** 
-     * Opens application assignment form with selected application ID. 
+    /**
+     * Opens application assignment form with selected application ID.
+     *
      * @param appBean Selected application summary bean.
      */
     private void openAssignmentForm(ApplicationSummaryBean appBean) {
@@ -172,20 +182,25 @@ public class DashBoardPanel extends ContentPanel {
             MessageUtility.displayMessage(ClientMessage.CHECK_FEES_NOT_PAID);
             return;
         }
+        
+        final String appId = appBean.getId();
+        SolaTask t = new SolaTask<Void, Void>() {
 
-        if (getMainContentPanel() != null) {
-            if (getMainContentPanel().isPanelOpened(MainContentPanel.CARD_APPASSIGNMENT)) {
-                getMainContentPanel().closePanel(MainContentPanel.CARD_APPASSIGNMENT);
+            @Override
+            public Void doTask() {
+                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_APPASSIGN));
+                ApplicationAssignmentPanel panel = new ApplicationAssignmentPanel(appId);
+                panel.addPropertyChangeListener(ApplicationBean.ASSIGNEE_ID_PROPERTY, assignmentPanelListener);
+                getMainContentPanel().addPanel(panel, MainContentPanel.CARD_APPASSIGNMENT, true);
+                return null;
             }
-            ApplicationAssignmentPanel panel = new ApplicationAssignmentPanel(appBean.getId());
-            panel.addPropertyChangeListener(ApplicationBean.ASSIGNEE_ID_PROPERTY, assignmentPanelListener);
-            getMainContentPanel().addPanel(panel, MainContentPanel.CARD_APPASSIGNMENT);
-            getMainContentPanel().showPanel(MainContentPanel.CARD_APPASSIGNMENT);
-        }
+        };
+        TaskManager.getInstance().runTask(t);
     }
 
-    /** 
-     * Opens application form. 
+    /**
+     * Opens application form.
+     *
      * @param appBean Selected application summary bean.
      */
     private void openApplication(final ApplicationSummaryBean appBean) {
@@ -194,9 +209,10 @@ public class DashBoardPanel extends ContentPanel {
         }
 
         SolaTask t = new SolaTask<Void, Void>() {
+
             @Override
             public Void doTask() {
-                setMessage("Opening application form.");
+                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_APP));
                 PropertyChangeListener listener = new PropertyChangeListener() {
 
                     @Override
@@ -250,7 +266,7 @@ public class DashBoardPanel extends ContentPanel {
         btnRefreshAssigned = new javax.swing.JButton();
         inprogressScrollPanel = new javax.swing.JScrollPane();
         tbAssigned = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
-        headerPanel1 = new org.sola.clients.swing.ui.HeaderPanel();
+        headerPanel = new org.sola.clients.swing.ui.HeaderPanel();
 
         popUpUnassignedApplications.setName("popUpUnassignedApplications"); // NOI18N
 
@@ -320,6 +336,7 @@ public class DashBoardPanel extends ContentPanel {
         });
         popUpAssignedApplications.add(menuRefreshAssignApplication);
 
+        setHelpTopic(bundle.getString("DashBoardPanel.helpTopic")); // NOI18N
         setMinimumSize(new java.awt.Dimension(354, 249));
         setName("Form"); // NOI18N
 
@@ -594,23 +611,23 @@ public class DashBoardPanel extends ContentPanel {
 
         jPanel3.add(jPanel2);
 
-        headerPanel1.setName("headerPanel1"); // NOI18N
-        headerPanel1.setTitleText(bundle.getString("DashBoardPanel.headerPanel1.titleText")); // NOI18N
+        headerPanel.setName("headerPanel"); // NOI18N
+        headerPanel.setTitleText(bundle.getString("DashBoardPanel.headerPanel.titleText")); // NOI18N
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(headerPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 583, Short.MAX_VALUE)
+            .add(headerPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .add(layout.createSequentialGroup()
                 .add(10, 10, 10)
-                .add(jPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 563, Short.MAX_VALUE)
+                .add(jPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
-                .add(headerPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(headerPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 359, Short.MAX_VALUE)
                 .addContainerGap())
@@ -679,16 +696,19 @@ public class DashBoardPanel extends ContentPanel {
         refreshAssignedApplications();
     }//GEN-LAST:event_menuRefreshAssignApplicationActionPerformed
 
-    /** Refreshes assigned and unassigned application lists. */
+    /**
+     * Refreshes assigned and unassigned application lists.
+     */
     private void refreshApplications() {
         SolaTask t = new SolaTask<Void, Void>() {
+
             @Override
             public Void doTask() {
-                setMessage(MessageUtility.getLocalizedMessage(
-                        ClientMessage.APPLICATION_LOADING_UNASSIGNED).getMessage());
+                setMessage(MessageUtility.getLocalizedMessageText(
+                        ClientMessage.APPLICATION_LOADING_UNASSIGNED));
                 unassignedAppListBean.FillUnassigned();
-                setMessage(MessageUtility.getLocalizedMessage(
-                        ClientMessage.APPLICATION_LOADING_ASSIGNED).getMessage());
+                setMessage(MessageUtility.getLocalizedMessageText(
+                        ClientMessage.APPLICATION_LOADING_ASSIGNED));
                 assignedAppListBean.FillAssigned();
                 return null;
             }
@@ -696,32 +716,44 @@ public class DashBoardPanel extends ContentPanel {
         TaskManager.getInstance().runTask(t);
     }
 
-    /** Opens application form for the selected application from unassigned list. */
+    /**
+     * Opens application form for the selected application from unassigned list.
+     */
     private void editUnassignedApplication() {
         openApplication(unassignedAppListBean.getSelectedApplication());
     }
 
-    /** Opens form to assign application. */
+    /**
+     * Opens form to assign application.
+     */
     private void assignApplication() {
         openAssignmentForm(unassignedAppListBean.getSelectedApplication());
     }
 
-    /** Refreshes the list of unassigned applications. */
+    /**
+     * Refreshes the list of unassigned applications.
+     */
     private void refreshUnassignedApplications() {
         refreshApplications();
     }
 
-    /** Opens form to unassign application. */
+    /**
+     * Opens form to unassign application.
+     */
     private void unassignApplication() {
         openAssignmentForm(assignedAppListBean.getSelectedApplication());
     }
 
-    /** Opens application form for the selected application from assigned list. */
+    /**
+     * Opens application form for the selected application from assigned list.
+     */
     private void editAssignedApplication() {
         openApplication(assignedAppListBean.getSelectedApplication());
     }
 
-    /** Refreshes the list of assigned applications. */
+    /**
+     * Refreshes the list of assigned applications.
+     */
     private void refreshAssignedApplications() {
         refreshApplications();
     }
@@ -733,7 +765,7 @@ public class DashBoardPanel extends ContentPanel {
     private javax.swing.JButton btnRefreshAssigned;
     private javax.swing.JButton btnRefreshUnassigned;
     private javax.swing.JButton btnUnassignApplication;
-    private org.sola.clients.swing.ui.HeaderPanel headerPanel1;
+    private org.sola.clients.swing.ui.HeaderPanel headerPanel;
     private javax.swing.JScrollPane inprogressScrollPanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

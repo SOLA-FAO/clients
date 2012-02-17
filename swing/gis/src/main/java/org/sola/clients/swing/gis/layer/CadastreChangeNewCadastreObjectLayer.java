@@ -54,7 +54,7 @@ import org.sola.common.messaging.GisMessage;
 
 /**
  *
- * @author manoku
+ * @author Elton Manoku
  */
 public class CadastreChangeNewCadastreObjectLayer extends ExtendedLayerEditor{
 

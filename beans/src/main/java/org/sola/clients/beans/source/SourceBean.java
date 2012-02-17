@@ -28,8 +28,8 @@
 package org.sola.clients.beans.source;
 
 import org.sola.clients.beans.converters.TypeConverters;
-import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.clients.beans.digitalarchive.DocumentBean;
+import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.EntityAction;
 import org.sola.webservices.transferobjects.casemanagement.SourceTO;
 

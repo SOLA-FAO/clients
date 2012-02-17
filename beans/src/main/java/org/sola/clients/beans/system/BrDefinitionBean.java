@@ -29,7 +29,6 @@ package org.sola.clients.beans.system;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.UUID;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.sola.clients.beans.AbstractBindingBean;
@@ -69,19 +68,6 @@ public class BrDefinitionBean extends AbstractBindingBean {
         activeUntil = calendar.getTime();
         body = "Enter business rule text.";
     }
-
-//    public String getId() {
-//        if(id==null){
-//            id = UUID.randomUUID().toString();
-//        }
-//        return id;
-//    }
-//
-//    public void setId(String id) {
-//        String oldValue = this.id;
-//        this.id = id;
-//        propertySupport.firePropertyChange(ID_PROPERTY, oldValue, this.id);
-//    }
     
     public Date getActiveFrom() {
         return activeFrom;
@@ -131,29 +117,6 @@ public class BrDefinitionBean extends AbstractBindingBean {
         setBrId(null);
         setEntityAction(null);
     }
-
-//    @Override
-//    public boolean equals(Object aThat)
-//    {
-//       if(aThat==null) return  false;
-//       if ( this == aThat ) return true;
-//       if ( !(BrDefinitionBean.class.isAssignableFrom(aThat.getClass()))) return false;
-//       
-//       BrDefinitionBean that = (BrDefinitionBean)aThat;
-//       
-//       if(this.getId() != null && that.getId() != null &&
-//               this.getId().equals(that.getId()))
-//           return true;
-//       else
-//           return false;
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        int hash = 7;
-//        hash = 89 * hash + (this.id != null ? this.id.hashCode() : 0);
-//        return hash;
-//    }
     
     @Override
     public boolean equals(Object aThat) {
