@@ -89,6 +89,7 @@ import org.sola.webservices.transferobjects.casemanagement.ApplicationTO;
 public class ApplicationPanel extends ContentPanel {
 
     private ControlsBundleForApplicationLocation mapControl = null;
+    public static final String APPLICATION_SAVED_PROPERTY = "applicationSaved";
     private String applicationID;
 
     /**
@@ -720,6 +721,7 @@ public class ApplicationPanel extends ContentPanel {
                 if (applicationID == null || applicationID.equals("")) {
                     showReport(ReportManager.getLodgementNoticeReport(appBean));
                 }
+                firePropertyChange(APPLICATION_SAVED_PROPERTY, false, true);
             }
         };
         TaskManager.getInstance().runTask(t);
