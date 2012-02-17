@@ -35,7 +35,10 @@ import java.net.URL;
 import java.util.Locale;
 import java.util.logging.Level;
 import javax.swing.ImageIcon;
+import net.sf.jasperreports.engine.JasperPrint;
+import org.sola.clients.beans.application.LodgementBean;
 import org.sola.clients.beans.security.SecurityBean;
+import org.sola.clients.reports.ReportManager;
 import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.common.LocalizationManager;
 import org.sola.clients.swing.common.tasks.SolaTask;
@@ -214,6 +217,7 @@ public class MainForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        lodgementBean1 = createLodgementBean();
         applicationsMain = new javax.swing.JToolBar();
         btnShowDashboard = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JToolBar.Separator();
@@ -253,6 +257,8 @@ public class MainForm extends javax.swing.JFrame {
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
         jmiContextHelp = new javax.swing.JMenuItem();
+        menuReportsDesktop = new javax.swing.JMenu();
+        menuLodgementReport = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/Bundle"); // NOI18N
@@ -260,7 +266,7 @@ public class MainForm extends javax.swing.JFrame {
 
         applicationsMain.setFloatable(false);
         applicationsMain.setRollover(true);
-        applicationsMain.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        applicationsMain.setFont(new java.awt.Font("Tahoma", 0, 12));
         applicationsMain.setMaximumSize(new java.awt.Dimension(32769, 32769));
         applicationsMain.setMinimumSize(new java.awt.Dimension(90, 45));
         applicationsMain.setPreferredSize(new java.awt.Dimension(980, 45));
@@ -525,6 +531,19 @@ public class MainForm extends javax.swing.JFrame {
 
         menuBar.add(helpMenu);
 
+        menuReportsDesktop.setText(bundle.getString("MainForm.menuReportsDesktop.text_1")); // NOI18N
+
+        menuLodgementReport.setText(bundle.getString("MainForm.menuLodgementReportDesktop.text_1")); // NOI18N
+        menuLodgementReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuLodgementReportActionPerformed(evt);
+            }
+        });
+        menuReportsDesktop.add(menuLodgementReport);
+        menuLodgementReport.getAccessibleContext().setAccessibleName(bundle.getString("MainForm.menuLodgementReport.AccessibleContext.accessibleName")); // NOI18N
+
+        menuBar.add(menuReportsDesktop);
+
         setJMenuBar(menuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -623,6 +642,28 @@ public class MainForm extends javax.swing.JFrame {
     private void btnOpenBaUnitSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenBaUnitSearchActionPerformed
         searchBaUnit();
     }//GEN-LAST:event_btnOpenBaUnitSearchActionPerformed
+    
+    private void openReportDateChooser() {
+            ReportDateChooser reportDateChooser = new ReportDateChooser(this, true);
+            reportDateChooser.setVisible(true);
+    }
+    
+    /** Opens {@link ReportViewerForm} to display report.*/
+    private void showReport(JasperPrint report) {
+        ReportViewerForm form = new ReportViewerForm(report);
+        form.setVisible(true);
+    }
+    
+   private LodgementBean createLodgementBean() {
+    if (lodgementBean1 == null) {
+            lodgementBean1 = new LodgementBean();
+        }
+        return lodgementBean1;
+     }
+    private void menuLodgementReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuLodgementReportActionPerformed
+        openReportDateChooser();
+//        showReport(ReportManager.getLodgementReport(lodgementBean1, ));  
+    }//GEN-LAST:event_menuLodgementReportActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToolBar applicationsMain;
@@ -640,6 +681,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JToolBar.Separator jSeparator4;
     private javax.swing.JMenuItem jmiContextHelp;
     private javax.swing.JLabel labStatus;
+    private org.sola.clients.beans.application.LodgementBean lodgementBean1;
     private javax.swing.JMenuItem menuAllLogLevel;
     private javax.swing.JMenu menuApplications;
     private javax.swing.JMenuItem menuBaUnitSearch;
@@ -649,10 +691,12 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuLangEN;
     private javax.swing.JMenuItem menuLangIT;
     private javax.swing.JMenu menuLanguage;
+    private javax.swing.JMenuItem menuLodgementReport;
     private javax.swing.JMenu menuLogLevel;
     private javax.swing.JMenu menuMap;
     private javax.swing.JMenuItem menuNewApplication;
     private javax.swing.JMenuItem menuOffLogLevel;
+    private javax.swing.JMenu menuReportsDesktop;
     private javax.swing.JMenu menuSearch;
     private javax.swing.JMenuItem menuSearchApplication;
     private javax.swing.JMenuItem menuShowMap;

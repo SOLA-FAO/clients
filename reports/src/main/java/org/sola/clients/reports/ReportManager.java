@@ -35,19 +35,22 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
+
 import org.sola.clients.beans.administrative.BaUnitBean;
 import org.sola.clients.beans.application.ApplicationBean;
+import org.sola.clients.beans.application.LodgementBean;
+import org.sola.clients.beans.application.LodgementTimingBean;
+import org.sola.clients.beans.application.LodgementViewParamsBean;
 import org.sola.clients.beans.system.BrReportBean;
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.beans.system.BrListBean;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
-
 /**
  * Provides methods to generate and display various reports.
  */
 public class ReportManager {
-
+   
     /** 
      * Generates and displays <b>Lodgement notice</b> report for the new application.
      * @param appBean Application bean containing data for the report.
@@ -224,4 +227,34 @@ public class ReportManager {
         }
     }
 
+    
+    
+     /** 
+     * Generates and displays <b>BA Unit</b> report.
+     * @param appBean Application bean containing data for the report.
+     */
+    public static JasperPrint getLodgementReport(LodgementBean lodgementBean, Date dateFrom, Date dateTo) {
+        HashMap inputParameters = new HashMap();
+        Date currentdate = new Date( System.currentTimeMillis());
+        inputParameters.put("REPORT_LOCALE", Locale.getDefault());
+        
+        inputParameters.put("CURRENT_DATE", currentdate);
+       
+        inputParameters.put("USER", SecurityBean.getCurrentUser().getFullUserName());
+        inputParameters.put("FROMDATE", dateFrom);
+        inputParameters.put("TODATE", dateTo);
+        LodgementBean[] beans = new LodgementBean[1];
+        beans[0] = lodgementBean;
+        JRDataSource jds = new JRBeanArrayDataSource(beans);
+        try {
+            return JasperFillManager.fillReport(
+                    ReportManager.class.getResourceAsStream("/reports/LodgementReport.jasper"),
+                    inputParameters, jds);
+        } catch (JRException ex) {
+            MessageUtility.displayMessage(ClientMessage.REPORT_GENERATION_FAILED,
+                    new Object[]{ex.getLocalizedMessage()});
+            return null;
+        }
+    }
+    
 }

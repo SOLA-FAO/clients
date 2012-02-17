@@ -1,5 +1,4 @@
-/**
- * ******************************************************************************************
+/***************************************************************************************
  * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
@@ -25,78 +24,61 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-package org.sola.clients.beans;
+package org.sola.clients.beans.application;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
+import java.util.Date;
+import javax.validation.constraints.NotNull;
+import org.sola.clients.beans.AbstractBindingBean;
+import org.sola.clients.beans.validation.Localized;
+import org.sola.common.messaging.ClientMessage;
+import org.sola.webservices.transferobjects.casemanagement.LodgementViewParamsTO;
 
-public class LodgementBean implements Serializable {
+/** 
+ * Contains properties used as the parameters to search applications.
+ * Could be populated from the {@link ApplicationSearchParamsTO} object.<br />
+ */
 
-    public LodgementBean(Long totcat, String category, BigDecimal perc, BigDecimal avg, Long totreq, BigDecimal percreq ) {
-        this.totcat = totcat;
-        this.category = category;
-        this.perc = perc;
-        this.avg = avg;
-        this.totreq = totreq;
-        this.percreq = percreq;
-    }
-
-    public LodgementBean() {
-    }
-
-    public BigDecimal getAvg() {
-        return avg;
-    }
-
-    public void setAvg(BigDecimal avg) {
-        this.avg = avg;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public BigDecimal getPerc() {
-        return perc;
-    }
-
-    public void setPerc(BigDecimal perc) {
-        this.perc = perc;
-    }
-
-    public Long getTotcat() {
-        return totcat;
-    }
-
-    public void setTotcat(Long totcat) {
-        this.totcat = totcat;
+/**
+ *
+ * @author RizzoM
+ */
+public class LodgementViewParamsBean  extends AbstractBindingBean {
+    
+    public static final String FROM_DATE_PROPERTY = "fromDate";
+    public static final String TO_DATE_PROPERTY = "toDate";
+    
+  
+    @NotNull(message = ClientMessage.CHECK_NOTNULL_EXPIRATION, payload = Localized.class)
+    private Date fromDate;
+    @NotNull(message = ClientMessage.CHECK_NOTNULL_EXPIRATION, payload = Localized.class)
+    private Date toDate;
+    
+    public LodgementViewParamsBean() {
+        super();
     }
     
-    public BigDecimal getPercreq() {
-        return percreq;
+     public Date getFromDate() {
+        return fromDate;
     }
 
-    public void setPercreq(BigDecimal percreq) {
-        this.percreq = percreq;
+    public void setFromDate(Date value) {
+        Date oldValue = fromDate;
+        fromDate = value;
+        propertySupport.firePropertyChange(FROM_DATE_PROPERTY, oldValue, value);
     }
 
-    public Long getTotreq() {
-        return totreq;
+    
+    public Date getToDate() {
+        return toDate;
     }
 
-    public void setTotreq(Long totreq) {
-        this.totreq = totreq;
+    public void setToDate(Date value) {
+        Date oldValue = toDate;
+        toDate = value;
+        propertySupport.firePropertyChange(TO_DATE_PROPERTY, oldValue, value);
     }
-
-    private Long totcat;
-    private String category;
-    private BigDecimal perc;
-    private BigDecimal avg;
-    private Long totreq;
-    private BigDecimal percreq;
     
 }
+
+
+

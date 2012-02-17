@@ -53,6 +53,9 @@
 		</field>
 	</subDataset>
 	<subDataset name="ApplicationLog">
+		<queryString language="SQL">
+			<![CDATA[]]>
+		</queryString>
 		<field name="Date" class="java.util.Date">
 			<fieldDescription><![CDATA[changeTime]]></fieldDescription>
 		</field>
