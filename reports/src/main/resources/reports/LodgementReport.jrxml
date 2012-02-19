@@ -297,12 +297,12 @@
 				</textElement>
 				<text><![CDATA[Date To:]]></text>
 			</staticText>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="279" y="1" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.util.Date"><![CDATA[$P{FROMDATE}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="455" y="1" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.util.Date"><![CDATA[$P{TODATE}]]></textFieldExpression>

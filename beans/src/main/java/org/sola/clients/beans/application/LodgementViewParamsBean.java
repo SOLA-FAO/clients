@@ -48,9 +48,9 @@ public class LodgementViewParamsBean  extends AbstractBindingBean {
     public static final String TO_DATE_PROPERTY = "toDate";
     
   
-    @NotNull(message = ClientMessage.CHECK_NOTNULL_EXPIRATION, payload = Localized.class)
+//    @NotNull(message = ClientMessage.CHECK_NOTNULL_EXPIRATION, payload = Localized.class)
     private Date fromDate;
-    @NotNull(message = ClientMessage.CHECK_NOTNULL_EXPIRATION, payload = Localized.class)
+//    @NotNull(message = ClientMessage.CHECK_NOTNULL_EXPIRATION, payload = Localized.class)
     private Date toDate;
     
     public LodgementViewParamsBean() {
@@ -61,7 +61,8 @@ public class LodgementViewParamsBean  extends AbstractBindingBean {
         return fromDate;
     }
 
-    public void setFromDate(Date value) {
+//    @NotNull(message = ClientMessage.CHECK_NOTNULL_EXPIRATION, payload = Localized.class)
+        public void setFromDate(Date value) {
         Date oldValue = fromDate;
         fromDate = value;
         propertySupport.firePropertyChange(FROM_DATE_PROPERTY, oldValue, value);
@@ -72,6 +73,7 @@ public class LodgementViewParamsBean  extends AbstractBindingBean {
         return toDate;
     }
 
+//    @NotNull(message = ClientMessage.CHECK_NOTNULL_EXPIRATION, payload = Localized.class)
     public void setToDate(Date value) {
         Date oldValue = toDate;
         toDate = value;
