@@ -15,12 +15,9 @@
  */
 package org.sola.clients.beans.administrative;
 
-import org.hibernate.validator.constraints.NotEmpty;
 import org.sola.clients.beans.AbstractTransactionedBean;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.referencedata.BaUnitTypeBean;
-import org.sola.clients.beans.validation.Localized;
-import org.sola.common.messaging.ClientMessage;
 import org.sola.webservices.transferobjects.administrative.BaUnitBasicTO;
 
 /** 
@@ -36,9 +33,9 @@ public class BaUnitSummaryBean extends AbstractTransactionedBean {
     public static final String NAME_LASTPART_PROPERTY = "nameLastpart";
     
     private String name;
-    @NotEmpty(message = ClientMessage.CHECK_NOTNULL_FIRSTPART, payload=Localized.class)
+    //@NotEmpty(message = ClientMessage.CHECK_NOTNULL_FIRSTPART, payload=Localized.class)
     private String nameFirstpart;
-    @NotEmpty(message = ClientMessage.CHECK_NOTNULL_FIRSTPART, payload=Localized.class)
+    //@NotEmpty(message = ClientMessage.CHECK_NOTNULL_FIRSTPART, payload=Localized.class)
     private String nameLastpart;
     private BaUnitTypeBean baUnitType;
     

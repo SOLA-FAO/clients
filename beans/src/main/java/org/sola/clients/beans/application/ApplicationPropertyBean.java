@@ -28,7 +28,10 @@
 package org.sola.clients.beans.application;
 
 import java.math.BigDecimal;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.sola.clients.beans.AbstractIdBean;
+import org.sola.clients.beans.validation.Localized;
+import org.sola.common.messaging.ClientMessage;
 import org.sola.webservices.transferobjects.casemanagement.ApplicationPropertyTO;
 
 /** 
@@ -50,7 +53,9 @@ public class ApplicationPropertyBean extends AbstractIdBean {
     
     private String applicationId;
     private BigDecimal area;
+    @NotEmpty(message = ClientMessage.CHECK_NOTNULL_FIRSTPART, payload=Localized.class)
     private String nameFirstpart;
+    @NotEmpty(message = ClientMessage.CHECK_NOTNULL_FIRSTPART, payload=Localized.class)
     private String nameLastpart;
     private BigDecimal totalValue;
     private String baUnitId;

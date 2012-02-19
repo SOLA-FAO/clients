@@ -56,6 +56,5 @@ public @interface RrrShareCheck{
      * Used by clients of the Bean Validation API to assign custom payload objects to a constraint
      */
     Class<? extends Payload>[] payload() default {};
-
 }
 

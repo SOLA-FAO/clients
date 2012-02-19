@@ -1,28 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.ui.security;
@@ -45,7 +47,7 @@ import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
 /**
- * Allows to authenticate users. 
+ * Allows to authenticate users.
  */
 public class LoginPanel extends javax.swing.JPanel {
 
@@ -53,7 +55,9 @@ public class LoginPanel extends javax.swing.JPanel {
     private Class<?> mainClass;
     protected JRadioButton previousButton;
 
-    /** Create combobox with languages */
+    /**
+     * Create combobox with languages
+     */
     private LanguageCombobox createLanguageCombobox() {
         if (mainClass != null) {
             return new LanguageCombobox(mainClass);
@@ -62,16 +66,19 @@ public class LoginPanel extends javax.swing.JPanel {
         }
     }
 
-    /** Default constructor. */
+    /**
+     * Default constructor.
+     */
     public LoginPanel() {
         initComponents();
         pnlThems.setVisible(false);
         txtUsername.requestFocus();
     }
 
-    /** 
-     * Creates new form LoginPanel. 
-     * @param applicationMainClass 
+    /**
+     * Creates new form LoginPanel.
+     *
+     * @param applicationMainClass
      */
     public LoginPanel(Class<?> mainClasss) {
         this.mainClass = mainClasss;
@@ -84,13 +91,16 @@ public class LoginPanel extends javax.swing.JPanel {
         txtUserPassword.setText("test");
     }
 
-    /** Calls authentication procedure. */
+    /**
+     * Calls authentication procedure.
+     */
     private void login() {
         SolaTask t = new SolaTask<Boolean, Object>() {
+
             private boolean result = false;
 
             @Override
-            public Boolean doTask() {
+            protected Boolean doTask() {
                 setMessage(MessageUtility.getLocalizedMessage(
                         ClientMessage.GENERAL_LOADING_APPLICATION).getMessage());
 
@@ -100,14 +110,17 @@ public class LoginPanel extends javax.swing.JPanel {
             }
 
             @Override
-            public void taskDone() {
+            protected void taskDone() {
                 if (result) {
                     fireLoginEvent(true);
                 } else {
                     enablePanel(true);
-                    txtUsername.requestFocusInWindow();
-                    txtUsername.selectAll();
                 }
+            }
+
+            @Override
+            protected void taskFailed(Throwable e) {
+                enablePanel(true);
             }
         };
         TaskManager.getInstance().runTask(t);
@@ -117,21 +130,31 @@ public class LoginPanel extends javax.swing.JPanel {
         firePropertyChange(LOGIN_RESULT, false, result);
     }
 
-    /** Enables or disables panel*/
+    /**
+     * Enables or disables panel
+     */
     public void enablePanel(boolean isEnabled) {
         btnLogin.setEnabled(isEnabled);
         txtUsername.setEnabled(isEnabled);
         txtUserPassword.setEnabled(isEnabled);
         languageCombobox.setEnabled(isEnabled);
+        if (isEnabled) {
+            txtUsername.requestFocusInWindow();
+            txtUsername.selectAll();
+        }
     }
 
-    /** Explicitely sets focus on user name text field.*/
+    /**
+     * Explicitely sets focus on user name text field.
+     */
     public void setUserNameFocus() {
         txtUsername.requestFocus();
         this.getRootPane().setDefaultButton(btnLogin);
     }
 
-    /** Sets the backgroundpanel. */
+    /**
+     * Sets the backgroundpanel.
+     */
     class LNFSetter implements ActionListener {
 
         String theLNFName;
@@ -360,9 +383,8 @@ public class LoginPanel extends javax.swing.JPanel {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(languageCombobox, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
-                .addGap(52, 52, 52))
+                .addGap(56, 56, 56)
+                .addComponent(languageCombobox, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -448,7 +470,7 @@ public class LoginPanel extends javax.swing.JPanel {
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)

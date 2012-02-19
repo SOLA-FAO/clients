@@ -217,7 +217,9 @@ public class DashBoardPanel extends ContentPanel {
 
                     @Override
                     public void propertyChange(PropertyChangeEvent e) {
-                        refreshApplications();
+                        if(e.getPropertyName().equals(ApplicationPanel.APPLICATION_SAVED_PROPERTY)){
+                            refreshApplications();
+                        }
                     }
                 };
 

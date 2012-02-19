@@ -33,8 +33,11 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import javax.validation.Valid;
+import javax.validation.constraints.Size;
 import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
+import org.sola.clients.beans.application.validation.ApplicationCheck;
 import org.sola.clients.beans.applicationlog.ApplicationLogBean;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.controls.SolaList;
@@ -47,6 +50,7 @@ import org.sola.clients.beans.referencedata.ApplicationStatusTypeBean;
 import org.sola.clients.beans.referencedata.RequestTypeBean;
 import org.sola.clients.beans.referencedata.StatusConstants;
 import org.sola.clients.beans.source.SourceBean;
+import org.sola.clients.beans.validation.Localized;
 import org.sola.clients.beans.validation.ValidationResultBean;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -60,6 +64,7 @@ import org.sola.webservices.transferobjects.search.PropertyVerifierTO;
  * populated from the {@link ApplicationTO} object.<br /> For more information
  * see data dictionary <b>Application</b> schema.
  */
+@ApplicationCheck
 public class ApplicationBean extends ApplicationSummaryBean {
 
     public static final String ACTION_CODE_PROPERTY = "actionCode";
@@ -78,6 +83,7 @@ public class ApplicationBean extends ApplicationSummaryBean {
     public static final String ASSIGNEE_ID_PROPERTY = "assigneeId";
     public static final String STATUS_TYPE_PROPERTY = "statusType";
     public static final String APPLICATION_PROPERTY = "application";
+    
     private ApplicationActionTypeBean actionBean;
     private String actionNotes;
     private SolaList<ApplicationPropertyBean> propertyList;
@@ -87,6 +93,7 @@ public class ApplicationBean extends ApplicationSummaryBean {
     private BigDecimal tax;
     private BigDecimal totalAmountPaid;
     private BigDecimal totalFee;
+    @Size(min=1, message = ClientMessage.CHECK_APP_SERVICES_NOT_EMPTY, payload=Localized.class)
     private SolaObservableList<ApplicationServiceBean> serviceList;
     private SolaList<SourceBean> sourceList;
     private SolaObservableList<ApplicationLogBean> appLogList;
@@ -100,10 +107,10 @@ public class ApplicationBean extends ApplicationSummaryBean {
     /**
      * Default constructor to create application bean. Initializes the following
      * list of beans which are the parts of the application bean: <br /> {@link ApplicationActionTypeBean}
-     * <br /> {@link ApplicationStatusTypeBean} <br /> {@link PartySummaryBean}
-     * <br /> {@link ObservableCollections}&lt;{@link ApplicationPropertyBean}&gt;
-     * <br /> {@link ObservableCollections}&lt;{@link ApplicationServiceBean}&gt;
-     * <br /> {@link ObservableCollections}&lt;{@link SourceBean}&gt;
+     * <br /> {@link PartySummaryBean}
+     * <br /> {@link ApplicationPropertyBean}
+     * <br /> {@link ApplicationServiceBean}
+     * <br /> {@link SourceBean}
      */
     public ApplicationBean() {
         super();
@@ -330,6 +337,7 @@ public class ApplicationBean extends ApplicationSummaryBean {
         return propertyList;
     }
 
+    @Valid
     public ObservableList<ApplicationPropertyBean> getFilteredPropertyList() {
         return propertyList.getFilteredList();
     }
@@ -414,6 +422,7 @@ public class ApplicationBean extends ApplicationSummaryBean {
         return sourceList;
     }
 
+    @Valid
     public ObservableList<SourceBean> getSourceFilteredList() {
         return sourceList.getFilteredList();
     }

@@ -30,7 +30,7 @@ import org.jdesktop.observablecollections.ObservableListListener;
 public class SolaObservableList<E> extends AbstractList<E>
         implements ObservableList<E>, Serializable {
 
-    private final boolean supportsElementPropertyChanged = true;
+    private final boolean supportsElementPropertyChanged = false;
     private List<E> list;
     private transient List<ObservableListListener> listeners;
 
