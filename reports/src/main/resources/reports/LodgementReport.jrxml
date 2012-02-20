@@ -212,11 +212,11 @@
 		<field name="resultCode" class="java.lang.String">
 			<fieldDescription><![CDATA[resultCode]]></fieldDescription>
 		</field>
-		<field name="resultDailyAvg" class="java.lang.String">
-			<fieldDescription><![CDATA[resultDailyAvg]]></fieldDescription>
-		</field>
 		<field name="resultTotal" class="java.lang.Integer">
 			<fieldDescription><![CDATA[resultTotal]]></fieldDescription>
+		</field>
+		<field name="resultDailyAvg" class="java.lang.Double">
+			<fieldDescription><![CDATA[resultDailyAvg]]></fieldDescription>
 		</field>
 	</subDataset>
 	<subDataset name="Table Dataset 1"/>
@@ -284,27 +284,31 @@
 	<pageHeader>
 		<band height="21" splitType="Stretch">
 			<staticText>
-				<reportElement x="203" y="1" width="76" height="20"/>
+				<reportElement x="224" y="1" width="42" height="20"/>
 				<textElement>
-					<font fontName="Tahoma" size="12"/>
+					<font fontName="Tahoma" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Date From:]]></text>
+				<text><![CDATA[From:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="379" y="1" width="76" height="20"/>
+				<reportElement x="389" y="1" width="30" height="20"/>
 				<textElement>
-					<font fontName="Tahoma" size="12"/>
+					<font fontName="Tahoma" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Date To:]]></text>
+				<text><![CDATA[To:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="279" y="1" width="100" height="20"/>
-				<textElement/>
+				<reportElement x="266" y="1" width="100" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
 				<textFieldExpression class="java.util.Date"><![CDATA[$P{FROMDATE}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="455" y="1" width="100" height="20"/>
-				<textElement/>
+				<reportElement x="419" y="1" width="100" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
 				<textFieldExpression class="java.util.Date"><![CDATA[$P{TODATE}]]></textFieldExpression>
 			</textField>
 		</band>
@@ -312,104 +316,102 @@
 	<detail>
 		<band height="285" splitType="Stretch">
 			<componentElement>
-				<reportElement key="table 6" style="table 6" positionType="Float" x="0" y="153" width="534" height="80"/>
+				<reportElement key="table 6" style="table 6" positionType="Float" x="0" y="134" width="555" height="65"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="Timing">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanArrayDataSource($F{lodgementTimingList}.toArray())]]></dataSourceExpression>
 					</datasetRun>
-					<jr:column width="115">
-						<jr:tableHeader style="table 6_TH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement mode="Transparent" x="0" y="0" width="115" height="30" forecolor="#CCFFCC" backcolor="#FFFFFF"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-									<font fontName="Tahoma" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-									<paragraph lineSpacing="Single"/>
-								</textElement>
-								<text><![CDATA[Dealing Timing]]></text>
-							</staticText>
-						</jr:tableHeader>
+					<jr:column width="183">
+						<jr:tableHeader style="table 6_TH" height="0" rowSpan="1"/>
 						<jr:columnHeader style="table 6_CH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement mode="Transparent" x="0" y="0" width="115" height="30" forecolor="#000000" backcolor="#FFFFFF"/>
+								<reportElement mode="Transparent" x="0" y="0" width="183" height="30" forecolor="#000000" backcolor="#FFFFFF"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-									<font fontName="Tahoma" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<font fontName="Tahoma" size="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
 								</textElement>
-								<text><![CDATA[Code]]></text>
+								<text><![CDATA[Current status]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:detailCell style="table 6_TD" height="20" rowSpan="1">
+						<jr:detailCell style="table 6_TD" height="30" rowSpan="1">
 							<textField>
-								<reportElement x="0" y="0" width="115" height="20"/>
-								<textElement/>
+								<reportElement x="0" y="0" width="183" height="20"/>
+								<textElement>
+									<font size="12"/>
+								</textElement>
 								<textFieldExpression class="java.lang.String"><![CDATA[$F{resultCode}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="90">
-						<jr:tableHeader style="table 6_TH" height="30" rowSpan="1"/>
+						<jr:tableHeader style="table 6_TH" height="0" rowSpan="1"/>
 						<jr:columnHeader style="table 6_CH" height="30" rowSpan="1">
 							<staticText>
 								<reportElement mode="Transparent" x="0" y="0" width="90" height="30" forecolor="#000000" backcolor="#FFFFFF"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-									<font fontName="Tahoma" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<font fontName="Tahoma" size="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
 								</textElement>
 								<text><![CDATA[Total]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:detailCell style="table 6_TD" height="20" rowSpan="1">
+						<jr:detailCell style="table 6_TD" height="30" rowSpan="1">
 							<textField>
 								<reportElement x="0" y="0" width="90" height="20"/>
-								<textElement/>
+								<textElement>
+									<font size="12"/>
+								</textElement>
 								<textFieldExpression class="java.lang.Integer"><![CDATA[$F{resultTotal}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="121">
-						<jr:tableHeader style="table 6_TH" height="30" rowSpan="1"/>
+					<jr:column width="134">
+						<jr:tableHeader style="table 6_TH" height="0" rowSpan="1"/>
 						<jr:columnHeader style="table 6_CH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement mode="Transparent" x="0" y="0" width="121" height="30" forecolor="#000000" backcolor="#FFFFFF"/>
+								<reportElement mode="Transparent" x="0" y="0" width="134" height="30" forecolor="#000000" backcolor="#FFFFFF"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-									<font fontName="Tahoma" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<font fontName="Tahoma" size="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
 								</textElement>
-								<text><![CDATA[Average]]></text>
+								<text><![CDATA[Average (per day)]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:detailCell style="table 6_TD" height="20" rowSpan="1">
+						<jr:detailCell style="table 6_TD" height="30" rowSpan="1">
 							<textField>
-								<reportElement x="0" y="0" width="121" height="20"/>
-								<textElement/>
-								<textFieldExpression class="java.lang.String"><![CDATA[$F{resultDailyAvg}]]></textFieldExpression>
+								<reportElement x="0" y="0" width="134" height="20"/>
+								<textElement>
+									<font size="12"/>
+								</textElement>
+								<textFieldExpression class="java.lang.Double"><![CDATA[$F{resultDailyAvg}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
+					</jr:column>
+					<jr:column width="74">
+						<jr:tableHeader style="table 6_TH" height="0" rowSpan="1"/>
+						<jr:columnHeader style="table 6_CH" height="30" rowSpan="1"/>
+						<jr:detailCell style="table 6_TD" height="30" rowSpan="1"/>
+					</jr:column>
+					<jr:column width="72">
+						<jr:tableHeader style="table 6_TH" height="0" rowSpan="1"/>
+						<jr:columnHeader style="table 6_CH" height="30" rowSpan="1"/>
+						<jr:detailCell style="table 6_TD" height="30" rowSpan="1"/>
 					</jr:column>
 				</jr:table>
 			</componentElement>
 			<componentElement>
-				<reportElement key="table 7" style="table 7" x="0" y="38" width="534" height="80"/>
+				<reportElement key="table 7" style="table 7" x="0" y="38" width="555" height="59"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="Deal">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanArrayDataSource($F{lodgementList}.toArray())]]></dataSourceExpression>
 					</datasetRun>
-					<jr:column width="139">
-						<jr:tableHeader style="table 7_TH" height="30" rowSpan="1">
+					<jr:column width="159">
+						<jr:tableHeader style="table 7_TH" height="0" rowSpan="1"/>
+						<jr:columnHeader style="table 6_CH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement mode="Transparent" x="0" y="0" width="139" height="30" forecolor="#CCFFCC" backcolor="#FFFFFF"/>
+								<reportElement mode="Transparent" x="0" y="0" width="159" height="30" forecolor="#000000" backcolor="#FFFFFF"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-									<font fontName="Tahoma" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-									<paragraph lineSpacing="Single"/>
-								</textElement>
-								<text><![CDATA[Dealing Categories :]]></text>
-							</staticText>
-						</jr:tableHeader>
-						<jr:columnHeader style="table 7_CH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement mode="Transparent" x="0" y="0" width="132" height="30" forecolor="#000000" backcolor="#FFFFFF"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-									<font fontName="Tahoma" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<font fontName="Tahoma" size="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
 								</textElement>
 								<text><![CDATA[Type]]></text>
@@ -417,19 +419,21 @@
 						</jr:columnHeader>
 						<jr:detailCell style="table 7_TD" height="20" rowSpan="1">
 							<textField>
-								<reportElement x="0" y="0" width="139" height="20"/>
-								<textElement/>
+								<reportElement x="0" y="0" width="159" height="20"/>
+								<textElement>
+									<font size="12"/>
+								</textElement>
 								<textFieldExpression class="java.lang.String"><![CDATA[$F{resultType}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="75">
-						<jr:tableHeader style="table 7_TH" height="30" rowSpan="1"/>
-						<jr:columnHeader style="table 7_CH" height="30" rowSpan="1">
+						<jr:tableHeader style="table 7_TH" height="0" rowSpan="1"/>
+						<jr:columnHeader style="table 6_CH" height="30" rowSpan="1">
 							<staticText>
 								<reportElement mode="Transparent" x="0" y="0" width="75" height="30" forecolor="#000000" backcolor="#FFFFFF"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-									<font fontName="Tahoma" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<font fontName="Tahoma" size="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
 								</textElement>
 								<text><![CDATA[Total]]></text>
@@ -438,18 +442,20 @@
 						<jr:detailCell style="table 7_TD" height="20" rowSpan="1">
 							<textField>
 								<reportElement x="0" y="0" width="75" height="20"/>
-								<textElement/>
+								<textElement>
+									<font size="12"/>
+								</textElement>
 								<textFieldExpression class="java.lang.Integer"><![CDATA[$F{resultTotal}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="77">
-						<jr:tableHeader style="table 7_TH" height="30" rowSpan="1"/>
-						<jr:columnHeader style="table 7_CH" height="30" rowSpan="1">
+						<jr:tableHeader style="table 7_TH" height="0" rowSpan="1"/>
+						<jr:columnHeader style="table 6_CH" height="30" rowSpan="1">
 							<staticText>
 								<reportElement mode="Transparent" x="0" y="0" width="77" height="30" forecolor="#000000" backcolor="#FFFFFF"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-									<font fontName="Tahoma" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<font fontName="Tahoma" size="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
 								</textElement>
 								<text><![CDATA[Daily Average]]></text>
@@ -458,18 +464,20 @@
 						<jr:detailCell style="table 7_TD" height="20" rowSpan="1">
 							<textField>
 								<reportElement x="0" y="0" width="77" height="20"/>
-								<textElement/>
+								<textElement>
+									<font size="12"/>
+								</textElement>
 								<textFieldExpression class="java.lang.Number"><![CDATA[$F{resultDailyAvg}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="81">
-						<jr:tableHeader style="table 7_TH" height="30" rowSpan="1"/>
-						<jr:columnHeader style="table 7_CH" height="30" rowSpan="1">
+						<jr:tableHeader style="table 7_TH" height="0" rowSpan="1"/>
+						<jr:columnHeader style="table 6_CH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement mode="Transparent" x="0" y="0" width="79" height="30" forecolor="#000000" backcolor="#FFFFFF"/>
+								<reportElement mode="Transparent" x="2" y="0" width="79" height="30" forecolor="#000000" backcolor="#FFFFFF"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-									<font fontName="Tahoma" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<font fontName="Tahoma" size="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
 								</textElement>
 								<text><![CDATA[Percentage]]></text>
@@ -477,19 +485,21 @@
 						</jr:columnHeader>
 						<jr:detailCell style="table 7_TD" height="20" rowSpan="1">
 							<textField>
-								<reportElement x="0" y="0" width="79" height="20"/>
-								<textElement/>
+								<reportElement x="0" y="0" width="81" height="20"/>
+								<textElement>
+									<font size="12"/>
+								</textElement>
 								<textFieldExpression class="java.lang.Number"><![CDATA[$F{resultTotalPerc}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="82">
-						<jr:tableHeader style="table 7_TH" height="30" rowSpan="1"/>
-						<jr:columnHeader style="table 7_CH" height="30" rowSpan="1">
+						<jr:tableHeader style="table 7_TH" height="0" rowSpan="1"/>
+						<jr:columnHeader style="table 6_CH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement mode="Transparent" x="0" y="0" width="79" height="30" forecolor="#000000" backcolor="#FFFFFF"/>
+								<reportElement mode="Transparent" x="0" y="0" width="82" height="30" forecolor="#000000" backcolor="#FFFFFF"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-									<font fontName="Tahoma" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<font fontName="Tahoma" size="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
 								</textElement>
 								<text><![CDATA[Requisitions]]></text>
@@ -498,18 +508,20 @@
 						<jr:detailCell style="table 7_TD" height="20" rowSpan="1">
 							<textField>
 								<reportElement x="0" y="0" width="82" height="20"/>
-								<textElement/>
+								<textElement>
+									<font size="12"/>
+								</textElement>
 								<textFieldExpression class="java.lang.Integer"><![CDATA[$F{resultTotalReq}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="78">
-						<jr:tableHeader style="table 7_TH" height="30" rowSpan="1"/>
-						<jr:columnHeader style="table 7_CH" height="30" rowSpan="1">
+					<jr:column width="80">
+						<jr:tableHeader style="table 7_TH" height="0" rowSpan="1"/>
+						<jr:columnHeader style="table 6_CH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement mode="Transparent" x="0" y="0" width="73" height="30" forecolor="#000000" backcolor="#FFFFFF"/>
+								<reportElement mode="Transparent" x="0" y="0" width="80" height="30" forecolor="#000000" backcolor="#FFFFFF"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-									<font fontName="Tahoma" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<font fontName="Tahoma" size="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
 								</textElement>
 								<text><![CDATA[Percentage]]></text>
@@ -517,14 +529,30 @@
 						</jr:columnHeader>
 						<jr:detailCell style="table 7_TD" height="20" rowSpan="1">
 							<textField>
-								<reportElement x="0" y="0" width="73" height="20"/>
-								<textElement/>
+								<reportElement x="0" y="0" width="80" height="20"/>
+								<textElement>
+									<font size="12"/>
+								</textElement>
 								<textFieldExpression class="java.lang.Number"><![CDATA[$F{resultReqPerc}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 				</jr:table>
 			</componentElement>
+			<staticText>
+				<reportElement x="3" y="18" width="218" height="20"/>
+				<textElement>
+					<font fontName="Tahoma" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Services]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="114" width="218" height="20"/>
+				<textElement>
+					<font fontName="Tahoma" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Application processing timing]]></text>
+			</staticText>
 		</band>
 	</detail>
 	<pageFooter>

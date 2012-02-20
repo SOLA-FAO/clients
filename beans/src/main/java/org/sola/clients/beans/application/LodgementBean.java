@@ -84,8 +84,6 @@ public class LodgementBean extends AbstractIdBean  {
 
         List<LodgementViewTO> lodgementViewTO =
                 WSManager.getInstance().getCaseManagementService().getLodgementView(paramsTO);
-//        TypeConverters.TransferObjectListToBeanList(lodgementViewTO,
-//                LodgementBean.class, (List) getLodgementList());
         
         TypeConverters.TransferObjectListToBeanList(lodgementViewTO,
                 LodgementDealBean.class, (List) lodgementList);
