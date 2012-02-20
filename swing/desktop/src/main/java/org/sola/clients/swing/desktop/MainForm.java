@@ -54,6 +54,7 @@ import org.sola.clients.swing.desktop.application.ApplicationPanel;
 import org.sola.clients.swing.desktop.application.ApplicationSearchPanel;
 import org.sola.clients.swing.desktop.cadastre.MapPanelForm;
 import org.sola.clients.swing.desktop.party.PartySearchPanelForm;
+import org.sola.clients.swing.desktop.reports.LodgementReportParamsForm;
 import org.sola.clients.swing.desktop.source.DocumentSearchPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.common.RolesConstants;
@@ -725,14 +726,21 @@ public class MainForm extends javax.swing.JFrame {
     private void btnOpenBaUnitSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenBaUnitSearchActionPerformed
         searchBaUnit();
     }//GEN-LAST:event_btnOpenBaUnitSearchActionPerformed
-
-    private void openReportDateChooser() {
-        ReportDateChooser reportDateChooser = new ReportDateChooser(this, true);
-        reportDateChooser.setVisible(true);
+    
+    private void openLodgementReportParamsForm() {
+           LodgementReportParamsForm reportDateChooser = new LodgementReportParamsForm(this, true);
+            reportDateChooser.setVisible(true);
+    }
+    
+    /** Opens {@link ReportViewerForm} to display report.*/
+    private void showReport(JasperPrint report) {
+        ReportViewerForm form = new ReportViewerForm(report);
+        form.setVisible(true);
     }
 
     private void menuLodgementReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuLodgementReportActionPerformed
-        openReportDateChooser();
+        openLodgementReportParamsForm();
+//        showReport(ReportManager.getLodgementReport(lodgementBean1, ));  
     }//GEN-LAST:event_menuLodgementReportActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToolBar applicationsMain;
