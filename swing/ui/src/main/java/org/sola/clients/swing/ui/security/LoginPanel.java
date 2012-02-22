@@ -71,7 +71,6 @@ public class LoginPanel extends javax.swing.JPanel {
      */
     public LoginPanel() {
         initComponents();
-        pnlThems.setVisible(false);
         txtUsername.requestFocus();
     }
 
@@ -83,7 +82,6 @@ public class LoginPanel extends javax.swing.JPanel {
     public LoginPanel(Class<?> mainClasss) {
         this.mainClass = mainClasss;
         initComponents();
-        pnlThems.setVisible(false);
         txtUsername.requestFocus();
 
         // TODO: REMOVE IN RELEASE!!!
@@ -152,44 +150,6 @@ public class LoginPanel extends javax.swing.JPanel {
         this.getRootPane().setDefaultButton(btnLogin);
     }
 
-    /**
-     * Sets the backgroundpanel.
-     */
-    class LNFSetter implements ActionListener {
-
-        String theLNFName;
-        JRadioButton thisButton;
-        String whichButton;
-
-        LNFSetter(String lnfName, JRadioButton me, String theme) {
-            theLNFName = lnfName;
-            whichButton = theme;
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            try {
-                LafManager.getInstance().setProperties(whichButton);
-                UIManager.setLookAndFeel(theLNFName);
-                SwingUtilities.updateComponentTreeUI(mainPanel);
-                Object psswdFont = "PasswordField.background";
-                txtUsername.setBackground(UIManager.getColor(psswdFont));
-                txtUserPassword.setBackground(UIManager.getColor(psswdFont));
-                txtUsername.setBackground(UIManager.getColor(psswdFont));
-                Object foreFont = "nimbusBase";
-                jSeparator1.setForeground(UIManager.getColor(foreFont));
-                jSeparator2.setForeground(UIManager.getColor(foreFont));
-                jSeparator3.setForeground(UIManager.getColor(foreFont));
-
-            } catch (Exception evt) {
-                JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/security/Bundle_en_US").getString("SETLOOKANDFEEL DIDN'T WORK: ") + evt, java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/security/Bundle_en_US").getString("UI FAILURE"),
-                        JOptionPane.INFORMATION_MESSAGE);
-                previousButton.setSelected(true); // reset the GUI to agree
-            }
-            previousButton = thisButton;
-        }
-    }
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -200,14 +160,6 @@ public class LoginPanel extends javax.swing.JPanel {
         mainPanel = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         taskPanel1 = new org.sola.clients.swing.common.tasks.TaskPanel();
-        pnlThems = new javax.swing.JPanel();
-        bDefault = new javax.swing.JRadioButton();
-        bMac = new javax.swing.JRadioButton();
-        bMotif = new javax.swing.JRadioButton();
-        bMSW = new javax.swing.JRadioButton();
-        bJava = new javax.swing.JRadioButton();
-        bAutumn = new javax.swing.JRadioButton();
-        bNimbus = new javax.swing.JRadioButton();
         jPanel5 = new javax.swing.JPanel();
         txtUserPassword = new javax.swing.JPasswordField();
         labPassword = new javax.swing.JLabel();
@@ -237,61 +189,6 @@ public class LoginPanel extends javax.swing.JPanel {
         taskPanel1.setName("taskPanel1"); // NOI18N
         jPanel2.add(taskPanel1);
 
-        pnlThems.setName("pnlThems"); // NOI18N
-        pnlThems.setOpaque(false);
-        pnlThems.setLayout(new java.awt.GridLayout(1, 7));
-
-        bDefault.setBackground(new java.awt.Color(255, 255, 255));
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/security/Bundle"); // NOI18N
-        bDefault.setText(bundle.getString("LoginPanel.bDefault.text")); // NOI18N
-        bDefault.setName("bDefault"); // NOI18N
-        String defaultLookAndFeel = UIManager.getSystemLookAndFeelClassName();
-        bDefault.addActionListener(new LNFSetter(defaultLookAndFeel, bDefault, "default"));
-        bg.add(bDefault);
-        pnlThems.add(bDefault);
-
-        bMac.setBackground(new java.awt.Color(255, 255, 255));
-        bMac.setText(bundle.getString("LoginPanel.bMac.text")); // NOI18N
-        bMac.setName("bMac"); // NOI18N
-        bMac.addActionListener(new LNFSetter("com.sun.java.swing.plaf.mac.MacLookAndFeel", bMac, "default"));
-        bg.add(bMac);
-        pnlThems.add(bMac);
-
-        bMotif.setBackground(new java.awt.Color(255, 255, 255));
-        bMotif.setText(bundle.getString("LoginPanel.bMotif.text")); // NOI18N
-        bMotif.setName("bMotif"); // NOI18N
-        bMotif.addActionListener(new LNFSetter("com.sun.java.swing.plaf.motif.MotifLookAndFeel", bMotif, "default"));
-        bg.add(bMotif);
-        pnlThems.add(bMotif);
-
-        bMSW.setBackground(new java.awt.Color(255, 255, 255));
-        bMSW.setText(bundle.getString("LoginPanel.bMSW.text")); // NOI18N
-        bMSW.setName("bMSW"); // NOI18N
-        bMSW.addActionListener(new LNFSetter("com.sun.java.swing.plaf.windows.WindowsLookAndFeel", bMSW, "default"));
-        bg.add(bMSW);
-        pnlThems.add(bMSW);
-
-        bJava.setBackground(new java.awt.Color(255, 255, 255));
-        bJava.setText(bundle.getString("LoginPanel.bJava.text")); // NOI18N
-        bJava.setName("bJava"); // NOI18N
-        bJava.addActionListener(new LNFSetter("javax.swing.plaf.metal.MetalLookAndFeel", bJava, "default"));
-        bg.add(bJava);
-        pnlThems.add(bJava);
-
-        bAutumn.setBackground(new java.awt.Color(255, 255, 255));
-        bAutumn.setText(bundle.getString("LoginPanel.bAutumn.text")); // NOI18N
-        bAutumn.setName("bAutumn"); // NOI18N
-        bAutumn.addActionListener(new LNFSetter("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel", bAutumn, "autumn"));
-        bg.add(bAutumn);
-        pnlThems.add(bAutumn);
-
-        bNimbus.setBackground(new java.awt.Color(255, 255, 255));
-        bNimbus.setText(bundle.getString("LoginPanel.bNimbus.text")); // NOI18N
-        bNimbus.setName("bNimbus"); // NOI18N
-        bNimbus.addActionListener(new LNFSetter("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel", bNimbus,"green"));
-        bg.add(bNimbus);
-        pnlThems.add(bNimbus);
-
         jPanel5.setName("jPanel5"); // NOI18N
         jPanel5.setOpaque(false);
 
@@ -306,6 +203,7 @@ public class LoginPanel extends javax.swing.JPanel {
             }
         });
 
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/security/Bundle"); // NOI18N
         labPassword.setText(bundle.getString("LoginPanel.labPassword.text")); // NOI18N
         labPassword.setName("labPassword"); // NOI18N
 
@@ -339,7 +237,7 @@ public class LoginPanel extends javax.swing.JPanel {
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(61, 61, 61)
+                .addGap(54, 54, 54)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel5Layout.createSequentialGroup()
@@ -383,8 +281,8 @@ public class LoginPanel extends javax.swing.JPanel {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addGap(56, 56, 56)
-                .addComponent(languageCombobox, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(languageCombobox, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -474,7 +372,6 @@ public class LoginPanel extends javax.swing.JPanel {
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(pnlThems, javax.swing.GroupLayout.Alignment.LEADING, 0, 0, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -485,15 +382,13 @@ public class LoginPanel extends javax.swing.JPanel {
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlThems, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(13, 13, 13)
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -529,13 +424,6 @@ public class LoginPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_txtUsernameKeyPressed
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JRadioButton bAutumn;
-    private javax.swing.JRadioButton bDefault;
-    private javax.swing.JRadioButton bJava;
-    private javax.swing.JRadioButton bMSW;
-    private javax.swing.JRadioButton bMac;
-    private javax.swing.JRadioButton bMotif;
-    private javax.swing.JRadioButton bNimbus;
     private javax.swing.ButtonGroup bg;
     public javax.swing.JButton btnLogin;
     private javax.swing.JLabel jLabel1;
@@ -554,7 +442,6 @@ public class LoginPanel extends javax.swing.JPanel {
     private javax.swing.JLabel labUser;
     private org.sola.clients.swing.common.controls.LanguageCombobox languageCombobox;
     private javax.swing.JPanel mainPanel;
-    private javax.swing.JPanel pnlThems;
     private org.sola.clients.beans.security.SecurityBean securityBean;
     private org.sola.clients.swing.common.tasks.TaskPanel taskPanel1;
     private javax.swing.JPasswordField txtUserPassword;
