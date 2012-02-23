@@ -63,6 +63,8 @@ public class RrrBean extends AbstractTransactionedBean {
         NEW, VARY, CANCEL, EDIT, VIEW;
     }
     public static final String CODE_OWNERSHIP = "ownership";
+    public static final String CODE_APARTMENT = "apartment";
+    public static final String CODE_STATE_OWNERSHIP = "stateOwnership";
     public static final String CODE_MORTGAGE = "mortgage";
     public static final String BA_UNIT_ID_PROPERTY = "baUnitId";
     public static final String TYPE_CODE_PROPERTY = "typeCode";

@@ -65,6 +65,8 @@ import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.desktop.ReportViewerForm;
 import org.sola.clients.swing.desktop.administrative.PropertyPanel;
 import org.sola.clients.swing.desktop.cadastre.CadastreTransactionMapPanel;
+import org.sola.clients.swing.desktop.cadastre.MapPanelForm;
+import org.sola.clients.swing.desktop.source.DocumentSearchPanel;
 import org.sola.clients.swing.desktop.source.TransactionedDocumentsPanel;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForApplicationLocation;
 import org.sola.clients.swing.ui.ContentPanel;
@@ -515,7 +517,10 @@ public class ApplicationPanel extends ContentPanel {
             String requestType = appBean.getSelectedService().getRequestTypeCode();
 
             // Determine what form to start for selected service
-            if (requestType.equalsIgnoreCase(RequestTypeBean.CODE_REG_POWER_OF_ATTORNEY)) {
+            
+            // Power of attorney or other type document registration
+            if (requestType.equalsIgnoreCase(RequestTypeBean.CODE_REG_POWER_OF_ATTORNEY) || 
+                    requestType.equalsIgnoreCase(RequestTypeBean.CODE_REG_STANDARD_DOCUMENT)) {
                 // Run registration/cancelation Power of attorney
                 SolaTask t = new SolaTask<Void, Void>() {
 
@@ -529,8 +534,64 @@ public class ApplicationPanel extends ContentPanel {
                     }
                 };
                 TaskManager.getInstance().runTask(t);
+            } 
+            
+            // Document copy request
+            else if (requestType.equalsIgnoreCase(RequestTypeBean.CODE_DOCUMENT_COPY)) {
+                SolaTask t = new SolaTask<Void, Void>() {
 
-            } else if (requestType.equalsIgnoreCase(RequestTypeBean.CODE_CADASTRE_CHANGE)
+                    @Override
+                    public Void doTask() {
+                        setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_DOCUMENTSEARCH));
+                        if (!getMainContentPanel().isPanelOpened(MainContentPanel.CARD_DOCUMENT_SEARCH)) {
+                            DocumentSearchPanel documentSearchPanel = new DocumentSearchPanel();
+                            getMainContentPanel().addPanel(documentSearchPanel, MainContentPanel.CARD_DOCUMENT_SEARCH);
+                        }
+                        getMainContentPanel().showPanel(MainContentPanel.CARD_DOCUMENT_SEARCH);
+                        return null;
+                    }
+                };
+                TaskManager.getInstance().runTask(t);
+            } 
+            
+            // Cadastre print
+            else if (requestType.equalsIgnoreCase(RequestTypeBean.CODE_CADASTRE_PRINT)) {
+                SolaTask t = new SolaTask<Void, Void>() {
+
+                    @Override
+                    public Void doTask() {
+                        setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_MAP));
+                        if (!getMainContentPanel().isPanelOpened(MainContentPanel.CARD_MAP)) {
+                            MapPanelForm mapPanel = new MapPanelForm();
+                            getMainContentPanel().addPanel(mapPanel, MainContentPanel.CARD_MAP);
+                        }
+                        getMainContentPanel().showPanel(MainContentPanel.CARD_MAP);
+                        return null;
+                    }
+                };
+                TaskManager.getInstance().runTask(t);
+            } 
+            
+            // Service enquiry (application status report)
+            else if (requestType.equalsIgnoreCase(RequestTypeBean.CODE_SERVICE_ENQUIRY)) {
+                SolaTask t = new SolaTask<Void, Void>() {
+
+                    @Override
+                    public Void doTask() {
+                        setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_APPSEARCH));
+                        if (!getMainContentPanel().isPanelOpened(MainContentPanel.CARD_APPSEARCH)) {
+                            ApplicationSearchPanel searchApplicationPanel = new ApplicationSearchPanel();
+                            getMainContentPanel().addPanel(searchApplicationPanel, MainContentPanel.CARD_APPSEARCH);
+                        }
+                        getMainContentPanel().showPanel(MainContentPanel.CARD_APPSEARCH);
+                        return null;
+                    }
+                };
+                TaskManager.getInstance().runTask(t);
+            } 
+            
+            // Cadastre change services
+            else if (requestType.equalsIgnoreCase(RequestTypeBean.CODE_CADASTRE_CHANGE)
                     || requestType.equalsIgnoreCase(RequestTypeBean.CODE_CADASTRE_REDEFINITION)) {
 
                 if (appBean.getPropertyList().getFilteredList().size() == 1) {

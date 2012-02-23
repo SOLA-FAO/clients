@@ -785,13 +785,16 @@ public class PropertyPanel extends ContentPanel {
         }
 
         RightFormListener rightFormListener = new RightFormListener();
-        ContentPanel panel = null;
+        ContentPanel panel;
         String cardName = MainContentPanel.CARD_SIMPLE_RIGHT;
-
-        if (rrrBean.getRrrType().getCode().equals(RrrBean.CODE_MORTGAGE)) {
+        String rrrCode = rrrBean.getRrrType().getCode();
+        
+        if (rrrCode.equals(RrrBean.CODE_MORTGAGE)) {
             panel = new MortgagePanel(rrrBean, applicationBean, applicationService, action);
             cardName = MainContentPanel.CARD_MORTGAGE;
-        } else if (rrrBean.getRrrType().getCode().toLowerCase().contains(RrrBean.CODE_OWNERSHIP)) {
+        } else if (rrrCode.equalsIgnoreCase(RrrBean.CODE_OWNERSHIP) || 
+                rrrCode.equalsIgnoreCase(RrrBean.CODE_STATE_OWNERSHIP) ||
+                rrrCode.equalsIgnoreCase(RrrBean.CODE_APARTMENT)) {
             panel = new OwnershipPanel(rrrBean, applicationBean, applicationService, action);
             cardName = MainContentPanel.CARD_OWNERSHIP;
         } else {
