@@ -492,18 +492,26 @@ public class ApplicationPanel extends ContentPanel {
      * Validates application
      */
     private void validateApplication() {
+        if (MainForm.checkBeanState(appBean)) {
+            if (MessageUtility.displayMessage(ClientMessage.APPLICATION_SAVE_BEFORE_VALIDATION)
+                    == MessageUtility.BUTTON_ONE) {
+                if (checkApplication()) {
+                    saveApplication();
+                }else{
+                    return;
+                }
+            } else {
+                return;
+            }
+        }
+
         if (appBean.getId() != null) {
-            SolaTask<Boolean, Boolean> t = new SolaTask<Boolean, Boolean>() {
+            SolaTask t = new SolaTask() {
 
                 @Override
                 public Boolean doTask() {
                     setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_APP_VALIDATING));
                     validationResultListBean.setValidationResultList(appBean.validate());
-                    for (ValidationResultBean validationBean : validationResultListBean.getValidationResutlList()) {
-                        if (!validationBean.isSuccessful() && validationBean.getSeverity().equals("critical")) {
-                            return false;
-                        }
-                    }
                     tabbedControlMain.setSelectedIndex(tabbedControlMain.indexOfComponent(validationPanel));
                     return true;
                 }
@@ -517,10 +525,10 @@ public class ApplicationPanel extends ContentPanel {
             String requestType = appBean.getSelectedService().getRequestTypeCode();
 
             // Determine what form to start for selected service
-            
+
             // Power of attorney or other type document registration
-            if (requestType.equalsIgnoreCase(RequestTypeBean.CODE_REG_POWER_OF_ATTORNEY) || 
-                    requestType.equalsIgnoreCase(RequestTypeBean.CODE_REG_STANDARD_DOCUMENT)) {
+            if (requestType.equalsIgnoreCase(RequestTypeBean.CODE_REG_POWER_OF_ATTORNEY)
+                    || requestType.equalsIgnoreCase(RequestTypeBean.CODE_REG_STANDARD_DOCUMENT)) {
                 // Run registration/cancelation Power of attorney
                 SolaTask t = new SolaTask<Void, Void>() {
 
@@ -534,9 +542,7 @@ public class ApplicationPanel extends ContentPanel {
                     }
                 };
                 TaskManager.getInstance().runTask(t);
-            } 
-            
-            // Document copy request
+            } // Document copy request
             else if (requestType.equalsIgnoreCase(RequestTypeBean.CODE_DOCUMENT_COPY)) {
                 SolaTask t = new SolaTask<Void, Void>() {
 
@@ -552,9 +558,7 @@ public class ApplicationPanel extends ContentPanel {
                     }
                 };
                 TaskManager.getInstance().runTask(t);
-            } 
-            
-            // Cadastre print
+            } // Cadastre print
             else if (requestType.equalsIgnoreCase(RequestTypeBean.CODE_CADASTRE_PRINT)) {
                 SolaTask t = new SolaTask<Void, Void>() {
 
@@ -570,9 +574,7 @@ public class ApplicationPanel extends ContentPanel {
                     }
                 };
                 TaskManager.getInstance().runTask(t);
-            } 
-            
-            // Service enquiry (application status report)
+            } // Service enquiry (application status report)
             else if (requestType.equalsIgnoreCase(RequestTypeBean.CODE_SERVICE_ENQUIRY)) {
                 SolaTask t = new SolaTask<Void, Void>() {
 
@@ -588,9 +590,7 @@ public class ApplicationPanel extends ContentPanel {
                     }
                 };
                 TaskManager.getInstance().runTask(t);
-            } 
-            
-            // Cadastre change services
+            } // Cadastre change services
             else if (requestType.equalsIgnoreCase(RequestTypeBean.CODE_CADASTRE_CHANGE)
                     || requestType.equalsIgnoreCase(RequestTypeBean.CODE_CADASTRE_REDEFINITION)) {
 
@@ -721,14 +721,23 @@ public class ApplicationPanel extends ContentPanel {
         }
     }
 
-    private void saveApplication(final boolean closeOnSave) {
+    private boolean saveApplication() {
+        appBean.setLocation(this.mapControl.getApplicationLocation());
+        if (applicationID != null && !applicationID.equals("")) {
+            return appBean.saveApplication();
+        } else {
+            return appBean.lodgeApplication();
+        }
+    }
+
+    private boolean checkApplication() {
         if (appBean.validate(true).size() > 0) {
-            return;
+            return false;
         }
 
         if (applicationDocumentsHelper.isAllItemsChecked() == false) {
             if (MessageUtility.displayMessage(ClientMessage.APPLICATION_NOTALL_DOCUMENT_REQUIRED) == MessageUtility.BUTTON_TWO) {
-                return;
+                return false;
             }
         }
 
@@ -751,22 +760,24 @@ public class ApplicationPanel extends ContentPanel {
         String[] params = {"" + nrPropRequired};
         if (appBean.getPropertyList().size() < nrPropRequired) {
             if (MessageUtility.displayMessage(ClientMessage.APPLICATION_ATLEAST_PROPERTY_REQUIRED, params) == MessageUtility.BUTTON_TWO) {
-                return;
+                return false;
             }
         }
+        return true;
+    }
 
-        appBean.setLocation(this.mapControl.getApplicationLocation());
+    private void saveApplication(final boolean closeOnSave) {
+
+        if (!checkApplication()) {
+            return;
+        }
 
         SolaTask<Void, Void> t = new SolaTask<Void, Void>() {
 
             @Override
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_SAVING));
-                if (applicationID != null && !applicationID.equals("")) {
-                    appBean.saveApplication();
-                } else {
-                    appBean.lodgeApplication();
-                }
+                saveApplication();
                 if (closeOnSave) {
                     close();
                 }
