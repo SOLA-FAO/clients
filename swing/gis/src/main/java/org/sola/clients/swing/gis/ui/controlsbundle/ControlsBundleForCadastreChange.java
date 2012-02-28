@@ -154,15 +154,16 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
                 this.getMap(), this.newCadastreObjectLayer.getHostForm()),
                 this.getToolbar(),
                 true);
-        super.addToolsAndCommands();
-        this.cadastreBoundaryEditTool.setTargetLayer(this.newCadastreObjectLayer);
-
         CadastreBoundarySelectTool cadastreBoundarySelectTool = 
                 new CadastreBoundarySelectTool(
                         this.cadastreBoundaryPointLayer,
                         this.newCadastreObjectLayer,
                         this.newCadastreObjectLayer.getVerticesLayer());
         this.getMap().addTool(cadastreBoundarySelectTool, this.getToolbar(), true);
+        super.addToolsAndCommands();
+        this.cadastreBoundaryEditTool.setTargetLayer(this.newCadastreObjectLayer);
+        this.cadastreBoundaryEditTool.getTargetSnappingLayers().add(this.targetParcelsLayer);
+
     }
 
     public void setTargetParcelsByBaUnit(String baUnitId) {

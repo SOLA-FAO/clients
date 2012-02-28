@@ -119,9 +119,6 @@ public final class ControlsBundleForCadastreRedefinition extends ControlsBundleF
                 true);
 
         this.getMap().addMapAction(new CadastreRedefinitionReset(this), this.getToolbar(), true);
-        super.addToolsAndCommands();
-        this.cadastreBoundaryEditTool.setTargetLayer(cadastreObjectModifiedLayer);
-
         CadastreBoundarySelectTool cadastreBoundarySelectTool =
                 new CadastreRedefinitionBoundarySelectTool(
                 this.getPojoDataAccess(),
@@ -129,6 +126,8 @@ public final class ControlsBundleForCadastreRedefinition extends ControlsBundleF
                 this.cadastreObjectModifiedLayer,
                 this.cadastreObjectNodeModifiedLayer);
         this.getMap().addTool(cadastreBoundarySelectTool, this.getToolbar(), true);
+        super.addToolsAndCommands();
+        this.cadastreBoundaryEditTool.setTargetLayer(cadastreObjectModifiedLayer);
     }
 
     public void reset() throws Exception {

@@ -37,6 +37,7 @@ import java.io.File;
 import javax.swing.JDialog;
 import org.junit.Test;
 import org.geotools.map.extended.layer.ExtendedFeatureLayer;
+import org.geotools.map.extended.layer.ExtendedImageLayer;
 import org.geotools.map.extended.layer.ExtendedLayer;
 import org.geotools.swing.mapaction.extended.Print;
 import org.geotools.swing.tool.extended.ExtendedDrawPolygon;
@@ -78,6 +79,9 @@ public class Development {
                 directory.getAbsolutePath());
         ExtendedLayer layer = mapCtrl.getMap().addLayerShapefile(
                 "Shape layer", "Title of shape layer", shapeFile, "polygon.xml");
+        ExtendedImageLayer imageLayer = new ExtendedImageLayer(
+                "Image", "C:\\dev\\projects\\sola\\docs\\test\\test.jpg");
+        mapCtrl.getMap().addLayer(imageLayer);
 //            mapCtrl.addLayerShapefile("Shape layer", "C:\\dev\\projects\\sola\\data\\Samoa_Parcels.shp", "parcel.sld");
 //            mapCtrl.addTool(new SolaInfoTool());
         //mapCtrl.addTool(new SolaSplitParcelTool());

@@ -6,6 +6,7 @@ package org.sola.clients.swing.gis.tool;
 
 import com.vividsolutions.jts.geom.CoordinateList;
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.LinearRing;
 import com.vividsolutions.jts.geom.Polygon;
@@ -68,7 +69,7 @@ public class CadastreBoundaryEditTool extends ExtendedDrawToolWithSnapping {
         while (iterator.hasNext()) {
             SimpleFeature currentFeature = iterator.next();
             Polygon currentGeom = (Polygon) currentFeature.getDefaultGeometry();
-            if (!currentGeom.intersects(targetBoundary)) {
+            if (!this.cadastralObjectHasTargetBoundary(currentGeom, targetBoundary)) {
                 continue;
             }
             currentGeom = this.getPolygonModifiedBoundary(currentGeom, targetBoundary, newBoundary);
@@ -110,6 +111,10 @@ public class CadastreBoundaryEditTool extends ExtendedDrawToolWithSnapping {
         return ring.getFactory().createLinearRing(coordList.toCoordinateArray());
     }
 
+    private boolean cadastralObjectHasTargetBoundary(Polygon coGeom, LineString targetBoundary){
+        return coGeom.covers(targetBoundary);
+    }
+    
     private CadastreBoundarySelectTool getSelectTool() {
         ExtendedAction selectAction =
                 this.getMapControl().getMapActionByName(CadastreBoundarySelectTool.NAME);

@@ -148,7 +148,8 @@ public class CadastreChangeNewCadastreObjectLayer extends ExtendedLayerEditor{
             fieldsWithValues = new HashMap<String, Object>();
             fieldsWithValues.put(CadastreChangeNewCadastreObjectLayer.LAYER_FIELD_FIRST_PART,
                     firstPartGenerator.toString());
-            fieldsWithValues.put(CadastreChangeNewCadastreObjectLayer.LAYER_FIELD_LAST_PART, this.lastPart);
+            fieldsWithValues.put(CadastreChangeNewCadastreObjectLayer.LAYER_FIELD_LAST_PART, 
+                    this.lastPart);
             fieldsWithValues.put(CadastreChangeNewCadastreObjectLayer.LAYER_FIELD_OFFICIAL_AREA, 
                     Math.round(geom.getArea()));
         }
@@ -189,6 +190,22 @@ public class CadastreChangeNewCadastreObjectLayer extends ExtendedLayerEditor{
 
     }
 
+    private void changeInTable(SimpleFeature featureObject) {
+        if (this.tableModel == null) {
+            return;
+        }
+        for (int rowIndex = 0; rowIndex < this.tableModel.getRowCount(); rowIndex++) {
+            String fid = this.tableModel.getValueAt(
+                    rowIndex, this.getFieldIndex(LAYER_FIELD_FID)).toString();
+            if (featureObject.getID().equals(fid)) {
+                this.tableModel.setValueAt(
+                        featureObject.getAttribute(LAYER_FIELD_OFFICIAL_AREA),
+                        rowIndex, this.getFieldIndex(LAYER_FIELD_OFFICIAL_AREA));
+                break;
+            }
+        }
+    }
+
     private void featureCollectionChanged(CollectionEvent ev) {
         if (ev.getFeatures() == null) {
             return;
@@ -210,6 +227,15 @@ public class CadastreChangeNewCadastreObjectLayer extends ExtendedLayerEditor{
             for (SimpleFeature feature : ev.getFeatures()) {
                 CadastreObjectBean found = this.getBean(feature);
                 if (found != null) {
+                    BigDecimal oldCalculatedArea = this.getSpatialValueBean(found, false).getSize();
+                    BigDecimal newCalculatedArea = 
+                            BigDecimal.valueOf(((Geometry) feature.getDefaultGeometry()).getArea());
+                    
+                    if (oldCalculatedArea.compareTo(newCalculatedArea) != 0){
+                        feature.setAttribute(LAYER_FIELD_OFFICIAL_AREA, 
+                                newCalculatedArea.longValue());
+                        this.changeInTable(feature);
+                    }
                     this.changeBean(found, feature);
                 }
             }
@@ -238,14 +264,23 @@ public class CadastreChangeNewCadastreObjectLayer extends ExtendedLayerEditor{
             calculatedAreaBean.setTypeCode(SpatialValueAreaBean.TYPE_CALCULATED);
             targetBean.getSpatialValueAreaList().add(calculatedAreaBean);
         } else {
-            spatialValueBean = targetBean.getSpatialValueAreaList().get(0);
-            calculatedAreaBean = targetBean.getSpatialValueAreaList().get(1);
+            spatialValueBean = this.getSpatialValueBean(targetBean, true);
+            calculatedAreaBean = this.getSpatialValueBean(targetBean, false);
         }
         spatialValueBean.setSize(BigDecimal.valueOf(Double.parseDouble(feature.getAttribute(
                 CadastreChangeNewCadastreObjectLayer.LAYER_FIELD_OFFICIAL_AREA).toString())));
         calculatedAreaBean.setSize(BigDecimal.valueOf(
                 ((Polygon) feature.getDefaultGeometry()).getArea()));
+        //spatialValueBean.setSize(calculatedAreaBean.getSize());
         targetBean.setGeomPolygon(wkbWriter.write((Geometry) feature.getDefaultGeometry()));
+    }
+    
+    private SpatialValueAreaBean getSpatialValueBean(
+            CadastreObjectBean coBean, boolean officialValue){
+        if (officialValue){
+            return coBean.getSpatialValueAreaList().get(0);
+        }
+        return coBean.getSpatialValueAreaList().get(1);
     }
 
     private CadastreObjectBean getBean(SimpleFeature feature) {

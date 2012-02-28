@@ -78,7 +78,8 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
 
     private CadastreChangePointSurveyListForm hostForm = null;
             
-    public CadastreChangeNewSurveyPointLayer(CadastreChangeNewCadastreObjectLayer newCadastreObjectLayer)
+    public CadastreChangeNewSurveyPointLayer(
+            CadastreChangeNewCadastreObjectLayer newCadastreObjectLayer)
             throws Exception {
         super(LAYER_NAME, Geometries.POINT,
                 LAYER_STYLE_RESOURCE, LAYER_ATTRIBUTE_DEFINITION);
@@ -133,7 +134,8 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
                 for (SurveyPointBean surveyPointBean : surveyPointList) {
                     HashMap<String, Object> fieldsWithValues = new HashMap<String, Object>();
                     fieldsWithValues.put(LAYER_FIELD_LABEL, surveyPointBean.getId());
-                    fieldsWithValues.put(LAYER_FIELD_ISBOUNDARY, surveyPointBean.isBoundary() ? 1 : 0);
+                    fieldsWithValues.put(LAYER_FIELD_ISBOUNDARY, 
+                            surveyPointBean.isBoundary() ? 1 : 0);
                     fieldsWithValues.put(LAYER_FIELD_ISLINKED, 0);
                     fieldsWithValues.put(LAYER_FIELD_SHIFT, 0);
                     fieldsWithValues.put(
@@ -227,7 +229,8 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
                 }
             } else if (pointObject.getAttribute(LAYER_FIELD_ISLINKED).equals(1)) {
                 pointObject.setAttribute(LAYER_FIELD_ISLINKED, 0);
-                Point originalGeometry = (Point) pointObject.getAttribute(LAYER_FIELD_ORIGINAL_GEOMETRY);
+                Point originalGeometry = 
+                        (Point) pointObject.getAttribute(LAYER_FIELD_ORIGINAL_GEOMETRY);
                 Point currentGeometry = (Point) pointObject.getDefaultGeometry();
                 currentGeometry.getCoordinate().x = originalGeometry.getX();
                 currentGeometry.getCoordinate().y = originalGeometry.getY();
@@ -354,19 +357,19 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
         }
     }
 
-    private void changeInTable(SimpleFeature pointObject) {
+    private void changeInTable(SimpleFeature featureObject) {
         if (this.tableModel == null) {
             return;
         }
         for (int rowIndex = 0; rowIndex < this.tableModel.getRowCount(); rowIndex++) {
             String fid = this.tableModel.getValueAt(
                     rowIndex, this.getFieldIndex(LAYER_FIELD_FID)).toString();
-            if (pointObject.getID().equals(fid)) {
+            if (featureObject.getID().equals(fid)) {
                 this.tableModel.setValueAt(
-                        pointObject.getAttribute(LAYER_FIELD_ISLINKED).equals(1),
+                        featureObject.getAttribute(LAYER_FIELD_ISLINKED).equals(1),
                         rowIndex, this.getFieldIndex(LAYER_FIELD_ISLINKED));
                 this.tableModel.setValueAt(
-                        pointObject.getAttribute(LAYER_FIELD_SHIFT),
+                        featureObject.getAttribute(LAYER_FIELD_SHIFT),
                         rowIndex, this.getFieldIndex(LAYER_FIELD_SHIFT));
                 break;
             }
