@@ -6,14 +6,12 @@ package org.sola.clients.swing.gis.tool;
 
 import com.vividsolutions.jts.geom.CoordinateList;
 import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.LinearRing;
 import com.vividsolutions.jts.geom.Polygon;
 import com.vividsolutions.jts.operation.linemerge.LineMerger;
 import java.util.Collection;
 import org.geotools.data.simple.SimpleFeatureIterator;
-import org.geotools.feature.CollectionEvent;
 import org.geotools.geometry.jts.Geometries;
 import org.geotools.map.extended.layer.ExtendedLayerGraphics;
 import org.geotools.swing.extended.util.Messaging;

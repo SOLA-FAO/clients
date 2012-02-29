@@ -32,6 +32,7 @@
 package org.geotools.map.extended.layer;
 
 import java.awt.Graphics2D;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -40,6 +41,8 @@ import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.map.DirectLayer;
 import org.geotools.map.MapContent;
 import org.geotools.map.MapViewport;
+import org.geotools.swing.extended.exception.DirectImageNotValidFileException;
+import sun.awt.image.ImageFormatException;
 
 /**
  *
@@ -48,35 +51,66 @@ import org.geotools.map.MapViewport;
 public class DirectImageLayer extends DirectLayer {
 
     private ReferencedEnvelope bounds;
-    private String rasterFile;
+    private File rasterFile = null;
+    private BufferedImage loadedBufferedImage = null;
+    private double minX;
+    private double minY;
+    private double maxX;
+    private double maxY;
+    private int imageWidth;
+    private int imageHeight;
+    
 
     public DirectImageLayer() {
     }
 
-    public void setRasterFile(String rasterFile) {
+    public void setRasterFile(File rasterFile) 
+            throws IOException, DirectImageNotValidFileException{
         this.rasterFile = rasterFile;
+        if (this.rasterFile != null){
+            this.loadedBufferedImage = ImageIO.read(this.rasterFile);
+            if (this.loadedBufferedImage == null){
+                throw new DirectImageNotValidFileException("Format is not recognized.");
+            }
+            this.imageWidth = this.loadedBufferedImage.getWidth();
+            this.imageHeight = this.loadedBufferedImage.getHeight();
+        }else{
+            this.loadedBufferedImage = null;
+        }
     }
+
+    public void setMaxX(double maxX) {
+        this.maxX = maxX;
+    }
+
+    public void setMaxY(double maxY) {
+        this.maxY = maxY;
+    }
+
+    public void setMinX(double minX) {
+        this.minX = minX;
+    }
+
+    public void setMinY(double minY) {
+        this.minY = minY;
+    } 
 
     @Override
     public void draw(Graphics2D graphics, MapContent map, MapViewport viewport) {
         this.bounds = viewport.getBounds();
-        BufferedImage img = this.getBufferedImage();
-        graphics.drawImage(img, 100,100, null);
-        System.out.println(this.bounds.toString());
-    }
-
-    private BufferedImage getBufferedImage() {
-        if (this.rasterFile == null) {
-            return null;
+        if (this.loadedBufferedImage != null){
+            Point2D pixelStartPoint = new Point2D.Double(this.minX, this.maxY);
+            Point2D pixelEndPoint = new Point2D.Double(this.maxX, this.minY);
+            viewport.getWorldToScreen().transform(pixelStartPoint, pixelStartPoint);
+            viewport.getWorldToScreen().transform(pixelEndPoint, pixelEndPoint);
+            graphics.drawImage(
+                    this.loadedBufferedImage, 
+                    (int) pixelStartPoint.getX(),(int) pixelStartPoint.getY(), 
+                    (int) pixelEndPoint.getX(), (int) pixelEndPoint.getY(), 
+                    0, 0, this.imageWidth, this.imageHeight, null);
         }
-        BufferedImage img = null;
-        try {
-            img = ImageIO.read(new File(this.rasterFile));
-        } catch (IOException e) {
-        }
-        return img;
     }
-
+    
     @Override
     public ReferencedEnvelope getBounds() {
         return this.bounds;

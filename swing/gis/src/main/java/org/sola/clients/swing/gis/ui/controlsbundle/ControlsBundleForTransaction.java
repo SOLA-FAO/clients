@@ -34,8 +34,11 @@ package org.sola.clients.swing.gis.ui.controlsbundle;
 import com.vividsolutions.jts.geom.Geometry;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.geometry.jts.ReferencedEnvelope;
+import org.geotools.map.extended.layer.ExtendedImageLayer;
 import org.sola.clients.swing.gis.beans.TransactionBean;
 import org.geotools.map.extended.layer.ExtendedLayer;
+import org.geotools.swing.mapaction.extended.RemoveDirectImage;
+import org.geotools.swing.tool.extended.AddDirectImageTool;
 import org.sola.clients.swing.gis.Messaging;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.data.PojoFeatureSource;
@@ -52,6 +55,9 @@ import org.sola.common.messaging.GisMessage;
 public abstract class ControlsBundleForTransaction extends ControlsBundleForWorkingWithCO {
 
     private PojoLayer pendingLayer = null;
+    private ExtendedImageLayer imageLayer = null;
+    private static final String IMAGE_LAYER_NAME = "imageLayer";
+    private static final String IMAGE_LAYER_TITLE = "Image";
     protected CadastreBoundaryPointLayer cadastreBoundaryPointLayer = null;
     protected CadastreBoundaryEditTool cadastreBoundaryEditTool;
 
@@ -104,6 +110,8 @@ public abstract class ControlsBundleForTransaction extends ControlsBundleForWork
     public abstract TransactionBean getTransactionBean();
 
     protected void addLayers() throws Exception {
+        this.imageLayer = new ExtendedImageLayer(IMAGE_LAYER_NAME, IMAGE_LAYER_TITLE);
+        this.getMap().addLayer(this.imageLayer);
         this.cadastreBoundaryPointLayer = new CadastreBoundaryPointLayer();
         this.getMap().addLayer(this.cadastreBoundaryPointLayer);
     }
@@ -112,6 +120,8 @@ public abstract class ControlsBundleForTransaction extends ControlsBundleForWork
         this.cadastreBoundaryEditTool =
                 new CadastreBoundaryEditTool(this.cadastreBoundaryPointLayer);
         this.getMap().addTool(this.cadastreBoundaryEditTool, this.getToolbar(), false);
+        this.getMap().addTool(new AddDirectImageTool(this.imageLayer), this.getToolbar(), true);
+        this.getMap().addMapAction(new RemoveDirectImage(this.getMap()), this.getToolbar(), true);
     }
 
     @Override

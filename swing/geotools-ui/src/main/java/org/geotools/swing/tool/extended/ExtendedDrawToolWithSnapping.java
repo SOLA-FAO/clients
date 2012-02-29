@@ -42,7 +42,6 @@ import com.vividsolutions.jts.linearref.LocationIndexedLine;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +59,7 @@ import org.geotools.map.extended.layer.ExtendedFeatureLayer;
  * 
  * @author Elton Manoku
  */
-public class ExtendedDrawToolWithSnapping extends ExtendedDrawTool {
+public abstract class ExtendedDrawToolWithSnapping extends ExtendedDrawTool {
 
     /**
      * Type of the target object being snapped

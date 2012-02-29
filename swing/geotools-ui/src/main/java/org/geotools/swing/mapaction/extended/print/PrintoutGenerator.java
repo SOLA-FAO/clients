@@ -31,27 +31,20 @@
  */
 package org.geotools.swing.mapaction.extended.print;
 
-import com.lowagie.text.Anchor;
 import com.lowagie.text.BadElementException;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Image;
-import com.lowagie.text.PageSize;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.Phrase;
 import com.lowagie.text.Rectangle;
 import com.lowagie.text.Utilities;
 import com.lowagie.text.pdf.BaseFont;
-import com.lowagie.text.pdf.ByteBuffer;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfWriter;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
-import javax.imageio.ImageIO;
 import org.geotools.swing.extended.Map;
 import org.geotools.swing.extended.util.MapImageGenerator;
 import org.geotools.swing.extended.util.ScalebarGenerator;
@@ -78,10 +71,9 @@ public class PrintoutGenerator {
                 this.getDimesionInPoints(layout.getPageWidth()), 
                 this.getDimesionInPoints(layout.getPageHeight()));
         Document document = new Document(pageSize);
-        //ByteBuffer byteBuffer = new ByteBuffer();
         try {
             // creation of the different writers
-            PdfWriter writer = PdfWriter.getInstance(document, //byteBuffer);
+            PdfWriter writer = PdfWriter.getInstance(document, 
                     new FileOutputStream(pathToResult));
             document.open();
             this.addImage(document, mapImage, 

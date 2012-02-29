@@ -40,6 +40,8 @@ import org.geotools.map.extended.layer.ExtendedFeatureLayer;
 import org.geotools.map.extended.layer.ExtendedImageLayer;
 import org.geotools.map.extended.layer.ExtendedLayer;
 import org.geotools.swing.mapaction.extended.Print;
+import org.geotools.swing.mapaction.extended.RemoveDirectImage;
+import org.geotools.swing.tool.extended.AddDirectImageTool;
 import org.geotools.swing.tool.extended.ExtendedDrawPolygon;
 import org.geotools.swing.tool.extended.ExtendedDrawToolWithSnapping;
 
@@ -79,8 +81,10 @@ public class Development {
                 directory.getAbsolutePath());
         ExtendedLayer layer = mapCtrl.getMap().addLayerShapefile(
                 "Shape layer", "Title of shape layer", shapeFile, "polygon.xml");
-        ExtendedImageLayer imageLayer = new ExtendedImageLayer(
-                "Image", "C:\\dev\\projects\\sola\\docs\\test\\test.jpg");
+        ExtendedImageLayer imageLayer = new ExtendedImageLayer("image", "Image");
+        //imageLayer.setRasterFile(new File("C:\\dev\\projects\\sola\\docs\\test\\test.jpg"));
+        //imageLayer.setMinX(1785170);imageLayer.setMinY(5927351);
+        //imageLayer.setMaxX(1786311);imageLayer.setMaxY(5928372);
         mapCtrl.getMap().addLayer(imageLayer);
 //            mapCtrl.addLayerShapefile("Shape layer", "C:\\dev\\projects\\sola\\data\\Samoa_Parcels.shp", "parcel.sld");
 //            mapCtrl.addTool(new SolaInfoTool());
@@ -89,13 +93,16 @@ public class Development {
         ExtendedDrawPolygon solaDrawTool = new ExtendedDrawPolygon();
         mapCtrl.getMap().addTool(solaDrawTool, mapCtrl.getToolbar(), true);
         
-        ExtendedDrawToolWithSnapping snapTool = new ExtendedDrawToolWithSnapping();
+//        ExtendedDrawToolWithSnapping snapTool = new ExtendedDrawToolWithSnapping();
 //        snapTool.getTargetSnappingLayers().add(
 //                (ExtendedFeatureLayer)mapCtrl.getMap().getSolaLayers().get("Shape layer"));
-        snapTool.getTargetSnappingLayers().add(
-                (ExtendedFeatureLayer)mapCtrl.getMap().getSolaLayers().get(solaDrawTool.getLayerName()));
+//        snapTool.getTargetSnappingLayers().add(
+//                (ExtendedFeatureLayer)mapCtrl.getMap().getSolaLayers().get(solaDrawTool.getLayerName()));
         
-        mapCtrl.getMap().addTool(snapTool, mapCtrl.getToolbar(), true);
+      //  mapCtrl.getMap().addTool(snapTool, mapCtrl.getToolbar(), true);
+        mapCtrl.getMap().addTool(new AddDirectImageTool(imageLayer), mapCtrl.getToolbar(), true);
+        mapCtrl.getMap().addMapAction(
+                new RemoveDirectImage(mapCtrl.getMap()), mapCtrl.getToolbar(), true);
        // mapCtrl.getToc().afterNodesAdded();
 //            mapCtrl.addTool(new SolaDrawLinestring());
 //            // mapCtrl.addLayerGraphics("Point layer");

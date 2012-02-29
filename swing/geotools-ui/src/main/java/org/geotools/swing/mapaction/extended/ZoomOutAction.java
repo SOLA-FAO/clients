@@ -46,7 +46,9 @@ public class ZoomOutAction extends ExtendedAction{
     private double zoomFactor = 0.5;
     
     public ZoomOutAction(Map mapControl) {        
-        super(mapControl, "zoomout", Messaging.getInstance().getMessageText(Messaging.Ids.GEOTOOL_TOOLTIP_ZOOM_OUT.toString()), "resources/zoomout.png");
+        super(mapControl, "zoomout", 
+                Messaging.getInstance().getMessageText(
+                Messaging.Ids.GEOTOOL_TOOLTIP_ZOOM_OUT.toString()), "resources/zoomout.png");
     }
 
     /**

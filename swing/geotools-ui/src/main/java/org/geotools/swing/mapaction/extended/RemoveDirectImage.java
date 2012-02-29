@@ -29,64 +29,31 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.geotools.swing.tool.extended;
+package org.geotools.swing.mapaction.extended;
 
-import java.awt.Point;
-import org.geotools.swing.event.MapMouseEvent;
+import org.geotools.swing.extended.Map;
 import org.geotools.swing.extended.util.Messaging;
+import org.geotools.swing.tool.extended.AddDirectImageTool;
 
 /**
- * It pans the  map. It is based in the {@see org.geotools.swing.tool.PanTool}
- * 
  * @author Elton Manoku
  */
-public class ExtendedPan extends ExtendedTool {
-
-    public static final String NAME = "pan";
-    private boolean panning = false;
-    private Point panePos;
-    private String toolTip =  
-            Messaging.getInstance().getMessageText(Messaging.Ids.GEOTOOL_TOOLTIP_PAN.toString());
-   
-    public ExtendedPan() {
-        this.setToolName(NAME);
-        this.setToolTip(toolTip);
+public class RemoveDirectImage extends ExtendedAction{
+    
+    public RemoveDirectImage(Map mapControl) {        
+        super(mapControl, "image-remove", Messaging.getInstance().getMessageText(
+                Messaging.Ids.REMOVE_DIRECT_IMAGE_TOOLTIP.toString()), 
+                "resources/image-remove.png");
     }
 
-    /**
-     * Respond to a mouse button press event from the map mapPane. This may
-     * signal the start of a mouse drag. Records the event's window position.
-     * @param ev the mouse event
-     */
     @Override
-    public void onMousePressed(MapMouseEvent ev) {
-        panePos = ev.getPoint();
-        panning = true;
+    public void onClick(){
+        this.getAddTool().reset();
     }
 
-    /**
-     * Respond to a mouse dragged event. Calls {@link org.geotools.swing.JMapPane#moveImage()}
-     * @param ev the mouse event
-     */
-    @Override
-    public void onMouseDragged(MapMouseEvent ev) {
-        if (panning) {
-            Point pos = ev.getPoint();
-            if (!pos.equals(panePos)) {
-                getMapControl().moveImage(pos.x - panePos.x, pos.y - panePos.y);
-                panePos = pos;
-            }
-        }
-    }
-
-    /**
-     * If this button release is the end of a mouse dragged event, requests the
-     * map mapPane to repaint the display
-     * @param ev the mouse event
-     */
-    @Override
-    public void onMouseReleased(MapMouseEvent ev) {
-        panning = false;
-        getMapControl().refresh();
+    private AddDirectImageTool getAddTool() {
+        ExtendedAction selectAction =
+                this.getMapControl().getMapActionByName(AddDirectImageTool.NAME);
+        return (AddDirectImageTool) selectAction.getAttachedTool();
     }
 }

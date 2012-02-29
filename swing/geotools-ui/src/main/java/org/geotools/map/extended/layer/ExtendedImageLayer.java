@@ -4,25 +4,9 @@
  */
 package org.geotools.map.extended.layer;
 
+import java.io.File;
 import java.io.IOException;
-import javax.swing.JOptionPane;
-import org.geotools.coverage.grid.GridCoverage2D;
-import org.geotools.coverage.grid.io.AbstractGridCoverage2DReader;
-import org.geotools.coverage.grid.io.AbstractGridFormat;
-import org.geotools.coverage.grid.io.GridFormatFinder;
-import org.geotools.factory.CommonFactoryFinder;
-import org.geotools.map.DirectLayer;
-import org.geotools.map.GridReaderLayer;
-import org.geotools.map.Layer;
-import org.geotools.styling.ChannelSelection;
-import org.geotools.styling.ContrastEnhancement;
-import org.geotools.styling.RasterSymbolizer;
-import org.geotools.styling.SLD;
-import org.geotools.styling.SelectedChannelType;
-import org.geotools.styling.Style;
-import org.geotools.styling.StyleFactory;
-import org.opengis.filter.FilterFactory2;
-import org.opengis.style.ContrastMethod;
+import org.geotools.swing.extended.exception.DirectImageNotValidFileException;
 
 /**
  *
@@ -30,9 +14,32 @@ import org.opengis.style.ContrastMethod;
  */
 public class ExtendedImageLayer extends ExtendedLayer {
     
-    public ExtendedImageLayer(String name, String rasterFile)throws Exception{
-         DirectImageLayer rasterLayer = new DirectImageLayer();
-         rasterLayer.setRasterFile(rasterFile);
-         this.getMapLayers().add(rasterLayer);
+    DirectImageLayer rasterLayer;
+    public ExtendedImageLayer(String name, String title)throws Exception{
+        this.setLayerName(name);
+        this.setTitle(title);
+         this.rasterLayer = new DirectImageLayer();
+         this.getMapLayers().add(this.rasterLayer);
     }
+    
+    public void setRasterFile(File rasterFile) 
+            throws IOException, DirectImageNotValidFileException{
+        this.rasterLayer.setRasterFile(rasterFile);
+    }
+    public void setMaxX(double maxX) {
+        this.rasterLayer.setMaxX(maxX);
+    }
+
+    public void setMaxY(double maxY) {
+        this.rasterLayer.setMaxY(maxY);
+    }
+
+    public void setMinX(double minX) {
+        this.rasterLayer.setMinX(minX);
+    }
+
+    public void setMinY(double minY) {
+        this.rasterLayer.setMinY(minY);
+    } 
+
 }

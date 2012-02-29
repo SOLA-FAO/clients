@@ -49,7 +49,7 @@ import org.geotools.map.extended.layer.VertexInformation;
  *
  * @author Elton Manoku
  */
-public class ExtendedEditGeometryTool extends ExtendedDrawToolWithSnapping {
+public abstract class ExtendedEditGeometryTool extends ExtendedDrawToolWithSnapping {
 
     /**
      * The kinds of the statuses the tool can have

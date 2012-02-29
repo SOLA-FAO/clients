@@ -31,8 +31,6 @@
  */
 package org.geotools.swing.extended.util;
 
-
-
 /**
  * This class handles showing of the messages. It can be extended by 
  * by the applications to use their library of showing messages.
@@ -48,6 +46,7 @@ public class Messaging {
      * Constants representing message ids used in the library.
      */
     public static enum Ids {
+
         ADDING_FEATURE_ERROR,
         MAPCONTROL_MAPCONTEXT_WITHOUT_SRID_ERROR,
         DRAWINGTOOL_GEOMETRY_NOT_VALID_ERROR,
@@ -71,27 +70,33 @@ public class Messaging {
         PRINT_SCALE_NOT_CORRECT,
         LEFT_PANEL_TAB_LAYERS_TITLE,
         GEOTOOL_GET_FEATURE_IN_RANGLE_ERROR,
-        LAYER_EDITOR_VERTEX_MAINTAIN_ERROR
+        LAYER_EDITOR_VERTEX_MAINTAIN_ERROR,
+        ADD_DIRECT_IMAGE_TOOLTIP,
+        ADD_DIRECT_IMAGE_ADD_FIRST_POINT,
+        ADD_DIRECT_IMAGE_ADD_SECOND_POINT,
+        ADD_DIRECT_IMAGE_LOAD_IMAGE_ERROR,
+        ADD_DIRECT_IMAGE_SECOND_POINT_ERROR,
+        REMOVE_DIRECT_IMAGE_TOOLTIP
     };
-
     private static Messaging messaging = new Messaging();
-    
+
     /**
      * Gets a singletone instance of the Messaging class
      * @return 
      */
-    public static Messaging getInstance(){
+    public static Messaging getInstance() {
         return messaging;
     }
-    
+
     /**
      * Sets the messaging library.
      * 
      * @param messagingLibrary 
      */
-    public void setMessaging(Messaging messagingLibrary){
+    public void setMessaging(Messaging messagingLibrary) {
         messaging = messagingLibrary;
     }
+
     /**
      * It shows a message by getting as a parameter a message id or a message text.
      * First it checks if the message id is from the list, if not then it will be considered
@@ -101,7 +106,7 @@ public class Messaging {
      * @param msg The message id or the message text
      * @param args arguments if the message text accepts them
      */
-    public void show(String msg, Object ... args) {
+    public void show(String msg, Object... args) {
         String msgBody = getInstance().getMessageText(msg, args);
         javax.swing.JOptionPane.showMessageDialog(null, msgBody);
     }
@@ -153,25 +158,39 @@ public class Messaging {
             msgBody = "There are not enough points to create the geometry.";
 //            msgBody =  GisMessage.GEOTOOL_NOT_ENOUGH_POINTS_INFORMATIVE;
         } else if (messageId.equals(Messaging.Ids.GEOTOOL_TOOLTIP_FULL_EXTENT.toString())) {
-            msgBody = "Click to full extent.";  
+            msgBody = "Click to full extent.";
         } else if (messageId.equals(Messaging.Ids.GEOTOOL_TOOLTIP_ZOOM_OUT.toString())) {
-            msgBody = "Click to zoom out.";  
+            msgBody = "Click to zoom out.";
         } else if (messageId.equals(Messaging.Ids.GEOTOOL_TOOLTIP_ZOOM_IN.toString())) {
-            msgBody = "Click to zoom in.";  
+            msgBody = "Click to zoom in.";
         } else if (messageId.equals(Messaging.Ids.GEOTOOL_TOOLTIP_PAN.toString())) {
-            msgBody = "Click to drag the map.";    
+            msgBody = "Click to drag the map.";
         } else if (messageId.equals(Messaging.Ids.PRINT.toString())) {
-            msgBody = "Print.";    
-        } else if (messageId.equals(Messaging.Ids.PRINT_LAYOUT_NOT_SELECTED.toString())){
+            msgBody = "Print.";
+        } else if (messageId.equals(Messaging.Ids.PRINT_LAYOUT_NOT_SELECTED.toString())) {
             msgBody = "Layout is not selected.";
-        }else if (messageId.equals(Messaging.Ids.PRINT_SCALE_NOT_CORRECT.toString())){
+        } else if (messageId.equals(Messaging.Ids.PRINT_SCALE_NOT_CORRECT.toString())) {
             msgBody = "Scale is not correct.";
-        } else if(messageId.equals(Messaging.Ids.LEFT_PANEL_TAB_LAYERS_TITLE.toString())){
+        } else if (messageId.equals(Messaging.Ids.LEFT_PANEL_TAB_LAYERS_TITLE.toString())) {
             msgBody = "Layers";
-        } else if(messageId.equals(Messaging.Ids.GEOTOOL_GET_FEATURE_IN_RANGLE_ERROR.toString())){
+        } else if (messageId.equals(Messaging.Ids.GEOTOOL_GET_FEATURE_IN_RANGLE_ERROR.toString())) {
             msgBody = "Error while getting features in range. \n Error : %s";
-        } else if(messageId.equals(Messaging.Ids.LAYER_EDITOR_VERTEX_MAINTAIN_ERROR.toString())){
+        } else if (messageId.equals(Messaging.Ids.LAYER_EDITOR_VERTEX_MAINTAIN_ERROR.toString())) {
             msgBody = "Error while maintaining vertexes of the feature. \n Error : %s";
+        } else if (messageId.equals(Messaging.Ids.ADD_DIRECT_IMAGE_TOOLTIP.toString())) {
+            msgBody = "Add a direct image in the map";
+        } else if (messageId.equals(Messaging.Ids.ADD_DIRECT_IMAGE_ADD_FIRST_POINT.toString())) {
+            msgBody = "Click in the map where the bottom left corner of the image has to be.";
+        } else if (messageId.equals(Messaging.Ids.ADD_DIRECT_IMAGE_ADD_SECOND_POINT.toString())) {
+            msgBody = "Click in the map where the top right corner of the image has to be.";
+        } else if (messageId.equals(Messaging.Ids.ADD_DIRECT_IMAGE_LOAD_IMAGE_ERROR.toString())) {
+            msgBody = "Error while loading the image. \n Error : %s";
+        } else if (messageId.equals(Messaging.Ids.ADD_DIRECT_IMAGE_SECOND_POINT_ERROR.toString())) {
+            msgBody = "The second point has to be more in the east and north than the first point."
+                    + "\n Define second point again or reset the adding of the image "
+                    + "to restart with the first point.";
+        } else if (messageId.equals(Messaging.Ids.REMOVE_DIRECT_IMAGE_TOOLTIP.toString())) {
+            msgBody = "Remove the added image";
         }
         return msgBody;
     }
@@ -183,7 +202,7 @@ public class Messaging {
      * @param args Arguments to be replaced
      * @return It returns the formatted string otherwise the message id
      */
-    public String getMessageText(String messageId, Object ... args){
+    public String getMessageText(String messageId, Object... args) {
         String msgBody = getInstance().getMessageText(messageId);
         return String.format(msgBody, args);
     }

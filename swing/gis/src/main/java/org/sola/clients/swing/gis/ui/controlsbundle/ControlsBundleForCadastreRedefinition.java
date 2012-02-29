@@ -86,6 +86,7 @@ public final class ControlsBundleForCadastreRedefinition extends ControlsBundleF
 
     @Override
     protected void addLayers() throws Exception {
+        super.addLayers();
         this.cadastreObjectModifiedLayer = new CadastreRedefinitionObjectLayer();
         this.getMap().addLayer(this.cadastreObjectModifiedLayer);
 
@@ -141,7 +142,7 @@ public final class ControlsBundleForCadastreRedefinition extends ControlsBundleF
     }
 
     @Override
-    public void setReadOnly(boolean readOnly){
+    public void setReadOnly(boolean readOnly) {
         super.setReadOnly(readOnly);
         this.getMap().getMapActionByName(
                 CadastreRedefinitionAddNodeTool.NAME).setEnabled(!readOnly);

@@ -109,6 +109,7 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
 
     @Override
     protected void addLayers() throws Exception {
+        super.addLayers();
         this.targetParcelsLayer = new CadastreChangeTargetCadastreObjectLayer(this.getMap().getSrid());
         this.getMap().addLayer(targetParcelsLayer);
 
@@ -125,7 +126,6 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
 
         this.newCadastreObjectLayer.setCadastreObjectList(
                 this.transactionBean.getCadastreObjectList());
-        super.addLayers();
     }
 
     @Override
