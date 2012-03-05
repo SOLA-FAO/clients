@@ -44,7 +44,10 @@ import org.geotools.renderer.lite.StreamingRenderer;
 import org.geotools.swing.extended.Map;
 
 /**
- *
+ * It is a generator of an image from the current status of the map layers.
+ * <br/>
+ * In the sides of the image generated, are added the coordinates of the extent.
+ * 
  * @author Elton Manoku
  */
 public class MapImageGenerator {
@@ -53,26 +56,56 @@ public class MapImageGenerator {
     private Color textColor = Color.RED;
     private Font textFont = new Font(Font.SANS_SERIF, Font.BOLD, 10);
 
+    /**
+     * Constructor of the generator.
+     * @param map The map control used as a source for generating the image
+     */
     public MapImageGenerator(Map map) {
         this.map = map;
     }
 
+    /**
+     * Gets the color of the text used in the image
+     * @return 
+     */
     public Color getTextColor() {
         return textColor;
     }
 
+    /**
+     * Sets the color of the text used in the image
+     * @param textColor 
+     */
     public void setTextColor(Color textColor) {
         this.textColor = textColor;
     }
 
+
+    /**
+     * Gets the font of the text used in the image
+     * @return 
+     */
     public Font getTextFont() {
         return textFont;
     }
 
+    /**
+     * Sets the font of the text used in the image
+     * @param textFont 
+     */
     public void setTextFont(Font textFont) {
         this.textFont = textFont;
     }
 
+
+    /**
+     * It generates the image.
+     * @param imageWidth The image width
+     * @param imageHeight The image height
+     * @param scale The scale of the map
+     * @param dpi The dpi used
+     * @return An buffered image
+     */
     public BufferedImage getImage(double imageWidth, double imageHeight, double scale, int dpi) {
         ReferencedEnvelope currentExtent = this.map.getDisplayArea();
         double centerX = currentExtent.getMedian(0);
@@ -87,6 +120,13 @@ public class MapImageGenerator {
         return this.getImage((int) Math.round(imageWidth), extent);
     }
 
+    /**
+     * It generates the image.
+     * The height of the image is calculated.
+     * @param imageWidth The width of the image
+     * @param extent The extent of the map to fit the image
+     * @return 
+     */
     public BufferedImage getImage(int imageWidth, ReferencedEnvelope extent) {
         int imageHeight = (int) (imageWidth * (extent.getHeight() / extent.getWidth()));
         BufferedImage bi = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_ARGB);

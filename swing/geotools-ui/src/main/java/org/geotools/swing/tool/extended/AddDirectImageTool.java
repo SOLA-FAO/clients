@@ -34,17 +34,17 @@ package org.geotools.swing.tool.extended;
 import java.io.File;
 import java.io.IOException;
 import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.geotools.geometry.DirectPosition2D;
 import org.geotools.map.extended.layer.ExtendedImageLayer;
 import org.geotools.swing.event.MapMouseEvent;
 import org.geotools.swing.extended.exception.DirectImageNotValidFileException;
 import org.geotools.swing.extended.util.Messaging;
+import org.geotools.swing.tool.extended.ui.DirectImageForm;
 
 /**
  *
- * @author manoku
+ * @author Elton Manoku
  */
 public class AddDirectImageTool extends ExtendedTool {
 
@@ -56,6 +56,7 @@ public class AddDirectImageTool extends ExtendedTool {
     private DirectPosition2D firstPoint = null;
     private DirectPosition2D secondPoint = null;
     private JFileChooser fileChooser = new JFileChooser();
+    private DirectImageForm imageForm = new DirectImageForm();
 
     public AddDirectImageTool(ExtendedImageLayer imageLayer) {
         this.setToolName(NAME);
@@ -63,29 +64,36 @@ public class AddDirectImageTool extends ExtendedTool {
         this.imageLayer = imageLayer;
         this.fileChooser.setMultiSelectionEnabled(false);
         this.fileChooser.removeChoosableFileFilter(this.fileChooser.getAcceptAllFileFilter());
+        String[] extensions = new String[]{"jpg", "jpeg", "png", "tif", "tiff"};
         this.fileChooser.addChoosableFileFilter(
-                new FileNameExtensionFilter("Images (*.jpg, *.jpeg, *.png, *.tif, *.tiff)", 
-                        "jpg", "jpeg", "png", "*.tif", "*.tiff"));
+                new FileNameExtensionFilter("Images (*.jpg, *.jpeg, *.png, *.tif, *.tiff)",
+                extensions));
     }
 
     @Override
     public void onMouseClicked(MapMouseEvent ev) {
-        DirectPosition2D pos = ev.getMapPosition();
-        if (this.firstPointMode) {
-            this.firstPoint = pos.clone();
-            Messaging.getInstance().show(
-                    Messaging.Ids.ADD_DIRECT_IMAGE_ADD_SECOND_POINT.toString());
-        } else {
-            this.secondPoint = pos.clone();
-            if (this.firstPoint.getX() > this.secondPoint.getX()
-                    || this.firstPoint.getY() > this.secondPoint.getY()) {
+        DirectPosition2D pos = ev.getWorldPos();
+        try {
+            if (this.firstPointMode) {
+                this.reset();
+                this.imageLayer.setFirstPoint(pos.getX(), pos.getY());
+                this.firstPoint = pos.clone();
+                this.secondPoint = null;
                 Messaging.getInstance().show(
-                        Messaging.Ids.ADD_DIRECT_IMAGE_SECOND_POINT_ERROR.toString());
-                return;
+                        Messaging.Ids.ADD_DIRECT_IMAGE_ADD_SECOND_POINT.toString());
+            } else {
+                this.imageLayer.setSecondPoint(pos.getX(), pos.getY());
+                this.secondPoint = pos.clone();
             }
+            this.firstPointMode = !this.firstPointMode;
+        } catch (Exception ex) {
+            Messaging.getInstance().show(
+                    Messaging.Ids.ADD_DIRECT_IMAGE_DEFINE_POINT_ERROR.toString(),
+                    ex.getMessage());
+        }
+        if (this.firstPoint != null && this.secondPoint != null) {
             this.loadImage();
         }
-        this.firstPointMode = !this.firstPointMode;
     }
 
     @Override
@@ -109,7 +117,9 @@ public class AddDirectImageTool extends ExtendedTool {
             this.getMapControl().refresh();
         } catch (IOException ex) {
             //Not relevant while resetting
-        }catch(DirectImageNotValidFileException ex){
+        } catch (DirectImageNotValidFileException ex) {
+            //Not relevant while resetting            
+        } catch (Exception ex) {
             //Not relevant while resetting            
         }
     }
@@ -118,20 +128,37 @@ public class AddDirectImageTool extends ExtendedTool {
         if (this.fileChooser.showOpenDialog(this.getMapControl()) == JFileChooser.APPROVE_OPTION) {
             File file = this.fileChooser.getSelectedFile();
             try {
-                this.imageLayer.setRasterFile(file);
-                this.imageLayer.setMinX(this.firstPoint.getX());
-                this.imageLayer.setMinY(this.firstPoint.getY());
-                this.imageLayer.setMaxX(this.secondPoint.getX());
-                this.imageLayer.setMaxY(this.secondPoint.getY());
-                this.getMapControl().refresh();
+                this.imageForm.setImage(file);
+                this.imageForm.setFirstPointInMapX(this.firstPoint.getX());
+                this.imageForm.setFirstPointInMapY(this.firstPoint.getY());
+                this.imageForm.setSecondPointInMapX(this.secondPoint.getX());
+                this.imageForm.setSecondPointInMapY(this.secondPoint.getY());
+                this.imageForm.setVisible(true);
+                if (this.imageForm.isSuccess()) {
+                    this.imageLayer.setRasterFile(file);
+                    this.imageLayer.setMinX(this.imageForm.getLeftBottomImageCornerInMapX());
+                    this.imageLayer.setMinY(this.imageForm.getLeftBottomImageCornerInMapY());
+                    this.imageLayer.setMaxX(this.imageForm.getRightTopImageCornerInTheMapX());
+                    this.imageLayer.setMaxY(this.imageForm.getRightTopImageCornerInTheMapY());
+                    this.getMapControl().refresh();
+                } else {
+                    this.reset();
+                }
             } catch (IOException ex) {
                 Messaging.getInstance().show(
                         Messaging.Ids.ADD_DIRECT_IMAGE_LOAD_IMAGE_ERROR.toString(),
                         ex.getMessage());
-            }catch(DirectImageNotValidFileException ex){
+                this.reset();
+            } catch (DirectImageNotValidFileException ex) {
                 Messaging.getInstance().show(
                         Messaging.Ids.ADD_DIRECT_IMAGE_LOAD_IMAGE_ERROR.toString(),
-                        ex.getMessage());                
+                        ex.getMessage());
+                this.reset();
+            } catch (Exception ex) {
+                Messaging.getInstance().show(
+                        Messaging.Ids.ADD_DIRECT_IMAGE_LOAD_IMAGE_ERROR.toString(),
+                        ex.getMessage());
+                this.reset();
             }
         }
     }

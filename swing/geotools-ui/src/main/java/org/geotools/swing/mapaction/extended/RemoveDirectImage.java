@@ -36,6 +36,10 @@ import org.geotools.swing.extended.util.Messaging;
 import org.geotools.swing.tool.extended.AddDirectImageTool;
 
 /**
+ * This is a command that is used to reset the adding of a direct image in the map.
+ * It requires that in the toolbar is also added 
+ * a tool {@see org.geotools.swing.tool.extended.AddDirectImageTool}.
+ * 
  * @author Elton Manoku
  */
 public class RemoveDirectImage extends ExtendedAction{

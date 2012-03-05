@@ -67,7 +67,7 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
     public static final String LAYER_FIELD_ISLINKED = "is_linked";
     public static final String LAYER_FIELD_SHIFT = "shift";
     private static final String LAYER_FIELD_ORIGINAL_GEOMETRY = "original_geometry";
-    private static final String LAYER_ATTRIBUTE_DEFINITION = 
+    private static final String LAYER_ATTRIBUTE_DEFINITION =
             String.format("%s:\"\",%s:0,%s:0,%s:0.0,%s:Point",
             LAYER_FIELD_LABEL, LAYER_FIELD_ISBOUNDARY, LAYER_FIELD_ISLINKED,
             LAYER_FIELD_SHIFT, LAYER_FIELD_ORIGINAL_GEOMETRY);
@@ -75,9 +75,8 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
     private DefaultTableModel tableModel = null;
     private CadastreChangeNewCadastreObjectLayer newCadastreObjectLayer = null;
     private List<SurveyPointBean> surveyPointList = new ArrayList<SurveyPointBean>();
-
     private CadastreChangePointSurveyListForm hostForm = null;
-            
+
     public CadastreChangeNewSurveyPointLayer(
             CadastreChangeNewCadastreObjectLayer newCadastreObjectLayer)
             throws Exception {
@@ -93,7 +92,7 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
                 featureCollectionChanged(ce);
             }
         });
-        
+
         this.hostForm = new CadastreChangePointSurveyListForm(this);
         this.tableModel = (DefaultTableModel) this.hostForm.getTable().getModel();
         this.tableModel.addTableModelListener(new TableModelListener() {
@@ -105,10 +104,10 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
         });
     }
 
-    public CadastreChangePointSurveyListForm getHostForm(){
+    public CadastreChangePointSurveyListForm getHostForm() {
         return this.hostForm;
     }
-    
+
     public int getFieldIndex(String fieldName) {
         if (fieldName.equals(LAYER_FIELD_FID)) {
             return 0;
@@ -134,7 +133,7 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
                 for (SurveyPointBean surveyPointBean : surveyPointList) {
                     HashMap<String, Object> fieldsWithValues = new HashMap<String, Object>();
                     fieldsWithValues.put(LAYER_FIELD_LABEL, surveyPointBean.getId());
-                    fieldsWithValues.put(LAYER_FIELD_ISBOUNDARY, 
+                    fieldsWithValues.put(LAYER_FIELD_ISBOUNDARY,
                             surveyPointBean.isBoundary() ? 1 : 0);
                     fieldsWithValues.put(LAYER_FIELD_ISLINKED, 0);
                     fieldsWithValues.put(LAYER_FIELD_SHIFT, 0);
@@ -161,7 +160,7 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
         SimpleFeatureIterator iterator = this.getFeatureCollection().features();
         while (iterator.hasNext()) {
             currentFeature = iterator.next();
-            if (currentFeature.getAttribute(LAYER_FIELD_ISLINKED).equals(0)){
+            if (currentFeature.getAttribute(LAYER_FIELD_ISLINKED).equals(0)) {
                 continue;
             }
             totalPoints++;
@@ -171,7 +170,7 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
             deltaY += Math.abs(originalGeometry.getY() - currentGeometry.getY());
         }
         this.getFeatureCollection().close(iterator);
-        result = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2))/totalPoints;
+        result = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2)) / totalPoints;
         return result;
     }
 
@@ -184,7 +183,7 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
         SimpleFeatureIterator iterator = this.getFeatureCollection().features();
         while (iterator.hasNext()) {
             currentFeature = iterator.next();
-            if (currentFeature.getAttribute(LAYER_FIELD_ISLINKED).equals(0)){
+            if (currentFeature.getAttribute(LAYER_FIELD_ISLINKED).equals(0)) {
                 continue;
             }
             Double shift = Double.parseDouble(
@@ -229,7 +228,7 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
                 }
             } else if (pointObject.getAttribute(LAYER_FIELD_ISLINKED).equals(1)) {
                 pointObject.setAttribute(LAYER_FIELD_ISLINKED, 0);
-                Point originalGeometry = 
+                Point originalGeometry =
                         (Point) pointObject.getAttribute(LAYER_FIELD_ORIGINAL_GEOMETRY);
                 Point currentGeometry = (Point) pointObject.getDefaultGeometry();
                 currentGeometry.getCoordinate().x = originalGeometry.getX();
@@ -265,16 +264,18 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
             String fid,
             Geometry geom,
             java.util.HashMap<String, Object> fieldsWithValues) throws Exception {
+        //if (fid == null) {
         fid = fidGenerator.toString();
+        //}
         fidGenerator++;
         if (fieldsWithValues == null) {
             fieldsWithValues = new HashMap<String, Object>();
-            fieldsWithValues.put(LAYER_FIELD_LABEL, fid);
             fieldsWithValues.put(LAYER_FIELD_ISBOUNDARY, 1);
             fieldsWithValues.put(LAYER_FIELD_ISLINKED, 0);
             fieldsWithValues.put(LAYER_FIELD_SHIFT, 0);
             fieldsWithValues.put(LAYER_FIELD_ORIGINAL_GEOMETRY, geom.clone());
         }
+        fieldsWithValues.put(LAYER_FIELD_LABEL, fid);
         SimpleFeature addedFeature = super.addFeature(fid, geom, fieldsWithValues);
         return addedFeature;
     }
@@ -390,7 +391,8 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
         this.changeBean(bean, feature);
         return bean;
     }
-        private SurveyPointBean getBean(SimpleFeature feature) {
+
+    private SurveyPointBean getBean(SimpleFeature feature) {
         SurveyPointBean bean = new SurveyPointBean();
         bean.setId(feature.getID());
         int foundIndex = this.getSurveyPointList().indexOf(bean);
@@ -401,8 +403,8 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
         }
         return bean;
     }
-    
-    private double getPointShift(SimpleFeature feature){
+
+    private double getPointShift(SimpleFeature feature) {
         return ((Point) feature.getDefaultGeometry()).distance(
                 (Geometry) feature.getAttribute(LAYER_FIELD_ORIGINAL_GEOMETRY));
     }

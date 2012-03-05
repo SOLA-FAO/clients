@@ -18,7 +18,7 @@ public class CadastreObjectTargetRedefinitionBean extends CadastreObjectTargetBe
     }
 
     public void setGeomPolygon(byte[] geomPolygon) {
-        this.geomPolygon = geomPolygon;
+        this.geomPolygon = geomPolygon.clone();
     }
 
     public byte[] getGeomPolygonCurrent() {
@@ -26,6 +26,6 @@ public class CadastreObjectTargetRedefinitionBean extends CadastreObjectTargetBe
     }
 
     public void setGeomPolygonCurrent(byte[] geomPolygonCurrent) {
-        this.geomPolygonCurrent = geomPolygonCurrent;
+        this.geomPolygonCurrent = geomPolygonCurrent.clone();
     }
 }

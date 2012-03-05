@@ -41,7 +41,9 @@ import org.geotools.renderer.lite.RendererUtilities;
 import org.geotools.swing.extended.util.ScalebarGenerator;
 
 /**
- *
+ * A layer to add decorations in the map like a scalebar. If used this layer should be in the top
+ * of all layers.
+ * 
  * @author Elton Manoku
  */
 public class MapDecorationsLayer extends DirectLayer {
@@ -49,10 +51,19 @@ public class MapDecorationsLayer extends DirectLayer {
     private ReferencedEnvelope bounds;
     private ScalebarGenerator scalebarGenerator;
 
+    /**
+     * It constructs the layer. 
+     */
     public MapDecorationsLayer() {
         this.scalebarGenerator = new ScalebarGenerator();
     }
 
+    /**
+     * It is called from the map control in every refresh of the map.
+     * @param graphics
+     * @param map
+     * @param viewport 
+     */
     @Override
     public void draw(Graphics2D graphics, MapContent map, MapViewport viewport) {
         if (this.bounds == null) {

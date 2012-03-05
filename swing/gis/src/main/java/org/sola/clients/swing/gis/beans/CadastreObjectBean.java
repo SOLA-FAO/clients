@@ -76,7 +76,7 @@ public class CadastreObjectBean implements Serializable {
     }
 
     public void setGeomPolygon(byte[] geomPolygon) {
-        this.geomPolygon = geomPolygon;
+        this.geomPolygon = geomPolygon.clone();
     }
     
     public List<SpatialValueAreaBean> getSpatialValueAreaList() {

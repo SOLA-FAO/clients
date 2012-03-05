@@ -118,6 +118,11 @@ public class ControlsBundle extends javax.swing.JPanel {
                 this.toc);
     }
 
+    /**
+     * It adds in the left panel a tab with the panel provided.
+     * @param title The title to appear in the ne tab
+     * @param panel The panel to add
+     */
     protected void addInLeftPanel(String title, JPanel panel) {
         this.leftPanel.insertTab(title, null, panel, null, this.leftPanel.getTabCount());
     }
@@ -138,13 +143,11 @@ public class ControlsBundle extends javax.swing.JPanel {
      * It starts up the Statusbar.
      */
     private void setupStatusBar() {
-        //ExtendedStatusbar mapStatusbar = new ExtendedStatusbar(this.map);
         this.pnlStatusbar.setLayout(new BorderLayout());
         JMapStatusBar statusBar = JMapStatusBar.createDefaultStatusBar(map);
         statusBar.removeAll();
         statusBar.addItem(new JRendererStatusBarItem(map), false, true);
         statusBar.addItem(new JCoordsStatusBarItem(map));
-        //this.pnlStatusbar.add(mapStatusbar, BorderLayout.CENTER);
         this.pnlStatusbar.add(statusBar, BorderLayout.CENTER);
     }
 

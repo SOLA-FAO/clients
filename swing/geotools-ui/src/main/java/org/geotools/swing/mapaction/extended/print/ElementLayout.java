@@ -34,7 +34,7 @@ package org.geotools.swing.mapaction.extended.print;
 import org.w3c.dom.Node;
 
 /**
- *
+ * A
  * @author Elton Manoku
  */
 public abstract class ElementLayout {

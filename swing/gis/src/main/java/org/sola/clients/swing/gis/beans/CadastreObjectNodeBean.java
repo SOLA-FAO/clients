@@ -37,7 +37,7 @@ public class CadastreObjectNodeBean implements Serializable {
     }
 
     public void setGeom(byte[] geom) {
-        this.geom = geom;
+        this.geom = geom.clone();
     }
 
     public String getId() {

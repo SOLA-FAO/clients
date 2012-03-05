@@ -25,10 +25,6 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.geotools.map.extended.layer;
 
 import java.awt.Graphics2D;
@@ -42,10 +38,11 @@ import org.geotools.map.DirectLayer;
 import org.geotools.map.MapContent;
 import org.geotools.map.MapViewport;
 import org.geotools.swing.extended.exception.DirectImageNotValidFileException;
-import sun.awt.image.ImageFormatException;
 
 /**
- *
+ * This layer is used to draw any given image in the map. Next to the message is given also 
+ * the coordinates of the boundingbox where the image will appear.
+ * 
  * @author Elton Manoku
  */
 public class DirectImageLayer extends DirectLayer {
@@ -61,9 +58,20 @@ public class DirectImageLayer extends DirectLayer {
     private int imageHeight;
     
 
+    /**
+     * Constructor of the layer.
+     */
     public DirectImageLayer() {
     }
 
+
+    /**
+     * Sets the raster file. If set to null the current image will disappear. This is the way
+     * to remove the image.
+     * @param rasterFile The File object containing a reference to the raster file.
+     * @throws IOException It is thrown if any IO error occurs.
+     * @throws DirectImageNotValidFileException It is thrown if the File is not image.
+     */
     public void setRasterFile(File rasterFile) 
             throws IOException, DirectImageNotValidFileException{
         this.rasterFile = rasterFile;
@@ -79,22 +87,46 @@ public class DirectImageLayer extends DirectLayer {
         }
     }
 
+    /**
+     * Sets the maximum X coordinate of the bounding box where the image will be located.
+     * @param maxX 
+     */
     public void setMaxX(double maxX) {
         this.maxX = maxX;
     }
 
+    /**
+     * Sets the maximum Y coordinate of the bounding box where the image will be located.
+     * @param maxY 
+     */
     public void setMaxY(double maxY) {
         this.maxY = maxY;
     }
 
+    /**
+     * Sets the minimum X coordinate of the bounding box where the image will be located.
+     * @param minX 
+     */
     public void setMinX(double minX) {
         this.minX = minX;
     }
 
+    /**
+     * Sets the minimum Y coordinate of the bounding box where the image will be located.
+     * @param minY 
+     */
     public void setMinY(double minY) {
         this.minY = minY;
     } 
 
+    /**
+     * It draws the image in the map if an image is provided 
+     * with the method setRasterFile(File rasterFile).
+     * <br/>It is called directly from the drawing engine.
+     * @param graphics
+     * @param map
+     * @param viewport 
+     */
     @Override
     public void draw(Graphics2D graphics, MapContent map, MapViewport viewport) {
         this.bounds = viewport.getBounds();

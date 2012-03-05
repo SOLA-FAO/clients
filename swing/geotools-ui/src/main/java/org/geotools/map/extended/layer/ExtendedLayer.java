@@ -82,6 +82,10 @@ public class ExtendedLayer {
         this.layerName = layerName;
     }
 
+    /**
+     * Gets title
+     * @return 
+     */
     public String getTitle() {
         if (title == null){
             return layerName;
@@ -89,6 +93,10 @@ public class ExtendedLayer {
         return title;
     }
 
+    /**
+     * Sets title
+     * @param title 
+     */
     public void setTitle(String title) {
         this.title = title;
     }

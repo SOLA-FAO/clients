@@ -75,8 +75,9 @@ public class Messaging {
         ADD_DIRECT_IMAGE_ADD_FIRST_POINT,
         ADD_DIRECT_IMAGE_ADD_SECOND_POINT,
         ADD_DIRECT_IMAGE_LOAD_IMAGE_ERROR,
-        ADD_DIRECT_IMAGE_SECOND_POINT_ERROR,
-        REMOVE_DIRECT_IMAGE_TOOLTIP
+        ADD_DIRECT_IMAGE_DEFINE_POINT_ERROR,
+        REMOVE_DIRECT_IMAGE_TOOLTIP,
+        ADD_DIRECT_IMAGE_DEFINE_POINT_IN_IMAGE_ERROR
     };
     private static Messaging messaging = new Messaging();
 
@@ -120,43 +121,30 @@ public class Messaging {
         String msgBody = messageId;
         if (messageId.equals(Messaging.Ids.ADDING_FEATURE_ERROR.toString())) {
             msgBody = "Error while adding a feature in the collection.";
-//            msgBody =  GisMessage.GEOTOOL_ADDING_FEATURE_ERROR;
         } else if (messageId.equals(Messaging.Ids.MAPCONTROL_MAPCONTEXT_WITHOUT_SRID_ERROR.toString())) {
             msgBody = "The map context of the map control does not have an SRID.";
-//            msgBody =  GisMessage.GEOTOOL_MAPCONTEXT_WITHOUT_SRID_ERROR;
         } else if (messageId.equals(Messaging.Ids.DRAWINGTOOL_GEOMETRY_NOT_VALID_ERROR.toString())) {
             msgBody = "Geometry is not valid.";
-//            msgBody =  GisMessage.GEOTOOL_GEOMETRY_NOT_VALID_ERROR;
         } else if (messageId.equals(Messaging.Ids.LAYERGRAPHICS_STARTUP_ERROR.toString())) {
             msgBody = "Error while starting up the graphics layer.";
-//            msgBody =  GisMessage.GEOTOOL_LAYERGRAPHICS_STARTUP_ERROR;
         } else if (messageId.equals(Messaging.Ids.SHAPEFILELAYER_FILE_NOT_FOUND_ERROR.toString())) {
             msgBody = "Shapefile not found.";
-//            msgBody =  GisMessage.GEOTOOL_FILE_NOT_FOUND_ERROR;
         } else if (messageId.equals(Messaging.Ids.REMOVE_ALL_FEATURES_ERROR.toString())) {
             msgBody = "Error while removing all features.";
-//            msgBody =  GisMessage.GEOTOOL_REMOVE_ALL_FEATURES_ERROR;
         } else if (messageId.equals(Messaging.Ids.LAYER_NOT_ADDED_ERROR.toString())) {
             msgBody = "Layer could not be added.";
-//            msgBody =  GisMessage.GEOTOOL_LAYER_NOT_ADDED;
         } else if (messageId.equals(Messaging.Ids.WMSLAYER_NOT_INITIALIZED_ERROR.toString())) {
             msgBody = "WMS Layer is not initialized.";
-//            msgBody =  GisMessage.GEOTOOL_WMSLAYER_NOT_INITIALIZED_ERROR;
         } else if (messageId.equals(Messaging.Ids.WMSLAYER_LAYER_NOT_FOUND_ERROR.toString())) {
             msgBody = "Layer %s not found in the wms server.";
-//            msgBody = "Layer %s "+ GisMessage.GEOTOOL_WMSLAYER_LAYER_NOT_FOUND_ERROR;
         } else if (messageId.equals(Messaging.Ids.UTILITIES_SLD_DOESNOT_EXIST_ERROR.toString())) {
             msgBody = "SLD Resource %s does not exist.";
-//            msgBody = "SLD Resource %s "+ GisMessage.GEOTOOL_SLD_DOESNOT_EXIST_ERROR;
         } else if (messageId.equals(Messaging.Ids.UTILITIES_SLD_LOADING_ERROR.toString())) {
             msgBody = "Error while retrieving the SLD style.";
-//            msgBody =  GisMessage.GEOTOOL_SLD_LOADING_ERROR;
         } else if (messageId.equals(Messaging.Ids.UTILITIES_COORDSYS_COULDNOT_BE_CREATED_ERROR.toString())) {
             msgBody = "Could not be created coordinative system for sird %s .";
-//            msgBody =  GisMessage.GEOTOOL_COORDSYS_COULDNOT_BE_CREATED_ERROR+" %s";
         } else if (messageId.equals(Messaging.Ids.DRAWINGTOOL_NOT_ENOUGH_POINTS_INFORMATIVE.toString())) {
             msgBody = "There are not enough points to create the geometry.";
-//            msgBody =  GisMessage.GEOTOOL_NOT_ENOUGH_POINTS_INFORMATIVE;
         } else if (messageId.equals(Messaging.Ids.GEOTOOL_TOOLTIP_FULL_EXTENT.toString())) {
             msgBody = "Click to full extent.";
         } else if (messageId.equals(Messaging.Ids.GEOTOOL_TOOLTIP_ZOOM_OUT.toString())) {
@@ -180,17 +168,18 @@ public class Messaging {
         } else if (messageId.equals(Messaging.Ids.ADD_DIRECT_IMAGE_TOOLTIP.toString())) {
             msgBody = "Add a direct image in the map";
         } else if (messageId.equals(Messaging.Ids.ADD_DIRECT_IMAGE_ADD_FIRST_POINT.toString())) {
-            msgBody = "Click in the map where the bottom left corner of the image has to be.";
+            msgBody = "Click in the map to define the first orientation point for the image.";
         } else if (messageId.equals(Messaging.Ids.ADD_DIRECT_IMAGE_ADD_SECOND_POINT.toString())) {
-            msgBody = "Click in the map where the top right corner of the image has to be.";
+            msgBody = "Click in the map to define the second orientation point for the image.";
         } else if (messageId.equals(Messaging.Ids.ADD_DIRECT_IMAGE_LOAD_IMAGE_ERROR.toString())) {
             msgBody = "Error while loading the image. \n Error : %s";
-        } else if (messageId.equals(Messaging.Ids.ADD_DIRECT_IMAGE_SECOND_POINT_ERROR.toString())) {
-            msgBody = "The second point has to be more in the east and north than the first point."
-                    + "\n Define second point again or reset the adding of the image "
-                    + "to restart with the first point.";
+        } else if (messageId.equals(Messaging.Ids.ADD_DIRECT_IMAGE_DEFINE_POINT_ERROR.toString())) {
+            msgBody = "Error while defining the orientation point! \n Error: %s";
         } else if (messageId.equals(Messaging.Ids.REMOVE_DIRECT_IMAGE_TOOLTIP.toString())) {
             msgBody = "Remove the added image";
+        }else if(messageId.equals(
+                Messaging.Ids.ADD_DIRECT_IMAGE_DEFINE_POINT_IN_IMAGE_ERROR.toString())){
+            msgBody = "Orientation points in image are set wrong.";            
         }
         return msgBody;
     }

@@ -39,7 +39,13 @@ import java.awt.image.BufferedImage;
 import java.text.DecimalFormat;
 
 /**
- *
+ * This utility generates an image presenting a scalebar of the map based in the give scale.<br/>
+ * It can be customized to apply different colors for segments (even, uneven) height, margins,
+ * text colors.
+ * <br/>
+ * The scalebar switches as needed to measure of type km or m depending in the scale and required
+ * width.
+ * 
  * @author Elton Manoku
  */
 public class ScalebarGenerator {
@@ -58,45 +64,90 @@ public class ScalebarGenerator {
     private Font textFont = new Font(Font.SANS_SERIF, Font.BOLD, 10);
     private segmentMeasureUnitType segmentMeasureUnit = segmentMeasureUnitType.m;
 
+    /**
+     * Constructor
+     */
     public ScalebarGenerator() {
     }
 
+    /**
+     * A color for the border of the segment.
+     * 
+     * @param colorBorderSegment 
+     */
     public void setColorBorderSegment(Color colorBorderSegment) {
         this.colorBorderSegment = colorBorderSegment;
     }
 
+    /**
+     * Set color for the even segments.
+     * @param colorSegmentEven 
+     */
     public void setColorSegmentEven(Color colorSegmentEven) {
         this.colorSegmentEven = colorSegmentEven;
     }
 
+    /**
+     * Set color for the uneven segments.
+     * @param colorSegmentUneven 
+     */
     public void setColorSegmentUneven(Color colorSegmentUneven) {
         this.colorSegmentUneven = colorSegmentUneven;
     }
 
+
+    /**
+     * Sets color for the texts used.
+     * @param colorText 
+     */
     public void setColorText(Color colorText) {
         this.colorText = colorText;
     }
 
+    /**
+     * Sets the height.
+     * @param height 
+     */
     public void setHeight(int height) {
         this.height = height;
     }
 
+    /**
+     * Sets the margin. The margin is the distance from the segments to the edge of the image.
+     * @param margin 
+     */
     public void setMargin(int margin) {
         this.margin = margin;
     }
 
+    /**
+     * Sets the number of segments to be displayed in the scalebar.
+     * @param numberOfSegments 
+     */
     public void setNumberOfSegments(int numberOfSegments) {
         this.numberOfSegments = numberOfSegments;
     }
 
+    /**
+     * Sets the font of the texts used.
+     * @param textFont 
+     */
     public void setTextFont(Font textFont) {
         this.textFont = textFont;
     }
     
+    /**
+     * Generate the image of the scalebar.
+     * @param scale The scale for which to generate the image
+     * @param width The width of the scalebar. The real width will change to round the measurement
+     * of the segments.
+     * @param dpi DPI used
+     * @return 
+     */
     public BufferedImage getImage(Double scale, double width, double dpi) {
 
-        double extentWidth = 2.54 * scale / 100; //viewport.getBounds().getWidth();
-        double screenWidth = dpi; //viewport.getScreenArea().getWidth();
+        double extentWidth = 2.54 * scale / 100; 
+        double screenWidth = dpi;
         double widthInMeters = extentWidth * width / screenWidth;
         if (widthInMeters == 0){
             return null;
@@ -118,7 +169,8 @@ public class ScalebarGenerator {
         int scalebarDrawingWidth = (int) Math.round(finalWidthInMeters * screenWidth / extentWidth);
         int segmentDrawingWidth = scalebarDrawingWidth / this.numberOfSegments;
         int finalScalebarWidth = scalebarDrawingWidth + margin * 2;
-        BufferedImage bi = new BufferedImage(finalScalebarWidth, height, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage bi = new BufferedImage(
+                finalScalebarWidth, height, BufferedImage.TYPE_INT_ARGB);
 
         int segmentHeight = this.height - this.margin * 2;
         Graphics2D g2D = (Graphics2D) bi.getGraphics();

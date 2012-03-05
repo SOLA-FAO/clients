@@ -78,6 +78,16 @@ public class ExtendedLayerEditor extends ExtendedLayerGraphics {
         this(name, geometryType, styleResource, VERTICES_LAYER_STYLE_RESOURCE, extraFieldsFormat);
     }
 
+    /**
+     * It creates an instance of this layer where it is possible to provide also a style for 
+     * the vertices. The other parameters are the same as in the other constructor.
+     * @param name
+     * @param geometryType
+     * @param styleResource
+     * @param styleResourceForVertexes The sld definition of the vertices style.
+     * @param extraFieldsFormat
+     * @throws Exception 
+     */
     public ExtendedLayerEditor(
             String name,
             Geometries geometryType,

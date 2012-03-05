@@ -5,8 +5,6 @@
 package org.sola.clients.swing.gis.beans;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -29,6 +27,6 @@ public class CadastreObjectNodeTargetBean implements Serializable {
     }
 
     public void setGeom(byte[] geom) {
-        this.geom = geom;
+        this.geom = geom.clone();
     }
 }

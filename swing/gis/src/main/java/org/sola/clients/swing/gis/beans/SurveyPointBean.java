@@ -55,7 +55,7 @@ public class SurveyPointBean {
     }
 
     public void setGeom(byte[] geometry) {
-        this.geom = geometry;
+        this.geom = geometry.clone();
     }
 
     public String getId() {
@@ -79,7 +79,7 @@ public class SurveyPointBean {
     }
 
     public void setOriginalGeom(byte[] originalGeom) {
-        this.originalGeom = originalGeom;
+        this.originalGeom = originalGeom.clone();
     }
     
     @Override

@@ -31,7 +31,6 @@
  */
 package org.geotools.swing.extended;
 
-import java.awt.Component;
 import java.util.Enumeration;
 import java.util.concurrent.TimeUnit;
 import org.geotools.map.event.MapLayerEvent;
@@ -52,7 +51,6 @@ import java.util.List;
 import java.util.Properties;
 import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
-import javax.swing.Action;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
@@ -101,7 +99,8 @@ public class Map extends JMapPane {
     private MapMouseAdapter mapMouseAdapter;
     private MapPaneAdapter mapPaneListener;
     private ReferencedEnvelope fullExtentEnvelope;
-    private LinkedHashMap<String, ExtendedLayer> solaLayers = new LinkedHashMap<String, ExtendedLayer>();
+    private LinkedHashMap<String, ExtendedLayer> extendedLayers = 
+            new LinkedHashMap<String, ExtendedLayer>();
     private Integer srid = null;
     private ButtonGroup toolsGroup = new ButtonGroup();
     private double pixelResolution = 0;
@@ -422,20 +421,6 @@ public class Map extends JMapPane {
     }
 
     /**
-     * If there is a fullextent defined by the user, use that one instead of the calculated one.
-     */
-//    @Override
-//    protected boolean setFullExtent() {
-//        boolean result =  false;
-//        if (this.getFullExtent() != null) {
-//            this.fullExtent = this.getFullExtent();
-//            result = true;
-//        } else {
-//            result = super.setFullExtent();
-//        }
-//        return result;
-//    }
-    /**
      * Gets the full extent.
      * If the full extent is not yet set then the full extent of all layers in the map is used.     * 
      * @return 
@@ -471,7 +456,7 @@ public class Map extends JMapPane {
      * @return 
      */
     public LinkedHashMap<String, ExtendedLayer> getSolaLayers() {
-        return this.solaLayers;
+        return this.extendedLayers;
     }
 
     /**
@@ -624,6 +609,11 @@ public class Map extends JMapPane {
         this.addMapAction(action, action.getAttachedTool() != null, inToolbar, enabled);
     }
 
+    /**
+     * Gets the button in the toolbar associated with the map control.
+     * @param actionName The action name associated with the button
+     * @return The button if found otherwise null
+     */
     public AbstractButton getBaritemByActionName(String actionName) {
         Enumeration mapBtnEnum = this.toolsGroup.getElements();
         while(mapBtnEnum.hasMoreElements()){
@@ -636,6 +626,12 @@ public class Map extends JMapPane {
         return null;
     }
 
+    /**
+     * Gets the map action which is used in one of the buttons added in the toolbar associated 
+     * with the map.
+     * @param actionName The action name
+     * @return The action if found or null
+     */
     public ExtendedAction getMapActionByName(String actionName) {
         AbstractButton btn = this.getBaritemByActionName(actionName);
         if (btn== null){
@@ -644,6 +640,11 @@ public class Map extends JMapPane {
         return (ExtendedAction) btn.getAction();
     }
     
+    /**
+     * Gets a toolitem that is found in the toolbar associated with the map.
+     * @param name Name of tool
+     * @return The toolitem or null
+     */
     public ExtendedToolItem getToolItemByName(String name){
         AbstractButton btn = this.getBaritemByActionName(name);
         ExtendedToolItem toolItem = null;
@@ -656,6 +657,10 @@ public class Map extends JMapPane {
         
     }
 
+    /**
+     * Sets a tool as active in the map.
+     * @param toolName The name of the tool.
+     */
     public void setActiveTool(String toolName){
         ExtendedToolItem toolItem = this.getToolItemByName(toolName);
         toolItem.setSelected(true);
@@ -676,6 +681,10 @@ public class Map extends JMapPane {
         this.drawLayers(false);
     }
 
+    /**
+     * Gets the current scale of the map.
+     * @return 
+     */
     public Double getScale() {
         try {
             return RendererUtilities.calculateScale(
