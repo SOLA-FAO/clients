@@ -27,7 +27,6 @@
  */
 package org.geotools.map.extended.layer;
 
-import com.sun.corba.se.spi.ior.MakeImmutable;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Point;
 import java.io.File;

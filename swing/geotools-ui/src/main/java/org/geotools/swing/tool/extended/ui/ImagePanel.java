@@ -15,6 +15,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import javax.swing.JLabel;
+import org.geotools.swing.extended.util.Messaging;
 
 /**
  *
@@ -35,6 +37,7 @@ public class ImagePanel extends javax.swing.JPanel {
     private Integer pointGraphicDimesion = 10;
     private Color pointGraphicColor = Color.GREEN;
     private Integer pointGraphicStrokeWidth = 3;
+    private JLabel labelImageAction;
 
     /** Creates new form ImagePanel */
     public ImagePanel() {
@@ -102,6 +105,10 @@ public class ImagePanel extends javax.swing.JPanel {
         
     }
 
+    public void setLabelImageAction(JLabel labelImageAction) {
+        this.labelImageAction = labelImageAction;
+    }
+
     @Override
     public void paint(Graphics g) {
         super.paint(g);
@@ -131,6 +138,11 @@ public class ImagePanel extends javax.swing.JPanel {
         g.drawLine(x - halfDimesion, y + halfDimesion, x + halfDimesion, y - halfDimesion);
     }
 
+    private void setImageAction(String messageId){
+        if (this.labelImageAction != null){
+            this.labelImageAction.setText(Messaging.getInstance().getMessageText(messageId));
+        }
+    }
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -165,11 +177,14 @@ private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_
         this.firstPointMomentImageWidth = this.getWidth();
         this.firstPointMomentImageHeight = this.getHeight();
         this.resetSecondPoint();
+        this.setImageAction(
+                Messaging.Ids.ADD_DIRECT_IMAGE_DEFINE_ORIENTATION_POINT_2_IN_IMAGE.toString());
     } else {
         this.secondPointX = evt.getX();
         this.secondPointY = evt.getY();
         this.secondPointMomentImageWidth = this.getWidth();
         this.secondPointMomentImageHeight = this.getHeight();
+        this.setImageAction(Messaging.Ids.ADD_DIRECT_IMAGE_LOAD_IMAGE.toString());        
     }
     this.repaint();
     this.firstPointMode = !this.firstPointMode;

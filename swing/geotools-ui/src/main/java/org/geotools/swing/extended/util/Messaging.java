@@ -77,7 +77,10 @@ public class Messaging {
         ADD_DIRECT_IMAGE_LOAD_IMAGE_ERROR,
         ADD_DIRECT_IMAGE_DEFINE_POINT_ERROR,
         REMOVE_DIRECT_IMAGE_TOOLTIP,
-        ADD_DIRECT_IMAGE_DEFINE_POINT_IN_IMAGE_ERROR
+        ADD_DIRECT_IMAGE_DEFINE_POINT_IN_IMAGE_ERROR,
+        ADD_DIRECT_IMAGE_DEFINE_ORIENTATION_POINT_1_IN_IMAGE,
+        ADD_DIRECT_IMAGE_DEFINE_ORIENTATION_POINT_2_IN_IMAGE,
+        ADD_DIRECT_IMAGE_LOAD_IMAGE
     };
     private static Messaging messaging = new Messaging();
 
@@ -179,7 +182,16 @@ public class Messaging {
             msgBody = "Remove the added image";
         }else if(messageId.equals(
                 Messaging.Ids.ADD_DIRECT_IMAGE_DEFINE_POINT_IN_IMAGE_ERROR.toString())){
-            msgBody = "Orientation points in image are set wrong.";            
+            msgBody = "Orientation points in image are not defined or are set wrong.";            
+        } else if (messageId.equals(
+                Messaging.Ids.ADD_DIRECT_IMAGE_DEFINE_ORIENTATION_POINT_1_IN_IMAGE.toString())){
+            msgBody = "Define first orientation point in the image.";            
+        } else if (messageId.equals(
+                Messaging.Ids.ADD_DIRECT_IMAGE_DEFINE_ORIENTATION_POINT_2_IN_IMAGE.toString())){
+            msgBody = "Define second orientation point in the image.";            
+        } else if (messageId.equals(
+                Messaging.Ids.ADD_DIRECT_IMAGE_LOAD_IMAGE.toString())){
+            msgBody = "Click OK to load image in the map or re-define first orientation point.";            
         }
         return msgBody;
     }

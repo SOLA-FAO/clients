@@ -78,7 +78,7 @@ public class DirectImageLayer extends DirectLayer {
         if (this.rasterFile != null){
             this.loadedBufferedImage = ImageIO.read(this.rasterFile);
             if (this.loadedBufferedImage == null){
-                throw new DirectImageNotValidFileException("Format is not recognized.");
+                throw new DirectImageNotValidFileException();
             }
             this.imageWidth = this.loadedBufferedImage.getWidth();
             this.imageHeight = this.loadedBufferedImage.getHeight();

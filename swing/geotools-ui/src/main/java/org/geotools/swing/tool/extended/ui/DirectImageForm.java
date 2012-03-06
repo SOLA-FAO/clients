@@ -19,7 +19,7 @@ import org.geotools.swing.extended.util.Messaging;
 
 /**
  *
- * @author Manoku
+ * @author Elton Manoku
  */
 public class DirectImageForm extends javax.swing.JDialog {
 
@@ -32,14 +32,16 @@ public class DirectImageForm extends javax.swing.JDialog {
     /** Creates new form DirectImageForm */
     public DirectImageForm() {
         initComponents();
+        this.lblAction.setText("TEST");
         this.setAlwaysOnTop(true);
         this.setModalityType(ModalityType.APPLICATION_MODAL);
+        this.pnlImage.setLabelImageAction(this.lblAction);
     }
 
     public void setImage(File file) throws DirectImageNotValidFileException, IOException {
         BufferedImage image = ImageIO.read(file);
         if (image == null) {
-            throw new DirectImageNotValidFileException("Format is not recognized.");
+            throw new DirectImageNotValidFileException();
         }
         this.pnlImage.setImage(image);
     }
@@ -80,7 +82,7 @@ public class DirectImageForm extends javax.swing.JDialog {
     }
 
     public Double getRightTopImageCornerInTheMapY() {
-        return this.secondPointInMapY 
+        return this.secondPointInMapY
                 + (this.getImageResolution() * this.pnlImage.getSecondPointY());
     }
 
@@ -99,9 +101,11 @@ public class DirectImageForm extends javax.swing.JDialog {
     private void initComponents() {
 
         pnlImage = new org.geotools.swing.tool.extended.ui.ImagePanel();
+        lblAction = new javax.swing.JLabel();
         cmdOk = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(463, 286));
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 formComponentShown(evt);
@@ -112,12 +116,14 @@ public class DirectImageForm extends javax.swing.JDialog {
         pnlImage.setLayout(pnlImageLayout);
         pnlImageLayout.setHorizontalGroup(
             pnlImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 463, Short.MAX_VALUE)
+            .addGap(0, 474, Short.MAX_VALUE)
         );
         pnlImageLayout.setVerticalGroup(
             pnlImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 283, Short.MAX_VALUE)
+            .addGap(0, 271, Short.MAX_VALUE)
         );
+
+        lblAction.setText("Image action");
 
         cmdOk.setText("Ok");
         cmdOk.addActionListener(new java.awt.event.ActionListener() {
@@ -131,7 +137,9 @@ public class DirectImageForm extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(327, 327, 327)
+                .addContainerGap()
+                .addComponent(lblAction, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 326, Short.MAX_VALUE)
                 .addComponent(cmdOk))
             .addComponent(pnlImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -139,39 +147,48 @@ public class DirectImageForm extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(pnlImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(cmdOk))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cmdOk, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(lblAction, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(11, 11, 11))))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-private void cmdOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdOkActionPerformed
+private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+    this.pnlImage.resetFirstPoint();
+    this.pnlImage.resetSecondPoint();
+    this.lblAction.setText(Messaging.getInstance().getMessageText(
+            Messaging.Ids.ADD_DIRECT_IMAGE_DEFINE_ORIENTATION_POINT_1_IN_IMAGE.toString()));
+    this.success = false;
+    this.pnlImage.repaint();
+}//GEN-LAST:event_formComponentShown
 
-    this.success = true;
-    this.success = this.success && ((this.firstPointInMapX < this.secondPointInMapX)?
-            this.pnlImage.getFirstPointX() < this.pnlImage.getSecondPointX():
-            this.pnlImage.getFirstPointX() > this.pnlImage.getSecondPointX());
-        this.success = this.success && ((this.firstPointInMapY < this.secondPointInMapY)?
-                this.pnlImage.getFirstPointY() > this.pnlImage.getSecondPointY():
-                this.pnlImage.getFirstPointY() < this.pnlImage.getSecondPointY());
+private void cmdOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdOkActionPerformed
+    this.success = (this.pnlImage.getFirstPointX() != null
+            && this.pnlImage.getSecondPointX() != null);
+    if (this.success) {
+        this.success = this.success && ((this.firstPointInMapX < this.secondPointInMapX)
+                ? this.pnlImage.getFirstPointX() < this.pnlImage.getSecondPointX()
+                : this.pnlImage.getFirstPointX() > this.pnlImage.getSecondPointX());
+        this.success = this.success && ((this.firstPointInMapY < this.secondPointInMapY)
+                ? this.pnlImage.getFirstPointY() > this.pnlImage.getSecondPointY()
+                : this.pnlImage.getFirstPointY() < this.pnlImage.getSecondPointY());
+    }
     if (success) {
         this.setVisible(false);
-    }else{
+    } else {
         Messaging.getInstance().show(
                 Messaging.Ids.ADD_DIRECT_IMAGE_DEFINE_POINT_IN_IMAGE_ERROR.toString());
     }
 }//GEN-LAST:event_cmdOkActionPerformed
 
-private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-    this.pnlImage.resetFirstPoint();
-    this.pnlImage.resetSecondPoint();
-    this.success = false;
-    this.pnlImage.repaint();
-}//GEN-LAST:event_formComponentShown
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cmdOk;
+    private javax.swing.JLabel lblAction;
     private org.geotools.swing.tool.extended.ui.ImagePanel pnlImage;
     // End of variables declaration//GEN-END:variables
 }
