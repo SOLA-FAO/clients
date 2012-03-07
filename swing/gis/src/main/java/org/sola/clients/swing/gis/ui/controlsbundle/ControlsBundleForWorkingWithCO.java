@@ -32,6 +32,7 @@
 package org.sola.clients.swing.gis.ui.controlsbundle;
 
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.io.ParseException;
 import java.util.List;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.geometry.jts.ReferencedEnvelope;
@@ -72,7 +73,7 @@ public abstract class ControlsBundleForWorkingWithCO extends SolaControlsBundle 
                 envelope.expandBy(10);
                 this.getMap().setDisplayArea(envelope);
             }
-        } catch (Exception ex) {
+        } catch (ParseException ex) {
             Messaging.getInstance().show(GisMessage.CADASTRE_CHANGE_ERROR_ADD_CO);
             org.sola.common.logging.LogUtility.log(
                     GisMessage.CADASTRE_CHANGE_ERROR_ADD_CO, ex);

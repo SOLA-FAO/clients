@@ -43,7 +43,12 @@ import org.geotools.swing.extended.util.Messaging;
 import org.geotools.swing.tool.extended.ui.DirectImageForm;
 
 /**
- *
+ * A tool used to start the process of adding an image in the map.
+ * The tool allows the adding of 2 orientation points in the map and image to define location
+ * of the image in the map.
+ * <br/>
+ * It supports adding of images of types: jpg, tif, png.
+ * 
  * @author Elton Manoku
  */
 public class AddDirectImageTool extends ExtendedTool {
@@ -58,6 +63,10 @@ public class AddDirectImageTool extends ExtendedTool {
     private JFileChooser fileChooser = new JFileChooser();
     private DirectImageForm imageForm = new DirectImageForm();
 
+    /**
+     * Constructor of the tool.
+     * @param imageLayer The Layer where the image will be added
+     */
     public AddDirectImageTool(ExtendedImageLayer imageLayer) {
         this.setToolName(NAME);
         this.setToolTip(toolTip);
@@ -70,27 +79,28 @@ public class AddDirectImageTool extends ExtendedTool {
                 extensions));
     }
 
+    /**
+     * For each click in the map the first orientation point or the second orientation point is 
+     * defined.
+     * <br/>
+     * After the second point is added, the loading of the image starts.
+     * @param ev 
+     */
     @Override
     public void onMouseClicked(MapMouseEvent ev) {
         DirectPosition2D pos = ev.getWorldPos();
-        try {
-            if (this.firstPointMode) {
-                this.reset();
-                this.imageLayer.setFirstPoint(pos.getX(), pos.getY());
-                this.firstPoint = pos.clone();
-                this.secondPoint = null;
-                Messaging.getInstance().show(
-                        Messaging.Ids.ADD_DIRECT_IMAGE_ADD_SECOND_POINT.toString());
-            } else {
-                this.imageLayer.setSecondPoint(pos.getX(), pos.getY());
-                this.secondPoint = pos.clone();
-            }
-            this.firstPointMode = !this.firstPointMode;
-        } catch (Exception ex) {
+        if (this.firstPointMode) {
+            this.reset();
+            this.imageLayer.setFirstPoint(pos.getX(), pos.getY());
+            this.firstPoint = pos.clone();
+            this.secondPoint = null;
             Messaging.getInstance().show(
-                    Messaging.Ids.ADD_DIRECT_IMAGE_DEFINE_POINT_ERROR.toString(),
-                    ex.getMessage());
+                    Messaging.Ids.ADD_DIRECT_IMAGE_ADD_SECOND_POINT.toString());
+        } else {
+            this.imageLayer.setSecondPoint(pos.getX(), pos.getY());
+            this.secondPoint = pos.clone();
         }
+        this.firstPointMode = !this.firstPointMode;
         if (this.firstPoint != null && this.secondPoint != null) {
             this.loadImage();
         }
@@ -110,6 +120,9 @@ public class AddDirectImageTool extends ExtendedTool {
         }
     }
 
+    /**
+     * It resets the process.
+     */
     public void reset() {
         this.firstPointMode = true;
         try {
@@ -118,8 +131,6 @@ public class AddDirectImageTool extends ExtendedTool {
         } catch (IOException ex) {
             //Not relevant while resetting
         } catch (DirectImageNotValidFileException ex) {
-            //Not relevant while resetting            
-        } catch (Exception ex) {
             //Not relevant while resetting            
         }
     }
@@ -150,11 +161,6 @@ public class AddDirectImageTool extends ExtendedTool {
                         ex.getMessage());
                 this.reset();
             } catch (DirectImageNotValidFileException ex) {
-                Messaging.getInstance().show(
-                        Messaging.Ids.ADD_DIRECT_IMAGE_LOAD_IMAGE_ERROR.toString(),
-                        ex.getMessage());
-                this.reset();
-            } catch (Exception ex) {
                 Messaging.getInstance().show(
                         Messaging.Ids.ADD_DIRECT_IMAGE_LOAD_IMAGE_ERROR.toString(),
                         ex.getMessage());

@@ -34,10 +34,7 @@ package org.geotools.swing.mapaction.extended;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 import org.geotools.swing.extended.Map;
@@ -65,7 +62,8 @@ public class Print extends ExtendedAction {
     }
 
     /**
-     * It zooms to full extent.
+     * It starts up the printing process. Then after it collects the parameters to print, 
+     * it uses the print generator to generate a pdf according to a predefined layout.
      */
     @Override
     public void onClick() {
@@ -85,6 +83,13 @@ public class Print extends ExtendedAction {
         this.showPrintableDocument(printLocation);
     }
 
+    /**
+     * Gets the list of available print layouts. The print layouts are defined 
+     * in resources/print/layouts.properties.
+     * <br/>
+     * If another source of layout has to be defined, this method has to be overridden.
+     * @return 
+     */
     protected List<PrintLayout> getPrintLayouts() {
         Properties propertyLayouts = new Properties();
         String layoutLocation = "resources/print/layouts.properties";
@@ -104,16 +109,26 @@ public class Print extends ExtendedAction {
         return layoutList;
     }
 
+    /**
+     * It generates the pdf and gives back the path of the pdf file.
+     * @param layout The layout
+     * @param scale The scale
+     * @return 
+     */
     protected String print(PrintLayout layout, double scale) {
         PrintoutGenerator printoutGenerator = new PrintoutGenerator(this.getMapControl());
         return printoutGenerator.generate(layout, scale);
     }
 
+    /**
+     * Used to show a pdf file.
+     * @param location The location file
+     */
     protected void showPrintableDocument(String location) {
         try {
             File file = new File(location);
             Desktop.getDesktop().open(file);
-        } catch (Exception ex) {
+        } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
     }

@@ -32,6 +32,7 @@
 package org.sola.clients.swing.gis.ui.controlsbundle;
 
 import java.util.ArrayList;
+import org.geotools.feature.SchemaException;
 import org.geotools.map.extended.layer.ExtendedFeatureLayer;
 import org.geotools.map.extended.layer.ExtendedLayer;
 import org.sola.clients.swing.gis.Messaging;
@@ -39,6 +40,8 @@ import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.layer.PojoLayer;
 import org.sola.clients.swing.gis.tool.InformationTool;
 import org.geotools.swing.extended.ControlsBundle;
+import org.geotools.swing.extended.exception.InitializeLayerException;
+import org.geotools.swing.extended.exception.InitializeMapException;
 import org.sola.clients.swing.gis.mapaction.SolaPrint;
 import org.sola.clients.swing.gis.ui.control.SearchPanel;
 import org.sola.common.messaging.GisMessage;
@@ -87,7 +90,15 @@ public abstract class SolaControlsBundle extends ControlsBundle {
                 this.addLayerConfig(configMapLayer, pojoDataAccess);
             }
             this.getMap().zoomToFullExtent();
-        } catch (Exception ex) {
+        } catch (InitializeLayerException ex) {
+            Messaging.getInstance().show(GisMessage.GENERAL_CONTROLBUNDLE_ERROR);
+            org.sola.common.logging.LogUtility.log(
+                    GisMessage.GENERAL_CONTROLBUNDLE_ERROR, ex);
+        } catch (InitializeMapException ex) {
+            Messaging.getInstance().show(GisMessage.GENERAL_CONTROLBUNDLE_ERROR);
+            org.sola.common.logging.LogUtility.log(
+                    GisMessage.GENERAL_CONTROLBUNDLE_ERROR, ex);
+        } catch (SchemaException ex) {
             Messaging.getInstance().show(GisMessage.GENERAL_CONTROLBUNDLE_ERROR);
             org.sola.common.logging.LogUtility.log(
                     GisMessage.GENERAL_CONTROLBUNDLE_ERROR, ex);
@@ -95,7 +106,7 @@ public abstract class SolaControlsBundle extends ControlsBundle {
     }
 
     public void addLayerConfig(ConfigMapLayerTO configMapLayer, PojoDataAccess pojoDataAccess)
-            throws Exception {
+            throws InitializeLayerException, SchemaException {
         ExtendedLayer layer = null;
         if (configMapLayer.getTypeCode().equals("wms")) {
             String wmsServerURL = configMapLayer.getWmsUrl();

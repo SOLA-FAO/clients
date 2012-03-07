@@ -19,7 +19,9 @@ import javax.swing.JLabel;
 import org.geotools.swing.extended.util.Messaging;
 
 /**
- *
+ * This is an Image panel that allows adding of an image and defining of two orientation points
+ * on it. Those points are always scaled.
+ * 
  * @author Elton Manoku
  */
 public class ImagePanel extends javax.swing.JPanel {
@@ -44,16 +46,29 @@ public class ImagePanel extends javax.swing.JPanel {
         initComponents();
     }
 
+    /**
+     * Sets the image
+     * @param image 
+     */
     public void setImage(BufferedImage image) {
         this.image = image;
     }
 
+    /**
+     * Gets X of the first point
+     * @return 
+     */
     public Integer getFirstPointX() {
         if (firstPointX == null || image == null){
             return null;
         }
         return firstPointX * image.getWidth() / this.firstPointMomentImageWidth;
     }
+
+    /**
+     * Gets Y of the first point
+     * @return 
+     */
 
     public Integer getFirstPointY() {
         if (firstPointY == null || image == null){
@@ -62,6 +77,11 @@ public class ImagePanel extends javax.swing.JPanel {
         return firstPointY * image.getHeight() / this.firstPointMomentImageHeight;
     }
 
+    /**
+     * Gets X of the second point
+     * @return 
+     */
+
     public Integer getSecondPointX() {
         if (secondPointX == null || image == null){
             return null;
@@ -69,13 +89,21 @@ public class ImagePanel extends javax.swing.JPanel {
         return secondPointX * image.getWidth() / this.secondPointMomentImageWidth;
     }
 
+    /**
+     * Gets Y of the second point
+     * @return 
+     */
     public Integer getSecondPointY() {
         if (secondPointY == null || image == null){
             return null;
         }
         return secondPointY * image.getHeight() / this.secondPointMomentImageHeight;
     }
-    
+
+    /**
+     * Gets the original width of the image
+     * @return 
+     */
     public Integer getImageWidth(){
         if (image == null){
             return null;
@@ -83,6 +111,10 @@ public class ImagePanel extends javax.swing.JPanel {
         return image.getWidth();
     }
 
+    /**
+     * Gets the original height of the image
+     * @return 
+     */
     public Integer getImageHeight(){
         if (image == null){
             return null;
@@ -90,6 +122,9 @@ public class ImagePanel extends javax.swing.JPanel {
         return image.getHeight();
     }
 
+    /**
+     * Removes the first point
+     */
     public void resetFirstPoint(){
         this.firstPointX = null;
         this.firstPointY = null;
@@ -97,6 +132,9 @@ public class ImagePanel extends javax.swing.JPanel {
         this.firstPointMomentImageHeight = null;
     }
 
+    /**
+     * Removes the second point
+     */
     public void resetSecondPoint(){
         this.secondPointX = null;
         this.secondPointY = null;
@@ -105,10 +143,22 @@ public class ImagePanel extends javax.swing.JPanel {
         
     }
 
+    /**
+     * Sets a label where instructions for operating can be written.
+     * 
+     * @param labelImageAction 
+     */
     public void setLabelImageAction(JLabel labelImageAction) {
         this.labelImageAction = labelImageAction;
     }
 
+    /**
+     * It draws the image in the component graphics and also the orientation points
+     * if they are inserted.
+     * During drawing points are also scaled.
+     * 
+     * @param g 
+     */
     @Override
     public void paint(Graphics g) {
         super.paint(g);
@@ -130,6 +180,16 @@ public class ImagePanel extends javax.swing.JPanel {
         }
     }
 
+    /**
+     * It draws an orientation point.
+     * <br/>
+     * It draws an 'X' where the point has to be located. If another shape has to be drawn then
+     * this method has to be overridden.
+     * @param x
+     * @param y
+     * @param graphicDimension
+     * @param g 
+     */
     protected void drawPoint(Integer x, Integer y, Integer graphicDimension, Graphics g) {
         g.setColor(this.pointGraphicColor);
         ((Graphics2D) g).setStroke(new BasicStroke(this.pointGraphicStrokeWidth));

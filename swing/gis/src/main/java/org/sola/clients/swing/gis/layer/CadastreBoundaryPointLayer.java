@@ -6,9 +6,11 @@ package org.sola.clients.swing.gis.layer;
 
 import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.Point;
+import com.vividsolutions.jts.io.ParseException;
 import java.util.HashMap;
 import org.geotools.geometry.jts.Geometries;
 import org.geotools.map.extended.layer.ExtendedLayerGraphics;
+import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.geotools.swing.extended.util.Messaging;
 import org.opengis.feature.simple.SimpleFeature;
 import org.sola.common.messaging.GisMessage;
@@ -31,7 +33,7 @@ public class CadastreBoundaryPointLayer extends ExtendedLayerGraphics {
     private static final String LAYER_BOUNDARY_STYLE_RESOURCE = "cadastreboundary.xml";
     private static final String BOUNDARY_FEATURE_ID = "1";
 
-    public CadastreBoundaryPointLayer() throws Exception {
+    public CadastreBoundaryPointLayer() throws InitializeLayerException {
         super(LAYER_NAME, Geometries.POINT, LAYER_STYLE_RESOURCE, LAYER_ATTRIBUTE_DEFINITION);
         this.setShowInToc(false);
         this.boundaryLayer = new ExtendedLayerGraphics(
@@ -74,7 +76,7 @@ public class CadastreBoundaryPointLayer extends ExtendedLayerGraphics {
     private void setTargetPoint(byte[] pointGeom, boolean isStart) {
         try {
             this.setTargetPoint((Point) wkbReader.read(pointGeom), isStart);
-        } catch (Exception ex) {
+        } catch (ParseException ex) {
             org.sola.common.logging.LogUtility.log(
                     GisMessage.CADASTRE_BOUNDARY_ADD_POINT_ERROR, ex);
             Messaging.getInstance().show(GisMessage.CADASTRE_BOUNDARY_ADD_POINT_ERROR);
@@ -83,35 +85,23 @@ public class CadastreBoundaryPointLayer extends ExtendedLayerGraphics {
     }
 
     private void setTargetPoint(Point pointGeom, boolean isStart) {
-        try {
-            String labelToUse = isStart ? LABEL_START_P0INT : LABEL_END_P0INT;
-            if (isStart) {
-                this.clearSelection();
-            }
-            HashMap<String, Object> params = new HashMap<String, Object>();
-            params.put(LAYER_FIELD_LABEL, labelToUse);
-            this.addFeature(labelToUse, pointGeom, params);
-        } catch (Exception ex) {
-            org.sola.common.logging.LogUtility.log(
-                    GisMessage.CADASTRE_BOUNDARY_ADD_POINT_ERROR, ex);
-            Messaging.getInstance().show(GisMessage.CADASTRE_BOUNDARY_ADD_POINT_ERROR);
+        String labelToUse = isStart ? LABEL_START_P0INT : LABEL_END_P0INT;
+        if (isStart) {
+            this.clearSelection();
         }
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put(LAYER_FIELD_LABEL, labelToUse);
+        this.addFeature(labelToUse, pointGeom, params);
     }
 
-    public void clearSelection() throws Exception {
+    public void clearSelection() {
         this.removeFeatures();
         this.boundaryLayer.removeFeatures();
     }
 
     public void setTargetBoundary(LineString boundaryGeometry) {
-        try {
-            this.boundaryLayer.removeFeatures();
-            this.boundaryLayer.addFeature(BOUNDARY_FEATURE_ID, boundaryGeometry, null);
-        } catch (Exception ex) {
-            org.sola.common.logging.LogUtility.log(
-                    GisMessage.CADASTRE_BOUNDARY_ADD_TARGET_BOUNDARY_ERROR, ex);
-            Messaging.getInstance().show(GisMessage.CADASTRE_BOUNDARY_ADD_TARGET_BOUNDARY_ERROR);
-        }
+        this.boundaryLayer.removeFeatures();
+        this.boundaryLayer.addFeature(BOUNDARY_FEATURE_ID, boundaryGeometry, null);
     }
 
     public LineString getTargetBoundary() {

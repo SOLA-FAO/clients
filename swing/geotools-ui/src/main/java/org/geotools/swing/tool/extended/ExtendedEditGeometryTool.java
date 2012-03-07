@@ -251,10 +251,9 @@ public abstract class ExtendedEditGeometryTool extends ExtendedDrawToolWithSnapp
      * It calls adding the feature method to the target layer.
      * 
      * @param geometry
-     * @throws Exception 
      */
     @Override
-    protected void treatFinalizedGeometry(Geometry geometry) throws Exception {
+    protected void treatFinalizedGeometry(Geometry geometry){
         this.addFeature(geometry);
     }
 
@@ -280,7 +279,7 @@ public abstract class ExtendedEditGeometryTool extends ExtendedDrawToolWithSnapp
      * If there are extra fields then this method has to be overridden.
      * @param geometry 
      */
-    public SimpleFeature addFeature(Geometry geometry) throws Exception {
+    public SimpleFeature addFeature(Geometry geometry){
         return this.layer.addFeature(null, geometry, null);
     }
 

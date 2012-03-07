@@ -32,8 +32,9 @@
 package org.sola.clients.swing.gis.beans;
 
 /**
- *
- * @author manoku
+ * A data bean that represents a survey point which is used during the cadastre change process.
+ * 
+ * @author Elton Manoku
  */
 public class SurveyPointBean {
     private String id;

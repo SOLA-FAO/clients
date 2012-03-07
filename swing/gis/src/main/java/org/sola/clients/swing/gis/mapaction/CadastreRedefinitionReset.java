@@ -31,13 +31,7 @@ public class CadastreRedefinitionReset extends ExtendedAction {
 
     @Override
     public void onClick() {
-        try {
-            this.mapControl.reset();
-            this.mapControl.refresh(false);
-        } catch (Exception ex) {
-            org.sola.common.logging.LogUtility.log(
-                    GisMessage.CADASTRE_REDEFINITION_RESET_ERROR, ex);
-            Messaging.getInstance().show(GisMessage.CADASTRE_REDEFINITION_RESET_ERROR);
-        }
+        this.mapControl.reset();
+        this.mapControl.refresh(false);
     }
 }

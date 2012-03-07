@@ -5,11 +5,13 @@
 package org.sola.clients.swing.gis.layer;
 
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.io.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.geometry.jts.Geometries;
 import org.geotools.map.extended.layer.ExtendedLayerGraphics;
+import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.geotools.swing.extended.util.Messaging;
 import org.opengis.feature.simple.SimpleFeature;
 import org.sola.clients.swing.gis.beans.CadastreObjectNodeTargetBean;
@@ -24,7 +26,7 @@ public class CadastreRedefinitionNodeLayer extends ExtendedLayerGraphics {
     private static final String LAYER_NAME = "Modified Nodes";
     private static final String LAYER_STYLE_RESOURCE = "node_modified.xml";
 
-    public CadastreRedefinitionNodeLayer() throws Exception {
+    public CadastreRedefinitionNodeLayer() throws InitializeLayerException {
         super(LAYER_NAME, Geometries.POINT, LAYER_STYLE_RESOURCE, null);
     }
     
@@ -36,7 +38,7 @@ public class CadastreRedefinitionNodeLayer extends ExtendedLayerGraphics {
         SimpleFeature featureAdded = null;
         try {
             featureAdded = this.addFeature(id, geom, null);
-        } catch (Exception ex) {
+        } catch (ParseException ex) {
             org.sola.common.logging.LogUtility.log(
                     GisMessage.CADASTRE_REDEFINITION_ADD_NODE_ERROR, ex);
             Messaging.getInstance().show(GisMessage.CADASTRE_REDEFINITION_ADD_NODE_ERROR);

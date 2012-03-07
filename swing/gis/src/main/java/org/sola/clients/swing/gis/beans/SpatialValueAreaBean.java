@@ -34,8 +34,9 @@ package org.sola.clients.swing.gis.beans;
 import java.math.BigDecimal;
 
 /**
- *
- * @author manoku
+ * A data bean which represents a Spatial Value for a cadastre object.
+ * 
+ * @author Elton Manoku
  */
 public class SpatialValueAreaBean {
     public static final String TYPE_OFFICIAL = "officialArea";

@@ -32,8 +32,10 @@
 package org.geotools.map.extended.layer;
 
 import java.io.File;
+import java.io.IOException;
 import org.geotools.data.FileDataStore;
 import org.geotools.data.FileDataStoreFinder;
+import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.geotools.swing.extended.util.Messaging;
 
 /**
@@ -49,21 +51,21 @@ public class ExtendedLayerShapefile extends ExtendedFeatureLayer{
      * @param pathOfShapefile The shapefile location 
      * @param styleResource the resource name of the style. Has to be found in one of the paths
      * specified in SLD_RESOURCES in {@see ExtendedFeatureLayer}
-     * @throws Exception
+     * @throws InitializeLayerException
      */
     public ExtendedLayerShapefile(String name, String pathOfShapefile, String styleResource) 
-            throws Exception{
+            throws InitializeLayerException{
         try {
             File file = new File(pathOfShapefile);
             if (file == null) {
-                throw new Exception(
-                        Messaging.Ids.SHAPEFILELAYER_FILE_NOT_FOUND_ERROR.toString());
+                throw new InitializeLayerException(
+                        Messaging.Ids.SHAPEFILELAYER_FILE_NOT_FOUND_ERROR.toString(), null);
             }
             FileDataStore store = FileDataStoreFinder.getDataStore(file);
             this.setFeatureSource(store.getFeatureSource());
             this.initialize(name, store.getFeatureSource(), styleResource);
-        } catch (Exception ex) {
-            throw new Exception(
+        } catch (IOException ex) {
+            throw new InitializeLayerException(
                     Messaging.Ids.LAYER_NOT_ADDED_ERROR.toString(), ex);
         }        
     }

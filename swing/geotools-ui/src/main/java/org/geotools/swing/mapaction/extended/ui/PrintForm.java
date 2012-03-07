@@ -48,7 +48,8 @@ import org.geotools.swing.extended.util.Messaging;
 import org.geotools.swing.mapaction.extended.print.PrintLayout;
 
 /**
- *
+ * A form used during the print operation to define some parameters before printing.
+ * 
  * @author Elton Manoku
  */
 public class PrintForm extends javax.swing.JDialog {

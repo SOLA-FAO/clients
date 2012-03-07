@@ -42,7 +42,7 @@ import org.sola.webservices.transferobjects.transaction.TransactionCadastreChang
 
 /**
  *
- * @author manoku
+ * @author Elton Manoku
  */
 public class TransactionCadastreChangeBean extends TransactionBean{
     

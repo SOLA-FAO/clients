@@ -32,8 +32,8 @@
 package org.sola.clients.swing.gis.beans;
 
 /**
- *
- * @author manoku
+ * Used as the base class for data beans used in the gis component.
+ * @author Elton Manoku
  */
-public class AbstractGisBean {
+public abstract class AbstractGisBean {
 }

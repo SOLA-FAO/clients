@@ -39,6 +39,8 @@ import org.geotools.map.MapContent;
 import org.geotools.map.MapViewport;
 import org.geotools.renderer.lite.RendererUtilities;
 import org.geotools.swing.extended.util.ScalebarGenerator;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.operation.TransformException;
 
 /**
  * A layer to add decorations in the map like a scalebar. If used this layer should be in the top
@@ -76,7 +78,9 @@ public class MapDecorationsLayer extends DirectLayer {
                     viewport.getBounds(), (int) viewport.getScreenArea().getWidth(),
                     (int) viewport.getScreenArea().getHeight(), dpi);
 
-        } catch (Exception ex) {
+        } catch (FactoryException ex) {
+            throw new RuntimeException(ex);
+        } catch (TransformException ex) {
             throw new RuntimeException(ex);
         }
         BufferedImage bi = this.scalebarGenerator.getImage(scale, 200, dpi);

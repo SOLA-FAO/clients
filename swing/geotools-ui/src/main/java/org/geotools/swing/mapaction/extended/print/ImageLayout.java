@@ -31,10 +31,12 @@
  */
 package org.geotools.swing.mapaction.extended.print;
 
+import org.geotools.swing.extended.exception.ParsePrintLayoutElementException;
 import org.w3c.dom.Node;
 
 /**
- *
+ * A print layout element which is defined for image type element.
+ * 
  * @author Elton Manoku
  */
 public class ImageLayout extends ElementLayout{
@@ -49,7 +51,13 @@ public class ImageLayout extends ElementLayout{
         
     }
 
-    public ImageLayout(Node imageXmlNode) throws Exception{
+    /**
+     * Constructor of the element which is defined in an xml element
+     * @param imageXmlNode The Xml node that defines the image element
+     * @throws ParsePrintLayoutElementException 
+     */
+    public ImageLayout(Node imageXmlNode) throws ParsePrintLayoutElementException{
+        try{
         this.x = Integer.parseInt(this.getAttributeValue(imageXmlNode, "x"));
         this.y = Integer.parseInt(this.getAttributeValue(imageXmlNode, "y"));
         this.width = Integer.parseInt(this.getAttributeValue(imageXmlNode, "width"));
@@ -59,8 +67,15 @@ public class ImageLayout extends ElementLayout{
         if (this.hasAttribute(imageXmlNode, "resource-location")){
             this.resourceLocation = this.getAttributeValue(imageXmlNode, "resource-location");            
         }
+        }catch(NumberFormatException ex){
+            throw new ParsePrintLayoutElementException("Print layout parse error.", ex);
+        }
     }
 
+    /**
+     * Gets a location of the image file
+     * @return 
+     */
     public String getResourceLocation() {
         return resourceLocation;
     }

@@ -36,6 +36,7 @@ import org.geotools.geometry.jts.Geometries;
 import org.sola.clients.swing.gis.Messaging;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.geotools.map.extended.layer.ExtendedLayerGraphics;
+import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.sola.common.messaging.GisMessage;
 import org.sola.webservices.transferobjects.cadastre.CadastreObjectTO;
 
@@ -62,7 +63,7 @@ public final class ControlsBundleForBaUnit extends ControlsBundleForWorkingWithC
                     new ExtendedLayerGraphics(CADASTRE_OBJECTS_LAYERNAME, 
                             Geometries.POLYGON, STYLE_RESOURCE);
             this.getMap().addLayer(layerForCadastreObjects);
-        } catch (Exception ex) {
+        } catch (InitializeLayerException ex) {
             org.sola.common.logging.LogUtility.log(
                     GisMessage.CADASTRE_OBJBAUNIT_SETUP_ERROR, ex);
             Messaging.getInstance().show(GisMessage.CADASTRE_OBJBAUNIT_SETUP_ERROR);

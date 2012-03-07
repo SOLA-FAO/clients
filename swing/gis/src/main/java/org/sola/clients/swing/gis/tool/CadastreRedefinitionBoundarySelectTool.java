@@ -25,6 +25,7 @@ import org.sola.webservices.transferobjects.cadastre.CadastreObjectNodeTO;
 public class CadastreRedefinitionBoundarySelectTool extends CadastreBoundarySelectTool {
 
     private PojoDataAccess dataAccess;
+
     public CadastreRedefinitionBoundarySelectTool(
             PojoDataAccess dataAccess,
             CadastreBoundaryPointLayer pointLayer,
@@ -61,35 +62,30 @@ public class CadastreRedefinitionBoundarySelectTool extends CadastreBoundarySele
             if (nodeBean == null) {
                 step2Finished = false;
             } else {
-                try {
+                List<String> targetCadastreObjectIdsTmp = new ArrayList<String>();
 
-                    List<String> targetCadastreObjectIdsTmp = new ArrayList<String>();
-
-                    for (CadastreObjectBean coBean : nodeBean.getCadastreObjectList()) {
-                        if (!this.targetCadastreObjectIds.contains(coBean.getId())) {
-                            continue;
-                        }
-                        targetCadastreObjectIdsTmp.add(coBean.getId());
+                for (CadastreObjectBean coBean : nodeBean.getCadastreObjectList()) {
+                    if (!this.targetCadastreObjectIds.contains(coBean.getId())) {
+                        continue;
                     }
-                    this.targetCadastreObjectIds.clear();
-                    this.targetCadastreObjectIds.addAll(targetCadastreObjectIdsTmp);
-                    if (this.targetCadastreObjectIds.size() < 1 
-                            || this.targetCadastreObjectIds.size() > 2) {
-                        this.clearSelection();
-                    } else {
-                        for (CadastreObjectBean coBean : nodeBean.getCadastreObjectList()) {
-                            if (this.targetCadastreObjectIds.contains(coBean.getId())) {
-                                this.getTargetLayer().addCadastreObjectTarget(
-                                        coBean.getId(), null, coBean.getGeomPolygon());
-                            }
-                        }
-                        this.pointLayer.setEndPoint(nodeBean.getGeom());
-                        this.defineTargetBoundary();
-                    }
-                    step2Finished = true;
-                } catch (ParseException ex) {
-                } catch (Exception ex) {
+                    targetCadastreObjectIdsTmp.add(coBean.getId());
                 }
+                this.targetCadastreObjectIds.clear();
+                this.targetCadastreObjectIds.addAll(targetCadastreObjectIdsTmp);
+                if (this.targetCadastreObjectIds.size() < 1
+                        || this.targetCadastreObjectIds.size() > 2) {
+                    this.clearSelection();
+                } else {
+                    for (CadastreObjectBean coBean : nodeBean.getCadastreObjectList()) {
+                        if (this.targetCadastreObjectIds.contains(coBean.getId())) {
+                            this.getTargetLayer().addCadastreObjectTarget(
+                                    coBean.getId(), null, coBean.getGeomPolygon());
+                        }
+                    }
+                    this.pointLayer.setEndPoint(nodeBean.getGeom());
+                    this.defineTargetBoundary();
+                }
+                step2Finished = true;
             }
         }
         return step2Finished;

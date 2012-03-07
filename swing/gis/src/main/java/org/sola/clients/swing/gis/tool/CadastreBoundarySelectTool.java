@@ -57,7 +57,7 @@ public class CadastreBoundarySelectTool extends ExtendedDrawRectangle {
     public void onSelectionChanged(boolean selected) {
         super.onSelectionChanged(selected);
         if (selected) {
-            if (this.isFirstStep()){
+            if (this.isFirstStep()) {
                 Messaging.getInstance().show(
                         GisMessage.CADASTRE_BOUNDARY_SELECT_FIRST_BOUNDARY_POINT);
             } else {
@@ -87,9 +87,9 @@ public class CadastreBoundarySelectTool extends ExtendedDrawRectangle {
             this.getMapControl().refresh();
         }
     }
-    
-    private boolean isFirstStep(){
-        return (this.pointLayer.getStartPoint() == null || this.pointLayer.getEndPoint()!= null);
+
+    private boolean isFirstStep() {
+        return (this.pointLayer.getStartPoint() == null || this.pointLayer.getEndPoint() != null);
     }
 
     protected final SimpleFeature getFirstPointFeature(Envelope2D env) {
@@ -113,7 +113,7 @@ public class CadastreBoundarySelectTool extends ExtendedDrawRectangle {
             return false;
         }
         Point geom = (Point) pointFeature.getDefaultGeometry();
-        if (this.pointLayer.getStartPoint().equals(geom)){
+        if (this.pointLayer.getStartPoint().equals(geom)) {
             Messaging.getInstance().show(GisMessage.CADASTRE_BOUNDARY_START_END_POINT_SAME);
             return true;
         }
@@ -164,25 +164,19 @@ public class CadastreBoundarySelectTool extends ExtendedDrawRectangle {
     }
 
     public final void clearSelection() {
-        try {
-            this.pointLayer.clearSelection();
-            SimpleFeature feature;
-            for (String cadastreObjectId : this.targetCadastreObjectIds) {
-                feature = this.targetLayer.getFeatureCollection().getFeature(
-                        cadastreObjectId);
-                if (feature != null) {
-                    this.targetLayer.getFeatureCollection().notifyListeners(
-                            feature, CollectionEvent.FEATURES_CHANGED);
-                }
+        this.pointLayer.clearSelection();
+        SimpleFeature feature;
+        for (String cadastreObjectId : this.targetCadastreObjectIds) {
+            feature = this.targetLayer.getFeatureCollection().getFeature(
+                    cadastreObjectId);
+            if (feature != null) {
+                this.targetLayer.getFeatureCollection().notifyListeners(
+                        feature, CollectionEvent.FEATURES_CHANGED);
             }
-            this.targetCadastreObjectIds.clear();
-            //Disactivate editing of boundary
-            this.getMapControl().getMapActionByName(CadastreBoundaryEditTool.NAME).setEnabled(false);
-        } catch (Exception ex) {
-            org.sola.common.logging.LogUtility.log(
-                    GisMessage.CADASTRE_BOUNDARY_CLEAR_SELECTION_ERROR, ex);
-            Messaging.getInstance().show(GisMessage.CADASTRE_BOUNDARY_CLEAR_SELECTION_ERROR);
         }
+        this.targetCadastreObjectIds.clear();
+        //Disactivate editing of boundary
+        this.getMapControl().getMapActionByName(CadastreBoundaryEditTool.NAME).setEnabled(false);
     }
 
     private LineString getTargetBoundaryFromRing(LineString targetRing, boolean clockwise,

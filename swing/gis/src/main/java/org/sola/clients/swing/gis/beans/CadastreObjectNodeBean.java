@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * A node bean which represents data about a boundary node and related Cadastre Objects that share
+ * that node.
+ * 
  * @author Elton Manoku
  */
 public class CadastreObjectNodeBean implements Serializable {

@@ -33,13 +33,16 @@ package org.geotools.map.extended.layer;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.io.ParseException;
 import org.geotools.data.collection.CollectionFeatureSource;
 import org.geotools.data.simple.SimpleFeatureSource;
+import org.geotools.feature.SchemaException;
 import org.geotools.geometry.jts.Geometries;
 import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.opengis.feature.simple.SimpleFeature;
 import org.geotools.data.collection.extended.GraphicsFeatureCollection;
 import org.geotools.feature.CollectionEvent;
+import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.geotools.swing.extended.util.Messaging;
 
 /**
@@ -61,11 +64,11 @@ public class ExtendedLayerGraphics extends ExtendedFeatureLayer {
      * @param geometryType The type of geometry
      * @param styleResource the resource name of the style. Has to be found in one of the paths
      * specified in SLD_RESOURCES in {@see ExtendedFeatureLayer}
-     * @throws Exception 
+     * @throws InitializeLayerException 
      */
     public ExtendedLayerGraphics(
             String name, Geometries geometryType, String styleResource)
-            throws Exception {
+            throws InitializeLayerException{
         this(name, geometryType, styleResource, null);
     }
 
@@ -76,11 +79,11 @@ public class ExtendedLayerGraphics extends ExtendedFeatureLayer {
      * @param styleResource
      * @param extraFieldsFormat Extra fields can be specified for the features by using the notation
      * as known by {@see org.geotools.data.DataUtilities}
-     * @throws Exception 
+     * @throws InitializeLayerException 
      */
     public ExtendedLayerGraphics(
             String name, Geometries geometryType, String styleResource, String extraFieldsFormat)
-            throws Exception {
+            throws InitializeLayerException {
 
         this.geometryFactory = JTSFactoryFinder.getGeometryFactory(null);
         try {
@@ -88,8 +91,8 @@ public class ExtendedLayerGraphics extends ExtendedFeatureLayer {
                     new GraphicsFeatureCollection(geometryType, extraFieldsFormat);
             SimpleFeatureSource featureSource = new CollectionFeatureSource(featureCollection);
             this.initialize(name, featureSource, styleResource);
-        } catch (Exception ex) {
-            throw new Exception(
+        } catch (SchemaException ex) {
+            throw new InitializeLayerException(
                     Messaging.Ids.LAYERGRAPHICS_STARTUP_ERROR.toString(), ex);
         }
     }
@@ -101,11 +104,10 @@ public class ExtendedLayerGraphics extends ExtendedFeatureLayer {
      * @param fieldsWithValues Extra field value pairs. The field names has to be the same 
      * as in the definition of the fields in the initialization of the layer.
      * @return The added feature.
-     * @throws Exception 
      */
     public SimpleFeature addFeature(String fid,
             com.vividsolutions.jts.geom.Geometry geom,
-            java.util.HashMap<String, Object> fieldsWithValues) throws Exception {
+            java.util.HashMap<String, Object> fieldsWithValues) {
         return this.getFeatureCollection().addFeature(fid, geom, fieldsWithValues);
     }
 
@@ -115,11 +117,11 @@ public class ExtendedLayerGraphics extends ExtendedFeatureLayer {
      * @param geomAsBytes Geometry in Well Known Binary format
      * @param fieldsWithValues
      * @return
-     * @throws Exception 
+     * @throws ParseException 
      */
     public SimpleFeature addFeature(String fid,
             byte[] geomAsBytes,
-            java.util.HashMap<String, Object> fieldsWithValues) throws Exception {
+            java.util.HashMap<String, Object> fieldsWithValues) throws ParseException {
         com.vividsolutions.jts.geom.Geometry geom = wkbReader.read(geomAsBytes);
         return this.addFeature(fid, geom, fieldsWithValues);
     }
@@ -135,15 +137,9 @@ public class ExtendedLayerGraphics extends ExtendedFeatureLayer {
 
     /**
      * It removes all features.
-     * @throws Exception 
      */
-    public void removeFeatures() throws Exception {
-        try {
-            this.getFeatureCollection().clear();
-        } catch (Exception ex) {
-            throw new Exception(
-                    Messaging.Ids.REMOVE_ALL_FEATURES_ERROR.toString(), ex);
-        }
+    public void removeFeatures() {
+        this.getFeatureCollection().clear();
     }
 
     /**
@@ -166,7 +162,6 @@ public class ExtendedLayerGraphics extends ExtendedFeatureLayer {
      * @param ofFeature the target feature
      * @param newGeometry the new geometry
      * @return true if the geometry is successfully changed
-     * @throws Exception 
      */
     public boolean replaceFeatureGeometry(
             SimpleFeature ofFeature, Geometry newGeometry) {
@@ -191,8 +186,6 @@ public class ExtendedLayerGraphics extends ExtendedFeatureLayer {
      * @return 
      */
     protected final boolean validateGeometry(Geometry geom) {
-        boolean result = true;
-        result = geom.isSimple() && geom.isValid();
-        return result;
+        return geom.isSimple() && geom.isValid();
     }
 }

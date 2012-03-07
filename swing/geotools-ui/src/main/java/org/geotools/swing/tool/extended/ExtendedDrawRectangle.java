@@ -10,7 +10,8 @@ import org.geotools.geometry.Envelope2D;
 import org.geotools.swing.event.MapMouseEvent;
 
 /**
- *
+ * An abstract tool that draws a rectangle in the map.
+ * 
  * @author Elton Manoku
  */
 public abstract class ExtendedDrawRectangle extends ExtendedTool{
@@ -26,7 +27,7 @@ public abstract class ExtendedDrawRectangle extends ExtendedTool{
      */
     @Override
     public void onMousePressed(MapMouseEvent ev) {
-        startDragPos.setLocation(ev.getMapPosition());
+        startDragPos.setLocation(ev.getWorldPos());
     }
 
     /**
@@ -40,23 +41,26 @@ public abstract class ExtendedDrawRectangle extends ExtendedTool{
     }
 
     /**
-     * If the mouse was dragged, determines the bounds of the
-     * box that the user defined and passes this to the mapPane's
-     * {@link org.geotools.swing.JMapPane#setDisplayArea(org.opengis.geometry.Envelope) }
-     * method
      *
-     * @param ev the mouse event
+     * @param ev
      */
     @Override
     public void onMouseReleased(MapMouseEvent ev) {
         if (dragged && !ev.getPoint().equals(startDragPos)) {
             dragged = false;
             Envelope2D env = new Envelope2D();
-            env.setFrameFromDiagonal(startDragPos, ev.getMapPosition());
+            env.setFrameFromDiagonal(startDragPos, ev.getWorldPos());
             this.onRectangleFinished(env);
         }
     }
     
+    /**
+     * It is called after the drawing process is finished.
+     * <br/>
+     * Override this method to implement functionality at the end of the drawing process.
+     * 
+     * @param env The envelope drawn
+     */
     protected void onRectangleFinished(Envelope2D env){
         
     }

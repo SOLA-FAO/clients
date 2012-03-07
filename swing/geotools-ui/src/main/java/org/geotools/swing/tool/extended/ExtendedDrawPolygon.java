@@ -32,7 +32,6 @@
 package org.geotools.swing.tool.extended;
 
 import com.vividsolutions.jts.geom.Geometry;
-import java.io.Serializable;
 import java.util.HashMap;
 import org.geotools.geometry.jts.Geometries;
 import org.opengis.feature.simple.SimpleFeature;
@@ -41,6 +40,7 @@ import org.geotools.swing.extended.Map;
 /**
  *
  * This is used for testing purposes to show how to extend the {@see ExtendedEditGeometryTool}
+ * 
  * @author Elton Manoku
  */
 public class ExtendedDrawPolygon extends ExtendedEditGeometryTool{
@@ -64,7 +64,7 @@ public class ExtendedDrawPolygon extends ExtendedEditGeometryTool{
     }
 
    @Override
-    public SimpleFeature addFeature(Geometry geometry) throws Exception{
+    public SimpleFeature addFeature(Geometry geometry){
         HashMap<String, Object> fieldsWithValues = new HashMap<String, Object>();
         fieldsWithValues.put("type", 2);
         fieldsWithValues.put("label", "aha");

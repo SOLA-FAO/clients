@@ -32,6 +32,7 @@
 package org.sola.clients.swing.gis.ui.control;
 
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.io.ParseException;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import org.geotools.geometry.jts.JTS;
@@ -100,7 +101,7 @@ public class MapObjectSearch extends FreeTextSearch {
             ReferencedEnvelope boundsToZoom = JTS.toEnvelope(geom);
             boundsToZoom.expandBy(10);
             this.map.setDisplayArea(boundsToZoom);
-        } catch (Exception ex) {
+        } catch (ParseException ex) {
             Messaging.getInstance().show(GisMessage.LEFT_PANEL_FIND_ERROR);
             org.sola.common.logging.LogUtility.log(GisMessage.LEFT_PANEL_FIND_ERROR, ex);
         }

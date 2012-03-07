@@ -31,13 +31,15 @@
  */
 package org.geotools.swing.mapaction.extended.print;
 
+import org.geotools.swing.extended.exception.ParsePrintLayoutElementException;
 import org.w3c.dom.Node;
 
 /**
- *
+ * A print layout element which is defined for text type element.
+ * 
  * @author Elton Manoku
  */
-public class TextLayout extends ElementLayout{
+public class TextLayout extends ElementLayout {
 
     private String value;
     private int size;
@@ -45,16 +47,25 @@ public class TextLayout extends ElementLayout{
     private int x;
     private int y;
 
-    public TextLayout(){
-        
+    public TextLayout() {
     }
 
-    public TextLayout(Node xmlNode) throws Exception{
-        this.x = Integer.parseInt(this.getAttributeValue(xmlNode, "x"));
-        this.y = Integer.parseInt(this.getAttributeValue(xmlNode, "y"));
-        this.size = Integer.parseInt(this.getAttributeValue(xmlNode, "size"));
-        this.fontName = this.getAttributeValue(xmlNode, "font-name");
-        this.value = this.getAttributeValue(xmlNode, "value");
+    /**
+     * Constructor of the element which is defined in an xml element
+     * @param imageXmlNode The Xml node that defines the text element
+     * @param xmlNode
+     * @throws ParsePrintLayoutElementException 
+     */
+    public TextLayout(Node xmlNode) throws ParsePrintLayoutElementException {
+        try {
+            this.x = Integer.parseInt(this.getAttributeValue(xmlNode, "x"));
+            this.y = Integer.parseInt(this.getAttributeValue(xmlNode, "y"));
+            this.size = Integer.parseInt(this.getAttributeValue(xmlNode, "size"));
+            this.fontName = this.getAttributeValue(xmlNode, "font-name");
+            this.value = this.getAttributeValue(xmlNode, "value");
+        } catch (NumberFormatException ex) {
+            throw new ParsePrintLayoutElementException("Print layout parse error.", ex);
+        }
     }
 
     public String getFontName() {
@@ -72,7 +83,6 @@ public class TextLayout extends ElementLayout{
     public void setValue(String text) {
         this.value = text;
     }
-
 
     public int getSize() {
         return size;
@@ -97,6 +107,4 @@ public class TextLayout extends ElementLayout{
     public void setY(int y) {
         this.y = y;
     }
-    
-    
 }

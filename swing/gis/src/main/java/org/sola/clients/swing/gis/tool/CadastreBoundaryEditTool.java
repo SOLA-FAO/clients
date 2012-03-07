@@ -50,7 +50,7 @@ public class CadastreBoundaryEditTool extends ExtendedDrawToolWithSnapping {
     }
 
     @Override
-    protected void treatFinalizedGeometry(Geometry geometry) throws Exception {
+    protected void treatFinalizedGeometry(Geometry geometry) {
         LineString targetBoundary = this.pointLayer.getTargetBoundary();
         if (targetBoundary == null) {
             return;

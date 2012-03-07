@@ -31,19 +31,24 @@
  */
 package org.geotools.swing.mapaction.extended.print;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import org.geotools.swing.extended.exception.ParsePrintLayoutElementException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
- *
+ * A print layout class definition. Instances of this class are used as a source
+ * for the {@see PrintoutGenerator}.
+ * 
  * @author Elton manoku
  */
 public class PrintLayout extends ElementLayout {
@@ -59,29 +64,48 @@ public class PrintLayout extends ElementLayout {
     public PrintLayout() {
     }
 
+    /**
+     * Constructor of the layout which uses an Xml Document.
+     * 
+     * @param xmlFormatedLayout  The xml definition of the layout
+     */
     public PrintLayout(String xmlFormatedLayout) {
         try {
             InputSource is = new InputSource(new StringReader(xmlFormatedLayout.trim()));
             Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is);
             this.initialize(doc);
-        } catch (Exception ex) {
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        } catch (SAXException ex) {
+            throw new RuntimeException(ex);
+        } catch (ParsePrintLayoutElementException ex) {
+            throw new RuntimeException(ex);
+        } catch (ParserConfigurationException ex) {
             throw new RuntimeException(ex);
         }
-
     }
 
+    /**
+     * Constructor of the layout which uses an Xml Document Input stream.
+     * @param xmlFormatedLayoutStream 
+     */
     public PrintLayout(InputStream xmlFormatedLayoutStream) {
         try {
             Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(
                     xmlFormatedLayoutStream);
             this.initialize(doc);
-        } catch (Exception ex) {
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        } catch (SAXException ex) {
+            throw new RuntimeException(ex);
+        } catch (ParsePrintLayoutElementException ex) {
+            throw new RuntimeException(ex);
+        } catch (ParserConfigurationException ex) {
             throw new RuntimeException(ex);
         }
-
     }
 
-    private void initialize(Document doc) throws Exception {
+    private void initialize(Document doc) throws ParsePrintLayoutElementException {
         this.parseNode(doc, "name");
         this.parseNode(doc, "page");
         this.parseNode(doc, "map");
@@ -90,24 +114,26 @@ public class PrintLayout extends ElementLayout {
         this.parseNode(doc, "image");
     }
 
-    private void parseNode(Document doc, String nodeName) throws Exception {
+    private void parseNode(Document doc, String nodeName) throws ParsePrintLayoutElementException {
         NodeList nodeList = doc.getElementsByTagName(nodeName);
         if (nodeName.equals("name")) {
             if (nodeList.getLength() == 0) {
-                throw new Exception("Layout is missing name.");
+                throw new ParsePrintLayoutElementException("Layout is missing name.", null);
             }
             Node node = nodeList.item(0);
             this.name = node.getTextContent();
         }else if (nodeName.equals("page")) {
             if (nodeList.getLength() == 0) {
-                throw new Exception("Layout is missing page definition.");
+                throw new ParsePrintLayoutElementException(
+                        "Layout is missing page definition.", null);
             }
             Node node = nodeList.item(0);
             this.pageWidth = Integer.parseInt(this.getAttributeValue(node, "width"));
             this.pageHeight = Integer.parseInt(this.getAttributeValue(node, "height"));
         }else if (nodeName.equals("map")) {
             if (nodeList.getLength() == 0) {
-                throw new Exception("Layout is missing map definition.");
+                throw new ParsePrintLayoutElementException(
+                        "Layout is missing map definition.", null);
             }
             Node node = nodeList.item(0);
             this.map = new ImageLayout(node);

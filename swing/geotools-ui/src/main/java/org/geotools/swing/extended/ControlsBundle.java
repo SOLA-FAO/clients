@@ -42,6 +42,7 @@ import org.geotools.swing.control.JCoordsStatusBarItem;
 import org.geotools.swing.control.JMapStatusBar;
 import org.geotools.swing.control.JRendererStatusBarItem;
 import org.geotools.swing.control.extended.ExtendedToolItem;
+import org.geotools.swing.extended.exception.InitializeMapException;
 import org.geotools.swing.extended.util.Messaging;
 import org.geotools.swing.mapaction.extended.FullExtent;
 import org.geotools.swing.tool.extended.ExtendedPan;
@@ -75,9 +76,10 @@ public class ControlsBundle extends javax.swing.JPanel {
      * @param wktOfReferenceSystem the WKT definition of Reference system if not found in the
      * srid.properties resource file. If found there there is not need to specify.
      * @param withToc
-     * @throws Exception 
+     * @throws InitializeMapException 
      */
-    public void Setup(int srid, String wktOfReferenceSystem, boolean withToc) throws Exception {
+    public void Setup(int srid, String wktOfReferenceSystem, boolean withToc) 
+            throws InitializeMapException {
         this.initialize(srid, wktOfReferenceSystem);
         //Set default tool
         this.getMap().getToolItemByName(ExtendedPan.NAME).setSelected(true);
@@ -88,9 +90,9 @@ public class ControlsBundle extends javax.swing.JPanel {
      * Internal method to initialize the control. It handles also the layouting.
      * @param srid
      * @param wktOfReferenceSystem
-     * @throws Exception 
+     * @throws InitializeMapException 
      */
-    private void initialize(int srid, String wktOfReferenceSystem) throws Exception {
+    private void initialize(int srid, String wktOfReferenceSystem) throws InitializeMapException {
         if (wktOfReferenceSystem == null) {
             this.map = new Map(srid);
         } else {

@@ -33,6 +33,7 @@ import java.io.File;
 import java.io.IOException;
 import org.geotools.geometry.jts.Geometries;
 import org.geotools.swing.extended.exception.DirectImageNotValidFileException;
+import org.geotools.swing.extended.exception.InitializeLayerException;
 
 /**
  * An extended layer to be used to attach an image in the map control.
@@ -52,9 +53,9 @@ public class ExtendedImageLayer extends ExtendedLayer {
      * Constructor of the layer.
      * @param name Name of the layer
      * @param title Title of the layer.
-     * @throws Exception 
+     * @throws InitializeLayerException 
      */
-    public ExtendedImageLayer(String name, String title)throws Exception{
+    public ExtendedImageLayer(String name, String title)throws InitializeLayerException{
         this.setLayerName(name);
         this.setTitle(title);
         
@@ -70,9 +71,8 @@ public class ExtendedImageLayer extends ExtendedLayer {
      * Sets the first orientation point in the map for the image.
      * @param x
      * @param y
-     * @throws Exception 
      */
-    public void setFirstPoint(Double x, Double y) throws Exception{
+    public void setFirstPoint(Double x, Double y){
         Point point = this.pointLayer.getGeometryFactory().createPoint(new Coordinate(x, y));
         this.pointLayer.removeFeatures();
         this.pointLayer.addFeature(null, point, null);
@@ -85,9 +85,8 @@ public class ExtendedImageLayer extends ExtendedLayer {
      * Sets the second orientation point in the map for the image.
      * @param x
      * @param y
-     * @throws Exception 
      */
-    public void setSecondPoint(Double x, Double y) throws Exception{
+    public void setSecondPoint(Double x, Double y){
         Point point = this.pointLayer.getGeometryFactory().createPoint(new Coordinate(x, y));
         this.pointLayer.addFeature(null, point, null);
         this.rasterLayer.setMaxX(x);
@@ -103,7 +102,7 @@ public class ExtendedImageLayer extends ExtendedLayer {
      * @throws DirectImageNotValidFileException It is thrown if the File is not image.
      */
     public void setRasterFile(File rasterFile) 
-            throws IOException, DirectImageNotValidFileException, Exception{
+            throws IOException, DirectImageNotValidFileException {
         this.rasterLayer.setRasterFile(rasterFile);
         if (rasterFile == null){
             this.pointLayer.removeFeatures();

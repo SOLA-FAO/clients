@@ -31,11 +31,13 @@
  */
 package org.sola.clients.swing.gis.layer;
 
+import com.vividsolutions.jts.io.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import org.geotools.feature.CollectionEvent;
 import org.geotools.feature.CollectionListener;
 import org.geotools.geometry.jts.Geometries;
+import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.opengis.feature.simple.SimpleFeature;
 import org.geotools.map.extended.layer.ExtendedLayerGraphics;
 import org.sola.clients.swing.gis.Messaging;
@@ -55,7 +57,7 @@ public class CadastreChangeTargetCadastreObjectLayer extends ExtendedLayerGraphi
     private List<CadastreObjectTargetBean> cadastreObjectTargetList = 
             new ArrayList<CadastreObjectTargetBean>();
 
-    public CadastreChangeTargetCadastreObjectLayer(int srid) throws Exception {
+    public CadastreChangeTargetCadastreObjectLayer(int srid) throws InitializeLayerException {
         super(LAYER_NAME, Geometries.POLYGON, LAYER_STYLE_RESOURCE);
 
         this.getFeatureCollection().addListener(new CollectionListener() {
@@ -85,7 +87,7 @@ public class CadastreChangeTargetCadastreObjectLayer extends ExtendedLayerGraphi
                 for (CadastreObjectTO targetCOTO : targetObjectList) {
                     this.addFeature(targetCOTO.getId(), targetCOTO.getGeomPolygon(), null);
                 }
-            } catch (Exception ex) {
+            } catch (ParseException ex) {
                 Messaging.getInstance().show(GisMessage.CADASTRE_CHANGE_ERROR_ADDTARGET_IN_START);
                 org.sola.common.logging.LogUtility.log(
                         GisMessage.CADASTRE_CHANGE_ERROR_ADDTARGET_IN_START, ex);

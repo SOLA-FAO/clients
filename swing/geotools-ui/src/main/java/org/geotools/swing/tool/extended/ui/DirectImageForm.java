@@ -18,7 +18,13 @@ import org.geotools.swing.extended.exception.DirectImageNotValidFileException;
 import org.geotools.swing.extended.util.Messaging;
 
 /**
- *
+ * This form is used during the adding of the image in the map.
+ * In this form is also calculated the left-bottom and right-top corner in the map where the 
+ * image will be located.
+ * <br/>
+ * After an image is loaded, two orientation points in the image are defined. In the form
+ * there are given as properties the orientation points in the map.
+ * 
  * @author Elton Manoku
  */
 public class DirectImageForm extends javax.swing.JDialog {
@@ -38,6 +44,13 @@ public class DirectImageForm extends javax.swing.JDialog {
         this.pnlImage.setLabelImageAction(this.lblAction);
     }
 
+    /**
+     * Sets the image file.
+     * 
+     * @param file
+     * @throws DirectImageNotValidFileException
+     * @throws IOException 
+     */
     public void setImage(File file) throws DirectImageNotValidFileException, IOException {
         BufferedImage image = ImageIO.read(file);
         if (image == null) {
@@ -46,6 +59,11 @@ public class DirectImageForm extends javax.swing.JDialog {
         this.pnlImage.setImage(image);
     }
 
+    /**
+     * Gets if the definition of the location of the image in the map is successful
+     * 
+     * @return 
+     */
     public boolean isSuccess() {
         return success;
     }

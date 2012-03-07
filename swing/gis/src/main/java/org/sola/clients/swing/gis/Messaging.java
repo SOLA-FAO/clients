@@ -72,7 +72,7 @@ public class Messaging extends org.geotools.swing.extended.util.Messaging {
 
         } catch (NoSuchFieldException ex) {
             //To be ignored
-        } catch (Exception ex) {
+        } catch (IllegalAccessException ex) {
             LogUtility.log("Error trying to get message sola code for message id:" + messageId, ex);
         }
         return solaMsgCode;

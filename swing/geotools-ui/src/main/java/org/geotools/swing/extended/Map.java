@@ -46,6 +46,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import java.awt.Color;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.Point2D;
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Properties;
@@ -69,6 +70,8 @@ import org.geotools.map.extended.layer.ExtendedLayerGraphics;
 import org.geotools.map.extended.layer.ExtendedLayerShapefile;
 import org.geotools.map.extended.layer.ExtendedLayerWMS;
 import org.geotools.renderer.lite.RendererUtilities;
+import org.geotools.swing.extended.exception.InitializeLayerException;
+import org.geotools.swing.extended.exception.InitializeMapException;
 import org.geotools.swing.mapaction.extended.ExtendedAction;
 import org.geotools.swing.tool.extended.ExtendedTool;
 import org.opengis.referencing.operation.TransformException;
@@ -99,7 +102,7 @@ public class Map extends JMapPane {
     private MapMouseAdapter mapMouseAdapter;
     private MapPaneAdapter mapPaneListener;
     private ReferencedEnvelope fullExtentEnvelope;
-    private LinkedHashMap<String, ExtendedLayer> extendedLayers = 
+    private LinkedHashMap<String, ExtendedLayer> extendedLayers =
             new LinkedHashMap<String, ExtendedLayer>();
     private Integer srid = null;
     private ButtonGroup toolsGroup = new ButtonGroup();
@@ -121,9 +124,9 @@ public class Map extends JMapPane {
     /**
      * It initializes the map control given an SRID.
      * @param srid The SRID
-     * @throws Exception 
+     * @throws InitializeMapException 
      */
-    public Map(int srid) throws Exception {
+    public Map(int srid) throws InitializeMapException {
         this();
         this.initialize(srid);
     }
@@ -135,9 +138,9 @@ public class Map extends JMapPane {
      * @param srid The SRID
      * @param wktOfReferenceSystem the WKT definition of Reference system if not found in the
      * srid.properties resource file. If found there there is not need to specify.
-     * @throws Exception 
+     * @throws InitializeMapException 
      */
-    public Map(int srid, String wktOfReferenceSystem) throws Exception {
+    public Map(int srid, String wktOfReferenceSystem) throws InitializeMapException {
         this();
         if (!sridResource.contains(Integer.toString(srid))) {
             sridResource.setProperty(Integer.toString(srid), wktOfReferenceSystem);
@@ -156,10 +159,8 @@ public class Map extends JMapPane {
                         SRID_RESOURCE_LOCATION);
                 sridResource.load(this.getClass().getResourceAsStream(resourceLocation));
             }
-        } catch (Exception ex) {
-            RuntimeException newEx =
-                    new RuntimeException("Error found while initializing crs resource", ex);
-            throw newEx;
+        } catch (IOException ex) {
+            throw new RuntimeException("Error found while initializing crs resource", ex);
         }
     }
 
@@ -167,15 +168,20 @@ public class Map extends JMapPane {
      * Internal initializer of the control. It starts up the map context, renderer and sets the 
      * Reference System based in the SRID.
      * @param srid
-     * @throws Exception 
+     * @throws InitializeMapException 
      */
-    private void initialize(int srid) throws Exception {
+    private void initialize(int srid) throws InitializeMapException {
         MapContent content = new MapContent();
-        content.getViewport().setCoordinateReferenceSystem(
-                this.generateCoordinateReferenceSystem(srid));
+        try {
+            content.getViewport().setCoordinateReferenceSystem(
+                    this.generateCoordinateReferenceSystem(srid));
+        } catch (FactoryException ex) {
+            throw new InitializeMapException(
+                    Messaging.Ids.MAPCONTROL_MAPCONTEXT_WITHOUT_SRID_ERROR.toString(), ex);
+        }
         if (content.getCoordinateReferenceSystem() == null) {
-            throw new Exception(
-                    Messaging.Ids.MAPCONTROL_MAPCONTEXT_WITHOUT_SRID_ERROR.toString());
+            throw new InitializeMapException(
+                    Messaging.Ids.MAPCONTROL_MAPCONTEXT_WITHOUT_SRID_ERROR.toString(), null);
         }
         this.srid = srid;
         this.setMapContent(content);
@@ -200,22 +206,14 @@ public class Map extends JMapPane {
 
     /**
      * It generates a CoordinateReferenceSystem based in srid.
-     * It forces XY Orientation for all systems.
      * @param srid
      * @return The coordinative system corresponding to the srid
-     * @throws Exception 
+     * @throws FactoryException 
      */
     private CoordinateReferenceSystem generateCoordinateReferenceSystem(int srid)
-            throws Exception {
-        CoordinateReferenceSystem coordSys = null;
-        try {
-            String wktOfCrs = sridResource.getProperty(Integer.toString(srid));
-            coordSys = CRS.parseWKT(wktOfCrs);
-        } catch (Exception ex) {
-            throw new Exception(
-                    Messaging.Ids.UTILITIES_COORDSYS_COULDNOT_BE_CREATED_ERROR.toString(), ex);
-        }
-        return coordSys;
+            throws FactoryException {
+        String wktOfCrs = sridResource.getProperty(Integer.toString(srid));
+        return CRS.parseWKT(wktOfCrs);
     }
 
     /**
@@ -439,14 +437,10 @@ public class Map extends JMapPane {
      */
     public Integer getSrid() {
         if (srid == null) {
-            srid = null;
-            try {
-                Object[] identifiers =
-                        this.getMapContent().getCoordinateReferenceSystem().getIdentifiers().toArray();
-                srid = Integer.parseInt(((NamedIdentifier) identifiers[0]).getCode());
+            Object[] identifiers =
+                    this.getMapContent().getCoordinateReferenceSystem().getIdentifiers().toArray();
+            srid = Integer.parseInt(((NamedIdentifier) identifiers[0]).getCode());
 
-            } finally {
-            }
         }
         return srid;
     }
@@ -465,17 +459,13 @@ public class Map extends JMapPane {
      * @return 
      */
     public ExtendedLayer addLayer(ExtendedLayer solaLayer) {
-        try {
-            this.getSolaLayers().put(solaLayer.getLayerName(), solaLayer);
-            for (Layer layer : solaLayer.getMapLayers()) {
-                this.getMapContent().addLayer(layer);
-            }
-            solaLayer.setMapControl(this);
-            if (this.toc != null && solaLayer.isShowInToc()) {
-                this.toc.addLayer(solaLayer);
-            }
-        } catch (Exception ex) {
-            Messaging.getInstance().show(ex.getMessage());
+        this.getSolaLayers().put(solaLayer.getLayerName(), solaLayer);
+        for (Layer layer : solaLayer.getMapLayers()) {
+            this.getMapContent().addLayer(layer);
+        }
+        solaLayer.setMapControl(this);
+        if (this.toc != null && solaLayer.isShowInToc()) {
+            this.toc.addLayer(solaLayer);
         }
         return solaLayer;
     }
@@ -494,7 +484,7 @@ public class Map extends JMapPane {
         try {
             layer = new ExtendedLayerWMS(layerName, layerTitle, this, URL, layerNames);
             this.getSolaLayers().put(layerName, layer);
-        } catch (Exception ex) {
+        } catch (InitializeLayerException ex) {
             Messaging.getInstance().show(ex.getMessage());
         }
         return layer;
@@ -517,7 +507,7 @@ public class Map extends JMapPane {
             layer = new ExtendedLayerShapefile(layerName, pathOfShapefile, styleResource);
             layer.setTitle(layerTitle);
             this.addLayer(layer);
-        } catch (Exception ex) {
+        } catch (InitializeLayerException ex) {
             Messaging.getInstance().show(ex.getMessage());
         }
         return layer;
@@ -541,7 +531,7 @@ public class Map extends JMapPane {
                     layerName, geometryType, styleResource);
             layer.setTitle(layerTitle);
             this.addLayer(layer);
-        } catch (Exception ex) {
+        } catch (InitializeLayerException ex) {
             Messaging.getInstance().show(ex.getMessage());
         }
         return layer;
@@ -566,7 +556,7 @@ public class Map extends JMapPane {
                     layerName, geometryType, styleResource, extraFieldsFormat);
             layer.setTitle(layerTitle);
             this.addLayer(layer);
-        } catch (Exception ex) {
+        } catch (InitializeLayerException ex) {
             Messaging.getInstance().show(ex.getMessage());
         }
         return layer;
@@ -616,10 +606,10 @@ public class Map extends JMapPane {
      */
     public AbstractButton getBaritemByActionName(String actionName) {
         Enumeration mapBtnEnum = this.toolsGroup.getElements();
-        while(mapBtnEnum.hasMoreElements()){
+        while (mapBtnEnum.hasMoreElements()) {
             AbstractButton btn = (AbstractButton) mapBtnEnum.nextElement();
             ExtendedAction btnAction = (ExtendedAction) btn.getAction();
-            if (btnAction.getName().equals(actionName)){
+            if (btnAction.getName().equals(actionName)) {
                 return btn;
             }
         }
@@ -634,38 +624,38 @@ public class Map extends JMapPane {
      */
     public ExtendedAction getMapActionByName(String actionName) {
         AbstractButton btn = this.getBaritemByActionName(actionName);
-        if (btn== null){
+        if (btn == null) {
             return null;
         }
         return (ExtendedAction) btn.getAction();
     }
-    
+
     /**
      * Gets a toolitem that is found in the toolbar associated with the map.
      * @param name Name of tool
      * @return The toolitem or null
      */
-    public ExtendedToolItem getToolItemByName(String name){
+    public ExtendedToolItem getToolItemByName(String name) {
         AbstractButton btn = this.getBaritemByActionName(name);
         ExtendedToolItem toolItem = null;
-        if (btn== null){
+        if (btn == null) {
             return null;
-        }else if (btn instanceof ExtendedToolItem){
+        } else if (btn instanceof ExtendedToolItem) {
             toolItem = (ExtendedToolItem) btn;
         }
         return toolItem;
-        
+
     }
 
     /**
      * Sets a tool as active in the map.
      * @param toolName The name of the tool.
      */
-    public void setActiveTool(String toolName){
+    public void setActiveTool(String toolName) {
         ExtendedToolItem toolItem = this.getToolItemByName(toolName);
         toolItem.setSelected(true);
     }
-    
+
     /**
      * Sets the Table of Contents.
      * @param toc 

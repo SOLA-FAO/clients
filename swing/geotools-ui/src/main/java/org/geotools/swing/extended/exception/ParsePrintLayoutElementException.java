@@ -25,75 +25,16 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package org.geotools.map.extended.layer;
-
-import com.vividsolutions.jts.geom.Coordinate;
-import org.opengis.feature.simple.SimpleFeature;
+package org.geotools.swing.extended.exception;
 
 /**
- * It represents a vertex used in {@see SolaLayerEditor}.
+ * An exception raised if the parsing of a print layout element fails
  * 
  * @author Elton Manoku
  */
-public class VertexInformation {
-    private Coordinate vertex;
-    private SimpleFeature feature;
-    private SimpleFeature vertexFeature;
+public class ParsePrintLayoutElementException extends Exception {
 
-    /**
-     * Initializes a VertexInformation.
-     * @param vertex The coordinates of the vertex
-     * @param feature The feature where this vertex belongs to
-     * @param vertexFeature The feature which is used to visualize the vertex
-     */
-    public VertexInformation(Coordinate vertex, SimpleFeature feature, SimpleFeature vertexFeature){
-        this.vertex = vertex;
-        this.feature = feature;
-        this.vertexFeature = vertexFeature;
+    public ParsePrintLayoutElementException(String message, Exception ex) {
+        super(message, ex);
     }
-
-    /**
-     * Gets coordinates of vertex
-     * @return 
-     */
-    public Coordinate getVertex() {
-        return vertex;
-    }
-    
-    /**
-     * Gets feature where the vertex belongs to
-     * @return 
-     */
-    public SimpleFeature getFeature() {
-        return feature;
-    }
-
-    /**
-     * Gets the feature that is used to visualize the vertex
-     * @return 
-     */
-    public SimpleFeature getVertexFeature() {
-        return vertexFeature;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof VertexInformation)){
-            return false;
-        }
-        VertexInformation otherVertex = (VertexInformation)obj;
-        return (this.vertexFeature.getID().equals(otherVertex.getVertexFeature().getID()));
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 37 * hash + (this.vertexFeature != null ? this.vertexFeature.hashCode() : 0);
-        return hash;
-    }
-
 }

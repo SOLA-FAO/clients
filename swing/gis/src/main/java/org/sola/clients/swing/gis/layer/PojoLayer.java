@@ -32,9 +32,11 @@
 package org.sola.clients.swing.gis.layer;
 
 import org.geotools.data.simple.SimpleFeatureSource;
+import org.geotools.feature.SchemaException;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.data.PojoFeatureSource;
 import org.geotools.map.extended.layer.ExtendedFeatureLayer;
+import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.sola.webservices.spatial.ConfigMapLayerTO;
 
 /**
@@ -50,7 +52,7 @@ public class PojoLayer extends ExtendedFeatureLayer {
     public PojoLayer(
             String name,
             PojoDataAccess dataAccess
-            ) throws Exception {
+            ) throws InitializeLayerException, SchemaException {
         this.dataAccess = dataAccess;
         this.setLayerName(name);
         this.setTitle(this.getConfig().getTitle());
@@ -67,7 +69,7 @@ public class PojoLayer extends ExtendedFeatureLayer {
         this.forceRefresh = forceRefresh;
     }
     
-    public ConfigMapLayerTO getConfig(){
+    public final ConfigMapLayerTO getConfig(){
         return this.dataAccess.getMapLayerInfoList().get(this.getLayerName());
     }
 }

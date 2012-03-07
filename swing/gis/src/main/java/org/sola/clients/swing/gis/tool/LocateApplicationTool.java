@@ -79,7 +79,6 @@ public class LocateApplicationTool extends ExtendedEditGeometryTool {
     }
 
     public void setLocationGeometry(Geometry existingLocation) {
-        try{
         this.layer.removeFeatures();
         if (existingLocation != null) {
 
@@ -88,10 +87,6 @@ public class LocateApplicationTool extends ExtendedEditGeometryTool {
                         (Geometry) existingLocation.getGeometryN(pointInd).clone(),
                         null);
             }
-        }
-        }catch(Exception ex){
-            Messaging.getInstance().show(GisMessage.LOCATE_ERROR_SETUP);
-            org.sola.common.logging.LogUtility.log(GisMessage.LOCATE_ERROR_SETUP, ex);            
         }
     }
 }

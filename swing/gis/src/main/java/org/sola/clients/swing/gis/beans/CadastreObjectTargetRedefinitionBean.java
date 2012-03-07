@@ -5,7 +5,9 @@
 package org.sola.clients.swing.gis.beans;
 
 /**
- *
+ * It represents a cadastre object during the process of redefinition of the cadastre process.
+ * This bean holds the current and changed geometry.
+ * 
  * @author Elton Manoku
  */
 public class CadastreObjectTargetRedefinitionBean extends CadastreObjectTargetBean {

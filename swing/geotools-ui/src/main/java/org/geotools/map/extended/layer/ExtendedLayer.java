@@ -38,7 +38,9 @@ import org.geotools.swing.extended.Map;
 import org.geotools.swing.control.extended.TocSymbol;
 
 /**
- * This is the layer as understood by SOLA. A layer can have multiple geotools map layers.
+ * This is the layer as understood by the extended map control. 
+ * A layer can have multiple geotools map layers.
+ * 
  * @author Elton Manoku
  */
 public class ExtendedLayer {
@@ -53,7 +55,7 @@ public class ExtendedLayer {
     
     private boolean showInToc = true;
    
-    public ExtendedLayer() throws Exception{    
+    public ExtendedLayer(){    
     }
 
     /**

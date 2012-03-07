@@ -34,8 +34,9 @@ package org.sola.clients.swing.gis.beans;
 import java.io.Serializable;
 
 /**
- *
- * @author manoku
+ * It represents a Target Cadastre Object during the Cadastre change process.
+ * 
+ * @author Elton Manoku
  */
 public class CadastreObjectTargetBean implements Serializable{
 

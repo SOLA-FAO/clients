@@ -32,9 +32,11 @@
 package org.sola.clients.swing.gis.ui.controlsbundle;
 
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.io.ParseException;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.map.extended.layer.ExtendedImageLayer;
+import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.sola.clients.swing.gis.beans.TransactionBean;
 import org.geotools.map.extended.layer.ExtendedLayer;
 import org.geotools.swing.mapaction.extended.RemoveDirectImage;
@@ -82,7 +84,7 @@ public abstract class ControlsBundleForTransaction extends ControlsBundleForWork
                 }
             }
 
-        } catch (Exception ex) {
+        } catch (InitializeLayerException ex) {
             Messaging.getInstance().show(GisMessage.CADASTRE_CHANGE_ERROR_SETUP);
             org.sola.common.logging.LogUtility.log(GisMessage.CADASTRE_CHANGE_ERROR_SETUP, ex);
         }
@@ -96,7 +98,7 @@ public abstract class ControlsBundleForTransaction extends ControlsBundleForWork
                 Geometry applicationLocationGeometry =
                         PojoFeatureSource.getWkbReader().read(applicationLocation);
                 interestingArea = JTS.toEnvelope(applicationLocationGeometry);
-            } catch (Exception ex) {
+            } catch (ParseException ex) {
                 Messaging.getInstance().show(GisMessage.CADASTRE_CHANGE_ERROR_SETUP);
                 org.sola.common.logging.LogUtility.log(GisMessage.CADASTRE_CHANGE_ERROR_SETUP, ex);
             }
@@ -109,7 +111,7 @@ public abstract class ControlsBundleForTransaction extends ControlsBundleForWork
 
     public abstract TransactionBean getTransactionBean();
 
-    protected void addLayers() throws Exception {
+    protected void addLayers() throws InitializeLayerException {
         this.imageLayer = new ExtendedImageLayer(IMAGE_LAYER_NAME, IMAGE_LAYER_TITLE);
         this.getMap().addLayer(this.imageLayer);
         this.cadastreBoundaryPointLayer = new CadastreBoundaryPointLayer();

@@ -36,7 +36,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Defines a cadastre object bean.
+ * 
  * @author Elton Manoku
  */
 public class CadastreObjectBean implements Serializable {

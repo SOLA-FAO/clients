@@ -31,12 +31,16 @@
  */
 package org.geotools.map.extended.layer;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import org.geotools.data.ows.Layer;
 import org.geotools.data.wms.WebMapServer;
 import org.geotools.map.WMSLayer;
+import org.geotools.ows.ServiceException;
 import org.geotools.swing.extended.Map;
+import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.geotools.swing.extended.util.Messaging;
 
 /**
@@ -56,11 +60,11 @@ public class ExtendedLayerWMS extends ExtendedLayer {
      * @param mapControl The map control
      * @param WMSServerURL The url of the wms server
      * @param layerNames The list of layer names within the wms server
-     * @throws Exception 
+     * @throws InitializeLayerException 
      */
-    public ExtendedLayerWMS(String name, String title, Map mapControl, 
+    public ExtendedLayerWMS(String name, String title, Map mapControl,
             String WMSServerURL, List<String> layerNames)
-            throws Exception {
+            throws InitializeLayerException {
         this.setLayerName(name);
         this.setTitle(title);
         this.setMapControl(mapControl);
@@ -70,13 +74,19 @@ public class ExtendedLayerWMS extends ExtendedLayer {
         }
     }
 
-    private void initializeServerWMS(String url) throws Exception {
+    private void initializeServerWMS(String url) throws InitializeLayerException {
         try {
             URL capabilitiesURL = new URL(url);
             this.serverWMS = new WebMapServer(capabilitiesURL);
             this.layersWMS = this.serverWMS.getCapabilities().getLayerList();
-        } catch (Exception ex) {
-            throw new Exception(
+        } catch (ServiceException ex) {
+            throw new InitializeLayerException(
+                    Messaging.Ids.WMSLAYER_NOT_INITIALIZED_ERROR.toString(), ex);
+        } catch (MalformedURLException ex) {
+            throw new InitializeLayerException(
+                    Messaging.Ids.WMSLAYER_NOT_INITIALIZED_ERROR.toString(), ex);
+        } catch (IOException ex) {
+            throw new InitializeLayerException(
                     Messaging.Ids.WMSLAYER_NOT_INITIALIZED_ERROR.toString(), ex);
         }
     }
@@ -85,33 +95,29 @@ public class ExtendedLayerWMS extends ExtendedLayer {
      * It adds a layer that exists in the wms server into the map control
      * @param name Name of the layer in the wms server
      * @return
-     * @throws Exception 
+     * @throws InitializeLayerException 
      */
-    public final boolean addLayerFromWMS(String name) throws Exception {
+    public final boolean addLayerFromWMS(String name) throws InitializeLayerException {
         boolean addedSuccessfully = true;
         if (this.serverWMS == null) {
-            throw new Exception(
-                    Messaging.Ids.WMSLAYER_NOT_INITIALIZED_ERROR.toString());
+            throw new InitializeLayerException(
+                    Messaging.Ids.WMSLAYER_NOT_INITIALIZED_ERROR.toString(), null);
         }
-        try {
-            Layer foundLayer = null;
-            for (Layer layer : this.layersWMS) {
-                String layerName = layer.getName();
-                if (layerName != null && layerName.equalsIgnoreCase(name)) {
-                    foundLayer = layer;
-                    break;
-                }
+        Layer foundLayer = null;
+        for (Layer layer : this.layersWMS) {
+            String layerName = layer.getName();
+            if (layerName != null && layerName.equalsIgnoreCase(name)) {
+                foundLayer = layer;
+                break;
             }
-            if (foundLayer == null) {
-                throw new Exception(
-                        Messaging.Ids.WMSLAYER_LAYER_NOT_FOUND_ERROR.toString());
-            }
-            WMSLayer displayLayer = new WMSLayer(this.serverWMS, foundLayer);
-            this.getMapControl().getMapContent().addLayer(displayLayer);
-            this.getMapLayers().add(displayLayer);
-        } catch (Exception ex) {
-            throw ex;
         }
+        if (foundLayer == null) {
+            throw new InitializeLayerException(
+                    Messaging.Ids.WMSLAYER_LAYER_NOT_FOUND_ERROR.toString(), null);
+        }
+        WMSLayer displayLayer = new WMSLayer(this.serverWMS, foundLayer);
+        this.getMapControl().getMapContent().addLayer(displayLayer);
+        this.getMapLayers().add(displayLayer);
         return addedSuccessfully;
     }
 }

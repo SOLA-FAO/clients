@@ -32,6 +32,7 @@
 package org.sola.clients.swing.gis.ui.controlsbundle;
 
 import org.geotools.geometry.jts.ReferencedEnvelope;
+import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.geotools.swing.mapaction.extended.ExtendedAction;
 import org.sola.clients.swing.gis.beans.TransactionCadastreRedefinitionBean;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
@@ -85,7 +86,7 @@ public final class ControlsBundleForCadastreRedefinition extends ControlsBundleF
     }
 
     @Override
-    protected void addLayers() throws Exception {
+    protected void addLayers() throws InitializeLayerException {
         super.addLayers();
         this.cadastreObjectModifiedLayer = new CadastreRedefinitionObjectLayer();
         this.getMap().addLayer(this.cadastreObjectModifiedLayer);
@@ -131,7 +132,7 @@ public final class ControlsBundleForCadastreRedefinition extends ControlsBundleF
         this.cadastreBoundaryEditTool.setTargetLayer(cadastreObjectModifiedLayer);
     }
 
-    public void reset() throws Exception {
+    public void reset() {
         this.cadastreObjectModifiedLayer.removeFeatures();
         this.cadastreObjectNodeModifiedLayer.removeFeatures();
         ExtendedAction action = this.getMap().getMapActionByName(CadastreBoundarySelectTool.NAME);

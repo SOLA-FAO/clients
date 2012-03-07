@@ -27,6 +27,7 @@
  */
 package org.sola.clients.swing.gis.tool;
 
+import com.vividsolutions.jts.io.ParseException;
 import org.geotools.geometry.DirectPosition2D;
 import org.geotools.swing.event.MapMouseEvent;
 import org.sola.clients.swing.gis.Messaging;
@@ -81,7 +82,7 @@ public class CadastreChangeSelectParcelTool extends ExtendedTool {
                         cadastreObject.getGeomPolygon(), null);
             }
             this.getMapControl().refresh();
-        } catch (Exception ex) {
+        } catch (ParseException ex) {
             Messaging.getInstance().show(GisMessage.PARCEL_ERROR_ADDING_PARCEL);
             org.sola.common.logging.LogUtility.log(GisMessage.PARCEL_ERROR_ADDING_PARCEL, ex);
         }

@@ -27,13 +27,12 @@
  */
 package org.geotools.data.collection.extended;
 
-import com.vividsolutions.jts.geom.Coordinate;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.collection.ListFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.feature.CollectionEvent;
 import org.geotools.feature.CollectionListener;
-import org.geotools.feature.FeatureCollection;
+import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.geometry.jts.Geometries;
 import org.opengis.feature.simple.SimpleFeature;
@@ -57,9 +56,9 @@ public class GraphicsFeatureCollection extends ListFeatureCollection {
      * Use this constructor for use in 
      * {@see org.sola.clients.geotools.ui.layers.ExtendedLayerGraphics}
      * @param geometryType The geometry type
-     * @throws Exception it is thrown by schema creation utility
+     * @throws SchemaException it is thrown by schema creation utility
      */
-    public GraphicsFeatureCollection(Geometries geometryType) throws Exception {
+    public GraphicsFeatureCollection(Geometries geometryType)throws SchemaException {
         this(geometryType, null);
     }
 
@@ -68,10 +67,10 @@ public class GraphicsFeatureCollection extends ListFeatureCollection {
      * as excepted by the DataUtility library of geotools.
      * @param geometryType type of geometry
      * @param fieldsFormat Extra fields used for the features
-     * @throws Exception 
+     * @throws SchemaException 
      */
     public GraphicsFeatureCollection(Geometries geometryType, String fieldsFormat)
-            throws Exception {
+            throws SchemaException {
         super(DataUtilities.createType(geometryType.getSimpleName(),
                 String.format("%s:%s%s",
                 FIELD_NAME_GEOMETRY, geometryType.getSimpleName(),
@@ -85,12 +84,10 @@ public class GraphicsFeatureCollection extends ListFeatureCollection {
      * @param fid A feature id. If is null, it will be generated.
      * @param geom The geometry
      * @param fieldsWithValues A hashmap with Field, Value pairs
-     * @throws Exception It is thrown if adding of the feature fails
      */
     public SimpleFeature addFeature(String fid,
             com.vividsolutions.jts.geom.Geometry geom,
-            java.util.HashMap<String, Object> fieldsWithValues) throws Exception {
-
+            java.util.HashMap<String, Object> fieldsWithValues){
         geom.normalize();
         this.builder.set(FIELD_NAME_GEOMETRY, geom);
         if (fieldsWithValues != null) {
@@ -101,12 +98,7 @@ public class GraphicsFeatureCollection extends ListFeatureCollection {
             }
         }
         SimpleFeature feature = this.builder.buildFeature(fid);
-        try {
-            this.add(feature);
-        } catch (Exception ex) {
-            throw new Exception(
-                    Messaging.Ids.ADDING_FEATURE_ERROR.toString(), ex);
-        }
+        this.add(feature);
         return feature;
     }
 

@@ -31,6 +31,7 @@
  */
 package org.sola.clients.swing.gis.ui.controlsbundle;
 
+import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.sola.clients.swing.gis.beans.TransactionCadastreChangeBean;
 import java.util.List;
 import org.geotools.geometry.jts.ReferencedEnvelope;
@@ -108,12 +109,14 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
     }
 
     @Override
-    protected void addLayers() throws Exception {
+    protected void addLayers() throws InitializeLayerException {
         super.addLayers();
-        this.targetParcelsLayer = new CadastreChangeTargetCadastreObjectLayer(this.getMap().getSrid());
+        this.targetParcelsLayer = new CadastreChangeTargetCadastreObjectLayer(
+                this.getMap().getSrid());
         this.getMap().addLayer(targetParcelsLayer);
 
-        this.newCadastreObjectLayer = new CadastreChangeNewCadastreObjectLayer(this.applicationNumber);
+        this.newCadastreObjectLayer = new CadastreChangeNewCadastreObjectLayer(
+                this.applicationNumber);
         this.getMap().addLayer(newCadastreObjectLayer);
 
         this.newPointsLayer = new CadastreChangeNewSurveyPointLayer(this.newCadastreObjectLayer);

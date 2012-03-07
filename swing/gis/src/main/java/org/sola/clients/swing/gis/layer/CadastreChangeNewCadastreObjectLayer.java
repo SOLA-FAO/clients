@@ -33,6 +33,7 @@ package org.sola.clients.swing.gis.layer;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Polygon;
+import com.vividsolutions.jts.io.ParseException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,6 +50,7 @@ import org.sola.clients.swing.gis.beans.CadastreObjectBean;
 import org.sola.clients.swing.gis.beans.SpatialValueAreaBean;
 import org.geotools.map.extended.layer.ExtendedLayerEditor;
 import org.geotools.map.extended.layer.VertexInformation;
+import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.sola.clients.swing.gis.ui.control.CadastreChangeNewCadastreObjectListForm;
 import org.sola.common.messaging.GisMessage;
 
@@ -74,7 +76,8 @@ public class CadastreChangeNewCadastreObjectLayer extends ExtendedLayerEditor{
     private DefaultTableModel tableModel = null;
     private CadastreChangeNewCadastreObjectListForm hostForm = null;
 
-    public CadastreChangeNewCadastreObjectLayer(String applicationNumber) throws Exception {
+    public CadastreChangeNewCadastreObjectLayer(String applicationNumber) 
+            throws InitializeLayerException{
         super(LAYER_NAME, Geometries.POLYGON,
                 LAYER_STYLE_RESOURCE, LAYER_ATTRIBUTE_DEFINITION);
         this.lastPart = String.format(LAST_PART_FORMAT, applicationNumber);
@@ -128,7 +131,7 @@ public class CadastreChangeNewCadastreObjectLayer extends ExtendedLayerEditor{
                     }
                     this.addFeature(null, cadastreObjectBean.getGeomPolygon(), fieldsWithValues);
                 }
-            } catch (Exception ex) {
+            } catch (ParseException ex) {
                 Messaging.getInstance().show(
                         GisMessage.CADASTRE_CHANGE_ERROR_ADDINGNEWCADASTREOBJECT_IN_START);
                 org.sola.common.logging.LogUtility.log(
@@ -141,7 +144,7 @@ public class CadastreChangeNewCadastreObjectLayer extends ExtendedLayerEditor{
     public SimpleFeature addFeature(
             String fid,
             Geometry geom,
-            java.util.HashMap<String, Object> fieldsWithValues) throws Exception {
+            java.util.HashMap<String, Object> fieldsWithValues) {
         fid = fidGenerator.toString();
         fidGenerator++;
         if (fieldsWithValues == null) {

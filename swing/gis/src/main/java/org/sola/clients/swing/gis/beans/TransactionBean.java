@@ -37,7 +37,8 @@ import org.sola.clients.beans.validation.ValidationResultBean;
 import org.sola.webservices.transferobjects.transaction.TransactionTO;
 
 /**
- *
+ * An abstract class used for GIS related transactions.
+ * 
  * @author Elton Manoku
  */
 public abstract class TransactionBean extends AbstractGisBean{
@@ -81,7 +82,17 @@ public abstract class TransactionBean extends AbstractGisBean{
         }
     }
     
+    /**
+     * Gets a TO Object from the transaction.
+     * 
+     * @param <T>
+     * @return 
+     */
     public abstract <T extends TransactionTO> T getTO();
     
+    /**
+     * It persists the transaction in the database.
+     * @return 
+     */
     public abstract List<ValidationResultBean> save();
 }

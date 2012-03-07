@@ -32,6 +32,7 @@
 package org.sola.clients.swing.gis.ui.controlsbundle;
 
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKBReader;
 import com.vividsolutions.jts.io.WKBWriter;
 import org.geotools.geometry.jts.JTS;
@@ -53,29 +54,23 @@ public final class ControlsBundleForApplicationLocation extends SolaControlsBund
     WKBWriter wkbWritter = null;
     WKBReader wkbReader = null;
 
-    public ControlsBundleForApplicationLocation(){
+    public ControlsBundleForApplicationLocation() {
         super();
         this.Setup(PojoDataAccess.getInstance());
     }
-    
+
     @Override
     public void Setup(PojoDataAccess pojoDataAccess) {
         super.Setup(pojoDataAccess);
-        try {
-            locationTool = new LocateApplicationTool();
-            this.getMap().addTool(locationTool, this.getToolbar(), true);
-            this.getMap().addMapAction(
-                    new LocateApplicationRemove(this), this.getToolbar(), true);
+        locationTool = new LocateApplicationTool();
+        this.getMap().addTool(locationTool, this.getToolbar(), true);
+        this.getMap().addMapAction(
+                new LocateApplicationRemove(this), this.getToolbar(), true);
 
-            //Initialize a writter that can be used when saving the location
-            wkbWritter = new WKBWriter();
-            wkbReader = new WKBReader();
+        //Initialize a writter that can be used when saving the location
+        wkbWritter = new WKBWriter();
+        wkbReader = new WKBReader();
 
-        } catch (Exception ex) {
-            Messaging.getInstance().show(GisMessage.GENERAL_CONTROLBUNDLEAPP_ERROR);
-            org.sola.common.logging.LogUtility.log(
-                    GisMessage.GENERAL_CONTROLBUNDLEAPP_ERROR, ex);
-        }
     }
 
     /**
@@ -102,12 +97,12 @@ public final class ControlsBundleForApplicationLocation extends SolaControlsBund
                 ReferencedEnvelope envelope = JTS.toEnvelope(geom);
                 envelope.expandBy(2000);
                 this.getMap().setDisplayArea(envelope);
-            } catch (Exception ex) {
+            } catch (ParseException ex) {
                 Messaging.getInstance().show(GisMessage.LOCATE_ERROR_APPLICATION);
                 org.sola.common.logging.LogUtility.log(
                         GisMessage.LOCATE_ERROR_APPLICATION, ex);
             }
-        }else{
+        } else {
             this.locationTool.setLocationGeometry(null);
             this.getMap().zoomToFullExtent();
         }

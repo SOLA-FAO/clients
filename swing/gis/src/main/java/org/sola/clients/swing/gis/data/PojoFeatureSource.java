@@ -33,6 +33,7 @@ package org.sola.clients.swing.gis.data;
 
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKBReader;
 import java.awt.RenderingHints.Key;
 import java.io.IOException;
@@ -49,6 +50,7 @@ import org.geotools.data.QueryCapabilities;
 import org.geotools.data.ResourceInfo;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureSource;
+import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.opengis.feature.simple.SimpleFeature;
@@ -62,10 +64,10 @@ import org.sola.webservices.spatial.SpatialResult;
 
 /**
  *
- * @author manoku
+ * @author Elton Manoku
  */
 public class PojoFeatureSource implements SimpleFeatureSource {
-    
+
     PojoFeatureCollection collection = null;
     protected List<FeatureListener> listeners = null;
     private QueryCapabilities capabilities;
@@ -80,33 +82,25 @@ public class PojoFeatureSource implements SimpleFeatureSource {
     private double lastEast;
     private double lastNorth;
     private PojoLayer layer;
-    
-    public PojoFeatureSource(PojoDataAccess dataSource, PojoLayer layer) throws Exception {
-        try {
-            this.layer = layer;
-            this.dataSource = dataSource;
-            SimpleFeatureType type = this.getNewFeatureType(
-                    this.layer.getLayerName(),
-                    this.dataSource.getMapLayerInfoList().get(
-                    this.layer.getLayerName()).getPojoStructure());
-            this.collection = new PojoFeatureCollection(type);
-            this.builder = new SimpleFeatureBuilder(type);
-        } catch (Exception ex) {
-            throw ex;
-        }
+
+    public PojoFeatureSource(PojoDataAccess dataSource, PojoLayer layer) throws SchemaException {
+        this.layer = layer;
+        this.dataSource = dataSource;
+        SimpleFeatureType type = this.getNewFeatureType(
+                this.layer.getLayerName(),
+                this.dataSource.getMapLayerInfoList().get(
+                this.layer.getLayerName()).getPojoStructure());
+        this.collection = new PojoFeatureCollection(type);
+        this.builder = new SimpleFeatureBuilder(type);
     }
-    
-    public static WKBReader getWkbReader(){
+
+    public static WKBReader getWkbReader() {
         return wkbReader;
     }
-    
-    private SimpleFeatureType getNewFeatureType(String name, String structure) {
-        try {
-            return DataUtilities.createType(name, structure);
-        } catch (Exception ex) {
-            System.out.println("Feature type is not generated. Reason:" + ex.getMessage());
-        }
-        return null;
+
+    private SimpleFeatureType getNewFeatureType(String name, String structure) 
+            throws SchemaException{
+        return DataUtilities.createType(name, structure);
     }
 
     /**
@@ -132,37 +126,37 @@ public class PojoFeatureSource implements SimpleFeatureSource {
         }
         listeners.remove(listener);
     }
-    
+
     @Override
     public ReferencedEnvelope getBounds() throws IOException {
         return collection.getBounds();
     }
-    
+
     @Override
     public ReferencedEnvelope getBounds(Query query) throws IOException {
         return getFeatures(query).getBounds();
     }
-    
+
     @Override
     public int getCount(Query query) throws IOException {
         return getFeatures(query).size();
     }
-    
+
     @Override
     public DataAccess<SimpleFeatureType, SimpleFeature> getDataStore() {
         throw new UnsupportedOperationException(GisMessage.GENERAL_EXCEPTION_COLLFEATSOURCE);
     }
-    
+
     @Override
     public ResourceInfo getInfo() {
         throw new UnsupportedOperationException(GisMessage.GENERAL_EXCEPTION_COLLFEATSOURCE);
     }
-    
+
     @Override
     public Name getName() {
         return this.getSchema().getName();
     }
-    
+
     @Override
     public synchronized QueryCapabilities getQueryCapabilities() {
         if (capabilities == null) {
@@ -184,7 +178,7 @@ public class PojoFeatureSource implements SimpleFeatureSource {
         }
         return capabilities;
     }
-    
+
     @Override
     public synchronized Set<Key> getSupportedHints() {
         if (hints == null) {
@@ -194,23 +188,23 @@ public class PojoFeatureSource implements SimpleFeatureSource {
         }
         return hints;
     }
-    
+
     @Override
     public SimpleFeatureType getSchema() {
         return this.collection.getSchema();
     }
-    
+
     @Override
     public SimpleFeatureCollection getFeatures() throws IOException {
         return this.collection;
     }
-    
+
     @Override
     public SimpleFeatureCollection getFeatures(Filter filter) throws IOException {
         Query query = new Query(getSchema().getTypeName(), filter);
         return this.getFeatures(query);
     }
-    
+
     @Override
     public PojoFeatureCollection getFeatures(Query query) throws IOException {
         Filter filter = query.getFilter();
@@ -232,7 +226,7 @@ public class PojoFeatureSource implements SimpleFeatureSource {
         this.ModifyFeatureCollection(west, south, east, north);
         return this.collection;
     }
-    
+
     private void ModifyFeatureCollection(double west, double south,
             double east, double north) {
         if (!this.layer.isForceRefresh()) {
@@ -254,7 +248,7 @@ public class PojoFeatureSource implements SimpleFeatureSource {
         this.collection.clear();
         this.collection.addAll(featuresToAdd);
     }
-    
+
     private List<SimpleFeature> getFeaturesFromData(List<SpatialResult> spatialResultList) {
         List<SimpleFeature> features = new ArrayList<SimpleFeature>();
         for (SpatialResult spatialResult : spatialResultList) {
@@ -264,22 +258,22 @@ public class PojoFeatureSource implements SimpleFeatureSource {
                 this.builder.set("theGeom", geomValue);
                 this.builder.set("label", spatialResult.getLabel());
                 features.add(this.builder.buildFeature(fid));
-            } catch (Exception ex) {
-                System.out.println("Error converting row to feature");
-                System.out.println("Reason:" + ex.getMessage());
+            } catch (ParseException ex) {
+                org.sola.common.logging.LogUtility.log(
+                    "Error converting row to feature", ex);
             }
         }
         return features;
     }
-    
+
     public PojoLayer getLayer() {
         return layer;
     }
-    
+
     public void setLayer(PojoLayer layer) {
         this.layer = layer;
     }
-    
+
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();

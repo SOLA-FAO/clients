@@ -35,11 +35,13 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.CoordinateList;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
+import com.vividsolutions.jts.io.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import org.geotools.feature.CollectionEvent;
 import org.geotools.geometry.DirectPosition2D;
 import org.geotools.geometry.jts.Geometries;
+import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.opengis.feature.simple.SimpleFeature;
 import org.geotools.swing.extended.util.Messaging;
 
@@ -68,13 +70,13 @@ public class ExtendedLayerEditor extends ExtendedLayerGraphics {
      * @param styleResource The resource where the style is found
      * @param extraFieldsFormat If there are more fields than geometry, are defined here in 
      * the format as accepted by DataUtility of Geotools.
-     * @throws Exception 
+     * @throws InitializeLayerException 
      */
     public ExtendedLayerEditor(
             String name,
             Geometries geometryType,
             String styleResource,
-            String extraFieldsFormat) throws Exception {
+            String extraFieldsFormat) throws InitializeLayerException {
         this(name, geometryType, styleResource, VERTICES_LAYER_STYLE_RESOURCE, extraFieldsFormat);
     }
 
@@ -86,14 +88,14 @@ public class ExtendedLayerEditor extends ExtendedLayerGraphics {
      * @param styleResource
      * @param styleResourceForVertexes The sld definition of the vertices style.
      * @param extraFieldsFormat
-     * @throws Exception 
+     * @throws InitializeLayerException 
      */
     public ExtendedLayerEditor(
             String name,
             Geometries geometryType,
             String styleResource,
             String styleResourceForVertexes,
-            String extraFieldsFormat) throws Exception {
+            String extraFieldsFormat) throws InitializeLayerException {
         super(name, geometryType, styleResource, extraFieldsFormat);
         this.verticesLayer = new ExtendedLayerGraphics(
                 name + VERTICES_LAYER_NAME_POSTFIX,
@@ -104,7 +106,7 @@ public class ExtendedLayerEditor extends ExtendedLayerGraphics {
 
     @Override
     public SimpleFeature addFeature(String fid, byte[] geomAsBytes,
-            java.util.HashMap<String, Object> fieldsWithValues) throws Exception {
+            java.util.HashMap<String, Object> fieldsWithValues) throws ParseException {
         return this.addFeature(fid, wkbReader.read(geomAsBytes), fieldsWithValues);
     }
 
@@ -115,11 +117,10 @@ public class ExtendedLayerEditor extends ExtendedLayerGraphics {
      * @param geom
      * @param fieldsWithValues
      * @return
-     * @throws Exception 
      */
     @Override
     public SimpleFeature addFeature(String fid, com.vividsolutions.jts.geom.Geometry geom,
-            java.util.HashMap<String, Object> fieldsWithValues) throws Exception {
+            java.util.HashMap<String, Object> fieldsWithValues) {
 
         SimpleFeature featureAdded = super.addFeature(fid, geom, fieldsWithValues);
         this.addVertexes(featureAdded);
@@ -148,7 +149,7 @@ public class ExtendedLayerEditor extends ExtendedLayerGraphics {
      * Additionally, removes also the vertexes.
      */
     @Override
-    public void removeFeatures() throws Exception {
+    public void removeFeatures() {
         super.removeFeatures();
         this.verticesLayer.removeFeatures();
         this.getMapControl().refresh();
@@ -216,16 +217,11 @@ public class ExtendedLayerEditor extends ExtendedLayerGraphics {
             return false;
         }
         this.removeVertexes(ofFeature);
-        try {
-            this.addVertexes(ofFeature);
-        } catch (Exception ex) {
-            Messaging.getInstance().show(
-                    Messaging.Ids.LAYER_EDITOR_VERTEX_MAINTAIN_ERROR.toString(), ex.getMessage());
-        }
+        this.addVertexes(ofFeature);
         return true;
     }
 
-    private void addVertexes(SimpleFeature ofFeature) throws Exception {
+    private void addVertexes(SimpleFeature ofFeature) {
         Geometry geom = (Geometry) ofFeature.getDefaultGeometry();
         com.vividsolutions.jts.geom.CoordinateList coordinates =
                 new CoordinateList(geom.getCoordinates(), false);

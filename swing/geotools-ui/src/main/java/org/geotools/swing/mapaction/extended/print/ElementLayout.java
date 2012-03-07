@@ -34,11 +34,18 @@ package org.geotools.swing.mapaction.extended.print;
 import org.w3c.dom.Node;
 
 /**
- * A
+ * An abstract class for defining any element in the layout used for the print.
+ * 
  * @author Elton Manoku
  */
 public abstract class ElementLayout {
     
+    /**
+     * Gets an attribute value in the xml node
+     * @param elementNode The xml node
+     * @param attributeName The name of the attribute
+     * @return 
+     */
     protected String getAttributeValue(Node elementNode, String attributeName) {
         Node attrNode = elementNode.getAttributes().getNamedItem(attributeName);
         if (attrNode == null) {
@@ -47,6 +54,13 @@ public abstract class ElementLayout {
         return attrNode.getTextContent();
     }
 
+    /**
+     * Gets if the attribute exists in the xml node
+     * 
+     * @param elementNode The Xml Node
+     * @param attributeName The attribute name
+     * @return 
+     */
     protected boolean hasAttribute(Node elementNode, String attributeName) {
         Node attrNode = elementNode.getAttributes().getNamedItem(attributeName);
         return (attrNode != null);

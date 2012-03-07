@@ -50,21 +50,34 @@ import org.geotools.swing.extended.util.MapImageGenerator;
 import org.geotools.swing.extended.util.ScalebarGenerator;
 
 /**
- *
+ * A Print generator. It is used to generate a PDF of the map following a print layout.
+ * 
  * @author Elton Manoku
  */
 public class PrintoutGenerator {
+
+    private final static String TEMPORARY_PRINT_FILE = "print.pdf";
 
     private ScalebarGenerator scalebar = new ScalebarGenerator();
     private MapImageGenerator mapImageGenerator;
     private HashMap<String, BaseFont> fonts = new HashMap<String, BaseFont>();
 
+    /**
+     * Constructor of the utility.
+     * @param map The map control to use for the print
+     */
     public PrintoutGenerator(Map map) {
         this.mapImageGenerator = new MapImageGenerator(map);
     }
 
+    /**
+     * Generates the printout.
+     * @param layout The layout to use for the printout
+     * @param scale The scale of the map to be used.
+     * @return The location of the pdf file generated
+     */
     public String generate(PrintLayout layout, double scale) {
-        String pathToResult = "print.pdf";
+        String pathToResult = TEMPORARY_PRINT_FILE;
         BufferedImage mapImage = this.getMapImage(layout.getMap(), scale);
         BufferedImage scalebarImage = this.getScalebarImage(layout.getScalebar(), scale);
         Rectangle pageSize = new Rectangle(
@@ -93,16 +106,13 @@ public class PrintoutGenerator {
                         textLayout.getValue(), textLayout.getFontName(), textLayout.getSize());
             }
 
-//            File outputfile = new File("c:\\tmp\\saved-map.png");
-//            ImageIO.write(mapImage, "png", outputfile);
-//            File outputfileScalebar = new File("c:\\tmp\\saved-scalebar.png");
-//            ImageIO.write(scalebarImage, "png", outputfileScalebar);
-        } catch (Exception ex) {
+        } catch (DocumentException ex) {
+            throw new RuntimeException(ex);
+        } catch (IOException ex) {
             throw new RuntimeException(ex);
         } finally {
             document.close();
         }
-        //return byteBuffer;
         return pathToResult;
     }
 
@@ -143,7 +153,6 @@ public class PrintoutGenerator {
         if (this.fonts.containsKey(fontName)) {
             bFont = this.fonts.get(fontName);
         } else {
-            //bFont = BaseFont.createFont(fontName, "Cp1252", false);
             bFont = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1250, BaseFont.NOT_EMBEDDED);
         }
         return bFont;

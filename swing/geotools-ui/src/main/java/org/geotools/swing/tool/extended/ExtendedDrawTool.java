@@ -49,6 +49,7 @@ import org.geotools.swing.event.MapMouseEvent;
 import org.geotools.swing.event.MapPaneAdapter;
 import org.geotools.swing.event.MapPaneEvent;
 import org.geotools.swing.extended.Map;
+import org.geotools.swing.extended.exception.GeometryInvalidException;
 import org.geotools.swing.extended.util.Messaging;
 
 /**
@@ -221,7 +222,7 @@ public abstract class ExtendedDrawTool extends ExtendedTool {
      * for different purposes.
      * @param geometry 
      */
-    protected void treatFinalizedGeometry(Geometry geometry) throws Exception {
+    protected void treatFinalizedGeometry(Geometry geometry){
     }
 
     /**
@@ -384,12 +385,11 @@ public abstract class ExtendedDrawTool extends ExtendedTool {
         try {
             geometry.normalize();
             if (!geometry.isValid()) {
-                throw new Exception(
-                        Messaging.Ids.DRAWINGTOOL_GEOMETRY_NOT_VALID_ERROR.toString());
+                throw new GeometryInvalidException(null);
             }
             this.treatFinalizedGeometry(geometry);
             this.resetDrawing(false);
-        } catch (Exception ex) {
+        } catch (GeometryInvalidException ex) {
             Messaging.getInstance().show(ex.getMessage());
         }
     }

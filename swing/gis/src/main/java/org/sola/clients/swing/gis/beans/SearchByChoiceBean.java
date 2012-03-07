@@ -37,7 +37,8 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- *
+ * It is a data bean which defines a search option for the map control.
+ * 
  * @author Elton Manoku
  */
 public class SearchByChoiceBean {
@@ -51,10 +52,17 @@ public class SearchByChoiceBean {
         this.label = label;
     }
 
+    /**
+     * The list of choices as defined in the resources. The resource is searchbychoice.properties.
+     * 
+     * @return
+     * @throws IOException 
+     */
     public static List<SearchByChoiceBean> getInstanceList() throws IOException {
         if (instanceList == null) {
             Properties valueSource = new Properties();
-            valueSource.load(SearchByChoiceBean.class.getResourceAsStream("searchbychoice.properties"));
+            valueSource.load(
+                    SearchByChoiceBean.class.getResourceAsStream("searchbychoice.properties"));
             instanceList = new ArrayList<SearchByChoiceBean>();
             for(Object key:valueSource.keySet()){
                 instanceList.add(new SearchByChoiceBean(

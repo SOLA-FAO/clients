@@ -56,6 +56,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.FeatureType;
 import org.opengis.feature.type.GeometryType;
 import org.geotools.swing.control.extended.TocSymbol;
+import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.geotools.swing.extended.util.Messaging;
 import org.opengis.filter.Filter;
 import org.opengis.filter.FilterFactory2;
@@ -87,22 +88,15 @@ public class ExtendedFeatureLayer extends ExtendedLayer {
     private String filterExpressionForSnapping = null;
 
     /**
-     * Constructor. Does not do anything. Usually, every subclass uses its own constructor.
-     * @throws Exception 
-     */
-    public ExtendedFeatureLayer() throws Exception {
-    }
-
-    /**
      * It initializes the layer.
      * @param name Name of the layer. Has to be unique.
      * @param featureSource The source of features.
      * @param styleResource The style resource name. With this name, it is searched in the paths 
      * provided in SLD_RESOURCES in the order of appearance.
-     * @throws Exception 
+     * @throws InitializeLayerException 
      */
     protected void initialize(String name, SimpleFeatureSource featureSource, String styleResource)
-            throws Exception {
+            throws InitializeLayerException {
         Style styleTmp = this.getStyleFromSLD(styleResource);
         this.initialize(name, featureSource, styleTmp);
     }
@@ -112,12 +106,12 @@ public class ExtendedFeatureLayer extends ExtendedLayer {
      * @param name
      * @param featureSource
      * @param style
-     * @throws Exception 
+     * @throws InitializeLayerException 
      */
     protected void initialize(String name, SimpleFeatureSource featureSource, Style style)
-            throws Exception {
+            throws InitializeLayerException {
         if (style == null) {
-            throw new Exception("Style is null...");
+            throw new InitializeLayerException("Style is missing.", null);
         }
         this.setLayerName(name);
         this.featureSource = featureSource;
@@ -226,9 +220,9 @@ public class ExtendedFeatureLayer extends ExtendedLayer {
      * It gets the first style found in the resource.
      * @param sldResource The resource name.
      * @return The first style if styles found or null
-     * @throws Exception 
+     * @throws InitializeLayerException 
      */
-    private Style getStyleFromSLD(String sldResource) throws Exception {
+    private Style getStyleFromSLD(String sldResource) throws InitializeLayerException {
         Style[] styles = this.getStylesFromSLD(sldResource);
         Style styleTmp = null;
         if (styles != null && styles.length > 0) {
@@ -242,9 +236,9 @@ public class ExtendedFeatureLayer extends ExtendedLayer {
      * from @see SLD_RESOURCES.
      * @param sldResource
      * @return
-     * @throws Exception 
+     * @throws InitializeLayerException 
      */
-    private Style[] getStylesFromSLD(String sldResource) throws Exception {
+    private Style[] getStylesFromSLD(String sldResource) throws InitializeLayerException {
         Style[] styles = null;
         try {
 
@@ -257,14 +251,14 @@ public class ExtendedFeatureLayer extends ExtendedLayer {
                 }
             }
             if (sldURL == null) {
-                throw new Exception(
-                        Messaging.Ids.UTILITIES_SLD_DOESNOT_EXIST_ERROR.toString());
+                throw new InitializeLayerException(
+                        Messaging.Ids.UTILITIES_SLD_DOESNOT_EXIST_ERROR.toString(), null);
             }
             SLDParser stylereader = new SLDParser(styleFactory, sldURL);
             styles = stylereader.readXML();
             return styles;
-        } catch (Exception ex) {
-            throw new Exception(
+        } catch (IOException ex) {
+            throw new InitializeLayerException(
                     Messaging.Ids.UTILITIES_SLD_LOADING_ERROR.toString(), ex);
         }
     }

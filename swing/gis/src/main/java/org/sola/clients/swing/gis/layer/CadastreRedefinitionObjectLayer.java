@@ -16,6 +16,7 @@ import org.geotools.feature.FeatureCollection;
 import org.geotools.geometry.jts.Geometries;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.map.extended.layer.ExtendedLayerGraphics;
+import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.geotools.swing.extended.util.Messaging;
 import org.opengis.feature.simple.SimpleFeature;
 import org.sola.clients.swing.gis.beans.CadastreObjectBean;
@@ -34,7 +35,7 @@ public class CadastreRedefinitionObjectLayer extends ExtendedLayerGraphics {
     private static final String LAYER_ATTRIBUTE_DEFINITION =
             String.format("%s:Polygon", LAYER_FIELD_ORIGINAL_GEOMETRY);
 
-    public CadastreRedefinitionObjectLayer() throws Exception {
+    public CadastreRedefinitionObjectLayer() throws InitializeLayerException {
         super(LAYER_NAME, Geometries.POLYGON, LAYER_STYLE_RESOURCE, LAYER_ATTRIBUTE_DEFINITION);
         this.getFeatureCollection().addListener(new CollectionListener() {
 
@@ -46,16 +47,10 @@ public class CadastreRedefinitionObjectLayer extends ExtendedLayerGraphics {
     }
 
     public void addCadastreObjects(List<CadastreObjectBean> cadastreObjectList) {
-        try {
-            for (CadastreObjectBean coBean : cadastreObjectList) {
-                if (this.getFeatureCollection().getFeature(coBean.getId()) == null) {
-                    this.addCadastreObjectTarget(coBean.getId(), null, coBean.getGeomPolygon());
-                }
+        for (CadastreObjectBean coBean : cadastreObjectList) {
+            if (this.getFeatureCollection().getFeature(coBean.getId()) == null) {
+                this.addCadastreObjectTarget(coBean.getId(), null, coBean.getGeomPolygon());
             }
-        } catch (Exception ex) {
-            org.sola.common.logging.LogUtility.log(
-                    GisMessage.CADASTRE_REDEFINITION_ADD_CO_ERROR, ex);
-            Messaging.getInstance().show(GisMessage.CADASTRE_REDEFINITION_ADD_CO_ERROR);
         }
     }
 
@@ -77,8 +72,7 @@ public class CadastreRedefinitionObjectLayer extends ExtendedLayerGraphics {
         return targetList;
     }
 
-    public void addCadastreObjectTargetList(List<CadastreObjectTargetRedefinitionBean> targetList)
-            throws Exception, ParseException {
+    public void addCadastreObjectTargetList(List<CadastreObjectTargetRedefinitionBean> targetList) {
         for (CadastreObjectTargetRedefinitionBean targetBean : targetList) {
             this.addCadastreObjectTarget(
                     targetBean.getCadastreObjectId(),
@@ -87,8 +81,7 @@ public class CadastreRedefinitionObjectLayer extends ExtendedLayerGraphics {
         }
     }
 
-    public void addCadastreObjectTarget(String fid, byte[] geometry, byte[] originalGeometry)
-            throws ParseException, Exception {
+    public void addCadastreObjectTarget(String fid, byte[] geometry, byte[] originalGeometry) {
         if (this.getFeatureCollection().getFeature(fid) != null) {
             return;
         }
@@ -96,8 +89,14 @@ public class CadastreRedefinitionObjectLayer extends ExtendedLayerGraphics {
             geometry = originalGeometry.clone();
         }
         HashMap<String, Object> fieldsWithValues = new HashMap<String, Object>();
-        fieldsWithValues.put(LAYER_FIELD_ORIGINAL_GEOMETRY, wkbReader.read(originalGeometry));
-        this.addFeature(fid, geometry, fieldsWithValues);
+        try {
+            fieldsWithValues.put(LAYER_FIELD_ORIGINAL_GEOMETRY, wkbReader.read(originalGeometry));
+            this.addFeature(fid, geometry, fieldsWithValues);
+        } catch (ParseException ex) {
+            org.sola.common.logging.LogUtility.log(
+                    GisMessage.CADASTRE_REDEFINITION_ADD_TARGET_ERROR, ex);
+            Messaging.getInstance().show(GisMessage.CADASTRE_REDEFINITION_ADD_TARGET_ERROR);
+        }
     }
 
     public List<SimpleFeature> getCadastreObjectFeatures(SimpleFeature nodeFeature) {
@@ -121,10 +120,10 @@ public class CadastreRedefinitionObjectLayer extends ExtendedLayerGraphics {
             return;
         }
         for (SimpleFeature feature : ev.getFeatures()) {
-            Geometry geom = (Geometry)feature.getDefaultGeometry();
-            Geometry originalGeometry = 
-                    (Geometry)feature.getAttribute(LAYER_FIELD_ORIGINAL_GEOMETRY);
-            if (geom.equalsTopo(originalGeometry)){
+            Geometry geom = (Geometry) feature.getDefaultGeometry();
+            Geometry originalGeometry =
+                    (Geometry) feature.getAttribute(LAYER_FIELD_ORIGINAL_GEOMETRY);
+            if (geom.equalsTopo(originalGeometry)) {
                 this.removeFeature(feature.getID());
             }
         }

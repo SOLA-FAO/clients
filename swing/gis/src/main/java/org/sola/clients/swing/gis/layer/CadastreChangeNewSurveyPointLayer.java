@@ -34,6 +34,7 @@ package org.sola.clients.swing.gis.layer;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
+import com.vividsolutions.jts.io.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -50,6 +51,7 @@ import org.sola.clients.swing.gis.Messaging;
 import org.sola.clients.swing.gis.beans.SurveyPointBean;
 import org.geotools.map.extended.layer.ExtendedLayerEditor;
 import org.geotools.map.extended.layer.VertexInformation;
+import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.sola.clients.swing.gis.ui.control.CadastreChangePointSurveyListForm;
 import org.sola.common.messaging.GisMessage;
 
@@ -79,7 +81,7 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
 
     public CadastreChangeNewSurveyPointLayer(
             CadastreChangeNewCadastreObjectLayer newCadastreObjectLayer)
-            throws Exception {
+            throws InitializeLayerException {
         super(LAYER_NAME, Geometries.POINT,
                 LAYER_STYLE_RESOURCE, LAYER_ATTRIBUTE_DEFINITION);
 
@@ -144,7 +146,7 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
                             surveyPointBean.getId(), surveyPointBean.getGeom(), fieldsWithValues);
                     feature.setAttribute(LAYER_FIELD_SHIFT, this.getPointShift(feature));
                 }
-            } catch (Exception ex) {
+            } catch (ParseException ex) {
                 Messaging.getInstance().show(GisMessage.CADASTRE_CHANGE_ERROR_ADDINGPOINT_IN_START);
                 org.sola.common.logging.LogUtility.log(
                         GisMessage.CADASTRE_CHANGE_ERROR_ADDINGPOINT_IN_START, ex);
@@ -247,26 +249,16 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
 
     public void addPoint(Double x, Double y) {
         Point pointGeom = this.getGeometryFactory().createPoint(new Coordinate(x, y));
-        try {
-            this.addFeature(null, pointGeom, null);
-            this.getMapControl().refresh();
-        } catch (Exception ex) {
-            Messaging.getInstance().show(GisMessage.CADASTRE_CHANGE_ERROR_ADDING_POINT);
-
-            org.sola.common.logging.LogUtility.log(
-                    GisMessage.CADASTRE_CHANGE_ERROR_ADDING_POINT, ex);
-        }
-
+        this.addFeature(null, pointGeom, null);
+        this.getMapControl().refresh();
     }
 
     @Override
     public SimpleFeature addFeature(
             String fid,
             Geometry geom,
-            java.util.HashMap<String, Object> fieldsWithValues) throws Exception {
-        //if (fid == null) {
+            java.util.HashMap<String, Object> fieldsWithValues) {
         fid = fidGenerator.toString();
-        //}
         fidGenerator++;
         if (fieldsWithValues == null) {
             fieldsWithValues = new HashMap<String, Object>();
