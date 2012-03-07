@@ -63,7 +63,7 @@ public class ExtendedLayerGraphics extends ExtendedFeatureLayer {
      * @param name Name of the layer. Has to be unique.
      * @param geometryType The type of geometry
      * @param styleResource the resource name of the style. Has to be found in one of the paths
-     * specified in SLD_RESOURCES in {@see ExtendedFeatureLayer}
+     * specified in sldResources in {@see ExtendedFeatureLayer}
      * @throws InitializeLayerException 
      */
     public ExtendedLayerGraphics(

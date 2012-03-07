@@ -161,10 +161,6 @@ public class CadastreChangeNewCadastreObjectLayer extends ExtendedLayerEditor{
         return addedFeature;
     }
 
-    public List<VertexInformation> getVertexList() {
-        return this.vertexList;
-    }
-
     private void treatTableChange(TableModelEvent e) {
         int rowIndex = e.getFirstRow();
         int colIndex = e.getColumn();

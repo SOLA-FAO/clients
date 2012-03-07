@@ -55,13 +55,10 @@ import org.geotools.swing.extended.util.Messaging;
  */
 public class ExtendedLayerEditor extends ExtendedLayerGraphics {
 
-    private static String VERTICES_LAYER_NAME_POSTFIX = " vertices";
-    private static String VERTICES_LAYER_STYLE_RESOURCE = "editor_vertices.xml";
+    private final static String VERTICES_LAYER_NAME_POSTFIX = " vertices";
+    private final static String VERTICES_LAYER_STYLE_RESOURCE = "editor_vertices.xml";
     private ExtendedLayerGraphics verticesLayer = null;
-    /**
-     * The list of {@see VertexInformation} for the features in this layer
-     */
-    protected List<VertexInformation> vertexList = new ArrayList<VertexInformation>();
+    private List<VertexInformation> vertexList = new ArrayList<VertexInformation>();
 
     /**
      * It creates an instance of this layer.
@@ -102,6 +99,13 @@ public class ExtendedLayerEditor extends ExtendedLayerGraphics {
                 Geometries.POINT,
                 styleResourceForVertexes);
         this.getMapLayers().addAll(this.verticesLayer.getMapLayers());
+    }
+
+    /**
+     * The list of {@see VertexInformation} for the features in this layer
+     */
+    public final List<VertexInformation> getVertexList() {
+        return vertexList;
     }
 
     @Override

@@ -63,8 +63,8 @@ public abstract class SolaControlsBundle extends ControlsBundle {
         super();
         if (!gisInitialized) {
             org.geotools.swing.extended.util.Messaging.getInstance().setMessaging(new Messaging());
-            ExtendedFeatureLayer.SLD_RESOURCES = "/org/sola/clients/swing/gis/layer/resources/,"
-                    + ExtendedFeatureLayer.SLD_RESOURCES;
+            ExtendedFeatureLayer.sldResources = "/org/sola/clients/swing/gis/layer/resources/,"
+                    + ExtendedFeatureLayer.sldResources;
             gisInitialized = true;
         }
     }

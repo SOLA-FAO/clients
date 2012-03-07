@@ -67,32 +67,32 @@ import org.opengis.filter.FilterFactory2;
  */
 public class ExtendedFeatureLayer extends ExtendedLayer {
 
-    /**
-     * The String with the path to the resources for layers. If there is more than one path,
-     * concatenate using comma ,.
-     */
-    public static String SLD_RESOURCES = "/org/geotools/map/extended/layer/resources/";
     private static StyleFactory styleFactory = new StyleFactoryImpl();
     private static FilterFactory2 filterFactory = CommonFactoryFinder.getFilterFactory2(null);
-    /**
-     * It is used to read WKB and convert it to geometry
-     */
-    protected static WKBReader wkbReader = new WKBReader();
-    /**
-     * It is used to convert a geometry to WKB
-     */
-    protected static WKBWriter wkbWriter = new WKBWriter();
     private SimpleFeatureSource featureSource;
     private Style style;
     private FeatureLayer featureLayer;
     private String filterExpressionForSnapping = null;
+    /**
+     * It is used to read WKB and convert it to geometry
+     */
+    protected final static WKBReader wkbReader = new WKBReader();
+    /**
+     * It is used to convert a geometry to WKB
+     */
+    protected final static WKBWriter wkbWriter = new WKBWriter();
+    /**
+     * The String with the path to the resources for layers. If there is more than one path,
+     * concatenate using comma ,.
+     */
+    public static String sldResources = "/org/geotools/map/extended/layer/resources/";
 
     /**
      * It initializes the layer.
      * @param name Name of the layer. Has to be unique.
      * @param featureSource The source of features.
      * @param styleResource The style resource name. With this name, it is searched in the paths 
-     * provided in SLD_RESOURCES in the order of appearance.
+     * provided in sldResources in the order of appearance.
      * @throws InitializeLayerException 
      */
     protected void initialize(String name, SimpleFeatureSource featureSource, String styleResource)
@@ -233,7 +233,7 @@ public class ExtendedFeatureLayer extends ExtendedLayer {
 
     /**
      * Gets the list of styles found in the resource. The location of the resource is taken 
-     * from @see SLD_RESOURCES.
+     * from @see sldResources.
      * @param sldResource
      * @return
      * @throws InitializeLayerException 
@@ -243,7 +243,7 @@ public class ExtendedFeatureLayer extends ExtendedLayer {
         try {
 
             URL sldURL = null;
-            String[] resourcesArray = SLD_RESOURCES.split(",");
+            String[] resourcesArray = sldResources.split(",");
             for (String resourcePath : resourcesArray) {
                 sldURL = ExtendedFeatureLayer.class.getResource(resourcePath + sldResource);
                 if (sldURL != null) {
