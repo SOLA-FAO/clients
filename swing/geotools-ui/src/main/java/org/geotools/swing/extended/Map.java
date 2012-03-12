@@ -114,7 +114,7 @@ public class Map extends JMapPane {
      * This constructor is used only for the graphical designer.
      * Use the other constructor for initializing the map control
      */
-    public Map() {
+    public Map() throws InitializeMapException{
         super();
         this.initializeReferenceSystemResource();
         this.setBackground(Color.WHITE);
@@ -148,7 +148,7 @@ public class Map extends JMapPane {
         this.initialize(srid);
     }
 
-    private void initializeReferenceSystemResource() {
+    private void initializeReferenceSystemResource() throws InitializeMapException{
         try {
             System.setProperty("org.geotools.referencing.forceXY", "true");
             //Hints hints = new Hints(Hints.FORCE_LONGITUDE_FIRST_AXIS_ORDER, Boolean.TRUE);
@@ -160,7 +160,7 @@ public class Map extends JMapPane {
                 sridResource.load(this.getClass().getResourceAsStream(resourceLocation));
             }
         } catch (IOException ex) {
-            throw new RuntimeException("Error found while initializing crs resource", ex);
+            throw new InitializeMapException("Coordinative system resource not found.", ex);
         }
     }
 

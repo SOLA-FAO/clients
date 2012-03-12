@@ -68,6 +68,7 @@ public class Messaging {
         PRINT,
         PRINT_LAYOUT_NOT_SELECTED,
         PRINT_SCALE_NOT_CORRECT,
+        PRINT_LAYOUT_GENERATION_ERROR,
         LEFT_PANEL_TAB_LAYERS_TITLE,
         GEOTOOL_GET_FEATURE_IN_RANGLE_ERROR,
         LAYER_EDITOR_VERTEX_MAINTAIN_ERROR,
@@ -192,6 +193,8 @@ public class Messaging {
         } else if (messageId.equals(
                 Messaging.Ids.ADD_DIRECT_IMAGE_LOAD_IMAGE.toString())){
             msgBody = "Click OK to load image in the map or re-define first orientation point.";            
+        } else if (messageId.equals(Messaging.Ids.PRINT_LAYOUT_GENERATION_ERROR.toString())){
+            msgBody = "Error while generating the print layout.";            
         }
         return msgBody;
     }

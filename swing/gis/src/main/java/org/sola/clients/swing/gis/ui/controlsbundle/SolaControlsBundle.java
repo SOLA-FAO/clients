@@ -54,6 +54,7 @@ import org.sola.webservices.spatial.MapDefinitionTO;
  */
 public abstract class SolaControlsBundle extends ControlsBundle {
 
+    private static String extraSldResources = "/org/sola/clients/swing/gis/layer/resources/";
     private static boolean gisInitialized = false;
     private PojoDataAccess pojoDataAccess = null;
     
@@ -63,8 +64,7 @@ public abstract class SolaControlsBundle extends ControlsBundle {
         super();
         if (!gisInitialized) {
             org.geotools.swing.extended.util.Messaging.getInstance().setMessaging(new Messaging());
-            ExtendedFeatureLayer.sldResources = "/org/sola/clients/swing/gis/layer/resources/,"
-                    + ExtendedFeatureLayer.sldResources;
+            ExtendedFeatureLayer.setExtraSldResources(extraSldResources);
             gisInitialized = true;
         }
     }
