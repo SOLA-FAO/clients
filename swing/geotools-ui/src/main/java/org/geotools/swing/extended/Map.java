@@ -72,6 +72,7 @@ import org.geotools.map.extended.layer.ExtendedLayerWMS;
 import org.geotools.renderer.lite.RendererUtilities;
 import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.geotools.swing.extended.exception.InitializeMapException;
+import org.geotools.swing.extended.exception.MapScaleException;
 import org.geotools.swing.mapaction.extended.ExtendedAction;
 import org.geotools.swing.tool.extended.ExtendedTool;
 import org.opengis.referencing.operation.TransformException;
@@ -675,15 +676,15 @@ public class Map extends JMapPane {
      * Gets the current scale of the map.
      * @return 
      */
-    public Double getScale() {
+    public Double getScale() throws MapScaleException{
         try {
             return RendererUtilities.calculateScale(
                     this.getDisplayArea(), this.getWidth(),
                     this.getHeight(), null);
         } catch (TransformException trnsEx) {
-            throw new RuntimeException(trnsEx);
+            throw new MapScaleException(trnsEx);
         } catch (FactoryException trnsEx) {
-            throw new RuntimeException(trnsEx);
+            throw new MapScaleException(trnsEx);
         }
     }
 

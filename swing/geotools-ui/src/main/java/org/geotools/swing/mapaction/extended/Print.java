@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import org.geotools.swing.extended.Map;
+import org.geotools.swing.extended.exception.MapScaleException;
 import org.geotools.swing.extended.exception.PrintLayoutException;
 import org.geotools.swing.extended.util.Messaging;
 import org.geotools.swing.mapaction.extended.print.PrintLayout;
@@ -70,22 +71,24 @@ public class Print extends ExtendedAction {
     public void onClick() {
         if (this.printForm == null) {
             this.printForm = new PrintForm();
-            try{
+            try {
                 this.printForm.setPrintLayoutList(this.getPrintLayouts());
-            }catch(PrintLayoutException ex){
+            } catch (PrintLayoutException ex) {
                 Messaging.getInstance().show(Messaging.Ids.PRINT_LAYOUT_GENERATION_ERROR.toString());
             }
         }
-        
-        this.printForm.setScale(this.getMapControl().getScale().intValue());
-
-        this.printForm.setVisible(true);
-        if (this.printForm.getPrintLayout() == null) {
-            return;
+        try {
+            this.printForm.setScale(this.getMapControl().getScale().intValue());
+            this.printForm.setVisible(true);
+            if (this.printForm.getPrintLayout() == null) {
+                return;
+            }
+            String printLocation = this.print(
+                    this.printForm.getPrintLayout(), this.printForm.getScale());
+            this.showPrintableDocument(printLocation);
+        } catch (MapScaleException ex) {
+            Messaging.getInstance().show(Messaging.Ids.PRINT_LAYOUT_GENERATION_ERROR.toString());
         }
-        String printLocation = this.print(
-                this.printForm.getPrintLayout(), this.printForm.getScale());
-        this.showPrintableDocument(printLocation);
     }
 
     /**
@@ -95,7 +98,7 @@ public class Print extends ExtendedAction {
      * If another source of layout has to be defined, this method has to be overridden.
      * @return 
      */
-    protected List<PrintLayout> getPrintLayouts() throws PrintLayoutException{
+    protected List<PrintLayout> getPrintLayouts() throws PrintLayoutException {
         Properties propertyLayouts = new Properties();
         String layoutLocation = "resources/print/layouts.properties";
         String resourceLocation = String.format("/%s/%s",

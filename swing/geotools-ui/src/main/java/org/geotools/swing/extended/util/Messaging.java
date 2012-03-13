@@ -81,7 +81,8 @@ public class Messaging {
         ADD_DIRECT_IMAGE_DEFINE_POINT_IN_IMAGE_ERROR,
         ADD_DIRECT_IMAGE_DEFINE_ORIENTATION_POINT_1_IN_IMAGE,
         ADD_DIRECT_IMAGE_DEFINE_ORIENTATION_POINT_2_IN_IMAGE,
-        ADD_DIRECT_IMAGE_LOAD_IMAGE
+        ADD_DIRECT_IMAGE_LOAD_IMAGE,
+        MAP_SCALE_ERROR
     };
     private static Messaging messaging = new Messaging();
 
@@ -195,6 +196,8 @@ public class Messaging {
             msgBody = "Click OK to load image in the map or re-define first orientation point.";            
         } else if (messageId.equals(Messaging.Ids.PRINT_LAYOUT_GENERATION_ERROR.toString())){
             msgBody = "Error while generating the print layout.";            
+        }else if(messageId.equals(Messaging.Ids.MAP_SCALE_ERROR.toString())){
+            msgBody = "Map scale calculation error.";
         }
         return msgBody;
     }
