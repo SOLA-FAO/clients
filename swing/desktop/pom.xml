@@ -138,7 +138,7 @@
                                 <manifest>
                                     <addClasspath>true</addClasspath>
                                     <classpathPrefix>lib/</classpathPrefix>
-                                    <mainClass>org.sola.clients.desktop.DesktopApplication</mainClass>
+                                    <mainClass>org.sola.clients.swing.desktop.DesktopApplication</mainClass>
                                 </manifest>
                             </archive>
                         </configuration>
