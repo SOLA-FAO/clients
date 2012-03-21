@@ -72,6 +72,7 @@ import org.geotools.map.extended.layer.ExtendedLayerWMS;
 import org.geotools.renderer.lite.RendererUtilities;
 import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.geotools.swing.extended.exception.InitializeMapException;
+import org.geotools.swing.extended.exception.MapScaleException;
 import org.geotools.swing.mapaction.extended.ExtendedAction;
 import org.geotools.swing.tool.extended.ExtendedTool;
 import org.opengis.referencing.operation.TransformException;
@@ -114,7 +115,7 @@ public class Map extends JMapPane {
      * This constructor is used only for the graphical designer.
      * Use the other constructor for initializing the map control
      */
-    public Map() {
+    public Map() throws InitializeMapException{
         super();
         this.initializeReferenceSystemResource();
         this.setBackground(Color.WHITE);
@@ -148,7 +149,7 @@ public class Map extends JMapPane {
         this.initialize(srid);
     }
 
-    private void initializeReferenceSystemResource() {
+    private void initializeReferenceSystemResource() throws InitializeMapException{
         try {
             System.setProperty("org.geotools.referencing.forceXY", "true");
             //Hints hints = new Hints(Hints.FORCE_LONGITUDE_FIRST_AXIS_ORDER, Boolean.TRUE);
@@ -160,7 +161,7 @@ public class Map extends JMapPane {
                 sridResource.load(this.getClass().getResourceAsStream(resourceLocation));
             }
         } catch (IOException ex) {
-            throw new RuntimeException("Error found while initializing crs resource", ex);
+            throw new InitializeMapException("Coordinative system resource not found.", ex);
         }
     }
 
@@ -675,15 +676,15 @@ public class Map extends JMapPane {
      * Gets the current scale of the map.
      * @return 
      */
-    public Double getScale() {
+    public Double getScale() throws MapScaleException{
         try {
             return RendererUtilities.calculateScale(
                     this.getDisplayArea(), this.getWidth(),
                     this.getHeight(), null);
         } catch (TransformException trnsEx) {
-            throw new RuntimeException(trnsEx);
+            throw new MapScaleException(trnsEx);
         } catch (FactoryException trnsEx) {
-            throw new RuntimeException(trnsEx);
+            throw new MapScaleException(trnsEx);
         }
     }
 

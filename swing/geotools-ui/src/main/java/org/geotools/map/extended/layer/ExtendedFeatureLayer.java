@@ -67,6 +67,11 @@ import org.opengis.filter.FilterFactory2;
  */
 public class ExtendedFeatureLayer extends ExtendedLayer {
 
+    /**
+     * The String with the path to the resources for layers. If there is more than one path,
+     * concatenate using comma ,.
+     */
+    private static String sldResources = "/org/geotools/map/extended/layer/resources/";
     private static StyleFactory styleFactory = new StyleFactoryImpl();
     private static FilterFactory2 filterFactory = CommonFactoryFinder.getFilterFactory2(null);
     private SimpleFeatureSource featureSource;
@@ -81,11 +86,6 @@ public class ExtendedFeatureLayer extends ExtendedLayer {
      * It is used to convert a geometry to WKB
      */
     protected final static WKBWriter wkbWriter = new WKBWriter();
-    /**
-     * The String with the path to the resources for layers. If there is more than one path,
-     * concatenate using comma ,.
-     */
-    public static String sldResources = "/org/geotools/map/extended/layer/resources/";
 
     /**
      * It initializes the layer.
@@ -120,6 +120,12 @@ public class ExtendedFeatureLayer extends ExtendedLayer {
         this.getMapLayers().add(this.featureLayer);
     }
 
+    /**
+     * It adds extra sld resources to the existing one. The last one added gets priority.
+     */
+    public static void setExtraSldResources(String sldExtraResources){
+        sldResources = String.format("%s,%s",sldExtraResources, sldResources); 
+    }
     /**
      * Gets the feature source
      * @return 

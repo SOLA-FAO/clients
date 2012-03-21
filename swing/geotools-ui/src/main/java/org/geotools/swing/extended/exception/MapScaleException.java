@@ -25,47 +25,17 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package org.geotools.swing.mapaction.extended.print;
-
-import org.geotools.swing.extended.exception.ParsePrintLayoutElementException;
-import org.w3c.dom.Node;
+package org.geotools.swing.extended.exception;
 
 /**
- * An abstract class for defining any element in the layout used for the print.
+ * An exception raised if there is failure generating the map scale.
  * 
  * @author Elton Manoku
  */
-public abstract class ElementLayout {
-    
-    /**
-     * Gets an attribute value in the xml node
-     * @param elementNode The xml node
-     * @param attributeName The name of the attribute
-     * @return 
-     */
-    protected String getAttributeValue(Node elementNode, String attributeName)
-    throws ParsePrintLayoutElementException{
-        Node attrNode = elementNode.getAttributes().getNamedItem(attributeName);
-        if (attrNode == null) {
-            throw new ParsePrintLayoutElementException(
-                    String.format("Attribute %s does not exist.", attributeName), null);
-        }
-        return attrNode.getTextContent();
-    }
+public class MapScaleException extends Exception {
 
-    /**
-     * Gets if the attribute exists in the xml node
-     * 
-     * @param elementNode The Xml Node
-     * @param attributeName The attribute name
-     * @return 
-     */
-    protected boolean hasAttribute(Node elementNode, String attributeName) {
-        Node attrNode = elementNode.getAttributes().getNamedItem(attributeName);
-        return (attrNode != null);
+    private static final String MESSAGE = "Map scale calculation failed.";
+    public MapScaleException(Exception ex) {
+        super(MESSAGE, ex);
     }
 }

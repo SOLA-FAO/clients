@@ -39,6 +39,7 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.geotools.swing.extended.exception.ParsePrintLayoutElementException;
+import org.geotools.swing.extended.exception.PrintLayoutException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -69,19 +70,20 @@ public class PrintLayout extends ElementLayout {
      * 
      * @param xmlFormatedLayout  The xml definition of the layout
      */
-    public PrintLayout(String xmlFormatedLayout) {
+    public PrintLayout(String xmlFormatedLayout)
+            throws PrintLayoutException {
         try {
             InputSource is = new InputSource(new StringReader(xmlFormatedLayout.trim()));
             Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is);
             this.initialize(doc);
         } catch (IOException ex) {
-            throw new RuntimeException(ex);
+            throw new PrintLayoutException(ex);
         } catch (SAXException ex) {
-            throw new RuntimeException(ex);
+            throw new PrintLayoutException(ex);
         } catch (ParsePrintLayoutElementException ex) {
-            throw new RuntimeException(ex);
+            throw new PrintLayoutException(ex);
         } catch (ParserConfigurationException ex) {
-            throw new RuntimeException(ex);
+            throw new PrintLayoutException(ex);
         }
     }
 
@@ -89,19 +91,19 @@ public class PrintLayout extends ElementLayout {
      * Constructor of the layout which uses an Xml Document Input stream.
      * @param xmlFormatedLayoutStream 
      */
-    public PrintLayout(InputStream xmlFormatedLayoutStream) {
+    public PrintLayout(InputStream xmlFormatedLayoutStream) throws PrintLayoutException {
         try {
             Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(
                     xmlFormatedLayoutStream);
             this.initialize(doc);
         } catch (IOException ex) {
-            throw new RuntimeException(ex);
+            throw new PrintLayoutException(ex);
         } catch (SAXException ex) {
-            throw new RuntimeException(ex);
+            throw new PrintLayoutException(ex);
         } catch (ParsePrintLayoutElementException ex) {
-            throw new RuntimeException(ex);
+            throw new PrintLayoutException(ex);
         } catch (ParserConfigurationException ex) {
-            throw new RuntimeException(ex);
+            throw new PrintLayoutException(ex);
         }
     }
 
@@ -122,7 +124,7 @@ public class PrintLayout extends ElementLayout {
             }
             Node node = nodeList.item(0);
             this.name = node.getTextContent();
-        }else if (nodeName.equals("page")) {
+        } else if (nodeName.equals("page")) {
             if (nodeList.getLength() == 0) {
                 throw new ParsePrintLayoutElementException(
                         "Layout is missing page definition.", null);
@@ -130,7 +132,7 @@ public class PrintLayout extends ElementLayout {
             Node node = nodeList.item(0);
             this.pageWidth = Integer.parseInt(this.getAttributeValue(node, "width"));
             this.pageHeight = Integer.parseInt(this.getAttributeValue(node, "height"));
-        }else if (nodeName.equals("map")) {
+        } else if (nodeName.equals("map")) {
             if (nodeList.getLength() == 0) {
                 throw new ParsePrintLayoutElementException(
                         "Layout is missing map definition.", null);
@@ -143,14 +145,14 @@ public class PrintLayout extends ElementLayout {
                 this.scalebar = new ImageLayout(node);
             }
         } else if (nodeName.equals("text")) {
-            for(int nodeInd=0; nodeInd< nodeList.getLength(); nodeInd++){                
+            for (int nodeInd = 0; nodeInd < nodeList.getLength(); nodeInd++) {
                 this.textLayouts.add(new TextLayout(nodeList.item(nodeInd)));
             }
         } else if (nodeName.equals("image")) {
-            for(int nodeInd=0; nodeInd< nodeList.getLength(); nodeInd++){                
+            for (int nodeInd = 0; nodeInd < nodeList.getLength(); nodeInd++) {
                 this.imageLayouts.add(new ImageLayout(nodeList.item(nodeInd)));
             }
-        } 
+        }
     }
 
     public String getName() {
