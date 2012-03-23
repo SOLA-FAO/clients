@@ -41,6 +41,7 @@ import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfWriter;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
@@ -56,8 +57,9 @@ import org.geotools.swing.extended.util.ScalebarGenerator;
  */
 public class PrintoutGenerator {
 
+    private final static String TEMPORARY_PRINT_FILE_LOCATION =
+            System.getProperty("user.home") + File.separator + "sola";
     private final static String TEMPORARY_PRINT_FILE = "print.pdf";
-
     private ScalebarGenerator scalebar = new ScalebarGenerator();
     private MapImageGenerator mapImageGenerator;
     private HashMap<String, BaseFont> fonts = new HashMap<String, BaseFont>();
@@ -77,26 +79,31 @@ public class PrintoutGenerator {
      * @return The location of the pdf file generated
      */
     public String generate(PrintLayout layout, double scale) {
-        String pathToResult = TEMPORARY_PRINT_FILE;
+        String pathToResult;
         BufferedImage mapImage = this.getMapImage(layout.getMap(), scale);
         BufferedImage scalebarImage = this.getScalebarImage(layout.getScalebar(), scale);
         Rectangle pageSize = new Rectangle(
-                this.getDimesionInPoints(layout.getPageWidth()), 
+                this.getDimesionInPoints(layout.getPageWidth()),
                 this.getDimesionInPoints(layout.getPageHeight()));
         Document document = new Document(pageSize);
         try {
+            File location = new File(TEMPORARY_PRINT_FILE_LOCATION);
+            if (!location.exists()) {
+                location.mkdirs();
+            }
+            pathToResult = TEMPORARY_PRINT_FILE_LOCATION + File.separator + TEMPORARY_PRINT_FILE;
             // creation of the different writers
-            PdfWriter writer = PdfWriter.getInstance(document, 
+            PdfWriter writer = PdfWriter.getInstance(document,
                     new FileOutputStream(pathToResult));
             document.open();
-            this.addImage(document, mapImage, 
+            this.addImage(document, mapImage,
                     layout.getMap().getX(), layout.getMap().getX(), layout.getMap().getWidth());
-            this.addImage(document, scalebarImage, 
-                    layout.getScalebar().getX(), layout.getScalebar().getY(), 
+            this.addImage(document, scalebarImage,
+                    layout.getScalebar().getX(), layout.getScalebar().getY(),
                     layout.getScalebar().getWidth());
-            for(ImageLayout imageLayout: layout.getImageLayouts()){
+            for (ImageLayout imageLayout : layout.getImageLayouts()) {
                 URL imageUrl = this.getClass().getResource(imageLayout.getResourceLocation());
-                this.addImage(document, imageUrl, 
+                this.addImage(document, imageUrl,
                         imageLayout.getX(), imageLayout.getY(), imageLayout.getWidth());
             }
 
@@ -119,8 +126,8 @@ public class PrintoutGenerator {
     private BufferedImage getMapImage(ImageLayout mapImageLayout, double scale) {
         BufferedImage result = null;
         if (mapImageLayout != null) {
-            int mapWidth = (int)this.getDimesionInPoints(mapImageLayout.getWidth());
-            int mapHeight = (int)this.getDimesionInPoints(mapImageLayout.getHeight());
+            int mapWidth = (int) this.getDimesionInPoints(mapImageLayout.getWidth());
+            int mapHeight = (int) this.getDimesionInPoints(mapImageLayout.getHeight());
             result = this.mapImageGenerator.getImage(
                     mapWidth, mapHeight, scale, this.getDpi());
         }
@@ -157,31 +164,32 @@ public class PrintoutGenerator {
         }
         return bFont;
     }
-    
-    private float getDimesionInPoints(int mm){
+
+    private float getDimesionInPoints(int mm) {
         return com.lowagie.text.Utilities.millimetersToPoints(mm);
     }
-    private int getDpi(){
-        return (int)com.lowagie.text.Utilities.inchesToPoints(1);        
-    }
-    
-    private void addImage(Document document, URL url, int x, int y, int width) 
-            throws BadElementException, IOException, DocumentException{
-         Image img = Image.getInstance(url);
-         this.addImage(document, img, x, y, width);
+
+    private int getDpi() {
+        return (int) com.lowagie.text.Utilities.inchesToPoints(1);
     }
 
-    private void addImage(Document document, BufferedImage bImage, int x, int y, int width) 
-            throws BadElementException, IOException, DocumentException{
-         Image img = Image.getInstance(bImage, null, false);
-         this.addImage(document, img, x, y, width);
+    private void addImage(Document document, URL url, int x, int y, int width)
+            throws BadElementException, IOException, DocumentException {
+        Image img = Image.getInstance(url);
+        this.addImage(document, img, x, y, width);
     }
 
-    private void addImage(Document document, Image img, int x, int y, int width) 
-            throws BadElementException, IOException, DocumentException{
-         img.setAbsolutePosition(this.getDimesionInPoints(x), this.getDimesionInPoints(y));
-         float widthInPoints = this.getDimesionInPoints(width);
-         img.scalePercent((widthInPoints / img.getWidth()) * 100);
-         document.add(img);
+    private void addImage(Document document, BufferedImage bImage, int x, int y, int width)
+            throws BadElementException, IOException, DocumentException {
+        Image img = Image.getInstance(bImage, null, false);
+        this.addImage(document, img, x, y, width);
+    }
+
+    private void addImage(Document document, Image img, int x, int y, int width)
+            throws BadElementException, IOException, DocumentException {
+        img.setAbsolutePosition(this.getDimesionInPoints(x), this.getDimesionInPoints(y));
+        float widthInPoints = this.getDimesionInPoints(width);
+        img.scalePercent((widthInPoints / img.getWidth()) * 100);
+        document.add(img);
     }
 }

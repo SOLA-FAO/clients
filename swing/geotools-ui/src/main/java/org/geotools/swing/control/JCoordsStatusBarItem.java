@@ -53,7 +53,6 @@ import javax.swing.JLabel;
 import org.geotools.geometry.DirectPosition2D;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.referencing.CRS;
-import org.geotools.swing.locale.LocaleUtils;
 import org.geotools.swing.MapPane;
 import org.geotools.swing.event.MapMouseAdapter;
 import org.geotools.swing.event.MapMouseEvent;
@@ -79,15 +78,19 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
  * <p>The constructor made public so it can be created from another class outside package. 
  * The constructor also makes the item without border. </p>
  * <p>The method to set the label to NO_COORS has be overridden to show nothing. </p>
+ * <p>References to the LocaleUtils.getValue are removed because it was failing with web start. </p>
  */
 public class JCoordsStatusBarItem extends StatusBarItem {
-    private static final String COMPONENT_NAME =
-            LocaleUtils.getValue("StatusBar", "CoordsItemName");
+    //Elton:
+    //private static final String COMPONENT_NAME =
+    //        LocaleUtils.getValue("StatusBar", "CoordsItemName");
+    private static final String COMPONENT_NAME = "Coordinates";
     
-    private static final String TOOL_TIP = LocaleUtils.getValue("StatusBar", "CoordsTooltip");
+    //private static final String TOOL_TIP = LocaleUtils.getValue("StatusBar", "CoordsTooltip");
     private static final int DEFAULT_NUM_INTEGER_DIGITS = 3;
 
-    private static final String NO_COORDS = LocaleUtils.getValue("StatusBar", "CoordsNone");
+    //Elton:
+    //private static final String NO_COORDS = LocaleUtils.getValue("StatusBar", "CoordsNone");
 
     private final JLabel label;
 
@@ -101,6 +104,7 @@ public class JCoordsStatusBarItem extends StatusBarItem {
      * @param mapPane the map pane
      */
     public JCoordsStatusBarItem(MapPane mapPane) {
+        //Elton: 
         //super(COMPONENT_NAME);
         super(COMPONENT_NAME, false);
 
@@ -112,7 +116,8 @@ public class JCoordsStatusBarItem extends StatusBarItem {
         label.setFont(JMapStatusBar.DEFAULT_FONT);
         add(label);
         
-        setToolTipText(TOOL_TIP);
+        //Elton:
+        //setToolTipText(TOOL_TIP);
 
         decLen = JMapStatusBar.DEFAULT_NUM_DECIMAL_DIGITS;
 

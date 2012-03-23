@@ -41,7 +41,6 @@ import javax.swing.JToolBar;
 import org.geotools.swing.control.JCoordsStatusBarItem;
 import org.geotools.swing.control.JMapStatusBar;
 import org.geotools.swing.control.JRendererStatusBarItem;
-import org.geotools.swing.control.extended.ExtendedToolItem;
 import org.geotools.swing.extended.exception.InitializeMapException;
 import org.geotools.swing.extended.util.Messaging;
 import org.geotools.swing.mapaction.extended.FullExtent;
@@ -146,11 +145,13 @@ public class ControlsBundle extends javax.swing.JPanel {
      */
     private void setupStatusBar() {
         this.pnlStatusbar.setLayout(new BorderLayout());
-        JMapStatusBar statusBar = JMapStatusBar.createDefaultStatusBar(map);
-        statusBar.removeAll();
+        //JMapStatusBar statusBar = JMapStatusBar.createDefaultStatusBar(map);
+//        statusBar.removeAll();
+        JMapStatusBar statusBar = new JMapStatusBar();
         statusBar.addItem(new JRendererStatusBarItem(map), false, true);
         statusBar.addItem(new JCoordsStatusBarItem(map));
         this.pnlStatusbar.add(statusBar, BorderLayout.CENTER);
+        //statusBar.addItem(null);
     }
 
     /**
