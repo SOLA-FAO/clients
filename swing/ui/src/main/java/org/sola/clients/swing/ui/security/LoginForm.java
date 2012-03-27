@@ -40,6 +40,7 @@ import javax.swing.ImageIcon;
 public class LoginForm extends javax.swing.JFrame {
 
     private Class<?> mainClass;
+    private KeyEventDispatcher escKeyListener;
     
     /** Creates {@link LoginPanel} instance.*/
     private LoginPanel createLoginPanel() {
@@ -56,13 +57,17 @@ public class LoginForm extends javax.swing.JFrame {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(LoginPanel.LOGIN_RESULT)) {
+                    if((Boolean)evt.getNewValue() == Boolean.TRUE && escKeyListener != null){
+                        KeyboardFocusManager.getCurrentKeyboardFocusManager()
+                                .removeKeyEventDispatcher(escKeyListener);
+                    }
                     firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
                 }
             }
         });
         loginPanel.setUserNameFocus();
         
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
+        escKeyListener = new KeyEventDispatcher() {
 
             @Override
             public boolean dispatchKeyEvent(KeyEvent e) {
@@ -72,7 +77,9 @@ public class LoginForm extends javax.swing.JFrame {
                 }
                 return false;
             }
-        });
+        };
+                
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(escKeyListener);
     }
 
     private void exitSystem(){
