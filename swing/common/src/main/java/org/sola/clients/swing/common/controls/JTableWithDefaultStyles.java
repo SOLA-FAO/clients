@@ -146,7 +146,7 @@ public class JTableWithDefaultStyles extends JTable {
             }
             return comp;
         } catch (Exception e) {
-            return getDefaultRenderer(renderer.getClass()).getTableCellRendererComponent(this, "", false, false, 0, 0);
+            return getDefaultRenderer(renderer.getClass()).getTableCellRendererComponent(this, null, false, false, 0, 0);
         }
     }
 
