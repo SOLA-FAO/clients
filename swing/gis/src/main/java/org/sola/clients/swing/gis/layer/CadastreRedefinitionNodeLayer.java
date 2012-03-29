@@ -18,7 +18,8 @@ import org.sola.clients.swing.gis.beans.CadastreObjectNodeTargetBean;
 import org.sola.common.messaging.GisMessage;
 
 /**
- *
+ * Layer that maintains the collection of nodes that are targeted during the cadastre redefinition.
+ * 
  * @author Elton Manoku
  */
 public class CadastreRedefinitionNodeLayer extends ExtendedLayerGraphics {
@@ -26,14 +27,30 @@ public class CadastreRedefinitionNodeLayer extends ExtendedLayerGraphics {
     private static final String LAYER_NAME = "Modified Nodes";
     private static final String LAYER_STYLE_RESOURCE = "node_modified.xml";
 
+    /**
+     * Constructor
+     * @throws InitializeLayerException 
+     */
     public CadastreRedefinitionNodeLayer() throws InitializeLayerException {
         super(LAYER_NAME, Geometries.POINT, LAYER_STYLE_RESOURCE, null);
     }
     
+    /**
+     * Adds a node target bean to the layer. It transforms it to feature
+     * 
+     * @param nodeBean
+     * @return 
+     */
     public SimpleFeature addNodeTarget(CadastreObjectNodeTargetBean nodeBean) {
         return this.addNodeTarget(nodeBean.getNodeId(), nodeBean.getGeom());
     }
 
+    /**
+     * Adds a node target from a WKB object
+     * @param id
+     * @param geom
+     * @return 
+     */
     public SimpleFeature addNodeTarget(String id, byte[] geom) {
         SimpleFeature featureAdded = null;
         try {
@@ -46,6 +63,10 @@ public class CadastreRedefinitionNodeLayer extends ExtendedLayerGraphics {
         return featureAdded;
     }
     
+    /**
+     * Gets the list of node targets
+     * @return 
+     */
     public List<CadastreObjectNodeTargetBean> getNodeTargetList(){
         List<CadastreObjectNodeTargetBean> nodeTargetList =
                 new ArrayList<CadastreObjectNodeTargetBean>();
@@ -64,6 +85,10 @@ public class CadastreRedefinitionNodeLayer extends ExtendedLayerGraphics {
         return nodeTargetList;
     }
     
+    /**
+     * Sets the list of node targets
+     * @param targetList 
+     */
     public void addNodeTargetList(List<CadastreObjectNodeTargetBean> targetList){
         for(CadastreObjectNodeTargetBean targetBean: targetList){
             this.addNodeTarget(targetBean);

@@ -16,7 +16,10 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.sola.common.messaging.GisMessage;
 
 /**
- *
+ * This layer is used to represent the boundary during the operation of irregular boundary
+ * definition.
+ * In addition it defines an extra layer also for the start and end point of the boundary.
+ * 
  * @author Elton Manoku
  */
 public class CadastreBoundaryPointLayer extends ExtendedLayerGraphics {
@@ -41,6 +44,10 @@ public class CadastreBoundaryPointLayer extends ExtendedLayerGraphics {
         this.getMapLayers().addAll(this.boundaryLayer.getMapLayers());
     }
 
+    /**
+     * Gets the end point of the boundary
+     * @return 
+     */
     public Point getEndPoint() {
         SimpleFeature pointFeature = this.getFeatureCollection().getFeature(LABEL_END_P0INT);
         if (pointFeature != null) {
@@ -49,14 +56,26 @@ public class CadastreBoundaryPointLayer extends ExtendedLayerGraphics {
         return null;
     }
 
+    /**
+     * Sets the end point using a point object
+     * @param endPoint 
+     */
     public void setEndPoint(Point endPoint) {
         this.setTargetPoint(endPoint, false);
     }
 
+    /**
+     * Sets the end point using a WKB format
+     * @param endPoint 
+     */
     public void setEndPoint(byte[] endPoint) {
         this.setTargetPoint(endPoint, false);
     }
 
+    /**
+     * Gets the star point of the boundary
+     * @return 
+     */
     public Point getStartPoint() {
         SimpleFeature pointFeature = this.getFeatureCollection().getFeature(LABEL_START_P0INT);
         if (pointFeature != null) {
@@ -65,10 +84,18 @@ public class CadastreBoundaryPointLayer extends ExtendedLayerGraphics {
         return null;
     }
 
+    /**
+     * Sets the start point of the boundary by using a Point object
+     * @param startPoint 
+     */
     public void setStartPoint(Point startPoint) {
         this.setTargetPoint(startPoint, true);
     }
 
+    /**
+     * Sets the start point of the boundary by using WKB format
+     * @param startPoint 
+     */
     public void setStartPoint(byte[] startPoint) {
         this.setTargetPoint(startPoint, true);
     }
@@ -94,16 +121,27 @@ public class CadastreBoundaryPointLayer extends ExtendedLayerGraphics {
         this.addFeature(labelToUse, pointGeom, params);
     }
 
+    /**
+     * Reset the selected boundary
+     */
     public void clearSelection() {
         this.removeFeatures();
         this.boundaryLayer.removeFeatures();
     }
 
+    /**
+     * Sets the target boundary
+     * @param boundaryGeometry 
+     */
     public void setTargetBoundary(LineString boundaryGeometry) {
         this.boundaryLayer.removeFeatures();
         this.boundaryLayer.addFeature(BOUNDARY_FEATURE_ID, boundaryGeometry, null);
     }
 
+    /**
+     * Gets the target boundary geometry
+     * @return 
+     */
     public LineString getTargetBoundary() {
         Object targetBoundary = this.boundaryLayer.getFeatureCollection().getFeature(
                 BOUNDARY_FEATURE_ID).getDefaultGeometry();

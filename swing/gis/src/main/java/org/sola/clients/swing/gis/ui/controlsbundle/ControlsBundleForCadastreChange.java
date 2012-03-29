@@ -111,8 +111,7 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
     @Override
     protected void addLayers() throws InitializeLayerException {
         super.addLayers();
-        this.targetParcelsLayer = new CadastreChangeTargetCadastreObjectLayer(
-                this.getMap().getSrid());
+        this.targetParcelsLayer = new CadastreChangeTargetCadastreObjectLayer();
         this.getMap().addLayer(targetParcelsLayer);
 
         this.newCadastreObjectLayer = new CadastreChangeNewCadastreObjectLayer(

@@ -34,10 +34,13 @@ package org.sola.clients.swing.gis.layer;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Polygon;
 import com.vividsolutions.jts.io.ParseException;
+import java.awt.Component;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
@@ -49,13 +52,13 @@ import org.sola.clients.swing.gis.Messaging;
 import org.sola.clients.swing.gis.beans.CadastreObjectBean;
 import org.sola.clients.swing.gis.beans.SpatialValueAreaBean;
 import org.geotools.map.extended.layer.ExtendedLayerEditor;
-import org.geotools.map.extended.layer.VertexInformation;
 import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.sola.clients.swing.gis.ui.control.CadastreChangeNewCadastreObjectListForm;
 import org.sola.common.messaging.GisMessage;
 
 /**
- *
+ * Layer that has the features of the new cadastre objects during the cadastre change
+ * 
  * @author Elton Manoku
  */
 public class CadastreChangeNewCadastreObjectLayer extends ExtendedLayerEditor{
@@ -74,13 +77,28 @@ public class CadastreChangeNewCadastreObjectLayer extends ExtendedLayerEditor{
     private static final String LAST_PART_FORMAT = "SP %s";
     private String lastPart = "";
     private DefaultTableModel tableModel = null;
-    private CadastreChangeNewCadastreObjectListForm hostForm = null;
+    private Component hostForm = null;
 
+    /**
+     * Constructor for the layer. 
+     * 
+     * @param applicationNumber The application number of the service that starts the 
+     * transaction where the layer is used. This number is used in the definition of new parcel
+     * number
+     * @throws InitializeLayerException 
+     */
     public CadastreChangeNewCadastreObjectLayer(String applicationNumber) 
             throws InitializeLayerException{
         super(LAYER_NAME, Geometries.POLYGON,
                 LAYER_STYLE_RESOURCE, LAYER_ATTRIBUTE_DEFINITION);
         this.lastPart = String.format(LAST_PART_FORMAT, applicationNumber);
+        initializeFormHostingAndEvents(new CadastreChangeNewCadastreObjectListForm(this));
+    }
+    
+    /**
+     * It initializes event handlers and form hosting
+     */
+    private void initializeFormHostingAndEvents(Component hostForm){
         this.getFeatureCollection().addListener(new CollectionListener() {
 
             @Override
@@ -89,25 +107,61 @@ public class CadastreChangeNewCadastreObjectLayer extends ExtendedLayerEditor{
             }
         });
         
-        this.hostForm = new CadastreChangeNewCadastreObjectListForm(this);
-        this.tableModel = (DefaultTableModel) this.hostForm.getTable().getModel();
+        this.hostForm = (JDialog)hostForm;
+        this.tableModel = (DefaultTableModel) this.getHostForm().getTable().getModel();
         this.tableModel.addTableModelListener(new TableModelListener() {
 
             @Override
             public void tableChanged(TableModelEvent e) {
                 treatTableChange(e);
             }
-        });
+        });        
     }
 
+    /**
+     * Gets the form that is responsible with handling other attributes of features
+     * @return 
+     */
     public CadastreChangeNewCadastreObjectListForm getHostForm() {
-        return hostForm;
+        if (this.hostForm == null){
+            this.hostForm = new CadastreChangeNewCadastreObjectListForm(this);
+        }
+        return (CadastreChangeNewCadastreObjectListForm)this.hostForm;
     }
 
+    /**
+     * Gets the field index in the table of a certain field
+     * @param fieldName
+     * @return 
+     */
+    public int getFieldIndex(String fieldName) {
+        if (fieldName.equals(LAYER_FIELD_FID)) {
+            return 0;
+        }
+        if (fieldName.equals(LAYER_FIELD_FIRST_PART)) {
+            return 1;
+        } else if (fieldName.equals(LAYER_FIELD_LAST_PART)) {
+            return 2;
+        } else if (fieldName.equals(LAYER_FIELD_OFFICIAL_AREA)) {
+            return 3;
+        }
+        return -1;
+    }
+
+    /**
+     * Gets the list of new cadastre objects
+     * @return 
+     */
     public List<CadastreObjectBean> getCadastreObjectList() {
         return cadastreObjectList;
     }
 
+    /**
+     * Sets the list of new cadastre objects. This is used if the transaction is read from
+     * the server.
+     * 
+     * @param cadastreObjectList 
+     */
     public void setCadastreObjectList(List<CadastreObjectBean> cadastreObjectList) {
         if (!cadastreObjectList.isEmpty()) {
             try {
@@ -140,6 +194,15 @@ public class CadastreChangeNewCadastreObjectLayer extends ExtendedLayerEditor{
         }
     }
 
+    /**
+     * It adds a feature of the cadastre object.
+     * The fid is not taken into account. It is always regenerated in the ordinal number.
+     * This is to assure the uniqueness and to have it also user friendly.
+     * @param fid
+     * @param geom
+     * @param fieldsWithValues
+     * @return 
+     */
     @Override
     public SimpleFeature addFeature(
             String fid,
@@ -161,6 +224,11 @@ public class CadastreChangeNewCadastreObjectLayer extends ExtendedLayerEditor{
         return addedFeature;
     }
 
+    /**
+     * It handles changes in the table where the other attributes are displayed. Some changes
+     * in some of the columns of this table, need to be reflected in the feature itself.
+     * @param e 
+     */
     private void treatTableChange(TableModelEvent e) {
         int rowIndex = e.getFirstRow();
         int colIndex = e.getColumn();
@@ -189,6 +257,11 @@ public class CadastreChangeNewCadastreObjectLayer extends ExtendedLayerEditor{
 
     }
 
+    /**
+     * This changes the table values if the linked feature is changed. 
+     * Only the official area can be changed.
+     * @param featureObject 
+     */
     private void changeInTable(SimpleFeature featureObject) {
         if (this.tableModel == null) {
             return;
@@ -205,6 +278,10 @@ public class CadastreChangeNewCadastreObjectLayer extends ExtendedLayerEditor{
         }
     }
 
+    /**
+     * It handles the changes in the collection of features
+     * @param ev 
+     */
     private void featureCollectionChanged(CollectionEvent ev) {
         if (ev.getFeatures() == null) {
             return;
@@ -241,6 +318,11 @@ public class CadastreChangeNewCadastreObjectLayer extends ExtendedLayerEditor{
         }
     }
 
+    /**
+     * Gets a new bean from a feature
+     * @param feature
+     * @return 
+     */
     private CadastreObjectBean newBean(SimpleFeature feature) {
         CadastreObjectBean coBean = new CadastreObjectBean();
         this.changeBean(coBean, feature);
@@ -248,6 +330,11 @@ public class CadastreChangeNewCadastreObjectLayer extends ExtendedLayerEditor{
 
     }
 
+    /**
+     * Changes an existing bean from its correspondent feature
+     * @param targetBean
+     * @param feature 
+     */
     private void changeBean(CadastreObjectBean targetBean, SimpleFeature feature) {
         targetBean.setId(feature.getID());
         targetBean.setNameFirstpart(feature.getAttribute(
@@ -270,10 +357,15 @@ public class CadastreChangeNewCadastreObjectLayer extends ExtendedLayerEditor{
                 CadastreChangeNewCadastreObjectLayer.LAYER_FIELD_OFFICIAL_AREA).toString())));
         calculatedAreaBean.setSize(BigDecimal.valueOf(
                 ((Polygon) feature.getDefaultGeometry()).getArea()));
-        //spatialValueBean.setSize(calculatedAreaBean.getSize());
         targetBean.setGeomPolygon(wkbWriter.write((Geometry) feature.getDefaultGeometry()));
     }
     
+    /**
+     * Gets the spatial value bean of a cadastre object bean
+     * @param coBean Cadastre object bean
+     * @param officialValue The type of spatial value. True = official, False = calculated
+     * @return 
+     */
     private SpatialValueAreaBean getSpatialValueBean(
             CadastreObjectBean coBean, boolean officialValue){
         if (officialValue){
@@ -282,6 +374,12 @@ public class CadastreChangeNewCadastreObjectLayer extends ExtendedLayerEditor{
         return coBean.getSpatialValueAreaList().get(1);
     }
 
+    /**
+     * Gets the corresponding bean of a feature
+     * 
+     * @param feature
+     * @return 
+     */
     private CadastreObjectBean getBean(SimpleFeature feature) {
         CadastreObjectBean coBean = new CadastreObjectBean();
         coBean.setId(feature.getID());
@@ -294,20 +392,10 @@ public class CadastreChangeNewCadastreObjectLayer extends ExtendedLayerEditor{
         return coBean;
     }
 
-    public int getFieldIndex(String fieldName) {
-        if (fieldName.equals(LAYER_FIELD_FID)) {
-            return 0;
-        }
-        if (fieldName.equals(LAYER_FIELD_FIRST_PART)) {
-            return 1;
-        } else if (fieldName.equals(LAYER_FIELD_LAST_PART)) {
-            return 2;
-        } else if (fieldName.equals(LAYER_FIELD_OFFICIAL_AREA)) {
-            return 3;
-        }
-        return -1;
-    }
-
+    /**
+     * Adds a row in the table from a feature
+     * @param feature 
+     */
     private void addInTable(SimpleFeature feature) {
         if (this.tableModel == null) {
             return;
@@ -320,6 +408,10 @@ public class CadastreChangeNewCadastreObjectLayer extends ExtendedLayerEditor{
         tableModel.addRow(row);
     }
 
+    /**
+     * Remove a row from the table for a given feature
+     * @param feature 
+     */
     private void removeInTable(SimpleFeature feature) {
         if (this.tableModel == null) {
             return;

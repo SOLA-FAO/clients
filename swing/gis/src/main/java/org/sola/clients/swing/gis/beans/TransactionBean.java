@@ -38,33 +38,52 @@ import org.sola.webservices.transferobjects.transaction.TransactionTO;
 
 /**
  * An abstract class used for GIS related transactions.
+ * <p>It encapsulates common functionality for the gis related transactions like the 
+ * list of sources (documents) that justifies the transaction, the service id that initializes 
+ * it.</p>
+ * 
  * 
  * @author Elton Manoku
  */
-public abstract class TransactionBean extends AbstractGisBean{
+public abstract class TransactionBean{
     
     private String fromServiceId;
     List<TransactionSourceBean> transactionSourceList = new ArrayList<TransactionSourceBean>();
 
+    /**
+     * Gets id of service that initialises the transaction
+     */
     public String getFromServiceId() {
         return fromServiceId;
     }
 
+    /**
+     * Sets id of service that initialises the transaction
+     */
     public void setFromServiceId(String fromServiceId) {
         this.fromServiceId = fromServiceId;
     }
 
 
+    /**
+     * Gets list of sources used in transaction
+     */
     public List<TransactionSourceBean> getTransactionSourceList() {
         return transactionSourceList;
     }
 
+    /**
+     * Sets list of sources used in transaction
+     */
     public void setTransactionSourceList(List<TransactionSourceBean> transactionSourceList) {
         this.transactionSourceList = transactionSourceList;
     }
 
         
 
+    /**
+     * Gets a list of ids of sources
+     */
     public List<String> getSourceIdList(){
         List<String> sourceIdList = new ArrayList<String>();
         for(TransactionSourceBean bean: this.getTransactionSourceList()){
@@ -73,6 +92,9 @@ public abstract class TransactionBean extends AbstractGisBean{
         return sourceIdList;
     }
     
+    /**
+     * Sets a list of ids of sources
+     */
     public void setSourceIdList(List<String> sourceIdList){
         this.transactionSourceList = new ArrayList<TransactionSourceBean>();
         for(String sourceId: sourceIdList){

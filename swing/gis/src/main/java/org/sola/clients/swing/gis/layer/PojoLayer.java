@@ -40,8 +40,10 @@ import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.sola.webservices.spatial.ConfigMapLayerTO;
 
 /**
- *
- * @author manoku
+ * The layers of this type are used to draw the features from the server. These layers are mainly 
+ * meant for visualization purposes only.
+ * 
+ * @author Elton Manoku
  */
 public class PojoLayer extends ExtendedFeatureLayer {
 
@@ -49,6 +51,14 @@ public class PojoLayer extends ExtendedFeatureLayer {
     
     private PojoDataAccess dataAccess;
     private boolean forceRefresh = false;
+    
+    /**
+     * Constructor
+     * @param name layer name
+     * @param dataAccess the data access that is used to get the features from the server
+     * @throws InitializeLayerException
+     * @throws SchemaException 
+     */
     public PojoLayer(
             String name,
             PojoDataAccess dataAccess
@@ -61,14 +71,27 @@ public class PojoLayer extends ExtendedFeatureLayer {
         this.initialize(name, featureSource, styleResource);
     }
 
+    /**
+     * Gets if the layer must be refreshed even the extent of the map is not changed
+     * @return 
+     */
     public boolean isForceRefresh() {
         return forceRefresh;
     }
 
+    /**
+     * Sets if the layer must be refreshed even the extent of the map is not changed
+     * @param forceRefresh 
+     */
     public void setForceRefresh(boolean forceRefresh) {
         this.forceRefresh = forceRefresh;
     }
     
+    /**
+     * Gets the configuration of the layer
+     * 
+     * @return 
+     */
     public final ConfigMapLayerTO getConfig(){
         return this.dataAccess.getMapLayerInfoList().get(this.getLayerName());
     }

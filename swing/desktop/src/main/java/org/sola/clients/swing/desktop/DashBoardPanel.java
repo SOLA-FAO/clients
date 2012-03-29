@@ -39,6 +39,7 @@ import org.sola.clients.swing.ui.renderers.DateTimeRenderer;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 import java.util.Locale;
+import javax.swing.RowSorter;
 import org.sola.clients.swing.desktop.application.ApplicationPanel;
 import org.sola.clients.beans.application.ApplicationSearchResultBean;
 import org.sola.clients.beans.application.ApplicationSearchResultsListBean;

@@ -38,47 +38,59 @@ import org.sola.clients.beans.validation.ValidationResultBean;
 import org.sola.clients.swing.gis.to.TransactionCadastreRedefinitionExtraTO;
 import org.sola.common.MappingManager;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
-import org.sola.clients.swing.gis.to.TransactionCadastreChangeExtraTO;
-import org.sola.webservices.transferobjects.transaction.TransactionCadastreChangeTO;
 import org.sola.webservices.transferobjects.transaction.TransactionCadastreRedefinitionTO;
 
 /**
- *
+ * Data bean representing a cadastre redefinition transaction.
+ * 
  * @author Elton Manoku
  */
-public class TransactionCadastreRedefinitionBean extends TransactionBean{
-    
-    private List<CadastreObjectTargetRedefinitionBean> cadastreObjectTargetList = 
-            new ArrayList<CadastreObjectTargetRedefinitionBean>();
+public class TransactionCadastreRedefinitionBean extends TransactionBean {
 
-    private List<CadastreObjectNodeTargetBean> cadastreObjectNodeTargetList = 
+    private List<CadastreObjectTargetRedefinitionBean> cadastreObjectTargetList =
+            new ArrayList<CadastreObjectTargetRedefinitionBean>();
+    private List<CadastreObjectNodeTargetBean> cadastreObjectNodeTargetList =
             new ArrayList<CadastreObjectNodeTargetBean>();
 
+    /**
+     * Gets list of target nodes during the redefinition process
+     */
     public List<CadastreObjectNodeTargetBean> getCadastreObjectNodeTargetList() {
         return cadastreObjectNodeTargetList;
     }
 
-    public void setCadastreObjectNodeTargetList(List<CadastreObjectNodeTargetBean> cadastreObjectNodeTargetList) {
+    /**
+     * Sets list of target nodes during the redefinition process
+     */
+    public void setCadastreObjectNodeTargetList(
+            List<CadastreObjectNodeTargetBean> cadastreObjectNodeTargetList) {
         this.cadastreObjectNodeTargetList = cadastreObjectNodeTargetList;
     }
 
+    /**
+     * Gets list of target cadastre objects
+     */
     public List<CadastreObjectTargetRedefinitionBean> getCadastreObjectTargetList() {
         return cadastreObjectTargetList;
     }
 
-    public void setCadastreObjectTargetList(List<CadastreObjectTargetRedefinitionBean> cadastreObjectTargetList) {
+    /**
+     * Sets list of target cadastre objects
+     */
+    public void setCadastreObjectTargetList(
+            List<CadastreObjectTargetRedefinitionBean> cadastreObjectTargetList) {
         this.cadastreObjectTargetList = cadastreObjectTargetList;
     }
-    
+
     @Override
-    public TransactionCadastreRedefinitionTO getTO(){
+    public TransactionCadastreRedefinitionTO getTO() {
         TransactionCadastreRedefinitionExtraTO to = new TransactionCadastreRedefinitionExtraTO();
         MappingManager.getMapper().map(this, to);
         return to;
     }
-    
+
     @Override
-    public List<ValidationResultBean> save(){        
+    public List<ValidationResultBean> save() {
         return TypeConverters.TransferObjectListToBeanList(
                 PojoDataAccess.getInstance().getCadastreService().saveTransactionCadastreRedefinition(
                 this.getTO()), ValidationResultBean.class, null);

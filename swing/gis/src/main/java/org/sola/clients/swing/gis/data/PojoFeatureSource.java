@@ -63,7 +63,9 @@ import org.sola.webservices.spatial.ResultForNavigationInfo;
 import org.sola.webservices.spatial.SpatialResult;
 
 /**
- *
+ * A FeatureSource for the Sola Feature layers. The features from this source are drawn in the 
+ * map control.
+ * 
  * @author Elton Manoku
  */
 public class PojoFeatureSource implements SimpleFeatureSource {
@@ -72,17 +74,22 @@ public class PojoFeatureSource implements SimpleFeatureSource {
     protected List<FeatureListener> listeners = null;
     private QueryCapabilities capabilities;
     private Set<Key> hints;
-    //private SpatialWS spatialWS;
     private PojoDataAccess dataSource;
     private static WKBReader wkbReader = new WKBReader();
     private SimpleFeatureBuilder builder;
-    //private String pojoQueryName;
     private double lastWest;
     private double lastSouth;
     private double lastEast;
     private double lastNorth;
     private PojoLayer layer;
 
+    /**
+     * Constructor.
+     * 
+     * @param dataSource The data source for the features
+     * @param layer The layer that will use the feature source
+     * @throws SchemaException 
+     */
     public PojoFeatureSource(PojoDataAccess dataSource, PojoLayer layer) throws SchemaException {
         this.layer = layer;
         this.dataSource = dataSource;
@@ -94,6 +101,11 @@ public class PojoFeatureSource implements SimpleFeatureSource {
         this.builder = new SimpleFeatureBuilder(type);
     }
 
+    /**
+     * The WKB reader used to translate the WKB geometries into geotools geometries
+     * 
+     * @return 
+     */
     public static WKBReader getWkbReader() {
         return wkbReader;
     }
@@ -162,18 +174,10 @@ public class PojoFeatureSource implements SimpleFeatureSource {
         if (capabilities == null) {
             capabilities = new QueryCapabilities() {
 
-//                @Override
-//                public boolean isOffsetSupported() {
-//                    return true;
-//                }
                 @Override
                 public boolean isReliableFIDSupported() {
                     return true;
                 }
-//                @Override
-//                public boolean supportsSorting(org.opengis.filter.sort.SortBy[] sortAttributes) {
-//                    return true;
-//                }
             };
         }
         return capabilities;
@@ -183,7 +187,6 @@ public class PojoFeatureSource implements SimpleFeatureSource {
     public synchronized Set<Key> getSupportedHints() {
         if (hints == null) {
             Set<Key> supports = new HashSet<Key>();
-            //supports.add( Hints.FEATURE_DETACHED );
             hints = Collections.unmodifiableSet(supports);
         }
         return hints;
@@ -205,6 +208,16 @@ public class PojoFeatureSource implements SimpleFeatureSource {
         return this.getFeatures(query);
     }
 
+    /**
+     * It retrieves the features falling into the query condition. If the filter is not changed
+     * from the previous filter and the layer is not marked to be forcibly refreshed, it does not
+     * ask for features from the server, but it returns the former ones
+     * 
+     * @param query The query (geotools) used to filter features
+     * 
+     * @return
+     * @throws IOException 
+     */
     @Override
     public PojoFeatureCollection getFeatures(Query query) throws IOException {
         Filter filter = query.getFilter();
@@ -227,8 +240,15 @@ public class PojoFeatureSource implements SimpleFeatureSource {
         return this.collection;
     }
 
-    private void ModifyFeatureCollection(double west, double south,
-            double east, double north) {
+    /**
+     * Given the extent, modifies the feature collection
+     * 
+     * @param west
+     * @param south
+     * @param east
+     * @param north 
+     */
+    private void ModifyFeatureCollection(double west, double south, double east, double north) {
         if (!this.layer.isForceRefresh()) {
             if (this.lastWest == west && this.lastSouth == south
                     && this.lastEast == east && this.lastNorth == north) {
@@ -249,6 +269,12 @@ public class PojoFeatureSource implements SimpleFeatureSource {
         this.collection.addAll(featuresToAdd);
     }
 
+    /**
+     * It translates the result retrieved from the server to features recognized by map control
+     * 
+     * @param spatialResultList
+     * @return 
+     */
     private List<SimpleFeature> getFeaturesFromData(List<SpatialResult> spatialResultList) {
         List<SimpleFeature> features = new ArrayList<SimpleFeature>();
         for (SpatialResult spatialResult : spatialResultList) {

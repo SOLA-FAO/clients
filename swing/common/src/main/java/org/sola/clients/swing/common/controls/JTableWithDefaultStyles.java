@@ -36,6 +36,7 @@ import java.awt.Font;
 import java.util.Locale;
 import javax.swing.JTable;
 import javax.swing.JViewport;
+import javax.swing.RowSorter;
 import javax.swing.UIManager;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
@@ -123,7 +124,7 @@ public class JTableWithDefaultStyles extends JTable {
             @Override
             public void ancestorMoved(AncestorEvent event) {
             }
-        });
+        });        
     }
 
     /**

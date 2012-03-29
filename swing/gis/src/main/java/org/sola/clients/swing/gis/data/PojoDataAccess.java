@@ -34,8 +34,8 @@ package org.sola.clients.swing.gis.data;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
-import org.sola.clients.swing.gis.beans.TransactionBean;
 import org.sola.common.MappingManager;
 import org.sola.clients.swing.gis.beans.TransactionCadastreChangeBean;
 import org.sola.clients.swing.gis.beans.TransactionCadastreRedefinitionBean;
@@ -57,7 +57,11 @@ import org.sola.webservices.transferobjects.transaction.TransactionCadastreRedef
 
 /**
  *
- * @author manoku
+ * This class is a singletone class. It handles the communication with the services for all needs
+ * that gis component has for information from server.
+ * It uses Sola infrastructure to achieve this.
+ * 
+ * @author Elton Manoku
  */
 public class PojoDataAccess {
 
@@ -66,10 +70,17 @@ public class PojoDataAccess {
     private MapDefinitionTO mapDefinition = null;
     private static PojoDataAccess poJoDataAccess = null;
 
+    /**
+     * Constructor. Use the singletone method instead of this constructor.
+     */
     public PojoDataAccess() {
         this.wsManager = WSManager.getInstance();
     }
 
+    /**
+     * It gets the singletone instance of itself. Use this instead of using the constructor to 
+     * get a reference to the object.
+     */
     public static PojoDataAccess getInstance(){
         if (poJoDataAccess==null){
             poJoDataAccess = new PojoDataAccess();
@@ -77,6 +88,12 @@ public class PojoDataAccess {
         return poJoDataAccess;
     }
     
+    /**
+     * Gets the map definition from the server. This object is used to define startup 
+     * parameters for the map control
+     * 
+     * @return 
+     */
     public MapDefinitionTO getMapDefinition() {
         if (this.mapDefinition == null) {
             this.mapDefinition = getSpatialService().getMapDefinition();
@@ -84,7 +101,10 @@ public class PojoDataAccess {
         return this.mapDefinition;
     }
 
-    public HashMap<String, ConfigMapLayerTO> getMapLayerInfoList() {
+    /**
+     * Gets the list of layer definitions from server
+     */
+    public Map<String, ConfigMapLayerTO> getMapLayerInfoList() {
         if (this.mapLayerInfoList == null) {
             List<ConfigMapLayerTO> configMapLayerList = new ArrayList<ConfigMapLayerTO>();
             configMapLayerList = this.getMapDefinition().getLayers();
@@ -96,6 +116,17 @@ public class PojoDataAccess {
         return this.mapLayerInfoList;
     }
 
+    /**
+     * Gets the list of features and other relevant information for the given extent
+     * @param name Name of layer
+     * @param west West coordinate
+     * @param south South coordinate
+     * @param east East coordinate
+     * @param north North coordinate
+     * @param srid Srid of the map control
+     * @param pixelTolerance the pixel tolerance. It is not used at the moment
+     * @return 
+     */
     public ResultForNavigationInfo GetQueryData(String name,
             double west, double south, double east, double north, int srid,
             double pixelTolerance) {
@@ -118,37 +149,63 @@ public class PojoDataAccess {
         return null;
     }
 
+    /**
+     * Gets a list of selected set of features for each query defined in the parameter.
+     * @param queries List of queries used for selecting features
+     * @return 
+     */
     public List<ResultForSelectionInfo> Select(List<QueryForSelect> queries) {
         try {
             return getSearchService().select(queries);
         } catch (WebServiceClientException ex) {
-            LogUtility.log("Error trying to select from gis component.", ex);
+            LogUtility.log(ex.getMessageCode(), ex);
             MessageUtility.displayMessage(ex.getMessageCode(),
                     ex.getErrorNumber(), ex.getMessageParameters());
         }
         return null;
     }
     
+    /**
+     * Gets a reference to the Sola Web service manager. This is used to finally 
+     * communicate with the web services
+     * @return 
+     */
     public WSManager getWSManager(){
         return wsManager;
     }
     
+    /**
+     * Gets a reference to the cadastre web service
+     * @return 
+     */
     public CadastreClient getCadastreService(){
         return getInstance().getWSManager().getCadastreService();
     }
 
+    /**
+     * Gets a reference to the search web service
+     * @return 
+     */
     public SearchClient getSearchService(){
         return getInstance().getWSManager().getSearchService();
     }
 
+    /**
+     * Gets a reference to the spatial web service
+     * @return 
+     */
     public SpatialClient getSpatialService(){
         return getInstance().getWSManager().getSpatialService();
     }
 
+    /**
+     * Gets a cadastre change transaction
+     * @param serviceId The service id which initializes the transaction
+     * @return 
+     */
     public TransactionCadastreChangeBean getTransactionCadastreChange(String serviceId){
         TransactionCadastreChangeTO objTO = 
-                getInstance().getWSManager().getCadastreService().getTransactionCadastreChange(
-                serviceId);
+                getInstance().getCadastreService().getTransactionCadastreChange(serviceId);
         TransactionCadastreChangeBean transactionBean = new TransactionCadastreChangeBean();
         if (objTO == null){
             transactionBean.setFromServiceId(serviceId);
@@ -158,10 +215,15 @@ public class PojoDataAccess {
         return transactionBean;
     }
 
-    public TransactionCadastreRedefinitionBean getTransactionCadastreRedefinition(String serviceId){
+    /**
+     * Gets a cadastre redefinition transaction
+     * @param serviceId The service id which initializes the transaction
+     * @return 
+     */
+    public TransactionCadastreRedefinitionBean getTransactionCadastreRedefinition(
+            String serviceId){
         TransactionCadastreRedefinitionTO objTO = 
-                getInstance().getWSManager().getCadastreService().getTransactionCadastreRedefinition(
-                serviceId);
+                getInstance().getCadastreService().getTransactionCadastreRedefinition(serviceId);
         TransactionCadastreRedefinitionBean transactionBean = 
                 new TransactionCadastreRedefinitionBean();
         if (objTO == null){
@@ -170,5 +232,5 @@ public class PojoDataAccess {
             MappingManager.getMapper().map(objTO, transactionBean);            
         }
         return transactionBean;
-    }    
+    }
 }

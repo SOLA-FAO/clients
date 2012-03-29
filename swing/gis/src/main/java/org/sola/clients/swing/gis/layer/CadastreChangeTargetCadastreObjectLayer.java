@@ -48,16 +48,24 @@ import org.sola.webservices.transferobjects.cadastre.CadastreObjectTO;
 
 /**
  *
- * @author manoku
+ * Layer of the target cadastre objects that is used during the cadastre change.
+ * It maintains a list of cadastre objects being targeted for change.
+ * 
+ * @author Elton Manoku
  */
-public class CadastreChangeTargetCadastreObjectLayer extends ExtendedLayerGraphics{
+public class CadastreChangeTargetCadastreObjectLayer extends ExtendedLayerGraphics {
 
     private static final String LAYER_NAME = "Target Parcels";
     private static final String LAYER_STYLE_RESOURCE = "parcel_target.xml";
-    private List<CadastreObjectTargetBean> cadastreObjectTargetList = 
+    private List<CadastreObjectTargetBean> cadastreObjectTargetList =
             new ArrayList<CadastreObjectTargetBean>();
 
-    public CadastreChangeTargetCadastreObjectLayer(int srid) throws InitializeLayerException {
+    /**
+     * Constructor
+     * 
+     * @throws InitializeLayerException 
+     */
+    public CadastreChangeTargetCadastreObjectLayer() throws InitializeLayerException {
         super(LAYER_NAME, Geometries.POLYGON, LAYER_STYLE_RESOURCE);
 
         this.getFeatureCollection().addListener(new CollectionListener() {
@@ -69,16 +77,26 @@ public class CadastreChangeTargetCadastreObjectLayer extends ExtendedLayerGraphi
         });
     }
 
+    /**
+     * Gets list of cadastre object targets
+     * @return 
+     */
     public List<CadastreObjectTargetBean> getCadastreObjectTargetList() {
         return cadastreObjectTargetList;
     }
 
+    /**
+     * Sets list of cadastre object targets. It is called when the transaction is read from the 
+     * server.
+     * 
+     * @param objectList 
+     */
     public void setCadastreObjectTargetList(
             List<CadastreObjectTargetBean> objectList) {
 
         if (objectList.size() > 0) {
             List<String> ids = new ArrayList<String>();
-            for(CadastreObjectTargetBean bean: objectList){
+            for (CadastreObjectTargetBean bean : objectList) {
                 ids.add(bean.getCadastreObjectId());
             }
             List<CadastreObjectTO> targetObjectList =
@@ -95,6 +113,10 @@ public class CadastreChangeTargetCadastreObjectLayer extends ExtendedLayerGraphi
         }
     }
 
+    /**
+     * It handles the changes in the collection of features
+     * @param ev 
+     */
     private void featureCollectionChanged(CollectionEvent ev) {
         if (ev.getFeatures() == null) {
             return;
@@ -105,7 +127,7 @@ public class CadastreChangeTargetCadastreObjectLayer extends ExtendedLayerGraphi
             }
         } else if (ev.getEventType() == CollectionEvent.FEATURES_REMOVED) {
             for (SimpleFeature feature : ev.getFeatures()) {
-                 CadastreObjectTargetBean found = this.getBean(feature);
+                CadastreObjectTargetBean found = this.getBean(feature);
                 if (found != null) {
                     this.getCadastreObjectTargetList().remove(found);
                 }
@@ -113,16 +135,33 @@ public class CadastreChangeTargetCadastreObjectLayer extends ExtendedLayerGraphi
         }
     }
 
+    /**
+     * Changes an existing bean from its correspondent feature
+     * @param targetBean
+     * @param feature 
+     */
     private void changeBean(CadastreObjectTargetBean targetBean, SimpleFeature feature) {
         targetBean.setCadastreObjectId(feature.getID());
     }
 
+    /**
+     * Gets a new bean from a feature
+     * @param feature
+     * @return 
+     */
     private CadastreObjectTargetBean newBean(SimpleFeature feature) {
         CadastreObjectTargetBean bean = new CadastreObjectTargetBean();
         this.changeBean(bean, feature);
         return bean;
     }
-        private CadastreObjectTargetBean getBean(SimpleFeature feature) {
+
+    /**
+     * Gets the corresponding bean of a feature
+     * 
+     * @param feature
+     * @return 
+     */
+    private CadastreObjectTargetBean getBean(SimpleFeature feature) {
         CadastreObjectTargetBean bean = new CadastreObjectTargetBean();
         bean.setCadastreObjectId(feature.getID());
         int foundIndex = this.getCadastreObjectTargetList().indexOf(bean);
@@ -134,6 +173,10 @@ public class CadastreChangeTargetCadastreObjectLayer extends ExtendedLayerGraphi
         return bean;
     }
 
+    /**
+     * Gets a reference to the data access
+     * @return 
+     */
     public PojoDataAccess getDataAccess() {
         return PojoDataAccess.getInstance();
     }

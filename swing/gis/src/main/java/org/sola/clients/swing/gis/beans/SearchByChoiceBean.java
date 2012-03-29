@@ -38,6 +38,8 @@ import java.util.Properties;
 
 /**
  * It is a data bean which defines a search option for the map control.
+ * It contains a static method which generates a list of the choices read from 
+ * the resource.
  * 
  * @author Elton Manoku
  */
@@ -73,22 +75,37 @@ public class SearchByChoiceBean {
         return instanceList;
     }
 
+    /**
+     * Gets the label which is used for the presentation of the choice for the user
+     */
     public String getLabel() {
         return label;
     }
 
+    /**
+     * Sets the label
+     */
     public void setLabel(String label) {
         this.label = label;
     }
 
+    /**
+     * Gets the value. It is the identifier of the choice
+     */
     public String getValue() {
         return value;
     }
 
+    /**
+     * Sets the value
+     */
     public void setValue(String value) {
         this.value = value;
     }
 
+    /**
+     * Gets the string presentation of the choice
+     */
     @Override
     public String toString() {
         return this.label;

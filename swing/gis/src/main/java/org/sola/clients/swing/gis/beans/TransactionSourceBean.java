@@ -35,7 +35,9 @@ import java.io.Serializable;
 
 /**
  *
- * @author manoku
+ * Data bean representing a source used in a transaction.
+ * 
+ * @author Elton Manoku
  */
 public class TransactionSourceBean implements Serializable{
 
