@@ -313,16 +313,16 @@
                         <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                           <Connection code="FormattersFactory.getInstance().getDecimalFormatterFactory()" type="code"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="org/sola/clients/swing/ui/referencedata/Bundle.properties" key="RequestTypePanel.txtBaseFee.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                        </Property>
                         <Property name="name" type="java.lang.String" value="txtBaseFee" noResource="true"/>
                         <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
                           <ComponentRef name="txtAreaFee"/>
                         </Property>
                       </Properties>
                       <BindingProperties>
-                        <BindingProperty name="value" source="Form" sourcePath="${requestTypeBean.baseFee}" target="txtBaseFee" targetPath="value" updateStrategy="0" immediately="false"/>
+                        <BindingProperty name="text" source="Form" sourcePath="${requestTypeBean.baseFee}" target="txtBaseFee" targetPath="text" updateStrategy="0" immediately="false">
+                          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                          <Property name="name" type="java.lang.String" value=""/>
+                        </BindingProperty>
                       </BindingProperties>
                     </Component>
                   </SubComponents>
@@ -370,16 +370,15 @@
                         <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                           <Connection code="FormattersFactory.getInstance().getDecimalFormatterFactory()" type="code"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="org/sola/clients/swing/ui/referencedata/Bundle.properties" key="RequestTypePanel.txtAreaFee.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                        </Property>
                         <Property name="name" type="java.lang.String" value="txtAreaFee" noResource="true"/>
                         <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
                           <ComponentRef name="txtValueBaseFee"/>
                         </Property>
                       </Properties>
                       <BindingProperties>
-                        <BindingProperty name="value" source="Form" sourcePath="${requestTypeBean.areaBaseFee}" target="txtAreaFee" targetPath="value" updateStrategy="0" immediately="false"/>
+                        <BindingProperty name="text" source="Form" sourcePath="${requestTypeBean.areaBaseFee}" target="txtAreaFee" targetPath="text" updateStrategy="0" immediately="false">
+                          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                        </BindingProperty>
                       </BindingProperties>
                     </Component>
                   </SubComponents>
@@ -427,16 +426,15 @@
                         <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                           <Connection code="FormattersFactory.getInstance().getDecimalFormatterFactory()" type="code"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="org/sola/clients/swing/ui/referencedata/Bundle.properties" key="RequestTypePanel.txtValueBaseFee.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                        </Property>
                         <Property name="name" type="java.lang.String" value="txtValueBaseFee" noResource="true"/>
                         <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
                           <ComponentRef name="txtCompleteDays"/>
                         </Property>
                       </Properties>
                       <BindingProperties>
-                        <BindingProperty name="value" source="Form" sourcePath="${requestTypeBean.valueBaseFee}" target="txtValueBaseFee" targetPath="value" updateStrategy="0" immediately="false"/>
+                        <BindingProperty name="text" source="Form" sourcePath="${requestTypeBean.valueBaseFee}" target="txtValueBaseFee" targetPath="text" updateStrategy="0" immediately="false">
+                          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                        </BindingProperty>
                       </BindingProperties>
                     </Component>
                   </SubComponents>
@@ -484,16 +482,15 @@
                         <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                           <Connection code="FormattersFactory.getInstance().getIntegerFormatterFactory()" type="code"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="org/sola/clients/swing/ui/referencedata/Bundle.properties" key="RequestTypePanel.txtCompleteDays.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                        </Property>
                         <Property name="name" type="java.lang.String" value="txtCompleteDays" noResource="true"/>
                         <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
                           <ComponentRef name="cbxRrrType"/>
                         </Property>
                       </Properties>
                       <BindingProperties>
-                        <BindingProperty name="value" source="Form" sourcePath="${requestTypeBean.nrDaysToComplete}" target="txtCompleteDays" targetPath="value" updateStrategy="0" immediately="false"/>
+                        <BindingProperty name="text" source="Form" sourcePath="${requestTypeBean.nrDaysToComplete}" target="txtCompleteDays" targetPath="text" updateStrategy="0" immediately="false">
+                          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                        </BindingProperty>
                       </BindingProperties>
                     </Component>
                   </SubComponents>
@@ -541,16 +538,15 @@
                         <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                           <Connection code="FormattersFactory.getInstance().getIntegerFormatterFactory()" type="code"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="org/sola/clients/swing/ui/referencedata/Bundle.properties" key="RequestTypePanel.txtRequiredPropObjects.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                        </Property>
                         <Property name="name" type="java.lang.String" value="txtRequiredPropObjects" noResource="true"/>
                         <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
                           <ComponentRef name="txtNotation"/>
                         </Property>
                       </Properties>
                       <BindingProperties>
-                        <BindingProperty name="value" source="Form" sourcePath="${requestTypeBean.nrPropertiesRequired}" target="txtRequiredPropObjects" targetPath="value" updateStrategy="0" immediately="false"/>
+                        <BindingProperty name="text" source="Form" sourcePath="${requestTypeBean.nrPropertiesRequired}" target="txtRequiredPropObjects" targetPath="text" updateStrategy="0" immediately="false">
+                          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                        </BindingProperty>
                       </BindingProperties>
                     </Component>
                   </SubComponents>

@@ -295,11 +295,10 @@ public class RequestTypePanel extends javax.swing.JPanel {
         jLabel7.setName("jLabel7"); // NOI18N
 
         txtBaseFee.setFormatterFactory(FormattersFactory.getInstance().getDecimalFormatterFactory());
-        txtBaseFee.setText(bundle.getString("RequestTypePanel.txtBaseFee.text")); // NOI18N
         txtBaseFee.setName("txtBaseFee"); // NOI18N
         txtBaseFee.setNextFocusableComponent(txtAreaFee);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${requestTypeBean.baseFee}"), txtBaseFee, org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${requestTypeBean.baseFee}"), txtBaseFee, org.jdesktop.beansbinding.BeanProperty.create("text"), "");
         bindingGroup.addBinding(binding);
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
@@ -329,11 +328,10 @@ public class RequestTypePanel extends javax.swing.JPanel {
         jLabel8.setName("jLabel8"); // NOI18N
 
         txtAreaFee.setFormatterFactory(FormattersFactory.getInstance().getDecimalFormatterFactory());
-        txtAreaFee.setText(bundle.getString("RequestTypePanel.txtAreaFee.text")); // NOI18N
         txtAreaFee.setName("txtAreaFee"); // NOI18N
         txtAreaFee.setNextFocusableComponent(txtValueBaseFee);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${requestTypeBean.areaBaseFee}"), txtAreaFee, org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${requestTypeBean.areaBaseFee}"), txtAreaFee, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
@@ -363,11 +361,10 @@ public class RequestTypePanel extends javax.swing.JPanel {
         jLabel9.setName("jLabel9"); // NOI18N
 
         txtValueBaseFee.setFormatterFactory(FormattersFactory.getInstance().getDecimalFormatterFactory());
-        txtValueBaseFee.setText(bundle.getString("RequestTypePanel.txtValueBaseFee.text")); // NOI18N
         txtValueBaseFee.setName("txtValueBaseFee"); // NOI18N
         txtValueBaseFee.setNextFocusableComponent(txtCompleteDays);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${requestTypeBean.valueBaseFee}"), txtValueBaseFee, org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${requestTypeBean.valueBaseFee}"), txtValueBaseFee, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
@@ -397,11 +394,10 @@ public class RequestTypePanel extends javax.swing.JPanel {
         jLabel6.setName("jLabel6"); // NOI18N
 
         txtCompleteDays.setFormatterFactory(FormattersFactory.getInstance().getIntegerFormatterFactory());
-        txtCompleteDays.setText(bundle.getString("RequestTypePanel.txtCompleteDays.text")); // NOI18N
         txtCompleteDays.setName("txtCompleteDays"); // NOI18N
         txtCompleteDays.setNextFocusableComponent(cbxRrrType);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${requestTypeBean.nrDaysToComplete}"), txtCompleteDays, org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${requestTypeBean.nrDaysToComplete}"), txtCompleteDays, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
@@ -431,11 +427,10 @@ public class RequestTypePanel extends javax.swing.JPanel {
         jLabel10.setName("jLabel10"); // NOI18N
 
         txtRequiredPropObjects.setFormatterFactory(FormattersFactory.getInstance().getIntegerFormatterFactory());
-        txtRequiredPropObjects.setText(bundle.getString("RequestTypePanel.txtRequiredPropObjects.text")); // NOI18N
         txtRequiredPropObjects.setName("txtRequiredPropObjects"); // NOI18N
         txtRequiredPropObjects.setNextFocusableComponent(txtNotation);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${requestTypeBean.nrPropertiesRequired}"), txtRequiredPropObjects, org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${requestTypeBean.nrPropertiesRequired}"), txtRequiredPropObjects, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
