@@ -34,10 +34,13 @@ import java.awt.Font;
 import java.util.Locale;
 import javax.swing.JTable;
 import javax.swing.JViewport;
+import javax.swing.RowSorter;
 import javax.swing.UIManager;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  * {@link JTable} component with predefined styles
@@ -114,7 +117,7 @@ public class JTableWithDefaultStyles extends JTable {
             @Override
             public void ancestorMoved(AncestorEvent event) {
             }
-        });
+        });        
     }
 
     /** Used to color alternative(even) rows. */
@@ -155,6 +158,13 @@ public class JTableWithDefaultStyles extends JTable {
 
     public void setOddRowColor(Color oddRowColor) {
         this.oddRowColor = oddRowColor;
-    }
+    }       
     
+    public void enableSorting(){
+        this.setRowSorter(new TableRowSorter<TableModel>(getModel()));
+    }
+
+    public void disableSorting(){
+        this.setRowSorter(null);
+    }
 }

@@ -39,6 +39,7 @@ import org.sola.clients.swing.ui.renderers.DateTimeRenderer;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 import java.util.Locale;
+import javax.swing.RowSorter;
 import org.sola.clients.swing.desktop.application.ApplicationPanel;
 import org.sola.clients.beans.application.ApplicationSearchResultBean;
 import org.sola.clients.beans.application.ApplicationSearchResultsListBean;
@@ -708,10 +709,14 @@ public class DashBoardPanel extends ContentPanel {
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(
                         ClientMessage.APPLICATION_LOADING_UNASSIGNED));
+                tbUnassigned.disableSorting();
                 unassignedAppListBean.FillUnassigned();
+                tbUnassigned.enableSorting();
                 setMessage(MessageUtility.getLocalizedMessageText(
                         ClientMessage.APPLICATION_LOADING_ASSIGNED));
+                tbAssigned.disableSorting();
                 assignedAppListBean.FillAssigned();
+                tbAssigned.enableSorting();
                 return null;
             }
         };
