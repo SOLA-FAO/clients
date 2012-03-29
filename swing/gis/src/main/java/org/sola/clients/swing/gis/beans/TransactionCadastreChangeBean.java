@@ -41,7 +41,8 @@ import org.sola.clients.swing.gis.to.TransactionCadastreChangeExtraTO;
 import org.sola.webservices.transferobjects.transaction.TransactionCadastreChangeTO;
 
 /**
- *
+ * Data bean representing a transaction of cadastre change.
+ * 
  * @author Elton Manoku
  */
 public class TransactionCadastreChangeBean extends TransactionBean{
@@ -51,26 +52,44 @@ public class TransactionCadastreChangeBean extends TransactionBean{
             new ArrayList<CadastreObjectTargetBean>();
     private List<SurveyPointBean> surveyPointList = new ArrayList<SurveyPointBean>();
 
+    /**
+     * Gets list of new cadastre objects
+     */
     public List<CadastreObjectBean> getCadastreObjectList() {
         return cadastreObjectList;
     }
 
+    /**
+     * Sets list of new cadastre objects
+     */
     public void setCadastreObjectList(List<CadastreObjectBean> cadastreObjectList) {
         this.cadastreObjectList = cadastreObjectList;
     }
 
+    /**
+     * Gets list of target cadastre objects
+     */
     public List<CadastreObjectTargetBean> getCadastreObjectTargetList() {
         return cadastreObjectTargetList;
     }
 
+    /**
+     * Sets list of target cadastre objects
+     */
     public void setCadastreObjectTargetList(List<CadastreObjectTargetBean> cadastreObjectTargetList) {
         this.cadastreObjectTargetList = cadastreObjectTargetList;
     }
     
+    /**
+     * Gets list of survey points added in transaction
+     */
     public List<SurveyPointBean> getSurveyPointList() {
         return surveyPointList;
     }
 
+    /**
+     * Sets list of survey points added in transaction
+     */
     public void setSurveyPointList(List<SurveyPointBean> surveyPointList) {
         this.surveyPointList = surveyPointList;
     }

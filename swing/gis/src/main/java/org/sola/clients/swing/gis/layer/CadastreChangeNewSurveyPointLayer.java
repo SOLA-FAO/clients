@@ -35,6 +35,7 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.io.ParseException;
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -56,8 +57,9 @@ import org.sola.clients.swing.gis.ui.control.CadastreChangePointSurveyListForm;
 import org.sola.common.messaging.GisMessage;
 
 /**
- *
- * @author Manoku
+ * Layer of the survey points that is used during the cadastre change
+ * 
+ * @author Elton Manoku
  */
 public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
 
@@ -77,8 +79,15 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
     private DefaultTableModel tableModel = null;
     private CadastreChangeNewCadastreObjectLayer newCadastreObjectLayer = null;
     private List<SurveyPointBean> surveyPointList = new ArrayList<SurveyPointBean>();
-    private CadastreChangePointSurveyListForm hostForm = null;
+    private Component hostForm = null;
 
+    /**
+     * Constructor.
+     * @param newCadastreObjectLayer The layer of the new cadastre objects. It is needed in order
+     * to do topology checks.
+     * 
+     * @throws InitializeLayerException 
+     */
     public CadastreChangeNewSurveyPointLayer(
             CadastreChangeNewCadastreObjectLayer newCadastreObjectLayer)
             throws InitializeLayerException {
@@ -87,6 +96,13 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
 
         this.setFilterExpressionForSnapping(String.format("%s=1", LAYER_FIELD_ISBOUNDARY));
         this.newCadastreObjectLayer = newCadastreObjectLayer;
+        initializeFormHostingAndEvents();
+    }
+
+    /**
+     * It initializes event handlers and form hosting
+     */
+    private void initializeFormHostingAndEvents() {
         this.getFeatureCollection().addListener(new CollectionListener() {
 
             @Override
@@ -95,8 +111,7 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
             }
         });
 
-        this.hostForm = new CadastreChangePointSurveyListForm(this);
-        this.tableModel = (DefaultTableModel) this.hostForm.getTable().getModel();
+        this.tableModel = (DefaultTableModel) this.getHostForm().getTable().getModel();
         this.tableModel.addTableModelListener(new TableModelListener() {
 
             @Override
@@ -106,10 +121,22 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
         });
     }
 
+    /**
+     * Gets the form that is responsible with handling other attributes of features
+     * @return 
+     */
     public CadastreChangePointSurveyListForm getHostForm() {
-        return this.hostForm;
+        if (this.hostForm == null) {
+            this.hostForm = new CadastreChangePointSurveyListForm(this);
+        }
+        return (CadastreChangePointSurveyListForm) this.hostForm;
     }
 
+    /**
+     * Gets the field index in the table of a certain field
+     * @param fieldName
+     * @return 
+     */
     public int getFieldIndex(String fieldName) {
         if (fieldName.equals(LAYER_FIELD_FID)) {
             return 0;
@@ -125,10 +152,19 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
         return -1;
     }
 
+    /**
+     * Gets the list of survey points
+     * @return 
+     */
     public List<SurveyPointBean> getSurveyPointList() {
         return surveyPointList;
     }
 
+    /**
+     * Sets the list of survey points. It is called when the transaction is read from the server
+     * 
+     * @param surveyPointList 
+     */
     public void setSurveyPointList(List<SurveyPointBean> surveyPointList) {
         if (!surveyPointList.isEmpty()) {
             try {
@@ -154,6 +190,11 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
         }
     }
 
+    /**
+     * Gets the mean of the deviations of survey points from their original location.
+     * It is calculated only for linked points
+     * @return 
+     */
     public Double getMean() {
         Double result = 0.0;
         Double deltaX = 0.0, deltaY = 0.0;
@@ -166,7 +207,8 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
                 continue;
             }
             totalPoints++;
-            Point originalGeometry = (Point) currentFeature.getAttribute(LAYER_FIELD_ORIGINAL_GEOMETRY);
+            Point originalGeometry =
+                    (Point) currentFeature.getAttribute(LAYER_FIELD_ORIGINAL_GEOMETRY);
             Point currentGeometry = (Point) currentFeature.getDefaultGeometry();
             deltaX += Math.abs(originalGeometry.getX() - currentGeometry.getX());
             deltaY += Math.abs(originalGeometry.getY() - currentGeometry.getY());
@@ -176,6 +218,11 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
         return result;
     }
 
+    /**
+     * Gets the standard deviation of survey points from their original location.
+     * It is calculated only for linked points
+     * @return 
+     */
     public Double getStandardDeviation() {
         Double result = 0.0;
         Double mean = this.getMean();
@@ -198,7 +245,12 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
         return result;
     }
 
-    private boolean pointIsUsedInNewParcel(SimpleFeature feature) {
+    /**
+     * It checks if a point is used in a new cadastre object
+     * @param feature
+     * @return 
+     */
+    private boolean pointIsUsedInNewCadastreObject(SimpleFeature feature) {
         Coordinate pointCoord = ((Point) feature.getDefaultGeometry()).getCoordinate();
         for (VertexInformation vertexInformation : this.newCadastreObjectLayer.getVertexList()) {
             if (vertexInformation.getVertex().equals2D(pointCoord)) {
@@ -208,6 +260,11 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
         return false;
     }
 
+    /**
+     * It handles changes in the table where the other attributes are displayed. Some changes
+     * in some of the columns of this table, need to be reflected in the feature itself.
+     * @param e 
+     */
     private void treatTableChange(TableModelEvent e) {
         int rowIndex = e.getFirstRow();
         int colIndex = e.getColumn();
@@ -247,12 +304,25 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
         }
     }
 
+    /**
+     * It adds a new survey point
+     * @param x
+     * @param y 
+     */
     public void addPoint(Double x, Double y) {
         Point pointGeom = this.getGeometryFactory().createPoint(new Coordinate(x, y));
         this.addFeature(null, pointGeom, null);
         this.getMapControl().refresh();
     }
 
+    /**
+     * It adds a new feature of survey point type
+     * @param fid This is ignored. The fid is always generated to assure uniqueness and to be
+     * human friendly.
+     * @param geom
+     * @param fieldsWithValues
+     * @return 
+     */
     @Override
     public SimpleFeature addFeature(
             String fid,
@@ -272,20 +342,35 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
         return addedFeature;
     }
 
+    /**
+     * It removes a feature of survey point type. It is first checked if the point is used
+     * in a new cadastre object.
+     * @param fid
+     * @return 
+     */
     @Override
     public SimpleFeature removeFeature(String fid) {
-        if (this.pointIsUsedInNewParcel(this.getFeatureCollection().getFeature(fid))) {
+        if (this.pointIsUsedInNewCadastreObject(this.getFeatureCollection().getFeature(fid))) {
             Messaging.getInstance().show(GisMessage.CADASTRE_CHANGE_ERROR_POINT_FOUND_IN_PARCEL);
             return null;
         }
         return super.removeFeature(fid);
     }
 
+    /**
+     * It changes a survey point. It triggers changes in all vertices that has the same coordinates
+     * in the new cadastre objects
+     * @param vertexInformation
+     * @param newPosition
+     * @return 
+     */
     @Override
-    public SimpleFeature changeVertex(VertexInformation vertexInformation, DirectPosition2D newPosition) {
+    public SimpleFeature changeVertex(
+            VertexInformation vertexInformation, DirectPosition2D newPosition) {
         for (VertexInformation vertexCOInformation : this.newCadastreObjectLayer.getVertexList()) {
             if (vertexInformation.getVertex().distance(vertexCOInformation.getVertex()) <= 0.01) {
-                if (this.newCadastreObjectLayer.changeVertex(vertexCOInformation, newPosition) == null) {
+                if (this.newCadastreObjectLayer.changeVertex(
+                        vertexCOInformation, newPosition) == null) {
                     return null;
                 }
             }
@@ -293,6 +378,10 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
         return super.changeVertex(vertexInformation, newPosition);
     }
 
+    /**
+     * It handles the changes in the collection of features
+     * @param ev 
+     */
     private void featureCollectionChanged(CollectionEvent ev) {
         if (ev.getFeatures() == null) {
             return;
@@ -322,6 +411,10 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
         }
     }
 
+    /**
+     * Adds a row in the table from a feature
+     * @param feature 
+     */
     private void addInTable(SimpleFeature pointObject) {
         if (this.tableModel == null) {
             return;
@@ -336,6 +429,10 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
         tableModel.addRow(row);
     }
 
+    /**
+     * Remove a row from the table for a given feature
+     * @param feature 
+     */
     private void removeInTable(SimpleFeature feature) {
         if (this.tableModel == null) {
             return;
@@ -350,6 +447,11 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
         }
     }
 
+    /**
+     * This changes the table values if the linked feature is changed. 
+     * Only the official area can be changed.
+     * @param featureObject 
+     */
     private void changeInTable(SimpleFeature featureObject) {
         if (this.tableModel == null) {
             return;
@@ -369,6 +471,11 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
         }
     }
 
+    /**
+     * Changes an existing bean from its correspondent feature
+     * @param targetBean
+     * @param feature 
+     */
     private void changeBean(SurveyPointBean targetBean, SimpleFeature feature) {
         targetBean.setId(feature.getID());
         targetBean.setBoundary(feature.getAttribute(LAYER_FIELD_ISBOUNDARY).equals(1));
@@ -378,12 +485,23 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
         targetBean.setGeom(wkbWriter.write((Geometry) feature.getDefaultGeometry()));
     }
 
+    /**
+     * Gets a new bean from a feature
+     * @param feature
+     * @return 
+     */
     private SurveyPointBean newBean(SimpleFeature feature) {
         SurveyPointBean bean = new SurveyPointBean();
         this.changeBean(bean, feature);
         return bean;
     }
 
+    /**
+     * Gets the corresponding bean of a feature
+     * 
+     * @param feature
+     * @return 
+     */
     private SurveyPointBean getBean(SimpleFeature feature) {
         SurveyPointBean bean = new SurveyPointBean();
         bean.setId(feature.getID());
@@ -396,6 +514,11 @@ public class CadastreChangeNewSurveyPointLayer extends ExtendedLayerEditor {
         return bean;
     }
 
+    /**
+     * Gets the shift of a point from its original location
+     * @param feature
+     * @return 
+     */
     private double getPointShift(SimpleFeature feature) {
         return ((Point) feature.getDefaultGeometry()).distance(
                 (Geometry) feature.getAttribute(LAYER_FIELD_ORIGINAL_GEOMETRY));

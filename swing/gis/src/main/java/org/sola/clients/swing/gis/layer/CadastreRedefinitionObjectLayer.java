@@ -24,7 +24,8 @@ import org.sola.clients.swing.gis.beans.CadastreObjectTargetRedefinitionBean;
 import org.sola.common.messaging.GisMessage;
 
 /**
- *
+ * Layer that maintains a list of target objects during the cadastre redefinition.
+ * 
  * @author Elton Manoku
  */
 public class CadastreRedefinitionObjectLayer extends ExtendedLayerGraphics {
@@ -35,6 +36,11 @@ public class CadastreRedefinitionObjectLayer extends ExtendedLayerGraphics {
     private static final String LAYER_ATTRIBUTE_DEFINITION =
             String.format("%s:Polygon", LAYER_FIELD_ORIGINAL_GEOMETRY);
 
+    /**
+     * Constructor
+     * 
+     * @throws InitializeLayerException 
+     */
     public CadastreRedefinitionObjectLayer() throws InitializeLayerException {
         super(LAYER_NAME, Geometries.POLYGON, LAYER_STYLE_RESOURCE, LAYER_ATTRIBUTE_DEFINITION);
         this.getFeatureCollection().addListener(new CollectionListener() {
@@ -46,6 +52,11 @@ public class CadastreRedefinitionObjectLayer extends ExtendedLayerGraphics {
         });
     }
 
+    /**
+     * Adds the cadastre objects to the layer
+     * 
+     * @param cadastreObjectList 
+     */
     public void addCadastreObjects(List<CadastreObjectBean> cadastreObjectList) {
         for (CadastreObjectBean coBean : cadastreObjectList) {
             if (this.getFeatureCollection().getFeature(coBean.getId()) == null) {
@@ -54,6 +65,10 @@ public class CadastreRedefinitionObjectLayer extends ExtendedLayerGraphics {
         }
     }
 
+    /**
+     * Gets the list of target objects
+     * @return 
+     */
     public List<CadastreObjectTargetRedefinitionBean> getCadastreObjectTargetList() {
         List<CadastreObjectTargetRedefinitionBean> targetList =
                 new ArrayList<CadastreObjectTargetRedefinitionBean>();
@@ -72,6 +87,12 @@ public class CadastreRedefinitionObjectLayer extends ExtendedLayerGraphics {
         return targetList;
     }
 
+
+    /**
+     * Adds the list of target cadastre objects. It is called during the read of the transaction
+     * from the server.
+     * @param targetList 
+     */
     public void addCadastreObjectTargetList(List<CadastreObjectTargetRedefinitionBean> targetList) {
         for (CadastreObjectTargetRedefinitionBean targetBean : targetList) {
             this.addCadastreObjectTarget(
@@ -81,6 +102,12 @@ public class CadastreRedefinitionObjectLayer extends ExtendedLayerGraphics {
         }
     }
 
+    /**
+     * Add a target cadastre object. If a feature with the same fid is found it is not added
+     * @param fid
+     * @param geometry If this is null, it is cloned by originalGeometry
+     * @param originalGeometry This is the original geometry of the cadastre object
+     */
     public void addCadastreObjectTarget(String fid, byte[] geometry, byte[] originalGeometry) {
         if (this.getFeatureCollection().getFeature(fid) != null) {
             return;
@@ -99,6 +126,12 @@ public class CadastreRedefinitionObjectLayer extends ExtendedLayerGraphics {
         }
     }
 
+    /**
+     * Gets the list of features of target cadastre objects that are involved in a node
+     * 
+     * @param nodeFeature
+     * @return 
+     */
     public List<SimpleFeature> getCadastreObjectFeatures(SimpleFeature nodeFeature) {
         List<SimpleFeature> cadastreObjectFeatureList =
                 new ArrayList<SimpleFeature>();
@@ -113,6 +146,13 @@ public class CadastreRedefinitionObjectLayer extends ExtendedLayerGraphics {
         return cadastreObjectFeatureList;
     }
 
+
+    /**
+     * It handles the if a feature changes. If a feature changes and its geometry
+     * becomes the same as the original geometry, it is removed from the collection.
+     * 
+     * @param ev 
+     */
     private void featureCollectionChanged(CollectionEvent ev) {
         if (ev.getFeatures() == null
                 || ev.getEventType() == CollectionEvent.FEATURES_ADDED

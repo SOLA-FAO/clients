@@ -7,7 +7,8 @@ package org.sola.clients.swing.gis.beans;
 import java.io.Serializable;
 
 /**
- *
+ * A data bean which represents a node target during the Redefine cadastre process.
+ * 
  * @author Elton Manoku
  */
 public class CadastreObjectNodeTargetBean implements Serializable {

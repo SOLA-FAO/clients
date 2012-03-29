@@ -48,10 +48,16 @@ public class CadastreObjectBean implements Serializable {
     private byte[] geomPolygon;
     private List<SpatialValueAreaBean> spatialValueAreaList = new ArrayList<SpatialValueAreaBean>();
 
+    /**
+     * Gets id
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * Sets id
+     */
     public void setId(String id) {
         this.id = id;
     }

@@ -35,8 +35,10 @@ import org.geotools.data.collection.ListFeatureCollection;
 import org.opengis.feature.simple.SimpleFeatureType;
 
 /**
- *
- * @author Manoku
+ * It is a ListFeatureCollection that is used for all features used to be drawn in the 
+ * map control.
+ * 
+ * @author Elton Manoku
  */
 public class PojoFeatureCollection extends ListFeatureCollection{
         
