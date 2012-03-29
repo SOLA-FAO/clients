@@ -45,13 +45,16 @@ public class NewPropertyWizardPanel extends ContentPanel {
     private java.util.ResourceBundle resourceBundle;
     private final static String CARD_SEARCH = "cardSearch";
     private final static String CARD_BAUNIT = "cardBaUnit";
+    private boolean allowSelection;
 
     /** 
      * Class constructor. 
      * @param applicationBean Application instance used to pick up property list.
+     * @param allowSelection Defines if selection of parcels and rights is allowed.
      */
-    public NewPropertyWizardPanel(ApplicationBean applicationBean) {
+    public NewPropertyWizardPanel(ApplicationBean applicationBean, boolean allowSelection) {
         this.applicationBean = applicationBean;
+        this.allowSelection = allowSelection;
         resourceBundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle");
 
         initComponents();
@@ -68,6 +71,10 @@ public class NewPropertyWizardPanel extends ContentPanel {
                 }
             }
         });
+        baUnitRelTypeListBean.makePriorTitleDefault();
+        tableCurrentParcels.setEnabled(allowSelection);
+        tableNewParcels.setEnabled(allowSelection);
+        tableRights.setEnabled(allowSelection);
         int tabIndex = tabsPropertySelection.indexOfComponent(pnlApplicationProperty);
         tabsPropertySelection.setTitleAt(tabIndex, String.format("%s #%s",
                 tabsPropertySelection.getTitleAt(tabIndex), applicationBean.getNr()));
@@ -380,6 +387,7 @@ public class NewPropertyWizardPanel extends ContentPanel {
             }
         });
 
+        cbxRelationType.setEnabled(false);
         cbxRelationType.setName("cbxRelationType"); // NOI18N
 
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${baUnitRelTypes}");
@@ -603,7 +611,7 @@ public class NewPropertyWizardPanel extends ContentPanel {
         if (getBaUnitBean().getSelectedCadastreObjects().size() < 1
                 && getBaUnitBean().getSelectedNewCadastreObjects().size() < 1
                 && getBaUnitBean().getSelectedRrrs(false).size() < 1) {
-            if(MessageUtility.displayMessage(ClientMessage.BAUNIT_NOTHING_SELECTED)
+            if(allowSelection && MessageUtility.displayMessage(ClientMessage.BAUNIT_NOTHING_SELECTED)
                     != MessageUtility.BUTTON_ONE){
                 return;
             }
@@ -618,9 +626,6 @@ public class NewPropertyWizardPanel extends ContentPanel {
             MessageUtility.displayMessage(ClientMessage.BAUNIT_EXISTING_PARCELS_SELECTED);
         }
 
-//        for (CadastreObjectBean cadastreObject : baUnit.getCadastreObjectList()) {
-//            cadastreObject.setStatusCode(StatusConstants.PENDING);
-//        }
         BaUnitBean selectedBaUnit = getBaUnitBean().copy();
         selectedBaUnit.getRrrList().clear();
         selectedBaUnit.getRrrList().addAll(getBaUnitBean().getSelectedRrrs(true));

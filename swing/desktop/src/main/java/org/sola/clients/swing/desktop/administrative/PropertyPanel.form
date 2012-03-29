@@ -286,7 +286,7 @@
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="jToolBar5" min="-2" pref="25" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jScrollPane6" pref="318" max="32767" attributes="0"/>
+              <Component id="jScrollPane6" pref="353" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -423,7 +423,7 @@
                           <Component id="jToolBar4" min="-2" pref="25" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="documentsPanel1" min="-2" pref="70" max="-2" attributes="0"/>
-                          <EmptySpace pref="32" max="32767" attributes="0"/>
+                          <EmptySpace pref="67" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -776,7 +776,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jToolBar1" min="-2" pref="25" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jScrollPane1" pref="237" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" pref="272" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -959,7 +959,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jToolBar2" min="-2" pref="25" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jScrollPane2" pref="237" max="32767" attributes="0"/>
+                          <Component id="jScrollPane2" pref="272" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -1235,7 +1235,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jScrollPane5" pref="268" max="32767" attributes="0"/>
+                          <Component id="jScrollPane5" pref="303" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -1349,7 +1349,7 @@
                               </Group>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jScrollPane4" pref="237" max="32767" attributes="0"/>
+                          <Component id="jScrollPane4" pref="272" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -1513,7 +1513,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                  <JTabbedPaneConstraints tabName="Prior Properties">
+                  <JTabbedPaneConstraints tabName="Property history">
                     <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                       <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="PropertyPanel.pnlPriorProperties.TabConstraints.tabTitle" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
@@ -1535,7 +1535,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jPanel14" pref="268" max="32767" attributes="0"/>
+                          <Component id="jPanel14" pref="303" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -1570,7 +1570,7 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jToolBar6" min="-2" pref="25" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jScrollPane3" pref="95" max="32767" attributes="0"/>
+                                  <Component id="jScrollPane3" pref="113" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -1720,6 +1720,7 @@
                                 <BindingProperty name="elements" source="baUnitBean1" sourcePath="${filteredParentBaUnits}" target="tableParentBaUnits" targetPath="elements" updateStrategy="0" immediately="true">
                                   <Subbinding sourcePath="${relatedBaUnit.name}">
                                     <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
+                                    <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
                                   </Subbinding>
                                   <Subbinding sourcePath="${relatedBaUnit.nameFirstpart}">
                                     <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
@@ -1735,6 +1736,7 @@
                                   </Subbinding>
                                   <Subbinding sourcePath="${relatedBaUnit.status.displayValue}">
                                     <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
+                                    <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
                                   </Subbinding>
                                 </BindingProperty>
                                 <BindingProperty name="selectedElement" source="baUnitBean1" sourcePath="${selectedParentBaUnit}" target="tableParentBaUnits" targetPath="selectedElement" updateStrategy="0" immediately="false">
@@ -1763,7 +1765,7 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jToolBar7" min="-2" pref="25" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jScrollPane7" pref="95" max="32767" attributes="0"/>
+                                  <Component id="jScrollPane7" pref="113" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -1930,7 +1932,7 @@
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="290" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="325" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>

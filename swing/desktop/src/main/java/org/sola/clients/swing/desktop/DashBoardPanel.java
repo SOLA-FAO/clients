@@ -182,7 +182,7 @@ public class DashBoardPanel extends ContentPanel {
             MessageUtility.displayMessage(ClientMessage.CHECK_FEES_NOT_PAID);
             return;
         }
-        
+
         final String appId = appBean.getId();
         SolaTask t = new SolaTask<Void, Void>() {
 
@@ -217,7 +217,7 @@ public class DashBoardPanel extends ContentPanel {
 
                     @Override
                     public void propertyChange(PropertyChangeEvent e) {
-                        if(e.getPropertyName().equals(ApplicationPanel.APPLICATION_SAVED_PROPERTY)){
+                        if (e.getPropertyName().equals(ApplicationPanel.APPLICATION_SAVED_PROPERTY)) {
                             refreshApplications();
                         }
                     }

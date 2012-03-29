@@ -452,6 +452,16 @@ public class ApplicationPanel extends ContentPanel {
                     getMainContentPanel().addPanel(propertyPnl, MainContentPanel.CARD_PROPERTY_PANEL, true);
                     return null;
                 }
+
+                @Override
+                protected void taskDone() {
+                    if(!appBean.getSelectedService().getRequestTypeCode()
+                            .equalsIgnoreCase(RequestTypeBean.CODE_NEW_DIGITAL_TITLE)){
+                        ((PropertyPanel)getMainContentPanel()
+                                .getPanel(MainContentPanel.CARD_PROPERTY_PANEL))
+                                .showPriorTitileMessage();
+                    }
+                }
             };
             TaskManager.getInstance().runTask(t);
         }
@@ -497,7 +507,7 @@ public class ApplicationPanel extends ContentPanel {
                     == MessageUtility.BUTTON_ONE) {
                 if (checkApplication()) {
                     saveApplication();
-                }else{
+                } else {
                     return;
                 }
             } else {

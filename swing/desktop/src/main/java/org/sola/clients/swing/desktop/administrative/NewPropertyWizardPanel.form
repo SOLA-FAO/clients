@@ -495,6 +495,7 @@
                     </Component>
                     <Component class="javax.swing.JComboBox" name="cbxRelationType">
                       <Properties>
+                        <Property name="enabled" type="boolean" value="false"/>
                         <Property name="name" type="java.lang.String" value="cbxRelationType" noResource="true"/>
                       </Properties>
                       <BindingProperties>

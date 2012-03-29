@@ -101,8 +101,8 @@ public class TableCellListRenderer extends JTextArea implements TableCellRendere
             }
 
         } catch (Exception e) {
-            setText("error");
-            setToolTipText("error");
+            setText("");
+            setToolTipText("");
         }
 
         return this;

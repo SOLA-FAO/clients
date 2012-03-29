@@ -1,58 +1,63 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.desktop.application;
 
-import org.sola.clients.swing.ui.application.ApplicationDetailsPanel;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.util.Locale;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
-import javax.swing.UIManager;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.beans.security.UserSummaryBean;
 import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.ui.ContentPanel;
+import org.sola.clients.swing.ui.application.ApplicationDetailsPanel;
 import org.sola.common.RolesConstants;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
-/** This dialog form is used to assign application to the user or unassign it from him.
- * <br />{@link UsersListBean} is used to bind the data on the form.
+/**
+ * This dialog form is used to assign application to the user or unassign it
+ * from him. <br />{@link UsersListBean} is used to bind the data on the form.
  */
 public class ApplicationAssignmentPanel extends ContentPanel {
 
     private String applicationId;
-    
-    /** This method is used by the dialog designer to create application details component. 
-     * It uses <code>applicationId</code> parameter passed to the dialog constructor.<br />
-     * <code>applicationId</code> should be initialized before 
+
+    /**
+     * This method is used by the dialog designer to create application details
+     * component. It uses
+     * <code>applicationId</code> parameter passed to the dialog constructor.<br
+     * />
+     * <code>applicationId</code> should be initialized before
      * {@link ApplicationAssignmentForm#initComponents} method call.
      */
     private ApplicationDetailsPanel createAppDetailsPanel() {
@@ -65,7 +70,9 @@ public class ApplicationAssignmentPanel extends ContentPanel {
         return panel;
     }
 
-    /** Initializes components.
+    /**
+     * Initializes components.
+     *
      * @param parent Parent component.
      * @param modal Boolean value indicating modal state of the dialog.
      * @param applicationId ID of application to display.
@@ -86,27 +93,32 @@ public class ApplicationAssignmentPanel extends ContentPanel {
         customizeForm();
     }
 
-    /** Enables or disables button, depending on user rights. */
+    /**
+     * Enables or disables button, depending on user rights.
+     */
     private void customizeForm() {
+        cbxUsers.setEnabled(false);
         if (pnlApplicationDetails.getApplicationBean().getAssigneeId() != null
                 && !pnlApplicationDetails.getApplicationBean().getAssigneeId().equals("")) {
-            if (pnlApplicationDetails.getApplicationBean().getAssigneeId().equals(SecurityBean.getCurrentUser().getId())) {
+            if (usersListBean1.getSelectedUser().getId().equals(SecurityBean.getCurrentUser().getId())) {
                 btnAssign.setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_UNASSIGN_FROM_YOURSELF));
             } else {
                 btnAssign.setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_UNASSIGN_FROM_OTHERS));
             }
         } else {
-            if (usersListBean1.getSelectedUser() != null) {
-                if (usersListBean1.getSelectedUser().getId().equals(SecurityBean.getCurrentUser().getId())) {
-                    btnAssign.setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_ASSIGN_TO_YOURSELF));
-                } else {
-                    btnAssign.setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_ASSIGN_TO_OTHERS));
-                }
+            cbxUsers.setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_ASSIGN_TO_OTHERS));
+            btnAssign.setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_ASSIGN_TO_OTHERS));
+
+            if (usersListBean1.getSelectedUser() != null && !btnAssign.isEnabled()
+                    && usersListBean1.getSelectedUser().getId().equals(SecurityBean.getCurrentUser().getId())) {
+                btnAssign.setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_ASSIGN_TO_YOURSELF));
             }
         }
     }
 
-    /** Designer generated code */
+    /**
+     * Designer generated code
+     */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -223,7 +235,9 @@ public class ApplicationAssignmentPanel extends ContentPanel {
         }
 }//GEN-LAST:event_btnAssignActionPerformed
 
-    /** Assigns application to the selected user.*/
+    /**
+     * Assigns application to the selected user.
+     */
     private void assign() {
         if (usersListBean1.getSelectedUser() == null) {
             MessageUtility.displayMessage(ClientMessage.APPLICATION_NOSEL_USER);
@@ -245,7 +259,9 @@ public class ApplicationAssignmentPanel extends ContentPanel {
         }
     }
 
-    /** Unassigns application from the selected user.*/
+    /**
+     * Unassigns application from the selected user.
+     */
     private void unassign() {
         if (usersListBean1.getSelectedUser() == null) {
             MessageUtility.displayMessage(ClientMessage.APPLICATION_NOSEL_USER);

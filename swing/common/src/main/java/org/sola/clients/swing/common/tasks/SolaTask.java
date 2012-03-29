@@ -36,6 +36,7 @@ public abstract class SolaTask<T, V> {
     public static final String TASK_STARTED = "STARTED";
     public static final String TASK_DONE = "DONE";
     public static final String TASK_PENDING = "PENDING";
+    public static final String REMOVE_TASK = "removeTask";
     private int progress;
     private String message;
     private String id = UUID.randomUUID().toString();
@@ -165,6 +166,7 @@ public abstract class SolaTask<T, V> {
                         taskFailed(exception);
                         return;
                     }
+                    propertySupport.firePropertyChange(REMOVE_TASK, false, true);
                     taskDone();
                 } catch (Throwable e) {
                     propertySupport.firePropertyChange(EXCEPTION_RISED, null, e);

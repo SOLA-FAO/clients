@@ -73,6 +73,14 @@ public class BaUnitRelTypeListBean extends AbstractBindingListBean {
         return selectedBaUnitRelType;
     }
 
+    public void makePriorTitleDefault(){
+        BaUnitRelTypeBean priorRelType = CacheManager
+                .getBeanByCode(CacheManager.getBaUnitRelTypes(), "priorTitle");
+        if(priorRelType!=null){
+            setSelectedBaUnitRelType(priorRelType);
+        }
+    }
+    
     public void setSelectedBaUnitRelType(BaUnitRelTypeBean selectedBaUnitRelType) {
         BaUnitRelTypeBean oldValue = this.selectedBaUnitRelType;
         this.selectedBaUnitRelType = selectedBaUnitRelType;

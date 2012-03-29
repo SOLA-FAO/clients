@@ -95,8 +95,8 @@ public class CellDelimitedListRenderer extends JTextArea implements TableCellRen
             }
 
         } catch (Exception e) {
-            setText("error");
-            setToolTipText("error");
+            setText("");
+            setToolTipText("");
         }
 
         return this;

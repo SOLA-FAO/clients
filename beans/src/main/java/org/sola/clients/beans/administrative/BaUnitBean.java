@@ -111,7 +111,8 @@ public class BaUnitBean extends BaUnitSummaryBean {
 
         private List<RrrShareBean> getShares(RrrBean rrrBean) {
             List<RrrShareBean> result = new LinkedList<RrrShareBean>();
-            if (rrrBean.getTypeCode().toLowerCase().contains("ownership")) {
+            if (rrrBean.getTypeCode().toLowerCase().contains("ownership") || 
+                    rrrBean.getTypeCode().toLowerCase().contains("apartment")) {
                 result = rrrBean.getFilteredRrrShareList();
             }
             return result;

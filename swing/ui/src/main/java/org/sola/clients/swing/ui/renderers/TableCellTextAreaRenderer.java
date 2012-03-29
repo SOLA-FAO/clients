@@ -81,8 +81,8 @@ public class TableCellTextAreaRenderer extends JTextArea implements TableCellRen
                 table.setRowHeight(row, height_wanted);
             }
         } catch (Exception e) {
-            setText("error");
-            setToolTipText("error");
+            setText("");
+            setToolTipText("");
         }
 
         return this;
