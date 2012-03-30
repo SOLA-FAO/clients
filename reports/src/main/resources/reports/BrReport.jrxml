@@ -55,7 +55,7 @@
 	<title>
 		<band height="102" splitType="Stretch">
 			<frame>
-				<reportElement mode="Opaque" x="0" y="-10" width="812" height="66" backcolor="#A06B23"/>
+				<reportElement mode="Opaque" x="0" y="-10" width="812" height="66" backcolor="#43A771"/>
 				<staticText>
 					<reportElement style="Title" x="0" y="0" width="370" height="66"/>
 					<box topPadding="4" leftPadding="4" bottomPadding="4" rightPadding="4"/>
@@ -73,7 +73,7 @@
 				</staticText>
 			</frame>
 			<frame>
-				<reportElement mode="Opaque" x="0" y="60" width="812" height="32" forecolor="#000000" backcolor="#8C3C22"/>
+				<reportElement mode="Opaque" x="0" y="60" width="812" height="32" forecolor="#000000" backcolor="#4DA796"/>
 				<textField pattern="EEEEE dd MMMMM yyyy">
 					<reportElement x="553" y="12" width="144" height="20" forecolor="#FFFFFF"/>
 					<textElement textAlignment="Right">
@@ -82,10 +82,6 @@
 					<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
 				</textField>
 			</frame>
-			<image>
-				<reportElement x="720" y="-10" width="77" height="66"/>
-				<imageExpression class="java.lang.String"><![CDATA["images/sola/logo_orange.png"]]></imageExpression>
-			</image>
 		</band>
 	</title>
 	<pageHeader>
@@ -94,7 +90,7 @@
 	<columnHeader>
 		<band height="21" splitType="Stretch">
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="0" width="105" height="20" forecolor="#D0B48E" backcolor="#A06B23"/>
+				<reportElement mode="Opaque" x="0" y="0" width="105" height="20" forecolor="#D0DC8E" backcolor="#43A771"/>
 				<box>
 					<pen lineWidth="0.0" lineColor="#CC6600"/>
 					<topPen lineWidth="0.0" lineColor="#CC6600"/>
@@ -109,7 +105,7 @@
 				<text><![CDATA[Br]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="105" y="0" width="105" height="20" forecolor="#D0B48E" backcolor="#A06B23"/>
+				<reportElement mode="Opaque" x="105" y="0" width="105" height="20" forecolor="#D0DC8E" backcolor="#43A771"/>
 				<box>
 					<pen lineWidth="0.0" lineColor="#CC6600"/>
 					<topPen lineWidth="0.0" lineColor="#CC6600"/>
@@ -124,7 +120,7 @@
 				<text><![CDATA[Type]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="315" y="0" width="105" height="20" forecolor="#D0B48E" backcolor="#A06B23"/>
+				<reportElement mode="Opaque" x="315" y="0" width="105" height="20" forecolor="#D0DC8E" backcolor="#43A771"/>
 				<box>
 					<pen lineWidth="0.0" lineColor="#CC6600"/>
 					<topPen lineWidth="0.0" lineColor="#CC6600"/>
@@ -139,7 +135,7 @@
 				<text><![CDATA[Description]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="420" y="0" width="105" height="20" forecolor="#D0B48E" backcolor="#A06B23"/>
+				<reportElement mode="Opaque" x="420" y="0" width="105" height="20" forecolor="#D0DC8E" backcolor="#43A771"/>
 				<box>
 					<pen lineWidth="0.0" lineColor="#CC6600"/>
 					<topPen lineWidth="0.0" lineColor="#CC6600"/>
@@ -154,7 +150,7 @@
 				<text><![CDATA[Body]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="210" y="0" width="105" height="20" forecolor="#D0B48E" backcolor="#A06B23"/>
+				<reportElement mode="Opaque" x="210" y="0" width="105" height="20" forecolor="#D0DC8E" backcolor="#43A771"/>
 				<box>
 					<pen lineWidth="0.0" lineColor="#CC6600"/>
 					<topPen lineWidth="0.0" lineColor="#CC6600"/>
@@ -169,7 +165,7 @@
 				<text><![CDATA[Feedback]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="525" y="0" width="105" height="20" forecolor="#D0B48E" backcolor="#A06B23"/>
+				<reportElement mode="Opaque" x="525" y="0" width="105" height="20" forecolor="#D0DC8E" backcolor="#43A771"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -177,7 +173,7 @@
 				<text><![CDATA[Severity]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="735" y="0" width="77" height="20" forecolor="#D0B48E" backcolor="#A06B23"/>
+				<reportElement mode="Opaque" x="735" y="0" width="77" height="20" forecolor="#D0DC8E" backcolor="#43A771"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -185,7 +181,7 @@
 				<text><![CDATA[Moment]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="630" y="0" width="105" height="20" forecolor="#D0B48E" backcolor="#A06B23"/>
+				<reportElement mode="Opaque" x="630" y="0" width="105" height="20" forecolor="#D0DC8E" backcolor="#43A771"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -288,7 +284,7 @@
 	<pageFooter>
 		<band height="25" splitType="Stretch">
 			<frame>
-				<reportElement mode="Opaque" x="0" y="0" width="812" height="25" forecolor="#D0B48E" backcolor="#A06B23"/>
+				<reportElement mode="Opaque" x="0" y="0" width="812" height="25" forecolor="#D0DC8E" backcolor="#43A771"/>
 				<textField evaluationTime="Report">
 					<reportElement style="Column header" x="757" y="3" width="40" height="20" forecolor="#FFFFFF"/>
 					<textElement verticalAlignment="Middle">
