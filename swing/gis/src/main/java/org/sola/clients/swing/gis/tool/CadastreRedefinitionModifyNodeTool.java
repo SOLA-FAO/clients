@@ -19,7 +19,8 @@ import org.sola.common.messaging.MessageUtility;
 import org.sola.webservices.transferobjects.cadastre.CadastreObjectNodeTO;
 
 /**
- *
+ * Tool that is used during the cadastre redefinition process to modify an existing node.
+ * 
  * @author Elton Manoku
  */
 public class CadastreRedefinitionModifyNodeTool extends CadastreRedefinitionAbstractNodeTool {
@@ -36,6 +37,15 @@ public class CadastreRedefinitionModifyNodeTool extends CadastreRedefinitionAbst
         this.setToolTip(toolTip);
     }
 
+    /**
+     * This is the action of this tool. It is first searched for a node in the target node layer.
+     * If not found in the layer, it is searched in the server.
+     * If a node is found then the manipulation node form is called to let the user
+     * enter the new coordinates or remove the node. The remove option is shown only if the node
+     * is found in max two cadastre objects.
+     * 
+     * @param env 
+     */
     @Override
     protected void onRectangleFinished(Envelope2D env) {
 
@@ -58,6 +68,12 @@ public class CadastreRedefinitionModifyNodeTool extends CadastreRedefinitionAbst
         }
     }
 
+    /**
+     * Gets a node from the server. The node must be already present in the server.
+     * 
+     * @param env
+     * @return The node bean if found otherwise null
+     */
     @Override
     protected CadastreObjectNodeBean getNodeFromServer(Envelope2D env) {
         CadastreObjectNodeTO nodeTO =
@@ -73,6 +89,12 @@ public class CadastreRedefinitionModifyNodeTool extends CadastreRedefinitionAbst
         return nodeBean;
     }
 
+    /**
+     * It removes a node that was just retrieved from the server. It is called if the modification
+     * process is canceled. It notifies also the cadastre objects that share the node.
+     * 
+     * @param nodeFeature 
+     */
     private void removeNewServerNodesAfterCancellation(SimpleFeature nodeFeature) {
         List<SimpleFeature> cadastreObjects =
                 this.cadastreObjectModifiedLayer.getCadastreObjectFeatures(nodeFeature);

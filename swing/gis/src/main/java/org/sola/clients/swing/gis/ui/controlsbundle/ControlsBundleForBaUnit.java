@@ -33,15 +33,17 @@ package org.sola.clients.swing.gis.ui.controlsbundle;
 
 import java.util.List;
 import org.geotools.geometry.jts.Geometries;
-import org.sola.clients.swing.gis.Messaging;
-import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.geotools.map.extended.layer.ExtendedLayerGraphics;
 import org.geotools.swing.extended.exception.InitializeLayerException;
+import org.sola.clients.swing.gis.Messaging;
+import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.common.messaging.GisMessage;
 import org.sola.webservices.transferobjects.cadastre.CadastreObjectTO;
 
 /**
- *
+ * A control bundle that is used in the property form to show the location of
+ * related cadastre objects for the given property.
+ * 
  * @author Elton Manoku
  */
 public final class ControlsBundleForBaUnit extends ControlsBundleForWorkingWithCO {
@@ -70,6 +72,10 @@ public final class ControlsBundleForBaUnit extends ControlsBundleForWorkingWithC
         }
     }
 
+    /**
+     * Sets the cadastre objects to be marked in the map
+     * @param baUnitId 
+     */
     public void setCadastreObjects(String baUnitId) {
         List<CadastreObjectTO> cadastreObjects = 
                 this.getPojoDataAccess().getCadastreService().getCadastreObjectsByBaUnit(baUnitId);

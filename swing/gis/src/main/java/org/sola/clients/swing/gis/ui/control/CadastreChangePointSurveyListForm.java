@@ -1,28 +1,26 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO). All rights
+ * reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without modification, are permitted
+ * provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this list of conditions
+ * and the following disclaimer. 2. Redistributions in binary form must reproduce the above
+ * copyright notice,this list of conditions and the following disclaimer in the documentation and/or
+ * other materials provided with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this software without
+ * specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+ * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 /*
@@ -38,8 +36,6 @@
 package org.sola.clients.swing.gis.ui.control;
 
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
@@ -49,26 +45,29 @@ import javax.swing.event.TableModelListener;
 import org.sola.clients.swing.gis.Messaging;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.layer.CadastreChangeNewSurveyPointLayer;
-import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.GisMessage;
 
 /**
+ * This form is used to display information about the survey points during the cadastre change
+ * process.
  *
- * @author Manoku
+ * @author Elton Manoku
  */
 public class CadastreChangePointSurveyListForm extends javax.swing.JDialog {
 
     private CadastreChangeNewSurveyPointLayer layer;
 
-    /** Creates new form CadastreChangePointSurveyListForm */
+    /**
+     * Creates new form CadastreChangePointSurveyListForm
+     */
     public CadastreChangePointSurveyListForm() {
         initComponents();
         this.setAlwaysOnTop(true);
         this.setModalityType(ModalityType.APPLICATION_MODAL);
         this.txtAcceptableShift.setText(
-                optionRural.isSelected()?
-                this.getAcceptanceShift(true).toString(): 
-                this.getAcceptanceShift(false).toString());
+                optionRural.isSelected()
+                ? this.getAcceptanceShift(true).toString()
+                : this.getAcceptanceShift(false).toString());
         this.txtMeanShift.setText(Double.toString(0.0));
         this.txtStandardDeviation.setText(Double.toString(0.0));
         this.table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -95,24 +94,37 @@ public class CadastreChangePointSurveyListForm extends javax.swing.JDialog {
         this.layer = pointLayer;
     }
 
-    public JTable getTable(){
+    /**
+     * Gets the table which shows for each survey point a row with information about the survey
+     * point
+     *
+     * @return
+     */
+    public JTable getTable() {
         return this.table;
     }
-    
-    private Double getAcceptanceShift(boolean forRuralArea){
-        if (forRuralArea){
+
+    /**
+     * Gets the accepted shift for survey points shifts from their original position
+     *
+     * @param forRuralArea
+     * @return
+     */
+    private Double getAcceptanceShift(boolean forRuralArea) {
+        if (forRuralArea) {
             return PojoDataAccess.getInstance().getMapDefinition().getSurveyPointShiftRuralArea();
         }
         return PojoDataAccess.getInstance().getMapDefinition().getSurveyPointShiftUrbanArea();
     }
-    
+
     private void treatTableChange(TableModelEvent e) {
         int colIndex = e.getColumn();
         if (colIndex == -1) {
             //It means is new row inserted. Column not defined
             return;
         }
-        if (this.layer.getFieldIndex(CadastreChangeNewSurveyPointLayer.LAYER_FIELD_SHIFT) == colIndex) {
+        if (this.layer.getFieldIndex(CadastreChangeNewSurveyPointLayer.LAYER_FIELD_SHIFT)
+                == colIndex) {
             //Calculate mean and standard deviation
             DecimalFormat df = new DecimalFormat("#.##");
             this.txtMeanShift.setText(df.format(this.layer.getMean()));
@@ -120,10 +132,9 @@ public class CadastreChangePointSurveyListForm extends javax.swing.JDialog {
         }
     }
 
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+    /**
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT
+     * modify this code. The content of this method is always regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -338,9 +349,8 @@ private void optionRuralActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 }//GEN-LAST:event_optionRuralActionPerformed
 
 private void cmdLoadFromExternalSourceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdLoadFromExternalSourceActionPerformed
-Messaging.getInstance().show(GisMessage.GENERAL_UNDER_CONSTRUCTION);
+    Messaging.getInstance().show(GisMessage.GENERAL_UNDER_CONSTRUCTION);
 }//GEN-LAST:event_cmdLoadFromExternalSourceActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cmdAdd;
     private javax.swing.JButton cmdLoadFromExternalSource;

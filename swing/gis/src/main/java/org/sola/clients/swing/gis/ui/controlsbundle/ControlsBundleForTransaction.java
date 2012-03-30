@@ -1,28 +1,26 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO). All rights
+ * reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without modification, are permitted
+ * provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this list of conditions
+ * and the following disclaimer. 2. Redistributions in binary form must reproduce the above
+ * copyright notice,this list of conditions and the following disclaimer in the documentation and/or
+ * other materials provided with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this software without
+ * specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+ * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 /*
@@ -36,12 +34,12 @@ import com.vividsolutions.jts.io.ParseException;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.map.extended.layer.ExtendedImageLayer;
-import org.geotools.swing.extended.exception.InitializeLayerException;
-import org.sola.clients.swing.gis.beans.TransactionBean;
 import org.geotools.map.extended.layer.ExtendedLayer;
+import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.geotools.swing.mapaction.extended.RemoveDirectImage;
 import org.geotools.swing.tool.extended.AddDirectImageTool;
 import org.sola.clients.swing.gis.Messaging;
+import org.sola.clients.swing.gis.beans.TransactionBean;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.data.PojoFeatureSource;
 import org.sola.clients.swing.gis.layer.CadastreBoundaryPointLayer;
@@ -51,6 +49,9 @@ import org.sola.clients.swing.gis.tool.CadastreBoundarySelectTool;
 import org.sola.common.messaging.GisMessage;
 
 /**
+ * An abstract bundle that defines common functionality that is used in the cadastre transaction
+ * related changes. It defines also abstract methods that need to be overridden by each cadastre
+ * transaction.
  *
  * @author Elton Manoku
  */
@@ -63,6 +64,13 @@ public abstract class ControlsBundleForTransaction extends ControlsBundleForWork
     protected CadastreBoundaryPointLayer cadastreBoundaryPointLayer = null;
     protected CadastreBoundaryEditTool cadastreBoundaryEditTool;
 
+    /**
+     * It sets up the bundle. It calls the adding layer method and adding tools method. It also
+     * identifies the pending layer which will be refreshed if a transaction is being saved in the
+     * database.
+     *
+     * @param pojoDataAccess
+     */
     @Override
     public void Setup(PojoDataAccess pojoDataAccess) {
         super.Setup(pojoDataAccess);
@@ -90,6 +98,12 @@ public abstract class ControlsBundleForTransaction extends ControlsBundleForWork
         }
     }
 
+    /**
+     * It zooms in the map where the transaction is happening
+     *
+     * @param interestingArea
+     * @param applicationLocation
+     */
     protected void zoomToInterestingArea(
             ReferencedEnvelope interestingArea,
             byte[] applicationLocation) {
@@ -109,8 +123,18 @@ public abstract class ControlsBundleForTransaction extends ControlsBundleForWork
         }
     }
 
+    /**
+     * Gets the transaction bean that is sent to the server.
+     *
+     * @return
+     */
     public abstract TransactionBean getTransactionBean();
 
+    /**
+     * Adds layers that are needed for the transaction
+     *
+     * @throws InitializeLayerException
+     */
     protected void addLayers() throws InitializeLayerException {
         this.imageLayer = new ExtendedImageLayer(IMAGE_LAYER_NAME, IMAGE_LAYER_TITLE);
         this.getMap().addLayer(this.imageLayer);
@@ -118,6 +142,10 @@ public abstract class ControlsBundleForTransaction extends ControlsBundleForWork
         this.getMap().addLayer(this.cadastreBoundaryPointLayer);
     }
 
+    /**
+     * Adds tools and commands that are relevant to the transaction
+     *
+     */
     protected void addToolsAndCommands() {
         this.cadastreBoundaryEditTool =
                 new CadastreBoundaryEditTool(this.cadastreBoundaryPointLayer);
@@ -131,8 +159,14 @@ public abstract class ControlsBundleForTransaction extends ControlsBundleForWork
         this.pendingLayer.setForceRefresh(force);
         super.refresh(force);
     }
-    
-    public void setReadOnly(boolean readOnly){
+
+    /**
+     * It disables/enables the changing tools and commands in order to prohibit user changing the
+     * transaction.
+     *
+     * @param readOnly
+     */
+    public void setReadOnly(boolean readOnly) {
         this.getMap().getMapActionByName(CadastreBoundarySelectTool.NAME).setEnabled(!readOnly);
     }
 }

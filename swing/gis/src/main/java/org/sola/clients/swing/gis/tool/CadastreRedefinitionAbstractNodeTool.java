@@ -4,12 +4,7 @@
  */
 package org.sola.clients.swing.gis.tool;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.CoordinateList;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.LineString;
-import com.vividsolutions.jts.geom.LinearRing;
-import com.vividsolutions.jts.geom.Polygon;
+import com.vividsolutions.jts.geom.*;
 import java.util.List;
 import org.geotools.feature.CollectionEvent;
 import org.geotools.geometry.Envelope2D;
@@ -25,7 +20,9 @@ import org.sola.clients.swing.gis.ui.control.CadastreRedefinitionNodeModifyForm;
 import org.sola.common.messaging.GisMessage;
 
 /**
- *
+ * An abstract tool that is used for node modification tools used in the cadastre redefinition.
+ * It contains common functionality for the tools that add or modify a node.
+ * 
  * @author Elton Manoku
  */
 public abstract class CadastreRedefinitionAbstractNodeTool extends ExtendedDrawRectangle {
@@ -35,6 +32,13 @@ public abstract class CadastreRedefinitionAbstractNodeTool extends ExtendedDrawR
     protected CadastreRedefinitionObjectLayer cadastreObjectModifiedLayer;
     protected CadastreRedefinitionNodeLayer cadastreObjectNodeModifiedLayer;
 
+    /**
+     * Constructor
+     * 
+     * @param dataAccess The data access that handles communication with the web services
+     * @param cadastreObjectNodeModifiedLayer The node layer
+     * @param cadastreObjectModifiedLayer The modified cadastre object layer
+     */
     public CadastreRedefinitionAbstractNodeTool(
             PojoDataAccess dataAccess,
             CadastreRedefinitionNodeLayer cadastreObjectNodeModifiedLayer,
@@ -45,6 +49,11 @@ public abstract class CadastreRedefinitionAbstractNodeTool extends ExtendedDrawR
         this.form = new CadastreRedefinitionNodeModifyForm();
     }
 
+    /**
+     * If the tool is selected/ made active, then the irregular boundary procedure is reseted.
+     * 
+     * @param selected 
+     */
     @Override
     public void onSelectionChanged(boolean selected) {
         super.onSelectionChanged(selected);
@@ -58,8 +67,21 @@ public abstract class CadastreRedefinitionAbstractNodeTool extends ExtendedDrawR
         }
     }
 
+    /**
+     * Gets a node and the cadastre objects that share the node from the server.
+     * 
+     * @param env
+     * @return 
+     */
     protected abstract CadastreObjectNodeBean getNodeFromServer(Envelope2D env);
 
+    /**
+     * If a node is found in the server, it adds it to the node layer and also adds the 
+     * related cadastre objects to the target cadastre object layer.
+     * 
+     * @param env
+     * @return 
+     */
     protected final CadastreObjectNodeBean addNodeFromServer(Envelope2D env) {
         CadastreObjectNodeBean nodeBean = this.getNodeFromServer(env);
         if (nodeBean != null){
@@ -75,6 +97,7 @@ public abstract class CadastreRedefinitionAbstractNodeTool extends ExtendedDrawR
      * It starts the manipulation of a node. It starts a popup form where the existing coordinates
      * are shown and that can be changed.
      * If the node is found in less than 3 cadastre objects, also the remove option is available.
+     * 
      * @param nodeFeature The node to manipulate
      */
     protected final boolean manipulateNode(SimpleFeature nodeFeature) {
@@ -96,11 +119,27 @@ public abstract class CadastreRedefinitionAbstractNodeTool extends ExtendedDrawR
         return manipulationHappen;
     }
 
+    /**
+     * Gets the first found node feature
+     * 
+     * @param env
+     * @return 
+     */
     protected final SimpleFeature getFirstNodeFeature(Envelope2D env) {
         return this.cadastreObjectNodeModifiedLayer.getFirstFeatureInRange(
                 new ReferencedEnvelope(env));
     }
 
+    /**
+     * It modifies the node by changing its coordinates. This will bring changes to 
+     * cadastre objects that share this node.
+     * If the changing of this node, brings the cadastre objects in the original situation,
+     * it will be removed, because nothing is changed.
+     * 
+     * @param nodeFeature The node feature 
+     * @param newCoordinateX The new coordinate X
+     * @param newCoordinateY The new coordinate Y
+     */
     private void modifyNode(
             SimpleFeature nodeFeature,
             Double newCoordinateX, Double newCoordinateY) {
@@ -138,6 +177,14 @@ public abstract class CadastreRedefinitionAbstractNodeTool extends ExtendedDrawR
         this.getMapControl().refresh();
     }
 
+    /**
+     * It removes a node. Removing the node means that the node will be removed in 
+     * all cadastre objects that share that node.
+     * If the cadastre objects will come to their original shape, those objects will be removed
+     * from the list of target cadastre objects.
+     * 
+     * @param nodeFeature 
+     */
     protected final void removeNode(SimpleFeature nodeFeature) {
         List<SimpleFeature> cadastreObjects =
                 this.cadastreObjectModifiedLayer.getCadastreObjectFeatures(nodeFeature);
@@ -174,6 +221,13 @@ public abstract class CadastreRedefinitionAbstractNodeTool extends ExtendedDrawR
         this.getMapControl().refresh();
     }
 
+    /**
+     * Remove a coordinate from a ring
+     * 
+     * @param target The target ring
+     * @param coordinate
+     * @return The ring without the coordinate
+     */
     private LinearRing removeCoordinateFromRing(
             LineString target, Coordinate coordinate) {
         com.vividsolutions.jts.geom.CoordinateList coordinates =
@@ -188,6 +242,14 @@ public abstract class CadastreRedefinitionAbstractNodeTool extends ExtendedDrawR
                 coordinates.toCoordinateArray());
     }
 
+    /**
+     * Removes a node if there is no cadastre object connected with it. This situation happen
+     * when the cadastre objects are removed from the list of target objects because they did 
+     * not change from their original shape.
+     * 
+     * @param nodeFeature
+     * @return True = if the node is removed
+     */
     private boolean removeIfNodeNotUsed(SimpleFeature nodeFeature) {
         boolean objectsAreRemoved = false;
         List<SimpleFeature> cadastreObjects =

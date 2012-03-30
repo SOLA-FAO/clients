@@ -4,7 +4,6 @@
  */
 package org.sola.clients.swing.gis.tool;
 
-import com.vividsolutions.jts.io.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import org.geotools.geometry.Envelope2D;
@@ -19,7 +18,9 @@ import org.sola.common.MappingManager;
 import org.sola.webservices.transferobjects.cadastre.CadastreObjectNodeTO;
 
 /**
- *
+ * This tool is used during the cadastre redefinition for selecting an irregular boundary for 
+ * replacement.
+ * 
  * @author Elton Manoku
  */
 public class CadastreRedefinitionBoundarySelectTool extends CadastreBoundarySelectTool {

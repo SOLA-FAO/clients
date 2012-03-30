@@ -42,10 +42,10 @@ import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.mapaction.LocateApplicationRemove;
 import org.sola.clients.swing.gis.tool.LocateApplicationTool;
 import org.sola.common.messaging.GisMessage;
-import org.sola.common.messaging.MessageUtility;
 
 /**
- *
+ * A control bundle that is used in the application form to define the application location.
+ * 
  * @author Elton Manoku
  */
 public final class ControlsBundleForApplicationLocation extends SolaControlsBundle {

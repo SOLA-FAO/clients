@@ -121,7 +121,7 @@ public class Print extends ExtendedAction {
      * It generates the pdf and gives back the path of the pdf file.
      * @param layout The layout
      * @param scale The scale
-     * @return 
+     * @return The path where generated PDF is found
      */
     protected String print(PrintLayout layout, double scale) {
         PrintoutGenerator printoutGenerator = new PrintoutGenerator(this.getMapControl());

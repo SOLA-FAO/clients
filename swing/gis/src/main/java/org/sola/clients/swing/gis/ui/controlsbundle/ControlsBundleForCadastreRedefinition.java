@@ -36,16 +36,18 @@ import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.geotools.swing.mapaction.extended.ExtendedAction;
 import org.sola.clients.swing.gis.beans.TransactionCadastreRedefinitionBean;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
-import org.sola.clients.swing.gis.layer.CadastreRedefinitionObjectLayer;
 import org.sola.clients.swing.gis.layer.CadastreRedefinitionNodeLayer;
+import org.sola.clients.swing.gis.layer.CadastreRedefinitionObjectLayer;
 import org.sola.clients.swing.gis.mapaction.CadastreRedefinitionReset;
 import org.sola.clients.swing.gis.tool.CadastreBoundarySelectTool;
+import org.sola.clients.swing.gis.tool.CadastreRedefinitionAddNodeTool;
 import org.sola.clients.swing.gis.tool.CadastreRedefinitionBoundarySelectTool;
 import org.sola.clients.swing.gis.tool.CadastreRedefinitionModifyNodeTool;
-import org.sola.clients.swing.gis.tool.CadastreRedefinitionAddNodeTool;
 
 /**
- *
+ * A control bundle that is used for cadastre redefinition process. 
+ * The necessary tools and layers are added in the bundle.
+ * 
  * @author Elton Manoku
  */
 public final class ControlsBundleForCadastreRedefinition extends ControlsBundleForTransaction {
@@ -54,6 +56,21 @@ public final class ControlsBundleForCadastreRedefinition extends ControlsBundleF
     private CadastreRedefinitionNodeLayer cadastreObjectNodeModifiedLayer = null;
     private CadastreRedefinitionObjectLayer cadastreObjectModifiedLayer = null;
 
+    /**
+     * Constructor.
+     * It sets up the bundle by adding layers and tools that are relevant.
+     * Finally, it zooms in the interested zone. The interested zone is defined 
+     * in the following order: <br/>
+     * If bean has modified cadastre objects it is zoomed there, 
+     * otherwise if baUnitId is present it is zoomed
+     * there else it is zoomed in the application location.
+     * 
+     * @param transactionBean  The transaction bean. If this is already populated it means 
+     * the transaction is being opened again for change.
+     * @param baUnitId Id of the property that is defined in the application as a target for 
+     * this cadastre change.
+     * @param applicationLocation Location of application that starts the cadastre change
+     */
     public ControlsBundleForCadastreRedefinition(
             TransactionCadastreRedefinitionBean transactionBean,
             String baUnitId,

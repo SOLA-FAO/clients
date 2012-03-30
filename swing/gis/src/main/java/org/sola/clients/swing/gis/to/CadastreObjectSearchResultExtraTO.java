@@ -35,12 +35,21 @@ import org.sola.common.MappingManager;
 import org.sola.webservices.transferobjects.search.CadastreObjectSearchResultTO;
 
 /**
- *
+ * It extends the TO which is generated from the web service with the set method
+ * which disappears during the auto generation from the representation of the TO object in 
+ * the server. This method is needed in order to use the generic mapper to translate from 
+ * data bean to TO and viceversa.
+ * 
  * @author Elton Manoku
  */
 public class CadastreObjectSearchResultExtraTO extends CadastreObjectSearchResultTO {
 
 
+    /**
+     * Constructor which gets as input the original TO
+     * 
+     * @param cadastreObjectSearchResultTO 
+     */
     public CadastreObjectSearchResultExtraTO(
             CadastreObjectSearchResultTO cadastreObjectSearchResultTO){
         MappingManager.getMapper().map(cadastreObjectSearchResultTO, this);

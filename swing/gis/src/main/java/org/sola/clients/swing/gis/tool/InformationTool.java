@@ -31,17 +31,17 @@
  */
 package org.sola.clients.swing.gis.tool;
 
-import org.sola.clients.swing.gis.ui.control.InformationResultWindow;
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.io.WKBWriter;
 import java.util.ArrayList;
 import java.util.List;
 import org.geotools.geometry.DirectPosition2D;
 import org.geotools.geometry.jts.JTS;
-import org.geotools.swing.event.MapMouseEvent;
-import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.geotools.map.extended.layer.ExtendedLayer;
+import org.geotools.swing.event.MapMouseEvent;
 import org.geotools.swing.tool.extended.ExtendedTool;
+import org.sola.clients.swing.gis.data.PojoDataAccess;
+import org.sola.clients.swing.gis.ui.control.InformationResultWindow;
 import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.MessageUtility;
 import org.sola.webservices.search.QueryForSelect;
@@ -49,8 +49,10 @@ import org.sola.webservices.search.ResultForSelectionInfo;
 import org.sola.webservices.spatial.ConfigMapLayerTO;
 
 /**
- *
- * @author manoku
+ * The information tool searches where the mouse is clicked for objects. If objects are found, they
+ * are shown in a form.
+ * 
+ * @author Elton Manoku
  */
 public class InformationTool extends ExtendedTool {
 
@@ -60,17 +62,31 @@ public class InformationTool extends ExtendedTool {
     private InformationResultWindow resultWindow;
     private String toolTip =  MessageUtility.getLocalizedMessage(
                             GisMessage.INFOTOOL_CLICK).getMessage();
+
+    /**
+     * Constructor
+     * 
+     * @param dataAccess The data access that communicates with the services
+     */
     public InformationTool(PojoDataAccess dataAccess) {
         this.setToolName("information");
-//        this.setToolTip("Click to get information");
         this.setToolTip(toolTip);
         this.setIconImage("resources/information.png");
         this.dataAccess = dataAccess;
     }
 
+    /**
+     * This is the action of this tool. On click the map coordinates are used to make a filter
+     * in a shape of an envelope with a certain width.
+     * For each layer that has a query for selected defined, a query definition is made and
+     * then it is sent to the server to search for features fulfilling the condition.
+     * The result is visualized.
+     * 
+     * @param ev 
+     */
     @Override
     public void onMouseClicked(MapMouseEvent ev) {
-        DirectPosition2D pos = ev.getMapPosition();
+        DirectPosition2D pos = ev.getWorldPos();
         double envelopeWidth =
                 this.getMapControl().getPixelResolution() * this.pixelTolerance / 2;
         Envelope env = new Envelope(
@@ -101,6 +117,10 @@ public class InformationTool extends ExtendedTool {
         this.VisualizeResult(results);
     }
 
+    /**
+     * It visualizes the result from the information tool.
+     * @param results 
+     */
     private void VisualizeResult(List<ResultForSelectionInfo> results) {
         if (this.resultWindow == null) {
             this.resultWindow = new InformationResultWindow();

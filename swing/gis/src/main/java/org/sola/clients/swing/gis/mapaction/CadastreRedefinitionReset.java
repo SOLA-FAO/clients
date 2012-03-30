@@ -4,7 +4,6 @@
  */
 package org.sola.clients.swing.gis.mapaction;
 
-import org.geotools.swing.extended.util.Messaging;
 import org.geotools.swing.mapaction.extended.ExtendedAction;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForCadastreRedefinition;
 import org.sola.common.messaging.GisMessage;
@@ -16,7 +15,7 @@ import org.sola.common.messaging.MessageUtility;
  * 
  * @author Elton Manoku
  */
-public class CadastreRedefinitionReset extends ExtendedAction {
+public final class CadastreRedefinitionReset extends ExtendedAction {
 
     public final static String MAPACTION_NAME = "cadastre-redefinition-reset";
     private ControlsBundleForCadastreRedefinition mapControl;

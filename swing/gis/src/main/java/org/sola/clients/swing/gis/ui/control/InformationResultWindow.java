@@ -38,12 +38,14 @@
 package org.sola.clients.swing.gis.ui.control;
 
 import java.util.List;
-import javax.swing.JPanel;
 import org.sola.webservices.search.ResultForSelectionInfo;
 
 /**
- *
- * @author Manoku
+ * This dialog serves as a host for information result panels that are produced during the
+ * information tool action.
+ * For each information result, a tab is added.
+ * 
+ * @author Elton Manoku
  */
 public class InformationResultWindow extends javax.swing.JDialog {
 
@@ -54,6 +56,11 @@ public class InformationResultWindow extends javax.swing.JDialog {
         this.setModalityType(ModalityType.APPLICATION_MODAL);
     }
 
+    /**
+     * Adds the information result panels and makes the dialog visible
+     * 
+     * @param results 
+     */
     public void Show(List<ResultForSelectionInfo> results) {
         this.tabsResult.removeAll();
         for (ResultForSelectionInfo resultInfo : results) {

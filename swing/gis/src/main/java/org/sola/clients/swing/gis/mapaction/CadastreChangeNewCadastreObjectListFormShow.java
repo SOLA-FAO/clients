@@ -57,10 +57,11 @@ import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.MessageUtility;
 
 /**
- *
+ * This map action shows the form of new cadastre objects during the cadastre change.
+ * 
  * @author rizzom
  */
-public class CadastreChangeNewCadastreObjectListFormShow extends ComponentShow {
+public final class CadastreChangeNewCadastreObjectListFormShow extends ComponentShow {
 
     public final static String MAPACTION_NAME = "newcadastralobjectformshow";
 

@@ -35,7 +35,8 @@ import org.sola.clients.swing.gis.data.PojoDataAccess;
 
 /**
  *
- * @author manoku
+ * A bundle that is used in the main application form. It contains only the basic tools
+ * @author Elton Manoku
  */
 public final class ControlsBundleViewer extends SolaControlsBundle{
     

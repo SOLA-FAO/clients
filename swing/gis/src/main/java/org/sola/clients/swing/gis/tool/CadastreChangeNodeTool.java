@@ -36,7 +36,8 @@ import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.MessageUtility;
 
 /**
- *
+ * Tool used to add or change the new survey points during the cadastre change.
+ * 
  * @author Elton Manoku
  */
 public class CadastreChangeNodeTool extends CadastreChangeEditAbstractTool {
@@ -45,6 +46,10 @@ public class CadastreChangeNodeTool extends CadastreChangeEditAbstractTool {
     private String toolTip = MessageUtility.getLocalizedMessage(
                             GisMessage.CADASTRE_CHANGE_TOOLTIP_NEW_SURVEYPOINT).getMessage();
 
+    /**
+     * Constructor
+     * @param targetLayer The layer where the survey points are maintained
+     */
     public CadastreChangeNodeTool(CadastreChangeNewSurveyPointLayer targetLayer) {
         this.setToolName(NAME);
         this.setGeometryType(Geometries.POINT);
@@ -53,6 +58,13 @@ public class CadastreChangeNodeTool extends CadastreChangeEditAbstractTool {
         this.layer = targetLayer;
     }
 
+    /**
+     * If the survey point is snapped to an existing node, it will be marked as linked.
+     * It notifies also the listeners appropriately.
+     * 
+     * @param mousePositionInMap
+     * @return 
+     */
     @Override
     protected SimpleFeature treatChangeVertex(DirectPosition2D mousePositionInMap) {
         SimpleFeature featureChanged = super.treatChangeVertex(mousePositionInMap);

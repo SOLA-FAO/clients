@@ -49,7 +49,9 @@ import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.search.CadastreObjectSearchResultTO;
 
 /**
- *
+ * This control extends the FreeTextSearch functionality by searching in the map control.
+ * It is used in the Find tab in the map.
+ * 
  * @author Elton Manoku
  */
 public class MapObjectSearch extends FreeTextSearch {
@@ -65,10 +67,21 @@ public class MapObjectSearch extends FreeTextSearch {
         this.setRefreshTextInSelection(false);
     }
 
+    /**
+     * Sets the map control
+     * 
+     * @param map 
+     */
     public void setMap(Map map) {
         this.map = map;
     }
 
+    /**
+     * It executes the search in the server
+     * 
+     * @param searchString
+     * @param listModel 
+     */
     @Override
     public void onNewSearchString(String searchString, DefaultListModel listModel) {
         if (this.dataSource == null) {
@@ -88,6 +101,10 @@ public class MapObjectSearch extends FreeTextSearch {
         }
     }
 
+    /**
+     * If a searched element is selected it zooms/pans the map there.
+     * 
+     */
     @Override
     public void onSelectionConfirmed() {
         if (this.getSelectedElement() == null) {
@@ -107,6 +124,12 @@ public class MapObjectSearch extends FreeTextSearch {
         }
     }
 
+    /**
+     * Sets the search option. The search option is sent to the server as well with the filter,
+     * to define what to search.
+     * 
+     * @param searchByObject 
+     */
     public void setSearchByObject(SearchByChoiceBean searchByObject) {
         this.searchByObject = searchByObject;
     }

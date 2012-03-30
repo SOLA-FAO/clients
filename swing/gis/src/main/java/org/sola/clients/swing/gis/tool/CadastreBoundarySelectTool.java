@@ -4,12 +4,7 @@
  */
 package org.sola.clients.swing.gis.tool;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.CoordinateList;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.LineString;
-import com.vividsolutions.jts.geom.Point;
-import com.vividsolutions.jts.geom.Polygon;
+import com.vividsolutions.jts.geom.*;
 import java.util.ArrayList;
 import java.util.List;
 import org.geotools.data.simple.SimpleFeatureIterator;
@@ -33,15 +28,25 @@ import org.sola.common.messaging.MessageUtility;
 public class CadastreBoundarySelectTool extends ExtendedDrawRectangle {
 
     public final static String NAME = "cadastre-boundary-select";
+    private final static double FILTER_PRECISION = 0.01;
+
     private String toolTip = MessageUtility.getLocalizedMessage(
             GisMessage.CADASTRE_BOUNDARY_SELECT_TOOL_TOOLTIP).getMessage();
-    //private PojoDataAccess dataAccess;
-    protected CadastreBoundaryPointLayer pointLayer;
     private ExtendedLayerGraphics targetLayer;
     private ExtendedLayerGraphics targetNodeLayer;
-    //private int stepNumber = 1;
+    
+    protected CadastreBoundaryPointLayer pointLayer;
+
     protected List<String> targetCadastreObjectIds = new ArrayList<String>();
 
+    /**
+     * Constructor
+     * @param pointLayer The layer where the target boundary and its start and end points
+     * are hold
+     * @param targetLayer The target cadastre object layer. In this layer the target cadastre 
+     * objects are found
+     * @param targetNodeLayer The target node layer. In this layer the boundary nodes are found
+     */
     public CadastreBoundarySelectTool(
             CadastreBoundaryPointLayer pointLayer,
             ExtendedLayerGraphics targetLayer,
@@ -53,6 +58,12 @@ public class CadastreBoundarySelectTool extends ExtendedDrawRectangle {
         this.targetNodeLayer = targetNodeLayer;
     }
 
+    /**
+     * Called when the tool is selected or deselected. If the tool is selected, depending
+     * in the step that is active, gives a hint message.
+     * 
+     * @param selected 
+     */
     @Override
     public void onSelectionChanged(boolean selected) {
         super.onSelectionChanged(selected);
@@ -67,10 +78,22 @@ public class CadastreBoundarySelectTool extends ExtendedDrawRectangle {
         }
     }
 
+    /**
+     * Gets the target layer
+     * @return 
+     */
     protected ExtendedLayerGraphics getTargetLayer() {
         return this.targetLayer;
     }
 
+    /**
+     * This is the map action for this tool. Depending in which step the procedure is, 
+     * selects the begin point or the end point of the boundary.
+     * Different checks are done for each step.
+     * In the end of the second step, the boundary self is being identified.
+     * 
+     * @param env The rectangle to filter the boundary node
+     */
     @Override
     protected void onRectangleFinished(Envelope2D env) {
         if (this.isFirstStep()) {
@@ -88,14 +111,35 @@ public class CadastreBoundarySelectTool extends ExtendedDrawRectangle {
         }
     }
 
+    /**
+     * Gets if the status of the procedure is the first step.
+     * Otherwise it is the second step.
+     * 
+     * @return 
+     */
     private boolean isFirstStep() {
         return (this.pointLayer.getStartPoint() == null || this.pointLayer.getEndPoint() != null);
     }
 
+    /**
+     * Gets the point in the target node layer. This is a search in the existing node already
+     * identified by other means.
+     * 
+     * @param env
+     * @return 
+     */
     protected final SimpleFeature getFirstPointFeature(Envelope2D env) {
         return this.targetNodeLayer.getFirstFeatureInRange(new ReferencedEnvelope(env));
     }
 
+    /**
+     * This step defines the begin node of the target boundary.
+     * It searches in the nodes already present in the layer.
+     * If a node is found, it makes a collection with all cadastre objects that share 
+     * this node.
+     * 
+     * @param env 
+     */
     protected void step1(Envelope2D env) {
         this.clearSelection();
         SimpleFeature pointFeature = this.getFirstPointFeature(env);
@@ -107,6 +151,18 @@ public class CadastreBoundarySelectTool extends ExtendedDrawRectangle {
         }
     }
 
+    /**
+     * This step defines the end node of the target boundary.
+     * It searches in the nodes that are found in the layer. 
+     * If a node is found, it is retrieved the list of cadastre objects that share this node.
+     * If the collection of the cadastre objects found in this step, intersects with 1 or 2
+     * members the collection of cadastre objects found in the first step, then we can identify a 
+     * boundary.
+     * If no boundary can be identified, the process is reseted.
+     * 
+     * @param env
+     * @return 
+     */
     protected boolean step2(Envelope2D env) {
         SimpleFeature pointFeature = this.getFirstPointFeature(env);
         if (pointFeature == null) {
@@ -138,6 +194,14 @@ public class CadastreBoundarySelectTool extends ExtendedDrawRectangle {
 
     }
 
+    /**
+     * It identifies the boundary. It is called after it is made sure that there are two nodes
+     * defined and there is a boundary between these two nodes.
+     * For the boundary it is searched in the clockwise order in the rings of the first cadastre
+     * object which contains both nodes.
+     * 
+     * @return 
+     */
     protected final boolean defineTargetBoundary() {
         boolean clockwise = true;
         Coordinate startCoordinate = this.pointLayer.getStartPoint().getCoordinate();
@@ -163,6 +227,9 @@ public class CadastreBoundarySelectTool extends ExtendedDrawRectangle {
         return (targetBoundaryGeom != null);
     }
 
+    /**
+     * It resets the procedure of identifying the target boundary
+     */
     public final void clearSelection() {
         this.pointLayer.clearSelection();
         SimpleFeature feature;
@@ -179,6 +246,16 @@ public class CadastreBoundarySelectTool extends ExtendedDrawRectangle {
         this.getMapControl().getMapActionByName(CadastreBoundaryEditTool.NAME).setEnabled(false);
     }
 
+    /**
+     * Gets a target boundary from a polygon ring.
+     * 
+     * @param targetRing The target ring
+     * @param clockwise True = Identification of the boundary is done in clockwise order
+     * @param startCoordinate The start node coordinate
+     * @param endCoordinate The end node coordinate
+     * 
+     * @return 
+     */
     private LineString getTargetBoundaryFromRing(LineString targetRing, boolean clockwise,
             Coordinate startCoordinate, Coordinate endCoordinate) {
         CoordinateList coordList = new CoordinateList(targetRing.getCoordinates());
@@ -216,10 +293,16 @@ public class CadastreBoundarySelectTool extends ExtendedDrawRectangle {
                 boundaryCoordList.toCoordinateArray());
     }
 
+    /**
+     * Gets the ids of the cadastre objects that share a node. 
+     * 
+     * @param nodeFeature The feature node
+     * @return 
+     */
     private List<String> getCadastreObjectTargetIdsFromNodeFeature(SimpleFeature nodeFeature) {
         List<String> ids = new ArrayList<String>();
         ReferencedEnvelope filterBbox = new ReferencedEnvelope(nodeFeature.getBounds());
-        filterBbox.expandBy(0.01, 0.01);
+        filterBbox.expandBy(FILTER_PRECISION, FILTER_PRECISION);
         FeatureCollection featureCollection =
                 this.getTargetLayer().getFeaturesInRange(filterBbox, null);
         SimpleFeatureIterator iterator = (SimpleFeatureIterator) featureCollection.features();

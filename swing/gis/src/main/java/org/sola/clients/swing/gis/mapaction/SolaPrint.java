@@ -42,7 +42,10 @@ import org.sola.clients.beans.referencedata.RequestTypeBean;
 import org.sola.clients.beans.security.SecurityBean;
 
 /**
- *
+ * This map action extends the Print map action that handles the print of the map according to a 
+ * layout. The user name and date is added in the layout and also it logs against the application
+ * (if the application is present) the action of printing.
+ * 
  * @author Elton Manoku
  */
 public class SolaPrint extends Print {
@@ -56,10 +59,26 @@ public class SolaPrint extends Print {
         super(map);
     }
 
+    /**
+     * Sets the application id if the map action is found in a bundle where the application
+     * is known. This application id is used to log the action of printing against the application.
+     * 
+     * @param applicationId 
+     */
     public void setApplicationId(String applicationId) {
         this.applicationId = applicationId;
     }
 
+    /**
+     * Additionally to the standard functionality of printing, it supplies the values of
+     * user and date to the layout so it can print them as well.
+     * Also if the print succeeds it logs against the application the action of printing if
+     * the application id is present.
+     * 
+     * @param layout
+     * @param scale
+     * @return 
+     */
     @Override
     protected String print(PrintLayout layout, double scale) {
         for(TextLayout textLayout:layout.getTextLayouts()){

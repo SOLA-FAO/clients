@@ -8,7 +8,9 @@ import org.geotools.swing.mapaction.extended.ExtendedAction;
 import org.geotools.swing.tool.extended.ExtendedEditGeometryTool;
 
 /**
- *
+ * An abstract class, that is used as a parent from editing tools that if activated, must reset
+ * the irregular boundary definition procedure.
+ * 
  * @author Elton Manoku
  */
 public abstract class CadastreChangeEditAbstractTool extends ExtendedEditGeometryTool {

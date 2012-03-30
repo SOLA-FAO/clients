@@ -29,17 +29,18 @@ package org.sola.clients.swing.gis.tool;
 
 import com.vividsolutions.jts.io.ParseException;
 import org.geotools.geometry.DirectPosition2D;
+import org.geotools.map.extended.layer.ExtendedLayerGraphics;
 import org.geotools.swing.event.MapMouseEvent;
+import org.geotools.swing.tool.extended.ExtendedTool;
 import org.sola.clients.swing.gis.Messaging;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
-import org.geotools.map.extended.layer.ExtendedLayerGraphics;
-import org.geotools.swing.tool.extended.ExtendedTool;
 import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.MessageUtility;
 import org.sola.webservices.transferobjects.cadastre.CadastreObjectTO;
 
 /**
- *
+ * Tool used during the cadastre change to select target cadastre objects.
+ * 
  * @author rizzom
  */
 public class CadastreChangeSelectParcelTool extends ExtendedTool {
@@ -50,6 +51,10 @@ public class CadastreChangeSelectParcelTool extends ExtendedTool {
     private ExtendedLayerGraphics targetParcelsLayer = null;
     private PojoDataAccess dataAccess;
 
+    /**
+     *  Constructor
+     * @param dataAccess The data access that handles communication with the web services
+     */
     public CadastreChangeSelectParcelTool(PojoDataAccess dataAccess) {
         this.setToolName(NAME);
         this.setIconImage("resources/select-parcel.png");
@@ -57,17 +62,31 @@ public class CadastreChangeSelectParcelTool extends ExtendedTool {
         this.dataAccess = dataAccess;
     }
 
+    /**
+     * Gets the target cadastre object layer
+     * @return 
+     */
     public ExtendedLayerGraphics getTargetParcelsLayer() {
         return targetParcelsLayer;
     }
 
+    /**
+     * Sets the target cadastre object layer
+     * @param targetParcelsLayer 
+     */
     public void setTargetParcelsLayer(ExtendedLayerGraphics targetParcelsLayer) {
         this.targetParcelsLayer = targetParcelsLayer;
     }
 
+    /**
+     * The action of this tool. If a cadastre object is already selected it will be unselected,
+     * otherwise it will be selected.
+     * 
+     * @param ev 
+     */
     @Override
     public void onMouseClicked(MapMouseEvent ev) {
-        DirectPosition2D pos = ev.getMapPosition();
+        DirectPosition2D pos = ev.getWorldPos();
         CadastreObjectTO cadastreObject =
                 this.dataAccess.getCadastreService().getCadastreObjectByPoint(
                 pos.x, pos.y, this.getMapControl().getSrid());

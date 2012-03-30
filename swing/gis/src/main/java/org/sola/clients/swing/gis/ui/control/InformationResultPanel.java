@@ -37,15 +37,18 @@
  */
 package org.sola.clients.swing.gis.ui.control;
 
-import java.lang.String;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
-import org.sola.webservices.search.GenericResult;
 import net.java.dev.jaxb.array.StringArray;
+import org.sola.webservices.search.GenericResult;
 /**
- *
- * @author Manoku
+ * This Panel is used for each kind of data found during the information tool action.
+ * It contains a JTable which is populated with values from the result.
+ * In the constructor is defined which fields should not become visible.
+ * The table is constructed from the result itself.
+ * 
+ * @author Elton Manoku
  */
 public class InformationResultPanel extends javax.swing.JPanel {
     
@@ -56,6 +59,12 @@ public class InformationResultPanel extends javax.swing.JPanel {
         initComponents();
     }
     
+    /**
+     * Constructor.
+     * By default, if columns id and the_geom exist in the result, will not be displayed in the 
+     * table.
+     * @param result The generic result that should be displayed. 
+     */
     public InformationResultPanel(GenericResult result) {
         this();
         fieldsNotToDisplay.add("id");

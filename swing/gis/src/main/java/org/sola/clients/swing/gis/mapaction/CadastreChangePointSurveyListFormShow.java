@@ -27,21 +27,21 @@
  */
 package org.sola.clients.swing.gis.mapaction;
 
-import org.sola.clients.swing.gis.ui.control.CadastreChangePointSurveyListForm;
+import java.awt.Component;
 import org.geotools.swing.extended.Map;
 import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.MessageUtility;
 
 /**
- *
+ * This map action shows the form of new survey points during the cadastre change.
+ * 
  * @author rizzom
  */
-public class CadastreChangePointSurveyListFormShow extends ComponentShow {
+public final class CadastreChangePointSurveyListFormShow extends ComponentShow {
 
     public final static String MAPACTION_NAME = "point-show";
 
-    public CadastreChangePointSurveyListFormShow(
-            Map mapObj, CadastreChangePointSurveyListForm pointSurveyListForm) {
+    public CadastreChangePointSurveyListFormShow(Map mapObj, Component pointSurveyListForm) {
         super(mapObj, pointSurveyListForm, "point-show",
                 MessageUtility.getLocalizedMessage(
                 GisMessage.CADASTRE_CHANGE_POINTS_SHOW).getMessage(),

@@ -25,8 +25,9 @@ import org.sola.common.messaging.MessageUtility;
 
 /**
  * It handles the editing of a selected boundary. The boundary is already defined 
- * by the points found in the pointLayer.
- * Do not forget to set the targetLayer as well.
+ * by the points found in the pointLayer and also the boundary itself is found there.
+ * Do not forget to set the targetLayer as well before using it.
+ * 
  * @author Elton Manoku
  */
 public class CadastreBoundaryEditTool extends ExtendedDrawToolWithSnapping {
@@ -37,6 +38,11 @@ public class CadastreBoundaryEditTool extends ExtendedDrawToolWithSnapping {
     private ExtendedLayerGraphics targetLayer;
     private CadastreBoundaryPointLayer pointLayer;
 
+    /**
+     * Constructor
+     * @param pointLayer The layer where the boundary to be changed is defined.
+     * 
+     */
     public CadastreBoundaryEditTool(CadastreBoundaryPointLayer pointLayer) {
         this.setToolName(NAME);
         this.setGeometryType(Geometries.LINESTRING);
@@ -45,10 +51,25 @@ public class CadastreBoundaryEditTool extends ExtendedDrawToolWithSnapping {
         this.getTargetSnappingLayers().add(this.pointLayer);
     }
 
+    /**
+     * Sets the layer where the target cadastre object is found. 
+     * The boundary that will be modified is found in an object in this layer.
+     * 
+     * @param targetLayer 
+     */
     public void setTargetLayer(ExtendedLayerGraphics targetLayer) {
         this.targetLayer = targetLayer;
     }
 
+    /**
+     * After the finishing of digitizing of the new boundary, it si checked if the new geometry
+     * can replace the existing boundary. The condition is that the new geometry should 
+     * begin and end where the existing boundary begins and ends.
+     * If that is true, then it is replaced the old boundary with the new geometry in all 
+     * cadastre objects where the old boundary is found.
+     * 
+     * @param geometry 
+     */
     @Override
     protected void treatFinalizedGeometry(Geometry geometry) {
         LineString targetBoundary = this.pointLayer.getTargetBoundary();
@@ -78,6 +99,14 @@ public class CadastreBoundaryEditTool extends ExtendedDrawToolWithSnapping {
         this.getMapControl().setActiveTool(ExtendedPan.NAME);
     }
 
+    /**
+     * It replaces the old boundary with the new boundary in a given polygon
+     * 
+     * @param targetPolygon
+     * @param targetBoundary
+     * @param newBoundary
+     * @return 
+     */
     private Polygon getPolygonModifiedBoundary(
             Polygon targetPolygon, LineString targetBoundary, LineString newBoundary) {
         LinearRing exteriorRing = this.getModifiedRing(
@@ -90,6 +119,14 @@ public class CadastreBoundaryEditTool extends ExtendedDrawToolWithSnapping {
         return targetPolygon.getFactory().createPolygon(exteriorRing, interiorRings);
     }
 
+    /**
+     * It replaces the old boundary with the new boundary in a given polygon ring
+     * 
+     * @param ring
+     * @param targetBoundary
+     * @param newBoundary
+     * @return 
+     */
     private LinearRing getModifiedRing(
             LineString ring, LineString targetBoundary, LineString newBoundary) {
         if (!ring.intersects(targetBoundary)) {
@@ -109,10 +146,22 @@ public class CadastreBoundaryEditTool extends ExtendedDrawToolWithSnapping {
         return ring.getFactory().createLinearRing(coordList.toCoordinateArray());
     }
 
+    /**
+     * It checks if the boundary belongs to a the cadastre object.
+     * 
+     * @param coGeom The cadastre object geometry
+     * @param targetBoundary The boundary
+     * @return 
+     */
     private boolean cadastralObjectHasTargetBoundary(Polygon coGeom, LineString targetBoundary){
         return coGeom.covers(targetBoundary);
     }
     
+    /**
+     * The tool that is used to select the target boundary
+     * 
+     * @return 
+     */
     private CadastreBoundarySelectTool getSelectTool() {
         ExtendedAction selectAction =
                 this.getMapControl().getMapActionByName(CadastreBoundarySelectTool.NAME);

@@ -44,8 +44,10 @@ import javax.swing.event.ListSelectionListener;
 import org.sola.clients.swing.gis.layer.CadastreChangeNewCadastreObjectLayer;
 
 /**
- *
- * @author Manoku
+ * This form is used to display information about the new cadastre objects 
+ * during the cadastre change process.
+ * 
+ * @author Elton Manoku
  */
 public class CadastreChangeNewCadastreObjectListForm extends javax.swing.JDialog {
 
@@ -63,7 +65,6 @@ public class CadastreChangeNewCadastreObjectListForm extends javax.swing.JDialog
                     @Override
                     public void valueChanged(ListSelectionEvent e) {
                         cmdRemove.setEnabled(true);
-                        //System.out.println("Selection:" + e.getFirstIndex());
                     }
                 });
     }
@@ -74,6 +75,10 @@ public class CadastreChangeNewCadastreObjectListForm extends javax.swing.JDialog
         this.layer = cadastreObjectLayer;
     }
 
+    /**
+     * Gets the table which displays for each cadastre object a row with information
+     * @return 
+     */
     public JTable getTable(){
         return this.table;
     }

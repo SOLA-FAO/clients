@@ -35,14 +35,15 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.geometry.jts.Geometries;
-import org.opengis.feature.simple.SimpleFeature;
-import org.sola.clients.swing.gis.Messaging;
 import org.geotools.swing.tool.extended.ExtendedEditGeometryTool;
+import org.opengis.feature.simple.SimpleFeature;
 import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.MessageUtility;
 
 /**
- *
+ * This tool it is used in the control bundle used in the application form. It is used to define
+ * the application location.
+ * 
  * @author Elton Manoku
  */
 public class LocateApplicationTool extends ExtendedEditGeometryTool {
@@ -60,6 +61,10 @@ public class LocateApplicationTool extends ExtendedEditGeometryTool {
         this.setGeometryType(Geometries.POINT);
     }
 
+    /**
+     * Gets the geometry of the application location. It is a multipoint.
+     * @return 
+     */
     public Geometry getLocationGeometry() {
         Geometry result = null;
         SimpleFeatureIterator iterator = this.layer.getFeatureCollection().features();
@@ -78,6 +83,11 @@ public class LocateApplicationTool extends ExtendedEditGeometryTool {
         return result;
     }
 
+    /**
+     * Sets the location of the application
+     * 
+     * @param existingLocation If null nothing is displayed
+     */
     public void setLocationGeometry(Geometry existingLocation) {
         this.layer.removeFeatures();
         if (existingLocation != null) {

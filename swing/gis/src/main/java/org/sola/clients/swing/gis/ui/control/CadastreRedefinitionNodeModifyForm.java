@@ -15,17 +15,24 @@ import org.sola.clients.swing.gis.Messaging;
 import org.sola.common.messaging.GisMessage;
 
 /**
- *
+ * This form is used during the manipulation of nodes in the cadastre redefinition process.
+ * If a node is identified or new inserted, then this form gives the possibility to change the 
+ * coordinates or to remove the node.
+ * 
  * @author Elton Manoku
  */
 public class CadastreRedefinitionNodeModifyForm extends javax.swing.JDialog {
 
+    /**
+     * Status types of the form
+     */
     public enum Status {
 
         RemoveNode,
         ModifyNode,
         DoNothing
     }
+    
     private Status status = Status.DoNothing;
     private DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
@@ -36,30 +43,60 @@ public class CadastreRedefinitionNodeModifyForm extends javax.swing.JDialog {
         this.setModalityType(ModalityType.APPLICATION_MODAL);
     }
 
+    /**
+     * Gets the status of the form
+     * @return 
+     */
     public Status getStatus() {
         return status;
     }
 
+    /**
+     * Sets the status of the form
+     * @param status 
+     */
     public void setStatus(Status status) {
         this.status = status;
     }
 
+    /**
+     * Sets the X coordinate
+     * @param x 
+     */
     public void setCoordinateX(Double x) {
         this.txtX.setText(decimalFormat.format(x));
     }
 
+    /**
+     * Sets the Y coordinate
+     * @param y 
+     */
     public void setCoordinateY(Double y) {
         this.txtY.setText(decimalFormat.format(y));
     }
 
+    /**
+     * Gets X coordinate
+     * @return 
+     */
     public Double getCoordinateX() {
         return Double.valueOf(this.txtX.getText());
     }
 
+    /**
+     * Gets Y coordinate
+     * @return 
+     */
     public Double getCoordinateY() {
         return Double.valueOf(this.txtY.getText());
     }
 
+    /**
+     * Changes the visibility of the remove button. Sometimes the remove button must not be
+     * enabled.
+     * 
+     * @param visible 
+     */
     public void setRemoveButtonVisibility(boolean visible){
         this.cmdRemove.setVisible(visible);
     }
