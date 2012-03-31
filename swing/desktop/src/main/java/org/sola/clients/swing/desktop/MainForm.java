@@ -332,17 +332,17 @@ public class MainForm extends javax.swing.JFrame {
         menuOffLogLevel = new javax.swing.JMenuItem();
         menuApplications = new javax.swing.JMenu();
         menuNewApplication = new javax.swing.JMenuItem();
-        menuMap = new javax.swing.JMenu();
-        menuShowMap = new javax.swing.JMenuItem();
         menuSearch = new javax.swing.JMenu();
         menuSearchApplication = new javax.swing.JMenuItem();
         menuBaUnitSearch = new javax.swing.JMenuItem();
         menuDocumentSearch = new javax.swing.JMenuItem();
+        menuMap = new javax.swing.JMenu();
+        menuShowMap = new javax.swing.JMenuItem();
+        menuReportsDesktop = new javax.swing.JMenu();
+        menuLodgementReport = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
         jmiContextHelp = new javax.swing.JMenuItem();
-        menuReportsDesktop = new javax.swing.JMenu();
-        menuLodgementReport = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/Bundle"); // NOI18N
@@ -555,19 +555,6 @@ public class MainForm extends javax.swing.JFrame {
 
         menuBar.add(menuApplications);
 
-        menuMap.setText(bundle.getString("MainForm.menuMap.text")); // NOI18N
-
-        menuShowMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/network.png"))); // NOI18N
-        menuShowMap.setText(bundle.getString("MainForm.menuShowMap.text")); // NOI18N
-        menuShowMap.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuShowMapActionPerformed(evt);
-            }
-        });
-        menuMap.add(menuShowMap);
-
-        menuBar.add(menuMap);
-
         menuSearch.setText(bundle.getString("MainForm.menuSearch.text")); // NOI18N
 
         menuSearchApplication.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/search.png"))); // NOI18N
@@ -599,6 +586,32 @@ public class MainForm extends javax.swing.JFrame {
 
         menuBar.add(menuSearch);
 
+        menuMap.setText(bundle.getString("MainForm.menuMap.text")); // NOI18N
+
+        menuShowMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/network.png"))); // NOI18N
+        menuShowMap.setText(bundle.getString("MainForm.menuShowMap.text")); // NOI18N
+        menuShowMap.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuShowMapActionPerformed(evt);
+            }
+        });
+        menuMap.add(menuShowMap);
+
+        menuBar.add(menuMap);
+
+        menuReportsDesktop.setText(bundle.getString("MainForm.menuReportsDesktop.text_1")); // NOI18N
+
+        menuLodgementReport.setText(bundle.getString("MainForm.menuLodgementReportDesktop.text_1")); // NOI18N
+        menuLodgementReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuLodgementReportActionPerformed(evt);
+            }
+        });
+        menuReportsDesktop.add(menuLodgementReport);
+        menuLodgementReport.getAccessibleContext().setAccessibleName(bundle.getString("MainForm.menuLodgementReport.AccessibleContext.accessibleName")); // NOI18N
+
+        menuBar.add(menuReportsDesktop);
+
         helpMenu.setText(bundle.getString("MainForm.helpMenu.text")); // NOI18N
 
         aboutMenuItem.setText(bundle.getString("MainForm.aboutMenuItem.text")); // NOI18N
@@ -615,19 +628,6 @@ public class MainForm extends javax.swing.JFrame {
 
         menuBar.add(helpMenu);
 
-        menuReportsDesktop.setText(bundle.getString("MainForm.menuReportsDesktop.text_1")); // NOI18N
-
-        menuLodgementReport.setText(bundle.getString("MainForm.menuLodgementReportDesktop.text_1")); // NOI18N
-        menuLodgementReport.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuLodgementReportActionPerformed(evt);
-            }
-        });
-        menuReportsDesktop.add(menuLodgementReport);
-        menuLodgementReport.getAccessibleContext().setAccessibleName(bundle.getString("MainForm.menuLodgementReport.AccessibleContext.accessibleName")); // NOI18N
-
-        menuBar.add(menuReportsDesktop);
-
         setJMenuBar(menuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -643,7 +643,7 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(applicationsMain, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlContent, javax.swing.GroupLayout.DEFAULT_SIZE, 535, Short.MAX_VALUE)
+                .addComponent(pnlContent, javax.swing.GroupLayout.DEFAULT_SIZE, 537, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(statusPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
