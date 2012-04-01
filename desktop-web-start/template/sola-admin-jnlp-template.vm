@@ -4,7 +4,7 @@
     codebase="$$codebase"
     context="$$context"
     href="$$name"
-    version="Alpha Release">
+    version="Customization Release v1.0">
   <information>
     <title>SOLA Admin Web Start</title>
 #if($project.Organization.Name)
