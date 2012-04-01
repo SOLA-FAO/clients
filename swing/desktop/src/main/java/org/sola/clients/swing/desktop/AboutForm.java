@@ -122,7 +122,7 @@ public class AboutForm extends javax.swing.JDialog {
                             .add(layout.createSequentialGroup()
                                 .add(appTitleLabel)
                                 .add(44, 44, 44))
-                            .add(appDescLabel))
+                            .add(appDescLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE))
                         .add(16, 16, 16)
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(jLabel1)
