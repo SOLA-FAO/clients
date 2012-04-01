@@ -5,11 +5,11 @@
     <parent>
         <artifactId>sola-clients</artifactId>
         <groupId>org.sola</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.1-SNAPSHOT</version>
     </parent>
     <groupId>org.sola.clients</groupId>
     <artifactId>clients-reports</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.1-SNAPSHOT</version>
     <name>Clients Reports</name>
     <url>http://maven.apache.org</url>
     <properties>
@@ -19,7 +19,7 @@
         <dependency>
             <groupId>org.sola.clients</groupId>
             <artifactId>clients-beans</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>net.sf.barcode4j</groupId>

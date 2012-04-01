@@ -5,11 +5,11 @@
     <parent>
         <artifactId>sola-clients-swing</artifactId>
         <groupId>org.sola.clients</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.1-SNAPSHOT</version>
     </parent>
     <groupId>org.sola.clients.swing</groupId>
     <artifactId>clients-swing-ui</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.1-SNAPSHOT</version>
     <name>Clients SWING UI</name>
     <url>http://maven.apache.org</url>
     <properties>
@@ -19,13 +19,13 @@
         <dependency>
             <groupId>org.sola.clients</groupId>
             <artifactId>clients-reports</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.1-SNAPSHOT</version>
         </dependency>
         
         <dependency>
             <groupId>org.sola.clients.swing</groupId>
             <artifactId>clients-swing-common</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.1-SNAPSHOT</version>
         </dependency>
         
         <dependency>
@@ -42,7 +42,7 @@
         <dependency>
             <groupId>org.sola.common</groupId>
             <artifactId>sola-help</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.1-SNAPSHOT</version>
             <type>jar</type>
         </dependency>
     </dependencies>

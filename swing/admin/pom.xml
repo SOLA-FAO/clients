@@ -5,7 +5,7 @@
     <parent>
         <artifactId>sola-clients-swing</artifactId>
         <groupId>org.sola.clients</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.1-SNAPSHOT</version>
     </parent>
     
     <groupId>org.sola.clients.swing</groupId>
@@ -14,7 +14,7 @@
     See  https://jira.atlassian.com/browse/CLOV-1026 -->
     <artifactId>sola-desktop-admin</artifactId>
     <packaging>jar</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.1-SNAPSHOT</version>
     <name>Clients Admin</name>
 
     <properties>
@@ -33,7 +33,7 @@
         <dependency>
             <groupId>org.sola.clients.swing</groupId>
             <artifactId>clients-swing-ui</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -44,7 +44,7 @@
         <dependency>
             <groupId>org.sola.clients.swing</groupId>
             <artifactId>sola-desktop</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.1-SNAPSHOT</version>
             <type>jar</type>
         </dependency>
     </dependencies>

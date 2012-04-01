@@ -5,11 +5,11 @@
     <parent>
         <artifactId>sola-clients-swing</artifactId>
         <groupId>org.sola.clients</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.1-SNAPSHOT</version>
     </parent>
     <groupId>org.sola.clients.swing</groupId>
     <artifactId>clients-swing-common</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.1-SNAPSHOT</version>
     <name>Clients SWING Common</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -36,17 +36,17 @@
         <dependency>
             <groupId>org.sola.services.boundary</groupId>
             <artifactId>sola-web-service-clients</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.sola.common</groupId>
             <artifactId>sola-common</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.1-SNAPSHOT</version>
         </dependency>
         <!--dependency>
             <groupId>org.sola.clients</groupId>
             <artifactId>clients-media</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.1-SNAPSHOT</version>
         </dependency-->
         <dependency>
             <groupId>junit</groupId>
