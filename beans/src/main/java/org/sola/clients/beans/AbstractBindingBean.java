@@ -38,6 +38,7 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -96,6 +97,11 @@ public abstract class AbstractBindingBean implements Serializable {
      * @param group List of validation groups.
      */
     public <T extends AbstractBindingBean> Set<ConstraintViolation<T>> validate(boolean showMessage, Class<?>... group) {
+        // Don't call validation for deleted entity
+//        if(this.getEntityAction()!=null && this.getEntityAction() == EntityAction.DELETE){
+//            return new HashSet<ConstraintViolation<T>>();
+//        }
+        
         T bean = (T) this;
         Set<ConstraintViolation<T>> warningsList = ValidatorFactory.getInstance().getValidator().validate(bean, group);
 

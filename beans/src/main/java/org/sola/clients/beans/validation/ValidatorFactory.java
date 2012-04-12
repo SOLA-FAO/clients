@@ -27,13 +27,15 @@
  */
 package org.sola.clients.beans.validation;
 
+import java.lang.annotation.ElementType;
 import java.util.Locale;
-import javax.validation.Configuration;
-import javax.validation.MessageInterpolator;
+import javax.validation.*;
 import javax.validation.MessageInterpolator.Context;
-import javax.validation.Validation;
-import javax.validation.Validator;
+import javax.validation.Path.Node;
+import org.hibernate.validator.engine.ConstraintValidatorFactoryImpl;
+import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.common.messaging.MessageUtility;
+import org.sola.webservices.transferobjects.EntityAction;
 
 /**
  * Holds a single instance of bean validator.
@@ -74,6 +76,26 @@ public class ValidatorFactory {
             }
         });
                 
+        // Stop validation if Entity action is DELETE
+        config.traversableResolver(new TraversableResolver() {
+
+            @Override
+            public boolean isReachable(Object traversableObject, Node traversableProperty, Class<?> rootBeanType, Path pathToTraversableObject, ElementType elementType) {
+                if(traversableObject!=null && AbstractBindingBean.class.isAssignableFrom(traversableObject.getClass())){
+                    AbstractBindingBean bean = (AbstractBindingBean)traversableObject;
+                    if(bean.getEntityAction()!=null && bean.getEntityAction() == EntityAction.DELETE){
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            @Override
+            public boolean isCascadable(Object traversableObject, Node traversableProperty, Class<?> rootBeanType, Path pathToTraversableObject, ElementType elementType) {
+                return true;
+            }
+        });
+        
         javax.validation.ValidatorFactory factory = config.buildValidatorFactory();
         validator = factory.getValidator();
     }

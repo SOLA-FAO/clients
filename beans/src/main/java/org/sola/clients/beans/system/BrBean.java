@@ -69,11 +69,7 @@ public class BrBean extends AbstractBindingBean {
     private BrTechnicalTypeBean brTechnicalType;
     private String feedback;
     private String description;
-    @Valid
-    @Size(min=1, message=ClientMessage.CHECK_SIZE_BRDEFLIST, payload=Localized.class)
     private SolaList<BrDefinitionBean> brDefinitionList;
-    @Valid
-    //@Size(min=1, message=ClientMessage.CHECK_SIZE_BRVALLIST, payload=Localized.class)
     private SolaList<BrValidationBean> brValidationList;
     private String technicalDescription;
     private transient BrDefinitionBean selectedBrDefinition;
@@ -93,6 +89,8 @@ public class BrBean extends AbstractBindingBean {
         propertySupport.firePropertyChange(DISPLAY_NAME_PROPERTY, oldValue, this.displayName);
     }
 
+    @Valid
+    @Size(min=1, message=ClientMessage.CHECK_SIZE_BRDEFLIST, payload=Localized.class)
     public ObservableList<BrDefinitionBean> getFilteredBrDefinitionList(){
         return getBrDefinitionList().getFilteredList();
     }
@@ -120,6 +118,8 @@ public class BrBean extends AbstractBindingBean {
         this.setJointRefDataBean(getBrTechnicalType(), brTechnicalType, BR_TECHNICAL_TYPE_PROPERTY);
     }
     
+    @Valid
+    //@Size(min=1, message=ClientMessage.CHECK_SIZE_BRVALLIST, payload=Localized.class)
     public ObservableList<BrValidationBean> getFilteredBrValidationList(){
         return getBrValidationList().getFilteredList();
     }

@@ -28,6 +28,8 @@
 package org.sola.clients.swing.desktop.application;
 
 import java.awt.ComponentOrientation;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Locale;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -42,25 +44,40 @@ public class ServiceListForm extends javax.swing.JDialog {
 
     private ApplicationBean application;
 
-    /** Creates new form ServiceList */
-    public ServiceListForm() {
-        super((JFrame) null, true);
-        initComponents();
-        this.setIconImage(new ImageIcon(ServiceListForm.class.getResource("/images/sola/logo_icon.jpg")).getImage());
-
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/application/Bundle"); // NOI18N
-        this.setTitle(bundle.getString("ServiceList.labTitle.text"));
-    }
-
     public ServiceListForm(ApplicationBean application) {
         super((JFrame) null, true);
         this.application = application;
 
         initComponents();
         this.setIconImage(new ImageIcon(ServiceListForm.class.getResource("/images/sola/logo_icon.jpg")).getImage());
+        
+        btnAddService.setEnabled(false);
+        requestTypeList.addPropertyChangeListener(new PropertyChangeListener() {
 
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if(evt.getPropertyName().equals(RequestTypeListBean.SELECTED_REQUEST_TYPE_PROPERTY)){
+                    btnAddService.setEnabled(requestTypeList.getSelectedRequestType()!=null);
+                }
+            }
+        });
     }
 
+    private void addService(){
+                    if (requestTypeList.getSelectedRequestType() != null) {
+//                for (Iterator<ApplicationServiceBean> it = application.getServiceList().iterator(); it.hasNext();) {
+//                    ApplicationServiceBean appService = it.next();
+//                    System.out.println("appService.getRequestTypeCode() " + appService.getRequestTypeCode());
+//
+//                    if (requestTypeList.getSelectedRequestType().getCode().equals(appService.getRequestTypeCode())) {
+//                        MessageUtility.displayMessage(ClientMessage.APPLICATION_ALREADYSELECTED_SERVICE);
+//                        return;
+//                    }
+//                }
+                application.addService(requestTypeList.getSelectedRequestType());
+            }
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -69,6 +86,8 @@ public class ServiceListForm extends javax.swing.JDialog {
         requestTypeList = new org.sola.clients.beans.referencedata.RequestTypeListBean();
         scrollFeeDetails1 = new javax.swing.JScrollPane();
         tabFeeDetails1 = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
+        jToolBar1 = new javax.swing.JToolBar();
+        btnAddService = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/application/Bundle"); // NOI18N
@@ -102,19 +121,39 @@ public class ServiceListForm extends javax.swing.JDialog {
         });
         scrollFeeDetails1.setViewportView(tabFeeDetails1);
         tabFeeDetails1.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("ServiceListForm.tabFeeDetails1.columnModel.title0")); // NOI18N
-        tabFeeDetails1.getColumnModel().getColumn(1).setPreferredWidth(100);
-        tabFeeDetails1.getColumnModel().getColumn(1).setMaxWidth(100);
+        tabFeeDetails1.getColumnModel().getColumn(1).setPreferredWidth(150);
+        tabFeeDetails1.getColumnModel().getColumn(1).setMaxWidth(150);
         tabFeeDetails1.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("ServiceListForm.tabFeeDetails1.columnModel.title1")); // NOI18N
+
+        jToolBar1.setFloatable(false);
+        jToolBar1.setRollover(true);
+        jToolBar1.setName(bundle.getString("ServiceListForm.jToolBar1.name")); // NOI18N
+
+        btnAddService.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
+        btnAddService.setText(bundle.getString("ServiceListForm.btnAddService.text")); // NOI18N
+        btnAddService.setFocusable(false);
+        btnAddService.setName(bundle.getString("ServiceListForm.btnAddService.name")); // NOI18N
+        btnAddService.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAddService.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddServiceActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnAddService);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrollFeeDetails1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE)
+            .addComponent(scrollFeeDetails1, javax.swing.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE)
+            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrollFeeDetails1, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(scrollFeeDetails1, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         bindingGroup.bind();
@@ -124,21 +163,17 @@ public class ServiceListForm extends javax.swing.JDialog {
 
     private void tabFeeDetails1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabFeeDetails1MouseClicked
         if (evt.getClickCount() == 2) {
-            if (requestTypeList.getSelectedRequestType() != null) {
-//                for (Iterator<ApplicationServiceBean> it = application.getServiceList().iterator(); it.hasNext();) {
-//                    ApplicationServiceBean appService = it.next();
-//                    System.out.println("appService.getRequestTypeCode() " + appService.getRequestTypeCode());
-//
-//                    if (requestTypeList.getSelectedRequestType().getCode().equals(appService.getRequestTypeCode())) {
-//                        MessageUtility.displayMessage(ClientMessage.APPLICATION_ALREADYSELECTED_SERVICE);
-//                        return;
-//                    }
-//                }
-                application.addService(requestTypeList.getSelectedRequestType());
-            }
+            addService();
         }
 }//GEN-LAST:event_tabFeeDetails1MouseClicked
+
+    private void btnAddServiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddServiceActionPerformed
+        addService();
+    }//GEN-LAST:event_btnAddServiceActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddService;
+    private javax.swing.JToolBar jToolBar1;
     private org.sola.clients.beans.referencedata.RequestTypeListBean requestTypeList;
     private javax.swing.JScrollPane scrollFeeDetails1;
     private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tabFeeDetails1;
