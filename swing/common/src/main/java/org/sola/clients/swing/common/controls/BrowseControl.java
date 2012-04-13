@@ -1,28 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.common.controls;
@@ -39,13 +41,12 @@ import java.awt.event.MouseListener;
 import java.awt.font.TextAttribute;
 import java.awt.geom.Rectangle2D;
 import java.text.AttributedString;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JTextField;
+import javax.swing.*;
+import org.sola.clients.swing.common.LafManager;
 
 /**
- * Browse control has view of text field with browse button to pickup values. 
- * Once there is a value, it could be removed by clicking delete button, or 
+ * Browse control has view of text field with browse button to pickup values.
+ * Once there is a value, it could be removed by clicking delete button, or
  * opened by clicking on the text in form of hyperlink.
  */
 public class BrowseControl extends JTextField {
@@ -62,6 +63,7 @@ public class BrowseControl extends JTextField {
     private Icon deleteButtonIcon;
     private Color browseBtnOffColor;
     private Color browseBtnOnColor;
+    private Color browseBtnClickColor;
     private Color browseBtnCurrentColor;
     private boolean displayDeleteButton;
     private boolean displayBrowseButton;
@@ -72,20 +74,25 @@ public class BrowseControl extends JTextField {
     private String browseButtonTooltip;
     private boolean enabled;
 
-    /** Class constructor. Initializes default values. */
+    /**
+     * Class constructor. Initializes default values.
+     */
     public BrowseControl() {
         super();
-        this.setBackground(new java.awt.Color(255, 255, 255));
-        this.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(128, 128, 128)));
+        this.setBackground(UIManager.getColor(LafManager.getInstance().getTxtFieldBg()));
+        this.setBorder(javax.swing.BorderFactory.createLineBorder(UIManager.getColor(LafManager.getInstance().getBtnDarkShadow())));
         this.setPreferredSize(new Dimension(185, 23));
 
         deleteButtonIcon = new ImageIcon(BrowseControl.class.getResource("/org/sola/clients/swing/common/controls/resources/delete_icon.gif"));
         textBox = new Rectangle();
         deleteButtonBox = new Rectangle();
         browseBtnBox = new Rectangle();
-        browseBtnOffColor = new Color(240, 240, 240);
-        browseBtnOnColor = new Color(204, 204, 204);
-        browseBtnCurrentColor = new Color(240, 240, 240);
+        browseBtnOffColor = UIManager.getColor(LafManager.getInstance().getBtnBackground());
+        browseBtnOnColor = new Color(150, 150, 150);
+        browseBtnClickColor = UIManager.getColor(LafManager.getInstance().getBtnShadow());
+
+
+        browseBtnCurrentColor = browseBtnOffColor;
         color = new java.awt.Color(0, 153, 255);
         text = "";
         displayBrowseButton = true;
@@ -113,6 +120,7 @@ public class BrowseControl extends JTextField {
 
             @Override
             public void mousePressed(MouseEvent e) {
+                mousePressedHandler(e);
             }
 
             @Override
@@ -130,7 +138,19 @@ public class BrowseControl extends JTextField {
         });
     }
 
-    /** Handles mouse exit out of control. */
+    /**
+     * Handles mouse pressed event.
+     */
+    private void mousePressedHandler(MouseEvent e) {
+        if (browseBtnCurrentColor != browseBtnClickColor && browseBtnBox.contains(e.getPoint())) {
+            browseBtnCurrentColor = browseBtnClickColor;
+            drawBrowseButton((Graphics2D) this.getGraphics());
+        }
+    }
+
+    /**
+     * Handles mouse exit out of control.
+     */
     private void mouseExitedHandler(MouseEvent e) {
         // Draw default settings
         if (browseBtnCurrentColor != browseBtnOffColor) {
@@ -140,7 +160,9 @@ public class BrowseControl extends JTextField {
         this.setToolTipText(null);
     }
 
-    /** Handles mouse clicks on the control. */
+    /**
+     * Handles mouse clicks on the control.
+     */
     private void mouseClickedHandler(MouseEvent e) {
         // Define the click type
         if (textBox.contains(e.getPoint())) {
@@ -154,7 +176,9 @@ public class BrowseControl extends JTextField {
         }
     }
 
-    /** Handles mouse moves. */
+    /**
+     * Handles mouse moves.
+     */
     private void mouseMovedHandler(java.awt.event.MouseEvent evt) {
         if (browseBtnBox.contains(evt.getPoint())) {
             if (underline) {
@@ -194,7 +218,9 @@ public class BrowseControl extends JTextField {
     }
 
     @Override
-    /** Drawing logic of the control. */
+    /**
+     * Drawing logic of the control.
+     */
     public void paint(Graphics g) {
         super.paint(g);
 
@@ -264,7 +290,9 @@ public class BrowseControl extends JTextField {
         drawBrowseButton(g2);
     }
 
-    /** Draws browse button. */
+    /**
+     * Draws browse button.
+     */
     private void drawBrowseButton(Graphics2D g) {
         if (!displayBrowseButton) {
             return;
@@ -272,22 +300,36 @@ public class BrowseControl extends JTextField {
 
         int x = this.getWidth() - browseBtnWidth;
 
-        // Draw rectangle
-        g.setPaint(browseBtnCurrentColor);
         Rectangle2D btnRect = new Rectangle2D.Double(x, 1, browseBtnWidth - 1, this.getHeight() - 2);
         Rectangle2D btnLeftGapRect = new Rectangle2D.Double(x - browseBtnGap, 1, browseBtnGap, this.getHeight() - 2);
-
         browseBtnBox = new Rectangle(btnLeftGapRect.getBounds().x,
                 btnLeftGapRect.getBounds().y,
                 btnRect.getBounds().width + btnLeftGapRect.getBounds().width,
                 btnRect.getBounds().height);
 
-        g.fill(btnRect);
+        Painter btnPainter;
 
-        // Draw vertical line as a left border of button
-        g.setPaint(Color.LIGHT_GRAY);
-        g.drawLine(btnRect.getBounds().x, btnRect.getBounds().y, btnRect.getBounds().x,
-                btnRect.getBounds().y + btnRect.getBounds().height);
+        if (browseBtnCurrentColor == browseBtnOnColor) {
+            btnPainter = (Painter) UIManager.get("Button[Default+MouseOver].backgroundPainter");
+        } else if (browseBtnCurrentColor == browseBtnClickColor) {
+            btnPainter = (Painter) UIManager.get("Button[Default+Focused+Pressed].backgroundPainter");
+        } else {
+            btnPainter = (Painter) UIManager.get("Button[Default].backgroundPainter");
+        }
+
+        if (btnPainter != null) {
+            btnPainter.paint((Graphics2D) g.create(x, 0, browseBtnWidth, this.getHeight()), null, browseBtnWidth, this.getHeight());
+        } else {
+            // Draw rectangle
+            g.setPaint(browseBtnCurrentColor);
+
+            g.fill(btnRect);
+
+            // Draw vertical line as a left border of button
+            g.setPaint(Color.LIGHT_GRAY);
+            g.drawLine(btnRect.getBounds().x, btnRect.getBounds().y, btnRect.getBounds().x,
+                    btnRect.getBounds().y + btnRect.getBounds().height);
+        }
 
         // Draw label on the button
         Font labelFont = new Font("Tahoma", Font.PLAIN, 11);
@@ -295,13 +337,15 @@ public class BrowseControl extends JTextField {
         int textY = (btnRect.getBounds().height / 2) + (getFontMetrics(labelFont).getHeight() / 2) - getFontMetrics(getFont()).getDescent();
         int textX = btnRect.getBounds().x + (btnRect.getBounds().width / 2 - getFontMetrics(labelFont).stringWidth(labelText) / 2);
 
-        g.setPaint(Color.BLACK);
+        g.setPaint(UIManager.getColor(LafManager.getInstance().getBtnForeground()));
         AttributedString as = new AttributedString(labelText);
         as.addAttribute(TextAttribute.FONT, labelFont);
         g.drawString(as.getIterator(), textX, textY);
     }
 
-    /** Draws delete button. */
+    /**
+     * Draws delete button.
+     */
     private void drawDeleteButton(Graphics2D g) {
         if (!displayDeleteButton) {
             return;
@@ -312,89 +356,121 @@ public class BrowseControl extends JTextField {
         g.drawImage(((ImageIcon) deleteButtonIcon).getImage(), leftInset, y1, null);
     }
 
-    /** Returns displayed string. */
+    /**
+     * Returns displayed string.
+     */
     @Override
     public String getText() {
         return text;
     }
 
-    /** Sets displayed string. */
+    /**
+     * Sets displayed string.
+     */
     @Override
     public void setText(String text) {
         this.text = text;
         this.repaint();
     }
 
-    /** Returns text color. */
+    /**
+     * Returns text color.
+     */
     public Color getColor() {
         return color;
     }
 
-    /** Sets text color. */
+    /**
+     * Sets text color.
+     */
     public void setColor(Color color) {
         this.color = color;
         this.repaint();
     }
 
-    /** Returns true if browse button is displayed and false if not. */
+    /**
+     * Returns true if browse button is displayed and false if not.
+     */
     public boolean isDisplayBrowseButton() {
         return displayBrowseButton;
     }
 
-    /** Sets browse button visibility. */
+    /**
+     * Sets browse button visibility.
+     */
     public void setDisplayBrowseButton(boolean displayBrowseButton) {
         this.displayBrowseButton = displayBrowseButton;
         this.repaint();
     }
 
-    /** Returns true if delete button is displayed and false if not. */
+    /**
+     * Returns true if delete button is displayed and false if not.
+     */
     public boolean isDisplayDeleteButton() {
         return displayDeleteButton;
     }
 
-    /** Sets delete button visibility. */
+    /**
+     * Sets delete button visibility.
+     */
     public void setDisplayDeleteButton(boolean displayDeleteButton) {
         this.displayDeleteButton = displayDeleteButton;
         this.repaint();
     }
 
-    /** Returns true if underline attribute is on and false if it is off. */
+    /**
+     * Returns true if underline attribute is on and false if it is off.
+     */
     public boolean isUnderline() {
         return underline;
     }
 
-    /** Sets underline attribute for the displayed string. */
+    /**
+     * Sets underline attribute for the displayed string.
+     */
     public void setUnderline(boolean underline) {
         this.underline = underline;
         this.repaint();
     }
 
-    /** Returns icon of delete button. */
+    /**
+     * Returns icon of delete button.
+     */
     public Icon getDeleteButtonIcon() {
         return deleteButtonIcon;
     }
 
-    /** Sets icon for delete button. */
+    /**
+     * Sets icon for delete button.
+     */
     public void setDeleteButtonIcon(Icon icon) {
         this.deleteButtonIcon = icon;
     }
 
-    /** Returns browse button tooltip. */
+    /**
+     * Returns browse button tooltip.
+     */
     public String getBrowseButtonTooltip() {
         return browseButtonTooltip;
     }
 
-    /** Sets browse button tooltip. */
+    /**
+     * Sets browse button tooltip.
+     */
     public void setBrowseButtonTooltip(String browseButtonTooltip) {
         this.browseButtonTooltip = browseButtonTooltip;
     }
 
-    /** Returns delete button tooltip. */
+    /**
+     * Returns delete button tooltip.
+     */
     public String getDeleteButtonTooltip() {
         return deleteButtonTooltip;
     }
 
-    /** Sets delete button tooltip. */
+    /**
+     * Sets delete button tooltip.
+     */
     public void setDeleteButtonTooltip(String deleteButtonTooltip) {
         this.deleteButtonTooltip = deleteButtonTooltip;
     }

@@ -39,9 +39,6 @@ import org.sola.clients.swing.ui.DesktopClientExceptionHandler;
 import org.sola.clients.swing.ui.security.LoginForm;
 import org.sola.clients.swing.ui.security.LoginPanel;
 import org.sola.common.logging.LogUtility;
-import org.sola.common.messaging.ClientMessage;
-import org.sola.common.messaging.MessageUtility;
-import org.sola.services.boundary.wsclients.WSManager;
 
 /**
  * The main class of the application.

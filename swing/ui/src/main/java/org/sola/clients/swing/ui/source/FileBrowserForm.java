@@ -223,6 +223,29 @@ public class FileBrowserForm extends javax.swing.JDialog {
             }
         }
     }
+    
+    private void attachLocalFile(){
+        File selectedFile = localFileChooser.getSelectedFile();
+        if (selectedFile != null) {
+            SolaTask<Void, Void> task = new SolaTask<Void, Void>() {
+                DocumentBean document=null;
+                
+                @Override
+                protected Void doTask() {
+                    setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.SOURCE_LOAD_DOC_ON_SERVER));
+                    document = DocumentBean.createDocumentFromLocalFile(
+                    localFileChooser.getSelectedFile());
+                    return null;
+                }
+                
+                @Override
+                protected void taskDone(){
+                    fireAttachEvent(document);
+                }
+            };
+            TaskManager.getInstance().runTask(task);
+        }
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -251,6 +274,7 @@ public class FileBrowserForm extends javax.swing.JDialog {
         btnDeleteServerFile = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JToolBar.Separator();
         btnAttachFromServer = new javax.swing.JButton();
+        taskPanel1 = new org.sola.clients.swing.common.tasks.TaskPanel();
 
         popupRemoteFiles.setName("popupRemoteFiles"); // NOI18N
 
@@ -296,6 +320,7 @@ public class FileBrowserForm extends javax.swing.JDialog {
         popupRemoteFiles.add(menuRemoteAttach);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle(bundle.getString("FileBrowserForm.title_1")); // NOI18N
         setMinimumSize(new java.awt.Dimension(706, 432));
         setName("Form"); // NOI18N
         setResizable(false);
@@ -479,7 +504,7 @@ public class FileBrowserForm extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
-                    .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE))
+                    .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE))
                 .addGap(17, 17, 17)
                 .addComponent(lblServerPreview, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -499,6 +524,8 @@ public class FileBrowserForm extends javax.swing.JDialog {
 
         jTabbedPane1.addTab(bundle.getString("FileBrowserForm.jPanel2.TabConstraints.tabTitle"), jPanel2); // NOI18N
 
+        taskPanel1.setName(bundle.getString("FileBrowserForm.taskPanel1.name")); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -507,13 +534,15 @@ public class FileBrowserForm extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 660, Short.MAX_VALUE)
                 .addContainerGap())
+            .addComponent(taskPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addComponent(taskPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         bindingGroup.bind();
@@ -585,13 +614,7 @@ public class FileBrowserForm extends javax.swing.JDialog {
      * {@link #fireAttachEvent(DocumentBean)} to rise attachment event.
      */
     private void btnAttachLocalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAttachLocalActionPerformed
-        File selectedFile = localFileChooser.getSelectedFile();
-
-        if (selectedFile != null) {
-            fireAttachEvent(DocumentBean.createDocumentFromLocalFile(
-                    localFileChooser.getSelectedFile()));
-        }
-
+        attachLocalFile();
     }//GEN-LAST:event_btnAttachLocalActionPerformed
 
     private void menuRemoteRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRemoteRefreshActionPerformed
@@ -631,6 +654,7 @@ public class FileBrowserForm extends javax.swing.JDialog {
     private javax.swing.JMenuItem menuRemoteRefresh;
     private javax.swing.JPopupMenu popupRemoteFiles;
     private org.sola.clients.beans.digitalarchive.FileInfoListBean serverFiles;
+    private org.sola.clients.swing.common.tasks.TaskPanel taskPanel1;
     private javax.swing.JTable tbServerFiles;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables

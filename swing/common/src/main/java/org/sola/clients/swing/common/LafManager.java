@@ -88,6 +88,34 @@ public class LafManager {
         this.btnFont = btnFont;
     }
 
+    public Object getBtnDarkShadow() {
+        return btnDarkShadow;
+    }
+
+    public Object getBtnDisabledText() {
+        return btnDisabledText;
+    }
+
+    public Object getBtnForeground() {
+        return btnForeground;
+    }
+
+    public Object getBtnHighlight() {
+        return btnHighlight;
+    }
+
+    public Object getBtnLight() {
+        return btnLight;
+    }
+
+    public Object getBtnSelect() {
+        return btnSelect;
+    }
+
+    public Object getBtnShadow() {
+        return btnShadow;
+    }
+
     public Object getCmbFont() {
         return cmbFont;
     }
@@ -106,6 +134,10 @@ public class LafManager {
 
     public Object getLabFont() {
         return labFont;
+    }
+
+    public Object getTxtFieldBg() {
+        return txtFieldBg;
     }
     
     public Font getLabFontBold() {
@@ -223,6 +255,15 @@ public class LafManager {
     private Object radioFont = "RadioButton.font";
     private Object passwordFont = "PasswordField.font";
     private Object btnBackground = "Button.background";
+    private Object btnSelect = "Button.select";
+    private Object btnDarkShadow = "Button.darkShadow";
+    private Object btnDisabledText = "Button.disabledText";
+    private Object btnForeground = "Button.foreground";
+    private Object btnHighlight = "Button.highlight";
+    private Object btnLight = "Button.light";
+    private Object btnShadow = "Button.shadow";
+    private Object txtFieldBg = "TextField.background";
+    
      /** 
      * sets {@link Look and feel} settings
      * accordingly. 
