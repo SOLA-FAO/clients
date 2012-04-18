@@ -172,7 +172,7 @@ public class PartyPanelForm extends ContentPanel {
 
         if (partyBean != null) {
             headerPanel.setTitleText(String.format(resourceBundle.getString("PartyPanelForm.headerPanel.titleText2"),
-                    partyBean.getName(), partyBean.getLastName()));
+                    partyBean.getName(), partyBean.getLastName() == null ? "" : partyBean.getLastName()));
         } else {
             headerPanel.setTitleText(resourceBundle.getString("PartyPanelForm.headerPanel.titleText"));
         }

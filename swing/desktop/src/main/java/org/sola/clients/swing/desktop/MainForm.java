@@ -336,6 +336,7 @@ public class MainForm extends javax.swing.JFrame {
         menuSearchApplication = new javax.swing.JMenuItem();
         menuBaUnitSearch = new javax.swing.JMenuItem();
         menuDocumentSearch = new javax.swing.JMenuItem();
+        menuPersons = new javax.swing.JMenuItem();
         menuMap = new javax.swing.JMenu();
         menuShowMap = new javax.swing.JMenuItem();
         menuReportsDesktop = new javax.swing.JMenu();
@@ -584,6 +585,15 @@ public class MainForm extends javax.swing.JFrame {
         });
         menuSearch.add(menuDocumentSearch);
 
+        menuPersons.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/users.png"))); // NOI18N
+        menuPersons.setText(bundle.getString("MainForm.menuPersons.text")); // NOI18N
+        menuPersons.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuPersonsActionPerformed(evt);
+            }
+        });
+        menuSearch.add(menuPersons);
+
         menuBar.add(menuSearch);
 
         menuMap.setText(bundle.getString("MainForm.menuMap.text")); // NOI18N
@@ -742,6 +752,11 @@ public class MainForm extends javax.swing.JFrame {
         openLodgementReportParamsForm();
 //        showReport(ReportManager.getLodgementReport(lodgementBean1, ));  
     }//GEN-LAST:event_menuLodgementReportActionPerformed
+
+    private void menuPersonsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuPersonsActionPerformed
+        openSearchParties();
+    }//GEN-LAST:event_menuPersonsActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToolBar applicationsMain;
     private javax.swing.JButton btnDocumentSearch;
@@ -772,6 +787,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenu menuMap;
     private javax.swing.JMenuItem menuNewApplication;
     private javax.swing.JMenuItem menuOffLogLevel;
+    private javax.swing.JMenuItem menuPersons;
     private javax.swing.JMenu menuReportsDesktop;
     private javax.swing.JMenu menuSearch;
     private javax.swing.JMenuItem menuSearchApplication;
