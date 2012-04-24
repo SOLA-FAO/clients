@@ -39,6 +39,7 @@ import org.junit.Test;
 import org.geotools.map.extended.layer.ExtendedFeatureLayer;
 import org.geotools.map.extended.layer.ExtendedImageLayer;
 import org.geotools.map.extended.layer.ExtendedLayer;
+import org.geotools.swing.extended.tool.ExtendedDrawLinestring;
 import org.geotools.swing.mapaction.extended.Print;
 import org.geotools.swing.mapaction.extended.RemoveDirectImage;
 import org.geotools.swing.tool.extended.AddDirectImageTool;
@@ -92,6 +93,7 @@ public class Development {
         mapCtrl.getMap().addMapAction(new Print(mapCtrl.getMap()), mapCtrl.getToolbar(), true);
         ExtendedDrawPolygon solaDrawTool = new ExtendedDrawPolygon();
         mapCtrl.getMap().addTool(solaDrawTool, mapCtrl.getToolbar(), true);
+        mapCtrl.getMap().addTool(new ExtendedDrawLinestring(), mapCtrl.getToolbar(), true);
         
 //        ExtendedDrawToolWithSnapping snapTool = new ExtendedDrawToolWithSnapping();
 //        snapTool.getTargetSnappingLayers().add(
