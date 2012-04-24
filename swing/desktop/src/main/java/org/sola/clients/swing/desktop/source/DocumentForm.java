@@ -15,8 +15,13 @@
  */
 package org.sola.clients.swing.desktop.source;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import org.sola.clients.beans.source.SourceBean;
+import org.sola.clients.swing.common.tasks.SolaTask;
+import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.ui.ContentPanel;
+import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
@@ -27,7 +32,7 @@ public class DocumentForm extends ContentPanel {
 
     private SourceBean document;
     public static final String DOCUMENT_SAVED = "documentSaved";
-    
+
     /**
      * Default form constructor
      */
@@ -38,6 +43,7 @@ public class DocumentForm extends ContentPanel {
 
     /**
      * Form constructor with document parameter
+     *
      * @param document Document to edit.
      */
     public DocumentForm(SourceBean document) {
@@ -45,28 +51,41 @@ public class DocumentForm extends ContentPanel {
         initComponents();
         postInit();
     }
-    
-    private void postInit(){
-        if(document==null){
-             headerPanel.setTitleText(
-                     MessageUtility.getLocalizedMessageText(ClientMessage.GENERAL_LABELS_DOCUMENT) 
-                     + " - " + MessageUtility.getLocalizedMessageText(ClientMessage.GENERAL_LABELS_NEW));
+
+    private void postInit() {
+        if (document == null) {
+            headerPanel.setTitleText(
+                    MessageUtility.getLocalizedMessageText(ClientMessage.GENERAL_LABELS_DOCUMENT)
+                    + " - " + MessageUtility.getLocalizedMessageText(ClientMessage.GENERAL_LABELS_NEW));
         } else {
             headerPanel.setTitleText(
-                     MessageUtility.getLocalizedMessageText(ClientMessage.GENERAL_LABELS_DOCUMENT) 
-                     + " - #" + document.getLaNr());
+                    MessageUtility.getLocalizedMessageText(ClientMessage.GENERAL_LABELS_DOCUMENT)
+                    + " - #" + document.getLaNr());
         }
         documentPanel.setDocument(document);
     }
-    
-    private void saveDocument(){
-        if(documentPanel.saveDocument()){
-            MessageUtility.displayMessage(ClientMessage.SOURCE_SAVED);
-            firePropertyChange(DOCUMENT_SAVED, false, true);
-            this.close();
-        }
+
+    private void saveDocument() {
+        SolaTask t = new SolaTask<Boolean, Boolean>() {
+
+            @Override
+            public Boolean doTask() {
+                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_DOCUMENT_SAVING));
+                return documentPanel.saveDocument();
+            }
+
+            @Override
+            protected void taskDone() {
+                if (get() == Boolean.TRUE) {
+                    MessageUtility.displayMessage(ClientMessage.SOURCE_SAVED);
+                    firePropertyChange(DOCUMENT_SAVED, false, true);
+                    close();
+                }
+            }
+        };
+        TaskManager.getInstance().runTask(t);
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -122,7 +141,6 @@ public class DocumentForm extends ContentPanel {
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         saveDocument();
     }//GEN-LAST:event_btnSaveActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSave;
     private org.sola.clients.swing.ui.source.DocumentPanel documentPanel;

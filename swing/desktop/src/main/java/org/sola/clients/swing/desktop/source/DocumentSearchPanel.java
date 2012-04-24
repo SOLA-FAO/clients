@@ -105,6 +105,7 @@ public class DocumentSearchPanel extends ContentPanel {
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
         documentSeachPanel.setName("documentSeachPanel"); // NOI18N
+        documentSeachPanel.setShowAttachButton(false);
         jScrollPane1.setViewportView(documentSeachPanel);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

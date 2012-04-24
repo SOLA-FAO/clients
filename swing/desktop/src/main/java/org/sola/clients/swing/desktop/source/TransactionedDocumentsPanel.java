@@ -236,6 +236,8 @@ public class TransactionedDocumentsPanel extends ContentPanel {
         jPanel2.setName("jPanel2"); // NOI18N
 
         documentSeachPanel.setName("documentSeachPanel"); // NOI18N
+        documentSeachPanel.setShowAttachButton(false);
+        documentSeachPanel.setShowEditButton(false);
         documentSeachPanel.setShowPrintButton(false);
 
         jToolBar3.setFloatable(false);
