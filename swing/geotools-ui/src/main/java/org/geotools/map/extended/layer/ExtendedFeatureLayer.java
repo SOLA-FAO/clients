@@ -192,7 +192,7 @@ public class ExtendedFeatureLayer extends ExtendedLayer {
             xy[8] = 2;
             xy[9] = 2;
             feature = legendDrawer.feature(legendDrawer.polygon(xy));
-        } else if (geomType.getBinding().toString().contains("Polyline")) {
+        } else if (geomType.getBinding().toString().contains("LineString")) {
             int[] xy = new int[4];
             xy[0] = 0;
             xy[1] = 5;
