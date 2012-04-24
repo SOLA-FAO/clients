@@ -1,13 +1,8 @@
-<?xml version="1.1" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <NonVisualComponents>
     <Component class="org.sola.clients.beans.referencedata.SourceTypeListBean" name="sourceTypeListBean">
-    </Component>
-    <Component class="org.sola.clients.beans.source.SourceBean" name="sourceBean">
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="createSource()"/>
-      </AuxValues>
     </Component>
   </NonVisualComponents>
   <Properties>
@@ -36,7 +31,7 @@
           <Group type="102" alignment="1" attributes="0">
               <Component id="jPanel3" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
+              <Component id="pnlAddButton" min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -49,7 +44,7 @@
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="jPanel4" max="32767" attributes="1"/>
+                  <Component id="pnlAddButton" max="32767" attributes="1"/>
                   <Component id="jPanel3" alignment="0" max="32767" attributes="1"/>
               </Group>
           </Group>
@@ -105,7 +100,7 @@
           </Properties>
           <BindingProperties>
             <BindingProperty name="elements" source="sourceTypeListBean" sourcePath="${sourceTypeList}" target="cbxDocType" targetPath="elements" updateStrategy="0" immediately="false"/>
-            <BindingProperty name="selectedItem" source="sourceBean" sourcePath="${sourceType}" target="cbxDocType" targetPath="selectedItem" updateStrategy="0" immediately="false">
+            <BindingProperty name="selectedItem" source="Form" sourcePath="${document.sourceType}" target="cbxDocType" targetPath="selectedItem" updateStrategy="0" immediately="false">
               <Property name="name" type="java.lang.String" value="DocType"/>
             </BindingProperty>
           </BindingProperties>
@@ -171,7 +166,7 @@
             <Property name="name" type="java.lang.String" value="txtDocRefNumber" noResource="true"/>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="text" source="sourceBean" sourcePath="${referenceNr}" target="txtDocRefNumber" targetPath="text" updateStrategy="0" immediately="false">
+            <BindingProperty name="text" source="Form" sourcePath="${document.referenceNr}" target="txtDocRefNumber" targetPath="text" updateStrategy="0" immediately="false">
               <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
               <Property name="name" type="java.lang.String" value="DocRef"/>
             </BindingProperty>
@@ -188,7 +183,7 @@
             <Property name="name" type="java.lang.String" value="txtDocRecordDate" noResource="true"/>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="value" source="sourceBean" sourcePath="${recordation}" target="txtDocRecordDate" targetPath="value" updateStrategy="0" immediately="false">
+            <BindingProperty name="value" source="Form" sourcePath="${document.recordation}" target="txtDocRecordDate" targetPath="value" updateStrategy="0" immediately="false">
               <Property name="name" type="java.lang.String" value="DocDate"/>
             </BindingProperty>
           </BindingProperties>
@@ -247,7 +242,7 @@
             <Property name="name" type="java.lang.String" value="browseAttachment" noResource="true"/>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="text" source="sourceBean" sourcePath="${archiveDocument.name}" target="browseAttachment" targetPath="text" updateStrategy="0" immediately="false">
+            <BindingProperty name="text" source="Form" sourcePath="${document.archiveDocument.name}" target="browseAttachment" targetPath="text" updateStrategy="0" immediately="false">
               <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
               <Property name="name" type="java.lang.String" value="DocAttachment"/>
             </BindingProperty>
@@ -255,9 +250,9 @@
         </Component>
       </SubComponents>
     </Container>
-    <Container class="javax.swing.JPanel" name="jPanel4">
+    <Container class="javax.swing.JPanel" name="pnlAddButton">
       <Properties>
-        <Property name="name" type="java.lang.String" value="jPanel4" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="pnlAddButton" noResource="true"/>
       </Properties>
 
       <Layout>

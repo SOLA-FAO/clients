@@ -156,4 +156,17 @@ public class SourceBean extends SourceSummaryBean {
         }
         return result;
     }
+    
+    public void save(){
+        TypeConverters.TransferObjectToBean(
+                WSManager.getInstance().getCaseManagementService()
+                .saveSource(TypeConverters.BeanToTrasferObject(this, SourceTO.class)), 
+                SourceBean.class, this);
+    }
+    
+    public static SourceBean getSource(String sourceId){
+        return TypeConverters.TransferObjectToBean(
+                WSManager.getInstance().getCaseManagementService().getSourceById(sourceId),
+                SourceBean.class, null);
+    }
 }

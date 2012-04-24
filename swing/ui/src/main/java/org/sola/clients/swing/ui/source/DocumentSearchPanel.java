@@ -36,6 +36,8 @@ import org.sola.clients.beans.application.ApplicationServiceBean;
 import org.sola.clients.beans.digitalarchive.DocumentBean;
 import org.sola.clients.beans.referencedata.RequestTypeBean;
 import org.sola.clients.beans.referencedata.SourceTypeListBean;
+import org.sola.clients.beans.security.SecurityBean;
+import org.sola.clients.beans.source.SourceBean;
 import org.sola.clients.beans.source.SourceSearchParamsBean;
 import org.sola.clients.beans.source.SourceSearchResultBean;
 import org.sola.clients.beans.source.SourceSearchResultsListBean;
@@ -44,8 +46,10 @@ import org.sola.clients.swing.common.controls.CalendarForm;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.ui.renderers.AttachedDocumentCellRenderer;
+import org.sola.common.RolesConstants;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
+import org.sola.services.boundary.wsclients.WSManager;
 
 /**
  * This panel provides parameterized source (documents) search capabilities.
@@ -55,13 +59,14 @@ import org.sola.common.messaging.MessageUtility;
 public class DocumentSearchPanel extends javax.swing.JPanel {
 
     public static final String SELECTED_SOURCE = "selectedSource";
+    public static final String EDIT_SOURCE = "editSource";
 
     /**
      * Default constructor to create form and initialize parameters.
      */
     public DocumentSearchPanel() {
         initComponents();
-        customizePrintButton();
+        customizeButtons();
         cbxSourceType.setSelectedIndex(-1);
         searchResultsList.addPropertyChangeListener(new PropertyChangeListener() {
 
@@ -69,7 +74,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(SourceSearchResultsListBean.SELECTED_SOURCE_PROPERTY)) {
                     firePropertyChange(SELECTED_SOURCE, null, evt.getNewValue());
-                    customizePrintButton();
+                    customizeButtons();
                 }
             }
         });
@@ -92,10 +97,19 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         separatorPrint.setVisible(showPrintButton);
     }
 
+    public boolean isShowEditButton() {
+        return btnEdit.isVisible();
+    }
+
+    public void setShowEditButton(boolean showEditButton) {
+        btnEdit.setVisible(showEditButton);
+        menuEdit.setVisible(showEditButton);
+    }
+
     /**
      * Enables or disables printing button.
      */
-    private void customizePrintButton() {
+    private void customizeButtons() {
         boolean enabled = false;
         if (searchResultsList.getSelectedSource() != null
                 && searchResultsList.getSelectedSource().getArchiveDocumentId() != null
@@ -106,6 +120,9 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         btnOpen.setEnabled(enabled);
         menuOpen.setEnabled(enabled);
         menuPrint.setEnabled(enabled);
+        btnEdit.setEnabled(searchResultsList.getSelectedSource() != null
+                && SecurityBean.isInRole(RolesConstants.SOURCE_SAVE));
+        menuEdit.setEnabled(btnEdit.isEnabled());
     }
 
     private void clearForm() {
@@ -146,6 +163,34 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         TaskManager.getInstance().runTask(t);
     }
 
+    private void fireEditSource() {
+        if (searchResultsList.getSelectedSource() != null) {
+            firePropertyChange(EDIT_SOURCE, null, SourceBean.getSource(
+                    searchResultsList.getSelectedSource().getId()));
+        }
+    }
+    
+    public void searchDocuments(){
+        SolaTask t = new SolaTask<Void, Void>() {
+
+            @Override
+            public Void doTask() {
+                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_DOCUMENT_SEARCHING));
+                searchResultsList.searchSources(searchParams);
+                return null;
+            }
+
+            @Override
+            public void taskDone() {
+                if (searchResultsList.getSourceSearchResultsList().size() > 100) {
+                    MessageUtility.displayMessage(ClientMessage.SEARCH_TOO_MANY_RESULTS, new String[]{"100"});
+                }
+                lblResults.setText(String.format("(%s)", searchResultsList.getSourceSearchResultsList().size()));
+            }
+        };
+        TaskManager.getInstance().runTask(t);
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -157,6 +202,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         popUpSearchResults = new javax.swing.JPopupMenu();
         menuOpen = new javax.swing.JMenuItem();
         menuPrint = new javax.swing.JMenuItem();
+        menuEdit = new javax.swing.JMenuItem();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblSearchResults = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
         jPanel9 = new javax.swing.JPanel();
@@ -197,6 +243,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         btnDateTo = new javax.swing.JButton();
         jToolBar1 = new javax.swing.JToolBar();
         btnOpen = new javax.swing.JButton();
+        btnEdit = new javax.swing.JButton();
         btnPrint = new javax.swing.JButton();
         separatorPrint = new javax.swing.JToolBar.Separator();
         jLabel4 = new javax.swing.JLabel();
@@ -225,6 +272,16 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
             }
         });
         popUpSearchResults.add(menuPrint);
+
+        menuEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/pencil.png"))); // NOI18N
+        menuEdit.setText(bundle.getString("DocumentSearchPanel.menuEdit.text")); // NOI18N
+        menuEdit.setName(bundle.getString("DocumentSearchPanel.menuEdit.name")); // NOI18N
+        menuEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuEditActionPerformed(evt);
+            }
+        });
+        popUpSearchResults.add(menuEdit);
 
         setName("Form"); // NOI18N
 
@@ -376,7 +433,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(txtRefNumber, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE)
+            .addComponent(txtRefNumber, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addComponent(jLabel8)
                 .addContainerGap())
@@ -408,7 +465,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addComponent(jLabel3)
-                .addContainerGap(76, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
             .addComponent(txtLaNr, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE)
         );
         jPanel7Layout.setVerticalGroup(
@@ -443,7 +500,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addContainerGap(217, Short.MAX_VALUE))
+                .addContainerGap(145, Short.MAX_VALUE))
             .addComponent(cbxSourceType, 0, 241, Short.MAX_VALUE)
         );
         jPanel8Layout.setVerticalGroup(
@@ -489,7 +546,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(txtSubmissionDateFrom, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+                .addComponent(txtSubmissionDateFrom)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnSubmissionDateFrom))
             .addGroup(jPanel4Layout.createSequentialGroup()
@@ -537,7 +594,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel5)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addComponent(txtSubmissionDateTo, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+                .addComponent(txtSubmissionDateTo, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnSubmissionDateTo))
         );
@@ -582,7 +639,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel7)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addComponent(txtDateFrom, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+                .addComponent(txtDateFrom)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnDateFrom))
         );
@@ -627,7 +684,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel6)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addComponent(txtDateTo, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+                .addComponent(txtDateTo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnDateTo))
         );
@@ -662,6 +719,18 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
             }
         });
         jToolBar1.add(btnOpen);
+
+        btnEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/pencil.png"))); // NOI18N
+        btnEdit.setText(bundle.getString("DocumentSearchPanel.btnEdit.text")); // NOI18N
+        btnEdit.setFocusable(false);
+        btnEdit.setName(bundle.getString("DocumentSearchPanel.btnEdit.name")); // NOI18N
+        btnEdit.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnEdit);
 
         btnPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/print.png"))); // NOI18N
         btnPrint.setText(bundle.getString("DocumentSearchPanel.btnPrint.text")); // NOI18N
@@ -715,24 +784,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-        SolaTask t = new SolaTask<Void, Void>() {
-
-            @Override
-            public Void doTask() {
-                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_DOCUMENT_SEARCHING));
-                searchResultsList.searchSources(searchParams);
-                return null;
-            }
-
-            @Override
-            public void taskDone() {
-                if (searchResultsList.getSourceSearchResultsList().size() > 100) {
-                    MessageUtility.displayMessage(ClientMessage.SEARCH_TOO_MANY_RESULTS, new String[]{"100"});
-                }
-                lblResults.setText(String.format("(%s)", searchResultsList.getSourceSearchResultsList().size()));
-            }
-        };
-        TaskManager.getInstance().runTask(t);
+        searchDocuments();
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void btnDateFromActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDateFromActionPerformed
@@ -776,10 +828,19 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
     private void menuPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuPrintActionPerformed
         print();
     }//GEN-LAST:event_menuPrintActionPerformed
+
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+        fireEditSource();
+    }//GEN-LAST:event_btnEditActionPerformed
+
+    private void menuEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEditActionPerformed
+        fireEditSource();
+    }//GEN-LAST:event_menuEditActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnDateFrom;
     private javax.swing.JButton btnDateTo;
+    private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnOpen;
     private javax.swing.JButton btnPrint;
     private javax.swing.JButton btnSearch;
@@ -813,6 +874,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel lblResults;
+    private javax.swing.JMenuItem menuEdit;
     private javax.swing.JMenuItem menuOpen;
     private javax.swing.JMenuItem menuPrint;
     private javax.swing.JPopupMenu popUpSearchResults;

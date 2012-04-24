@@ -79,6 +79,8 @@ public class MainContentPanel extends javax.swing.JPanel {
     public final static String CARD_ADMIN_USER_PASSWORD = "userPasswordPanel";
     public final static String CARD_ADMIN_BR_MANAGE = "brManagementPanel";
     public final static String CARD_ADMIN_BR = "brPanel";
+    public final static String CARD_SOURCE = "sourcePanel";
+    
     private HashMap<String, Component> cards;
     private ArrayList<String> cardsIndex;
     private PropertyChangeListener panelListener;
