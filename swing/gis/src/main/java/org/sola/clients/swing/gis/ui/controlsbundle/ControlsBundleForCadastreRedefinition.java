@@ -117,7 +117,6 @@ public final class ControlsBundleForCadastreRedefinition extends ControlsBundleF
         this.cadastreObjectNodeModifiedLayer.addNodeTargetList(
                 this.transactionBean.getCadastreObjectNodeTargetList());
 
-        super.addLayers();
     }
 
     @Override
