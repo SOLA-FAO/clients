@@ -1,28 +1,26 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO). All rights
+ * reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without modification, are permitted
+ * provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this list of conditions
+ * and the following disclaimer. 2. Redistributions in binary form must reproduce the above
+ * copyright notice,this list of conditions and the following disclaimer in the documentation and/or
+ * other materials provided with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this software without
+ * specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+ * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 /*
@@ -32,7 +30,9 @@
 package org.sola.clients.swing.gis.tool;
 
 import com.vividsolutions.jts.geom.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.geotools.feature.CollectionEvent;
 import org.geotools.geometry.Envelope2D;
 import org.geotools.geometry.jts.ReferencedEnvelope;
@@ -47,9 +47,9 @@ import org.sola.clients.swing.gis.ui.control.CadastreRedefinitionNodeModifyForm;
 import org.sola.common.messaging.GisMessage;
 
 /**
- * An abstract tool that is used for node modification tools used in the cadastre redefinition.
- * It contains common functionality for the tools that add or modify a node.
- * 
+ * An abstract tool that is used for node modification tools used in the cadastre redefinition. It
+ * contains common functionality for the tools that add or modify a node.
+ *
  * @author Elton Manoku
  */
 public abstract class CadastreRedefinitionAbstractNodeTool extends ExtendedDrawRectangle {
@@ -61,7 +61,7 @@ public abstract class CadastreRedefinitionAbstractNodeTool extends ExtendedDrawR
 
     /**
      * Constructor
-     * 
+     *
      * @param dataAccess The data access that handles communication with the web services
      * @param cadastreObjectNodeModifiedLayer The node layer
      * @param cadastreObjectModifiedLayer The modified cadastre object layer
@@ -78,8 +78,8 @@ public abstract class CadastreRedefinitionAbstractNodeTool extends ExtendedDrawR
 
     /**
      * If the tool is selected/ made active, then the irregular boundary procedure is reseted.
-     * 
-     * @param selected 
+     *
+     * @param selected
      */
     @Override
     public void onSelectionChanged(boolean selected) {
@@ -96,22 +96,22 @@ public abstract class CadastreRedefinitionAbstractNodeTool extends ExtendedDrawR
 
     /**
      * Gets a node and the cadastre objects that share the node from the server.
-     * 
+     *
      * @param env
-     * @return 
+     * @return
      */
     protected abstract CadastreObjectNodeBean getNodeFromServer(Envelope2D env);
 
     /**
-     * If a node is found in the server, it adds it to the node layer and also adds the 
-     * related cadastre objects to the target cadastre object layer.
-     * 
+     * If a node is found in the server, it adds it to the node layer and also adds the related
+     * cadastre objects to the target cadastre object layer.
+     *
      * @param env
-     * @return 
+     * @return
      */
     protected final CadastreObjectNodeBean addNodeFromServer(Envelope2D env) {
         CadastreObjectNodeBean nodeBean = this.getNodeFromServer(env);
-        if (nodeBean != null){
+        if (nodeBean != null) {
             this.cadastreObjectNodeModifiedLayer.addNodeTarget(
                     nodeBean.getId(), nodeBean.getGeom());
             this.cadastreObjectModifiedLayer.addCadastreObjects(nodeBean.getCadastreObjectList());
@@ -122,9 +122,9 @@ public abstract class CadastreRedefinitionAbstractNodeTool extends ExtendedDrawR
 
     /**
      * It starts the manipulation of a node. It starts a popup form where the existing coordinates
-     * are shown and that can be changed.
-     * If the node is found in less than 3 cadastre objects, also the remove option is available.
-     * 
+     * are shown and that can be changed. If the node is found in less than 3 cadastre objects, also
+     * the remove option is available.
+     *
      * @param nodeFeature The node to manipulate
      */
     protected final boolean manipulateNode(SimpleFeature nodeFeature) {
@@ -137,9 +137,10 @@ public abstract class CadastreRedefinitionAbstractNodeTool extends ExtendedDrawR
                 this.cadastreObjectModifiedLayer.getCadastreObjectFeatures(nodeFeature).size() < 3);
         this.form.setVisible(true);
         if (this.form.getStatus() == CadastreRedefinitionNodeModifyForm.Status.ModifyNode) {
-            this.modifyNode(nodeFeature, this.form.getCoordinateX(), this.form.getCoordinateY());
+            manipulationHappen = this.modifyNode(
+                    nodeFeature, this.form.getCoordinateX(), this.form.getCoordinateY());
         } else if (this.form.getStatus() == CadastreRedefinitionNodeModifyForm.Status.RemoveNode) {
-            this.removeNode(nodeFeature);
+            manipulationHappen = this.removeNode(nodeFeature);
         } else {
             manipulationHappen = false;
         }
@@ -148,9 +149,9 @@ public abstract class CadastreRedefinitionAbstractNodeTool extends ExtendedDrawR
 
     /**
      * Gets the first found node feature
-     * 
+     *
      * @param env
-     * @return 
+     * @return
      */
     protected final SimpleFeature getFirstNodeFeature(Envelope2D env) {
         return this.cadastreObjectNodeModifiedLayer.getFirstFeatureInRange(
@@ -158,16 +159,16 @@ public abstract class CadastreRedefinitionAbstractNodeTool extends ExtendedDrawR
     }
 
     /**
-     * It modifies the node by changing its coordinates. This will bring changes to 
-     * cadastre objects that share this node.
-     * If the changing of this node, brings the cadastre objects in the original situation,
-     * it will be removed, because nothing is changed.
-     * 
-     * @param nodeFeature The node feature 
+     * It modifies the node by changing its coordinates. This will bring changes to cadastre objects
+     * that share this node. If the changing of this node, brings the cadastre objects in the
+     * original situation, it will be removed, because nothing is changed.
+     *
+     * @param nodeFeature The node feature
      * @param newCoordinateX The new coordinate X
      * @param newCoordinateY The new coordinate Y
+     * @return True if the change happen
      */
-    private void modifyNode(
+    private boolean modifyNode(
             SimpleFeature nodeFeature,
             Double newCoordinateX, Double newCoordinateY) {
         Geometry nodeFeatureGeom = (Geometry) nodeFeature.getDefaultGeometry();
@@ -177,8 +178,14 @@ public abstract class CadastreRedefinitionAbstractNodeTool extends ExtendedDrawR
         List<SimpleFeature> cadastreObjects =
                 this.cadastreObjectModifiedLayer.getCadastreObjectFeatures(nodeFeature);
 
+        Map<String, Geometry> backup = new HashMap<String, Geometry>();
+        boolean success = true;
         for (SimpleFeature cadastreObjectFeature : cadastreObjects) {
-            Geometry cadastreObjectGeom = (Geometry) cadastreObjectFeature.getDefaultGeometry();
+            backup.put(
+                    cadastreObjectFeature.getID(),
+                    (Geometry) cadastreObjectFeature.getDefaultGeometry());
+            Geometry cadastreObjectGeom =
+                    (Geometry) ((Geometry) cadastreObjectFeature.getDefaultGeometry()).clone();
             com.vividsolutions.jts.geom.CoordinateList coordinates =
                     new CoordinateList(cadastreObjectGeom.getCoordinates(), false);
 
@@ -190,29 +197,39 @@ public abstract class CadastreRedefinitionAbstractNodeTool extends ExtendedDrawR
                     coordinate.y = newCoordinateY;
                 }
             }
-            cadastreObjectGeom.geometryChanged();
-            this.cadastreObjectModifiedLayer.getFeatureCollection().notifyListeners(
-                    cadastreObjectFeature, CollectionEvent.FEATURES_CHANGED);
+            success = this.cadastreObjectModifiedLayer.replaceFeatureGeometry(
+                    cadastreObjectFeature, cadastreObjectGeom);
+            if (!success) {
+                break;
+            }
         }
 
-
-        nodeFeatureGeom.getCoordinate().x = newCoordinateX;
-        nodeFeatureGeom.getCoordinate().y = newCoordinateY;
-        nodeFeatureGeom.geometryChanged();
-
-        this.removeIfNodeNotUsed(nodeFeature);
-        this.getMapControl().refresh();
+        if (success) {
+            nodeFeatureGeom.getCoordinate().x = newCoordinateX;
+            nodeFeatureGeom.getCoordinate().y = newCoordinateY;
+            nodeFeatureGeom.geometryChanged();
+            this.removeIfNodeNotUsed(nodeFeature);
+            this.getMapControl().refresh();
+        } else {
+            for (SimpleFeature cadastreObjectFeature : cadastreObjects) {
+                if (backup.containsKey(cadastreObjectFeature.getID())) {
+                    cadastreObjectFeature.setDefaultGeometry(
+                            backup.get(cadastreObjectFeature.getID()));
+                }
+            }
+        }
+        return success;
     }
 
     /**
-     * It removes a node. Removing the node means that the node will be removed in 
-     * all cadastre objects that share that node.
-     * If the cadastre objects will come to their original shape, those objects will be removed
-     * from the list of target cadastre objects.
-     * 
-     * @param nodeFeature 
+     * It removes a node. Removing the node means that the node will be removed in all cadastre
+     * objects that share that node. If the cadastre objects will come to their original shape,
+     * those objects will be removed from the list of target cadastre objects.
+     *
+     * @param nodeFeature
+     * @return True if the manipulation happen
      */
-    protected final void removeNode(SimpleFeature nodeFeature) {
+    protected final boolean removeNode(SimpleFeature nodeFeature) {
         List<SimpleFeature> cadastreObjects =
                 this.cadastreObjectModifiedLayer.getCadastreObjectFeatures(nodeFeature);
 
@@ -223,8 +240,12 @@ public abstract class CadastreRedefinitionAbstractNodeTool extends ExtendedDrawR
         Geometry nodeFeatureGeom = (Geometry) nodeFeature.getDefaultGeometry();
         Coordinate coordinate = nodeFeatureGeom.getCoordinate();
 
+
+        Map<String, Geometry> backup = new HashMap<String, Geometry>();
+        boolean success = true;
         for (SimpleFeature cadastreObjectFeature : cadastreObjects) {
             Polygon cadastreObjectGeom = (Polygon) cadastreObjectFeature.getDefaultGeometry();
+            backup.put(cadastreObjectFeature.getID(), (Geometry) cadastreObjectGeom.clone());
             LinearRing exteriorRing = this.removeCoordinateFromRing(
                     cadastreObjectGeom.getExteriorRing(), coordinate);
 
@@ -239,18 +260,30 @@ public abstract class CadastreRedefinitionAbstractNodeTool extends ExtendedDrawR
             cadastreObjectGeom =
                     this.cadastreObjectModifiedLayer.getGeometryFactory().createPolygon(
                     exteriorRing, interiorRings);
-            cadastreObjectFeature.setDefaultGeometry(cadastreObjectGeom);
-            cadastreObjectGeom.geometryChanged();
-            this.cadastreObjectModifiedLayer.getFeatureCollection().notifyListeners(
-                    cadastreObjectFeature, CollectionEvent.FEATURES_CHANGED);
+            success = this.cadastreObjectModifiedLayer.replaceFeatureGeometry(
+                    cadastreObjectFeature, cadastreObjectGeom);
+            if (!success) {
+                break;
+            }
         }
-        this.cadastreObjectNodeModifiedLayer.removeFeature(nodeFeature.getID());
-        this.getMapControl().refresh();
+        if (success) {
+            this.cadastreObjectNodeModifiedLayer.removeFeature(nodeFeature.getID());
+            this.getMapControl().refresh();
+        } else {
+            for (SimpleFeature cadastreObjectFeature : cadastreObjects) {
+                if (backup.containsKey(cadastreObjectFeature.getID())) {
+                    cadastreObjectFeature.setDefaultGeometry(
+                            backup.get(cadastreObjectFeature.getID()));
+                }
+            }
+        }
+
+        return success;
     }
 
     /**
      * Remove a coordinate from a ring
-     * 
+     *
      * @param target The target ring
      * @param coordinate
      * @return The ring without the coordinate
@@ -270,10 +303,10 @@ public abstract class CadastreRedefinitionAbstractNodeTool extends ExtendedDrawR
     }
 
     /**
-     * Removes a node if there is no cadastre object connected with it. This situation happen
-     * when the cadastre objects are removed from the list of target objects because they did 
-     * not change from their original shape.
-     * 
+     * Removes a node if there is no cadastre object connected with it. This situation happen when
+     * the cadastre objects are removed from the list of target objects because they did not change
+     * from their original shape.
+     *
      * @param nodeFeature
      * @return True = if the node is removed
      */
