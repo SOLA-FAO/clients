@@ -1,28 +1,26 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO). All rights
+ * reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without modification, are permitted
+ * provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this list of conditions
+ * and the following disclaimer. 2. Redistributions in binary form must reproduce the above
+ * copyright notice,this list of conditions and the following disclaimer in the documentation and/or
+ * other materials provided with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this software without
+ * specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+ * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.gis;
@@ -34,8 +32,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
+import org.sola.common.messaging.GisMessage;
+import org.sola.common.messaging.LocalizedMessage;
+import org.sola.common.messaging.MessageUtility;
 import org.sola.webservices.search.QueryForSelect;
 import org.sola.webservices.spatial.ResultForNavigationInfo;
 import org.sola.webservices.search.ResultForSelectionInfo;
@@ -45,7 +47,7 @@ import org.sola.webservices.spatial.MapDefinitionTO;
  * Unit test for simple App.
  */
 public class AppTest {
-    
+
     /**
      * Create the test case
      *
@@ -65,13 +67,13 @@ public class AppTest {
     private Boolean skipTests = null;
 
     /**
-     * Checks the SOLA_OPTS environment variable to determine if the Integration Tests such as
-     * those using Embedded Glassfish should be skipped or not. 
-     * <p> To set this environment variable in Ubuntu, add the following export to the 
-     * ~/.gnomerc file: {@code export SOLA_OPTS=SkipIntTests} You may need to create
-     * the ~/.gnomerc file if it doesn't exist.</p><p>
-     * This variable is used by Bamboo to avoid running Integration tests during the automated build process. 
-     * @return 
+     * Checks the SOLA_OPTS environment variable to determine if the Integration Tests such as those
+     * using Embedded Glassfish should be skipped or not. <p> To set this environment variable in
+     * Ubuntu, add the following export to the ~/.gnomerc file: {@code export SOLA_OPTS=SkipIntTests}
+     * You may need to create the ~/.gnomerc file if it doesn't exist.</p><p> This variable is used
+     * by Bamboo to avoid running Integration tests during the automated build process.
+     *
+     * @return
      */
     private boolean skipIntegrationTest() {
         if (skipTests == null) {
@@ -88,6 +90,7 @@ public class AppTest {
     /**
      * Testing the getMapDefinition
      */
+    @Ignore
     @Test
     public void testGetMapDefinition() {
         if (skipIntegrationTest()) {
@@ -103,9 +106,9 @@ public class AppTest {
     /**
      * Testing the web service
      */
-    //@Ignore
+    @Ignore
     @Test
-    public void testWebService() throws Exception{
+    public void testWebService() throws Exception {
         if (skipIntegrationTest()) {
             return;
         }
@@ -156,10 +159,11 @@ public class AppTest {
         List<ResultForSelectionInfo> resultInfoList = PojoDataAccess.getInstance().Select(queries);
         System.out.println("Results returned. Total:" + resultInfoList.size());
         if (resultInfoList.get(0).getResult().getValues().size() > 0) {
-            System.out.println("First result is:\n" 
+            System.out.println("First result is:\n"
                     + resultInfoList.get(0).getResult().getValues().get(0));
         }
     }
+
     private byte[] getGeometry(String wktGeometry) throws Exception {
         WKTReader wktReader = new WKTReader();
         Geometry geom = wktReader.read(wktGeometry);
@@ -168,13 +172,15 @@ public class AppTest {
     }
 
     @Test
-    public void testMessaging() throws Exception{
+    public void testMessaging() throws Exception {
         if (skipIntegrationTest()) {
             return;
         }
         System.out.println("Test messaging");
+        org.geotools.swing.extended.util.Messaging.getInstance().setMessaging(new Messaging());
         //Messaging messaging = new Messaging();
-        System.out.println("Message add_feature_error: " + Messaging.getInstance().getMessageText(
-                Messaging.Ids.ADDING_FEATURE_ERROR.toString()));
+        LocalizedMessage msg = MessageUtility.getLocalizedMessage("Layer: {0}", new String[]{"layer"});
+        Messaging.getInstance().show(
+                GisMessage.GENERAL_RETRIEVE_FEATURES_ERROR, "Layer");
     }
 }

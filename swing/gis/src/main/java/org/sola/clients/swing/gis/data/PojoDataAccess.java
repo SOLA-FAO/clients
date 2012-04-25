@@ -139,14 +139,7 @@ public class PojoDataAccess {
         spatialQueryInfo.setNorth(north);
         spatialQueryInfo.setSrid(srid);
         spatialQueryInfo.setPixelResolution(pixelTolerance);
-        try {
             return getSpatialService().getSpatialForNavigation(spatialQueryInfo);
-        } catch (WebServiceClientException ex) {
-            LogUtility.log(ex.getMessageCode(), Level.SEVERE);
-            MessageUtility.displayMessage(ex.getMessageCode(),
-                    ex.getErrorNumber(), ex.getMessageParameters());
-        }
-        return null;
     }
 
     /**
