@@ -666,6 +666,15 @@ public class Map extends JMapPane {
     }
 
     /**
+     * Gets the Table of Contents.
+     * @return 
+     */
+    public Toc getToc() {
+        return toc;
+    }
+
+    
+    /**
      * It refreshes the map.
      */
     public void refresh() {

@@ -70,6 +70,7 @@ public class ExtendedDrawLinestring extends ExtendedEditGeometryTool{
         HashMap<String, Object> fieldsWithValues = new HashMap<String, Object>();
         fieldsWithValues.put("type", 2);
         fieldsWithValues.put("label", "aha");
+        this.getMapControl().getToc().changeNodeSwitch(toolName);
         return this.layer.addFeature(null, geometry, fieldsWithValues);
     }
     
