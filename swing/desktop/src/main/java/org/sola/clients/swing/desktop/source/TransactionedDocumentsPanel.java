@@ -239,6 +239,7 @@ public class TransactionedDocumentsPanel extends ContentPanel {
         documentSeachPanel.setShowAttachButton(false);
         documentSeachPanel.setShowEditButton(false);
         documentSeachPanel.setShowPrintButton(false);
+        documentSeachPanel.setShowSelectButton(false);
 
         jToolBar3.setFloatable(false);
         jToolBar3.setRollover(true);

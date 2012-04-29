@@ -234,6 +234,7 @@
                         <Property name="showAttachButton" type="boolean" value="false"/>
                         <Property name="showEditButton" type="boolean" value="false"/>
                         <Property name="showPrintButton" type="boolean" value="false"/>
+                        <Property name="showSelectButton" type="boolean" value="false"/>
                       </Properties>
                     </Component>
                     <Container class="javax.swing.JToolBar" name="jToolBar3">

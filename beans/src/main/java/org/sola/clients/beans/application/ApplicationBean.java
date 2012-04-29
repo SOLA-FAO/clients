@@ -558,7 +558,7 @@ public class ApplicationBean extends ApplicationSummaryBean {
      */
     public void removeSelectedSource() {
         if (selectedSource != null && sourceList != null) {
-            sourceList.safeRemove(selectedSource, EntityAction.DELETE);
+            sourceList.safeRemove(selectedSource, EntityAction.DISASSOCIATE);
         }
     }
 

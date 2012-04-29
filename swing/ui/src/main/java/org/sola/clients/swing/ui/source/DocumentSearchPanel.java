@@ -59,6 +59,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
 
     public static final String SELECTED_SOURCE = "selectedSource";
     public static final String EDIT_SOURCE = "editSource";
+    public static final String SELECT_SOURCE = "selectSource";
     public static final String ATTACH_SOURCE = "attachSource";
     
     /**
@@ -96,6 +97,15 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         menuPrint.setVisible(showPrintButton);
     }
     
+    public boolean isShowSelectButton() {
+        return btnSelect.isVisible();
+    }
+
+    public void setShowSelectButton(boolean showSelectButton) {
+        btnSelect.setVisible(showSelectButton);
+        menuSelect.setVisible(showSelectButton);
+    }
+    
     public boolean isShowAttachButton() {
         return btnAttach.isVisible();
     }
@@ -118,8 +128,9 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
      * Enables or disables printing button.
      */
     private void customizeButtons() {
+        boolean selected = searchResultsList.getSelectedSource() != null;
         boolean enabled = false;
-        if (searchResultsList.getSelectedSource() != null
+        if (selected
                 && searchResultsList.getSelectedSource().getArchiveDocumentId() != null
                 && !searchResultsList.getSelectedSource().getArchiveDocumentId().isEmpty()) {
             enabled = true;
@@ -128,11 +139,13 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         btnOpen.setEnabled(enabled);
         menuOpen.setEnabled(enabled);
         menuPrint.setEnabled(enabled);
-        btnEdit.setEnabled(searchResultsList.getSelectedSource() != null
+        btnEdit.setEnabled(selected
                 && SecurityBean.isInRole(RolesConstants.SOURCE_SAVE));
         menuEdit.setEnabled(btnEdit.isEnabled());
         btnAttach.setEnabled(enabled);
         menuAttach.setEnabled(enabled);
+        btnSelect.setEnabled(selected);
+        menuSelect.setEnabled(selected);
     }
 
     private void clearForm() {
@@ -193,6 +206,13 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         }
     }
     
+    private void fireSelect(){
+        if (searchResultsList.getSelectedSource() != null) {
+            firePropertyChange(SELECT_SOURCE, null, SourceBean.getSource(
+                    searchResultsList.getSelectedSource().getId()));
+        }
+    }
+    
     public void searchDocuments(){
         SolaTask t = new SolaTask<Void, Void>() {
 
@@ -224,6 +244,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         sourceTypesList = createSourceTypes();
         popUpSearchResults = new javax.swing.JPopupMenu();
         menuOpen = new javax.swing.JMenuItem();
+        menuSelect = new javax.swing.JMenuItem();
         menuAttach = new javax.swing.JMenuItem();
         menuEdit = new javax.swing.JMenuItem();
         menuPrint = new javax.swing.JMenuItem();
@@ -267,6 +288,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         btnDateTo = new javax.swing.JButton();
         jToolBar1 = new javax.swing.JToolBar();
         btnOpen = new javax.swing.JButton();
+        btnSelect = new javax.swing.JButton();
         btnAttach = new javax.swing.JButton();
         btnEdit = new javax.swing.JButton();
         btnPrint = new javax.swing.JButton();
@@ -287,6 +309,16 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
             }
         });
         popUpSearchResults.add(menuOpen);
+
+        menuSelect.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/select.png"))); // NOI18N
+        menuSelect.setText(bundle.getString("DocumentSearchPanel.menuSelect.text")); // NOI18N
+        menuSelect.setName(bundle.getString("DocumentSearchPanel.menuSelect.name")); // NOI18N
+        menuSelect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuSelectActionPerformed(evt);
+            }
+        });
+        popUpSearchResults.add(menuSelect);
 
         menuAttach.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/attachment.png"))); // NOI18N
         menuAttach.setText(bundle.getString("DocumentSearchPanel.menuAttach.text")); // NOI18N
@@ -750,6 +782,18 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         });
         jToolBar1.add(btnOpen);
 
+        btnSelect.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/select.png"))); // NOI18N
+        btnSelect.setText(bundle.getString("DocumentSearchPanel.btnSelect.text")); // NOI18N
+        btnSelect.setFocusable(false);
+        btnSelect.setName(bundle.getString("DocumentSearchPanel.btnSelect.name")); // NOI18N
+        btnSelect.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSelect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSelectActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnSelect);
+
         btnAttach.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/attachment.png"))); // NOI18N
         btnAttach.setText(bundle.getString("DocumentSearchPanel.btnAttach.text")); // NOI18N
         btnAttach.setFocusable(false);
@@ -883,6 +927,14 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         fireAttach();
     }//GEN-LAST:event_btnAttachActionPerformed
 
+    private void btnSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectActionPerformed
+        fireSelect();
+    }//GEN-LAST:event_btnSelectActionPerformed
+
+    private void menuSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSelectActionPerformed
+        fireSelect();
+    }//GEN-LAST:event_menuSelectActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAttach;
     private javax.swing.JButton btnClear;
@@ -892,6 +944,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
     private javax.swing.JButton btnOpen;
     private javax.swing.JButton btnPrint;
     private javax.swing.JButton btnSearch;
+    private javax.swing.JButton btnSelect;
     private javax.swing.JButton btnSubmissionDateFrom;
     private javax.swing.JButton btnSubmissionDateTo;
     private javax.swing.JComboBox cbxSourceType;
@@ -926,6 +979,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
     private javax.swing.JMenuItem menuEdit;
     private javax.swing.JMenuItem menuOpen;
     private javax.swing.JMenuItem menuPrint;
+    private javax.swing.JMenuItem menuSelect;
     private javax.swing.JPopupMenu popUpSearchResults;
     private org.sola.clients.beans.source.SourceSearchParamsBean searchParams;
     private org.sola.clients.beans.source.SourceSearchResultsListBean searchResultsList;

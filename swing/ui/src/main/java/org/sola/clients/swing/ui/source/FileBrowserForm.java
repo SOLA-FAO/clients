@@ -546,6 +546,7 @@ public class FileBrowserForm extends javax.swing.JDialog {
         documentSearchPanel.setName(bundle.getString("FileBrowserForm.documentSearchPanel.name")); // NOI18N
         documentSearchPanel.setShowEditButton(false);
         documentSearchPanel.setShowPrintButton(false);
+        documentSearchPanel.setShowSelectButton(false);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
