@@ -33,6 +33,7 @@ import java.util.Date;
 import javax.validation.Valid;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractTransactionedBean;
@@ -84,6 +85,7 @@ public class RrrBean extends AbstractTransactionedBean {
     
     private String baUnitId;
     private String nr;
+    @Past(message = ClientMessage.CHECK_REGISTRATION_DATE, payload = Localized.class)
     private Date registrationDate;
     private String transactionId;
     @NotNull(message = ClientMessage.CHECK_NOTNULL_EXPIRATION, payload = Localized.class, groups = {MortgageValidationGroup.class})
