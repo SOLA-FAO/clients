@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<StyledLayerDescriptor version="1.0.0" xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc"
+  xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.0.0/StyledLayerDescriptor.xsd">
+<NamedLayer>
+     <Name>parcel</Name>
+    <UserStyle>
+   <FeatureTypeStyle>
+     <Rule>
+       <Name>Scale &lt; 50000</Name>
+       <MaxScaleDenominator>50000</MaxScaleDenominator>
+       <PolygonSymbolizer>
+         <Stroke>
+           <CssParameter name="stroke">#0EEFD5</CssParameter>
+           <CssParameter name="stroke-width">2</CssParameter>
+         </Stroke>
+         <Fill>
+           <CssParameter name="fill">#2CEF0E</CssParameter>
+         </Fill>
+       </PolygonSymbolizer>
+       <TextSymbolizer>
+         <Label>
+           <ogc:PropertyName>label</ogc:PropertyName>
+         </Label>
+         <Font>
+           <CssParameter name="font-family">Arial</CssParameter>
+           <CssParameter name="font-size">13</CssParameter>
+           <CssParameter name="font-style">normal</CssParameter>
+           <CssParameter name="font-weight">normal</CssParameter>
+         </Font>
+         <LabelPlacement>
+           <PointPlacement>
+             <AnchorPoint>
+               <AnchorPointX>0.5</AnchorPointX>
+               <AnchorPointY>0.5</AnchorPointY>
+             </AnchorPoint>
+           </PointPlacement>
+         </LabelPlacement>
+         <Fill>
+           <CssParameter name="fill">#000000</CssParameter>
+         </Fill>
+       </TextSymbolizer>
+     </Rule>
+     <Rule>
+       <Name>Scale 50000 - 625000</Name>
+       <MinScaleDenominator>50000</MinScaleDenominator>
+       <MaxScaleDenominator>625000</MaxScaleDenominator>
+	   
+       <PolygonSymbolizer>
+         <Fill>
+           <CssParameter name="fill">#2CEF0E</CssParameter>
+         </Fill>
+         <Stroke>
+           <CssParameter name="stroke">#0EEFD5</CssParameter>
+           <CssParameter name="stroke-width">1</CssParameter>
+         </Stroke>
+       </PolygonSymbolizer>
+     </Rule>
+     <Rule>
+       <Name>Scale &gt; 625000</Name>
+       <MinScaleDenominator>625000</MinScaleDenominator>
+       <PolygonSymbolizer>
+         <Fill>
+           <CssParameter name="fill">#2CEF0E</CssParameter>
+         </Fill>
+         <Stroke>
+           <CssParameter name="stroke">#0EEFD5</CssParameter>
+           <CssParameter name="stroke-width">0.2</CssParameter>
+         </Stroke>
+       </PolygonSymbolizer>
+     </Rule>
+   </FeatureTypeStyle>
+    </UserStyle>
+  </NamedLayer>
+</StyledLayerDescriptor>

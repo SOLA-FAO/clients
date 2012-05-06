@@ -106,7 +106,7 @@ public class InformationTool extends ExtendedTool {
                 continue;
             }
             QueryForSelect queryForSelect = new QueryForSelect();
-            queryForSelect.setId(solaLayer.getLayerName());
+            queryForSelect.setId(solaLayer.getTitle());
             queryForSelect.setQueryName(queryNameForSelect);
             queryForSelect.setSrid(solaLayer.getSrid());
             queryForSelect.setFilteringGeometry(filteringGeometry);

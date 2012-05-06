@@ -171,7 +171,7 @@ public class Toc extends JPanel {
      * It forces the node to change its status (from checked to unchecked and otherway around).
      * <br/>
      * If node is not found nothing happen.
-     * @param tocNode The node
+     * @param tocNode The node to change the switch. If the node is null nothing will happen
      */
     public void changeNodeSwitch(TocLayerNode tocNode) {
         if (tocNode != null) {
