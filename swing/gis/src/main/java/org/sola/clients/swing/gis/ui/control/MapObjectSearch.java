@@ -1,28 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 /*
@@ -49,9 +51,9 @@ import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.search.CadastreObjectSearchResultTO;
 
 /**
- * This control extends the FreeTextSearch functionality by searching in the map control.
- * It is used in the Find tab in the map.
- * 
+ * This control extends the FreeTextSearch functionality by searching in the map
+ * control. It is used in the Find tab in the map.
+ *
  * @author Elton Manoku
  */
 public class MapObjectSearch extends FreeTextSearch {
@@ -69,8 +71,8 @@ public class MapObjectSearch extends FreeTextSearch {
 
     /**
      * Sets the map control
-     * 
-     * @param map 
+     *
+     * @param map
      */
     public void setMap(Map map) {
         this.map = map;
@@ -78,17 +80,17 @@ public class MapObjectSearch extends FreeTextSearch {
 
     /**
      * It executes the search in the server
-     * 
+     *
      * @param searchString
-     * @param listModel 
+     * @param listModel
      */
     @Override
     public void onNewSearchString(String searchString, DefaultListModel listModel) {
         if (this.dataSource == null) {
             this.dataSource = WSManager.getInstance().getSearchService();
         }
-        
-        if (this.searchByObject == null){
+
+        if (this.searchByObject == null) {
             return;
         }
 
@@ -103,7 +105,7 @@ public class MapObjectSearch extends FreeTextSearch {
 
     /**
      * If a searched element is selected it zooms/pans the map there.
-     * 
+     *
      */
     @Override
     public void onSelectionConfirmed() {
@@ -115,6 +117,11 @@ public class MapObjectSearch extends FreeTextSearch {
         try {
             Geometry geom =
                     PojoFeatureSource.getWkbReader().read(selectedObj.getTheGeom());
+
+            // Select the object on the map
+            this.map.clearSelectedFeatures();
+            this.map.selectFeature(selectedObj.getId(), geom);
+
             ReferencedEnvelope boundsToZoom = JTS.toEnvelope(geom);
             boundsToZoom.expandBy(10);
             this.map.setDisplayArea(boundsToZoom);
@@ -125,12 +132,20 @@ public class MapObjectSearch extends FreeTextSearch {
     }
 
     /**
-     * Sets the search option. The search option is sent to the server as well with the filter,
-     * to define what to search.
-     * 
-     * @param searchByObject 
+     * Sets the search option. The search option is sent to the server as well
+     * with the filter, to define what to search.
+     *
+     * @param searchByObject
      */
     public void setSearchByObject(SearchByChoiceBean searchByObject) {
         this.searchByObject = searchByObject;
+    }
+
+    /**
+     * Clear the selected features from the map. 
+     */
+    public void clearSelection() {
+        this.map.clearSelectedFeatures();
+        this.map.refresh();
     }
 }

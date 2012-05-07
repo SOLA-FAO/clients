@@ -99,6 +99,7 @@ public abstract class SolaControlsBundle extends ControlsBundle {
             for (ConfigMapLayerTO configMapLayer : mapDefinition.getLayers()) {
                 this.addLayerConfig(configMapLayer);
             }
+            this.getMap().initializeSelectionLayer();
             this.getMap().zoomToFullExtent();
         } catch (InitializeLayerException ex) {
             Messaging.getInstance().show(GisMessage.GENERAL_CONTROLBUNDLE_ERROR);

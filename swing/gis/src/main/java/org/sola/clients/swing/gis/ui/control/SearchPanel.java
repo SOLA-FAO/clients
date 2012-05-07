@@ -101,6 +101,7 @@ public class SearchPanel extends javax.swing.JPanel {
         listScrollPane = new javax.swing.JScrollPane();
         jLabel1 = new javax.swing.JLabel();
         mapObjectSearch = new org.sola.clients.swing.gis.ui.control.MapObjectSearch();
+        btnClearSelection = new javax.swing.JButton();
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
@@ -127,19 +128,32 @@ public class SearchPanel extends javax.swing.JPanel {
         mapObjectSearch.setText(bundle.getString("SearchPanel.mapObjectSearch.text")); // NOI18N
         mapObjectSearch.setName("mapObjectSearch"); // NOI18N
 
+        btnClearSelection.setText(bundle.getString("SearchPanel.btnClearSelection.text")); // NOI18N
+        btnClearSelection.setActionCommand(bundle.getString("SearchPanel.btnClearSelection.actionCommand")); // NOI18N
+        btnClearSelection.setName(bundle.getString("SearchPanel.btnClearSelection.name")); // NOI18N
+        btnClearSelection.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearSelectionActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(listScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
-                    .addComponent(mapObjectSearch, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(listScrollPane)
+                    .addComponent(mapObjectSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmdSearchBy, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(cmdSearchBy, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnClearSelection, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -152,7 +166,9 @@ public class SearchPanel extends javax.swing.JPanel {
                 .addGap(14, 14, 14)
                 .addComponent(mapObjectSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(listScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
+                .addComponent(listScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnClearSelection)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -161,7 +177,13 @@ private void cmdSearchByActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     this.mapObjectSearch.setSearchByObject(
             (SearchByChoiceBean) this.cmdSearchBy.getSelectedItem());
 }//GEN-LAST:event_cmdSearchByActionPerformed
+
+    private void btnClearSelectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearSelectionActionPerformed
+        this.mapObjectSearch.clearSelection();
+    }//GEN-LAST:event_btnClearSelectionActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnClearSelection;
     private javax.swing.JComboBox cmdSearchBy;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
