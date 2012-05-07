@@ -173,12 +173,15 @@ public abstract class SolaTask<T, V> {
             @Override
             protected void done() {
                 try {
+                    propertySupport.firePropertyChange(REMOVE_TASK, false, true);
                     if(exception != null){
-                        propertySupport.firePropertyChange(EXCEPTION_RISED, null, exception);
+                        try {
+                            propertySupport.firePropertyChange(EXCEPTION_RISED, null, exception);
+                        } catch (Exception e) {
+                        }
                         taskFailed(exception);
                         return;
                     }
-                    propertySupport.firePropertyChange(REMOVE_TASK, false, true);
                     taskDone();
                 } catch (Throwable e) {
                     propertySupport.firePropertyChange(EXCEPTION_RISED, null, e);

@@ -32,6 +32,7 @@ package org.sola.clients.swing.common.tasks;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.HashMap;
 import javax.swing.SwingWorker.StateValue;
 import org.sola.clients.swing.common.DefaultExceptionHandler;
@@ -116,7 +117,12 @@ public class TaskManager {
 
         if (evt.getPropertyName().equals(SolaTask.EXCEPTION_RISED)) {
             if (Throwable.class.isAssignableFrom(evt.getNewValue().getClass())) {
-                DefaultExceptionHandler.handleException((Throwable) evt.getNewValue());
+                UncaughtExceptionHandler defaultHandler = Thread.getDefaultUncaughtExceptionHandler();
+                if(defaultHandler!=null){
+                Thread.getDefaultUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), (Throwable)evt.getNewValue());
+                } else {
+                    DefaultExceptionHandler.handleException((Throwable)evt.getNewValue());
+                }
             }
             if (taskId != null) {
                 tasks.remove(taskId);

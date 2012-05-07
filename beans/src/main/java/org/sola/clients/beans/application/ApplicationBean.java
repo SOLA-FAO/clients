@@ -599,7 +599,7 @@ public class ApplicationBean extends ApplicationSummaryBean {
     public boolean verifyProperty() {
         if (selectedProperty != null) {
             PropertyVerifierTO verifier = WSManager.getInstance().getSearchService().verifyApplicationProperty(
-                    selectedProperty.getNameFirstpart(), selectedProperty.getNameLastpart());
+                    this.getNr(), selectedProperty.getNameFirstpart(), selectedProperty.getNameLastpart());
             if (verifier != null) {
                 selectedProperty.setBaUnitId(verifier.getId());
                 selectedProperty.setVerifiedLocation(verifier.isHasLocation());
