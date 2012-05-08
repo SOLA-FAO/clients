@@ -87,7 +87,6 @@ public class PropertyPanel extends ContentPanel {
             }
         }
     }
-    
     private ApplicationBean applicationBean;
     private ApplicationServiceBean applicationService;
     private String baUnitID;
@@ -304,8 +303,7 @@ public class PropertyPanel extends ContentPanel {
                         @Override
                         public void propertyChange(PropertyChangeEvent evt) {
                             if (evt.getPropertyName().equals(NewPropertyWizardPanel.SELECTED_RESULT_PROPERTY)) {
-                                if (addParentProperty((Object[]) evt.getNewValue())){
-                                    
+                                if (addParentProperty((Object[]) evt.getNewValue())) {
 //                                        && MessageUtility.displayMessage(ClientMessage.BAUNIT_SELECT_EXISTING_PROPERTY_AGAIN) == MessageUtility.BUTTON_ONE) {
 //                                    showNewTitleWizard(false);
                                 }
@@ -320,9 +318,8 @@ public class PropertyPanel extends ContentPanel {
                     public Void doTask() {
                         setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PROPERTYLINK));
                         boolean allowSelection = true;
-                        if(applicationService!=null){
-                            allowSelection = !applicationService.getRequestTypeCode()
-                                    .equalsIgnoreCase(RequestTypeBean.CODE_NEW_DIGITAL_TITLE);
+                        if (applicationService != null) {
+                            allowSelection = !applicationService.getRequestTypeCode().equalsIgnoreCase(RequestTypeBean.CODE_NEW_DIGITAL_TITLE);
                         }
                         NewPropertyWizardPanel newPropertyWizardPanel = new NewPropertyWizardPanel(applicationBean, allowSelection);
                         newPropertyWizardPanel.addPropertyChangeListener(newPropertyWizardListener);
@@ -794,13 +791,13 @@ public class PropertyPanel extends ContentPanel {
         ContentPanel panel;
         String cardName = MainContentPanel.CARD_SIMPLE_RIGHT;
         String rrrCode = rrrBean.getRrrType().getCode();
-        
+
         if (rrrCode.equals(RrrBean.CODE_MORTGAGE)) {
             panel = new MortgagePanel(rrrBean, applicationBean, applicationService, action);
             cardName = MainContentPanel.CARD_MORTGAGE;
-        } else if (rrrCode.equalsIgnoreCase(RrrBean.CODE_OWNERSHIP) || 
-                rrrCode.equalsIgnoreCase(RrrBean.CODE_STATE_OWNERSHIP) ||
-                rrrCode.equalsIgnoreCase(RrrBean.CODE_APARTMENT)) {
+        } else if (rrrCode.equalsIgnoreCase(RrrBean.CODE_OWNERSHIP)
+                || rrrCode.equalsIgnoreCase(RrrBean.CODE_STATE_OWNERSHIP)
+                || rrrCode.equalsIgnoreCase(RrrBean.CODE_APARTMENT)) {
             panel = new OwnershipPanel(rrrBean, applicationBean, applicationService, action);
             cardName = MainContentPanel.CARD_OWNERSHIP;
         } else {
@@ -843,6 +840,37 @@ public class PropertyPanel extends ContentPanel {
         TaskManager.getInstance().runTask(t);
     }
 
+    private void saveBaUnit() {
+        if (baUnitBean1.validate(true).size() > 0) {
+            return;
+        }
+
+        if (baUnitID != null && !baUnitID.equals("")) {
+            baUnitBean1.saveBaUnit(applicationService.getId());
+        } else {
+            baUnitBean1.createBaUnit(applicationService.getId());
+        }
+        saveBaUnitState();
+    }
+
+    private void terminateBaUnit(){
+        if (baUnitBean1.getPendingActionCode() != null && baUnitBean1.getPendingActionCode().equals(TypeActionBean.CODE_CANCEL)) {
+            saveBaUnit();
+            baUnitBean1.cancelBaUnitTermination();
+            MessageUtility.displayMessage(ClientMessage.BAUNIT_TERMINATION_CANCELED);
+            customizeForm();
+            saveBaUnitState();
+        } else {
+            if (MessageUtility.displayMessage(ClientMessage.BAUNIT_CONFIRM_TERMINATION) == MessageUtility.BUTTON_ONE) {
+                saveBaUnit();
+                baUnitBean1.terminateBaUnit(applicationService.getId());
+                MessageUtility.displayMessage(ClientMessage.BAUNIT_TERMINATED);
+                customizeForm();
+                saveBaUnitState();
+            }
+        }
+    }
+    
     /**
      * Opens form to select or create document to be used as a paper title
      * document.
@@ -2159,19 +2187,7 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     }//GEN-LAST:event_menuOpenChildBaUnitActionPerformed
 
     private void btnTerminateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTerminateActionPerformed
-        if (baUnitBean1.getPendingActionCode() != null && baUnitBean1.getPendingActionCode().equals(TypeActionBean.CODE_CANCEL)) {
-            saveBaUnit(false, false);
-            baUnitBean1.cancelBaUnitTermination();
-            MessageUtility.displayMessage(ClientMessage.BAUNIT_TERMINATION_CANCELED);
-            customizeForm();
-        } else {
-            if (MessageUtility.displayMessage(ClientMessage.BAUNIT_CONFIRM_TERMINATION) == MessageUtility.BUTTON_ONE) {
-                saveBaUnit(false, false);
-                baUnitBean1.terminateBaUnit(applicationService.getId());
-                MessageUtility.displayMessage(ClientMessage.BAUNIT_TERMINATED);
-                customizeForm();
-            }
-        }
+        terminateBaUnit();
     }//GEN-LAST:event_btnTerminateActionPerformed
 
     private void btnViewRightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewRightActionPerformed
