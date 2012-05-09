@@ -46,7 +46,7 @@ import org.sola.webservices.transferobjects.casemanagement.ServiceTO;
  * For more information see data dictionary <b>Application</b> schema.
  */
 public class ApplicationServiceBean extends ApplicationServiceSummaryBean {
-
+    
     public static final String ACTION_CODE_PROPERTY = "actionCode";
     public static final String ACTION_PROPERTY = "action";
     public static final String ACTION_NOTES_PROPERTY = "actionNotes";

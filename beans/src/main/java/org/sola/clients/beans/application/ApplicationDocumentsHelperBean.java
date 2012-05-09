@@ -33,8 +33,10 @@ import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.controls.SolaObservableList;
+import org.sola.clients.beans.referencedata.ApplicationStatusTypeBean;
 import org.sola.clients.beans.referencedata.RequestTypeBean;
 import org.sola.clients.beans.referencedata.RequestTypeSourceTypeBean;
+import org.sola.clients.beans.referencedata.ServiceStatusTypeBean;
 import org.sola.clients.beans.source.SourceBean;
 import org.sola.services.boundary.wsclients.WSManager;
 /** 
@@ -72,6 +74,11 @@ public class ApplicationDocumentsHelperBean extends AbstractBindingBean {
             for (Iterator<ApplicationServiceBean> it = applicationServiceList.iterator(); it.hasNext();) {
                 ApplicationServiceBean applicationServiceBean = it.next();
 
+                if(applicationServiceBean.getStatusCode() == null || (applicationServiceBean.getStatusCode()!=null &&
+                        applicationServiceBean.getStatusCode().equalsIgnoreCase(ServiceStatusTypeBean.STATUS_CODE_CANCELLED))){
+                    continue;
+                }
+                
                 for (Iterator<RequestTypeBean> it1 = CacheManager.getRequestTypes().iterator(); it1.hasNext();) {
                     RequestTypeBean requestType = it1.next();
 

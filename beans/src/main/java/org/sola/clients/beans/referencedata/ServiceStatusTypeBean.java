@@ -39,6 +39,11 @@ import org.sola.webservices.transferobjects.referencedata.ServiceStatusTypeTO;
  */
 public class ServiceStatusTypeBean extends AbstractCodeBean {
 
+    public static final String STATUS_CODE_CANCELLED = "cancelled";
+    public static final String STATUS_CODE_COMPLETED = "completed";
+    public static final String STATUS_CODE_LODGED = "lodged";
+    public static final String STATUS_CODE_PENDING = "pending";
+    
     public ServiceStatusTypeBean() {
         super();
     }

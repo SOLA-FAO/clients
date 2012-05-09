@@ -29,7 +29,6 @@
  */
 package org.sola.clients.swing.ui.party;
 
-import java.awt.MouseInfo;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -39,6 +38,7 @@ import org.sola.clients.beans.party.PartySearchResultListBean;
 import org.sola.clients.beans.referencedata.PartyRoleTypeListBean;
 import org.sola.clients.beans.referencedata.PartyTypeListBean;
 import org.sola.clients.beans.security.SecurityBean;
+import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.common.RolesConstants;
@@ -182,6 +182,7 @@ public class PartySearchPanel extends JPanel {
 
             @Override
             public void taskDone() {
+                lblSearchResultNumber.setText(Integer.toString(partySearchResuls.getPartySearchResults().size()));
                 if (partySearchResuls.getPartySearchResults().size() > 100) {
                     MessageUtility.displayMessage(ClientMessage.SEARCH_TOO_MANY_RESULTS, new String[]{"100"});
                 } else if (partySearchResuls.getPartySearchResults().size() < 1) {
@@ -234,6 +235,9 @@ public class PartySearchPanel extends JPanel {
         btnAddParty = new javax.swing.JButton();
         btnEditParty = new javax.swing.JButton();
         btnRemoveParty = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JToolBar.Separator();
+        jLabel5 = new javax.swing.JLabel();
+        lblSearchResultNumber = new javax.swing.JLabel();
         jPanel8 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
@@ -417,6 +421,18 @@ public class PartySearchPanel extends JPanel {
             }
         });
         jToolBar1.add(btnRemoveParty);
+
+        jSeparator1.setName(bundle.getString("PartySearchPanel.jSeparator1.name")); // NOI18N
+        jToolBar1.add(jSeparator1);
+
+        jLabel5.setText(bundle.getString("PartySearchPanel.jLabel5.text")); // NOI18N
+        jLabel5.setName(bundle.getString("PartySearchPanel.jLabel5.name")); // NOI18N
+        jToolBar1.add(jLabel5);
+
+        lblSearchResultNumber.setFont(LafManager.getInstance().getLabFontBold());
+        lblSearchResultNumber.setText(bundle.getString("PartySearchPanel.lblSearchResultNumber.text")); // NOI18N
+        lblSearchResultNumber.setName(bundle.getString("PartySearchPanel.lblSearchResultNumber.name")); // NOI18N
+        jToolBar1.add(lblSearchResultNumber);
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -690,6 +706,7 @@ public class PartySearchPanel extends JPanel {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -698,7 +715,9 @@ public class PartySearchPanel extends JPanel {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JLabel lblSearchResultNumber;
     private javax.swing.JMenuItem menuAdd;
     private javax.swing.JMenuItem menuEdit;
     private javax.swing.JMenuItem menuRemove;

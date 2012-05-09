@@ -46,9 +46,15 @@ public class LocalizationManager {
      */
     public static void loadLanguage(Class<?> applicationMainClass) {
         Preferences prefs = Preferences.userNodeForPackage(applicationMainClass);
+        Locale defaultLocale = Locale.getDefault(Locale.Category.FORMAT);
 
         String language = prefs.get(LANGUAGE, "en");
         String country = prefs.get(COUNTRY, "US");
+        
+        if(defaultLocale.getLanguage().equalsIgnoreCase(language)){
+            // Override country code from local settings
+            country = defaultLocale.getCountry();
+        }
         Locale loc = new Locale(language, country);
         Locale.setDefault(loc);
 

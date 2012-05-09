@@ -38,7 +38,7 @@ import org.sola.webservices.transferobjects.referencedata.ApplicationStatusTypeT
  * <br />This bean is used as a part of {@link ApplicationBean}.
  */
 public class ApplicationStatusTypeBean extends AbstractCodeBean {
-
+   
     public ApplicationStatusTypeBean() {
         super();
     }
