@@ -35,10 +35,9 @@
  */
 package org.sola.clients.swing.gis.ui.control;
 
-import java.io.IOException;
 import org.geotools.swing.extended.Map;
 import org.sola.clients.swing.common.LafManager;
-import org.sola.clients.swing.gis.beans.SearchByChoiceBean;
+import org.sola.clients.swing.gis.beans.SpatialSearchOptionBean;
 
 /**
  * This is the control used to search map objects.
@@ -55,24 +54,19 @@ public class SearchPanel extends javax.swing.JPanel {
         this.mapObjectSearch.setMap(map);
         this.mapObjectSearch.setListScroll(this.listScrollPane);
         customizeComponents();
-        initializeSearchBy();
+        initializeSearchOptions();
     }
 
     /**
-     * It initializes the search by list. The list is defined in the resources
+     * It initializes the search by list. The list is defined in the database
      *
      */
-    private void initializeSearchBy() {
-        try {
-            cmdSearchBy.removeAllItems();
-            for (SearchByChoiceBean choiceObject : SearchByChoiceBean.getInstanceList()) {
-                cmdSearchBy.addItem(choiceObject);
-            }
-
-            this.cmdSearchBy.setSelectedIndex(0);
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
+    private void initializeSearchOptions() {
+        cmdSearchBy.removeAllItems();
+        for (SpatialSearchOptionBean choiceObject : SpatialSearchOptionBean.getInstanceList()) {
+            cmdSearchBy.addItem(choiceObject);
         }
+        this.cmdSearchBy.setSelectedIndex(0);
     }
 
     /**
@@ -175,13 +169,12 @@ public class SearchPanel extends javax.swing.JPanel {
 
 private void cmdSearchByActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdSearchByActionPerformed
     this.mapObjectSearch.setSearchByObject(
-            (SearchByChoiceBean) this.cmdSearchBy.getSelectedItem());
+            (SpatialSearchOptionBean) this.cmdSearchBy.getSelectedItem());
 }//GEN-LAST:event_cmdSearchByActionPerformed
 
     private void btnClearSelectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearSelectionActionPerformed
         this.mapObjectSearch.clearSelection();
     }//GEN-LAST:event_btnClearSelectionActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClearSelection;
     private javax.swing.JComboBox cmdSearchBy;

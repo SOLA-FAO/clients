@@ -45,7 +45,7 @@ import org.sola.clients.beans.source.SourceBean;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.EntityAction;
 import org.sola.webservices.transferobjects.administrative.BaUnitTO;
-import org.sola.webservices.transferobjects.search.CadastreObjectSearchResultTO;
+import org.sola.webservices.transferobjects.search.SpatialSearchResultTO;
 
 /** 
  * Contains properties and methods to manage <b>BA Unit</b> object of the 
@@ -161,6 +161,7 @@ public class BaUnitBean extends BaUnitSummaryBean {
         }
     }
     
+    private static final String BAUNIT_ID_SEARCH = "system_search.cadastre_object_by_baunit_id";
     public static final String SELECTED_PARCEL_PROPERTY = "selectedParcel";
     public static final String SELECTED_RIGHT_PROPERTY = "selectedRight";
     public static final String SELECTED_BA_UNIT_NOTATION_PROPERTY = "selectedBaUnitNotation";
@@ -534,12 +535,12 @@ public class BaUnitBean extends BaUnitSummaryBean {
         }
         newCadastreObjectList.clear();
         if(getId()!=null){
-            List<CadastreObjectSearchResultTO> searchResults = 
+            List<SpatialSearchResultTO> searchResults = 
                     WSManager.getInstance().getSearchService()
-                    .searchCadastreObjects("BAUNIT_ID", getId());
+                    .searchSpatialObjects(BAUNIT_ID_SEARCH, getId());
             if(searchResults!=null && searchResults.size()>0){
                 List<String> ids = new ArrayList<String>();
-                for(CadastreObjectSearchResultTO result : searchResults){
+                for(SpatialSearchResultTO result : searchResults){
                     ids.add(result.getId());
                 }
                 TypeConverters.TransferObjectListToBeanList(WSManager.getInstance()
