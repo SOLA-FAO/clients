@@ -704,7 +704,6 @@ public class ApplicationPanel extends ContentPanel {
                     // Open property form for new title registration
                     if (requestType.equalsIgnoreCase(RequestTypeBean.CODE_NEW_APARTMENT)
                             || requestType.equalsIgnoreCase(RequestTypeBean.CODE_NEW_FREEHOLD)
-                            || requestType.equalsIgnoreCase(RequestTypeBean.CODE_NEW_OWNERSHIP)
                             || requestType.equalsIgnoreCase(RequestTypeBean.CODE_NEW_STATE)) {
                         if (!readOnly) {
                             // Open empty property form
