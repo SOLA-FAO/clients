@@ -1,30 +1,26 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations
- * (FAO). All rights reserved.
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO). All rights
+ * reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without modification, are permitted
+ * provided that the following conditions are met:
  *
- * 1. Redistributions of source code must retain the above copyright notice,this
- * list of conditions and the following disclaimer. 2. Redistributions in binary
- * form must reproduce the above copyright notice,this list of conditions and
- * the following disclaimer in the documentation and/or other materials provided
- * with the distribution. 3. Neither the name of FAO nor the names of its
- * contributors may be used to endorse or promote products derived from this
- * software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this list of conditions
+ * and the following disclaimer. 2. Redistributions in binary form must reproduce the above
+ * copyright notice,this list of conditions and the following disclaimer in the documentation and/or
+ * other materials provided with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this software without
+ * specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+ * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 /*
@@ -83,15 +79,13 @@ import org.opengis.referencing.operation.TransformException;
 /**
  * This is an extension of the swing control {
  *
- * @see org.geotools.swing.JMapPane}. Added functionality includes: <ul> <li>
- * Initialization of the control only by a SRID. It uses the StreamingRenderer
- * for rendering and DefaultMapContext for the map context </li> <li> Helper
- * methods to add different kind of layers</li> <li> Adding OnMouseWheel Zoom
- * in/out handling</li> <li> Adding panning with by holding the middle button of
- * the mouse pressed</li> <li> Get current pixel resolution for the map
- * control</li> <li> Helper methods for transforming points map from/to
- * screen</li> <li> Defining a custom full extent that is not dependent in the
- * full extent of all layers found in the map</li> </ul>
+ * @see org.geotools.swing.JMapPane}. Added functionality includes: <ul> <li> Initialization of the
+ * control only by a SRID. It uses the StreamingRenderer for rendering and DefaultMapContext for the
+ * map context </li> <li> Helper methods to add different kind of layers</li> <li> Adding
+ * OnMouseWheel Zoom in/out handling</li> <li> Adding panning with by holding the middle button of
+ * the mouse pressed</li> <li> Get current pixel resolution for the map control</li> <li> Helper
+ * methods for transforming points map from/to screen</li> <li> Defining a custom full extent that
+ * is not dependent in the full extent of all layers found in the map</li> </ul>
  * @author Elton Manoku
  *
  */
@@ -116,8 +110,8 @@ public class Map extends JMapPane {
     private CursorTool activeTool = null;
 
     /**
-     * This constructor is used only for the graphical designer. Use the other
-     * constructor for initializing the map control
+     * This constructor is used only for the graphical designer. Use the other constructor for
+     * initializing the map control
      */
     public Map() throws InitializeMapException {
         super();
@@ -138,14 +132,13 @@ public class Map extends JMapPane {
     }
 
     /**
-     * It initializes the map control given an SRID and WKT Presentation of the
-     * reference system. This constructor is used if for the given srid the WKT
-     * is not in the resource srid.properties.
+     * It initializes the map control given an SRID and WKT Presentation of the reference system.
+     * This constructor is used if for the given srid the WKT is not in the resource
+     * srid.properties.
      *
      * @param srid The SRID
-     * @param wktOfReferenceSystem the WKT definition of Reference system if not
-     * found in the srid.properties resource file. If found there there is not
-     * need to specify.
+     * @param wktOfReferenceSystem the WKT definition of Reference system if not found in the
+     * srid.properties resource file. If found there there is not need to specify.
      * @throws InitializeMapException
      */
     public Map(int srid, String wktOfReferenceSystem) throws InitializeMapException {
@@ -173,8 +166,8 @@ public class Map extends JMapPane {
     }
 
     /**
-     * Internal initializer of the control. It starts up the map context,
-     * renderer and sets the Reference System based in the SRID.
+     * Internal initializer of the control. It starts up the map context, renderer and sets the
+     * Reference System based in the SRID.
      *
      * @param srid
      * @throws InitializeMapException
@@ -228,9 +221,8 @@ public class Map extends JMapPane {
     }
 
     /**
-     * Initialize the mouse and map bounds listeners. The map wheel listener are
-     * initialized separately because the ones provided by mapMouseAdapter gives
-     * a null location
+     * Initialize the mouse and map bounds listeners. The map wheel listener are initialized
+     * separately because the ones provided by mapMouseAdapter gives a null location
      */
     private void createListeners() {
 
@@ -282,8 +274,8 @@ public class Map extends JMapPane {
     }
 
     /**
-     * It zooms in and out as the user uses the mousewheel. The mouse stays
-     * pointing in the same map coordinates
+     * It zooms in and out as the user uses the mousewheel. The mouse stays pointing in the same map
+     * coordinates
      *
      * @param ev
      */
@@ -354,8 +346,8 @@ public class Map extends JMapPane {
     }
 
     /**
-     * If this button release is the end of a mouse dragged event, requests the
-     * map to repaint the display
+     * If this button release is the end of a mouse dragged event, requests the map to repaint the
+     * display
      *
      * @param ev the mouse event
      */
@@ -367,8 +359,7 @@ public class Map extends JMapPane {
     }
 
     /**
-     * It updates the pixel resolution of the map for each change of the
-     * DisplayArea.
+     * It updates the pixel resolution of the map for each change of the DisplayArea.
      *
      * @param ev
      */
@@ -442,8 +433,8 @@ public class Map extends JMapPane {
     }
 
     /**
-     * Gets the full extent. If the full extent is not yet set then the full
-     * extent of all layers in the map is used.
+     * Gets the full extent. If the full extent is not yet set then the full extent of all layers in
+     * the map is used.
      *
      *
      * @return
@@ -499,8 +490,8 @@ public class Map extends JMapPane {
     }
 
     /**
-     * It adds a layer of type WMS which is actually a WMS Server with a list of
-     * layers in it.
+     * It adds a layer of type WMS which is actually a WMS Server with a list of layers in it. Sets
+     * the layer visible by default.
      *
      * @param layerName The name
      * @param layerTitle layer title
@@ -510,9 +501,26 @@ public class Map extends JMapPane {
      */
     public ExtendedLayerWMS addLayerWMS(
             String layerName, String layerTitle, String URL, List<String> layerNames) {
+        return addLayerWMS(layerName, layerTitle, URL, layerNames, true);
+    }
+
+    /**
+     * It adds a layer of type WMS which is actually a WMS Server with a list of layers in it.
+     *
+     * @param layerName The name
+     * @param layerTitle layer title
+     * @param URL The WMS Capabilities Location
+     * @param layerNames The list of layer names
+     * @param visible Flag to indicate if the layer should be visible by default.
+     * @return
+     */
+    public ExtendedLayerWMS addLayerWMS(
+            String layerName, String layerTitle, String URL, List<String> layerNames,
+            boolean visible) {
         ExtendedLayerWMS layer = null;
         try {
             layer = new ExtendedLayerWMS(layerName, layerTitle, this, URL, layerNames);
+            layer.setVisible(visible);
             this.getSolaLayers().put(layerName, layer);
         } catch (InitializeLayerException ex) {
             Messaging.getInstance().show(ex.getMessage());
@@ -521,23 +529,42 @@ public class Map extends JMapPane {
     }
 
     /**
-     * It adds a shapefile layer
+     * It adds a shapefile layer setting the layer to visible by default.
      *
      * @param layerName the layer name
      * @param layerTitle layer title
      * @param pathOfShapefile the path of the .shp file
-     * @param styleResource the resource name .xml in the location of resources
-     * for layer styles. This resource location is added in the path decided in
-     * SLD_RESOURCES {
+     * @param styleResource the resource name .xml in the location of resources for layer styles.
+     * This resource location is added in the path decided in SLD_RESOURCES {
      * @see org.sola.clients.geotools.ui.layers.SolaFeatureLayer}.
      * @return
      */
     public ExtendedLayerShapefile addLayerShapefile(
             String layerName, String layerTitle, String pathOfShapefile, String styleResource) {
+
+        return addLayerShapefile(layerName, layerTitle, pathOfShapefile, styleResource, true);
+    }
+
+    /**
+     * It adds a shapefile layer setting the layer to visible by default.
+     *
+     * @param layerName the layer name
+     * @param layerTitle layer title
+     * @param pathOfShapefile the path of the .shp file
+     * @param styleResource the resource name .xml in the location of resources for layer styles.
+     * @param visible Indicates if the default state of the layer is visible or not. This resource
+     * location is added in the path decided in SLD_RESOURCES {
+     * @see org.sola.clients.geotools.ui.layers.SolaFeatureLayer}.
+     * @return
+     */
+    public ExtendedLayerShapefile addLayerShapefile(
+            String layerName, String layerTitle, String pathOfShapefile, String styleResource,
+            boolean visible) {
         ExtendedLayerShapefile layer = null;
         try {
             layer = new ExtendedLayerShapefile(layerName, pathOfShapefile, styleResource);
             layer.setTitle(layerTitle);
+            layer.setVisible(visible);
             this.addLayer(layer);
         } catch (InitializeLayerException ex) {
             Messaging.getInstance().show(ex.getMessage());
@@ -551,9 +578,8 @@ public class Map extends JMapPane {
      * @param layerName layer name
      * @param layerTitle layer title
      * @param geometryType geometry type for this layer
-     * @param styleResource the resource name .xml in the location of resources
-     * for layer styles. This resource location is added in the path decided in
-     * SLD_RESOURCES {
+     * @param styleResource the resource name .xml in the location of resources for layer styles.
+     * This resource location is added in the path decided in SLD_RESOURCES {
      * @see org.sola.clients.geotools.ui.layers.SolaFeatureLayer}.
      * @return
      */
@@ -577,9 +603,8 @@ public class Map extends JMapPane {
      * @param layerName layer name
      * @param layerTitle layer title
      * @param geometryType geometry type for this layer
-     * @param styleResource the resource name .xml in the location of resources
-     * for layer styles. This resource location is added in the path decided in
-     * SLD_RESOURCES {
+     * @param styleResource the resource name .xml in the location of resources for layer styles.
+     * This resource location is added in the path decided in SLD_RESOURCES {
      * @see org.sola.clients.geotools.ui.layers.SolaFeatureLayer}.
      * @return
      */
@@ -619,8 +644,8 @@ public class Map extends JMapPane {
     }
 
     /**
-     * It adds a tool in the map. The tool adds also an action in the toolbar
-     * which can activate the tool
+     * It adds a tool in the map. The tool adds also an action in the toolbar which can activate the
+     * tool
      *
      * @param tool the tool
      * @param inToolbar the toolbar
@@ -658,8 +683,8 @@ public class Map extends JMapPane {
     }
 
     /**
-     * Gets the map action which is used in one of the buttons added in the
-     * toolbar associated with the map.
+     * Gets the map action which is used in one of the buttons added in the toolbar associated with
+     * the map.
      *
      * @param actionName The action name
      * @return The action if found or null
@@ -743,8 +768,7 @@ public class Map extends JMapPane {
     }
 
     /**
-     * It overrides the default behavior of drawLayers by resetting always the
-     * labelcache.
+     * It overrides the default behavior of drawLayers by resetting always the labelcache.
      *
      * @param createNewImage
      */
@@ -755,8 +779,8 @@ public class Map extends JMapPane {
     }
 
     /**
-     * It overrides the default behavior of the JMapPane of geotools by trying
-     * to maintain the extent of the map while resizing.
+     * It overrides the default behavior of the JMapPane of geotools by trying to maintain the
+     * extent of the map while resizing.
      */
     @Override
     protected void setForNewSize() {
@@ -767,9 +791,8 @@ public class Map extends JMapPane {
     }
 
     /**
-     * Overrides the default behavior of layerChanged. The repaint() is
-     * commented so when the layer is changed and the map is refreshed the image
-     * is not reseted completely.
+     * Overrides the default behavior of layerChanged. The repaint() is commented so when the layer
+     * is changed and the map is refreshed the image is not reseted completely.
      */
     @Override
     public void layerChanged(MapLayerListEvent event) {
@@ -794,8 +817,8 @@ public class Map extends JMapPane {
     }
 
     /**
-     * Overrides the default behavior of onImageMoved. The repaint() is
-     * commented so while panning the image is not reseted completely.
+     * Overrides the default behavior of onImageMoved. The repaint() is commented so while panning
+     * the image is not reseted completely.
      */
     @Override
     protected void onImageMoved() {
@@ -816,9 +839,9 @@ public class Map extends JMapPane {
     }
 
     /**
-     * Initializes the selection layer on the map control. This method should be
-     * called after all map layers have been added to ensure the selection layer
-     * appears on top of the other SOLA layers.
+     * Initializes the selection layer on the map control. This method should be called after all
+     * map layers have been added to ensure the selection layer appears on top of the other SOLA
+     * layers.
      */
     public void initializeSelectionLayer() {
         try {

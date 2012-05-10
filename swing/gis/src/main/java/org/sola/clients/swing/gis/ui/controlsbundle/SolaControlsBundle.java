@@ -130,15 +130,18 @@ public abstract class SolaControlsBundle extends ControlsBundle {
             String[] layerNameList = configMapLayer.getWmsLayers().split(";");
             java.util.Collections.addAll(wmsLayerNames, layerNameList);
             this.getMap().addLayerWMS(
-                    configMapLayer.getId(), configMapLayer.getTitle(), wmsServerURL, wmsLayerNames);
+                    configMapLayer.getId(), configMapLayer.getTitle(), wmsServerURL, wmsLayerNames,
+                    configMapLayer.isVisible());
         } else if (configMapLayer.getTypeCode().equals("shape")) {
             this.getMap().addLayerShapefile(
                     configMapLayer.getId(),
                     configMapLayer.getTitle(),
                     configMapLayer.getShapeLocation(),
-                    configMapLayer.getStyle());
+                    configMapLayer.getStyle(),
+                    configMapLayer.isVisible());
         } else if (configMapLayer.getTypeCode().equals("pojo")) {
-            ExtendedLayer layer = new PojoLayer(configMapLayer.getId(), this.pojoDataAccess);
+            ExtendedLayer layer = new PojoLayer(configMapLayer.getId(), this.pojoDataAccess, 
+                    configMapLayer.isVisible());
             this.getMap().addLayer(layer);
         }
     }
