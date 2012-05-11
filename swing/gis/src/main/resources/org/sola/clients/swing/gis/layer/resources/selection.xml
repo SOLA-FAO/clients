@@ -22,7 +22,7 @@
             <sld:PointSymbolizer>
                 <sld:Graphic>
                     <sld:Mark>
-                        <sld:WellKnownName>cross</sld:WellKnownName>
+                        <sld:WellKnownName>circle</sld:WellKnownName>
                         <sld:Fill>
                             <sld:CssParameter name="fill">#FFFF00</sld:CssParameter>
                         </sld:Fill>
@@ -30,8 +30,7 @@
                             <sld:CssParameter name="stroke">#FFFF00</sld:CssParameter>
                         </sld:Stroke>
                     </sld:Mark>
-                    <sld:Size>8.0</sld:Size>
-                    <sld:Rotation>45.0</sld:Rotation>
+                    <sld:Size>10.0</sld:Size>
                 </sld:Graphic>
             </sld:PointSymbolizer>
         </sld:Rule>

@@ -24,12 +24,14 @@
  * *********************************************************************************************
  */
 package org.sola.clients.swing.gis.beans;
+
 /**
- * Bean used for the result in the Spatial Object Search Result list. Provides a customized
- * toString method for display in the list control.  
+ * Bean used for the result in the Spatial Object Search Result list. Provides a customized toString
+ * method for display in the list control.
+ *
  * @author soladev
  */
-public class SpatialSearchResultBean {
+public class SpatialSearchResultBean implements Comparable {
 
     private String id;
     private String label;
@@ -67,5 +69,12 @@ public class SpatialSearchResultBean {
     public String toString() {
         return getLabel();
     }
-}
 
+    /**
+     * Can be used to sort the Spatial Result List 
+     */
+    @Override
+    public int compareTo(Object compareObj) {
+        return this.toString().compareTo(compareObj.toString());
+    }
+}

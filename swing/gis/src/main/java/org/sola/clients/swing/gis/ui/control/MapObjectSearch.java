@@ -31,6 +31,8 @@ package org.sola.clients.swing.gis.ui.control;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.ParseException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import org.geotools.geometry.jts.JTS;
@@ -95,12 +97,23 @@ public class MapObjectSearch extends FreeTextSearch {
         List<SpatialSearchResultTO> searchResults =
                 this.dataSource.searchSpatialObjects(this.searchByObject.getQueryName(), searchString);
 
-        //Display the results in the result list
         listModel.clear();
-        for (SpatialSearchResultTO searchResult : searchResults) {
-            listModel.addElement(MappingManager.getMapper().map(searchResult,
-                    SpatialSearchResultBean.class));
+        
+        if (searchResults != null && searchResults.size() > 0) {
+            // Convert the TOs to Beans
+            List<SpatialSearchResultBean> beanList = new ArrayList<SpatialSearchResultBean>();
+            for (SpatialSearchResultTO searchResult : searchResults) {
+                beanList.add(MappingManager.getMapper().map(searchResult,
+                        SpatialSearchResultBean.class));
+
+            }   
+            // Sort the beans and then display them in the list. 
+            Collections.sort(beanList);
+            for (SpatialSearchResultBean bean : beanList) {
+                listModel.addElement(bean); 
+            }
         }
+        
 
     }
 
@@ -124,7 +137,7 @@ public class MapObjectSearch extends FreeTextSearch {
 
             // Zoom to map to the object
             ReferencedEnvelope boundsToZoom = JTS.toEnvelope(geom);
-            boundsToZoom.expandBy(10);
+            boundsToZoom.expandBy(this.searchByObject.getZoomInBuffer().doubleValue());
             this.map.setDisplayArea(boundsToZoom);
         } catch (ParseException ex) {
             Messaging.getInstance().show(GisMessage.LEFT_PANEL_FIND_ERROR);
@@ -140,6 +153,9 @@ public class MapObjectSearch extends FreeTextSearch {
      */
     public void setSearchByObject(SpatialSearchOptionBean searchByObject) {
         this.searchByObject = searchByObject;
+        if (searchByObject != null) {
+            this.setMinimalSearchStringLength(searchByObject.getMinSearchStrLen());
+        }
     }
 
     /**

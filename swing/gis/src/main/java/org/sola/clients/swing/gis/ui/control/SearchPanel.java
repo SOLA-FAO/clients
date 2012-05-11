@@ -79,6 +79,9 @@ public class SearchPanel extends javax.swing.JPanel {
 
 //    LABELS    
         LafManager.getInstance().setLabProperties(jLabel1);
+        
+        //  BUTTONS    
+        LafManager.getInstance().setBtnProperties(btnClearSelection);
     }
 
     /**
