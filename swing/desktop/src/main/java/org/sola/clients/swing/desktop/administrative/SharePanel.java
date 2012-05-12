@@ -60,6 +60,7 @@ public class SharePanel extends ContentPanel {
             }
         }
     }
+    
     private RrrBean.RRR_ACTION rrrAction;
     public static final String UPDATED_RRR_SHARE = "updatedRrrShare";
 
@@ -171,6 +172,29 @@ public class SharePanel extends ContentPanel {
             return saveRrrShare();
         }
         return true;
+    }
+    
+    private void viewOwner() {
+        if (rrrShareBean.getSelectedRightHolder() != null) {
+            openRightHolderForm(rrrShareBean.getSelectedRightHolder(), true);
+        }
+    }
+
+    private void removeOwner() {
+        if (rrrShareBean.getSelectedRightHolder() != null
+                && MessageUtility.displayMessage(ClientMessage.CONFIRM_DELETE_RECORD) == MessageUtility.BUTTON_ONE) {
+            rrrShareBean.removeSelectedRightHolder();
+        }
+    }
+
+    private void addOwner() {
+        openRightHolderForm(null, false);
+    }
+
+    private void editOwner() {
+        if (rrrShareBean.getSelectedRightHolder() != null) {
+            openRightHolderForm(rrrShareBean.getSelectedRightHolder(), false);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -441,28 +465,6 @@ public class SharePanel extends ContentPanel {
         viewOwner();
     }//GEN-LAST:event_menuViewOwnerActionPerformed
 
-    private void viewOwner() {
-        if (rrrShareBean.getSelectedRightHolder() != null) {
-            openRightHolderForm(rrrShareBean.getSelectedRightHolder(), true);
-        }
-    }
-
-    private void removeOwner() {
-        if (rrrShareBean.getSelectedRightHolder() != null
-                && MessageUtility.displayMessage(ClientMessage.CONFIRM_DELETE_RECORD) == MessageUtility.BUTTON_ONE) {
-            rrrShareBean.removeSelectedRightHolder();
-        }
-    }
-
-    private void addOwner() {
-        openRightHolderForm(null, false);
-    }
-
-    private void editOwner() {
-        if (rrrShareBean.getSelectedRightHolder() != null) {
-            openRightHolderForm(rrrShareBean.getSelectedRightHolder(), false);
-        }
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddOwner;
     private javax.swing.JButton btnEditOwner;

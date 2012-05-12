@@ -126,7 +126,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="txtNotationText" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="jPanel4" pref="245" max="32767" attributes="0"/>
+              <Component id="jPanel4" pref="269" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -333,7 +333,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jToolBar1" min="-2" pref="25" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane1" pref="61" max="32767" attributes="0"/>
+                      <Component id="jScrollPane1" pref="73" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -494,7 +494,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="groupPanel2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="documentsPanel" pref="92" max="32767" attributes="0"/>
+                      <Component id="documentsPanel" pref="104" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>

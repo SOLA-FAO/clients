@@ -39,6 +39,7 @@ import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractTransactionedBean;
 import org.sola.clients.beans.administrative.validation.MortgageValidationGroup;
 import org.sola.clients.beans.administrative.validation.OwnershipValidationGroup;
+import org.sola.clients.beans.administrative.validation.SimpleOwnershipValidationGroup;
 import org.sola.clients.beans.administrative.validation.TotalShareSize;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.controls.SolaList;
@@ -67,6 +68,25 @@ public class RrrBean extends AbstractTransactionedBean {
     public static final String CODE_APARTMENT = "apartment";
     public static final String CODE_STATE_OWNERSHIP = "stateOwnership";
     public static final String CODE_MORTGAGE = "mortgage";
+    
+    public static final String CODE_AGRI_ACTIVITY = "agriActivity";
+    public static final String CODE_COMMON_OWNERSHIP = "commonOwnership";
+    public static final String CODE_CUSTOMARY_TYPE = "customaryType";
+    public static final String CODE_FIREWOOD = "firewood";
+    public static final String CODE_FISHING = "fishing";
+    public static final String CODE_GRAZING = "grazing";
+    public static final String CODE_LEASE = "lease";
+    public static final String CODE_OCCUPATION = "occupation";
+    public static final String CODE_OWNERSHIP_ASSUMED = "ownershipAssumed";
+    public static final String CODE_SUPERFICIES = "superficies";
+    public static final String CODE_TENANCY = "tenancy";
+    public static final String CODE_USUFRUCT = "usufruct";
+    public static final String CODE_WATERRIGHTS = "waterrights";
+    public static final String CODE_ADMIN_PUBLIC_SERVITUDE = "adminPublicServitude";
+    public static final String CODE_MONUMENT = "monument";
+    public static final String CODE_LIFE_ESTATE = "lifeEstate";
+    public static final String CODE_CAVEAT = "caveat";
+    
     public static final String BA_UNIT_ID_PROPERTY = "baUnitId";
     public static final String TYPE_CODE_PROPERTY = "typeCode";
     public static final String RRR_TYPE_PROPERTY = "rrrType";
@@ -82,6 +102,7 @@ public class RrrBean extends AbstractTransactionedBean {
     public static final String FIRST_RIGHTHOLDER_PROPERTY = "firstRightholder";
     public static final String SELECTED_SHARE_PROPERTY = "selectedShare";
     public static final String SELECTED_PROPERTY = "selected";
+    public static final String SELECTED_RIGHTHOLDER_PROPERTY = "selectedRightHolder";
     
     private String baUnitId;
     private String nr;
@@ -110,6 +131,7 @@ public class RrrBean extends AbstractTransactionedBean {
     private SolaList<PartySummaryBean> rightHolderList;
     private transient RrrShareBean selectedShare;
     private transient boolean selected;
+    private transient PartySummaryBean selectedRightholder;
 
     public RrrBean() {
         super();
@@ -324,6 +346,15 @@ public class RrrBean extends AbstractTransactionedBean {
         }
     }
 
+    public PartySummaryBean getSelectedRightHolder() {
+        return selectedRightholder;
+    }
+
+    public void setSelectedRightHolder(PartySummaryBean selectedRightholder) {
+        this.selectedRightholder = selectedRightholder;
+        propertySupport.firePropertyChange(SELECTED_RIGHTHOLDER_PROPERTY, null, this.selectedRightholder);
+    }
+
     public SolaList<PartySummaryBean> getRightHolderList() {
         return rightHolderList;
     }
@@ -333,6 +364,11 @@ public class RrrBean extends AbstractTransactionedBean {
         return rightHolderList.getFilteredList();
     }
 
+    @Size(min = 1, groups = {SimpleOwnershipValidationGroup.class}, message = ClientMessage.CHECK_SIZE_OWNERSLIST, payload = Localized.class)
+    private ObservableList<PartySummaryBean> getFilteredOwnersList() {
+        return rightHolderList.getFilteredList();
+    }
+    
     public void setRightHolderList(SolaList<PartySummaryBean> rightHolderList) {
         this.rightHolderList = rightHolderList;
     }
@@ -357,6 +393,22 @@ public class RrrBean extends AbstractTransactionedBean {
         propertySupport.firePropertyChange(SELECTED_PROPERTY, oldValue, this.selected);
     }
 
+    public void removeSelectedRightHolder(){
+        if(selectedRightholder!=null){
+            getRightHolderList().safeRemove(selectedRightholder, EntityAction.DISASSOCIATE);
+        }
+    }
+    
+    public void addOrUpdateRightholder(PartySummaryBean rightholder) {
+        if (rightholder != null && rightHolderList != null) {
+            if (rightHolderList.contains(rightholder)) {
+                rightHolderList.set(rightHolderList.indexOf(rightholder), rightholder);
+            } else {
+                rightHolderList.addAsNew(rightholder);
+            }
+        }
+    }
+    
     public RrrBean makeCopyByAction(RRR_ACTION rrrAction) {
         RrrBean copy = this;
 
