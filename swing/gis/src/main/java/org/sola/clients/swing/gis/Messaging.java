@@ -55,7 +55,7 @@ public class Messaging extends org.geotools.swing.extended.util.Messaging {
     @Override
     public void show(String messageCode, Object... args) {
         String msgSolaCode = this.getSolaMessageCode(messageCode);
-        MessageUtility.displayMessage(messageCode, args);
+        MessageUtility.displayMessage(msgSolaCode, args);
     }
 
     @Override
