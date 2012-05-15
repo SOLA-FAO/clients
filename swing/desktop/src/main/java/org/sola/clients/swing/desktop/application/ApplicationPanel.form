@@ -1153,7 +1153,10 @@
                       <SubComponents>
                         <Container class="javax.swing.JPanel" name="jPanel24">
                           <Properties>
+                            <Property name="enabled" type="boolean" value="false"/>
+                            <Property name="focusable" type="boolean" value="false"/>
                             <Property name="name" type="java.lang.String" value="jPanel24" noResource="true"/>
+                            <Property name="requestFocusEnabled" type="boolean" value="false"/>
                           </Properties>
 
                           <Layout>
@@ -1189,7 +1192,10 @@
                             <Component class="javax.swing.JTextField" name="txtAppNumber">
                               <Properties>
                                 <Property name="editable" type="boolean" value="false"/>
+                                <Property name="enabled" type="boolean" value="false"/>
+                                <Property name="focusable" type="boolean" value="false"/>
                                 <Property name="name" type="java.lang.String" value="txtAppNumber" noResource="true"/>
+                                <Property name="requestFocusEnabled" type="boolean" value="false"/>
                               </Properties>
                               <BindingProperties>
                                 <BindingProperty name="text" source="appBean" sourcePath="${nr}" target="txtAppNumber" targetPath="text" updateStrategy="0" immediately="false">
@@ -1201,7 +1207,10 @@
                         </Container>
                         <Container class="javax.swing.JPanel" name="jPanel13">
                           <Properties>
+                            <Property name="enabled" type="boolean" value="false"/>
+                            <Property name="focusable" type="boolean" value="false"/>
                             <Property name="name" type="java.lang.String" value="jPanel13" noResource="true"/>
+                            <Property name="requestFocusEnabled" type="boolean" value="false"/>
                           </Properties>
 
                           <Layout>
@@ -1238,7 +1247,10 @@
                             <Component class="javax.swing.JTextField" name="txtDate">
                               <Properties>
                                 <Property name="editable" type="boolean" value="false"/>
+                                <Property name="enabled" type="boolean" value="false"/>
+                                <Property name="focusable" type="boolean" value="false"/>
                                 <Property name="name" type="java.lang.String" value="txtDate" noResource="true"/>
+                                <Property name="requestFocusEnabled" type="boolean" value="false"/>
                               </Properties>
                               <BindingProperties>
                                 <BindingProperty name="text" source="appBean" sourcePath="${lodgingDatetime}" target="txtDate" targetPath="text" updateStrategy="0" immediately="false">
@@ -1256,7 +1268,10 @@
                         </Container>
                         <Container class="javax.swing.JPanel" name="jPanel26">
                           <Properties>
+                            <Property name="enabled" type="boolean" value="false"/>
+                            <Property name="focusable" type="boolean" value="false"/>
                             <Property name="name" type="java.lang.String" value="jPanel26" noResource="true"/>
+                            <Property name="requestFocusEnabled" type="boolean" value="false"/>
                           </Properties>
 
                           <Layout>
@@ -1292,7 +1307,10 @@
                             <Component class="javax.swing.JTextField" name="txtCompleteBy">
                               <Properties>
                                 <Property name="editable" type="boolean" value="false"/>
+                                <Property name="enabled" type="boolean" value="false"/>
+                                <Property name="focusable" type="boolean" value="false"/>
                                 <Property name="name" type="java.lang.String" value="txtCompleteBy" noResource="true"/>
+                                <Property name="requestFocusEnabled" type="boolean" value="false"/>
                               </Properties>
                               <BindingProperties>
                                 <BindingProperty name="text" source="appBean" sourcePath="${expectedCompletionDate}" target="txtCompleteBy" targetPath="text" updateStrategy="0" immediately="false">

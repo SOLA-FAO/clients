@@ -1659,13 +1659,19 @@ public class ApplicationPanel extends ContentPanel {
         jPanel25.setName("jPanel25"); // NOI18N
         jPanel25.setLayout(new java.awt.GridLayout(1, 3, 15, 0));
 
+        jPanel24.setEnabled(false);
+        jPanel24.setFocusable(false);
         jPanel24.setName("jPanel24"); // NOI18N
+        jPanel24.setRequestFocusEnabled(false);
 
         jLabel1.setText(bundle.getString("ApplicationPanel.jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
 
         txtAppNumber.setEditable(false);
+        txtAppNumber.setEnabled(false);
+        txtAppNumber.setFocusable(false);
         txtAppNumber.setName("txtAppNumber"); // NOI18N
+        txtAppNumber.setRequestFocusEnabled(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, appBean, org.jdesktop.beansbinding.ELProperty.create("${nr}"), txtAppNumber, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
@@ -1690,14 +1696,20 @@ public class ApplicationPanel extends ContentPanel {
 
         jPanel25.add(jPanel24);
 
+        jPanel13.setEnabled(false);
+        jPanel13.setFocusable(false);
         jPanel13.setName("jPanel13"); // NOI18N
+        jPanel13.setRequestFocusEnabled(false);
 
         LafManager.getInstance().setLabProperties(labDate);
         labDate.setText(bundle.getString("ApplicationPanel.labDate.text")); // NOI18N
         labDate.setName("labDate"); // NOI18N
 
         txtDate.setEditable(false);
+        txtDate.setEnabled(false);
+        txtDate.setFocusable(false);
         txtDate.setName("txtDate"); // NOI18N
+        txtDate.setRequestFocusEnabled(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, appBean, org.jdesktop.beansbinding.ELProperty.create("${lodgingDatetime}"), txtDate, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setConverter(new DateConverter());
@@ -1726,13 +1738,19 @@ public class ApplicationPanel extends ContentPanel {
 
         jPanel25.add(jPanel13);
 
+        jPanel26.setEnabled(false);
+        jPanel26.setFocusable(false);
         jPanel26.setName("jPanel26"); // NOI18N
+        jPanel26.setRequestFocusEnabled(false);
 
         jLabel2.setText(bundle.getString("ApplicationPanel.jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
 
         txtCompleteBy.setEditable(false);
+        txtCompleteBy.setEnabled(false);
+        txtCompleteBy.setFocusable(false);
         txtCompleteBy.setName("txtCompleteBy"); // NOI18N
+        txtCompleteBy.setRequestFocusEnabled(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, appBean, org.jdesktop.beansbinding.ELProperty.create("${expectedCompletionDate}"), txtCompleteBy, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setConverter(new DateConverter());
