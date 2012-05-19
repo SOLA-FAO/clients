@@ -471,6 +471,17 @@ public class ApplicationBean extends ApplicationSummaryBean {
     public void addService(RequestTypeBean requestTypeBean) {
         if (requestTypeBean != null && serviceList != null) {
             int order = 0;
+              for (Iterator<ApplicationServiceBean> it = serviceList.iterator(); it.hasNext();) {
+                    ApplicationServiceBean appService = it.next();
+                    System.out.println("appService.getRequestTypeCode() " + appService.getRequestTypeCode());
+
+                    if (requestTypeBean.getCode().equals(appService.getRequestTypeCode())) {
+                        MessageUtility.displayMessage(ClientMessage.APPLICATION_ALREADYSELECTED_SERVICE);
+                        return;
+                    }
+                }
+            
+            
             for (Iterator<ApplicationServiceBean> it = serviceList.iterator(); it.hasNext();) {
                 ApplicationServiceBean applicationServiceBean = it.next();
                 if (applicationServiceBean.getServiceOrder() > order) {
