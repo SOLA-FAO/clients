@@ -348,6 +348,7 @@ public class ApplicationBean extends ApplicationSummaryBean {
 
     public void setContactPerson(PartyBean value) {
         contactPerson = value;
+        contactPerson.setEmail(value.getEmail());
         propertySupport.firePropertyChange(CONTACT_PERSON_PROPERTY, null, value);
     }
 
@@ -471,15 +472,19 @@ public class ApplicationBean extends ApplicationSummaryBean {
     public void addService(RequestTypeBean requestTypeBean) {
         if (requestTypeBean != null && serviceList != null) {
             int order = 0;
-              for (Iterator<ApplicationServiceBean> it = serviceList.iterator(); it.hasNext();) {
-                    ApplicationServiceBean appService = it.next();
-                    System.out.println("appService.getRequestTypeCode() " + appService.getRequestTypeCode());
 
-                    if (requestTypeBean.getCode().equals(appService.getRequestTypeCode())) {
-                        MessageUtility.displayMessage(ClientMessage.APPLICATION_ALREADYSELECTED_SERVICE);
-                        return;
-                    }
-                }
+//             bug #122 (The same service can be added multiple times)is not a bug,  
+//             it was restricted before to duplicate services,
+//             but later we found that sometimes it is needed to have duplications (it could be more than 1service with the same name).
+//               for (Iterator<ApplicationServiceBean> it = serviceList.iterator(); it.hasNext();) {
+//                    ApplicationServiceBean appService = it.next();
+//                    System.out.println("appService.getRequestTypeCode() " + appService.getRequestTypeCode());
+//
+//                    if (requestTypeBean.getCode().equals(appService.getRequestTypeCode())) {
+//                        MessageUtility.displayMessage(ClientMessage.APPLICATION_ALREADYSELECTED_SERVICE);
+//                        return;
+//                    }
+//                }
             
             
             for (Iterator<ApplicationServiceBean> it = serviceList.iterator(); it.hasNext();) {
