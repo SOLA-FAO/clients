@@ -1,4 +1,4 @@
-<?xml version="1.1" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <NonVisualComponents>
@@ -31,7 +31,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="tabPanels" pref="601" max="32767" attributes="0"/>
+              <Component id="tabPanels" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -40,7 +40,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="tabPanels" pref="391" max="32767" attributes="0"/>
+              <Component id="tabPanels" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -581,11 +581,8 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Component id="labAgents" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="99" max="32767" attributes="0"/>
-                          </Group>
                           <Component id="txtAgent" alignment="0" pref="132" max="32767" attributes="1"/>
+                          <Component id="labAgents" alignment="0" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
@@ -636,11 +633,8 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="labStatus" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="97" max="32767" attributes="0"/>
-                          </Group>
                           <Component id="txtStatus" alignment="0" pref="132" max="32767" attributes="1"/>
+                          <Component id="labStatus" alignment="0" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
@@ -691,11 +685,8 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="txtLodgementDate" alignment="0" pref="132" max="32767" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="labLodgedDate" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="50" max="32767" attributes="0"/>
-                          </Group>
+                          <Component id="labLodgedDate" pref="132" max="32767" attributes="0"/>
+                          <Component id="txtLodgementDate" alignment="0" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
@@ -718,26 +709,25 @@
                         <Property name="name" type="java.lang.String" value="labLodgedDate" noResource="true"/>
                       </Properties>
                     </Component>
-                    <Component class="javax.swing.JTextField" name="txtLodgementDate">
+                    <Component class="javax.swing.JFormattedTextField" name="txtLodgementDate">
                       <Properties>
                         <Property name="editable" type="boolean" value="false"/>
+                        <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
+                          <Format subtype="0" type="1"/>
+                        </Property>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/sola/clients/swing/ui/application/Bundle.properties" key="ApplicationDetailsPanel.txtLodgementDate.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                         <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="0" green="0" red="0" type="rgb"/>
                         </Property>
-                        <Property name="name" type="java.lang.String" value="txtLodgementDate" noResource="true"/>
+                        <Property name="name" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/sola/clients/swing/ui/application/Bundle.properties" key="ApplicationDetailsPanel.txtLodgementDate.name" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                       </Properties>
                       <BindingProperties>
-                        <BindingProperty name="text" source="appBean" sourcePath="${lodgingDatetime}" target="txtLodgementDate" targetPath="text" updateStrategy="0" immediately="false">
-                          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-                          <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                            <Connection code="new DateConverter()" type="code"/>
-                          </Property>
-                        </BindingProperty>
+                        <BindingProperty name="value" source="appBean" sourcePath="${lodgingDatetime}" target="txtLodgementDate" targetPath="value" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
-                      <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="txtLodgementDate.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));&#xa;txtLodgementDate.setHorizontalAlignment(JTextField.LEADING);"/>
-                        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="txtLodgementDate.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 12)); // NOI18N"/>
-                      </AuxValues>
                     </Component>
                   </SubComponents>
                 </Container>
@@ -749,11 +739,8 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Component id="labLodgedDate1" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="68" max="32767" attributes="0"/>
-                          </Group>
-                          <Component id="txtCompleteDate" alignment="0" pref="132" max="32767" attributes="0"/>
+                          <Component id="txtCompleteDate" alignment="0" max="32767" attributes="0"/>
+                          <Component id="labLodgedDate1" alignment="0" pref="132" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
@@ -776,26 +763,22 @@
                         <Property name="name" type="java.lang.String" value="labLodgedDate1" noResource="true"/>
                       </Properties>
                     </Component>
-                    <Component class="javax.swing.JTextField" name="txtCompleteDate">
+                    <Component class="javax.swing.JFormattedTextField" name="txtCompleteDate">
                       <Properties>
                         <Property name="editable" type="boolean" value="false"/>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/sola/clients/swing/ui/application/Bundle.properties" key="ApplicationDetailsPanel.txtCompleteDate.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                         <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="0" green="0" red="0" type="rgb"/>
                         </Property>
-                        <Property name="name" type="java.lang.String" value="txtCompleteDate" noResource="true"/>
+                        <Property name="name" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/sola/clients/swing/ui/application/Bundle.properties" key="ApplicationDetailsPanel.txtCompleteDate.name" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                       </Properties>
                       <BindingProperties>
-                        <BindingProperty name="text" source="appBean" sourcePath="${expectedCompletionDate}" target="txtCompleteDate" targetPath="text" updateStrategy="0" immediately="false">
-                          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-                          <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                            <Connection code="new DateConverter()" type="code"/>
-                          </Property>
-                        </BindingProperty>
+                        <BindingProperty name="value" source="appBean" sourcePath="${expectedCompletionDate}" target="txtCompleteDate" targetPath="value" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
-                      <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="txtCompleteDate.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));&#xa;txtCompleteDate.setHorizontalAlignment(JTextField.LEADING);"/>
-                        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="txtCompleteDate.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 12)); // NOI18N"/>
-                      </AuxValues>
                     </Component>
                   </SubComponents>
                 </Container>

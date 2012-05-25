@@ -132,10 +132,10 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
         labStatus = new javax.swing.JLabel();
         jPanel12 = new javax.swing.JPanel();
         labLodgedDate = new javax.swing.JLabel();
-        txtLodgementDate = new javax.swing.JTextField();
+        txtLodgementDate = new javax.swing.JFormattedTextField();
         jPanel13 = new javax.swing.JPanel();
         labLodgedDate1 = new javax.swing.JLabel();
-        txtCompleteDate = new javax.swing.JTextField();
+        txtCompleteDate = new javax.swing.JFormattedTextField();
         groupPanel1 = new org.sola.clients.swing.ui.GroupPanel();
         labAppNr = new javax.swing.JLabel();
         labTxtAppNr = new javax.swing.JLabel();
@@ -167,7 +167,7 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
         setName("Form"); // NOI18N
 
         txtId.setEditable(false);
-        txtId.setFont(new java.awt.Font("Tahoma", 0, 3));
+        txtId.setFont(new java.awt.Font("Tahoma", 0, 3)); // NOI18N
         txtId.setForeground(new java.awt.Color(240, 240, 240));
         txtId.setBorder(null);
         txtId.setCaretColor(new java.awt.Color(240, 240, 240));
@@ -465,10 +465,8 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
         jPanel11.setLayout(jPanel11Layout);
         jPanel11Layout.setHorizontalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel11Layout.createSequentialGroup()
-                .addComponent(labAgents)
-                .addContainerGap(99, Short.MAX_VALUE))
             .addComponent(txtAgent, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+            .addComponent(labAgents, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -501,10 +499,8 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel10Layout.createSequentialGroup()
-                .addComponent(labStatus)
-                .addContainerGap(97, Short.MAX_VALUE))
             .addComponent(txtStatus, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+            .addComponent(labStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -522,26 +518,21 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
         labLodgedDate.setText(bundle.getString("ApplicationDetailsPanel.labLodgedDate.text")); // NOI18N
         labLodgedDate.setName("labLodgedDate"); // NOI18N
 
-        txtLodgementDate.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtLodgementDate.setEditable(false);
+        txtLodgementDate.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter()));
+        txtLodgementDate.setText(bundle.getString("ApplicationDetailsPanel.txtLodgementDate.text")); // NOI18N
         txtLodgementDate.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        txtLodgementDate.setName("txtLodgementDate"); // NOI18N
+        txtLodgementDate.setName(bundle.getString("ApplicationDetailsPanel.txtLodgementDate.name")); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, appBean, org.jdesktop.beansbinding.ELProperty.create("${lodgingDatetime}"), txtLodgementDate, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setConverter(new DateConverter());
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, appBean, org.jdesktop.beansbinding.ELProperty.create("${lodgingDatetime}"), txtLodgementDate, org.jdesktop.beansbinding.BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
-
-        txtLodgementDate.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-        txtLodgementDate.setHorizontalAlignment(JTextField.LEADING);
 
         javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
         jPanel12.setLayout(jPanel12Layout);
         jPanel12Layout.setHorizontalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(txtLodgementDate, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
-            .addGroup(jPanel12Layout.createSequentialGroup()
-                .addComponent(labLodgedDate)
-                .addContainerGap(50, Short.MAX_VALUE))
+            .addComponent(labLodgedDate, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+            .addComponent(txtLodgementDate)
         );
         jPanel12Layout.setVerticalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -559,26 +550,20 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
         labLodgedDate1.setText(bundle.getString("ApplicationDetailsPanel.labLodgedDate1.text")); // NOI18N
         labLodgedDate1.setName("labLodgedDate1"); // NOI18N
 
-        txtCompleteDate.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtCompleteDate.setEditable(false);
+        txtCompleteDate.setText(bundle.getString("ApplicationDetailsPanel.txtCompleteDate.text")); // NOI18N
         txtCompleteDate.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        txtCompleteDate.setName("txtCompleteDate"); // NOI18N
+        txtCompleteDate.setName(bundle.getString("ApplicationDetailsPanel.txtCompleteDate.name")); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, appBean, org.jdesktop.beansbinding.ELProperty.create("${expectedCompletionDate}"), txtCompleteDate, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setConverter(new DateConverter());
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, appBean, org.jdesktop.beansbinding.ELProperty.create("${expectedCompletionDate}"), txtCompleteDate, org.jdesktop.beansbinding.BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
-
-        txtCompleteDate.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-        txtCompleteDate.setHorizontalAlignment(JTextField.LEADING);
 
         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
         jPanel13.setLayout(jPanel13Layout);
         jPanel13Layout.setHorizontalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel13Layout.createSequentialGroup()
-                .addComponent(labLodgedDate1)
-                .addContainerGap(68, Short.MAX_VALUE))
-            .addComponent(txtCompleteDate, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+            .addComponent(txtCompleteDate)
+            .addComponent(labLodgedDate1, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
         );
         jPanel13Layout.setVerticalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1032,14 +1017,14 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tabPanels, javax.swing.GroupLayout.DEFAULT_SIZE, 601, Short.MAX_VALUE)
+                .addComponent(tabPanels)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tabPanels, javax.swing.GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE)
+                .addComponent(tabPanels)
                 .addContainerGap())
         );
 
@@ -1116,13 +1101,13 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
     private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tabPropertyDetails;
     private javax.swing.JTextField txtAddress;
     private javax.swing.JTextField txtAgent;
-    private javax.swing.JTextField txtCompleteDate;
+    private javax.swing.JFormattedTextField txtCompleteDate;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtFax;
     private javax.swing.JTextField txtFirstName;
     private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtLastName;
-    private javax.swing.JTextField txtLodgementDate;
+    private javax.swing.JFormattedTextField txtLodgementDate;
     private javax.swing.JTextField txtPhone;
     private javax.swing.JTextField txtPreferredWay;
     private javax.swing.JTextField txtStatus;
