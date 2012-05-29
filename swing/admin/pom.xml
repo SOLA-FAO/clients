@@ -48,4 +48,55 @@
             <type>jar</type>
         </dependency>
     </dependencies>
+    <profiles>
+        <profile>
+            <!-- This profile packages the SOLA Desktop dependencies in a lib directory and
+            sets the classpath in sola-desktop jar. The output can be run independently of the 
+            Netbeans environment. -->
+            <id>Runnable</id>
+            <build>
+                <plugins>           
+                    <plugin>
+                <!-- Copies all of the external sola-desktop dependencies to the lib directory --> 
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <version>2.3</version>
+                        <executions>
+                            <execution>
+                                <id>copy-dependencies</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>copy-dependencies</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                                    <overWriteReleases>false</overWriteReleases>
+                                    <overWriteSnapshots>false</overWriteSnapshots>
+                                    <overWriteIfNewer>true</overWriteIfNewer>
+                                    <stripVersion>false</stripVersion>
+                                    <outputAbsoluteArtifactFilename>true</outputAbsoluteArtifactFilename>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                <!-- Configures the manifest for the sola-desktop.jar including a 
+                classpath entry for all lib jars. -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <version>2.3.1</version>
+                        <configuration>
+                            <archive>
+                                <manifest>
+                                    <addClasspath>true</addClasspath>
+                                    <classpathPrefix>lib/</classpathPrefix>
+                                    <mainClass>org.sola.clients.swing.admin.AdminApplication</mainClass>
+                                </manifest>
+                            </archive>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

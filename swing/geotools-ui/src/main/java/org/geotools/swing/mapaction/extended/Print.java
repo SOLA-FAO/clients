@@ -35,6 +35,7 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 import org.geotools.swing.extended.Map;
@@ -43,6 +44,8 @@ import org.geotools.swing.extended.exception.PrintLayoutException;
 import org.geotools.swing.extended.util.Messaging;
 import org.geotools.swing.mapaction.extended.print.PrintLayout;
 import org.geotools.swing.mapaction.extended.print.PrintoutGenerator;
+import org.geotools.swing.mapaction.extended.print.TextLayout;
+import org.geotools.swing.mapaction.extended.ui.IPrintUi;
 import org.geotools.swing.mapaction.extended.ui.PrintForm;
 
 /**
@@ -55,7 +58,7 @@ import org.geotools.swing.mapaction.extended.ui.PrintForm;
  */
 public class Print extends ExtendedAction {
 
-    private PrintForm printForm;
+    private IPrintUi printForm;
 
     public Print(Map mapControl) {
         super(mapControl, "print",
@@ -70,7 +73,7 @@ public class Print extends ExtendedAction {
     @Override
     public void onClick() {
         if (this.printForm == null) {
-            this.printForm = new PrintForm();
+            this.printForm = this.getPrintForm();
             try {
                 this.printForm.setPrintLayoutList(this.getPrintLayouts());
             } catch (PrintLayoutException ex) {
@@ -79,18 +82,30 @@ public class Print extends ExtendedAction {
         }
         try {
             this.printForm.setScale(this.getMapControl().getScale().intValue());
-            this.printForm.setVisible(true);
+            this.printForm.setVisibility(true);
             if (this.printForm.getPrintLayout() == null) {
                 return;
             }
             String printLocation = this.print(
-                    this.printForm.getPrintLayout(), this.printForm.getScale());
+                    this.printForm.getPrintLayout(), 
+                    this.printForm.getScale(), 
+                    this.printForm.getExtraFields());
             this.showPrintableDocument(printLocation);
         } catch (MapScaleException ex) {
             Messaging.getInstance().show(Messaging.Ids.PRINT_LAYOUT_GENERATION_ERROR.toString());
         }
     }
 
+    /**
+     * Gets the form that is open when the map action is clicked. 
+     * To get another interface, override this form.
+     * 
+     * @return 
+     */
+    protected IPrintUi getPrintForm(){
+        return new PrintForm();
+    }
+    
     /**
      * Gets the list of available print layouts. The print layouts are defined 
      * in resources/print/layouts.properties.
@@ -123,7 +138,17 @@ public class Print extends ExtendedAction {
      * @param scale The scale
      * @return The path where generated PDF is found
      */
-    protected String print(PrintLayout layout, double scale) {
+    protected String print(
+            PrintLayout layout, double scale, java.util.Map<String, Object> extraFields) {
+        if (extraFields == null){
+            extraFields = new HashMap<String, Object>();
+        }
+        for(TextLayout textLayout:layout.getTextLayouts()){
+            if (extraFields.containsKey(textLayout.getValue())){
+                textLayout.setValue(extraFields.get(textLayout.getValue()).toString());
+            }
+        }
+        
         PrintoutGenerator printoutGenerator = new PrintoutGenerator(this.getMapControl());
         return printoutGenerator.generate(layout, scale);
     }

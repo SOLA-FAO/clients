@@ -33,6 +33,7 @@ package org.sola.clients.swing.gis.mapaction;
 
 import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import org.geotools.swing.extended.Map;
 import org.geotools.swing.mapaction.extended.Print;
 import org.geotools.swing.mapaction.extended.print.PrintLayout;
@@ -80,16 +81,15 @@ public class SolaPrint extends Print {
      * @return 
      */
     @Override
-    protected String print(PrintLayout layout, double scale) {
-        for(TextLayout textLayout:layout.getTextLayouts()){
-            if (textLayout.getValue().equals(FIELD_USER)){
-                textLayout.setValue(SecurityBean.getCurrentUser().getFullUserName());
-            }else if (textLayout.getValue().equals(FIELD_DATE)){
-                textLayout.setValue(
-                        DateFormat.getInstance().format(Calendar.getInstance().getTime()));
-            }
+    protected String print(
+            PrintLayout layout, double scale, java.util.Map<String, Object> extraFields) {
+        if (extraFields == null){
+            extraFields = new HashMap<String, Object>();
         }
-        String printoutLocation = super.print(layout, scale);
+        extraFields.put(FIELD_USER, SecurityBean.getCurrentUser().getFullUserName());
+        extraFields.put(FIELD_DATE, 
+                DateFormat.getInstance().format(Calendar.getInstance().getTime()));
+        String printoutLocation = super.print(layout, scale, extraFields);
         ApplicationServiceBean serviceBean = new ApplicationServiceBean();
         serviceBean.setRequestTypeCode(RequestTypeBean.CODE_CADASTRE_PRINT);
         if (this.applicationId != null){

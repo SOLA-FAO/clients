@@ -38,6 +38,7 @@
 package org.geotools.swing.mapaction.extended.ui;
 
 import java.awt.ComponentOrientation;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import javax.swing.JButton;
@@ -52,7 +53,7 @@ import org.geotools.swing.mapaction.extended.print.PrintLayout;
  * 
  * @author Elton Manoku
  */
-public class PrintForm extends javax.swing.JDialog {
+public class PrintForm extends javax.swing.JDialog implements IPrintUi{
 
     private boolean continueWithPrinting = false;
     private PrintLayout printLayout;
@@ -72,15 +73,18 @@ public class PrintForm extends javax.swing.JDialog {
         this.setModalityType(ModalityType.APPLICATION_MODAL);
     }
 
+    @Override
     public Integer getScale() {
         return scale;
     }
 
+    @Override
     public void setScale(Integer scale) {
         this.scale = scale;
         this.txtScale.setText(this.scale.toString());
     }
 
+    @Override
     public PrintLayout getPrintLayout() {
         return printLayout;
     }
@@ -89,6 +93,7 @@ public class PrintForm extends javax.swing.JDialog {
         return printLayoutList;
     }
 
+    @Override
     public void setPrintLayoutList(List<PrintLayout> printLayoutList) {
         this.printLayoutList = printLayoutList;
         this.cmdLayout.removeAllItems();
@@ -97,10 +102,16 @@ public class PrintForm extends javax.swing.JDialog {
         }
     }
 
-    public boolean isContinueWithPrint() {
-        return continueWithPrinting;
+    @Override
+    public void setVisibility(boolean visible){
+        this.setVisible(visible);
     }
-
+    
+    @Override
+    public java.util.Map<String, Object> getExtraFields(){
+        return new HashMap<String, Object>();
+    }
+    
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
