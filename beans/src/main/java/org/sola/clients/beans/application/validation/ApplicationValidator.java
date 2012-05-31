@@ -27,6 +27,8 @@
  */
 package org.sola.clients.beans.application.validation;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import org.sola.clients.beans.application.ApplicationBean;
@@ -79,8 +81,77 @@ public class ApplicationValidator implements ConstraintValidator<ApplicationChec
                         MessageUtility.getLocalizedMessageText(
                         ClientMessage.CHECK_APP_CONTACT_PERSON_LASTNAME)).addConstraintViolation();
             }
+            
+            if (appBean.getContactPerson().getPhone() != null && !appBean.getContactPerson().getPhone().isEmpty()) {
+              if (! isPhoneNumberValid(appBean.getContactPerson().getPhone())) {
+                result = false;
+                constraintContext.buildConstraintViolationWithTemplate(
+                        MessageUtility.getLocalizedMessageText(
+                        ClientMessage.CHECK_INVALID_PHONE)).addConstraintViolation();
+              }
+            }
+            if (appBean.getContactPerson().getFax() != null && !appBean.getContactPerson().getFax().isEmpty()) {
+              if (! isPhoneNumberValid(appBean.getContactPerson().getFax())) {
+                result = false;
+                constraintContext.buildConstraintViolationWithTemplate(
+                        MessageUtility.getLocalizedMessageText(
+                        ClientMessage.CHECK_INVALID_FAX)).addConstraintViolation();
+              }
+            }  
+            if (appBean.getContactPerson().getEmail() != null && !appBean.getContactPerson().getEmail().isEmpty()) {
+              if (! isEmailValid(appBean.getContactPerson().getEmail())) {
+                result = false;
+                constraintContext.buildConstraintViolationWithTemplate(
+                        MessageUtility.getLocalizedMessageText(
+                        ClientMessage.CHECK_INVALID_EMAIL)).addConstraintViolation();
+              }
+            }
         }
 
         return result;
     }
+    
+    
+    
+
+/** isPhoneNumberValid: Validate phone number using Java reg ex.
+* This method checks if the input string is a valid phone number.
+* @param phoneNumber String. Phone number to validate
+* @return boolean: true if phone number is valid, false otherwise.
+*/
+public static boolean isPhoneNumberValid(String phoneNumber){
+boolean isValid = false;
+
+//Initialize reg ex for phone number. 
+String expression =  "[0-9\\s]*+$";  
+CharSequence inputStr = phoneNumber;
+Pattern pattern = Pattern.compile(expression);
+Matcher matcher = pattern.matcher(inputStr);
+if(matcher.matches()){
+isValid = true;
+}
+return isValid;
+}
+
+
+   /** isEmailValid: Validate phone number using Java reg ex.
+* This method checks if the input string is a valid email.
+* @param email String. 
+* @return boolean: true if phone number is valid, false otherwise.
+*/
+public static boolean isEmailValid(String email){
+boolean isValid = false;
+
+//Initialize reg ex for email.  
+String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";  
+CharSequence inputStr = email;  
+//Make the comparison case-insensitive.  
+Pattern pattern = Pattern.compile(expression,Pattern.CASE_INSENSITIVE);  
+Matcher matcher = pattern.matcher(inputStr);  
+if(matcher.matches()){  
+isValid = true;  
+}  
+return isValid;   
+}
+    
 }
