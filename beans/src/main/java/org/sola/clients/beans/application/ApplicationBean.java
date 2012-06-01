@@ -470,6 +470,8 @@ public class ApplicationBean extends ApplicationSummaryBean {
      * list.
      */
     public void addService(RequestTypeBean requestTypeBean) {
+        
+       
         if (requestTypeBean != null && serviceList != null) {
             int order = 0;
 
@@ -486,7 +488,10 @@ public class ApplicationBean extends ApplicationSummaryBean {
 //                    }
 //                }
             
-            
+             if (this.isFeePaid()) {
+              MessageUtility.displayMessage(ClientMessage.APPLICATION_WARNING_ADDEDSERVICE);
+//                        return;
+             }
             for (Iterator<ApplicationServiceBean> it = serviceList.iterator(); it.hasNext();) {
                 ApplicationServiceBean applicationServiceBean = it.next();
                 if (applicationServiceBean.getServiceOrder() > order) {
@@ -498,7 +503,9 @@ public class ApplicationBean extends ApplicationSummaryBean {
             newService.setApplicationId(this.getId());
             newService.setRequestTypeCode(requestTypeBean.getCode());
             newService.setServiceOrder(order + 1);
-
+            
+            
+            
             serviceList.add(newService);
         }
     }
