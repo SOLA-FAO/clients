@@ -33,7 +33,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.sola.clients.beans.administrative.BaUnitBean;
 import org.sola.clients.beans.converters.TypeConverters;
-import org.sola.clients.swing.gis.TestCadastreTransactionChange;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForApplicationLocation;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.WKBWriter;
@@ -48,11 +47,9 @@ import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForCadastreCha
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForCadastreRedefinition;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleViewer;
-import org.sola.common.MappingManager;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.spatial.MapDefinitionTO;
 import org.sola.webservices.transferobjects.administrative.BaUnitTO;
-import org.sola.webservices.transferobjects.cadastre.CadastreObjectTO;
 
 /**
  * Unit test for simple App.
@@ -80,7 +77,7 @@ public class Development {
     public void testUIControlsBundleForBaUnit() throws Exception {
         System.out.println("Test ControlsBundle for setting cadastre objects");
         SecurityBean.authenticate("test", "test".toCharArray(), this.getWSConfig());
-        BaUnitTO baUnitTO =WSManager.getInstance().getAdministrative().GetBaUnitById("3068323");
+        BaUnitTO baUnitTO =WSManager.getInstance().getAdministrative().getBaUnitById("3068323");
         BaUnitBean baUnitBean = new BaUnitBean();
         TypeConverters.TransferObjectToBean(baUnitTO, BaUnitBean.class, baUnitBean);
 
