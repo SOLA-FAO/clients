@@ -62,12 +62,12 @@ public class Development {
     /**
      * Test the controls bundle for setting the location of an application
      */
-    @Ignore
+    //@Ignore
     @Test
     public void testUIControlsBundleViewer() throws Exception {
         System.out.println("Test ControlsBundle for Viewer");
         System.err.println("Language from user.property:" + System.getProperty("user.language"));
-        WSManager.getInstance().initWebServices("test", "test".toCharArray(), this.getWSConfig());
+        SecurityBean.authenticate("test", "test".toCharArray(), this.getWSConfig());
         ControlsBundleViewer ctrl = new ControlsBundleViewer();
         this.displayControlsBundleForm(ctrl);
     }
@@ -75,11 +75,11 @@ public class Development {
     /**
      * Test the controls bundle for setting the location of an application
      */
-   // @Ignore
+    @Ignore
     @Test
     public void testUIControlsBundleForBaUnit() throws Exception {
         System.out.println("Test ControlsBundle for setting cadastre objects");
-        WSManager.getInstance().initWebServices("test", "test".toCharArray(), this.getWSConfig());
+        SecurityBean.authenticate("test", "test".toCharArray(), this.getWSConfig());
         BaUnitTO baUnitTO =WSManager.getInstance().getAdministrative().GetBaUnitById("3068323");
         BaUnitBean baUnitBean = new BaUnitBean();
         TypeConverters.TransferObjectToBean(baUnitTO, BaUnitBean.class, baUnitBean);
@@ -96,7 +96,7 @@ public class Development {
     @Test
     public void testUIControlsBundleForApplicationLocation() throws Exception {
         System.out.println("Test ControlsBundle for setting Application Location");
-        WSManager.getInstance().initWebServices("test", "test".toCharArray(), this.getWSConfig());
+        SecurityBean.authenticate("test", "test".toCharArray(), this.getWSConfig());
         MapDefinitionTO mapDef = PojoDataAccess.getInstance().getMapDefinition();
         WKTReader wktReader = new WKTReader();
         WKBWriter wkbWriter = new WKBWriter();
