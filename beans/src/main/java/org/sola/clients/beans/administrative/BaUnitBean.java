@@ -513,14 +513,14 @@ public class BaUnitBean extends BaUnitSummaryBean {
     
     public boolean createBaUnit(String serviceId) {
         BaUnitTO baUnit = TypeConverters.BeanToTrasferObject(this, BaUnitTO.class);
-        baUnit = WSManager.getInstance().getAdministrative().CreateBaUnit(serviceId, baUnit);
+        baUnit = WSManager.getInstance().getAdministrative().createBaUnit(serviceId, baUnit);
         TypeConverters.TransferObjectToBean(baUnit, BaUnitBean.class, this);
         return true;
     }
 
     public boolean saveBaUnit(String serviceId) {
         BaUnitTO baUnit = TypeConverters.BeanToTrasferObject(this, BaUnitTO.class);
-        baUnit = WSManager.getInstance().getAdministrative().SaveBaUnit(serviceId, baUnit);
+        baUnit = WSManager.getInstance().getAdministrative().saveBaUnit(serviceId, baUnit);
         TypeConverters.TransferObjectToBean(baUnit, BaUnitBean.class, this);
         return true;
     }
@@ -564,7 +564,7 @@ public class BaUnitBean extends BaUnitSummaryBean {
      */
     public static BaUnitBean getBaUnitsById(String baUnitId){
         return TypeConverters.TransferObjectToBean(
-                WSManager.getInstance().getAdministrative().GetBaUnitById(baUnitId),
+                WSManager.getInstance().getAdministrative().getBaUnitById(baUnitId),
                 BaUnitBean.class, null);
     }
     

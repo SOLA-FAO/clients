@@ -248,6 +248,7 @@ public abstract class AbstractBindingBean implements Serializable {
         byte[] bytes = baos.toByteArray();
         m.update(bytes);
         hashString = (new BigInteger(1, m.digest())).toString(16);
+        System.out.println("Bean="+ bytes.toString()); 
         return hashString;
     }
     

@@ -124,7 +124,7 @@ public class CadastreTransactionMapPanel extends ContentPanel {
     private String getBaUnitId() {
         String baUnitId = null;
         if (applicationProperty != null) {
-            BaUnitTO baUnitTO = WSManager.getInstance().getAdministrative().GetBaUnitByCode(
+            BaUnitTO baUnitTO = WSManager.getInstance().getAdministrative().getBaUnitByCode(
                     applicationProperty.getNameFirstpart(),
                     applicationProperty.getNameLastpart());
             if (baUnitTO != null) {

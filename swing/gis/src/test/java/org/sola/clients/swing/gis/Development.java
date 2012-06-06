@@ -80,7 +80,7 @@ public class Development {
     public void testUIControlsBundleForBaUnit() throws Exception {
         System.out.println("Test ControlsBundle for setting cadastre objects");
         WSManager.getInstance().initWebServices("test", "test".toCharArray(), this.getWSConfig());
-        BaUnitTO baUnitTO =WSManager.getInstance().getAdministrative().GetBaUnitById("3068323");
+        BaUnitTO baUnitTO =WSManager.getInstance().getAdministrative().getBaUnitById("3068323");
         BaUnitBean baUnitBean = new BaUnitBean();
         TypeConverters.TransferObjectToBean(baUnitTO, BaUnitBean.class, baUnitBean);
 
