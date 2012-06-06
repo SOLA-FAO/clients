@@ -136,7 +136,7 @@ public class NewPropertyWizardPanel extends ContentPanel {
             @Override
             public Void doTask() {
                 setMessage("Getting property object.");
-                BaUnitTO baUnitTO = WSManager.getInstance().getAdministrative().GetBaUnitByCode(nameFirstPart, nameLastPart);
+                BaUnitTO baUnitTO = WSManager.getInstance().getAdministrative().getBaUnitByCode(nameFirstPart, nameLastPart);
                 BaUnitBean baUnitBean1 = TypeConverters.TransferObjectToBean(baUnitTO, BaUnitBean.class, null);
                 if (baUnitBean1 != null) {
                     setBaUnitBean(baUnitBean1);

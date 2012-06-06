@@ -630,7 +630,7 @@ public class PropertyPanel extends ContentPanel {
      * Returns {@link BaUnitBean} by first and last name part.
      */
     private BaUnitBean getBaUnit(String nameFirstPart, String nameLastPart) {
-        BaUnitTO baUnitTO = WSManager.getInstance().getAdministrative().GetBaUnitByCode(nameFirstPart, nameLastPart);
+        BaUnitTO baUnitTO = WSManager.getInstance().getAdministrative().getBaUnitByCode(nameFirstPart, nameLastPart);
         return TypeConverters.TransferObjectToBean(baUnitTO, BaUnitBean.class, null);
     }
 
