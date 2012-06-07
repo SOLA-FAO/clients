@@ -6,8 +6,8 @@ package org.geotools.swing.extended.util;
 
 import org.junit.AfterClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 
 /**
  *
@@ -28,6 +28,7 @@ public class ScalebarGeneratorTest {
 
 
     @Test
+    @Ignore
     public void testGetImageAsFileLocation() throws Exception {
         System.out.println("getImageAsFileLocation");
         double imageWidth = 200.0;

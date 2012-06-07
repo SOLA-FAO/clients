@@ -4,18 +4,10 @@
  */
 package org.geotools.swing.extended.util;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import org.geotools.geometry.jts.ReferencedEnvelope;
-import org.geotools.map.extended.layer.ExtendedLayer;
-import org.geotools.swing.extended.ControlsBundle;
 import org.geotools.swing.extended.Map;
 import org.geotools.swing.extended.exception.InitializeMapException;
 import org.junit.*;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -46,6 +38,7 @@ public class MapImageGeneratorTest {
      * Test of getImageAsFileLocation method, of class MapImageGenerator.
      */
     @Test
+    @Ignore
     public void testGetImageAsFileLocation() throws Exception {
         System.out.println("getImageAsFileLocation");
         double imageWidth = 200.0;
