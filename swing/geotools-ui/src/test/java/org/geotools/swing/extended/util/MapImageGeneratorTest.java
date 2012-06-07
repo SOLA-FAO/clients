@@ -4,6 +4,7 @@
  */
 package org.geotools.swing.extended.util;
 
+import java.awt.Toolkit;
 import java.io.File;
 import org.geotools.swing.extended.Map;
 import org.geotools.swing.extended.exception.InitializeMapException;
@@ -41,6 +42,8 @@ public class MapImageGeneratorTest {
     //@Ignore
     public void testGetImageAsFileLocation() throws Exception {
         System.setProperty("java.awt.headless", "true");
+        Toolkit tk = Toolkit.getDefaultToolkit();
+        
         System.out.println("getImageAsFileLocation");
         double imageWidth = 200.0;
         double imageHeight = 200.0;
