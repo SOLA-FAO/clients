@@ -41,8 +41,8 @@ public class MapImageGeneratorTest {
     @Test
     //@Ignore
     public void testGetImageAsFileLocation() throws Exception {
-        System.setProperty("java.awt.headless", "true");
-        Toolkit tk = Toolkit.getDefaultToolkit();
+        //System.setProperty("java.awt.headless", "true");
+        //Toolkit tk = Toolkit.getDefaultToolkit();
         javax.swing.JFrame window = new javax.swing.JFrame();
         
 //        System.out.println("getImageAsFileLocation");
