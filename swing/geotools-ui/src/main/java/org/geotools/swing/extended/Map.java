@@ -95,10 +95,7 @@ public class Map extends JMapPane {
     private static String SELECTION_SLD_FILE = "selection.xml";
     private static String SELECTION_LAYER_NAME = "selection";
     private static Properties sridResource = null;
-    private java.awt.Point panePos = null;
-    private boolean panning = false;
     private boolean isRendering = false;
-    private MapMouseAdapter mapMouseAdapter;
     private MapPaneAdapter mapPaneListener;
     private ReferencedEnvelope fullExtentEnvelope;
     private LinkedHashMap<String, ExtendedLayer> extendedLayers =
@@ -233,24 +230,6 @@ public class Map extends JMapPane {
             }
         });
 
-        this.mapMouseAdapter = new MapMouseAdapter() {
-
-            @Override
-            public void onMouseDragged(MapMouseEvent mme) {
-                handleMouseDragged(mme);
-            }
-
-            @Override
-            public void onMousePressed(MapMouseEvent mme) {
-                handleMousePressed(mme);
-            }
-
-            @Override
-            public void onMouseReleased(MapMouseEvent mme) {
-                handleMouseReleased(mme);
-            }
-        };
-
         this.mapPaneListener = new MapPaneAdapter() {
 
             @Override
@@ -261,7 +240,6 @@ public class Map extends JMapPane {
             @Override
             public void onRenderingStopped(MapPaneEvent ev) {
                 isRendering = false;
-                //refreshScalebar();
             }
 
             @Override
@@ -269,7 +247,6 @@ public class Map extends JMapPane {
                 handleOnDisplayAreaChanged(ev);
             }
         };
-        this.addMouseListener(this.mapMouseAdapter);
         this.addMapPaneListener(this.mapPaneListener);
     }
 
@@ -316,46 +293,6 @@ public class Map extends JMapPane {
 
         this.setDisplayArea(env);
         this.refresh();
-    }
-
-    /**
-     * It catches the start of the pan process
-     *
-     * @param ev
-     */
-    public void handleMousePressed(MapMouseEvent ev) {
-        if (ev.getButton() == java.awt.event.MouseEvent.BUTTON2) {
-            panePos = ev.getPoint();
-            panning = true;
-        }
-    }
-
-    /**
-     * Respond to a mouse dragged event. Calls {@link org.geotools.swing.JMapPane#moveImage()}
-     *
-     * @param ev the mouse event
-     */
-    public void handleMouseDragged(MapMouseEvent ev) {
-        if (this.panning) {
-            java.awt.Point pos = ev.getPoint();
-            if (!pos.equals(this.panePos)) {
-                this.moveImage(pos.x - this.panePos.x, pos.y - this.panePos.y);
-                this.panePos = pos;
-            }
-        }
-    }
-
-    /**
-     * If this button release is the end of a mouse dragged event, requests the map to repaint the
-     * display
-     *
-     * @param ev the mouse event
-     */
-    public void handleMouseReleased(MapMouseEvent ev) {
-        if (this.panning) {
-            panning = false;
-            this.refresh();
-        }
     }
 
     /**
