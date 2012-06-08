@@ -41,20 +41,16 @@ public class MapImageGeneratorTest {
     @Test
     //@Ignore
     public void testGetImageAsFileLocation() throws Exception {
-        //System.setProperty("java.awt.headless", "true");
-        //Toolkit tk = Toolkit.getDefaultToolkit();
-        javax.swing.JFrame window = new javax.swing.JFrame();
-        
-//        System.out.println("getImageAsFileLocation");
-//        double imageWidth = 200.0;
-//        double imageHeight = 200.0;
-//        double scale = 1500.0;
-//        int dpi = 96;
-//        String imageFormat = "png";
-//        MapImageGenerator instance = new MapImageGenerator(this.getMap());
-//        String result = instance.getImageAsFileLocation(
-//                imageWidth, imageHeight, scale, dpi, imageFormat);
-//        System.out.print("Map image generated in:" + result);
+        System.out.println("getImageAsFileLocation");
+        double imageWidth = 200.0;
+        double imageHeight = 200.0;
+        double scale = 1500.0;
+        int dpi = 96;
+        String imageFormat = "png";
+        MapImageGenerator instance = new MapImageGenerator(this.getMap());
+        String result = instance.getImageAsFileLocation(
+                imageWidth, imageHeight, scale, dpi, imageFormat);
+        System.out.print("Map image generated in:" + result);
     }
 
     private Map getMap() throws InitializeMapException {
