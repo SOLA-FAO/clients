@@ -267,4 +267,20 @@ public class ApplicationServiceBean extends ApplicationServiceSummaryBean {
             return false;
         }
     }
+    
+    
+    
+     /**
+     * Returns collection of {@link ApplicationBean} objects. This method is
+     * used by Jasper report designer to extract properties of application bean
+     * to help design a report.
+     */
+    public static java.util.Collection generateCollection() {
+        java.util.Vector collection = new java.util.Vector();
+        ApplicationServiceBean bean = new ApplicationServiceBean();
+        collection.add(bean);
+        return collection;
+    }
+
+    
 }
