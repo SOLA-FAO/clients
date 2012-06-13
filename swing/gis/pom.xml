@@ -55,6 +55,16 @@
             <artifactId>clients-beans</artifactId>
             <version>${project.version}</version>
         </dependency>
+         <dependency>
+            <groupId>org.sola.clients</groupId>
+            <artifactId>clients-reports</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.sola.clients.swing</groupId>
+            <artifactId>clients-swing-ui</artifactId>
+            <version>1.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
     <repositories>
         <repository>
