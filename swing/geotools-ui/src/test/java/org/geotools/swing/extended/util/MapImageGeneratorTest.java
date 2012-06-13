@@ -39,7 +39,7 @@ public class MapImageGeneratorTest {
      * Test of getImageAsFileLocation method, of class MapImageGenerator.
      */
     @Test
-    //@Ignore
+    @Ignore
     public void testGetImageAsFileLocation() throws Exception {
         System.out.println("getImageAsFileLocation");
         double imageWidth = 200.0;
