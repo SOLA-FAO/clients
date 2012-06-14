@@ -32,7 +32,6 @@ import java.io.InputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
-import javax.servlet.ServletContext;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -291,7 +290,7 @@ public class ReportManager {
 
 //        ServletContext.class.getRealPath("/reports/SolaPrintReport.jrxml");
 //        System.out.println("SERVLETCONTEXT  "+ServletContext.class.getResourceAsStream("/reports/SolaPrintReport.jrxml" ));
-        System.out.println("SERVLETCONTEXT  "+ServletContext.class.getResource("/reports/SolaPrintReport.jrxml" ));
+ //       System.out.println("SERVLETCONTEXT  "+ServletContext.class.getResource("/reports/SolaPrintReport.jrxml" ));
         
         String navigatorImage = "/images/sola/north-arrow.png";
         HashMap inputParameters = new HashMap();
