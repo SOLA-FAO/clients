@@ -42,7 +42,7 @@ public class ApplicationActionTypeBean extends AbstractCodeBean {
     public static final String ADD_DOCUMENT = "addDocument";
     public static final String APPROVE = "approve";
     public static final String ARCHIVE = "archive";
-    public static final String DESPATCH = "despatch";
+    public static final String DISPATCH = "dispatch";
     public static final String WITHDRAW = "withdraw";
     public static final String CANCEL = "cancel";
     public static final String REQUISITION = "requisition";
