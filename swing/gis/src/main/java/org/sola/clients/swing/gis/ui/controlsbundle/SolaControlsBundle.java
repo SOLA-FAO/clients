@@ -41,12 +41,19 @@ import org.geotools.swing.extended.exception.InitializeMapException;
 import org.sola.clients.swing.gis.Messaging;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.layer.PojoLayer;
-import org.sola.clients.swing.gis.mapaction.SolaPrint;
 import org.sola.clients.swing.gis.tool.InformationTool;
 import org.sola.clients.swing.gis.ui.control.SearchPanel;
 import org.sola.common.messaging.GisMessage;
 import org.sola.webservices.spatial.ConfigMapLayerTO;
 import org.sola.webservices.spatial.MapDefinitionTO;
+
+// CHOOSE WHICH TOOL IS PREFERRED FOR THE MAP PRINT COMMENTING AND UNCOMMENTING THE FOLLOWING LINES
+//this is the mapaction used for creating a jasper report map print
+import org.sola.clients.swing.gis.mapaction.SolaJasperPrint;
+//this is the mapaction used for creating a pdf map print
+//import org.sola.clients.swing.gis.mapaction.SolaPrint;
+
+
 
 /**
  * This is the basic abstract bundle used in Sola. It sets up the map control with common layers
@@ -61,8 +68,12 @@ public abstract class SolaControlsBundle extends ControlsBundle {
     private static String extraSldResources = "/org/sola/clients/swing/gis/layer/resources/";
     private static boolean gisInitialized = false;
     private PojoDataAccess pojoDataAccess = null;
-    
-    private SolaPrint solaPrint = null;
+
+// CHOOSE WHICH TOOL IS PREFERRED FOR THE MAP PRINT COMMENTING AND UNCOMMENTING THE FOLLOWING LINES
+//this is used for creating a pdf map print
+//    private SolaPrint solaPrint = null;
+//this is used for creating a jasper report map print
+    private SolaJasperPrint solaPrint = null;
 
     public SolaControlsBundle() {
         super();
@@ -87,7 +98,14 @@ public abstract class SolaControlsBundle extends ControlsBundle {
             this.addSearchPanel();
             InformationTool infoTool = new InformationTool(this.pojoDataAccess);
             this.getMap().addTool(infoTool, this.getToolbar(), true);
-            this.solaPrint = new SolaPrint(this.getMap());
+           
+            
+            // CHOOSE WHICH TOOL IS PREFERRED FOR THE MAP PRINT COMMENTING AND UNCOMMENTING THE FOLLOWING LINES
+            //this is used for creating a pdf map print
+            //            this.solaPrint = new SolaPrint(this.getMap());
+            //this is used for creating a jasper report map print
+            this.solaPrint = new SolaJasperPrint(this.getMap());
+           
             this.getMap().addMapAction(this.solaPrint, this.getToolbar(), true);
             
             this.getMap().setFullExtent(

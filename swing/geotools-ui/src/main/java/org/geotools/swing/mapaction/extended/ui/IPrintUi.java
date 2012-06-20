@@ -18,6 +18,7 @@ public interface IPrintUi {
    Integer getScale();
    void setScale(Integer scale);
    PrintLayout getPrintLayout();
+   String getPrintTool();
    void setPrintLayoutList(List<PrintLayout> printLayoutList);
    void setVisibility(boolean visible);
    Map<String, Object> getExtraFields();
