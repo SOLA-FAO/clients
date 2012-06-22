@@ -29,11 +29,7 @@
  */
 package org.sola.clients.swing.gis.mapaction;
 
-import com.vividsolutions.jts.awt.PointShapeFactory.Point;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.util.Calendar;
-import java.util.HashMap;
 import org.geotools.swing.extended.Map;
 import org.geotools.swing.extended.exception.MapScaleException;
 import org.geotools.swing.extended.exception.PrintLayoutException;
@@ -42,14 +38,10 @@ import org.geotools.swing.extended.util.Messaging;
 import org.geotools.swing.extended.util.ScalebarGenerator;
 import org.geotools.swing.mapaction.extended.Print;
 import org.geotools.swing.mapaction.extended.print.PrintLayout;
-import org.geotools.swing.mapaction.extended.print.TextLayout;
 import org.geotools.swing.mapaction.extended.ui.IPrintUi;
 import org.sola.clients.beans.application.ApplicationServiceBean;
 import org.sola.clients.beans.referencedata.RequestTypeBean;
-import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.reports.ReportManager;
-import org.sola.clients.swing.common.tasks.SolaTask;
-import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.gis.ui.control.SolaPrintViewerForm;
 /**
  * This map action extends the Print map action that handles the print of the map according to a
@@ -60,15 +52,13 @@ import org.sola.clients.swing.gis.ui.control.SolaPrintViewerForm;
  */
 public class SolaJasperPrint extends Print {
 
-    private String mapImageLocation;
-    private String scalebarImageLocation;
-    private String layoutName;
     private String applicationId;
     private IPrintUi printForm;
     
     public SolaJasperPrint(Map map) {
         super(map);
-        //the following changes the layout properties file for the org.geotools.swing.mapaction.extended.Print.java
+        //the following changes the layout properties file for 
+        //the org.geotools.swing.mapaction.extended.Print.java
         // in order to use it for jasper report print map
         this.layoutLocation = "resources/print/layoutsJasper.properties";      
     }
@@ -131,9 +121,9 @@ public class SolaJasperPrint extends Print {
     protected void Print(PrintLayout layout, double scale) {
              
         //This is the image width of the map. It is given in pixels or in points.
-        Double mapImageWidth = layout.getMap().getJasperWidth();
+        Double mapImageWidth = Double.valueOf(layout.getMap().getWidth());
         //This is the image height of the map. It is given in pixels or in points.
-        Double mapImageHeight = layout.getMap().getJasperHeight();
+        Double mapImageHeight = Double.valueOf(layout.getMap().getHeight());
         
         //This is the DPI. Normally the printer has a DPI, the monitor has a DPI. 
         //Also Jasper engine should have a DPI, which is 72. With this DPI pixels and points are equal
@@ -145,8 +135,7 @@ public class SolaJasperPrint extends Print {
         //The real width might change from the given size because the scalebar dynamicly looks
         //for the best width. 
         //So in Jasper the width/height of the scalebar is not restricted 
-        //  Double scalebarImageWidth = 100.0;
-        Double scalebarImageWidth = layout.getScalebar().getJasperWidth();
+        Double scalebarImageWidth = Double.valueOf(layout.getScalebar().getWidth());
         try {
             MapImageGenerator mapImageGenerator = new MapImageGenerator(this.getMapControl());
             //This gives back the absolute location of the map image. 
@@ -157,13 +146,7 @@ public class SolaJasperPrint extends Print {
             //This gives back the absolute location of the scalebar image. 
             String scalebarImageLocation = scalebarGenerator.getImageAsFileLocation(
                     scale, scalebarImageWidth, dpi);
-            
-                   
-            this.mapImageLocation=mapImageLocation;
-            this.scalebarImageLocation=scalebarImageLocation;
-            this.layoutName=layout.getName().toString();
-            String  fieldDate = DateFormat.getInstance().format(Calendar.getInstance().getTime());
-            
+                               
             ApplicationServiceBean serviceBean = new ApplicationServiceBean(); 
             serviceBean.setRequestTypeCode(RequestTypeBean.CODE_CADASTRE_PRINT);
             if (this.applicationId != null) {
@@ -178,8 +161,8 @@ public class SolaJasperPrint extends Print {
              
             //   This is to call the report generation         
 	    SolaPrintViewerForm form = new SolaPrintViewerForm(
-		ReportManager.getSolaPrintReport(dataBean, this.mapImageLocation, this.scalebarImageLocation, this.layoutName, fieldDate,  
-                    mapImageWidth,  mapImageHeight, scalebarImageWidth )
+		ReportManager.getSolaPrintReport(
+                    layout.getName(), dataBean, mapImageLocation, scalebarImageLocation)
             );
             // this is to visualize the generated report            
 	    form.setVisible(true);

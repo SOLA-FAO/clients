@@ -112,7 +112,7 @@ public class Development {
 
     private void displayControlsBundleForm(Component ctrl) {
         JDialog controlContainer = new JDialog();
-        controlContainer.setAlwaysOnTop(true);
+        //controlContainer.setAlwaysOnTop(true);
         controlContainer.setModal(true);
         ctrl.setPreferredSize(new Dimension(600, 600));
         controlContainer.getContentPane().add(ctrl);
