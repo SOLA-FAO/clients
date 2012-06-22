@@ -57,7 +57,6 @@ public class PrintForm extends javax.swing.JDialog implements IPrintUi{
 
     private boolean continueWithPrinting = false;
     private PrintLayout printLayout;
-    private String printTool = null;
     private List<PrintLayout> printLayoutList;
     private Integer scale = null;
     private Object txtFont = "TextField.font";
@@ -96,18 +95,14 @@ public class PrintForm extends javax.swing.JDialog implements IPrintUi{
 
     @Override
     public void setPrintLayoutList(List<PrintLayout> printLayoutList) {
+       
         this.printLayoutList = printLayoutList;
         this.cmdLayout.removeAllItems();
         for (PrintLayout layout : this.printLayoutList) {
             this.cmdLayout.addItem(layout);
         }
     }
-    
-    @Override
-     public String getPrintTool() {
-        return printTool;
-    }
-    
+   
     @Override
     public void setVisibility(boolean visible){
         this.setVisible(visible);
@@ -218,7 +213,6 @@ private void cmdPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         Messaging.getInstance().show(Messaging.Ids.PRINT_LAYOUT_NOT_SELECTED.toString());
     } else {
         this.printLayout = (PrintLayout) this.cmdLayout.getSelectedItem();
-        this.printTool =  this.printTool;
         try {
             this.scale = Integer.parseInt(this.txtScale.getText());
             this.continueWithPrinting = true;

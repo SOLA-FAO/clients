@@ -8,7 +8,6 @@
 	<parameter name="SCALE_IMAGE" class="java.lang.String"/>
 	<parameter name="USER_NAME" class="java.lang.String"/>
 	<parameter name="LAYOUT" class="java.lang.String"/>
-	<parameter name="MAP_DATA_SOURCE" class="java.lang.String"/>
 	<parameter name="INPUT_DATE" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
@@ -52,7 +51,7 @@
 	<detail>
 		<band height="259" splitType="Stretch">
 			<image scaleImage="RealSize" hAlign="Left" isUsingCache="false">
-				<reportElement positionType="FixRelativeToBottom" x="0" y="209" width="150" height="50" isRemoveLineWhenBlank="true"/>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="209" width="802" height="50" isRemoveLineWhenBlank="true"/>
 				<imageExpression><![CDATA[$P{SCALE_IMAGE}]]></imageExpression>
 			</image>
 			<image scaleImage="RetainShape" hAlign="Center">

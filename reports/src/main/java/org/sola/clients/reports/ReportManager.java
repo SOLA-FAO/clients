@@ -269,17 +269,17 @@ public class ReportManager {
      * @param mapImageHeight Double this specifies the height of the map. It can be used if it is needed to dynamically set the report map image size
      * @param scalebarImageWidth Double this specifies the width of the scalebar. It can be used if it is needed to dynamically set the report scalebar image size
      */
-    public static JasperPrint getSolaPrintReport(ApplicationServiceBean serviceBean, 
+    public static JasperPrint getSolaPrintReport(Object dataBean, 
                                                  String mapImageLocation, String scalebarImageLocation,
                                                  String layout, String Field_Date,
                                                  Double mapImageWidth,  Double mapImageHeight, 
                                                  Double scalebarImageWidth) throws IOException {
         
         
-        double pageWidthDouble=mapImageWidth;
-        int pageWidth= (int)pageWidthDouble+60;
-        double pageHeightDouble=mapImageHeight;
-        int pageHeight= (int)pageHeightDouble+75;
+//        double pageWidthDouble=mapImageWidth;
+//        int pageWidth= (int)pageWidthDouble+60;
+//        double pageHeightDouble=mapImageHeight;
+//        int pageHeight= (int)pageHeightDouble+75;
         
         
         // Image Location of the north-arrow image
@@ -291,25 +291,27 @@ public class ReportManager {
         inputParameters.put("SCALE_IMAGE", scalebarImageLocation);
         inputParameters.put("NAVIGATOR_IMAGE", ReportManager.class.getResourceAsStream(navigatorImage));
         inputParameters.put("LAYOUT", layout);
-        inputParameters.put("MAP_DATA_SOURCE", SecurityBean.getCurrentUser().getFullUserName());
         inputParameters.put("INPUT_DATE",Field_Date);
        
         
-        //This is the bean containing data for the report. 
+        //This will be the bean containing data for the report. 
         //it is the data source for the report
-        //it can be replaced with appropriate bean if needed
-        ApplicationServiceBean[] beans = new ApplicationServiceBean[1];
-        beans[0] = serviceBean;
+        //it must be replaced with appropriate bean if needed
+        Object[] beans = new Object[1];
+        beans[0] = dataBean;
         JRDataSource jds = new JRBeanArrayDataSource(beans);
+//        ApplicationServiceBean[] beans = new ApplicationServiceBean[1];
+//        beans[0] = serviceBean;
+//        JRDataSource jds = new JRBeanArrayDataSource(beans);
         
         // this generates the report. 
         // NOTICE THAT THE NAMING CONVENTION IS TO PRECEED "SolaPrintReport.jasper"
         // WITH THE LAYOUT NAME. SO IT MUST BE PRESENT ONE REPORT FOR EACH LAYOUT FORMAT
          try {
             JasperPrint jasperPrint = JasperFillManager.fillReport(
-                    ReportManager.class.getResourceAsStream("/reports/"+layout+"SolaPrintReport.jasper"), inputParameters, jds);
-            jasperPrint.setPageHeight(pageHeight);
-            jasperPrint.setPageWidth(pageWidth);
+                    ReportManager.class.getResourceAsStream("/reports/maps/"+layout+"SolaPrintReport.jasper"), inputParameters, jds);
+//            jasperPrint.setPageHeight(pageHeight);
+//            jasperPrint.setPageWidth(pageWidth);
             return jasperPrint;
          } catch (JRException ex) {
             MessageUtility.displayMessage(ClientMessage.REPORT_GENERATION_FAILED,

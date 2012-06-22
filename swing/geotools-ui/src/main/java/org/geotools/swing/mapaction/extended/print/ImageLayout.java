@@ -44,6 +44,8 @@ public class ImageLayout extends ElementLayout{
     private String resourceLocation;
     private int width;
     private int height;
+    private double widthJasper;
+    private double heightJasper;
     private int x;
     private int y;
     
@@ -61,8 +63,10 @@ public class ImageLayout extends ElementLayout{
         this.x = Integer.parseInt(this.getAttributeValue(imageXmlNode, "x"));
         this.y = Integer.parseInt(this.getAttributeValue(imageXmlNode, "y"));
         this.width = Integer.parseInt(this.getAttributeValue(imageXmlNode, "width"));
+        this.widthJasper = Double.parseDouble(this.getAttributeValue(imageXmlNode, "width"));
         if (this.hasAttribute(imageXmlNode, "height")){
-            this.height = Integer.parseInt(this.getAttributeValue(imageXmlNode, "height"));            
+            this.height = Integer.parseInt(this.getAttributeValue(imageXmlNode, "height"));   
+            this.heightJasper = Double.parseDouble(this.getAttributeValue(imageXmlNode, "height"));
         }
         if (this.hasAttribute(imageXmlNode, "resource-location")){
             this.resourceLocation = this.getAttributeValue(imageXmlNode, "resource-location");            
@@ -115,5 +119,23 @@ public class ImageLayout extends ElementLayout{
     public void setY(int y) {
         this.y = y;
     }
+    
+    
+    public double getJasperHeight() {
+        return heightJasper;
+    }
+
+    public void setJasperHeight(double heightJasper) {
+        this.heightJasper = heightJasper;
+    }
+
+    public double getJasperWidth() {
+        return widthJasper;
+    }
+
+    public void setJasperWidth(double widthJasper) {
+        this.widthJasper = widthJasper;
+    }
+    
     
 }

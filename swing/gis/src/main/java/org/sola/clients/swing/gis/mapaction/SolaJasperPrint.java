@@ -60,15 +60,17 @@ import org.sola.clients.swing.gis.ui.control.SolaPrintViewerForm;
  */
 public class SolaJasperPrint extends Print {
 
-    private final static String FIELD_USER = "{userName}";
-    private final static String FIELD_DATE = "{date}";
     private String mapImageLocation;
     private String scalebarImageLocation;
     private String layoutName;
     private String applicationId;
     private IPrintUi printForm;
+    
     public SolaJasperPrint(Map map) {
         super(map);
+        //the following changes the layout properties file for the org.geotools.swing.mapaction.extended.Print.java
+        // in order to use it for jasper report print map
+        this.layoutLocation = "resources/print/layoutsJasper.properties";      
     }
 
     /**
@@ -127,24 +129,11 @@ public class SolaJasperPrint extends Print {
      * @param scale This is the scale of the map for which the print will be done
      */
     protected void Print(PrintLayout layout, double scale) {
-        
-        int pageHeight=layout.getMap().getHeight();
-        int pageWidth=layout.getMap().getWidth();
-        
-        float pageWPoint= com.lowagie.text.Utilities.millimetersToPoints(pageWidth);
-        float pageHPoint= com.lowagie.text.Utilities.millimetersToPoints(pageHeight);
-        
-        System.out.println("pageHeight  "+pageHeight);
-        System.out.println("pageWidth  "+pageWidth);
-        System.out.println("pageWidthPoints  "+pageWPoint);
-        System.out.println("pageHeightPoints  "+pageHPoint);
-                
+             
         //This is the image width of the map. It is given in pixels or in points.
-        // - 10 for the horizontal margins        
-        Double mapImageWidth = (double) pageWPoint-10;
+        Double mapImageWidth = layout.getMap().getJasperWidth();
         //This is the image height of the map. It is given in pixels or in points.
-        // - 75 for the vertical margins
-        Double mapImageHeight = (double) pageHPoint-75;
+        Double mapImageHeight = layout.getMap().getJasperHeight();
         
         //This is the DPI. Normally the printer has a DPI, the monitor has a DPI. 
         //Also Jasper engine should have a DPI, which is 72. With this DPI pixels and points are equal
@@ -154,9 +143,10 @@ public class SolaJasperPrint extends Print {
         
         //This is the image width of the scalebar. It is given in pixels or in points.
         //The real width might change from the given size because the scalebar dynamicly looks
-        //for the best width. So it will be good in Jasper not to restrict the width/height of the
-        //scalebar.
-        Double scalebarImageWidth = 100.0;
+        //for the best width. 
+        //So in Jasper the width/height of the scalebar is not restricted 
+        //  Double scalebarImageWidth = 100.0;
+        Double scalebarImageWidth = layout.getScalebar().getJasperWidth();
         try {
             MapImageGenerator mapImageGenerator = new MapImageGenerator(this.getMapControl());
             //This gives back the absolute location of the map image. 
@@ -168,22 +158,12 @@ public class SolaJasperPrint extends Print {
             String scalebarImageLocation = scalebarGenerator.getImageAsFileLocation(
                     scale, scalebarImageWidth, dpi);
             
-            //This is to get the real size of the scalebar image, since it might change            
-            float scalebarHpoint =com.lowagie.text.Utilities.millimetersToPoints(scalebarGenerator.getImage(scale, scalebarImageWidth, dpi).getHeight());
-            float scalebarWpoint =com.lowagie.text.Utilities.millimetersToPoints(scalebarGenerator.getImage(scale, scalebarImageWidth, dpi).getWidth());
-            scalebarImageWidth= (double)scalebarWpoint;
-            
-            System.out.println("scalebarWidth  "+scalebarImageWidth);
-            System.out.println("scalebarRealWidth  "+scalebarGenerator.getImage(scale, scalebarImageWidth, dpi).getWidth());
-            System.out.println("scalebarWidthPoints  "+scalebarWpoint);
-            System.out.println("scalebarHeightPoints  "+scalebarHpoint);
-        
-            
-            
+                   
             this.mapImageLocation=mapImageLocation;
             this.scalebarImageLocation=scalebarImageLocation;
             this.layoutName=layout.getName().toString();
             String  fieldDate = DateFormat.getInstance().format(Calendar.getInstance().getTime());
+            
             ApplicationServiceBean serviceBean = new ApplicationServiceBean(); 
             serviceBean.setRequestTypeCode(RequestTypeBean.CODE_CADASTRE_PRINT);
             if (this.applicationId != null) {
@@ -191,9 +171,14 @@ public class SolaJasperPrint extends Print {
             }
             serviceBean.saveInformationService();
             
+            //This will be the bean containing data for the report. 
+            //it is the data source for the report
+            //it must be replaced with appropriate bean if needed
+             Object dataBean = new Object();
+             
             //   This is to call the report generation         
 	    SolaPrintViewerForm form = new SolaPrintViewerForm(
-		ReportManager.getSolaPrintReport(serviceBean,this.mapImageLocation, this.scalebarImageLocation, this.layoutName, fieldDate,  
+		ReportManager.getSolaPrintReport(dataBean, this.mapImageLocation, this.scalebarImageLocation, this.layoutName, fieldDate,  
                     mapImageWidth,  mapImageHeight, scalebarImageWidth )
             );
             // this is to visualize the generated report            

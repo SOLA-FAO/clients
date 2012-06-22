@@ -59,7 +59,11 @@ import org.geotools.swing.mapaction.extended.ui.PrintForm;
 public class Print extends ExtendedAction {
 
     private IPrintUi printForm;
-    public boolean ifJasper = false;
+    
+   
+   protected   String layoutLocation = "resources/print/layouts.properties";
+
+    
     public Print(Map mapControl) {
         super(mapControl, "print",
                 Messaging.getInstance().getMessageText(Messaging.Ids.PRINT.toString()),
@@ -89,19 +93,12 @@ public class Print extends ExtendedAction {
             }
             
             
-//         if (this.printForm.getPrintTool().equalsIgnoreCase("Pdf")) {
             String printLocation = this.print(
                     this.printForm.getPrintLayout(), 
                     this.printForm.getScale(), 
                     this.printForm.getExtraFields());
             this.showPrintableDocument(printLocation);
-//             this.ifJasper = false; 
-//            return;
-//         } else {
-//           this.ifJasper = true; 
-////           return;
-//         }        
-//            
+            
         } catch (MapScaleException ex) {
             Messaging.getInstance().show(Messaging.Ids.PRINT_LAYOUT_GENERATION_ERROR.toString());
         }
@@ -126,13 +123,12 @@ public class Print extends ExtendedAction {
      */
     protected List<PrintLayout> getPrintLayouts() throws PrintLayoutException {
         Properties propertyLayouts = new Properties();
-        String layoutLocation = "resources/print/layouts.properties";
+        String layoutLocation = this.layoutLocation;
         String resourceLocation = String.format("/%s/%s",
                 this.getClass().getPackage().getName().replace('.', '/'),
                 layoutLocation);
         List<PrintLayout> layoutList = new ArrayList<PrintLayout>();
-         System.out.println("RESOURCE LOCATION: "+resourceLocation);
-       
+        
         try {
             propertyLayouts.load(this.getClass().getResourceAsStream(resourceLocation));
             for (Object layoutObj : propertyLayouts.values()) {
