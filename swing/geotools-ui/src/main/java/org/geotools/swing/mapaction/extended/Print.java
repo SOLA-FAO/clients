@@ -125,8 +125,9 @@ public class Print extends ExtendedAction {
 
         try {
             propertyLayouts.load(this.getClass().getResourceAsStream(resourceLocation));
-            for (Object layoutObj : propertyLayouts.values()) {
-                PrintLayout layout = new PrintLayout(layoutObj.toString());
+            for (String layoutId : propertyLayouts.stringPropertyNames()) {
+                PrintLayout layout = new PrintLayout(
+                        layoutId, propertyLayouts.getProperty(layoutId));
                 layoutList.add(layout);
             }
         } catch (IOException ex) {

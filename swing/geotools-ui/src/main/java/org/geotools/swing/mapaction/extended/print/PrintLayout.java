@@ -1,28 +1,26 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO). All rights
+ * reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without modification, are permitted
+ * provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this list of conditions
+ * and the following disclaimer. 2. Redistributions in binary form must reproduce the above
+ * copyright notice,this list of conditions and the following disclaimer in the documentation and/or
+ * other materials provided with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this software without
+ * specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+ * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 /*
@@ -47,13 +45,15 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
- * A print layout class definition. Instances of this class are used as a source
- * for the {@see PrintoutGenerator}.
- * 
+ * A print layout class definition. Instances of this class are used as a source for the {
+ *
+ * @see PrintoutGenerator}.
+ *
  * @author Elton manoku
  */
 public class PrintLayout extends ElementLayout {
 
+    private String id;
     private String name;
     private int pageWidth;
     private int pageHeight;
@@ -62,20 +62,17 @@ public class PrintLayout extends ElementLayout {
     private List<ImageLayout> imageLayouts = new ArrayList<ImageLayout>();
     private List<TextLayout> textLayouts = new ArrayList<TextLayout>();
 
-    public PrintLayout() {
-    }
-
     /**
      * Constructor of the layout which uses an Xml Document.
-     * 
-     * @param xmlFormatedLayout  The xml definition of the layout
+     *
+     * @param xmlFormatedLayout The xml definition of the layout
      */
-    public PrintLayout(String xmlFormatedLayout)
+    public PrintLayout(String id, String xmlFormatedLayout)
             throws PrintLayoutException {
         try {
             InputSource is = new InputSource(new StringReader(xmlFormatedLayout.trim()));
             Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is);
-            this.initialize(doc);
+            this.initialize(id, doc);
         } catch (IOException ex) {
             throw new PrintLayoutException(ex);
         } catch (SAXException ex) {
@@ -89,13 +86,14 @@ public class PrintLayout extends ElementLayout {
 
     /**
      * Constructor of the layout which uses an Xml Document Input stream.
-     * @param xmlFormatedLayoutStream 
+     *
+     * @param xmlFormatedLayoutStream
      */
-    public PrintLayout(InputStream xmlFormatedLayoutStream) throws PrintLayoutException {
+    public PrintLayout(String id, InputStream xmlFormatedLayoutStream) throws PrintLayoutException {
         try {
             Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(
                     xmlFormatedLayoutStream);
-            this.initialize(doc);
+            this.initialize(id, doc);
         } catch (IOException ex) {
             throw new PrintLayoutException(ex);
         } catch (SAXException ex) {
@@ -107,7 +105,8 @@ public class PrintLayout extends ElementLayout {
         }
     }
 
-    private void initialize(Document doc) throws ParsePrintLayoutElementException {
+    private void initialize(String id, Document doc) throws ParsePrintLayoutElementException {
+        this.id = id;
         this.parseNode(doc, "name");
         this.parseNode(doc, "page");
         this.parseNode(doc, "map");
@@ -153,6 +152,10 @@ public class PrintLayout extends ElementLayout {
                 this.imageLayouts.add(new ImageLayout(nodeList.item(nodeInd)));
             }
         }
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getName() {

@@ -261,17 +261,15 @@ public class ReportManager {
     /**
      * Generates and displays <b>SolaPrintReport</b> for the map.
      *
-     * @param serviceBean ApplicationServiceBean containing data for the report. it can be replaced
+     * @param layoutId String This is the id of the report. It is used to identify the report file.
+     * @param dataBean Object containing data for the report. it can be replaced
      * with appropriate bean if needed
      * @param mapImageLocation String this is the location of the map to be passed as MAP_IMAGE
      * PARAMETER to the report. It is necessary for visualizing the map
      * @param scalebarImageLocation String this is the location of the scalebar to be passed as
      * SCALE_IMAGE PARAMETER to the report. It is necessary for visualizing the scalebar
-     * @param layout String this indicates the format of the layout It is used also for setting
-     * appropriately the name of the report (one report for each format)
-     * @param Field_Date String this indicates the date of report request
      */
-    public static JasperPrint getSolaPrintReport(String layoutName, Object dataBean,
+    public static JasperPrint getSolaPrintReport(String layoutId, Object dataBean,
             String mapImageLocation, String scalebarImageLocation) throws IOException {
 
         // Image Location of the north-arrow image
@@ -283,7 +281,7 @@ public class ReportManager {
         inputParameters.put("SCALE_IMAGE", scalebarImageLocation);
         inputParameters.put("NAVIGATOR_IMAGE",
                 ReportManager.class.getResourceAsStream(navigatorImage));
-        inputParameters.put("LAYOUT", layoutName);
+        inputParameters.put("LAYOUT", layoutId);
         inputParameters.put("INPUT_DATE", 
                 DateFormat.getInstance().format(Calendar.getInstance().getTime()));
 
@@ -301,7 +299,7 @@ public class ReportManager {
         try {
             JasperPrint jasperPrint = JasperFillManager.fillReport(
                     ReportManager.class.getResourceAsStream(
-                    "/reports/maps/" + layoutName + "SolaPrintReport.jasper"), inputParameters, jds);
+                    "/reports/map/" + layoutId + ".jasper"), inputParameters, jds);
             return jasperPrint;
         } catch (JRException ex) {
             MessageUtility.displayMessage(ClientMessage.REPORT_GENERATION_FAILED,

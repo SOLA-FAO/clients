@@ -162,7 +162,7 @@ public class SolaJasperPrint extends Print {
             //   This is to call the report generation         
 	    SolaPrintViewerForm form = new SolaPrintViewerForm(
 		ReportManager.getSolaPrintReport(
-                    layout.getName(), dataBean, mapImageLocation, scalebarImageLocation)
+                    layout.getId(), dataBean, mapImageLocation, scalebarImageLocation)
             );
             // this is to visualize the generated report            
 	    form.setVisible(true);
