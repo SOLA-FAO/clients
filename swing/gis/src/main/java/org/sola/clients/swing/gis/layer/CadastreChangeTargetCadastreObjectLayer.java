@@ -37,10 +37,9 @@ import java.util.List;
 import org.geotools.feature.CollectionEvent;
 import org.geotools.feature.CollectionListener;
 import org.geotools.geometry.jts.Geometries;
-import org.geotools.map.extended.layer.ExtendedLayerEditor;
+import org.geotools.map.extended.layer.ExtendedLayerGraphics;
 import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.opengis.feature.simple.SimpleFeature;
-import org.geotools.map.extended.layer.ExtendedLayerGraphics;
 import org.sola.clients.swing.gis.Messaging;
 import org.sola.clients.swing.gis.beans.CadastreObjectTargetBean;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
@@ -54,7 +53,7 @@ import org.sola.webservices.transferobjects.cadastre.CadastreObjectTO;
  * 
  * @author Elton Manoku
  */
-public class CadastreChangeTargetCadastreObjectLayer extends ExtendedLayerEditor {
+public class CadastreChangeTargetCadastreObjectLayer extends ExtendedLayerGraphics {
 
     private static final String LAYER_NAME = "Target Parcels";
     private static final String LAYER_STYLE_RESOURCE = "parcel_target.xml";
