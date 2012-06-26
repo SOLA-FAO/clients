@@ -46,6 +46,7 @@ public class GenericTranslatorListener implements DozerEventListener {
 
     /**
      * This listener method is triggered once before the mapping process begins.
+     *
      * @param event
      */
     @Override
@@ -55,6 +56,7 @@ public class GenericTranslatorListener implements DozerEventListener {
     /**
      * This listener method is triggered before each field in the target object
      * has been assigned its destination value.
+     *
      * @param event
      */
     @Override
@@ -63,19 +65,31 @@ public class GenericTranslatorListener implements DozerEventListener {
 
     /**
      * This listener method is triggered after each field in the target object
-     * has been assigned its destination value. 
+     * has been assigned its destination value.
+     *
      * @param event
      */
     @Override
     public void postWritingDestinationValue(DozerEvent event) {
+        Object array = event.getFieldMap().getSrcFieldValue(event.getSourceObject());
+        if (array != null && array instanceof byte[]) {
+            try {
+                String name = event.getFieldMap().getDestFieldName();
+                name = "set" + name.substring(0, 1).toUpperCase() + name.substring(1);
+                Method method = event.getDestinationObject().getClass().getMethod(name, byte[].class);
+                method.invoke(event.getDestinationObject(), (byte[]) array);
+            } catch (Exception e) {
+                System.out.println("Error occured while assigning byte array value. " + e.getMessage());
+            }
+        }
     }
 
     /**
      * This listener method is triggered once at the completion of the mapping
      * process. It checks final object to have List getters and populates list
      * through the getter if relevant setter is missing. This logic is applied
-     * only for objects, inherited either from {@link AbstractTO} 
-     * or {@link AbstractBindingBean}.
+     * only for objects, inherited either from {@link AbstractTO} or {@link AbstractBindingBean}.
+     *
      * @param event
      */
     @Override
@@ -91,26 +105,25 @@ public class GenericTranslatorListener implements DozerEventListener {
             // Loop through the getter methods of destination object
             for (Method destinationGetter : methods) {
 
-                if (destinationGetter.getName().substring(0, 3).equalsIgnoreCase("get")
-                        && Iterable.class.isAssignableFrom(destinationGetter.getReturnType())) {
+                if (destinationGetter.getName().substring(0, 3).equalsIgnoreCase("get") && 
+                        Iterable.class.isAssignableFrom(destinationGetter.getReturnType())) {
 
                     try {
-                        // Check for destination setter method to exist
-                        try {
-                            if(event.getDestinationObject().getClass().getMethod("set" + destinationGetter.getName().substring(3))!=null){
-                                // Skip this method if there is setter.
-                                continue;
-                            }
-                            
-                        } catch (NoSuchMethodException e) {
-                        }
-
                         Method sourceGetter;
                         // Get relevant source object getter method
                         try {
                             sourceGetter = event.getSourceObject().getClass().getMethod(destinationGetter.getName());
                         } catch (NoSuchMethodException e) {
                             continue;
+                        }
+
+                        // Check for destination setter method to exist
+                        try {
+                            if (event.getDestinationObject().getClass().getMethod("set" + destinationGetter.getName().substring(3)) != null) {
+                                // Skip this method if there is setter.
+                                continue;
+                            }
+                        } catch (NoSuchMethodException e) {
                         }
 
                         // Get destination list inner type
