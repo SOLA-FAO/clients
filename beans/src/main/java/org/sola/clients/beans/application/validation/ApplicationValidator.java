@@ -27,11 +27,13 @@
  */
 package org.sola.clients.beans.application.validation;
 
+import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import org.sola.clients.beans.application.ApplicationBean;
+import org.sola.clients.beans.application.ApplicationPropertyBean;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
@@ -53,7 +55,9 @@ public class ApplicationValidator implements ConstraintValidator<ApplicationChec
         boolean result = true;
 
         constraintContext.disableDefaultConstraintViolation();
-
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/application/Bundle");
+        
+        
         // Check contact person
         if (appBean.getContactPerson() == null) {
             result = false;
@@ -61,6 +65,7 @@ public class ApplicationValidator implements ConstraintValidator<ApplicationChec
                     MessageUtility.getLocalizedMessageText(
                     ClientMessage.CHECK_APP_CONTACT_PERSON_NULL)).addConstraintViolation();
         } else {
+            // address validation
             if (appBean.getContactPerson().getAddress() == null || 
                     appBean.getContactPerson().getAddress().getDescription() == null ||
                     appBean.getContactPerson().getAddress().getDescription().isEmpty()) {
@@ -69,19 +74,48 @@ public class ApplicationValidator implements ConstraintValidator<ApplicationChec
                         MessageUtility.getLocalizedMessageText(
                         ClientMessage.CHECK_APP_CONTACT_PERSON_ADDRESS)).addConstraintViolation();
             }
+            if (appBean.getContactPerson().getAddress().getDescription() != null && !appBean.getContactPerson().getAddress().getDescription().isEmpty()) {
+                if (appBean.getContactPerson().getAddress().getDescription().length()>255){
+                        result = false;
+                        constraintContext.buildConstraintViolationWithTemplate(
+                        (MessageUtility.getLocalizedMessageText(
+                        ClientMessage.CHECK_FIELD_INVALID_LENGTH))+" "+bundle.getString("ApplicationPanel.labAddress.text")).addConstraintViolation();
+                }
+            }
+            // name validation
             if (appBean.getContactPerson().getName() == null || appBean.getContactPerson().getName().isEmpty()) {
                 result = false;
                 constraintContext.buildConstraintViolationWithTemplate(
                         MessageUtility.getLocalizedMessageText(
                         ClientMessage.CHECK_APP_CONTACT_PERSON_NAME)).addConstraintViolation();
             }
+            
+            if (appBean.getContactPerson().getName() != null && !appBean.getContactPerson().getName().isEmpty()) {
+                if (appBean.getContactPerson().getName().length()>255){
+                        result = false;
+                        constraintContext.buildConstraintViolationWithTemplate(
+                        (MessageUtility.getLocalizedMessageText(
+                        ClientMessage.CHECK_FIELD_INVALID_LENGTH))+" "+bundle.getString("ApplicationPanel.labName.text")).addConstraintViolation();
+                }
+            }
+            // LastName validation
             if (appBean.getContactPerson().getLastName() == null || appBean.getContactPerson().getLastName().isEmpty()) {
                 result = false;
                 constraintContext.buildConstraintViolationWithTemplate(
                         MessageUtility.getLocalizedMessageText(
                         ClientMessage.CHECK_APP_CONTACT_PERSON_LASTNAME)).addConstraintViolation();
             }
+           
+            if (appBean.getContactPerson().getLastName() != null && !appBean.getContactPerson().getLastName().isEmpty()) {
+                if (appBean.getContactPerson().getLastName().length()>50){
+                        result = false;
+                        constraintContext.buildConstraintViolationWithTemplate(
+                        (MessageUtility.getLocalizedMessageText(
+                        ClientMessage.CHECK_FIELD_INVALID_LENGTH))+" "+bundle.getString("ApplicationPanel.labLastName.text")).addConstraintViolation();
+                }
+            }
             
+            // phone validation
             if (appBean.getContactPerson().getPhone() != null && !appBean.getContactPerson().getPhone().isEmpty()) {
               if (! isPhoneNumberValid(appBean.getContactPerson().getPhone())) {
                 result = false;
@@ -89,7 +123,14 @@ public class ApplicationValidator implements ConstraintValidator<ApplicationChec
                         MessageUtility.getLocalizedMessageText(
                         ClientMessage.CHECK_INVALID_PHONE)).addConstraintViolation();
               }
+              if (appBean.getContactPerson().getPhone().length()>15){
+                        result = false;
+                        constraintContext.buildConstraintViolationWithTemplate(
+                        (MessageUtility.getLocalizedMessageText(
+                        ClientMessage.CHECK_FIELD_INVALID_LENGTH))+" "+bundle.getString("ApplicationPanel.labPhone.text")).addConstraintViolation();
+              }
             }
+            // fax validation
             if (appBean.getContactPerson().getFax() != null && !appBean.getContactPerson().getFax().isEmpty()) {
               if (! isPhoneNumberValid(appBean.getContactPerson().getFax())) {
                 result = false;
@@ -97,7 +138,14 @@ public class ApplicationValidator implements ConstraintValidator<ApplicationChec
                         MessageUtility.getLocalizedMessageText(
                         ClientMessage.CHECK_INVALID_FAX)).addConstraintViolation();
               }
+              if (appBean.getContactPerson().getFax().length()>15){
+                        result = false;
+                        constraintContext.buildConstraintViolationWithTemplate(
+                        (MessageUtility.getLocalizedMessageText(
+                        ClientMessage.CHECK_FIELD_INVALID_LENGTH))+" "+bundle.getString("ApplicationPanel.labFax.text")).addConstraintViolation();
+              }
             }  
+            // email validation
             if (appBean.getContactPerson().getEmail() != null && !appBean.getContactPerson().getEmail().isEmpty()) {
               if (! isEmailValid(appBean.getContactPerson().getEmail())) {
                 result = false;
@@ -105,9 +153,14 @@ public class ApplicationValidator implements ConstraintValidator<ApplicationChec
                         MessageUtility.getLocalizedMessageText(
                         ClientMessage.CHECK_INVALID_EMAIL)).addConstraintViolation();
               }
+              if (appBean.getContactPerson().getEmail().length()>50){
+                        result = false;
+                        constraintContext.buildConstraintViolationWithTemplate(
+                       (MessageUtility.getLocalizedMessageText(
+                        ClientMessage.CHECK_FIELD_INVALID_LENGTH))+" "+bundle.getString("ApplicationPanel.labEmail.text")).addConstraintViolation();
+              }
             }
         }
-
         return result;
     }
     

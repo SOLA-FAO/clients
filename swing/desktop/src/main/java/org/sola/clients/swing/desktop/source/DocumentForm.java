@@ -66,8 +66,10 @@ public class DocumentForm extends ContentPanel {
     }
 
     private void saveDocument() {
+     if (document.docValid()) {
+        
         SolaTask t = new SolaTask<Boolean, Boolean>() {
-
+             
             @Override
             public Boolean doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_DOCUMENT_SAVING));
@@ -84,6 +86,7 @@ public class DocumentForm extends ContentPanel {
             }
         };
         TaskManager.getInstance().runTask(t);
+     }  
     }
 
     @SuppressWarnings("unchecked")

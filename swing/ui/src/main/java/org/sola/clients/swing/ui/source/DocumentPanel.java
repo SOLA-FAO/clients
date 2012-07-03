@@ -386,9 +386,11 @@ public class DocumentPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
+       if (getDocument().docValid()){  
         if (getDocument().validate(true).size() < 1) {
             fireDocumentChangeEvent();
         }
+       } 
     }//GEN-LAST:event_btnOkActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.sola.clients.swing.common.controls.BrowseControl browseAttachment;

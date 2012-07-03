@@ -29,6 +29,7 @@
  */
 package org.sola.clients.beans.application;
 
+import java.util.ResourceBundle;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Iterator;
@@ -58,6 +59,7 @@ import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.EntityAction;
 import org.sola.webservices.transferobjects.casemanagement.ApplicationTO;
 import org.sola.webservices.transferobjects.search.PropertyVerifierTO;
+
 
 /**
  * Represents full object of the application in the domain model. Could be
@@ -103,7 +105,7 @@ public class ApplicationBean extends ApplicationSummaryBean {
     private PartySummaryBean agent;
     private String assigneeId;
     private ApplicationStatusTypeBean statusBean;
-
+        
     /**
      * Default constructor to create application bean. Initializes the following
      * list of beans which are the parts of the application bean: <br /> {@link ApplicationActionTypeBean}
@@ -595,7 +597,31 @@ public class ApplicationBean extends ApplicationSummaryBean {
      * @param value The value of parcel.
      */
     public void addProperty(String firstPart, String lastPart, BigDecimal area, BigDecimal value) {
+        
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/application/Bundle");
+    
         if (propertyList != null) {
+               // property firstpart lastpart validation
+               if (firstPart.isEmpty()||firstPart==null||firstPart==""||firstPart.trim().equals("")){
+                        MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_FIRSTPART);
+                  return;      
+               }     
+               
+               if (lastPart.isEmpty()||lastPart==null||lastPart==""||lastPart.trim().equals("")){
+                        MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_LASTPART);
+                  return;      
+               }
+            
+                
+                if (firstPart.length()>20){
+                        MessageUtility.displayMessage(ClientMessage.CHECK_FIELD_INVALID_LENGTH_PAR, new Object[]{bundle.getString("ApplicationPanel.labFirstPart.text")});
+                  return;      
+                }
+                if (lastPart.length()>50){
+                        MessageUtility.displayMessage(ClientMessage.CHECK_FIELD_INVALID_LENGTH_PAR, new Object[]{bundle.getString("ApplicationPanel.labLastPart.text")});
+                  return;      
+                }
+                
             ApplicationPropertyBean newProperty = new ApplicationPropertyBean();
             newProperty.setArea(area);
             newProperty.setNameFirstpart(firstPart);
