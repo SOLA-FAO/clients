@@ -27,9 +27,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.codehaus.mojo.webstart</groupId>
+            <groupId>org.codehaus.mojo</groupId>
             <artifactId>webstart-jnlp-servlet</artifactId>
-            <version>1.0-6.0-02_ea_b02</version>
+            <version>1.0-beta-3</version>
             <scope>runtime</scope>
         </dependency>
 
@@ -59,9 +59,9 @@
                 <!-- Use webstart plugin to create the jnlp package, and sign and compress the
                 jar files. Both the SOLA Desktop and the SOLA Admin applications are packaged
                 together for easy deployment. These could be packaged separately if necessary. --> 
-                <groupId>org.codehaus.mojo.webstart</groupId>
+                <groupId>org.codehaus.mojo</groupId>
                 <artifactId>webstart-maven-plugin</artifactId>
-                <version>1.0-beta-2</version>
+                <version>1.0-beta-3</version>
                 <executions>
                     <execution>
                         <phase>process-resources</phase>
