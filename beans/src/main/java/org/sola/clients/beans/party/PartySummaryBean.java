@@ -25,6 +25,7 @@
  */
 package org.sola.clients.beans.party;
 
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.sola.clients.beans.AbstractIdBean;
 import org.sola.clients.beans.application.ApplicationBean;
@@ -52,9 +53,12 @@ public class PartySummaryBean extends AbstractIdBean {
     public static final String TYPE_PROPERTY = "type";
     public static final String IS_RIGHTHOLDER_PROPERTY = "rightHolder";
     public static final String ROLE_CODE_PROPERTY = "roleCode";
+    
     @NotEmpty(message = ClientMessage.CHECK_NOTNULL_NAME, payload = Localized.class)
+    @Length(max = 255, message =  ClientMessage.CHECK_FIELD_INVALID_LENGTH_NAME, payload=Localized.class)
     private String name;
     @NotEmpty(message = ClientMessage.CHECK_NOTNULL_LASTNAME, payload = Localized.class, groups = PartyIndividualValidationGroup.class)
+    @Length(max = 50, message =  ClientMessage.CHECK_FIELD_INVALID_LENGTH_LASTNAME, payload=Localized.class)
     private String lastName;
     private String extId;
     private boolean rightHolder;

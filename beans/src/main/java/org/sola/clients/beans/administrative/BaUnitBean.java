@@ -42,6 +42,8 @@ import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.beans.referencedata.StatusConstants;
 import org.sola.clients.beans.referencedata.TypeActionBean;
 import org.sola.clients.beans.source.SourceBean;
+import org.sola.common.messaging.ClientMessage;
+import org.sola.common.messaging.MessageUtility;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.EntityAction;
 import org.sola.webservices.transferobjects.administrative.BaUnitTO;
@@ -52,7 +54,8 @@ import org.sola.webservices.transferobjects.search.SpatialSearchResultTO;
  * domain model. Could be populated from the {@link BaUnitTO} object.
  */
 public class BaUnitBean extends BaUnitSummaryBean {
-
+         
+    
     private class RrrListListener implements ObservableListListener, Serializable {
 
         @Override
@@ -244,7 +247,18 @@ public class BaUnitBean extends BaUnitSummaryBean {
         }
         return false;
     }
-
+    
+    
+    public boolean isValid(){
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle");
+    
+        if ( this.getName().length()>255){
+                        MessageUtility.displayMessage(ClientMessage.CHECK_FIELD_INVALID_LENGTH_PAR, new Object[]{bundle.getString("PropertyPanel.jLabel5.text")});
+           return false;      
+        }
+        return true;
+    }
+    
     public void removeSelectedParcel() {
         if (selectedParcel != null && cadastreObjectList != null) {
             cadastreObjectList.safeRemove(selectedParcel, EntityAction.DISASSOCIATE);
@@ -258,6 +272,13 @@ public class BaUnitBean extends BaUnitSummaryBean {
     }
 
     public boolean addBaUnitNotation(String notationText) {
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle");
+         if (notationText.length()>1000){
+                        MessageUtility.displayMessage(ClientMessage.CHECK_FIELD_INVALID_LENGTH_PAR, new Object[]{bundle.getString("PropertyPanel.jLabel15.text")});
+                  return false;      
+         }
+        
+        
         BaUnitNotationBean notation = new BaUnitNotationBean();
         notation.setBaUnitId(this.getId());
         notation.setNotationText(notationText);

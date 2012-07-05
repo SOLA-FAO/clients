@@ -30,6 +30,7 @@ package org.sola.clients.swing.desktop.party;
 import javax.swing.ImageIcon;
 import org.sola.clients.beans.party.PartySearchParamsBean;
 import org.sola.clients.beans.party.PartySearchResultBean;
+import org.sola.clients.swing.desktop.administrative.MortgagePanel;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
@@ -39,10 +40,21 @@ import org.sola.common.messaging.MessageUtility;
 public class QuickSearchPartyForm extends javax.swing.JDialog {
 
     public static final String SELECTED_PARTY="selectedParty";
+    public static final java.awt.Frame PARENT_FORM = null;
+    private MortgagePanel panelForm;
     
     public QuickSearchPartyForm(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
        this.setIconImage(new ImageIcon(QuickSearchPartyForm.class.getResource("/images/sola/logo_icon.jpg")).getImage());
+    
+        initComponents();
+    }
+
+    public QuickSearchPartyForm(MortgagePanel panel, boolean modal) {
+        super(PARENT_FORM, modal);
+        
+        this.panelForm=panel; 
+        this.setIconImage(new ImageIcon(QuickSearchPartyForm.class.getResource("/images/sola/logo_icon.jpg")).getImage());
     
         initComponents();
     }
@@ -101,6 +113,11 @@ public class QuickSearchPartyForm extends javax.swing.JDialog {
         if (partyQuickSearchControl.getSelectedElement() != null) {
             this.firePropertyChange(SELECTED_PARTY, null,
                     (PartySearchResultBean) partyQuickSearchControl.getSelectedElement());
+            if (this.getSearchParams().getRoleTypeCode().contains("bank")){
+                java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
+                String notationText = bundle.getString("MortgagePanel.notationText.text")+" "+partyQuickSearchControl.getSelectedElement();
+                this.panelForm.txtNotationText.setText(notationText);
+            }
             this.dispose();
         } else {
             MessageUtility.displayMessage(ClientMessage.PARTY_SELECT_PARTY);

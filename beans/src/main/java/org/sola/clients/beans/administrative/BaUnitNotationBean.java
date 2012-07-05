@@ -27,6 +27,7 @@
  */
 package org.sola.clients.beans.administrative;
 
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.sola.clients.beans.AbstractTransactionedBean;
 import org.sola.clients.beans.referencedata.StatusConstants;
@@ -48,6 +49,7 @@ public class BaUnitNotationBean extends AbstractTransactionedBean {
     private String baUnitId;
     private String transactionId;
     
+    @Length(max = 1000, message =  ClientMessage.CHECK_FIELD_INVALID_LENGTH_NOTATION, payload=Localized.class)
     @NotEmpty(message= ClientMessage.CHECK_NOTNULL_NOTATION, payload=Localized.class)
     private String notationText;
     private String referenceNr;

@@ -161,7 +161,7 @@ public class MortgagePanel extends ContentPanel {
     }
 
     private void openLenderForm() {
-        QuickSearchPartyForm searchForm = new QuickSearchPartyForm(null, true);
+        QuickSearchPartyForm searchForm = new QuickSearchPartyForm(this, true);
         searchForm.getSearchParams().setRoleTypeCode("bank");
         searchForm.setLocationRelativeTo(this);
 
@@ -636,7 +636,7 @@ public class MortgagePanel extends ContentPanel {
     private javax.swing.JFormattedTextField txtAmount;
     private javax.swing.JFormattedTextField txtExpiryDate;
     private javax.swing.JFormattedTextField txtInterestRate;
-    private javax.swing.JTextField txtNotationText;
+    public javax.swing.JTextField txtNotationText;
     private javax.swing.JFormattedTextField txtRanking;
     private javax.swing.JFormattedTextField txtRegDatetime;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;

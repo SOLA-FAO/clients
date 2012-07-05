@@ -29,12 +29,14 @@ package org.sola.clients.beans.party;
 
 import java.util.UUID;
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.address.AddressBean;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.controls.SolaList;
 import org.sola.clients.beans.converters.TypeConverters;
+import org.sola.clients.beans.party.validation.PartyAddressCheck;
 import org.sola.clients.beans.party.validation.PartyIdTypeCheck;
 import org.sola.clients.beans.referencedata.*;
 import org.sola.clients.beans.validation.Localized;
@@ -50,6 +52,7 @@ import org.sola.webservices.transferobjects.casemanagement.PartyTO;
  * <br />This bean is used as a part of {@link ApplicationBean}.
  */
 @PartyIdTypeCheck(message = ClientMessage.CHECK_PERSON_ID_DOC_NUMBER, payload=Localized.class)
+@PartyAddressCheck(message = ClientMessage.CHECK_PERSON_ADDRESS, payload=Localized.class)
 public class PartyBean extends PartySummaryBean {
 
     public static final String EMAIL_PROPERTY = "email";
@@ -68,14 +71,21 @@ public class PartyBean extends PartySummaryBean {
     public static final String GRANDFATHERSNAME_PROPERTY = "fathersLastName";
     public static final String ALIAS_PROPERTY = "alias";
     
+    @Length(max = 50, message =  ClientMessage.CHECK_FIELD_INVALID_LENGTH_MAIL, payload=Localized.class)
     @Email(message = ClientMessage.CHECK_INVALID_EMAIL, payload=Localized.class)
     private String email;
+    @Length(max = 15, message =  ClientMessage.CHECK_FIELD_INVALID_LENGTH_PHONE, payload=Localized.class)
     private String phone;
+    @Length(max = 15, message =  ClientMessage.CHECK_FIELD_INVALID_LENGTH_MOBILE, payload=Localized.class)
     private String mobile;
     private String idNumber;
+    @Length(max = 15, message =  ClientMessage.CHECK_FIELD_INVALID_LENGTH_FAX, payload=Localized.class)
     private String fax;
+    @Length(max = 50, message =  ClientMessage.CHECK_FIELD_INVALID_LENGTH_FNAME, payload=Localized.class)
     private String fathersName;
+    @Length(max = 50, message =  ClientMessage.CHECK_FIELD_INVALID_LENGTH_FLAST, payload=Localized.class)
     private String fathersLastName;
+    @Length(max = 50, message =  ClientMessage.CHECK_FIELD_INVALID_LENGTH_ALIAS, payload=Localized.class)
     private String alias;
     private AddressBean addressBean;
     private GenderTypeBean genderTypeBean;

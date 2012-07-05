@@ -831,6 +831,13 @@ public class PropertyPanel extends ContentPanel {
         if (baUnitBean1.validate(true).size() > 0) {
             return;
         }
+        
+        if (!baUnitBean1.isValid()) {
+         return;   
+        }
+        
+        
+        
 
         SolaTask<Void, Void> t = new SolaTask<Void, Void>() {
 
