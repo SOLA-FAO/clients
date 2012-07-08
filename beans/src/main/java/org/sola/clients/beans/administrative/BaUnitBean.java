@@ -251,11 +251,13 @@ public class BaUnitBean extends BaUnitSummaryBean {
     
     public boolean isValid(){
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle");
-    
-        if ( this.getName().length()>255){
+//        if(!this.getName().isEmpty()&& this.getName()!= null && this.getName()!= "" ){
+        if(this.getName()!= null){
+         if ( this.getName().length()>255){
                         MessageUtility.displayMessage(ClientMessage.CHECK_FIELD_INVALID_LENGTH_PAR, new Object[]{bundle.getString("PropertyPanel.jLabel5.text")});
            return false;      
-        }
+         }
+      }  
         return true;
     }
     

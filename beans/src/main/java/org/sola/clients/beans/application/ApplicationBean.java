@@ -31,9 +31,7 @@ package org.sola.clients.beans.application;
 
 import java.util.ResourceBundle;
 import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import org.jdesktop.observablecollections.ObservableCollections;
@@ -700,7 +698,44 @@ public class ApplicationBean extends ApplicationSummaryBean {
         // Validation updates the Application, so need to reload to get the
         // lastest rowversion, etc. 
         this.reload();
-        return validationResults;
+           
+           
+          ObservableList<ValidationResultBean>  validationSorted1List = ObservableCollections.observableList(new ArrayList<ValidationResultBean>());       
+          ObservableList<ValidationResultBean>  validationSorted2List = ObservableCollections.observableList(new ArrayList<ValidationResultBean>());       
+          ObservableList<ValidationResultBean>  validationSorted3List = ObservableCollections.observableList(new ArrayList<ValidationResultBean>());       
+          ObservableList<ValidationResultBean>  validationSorted4List = ObservableCollections.observableList(new ArrayList<ValidationResultBean>());       
+          ObservableList<ValidationResultBean>  validationSortedList = ObservableCollections.observableList(new ArrayList<ValidationResultBean>());       
+          
+          
+          for(ValidationResultBean resultBean:validationResults){
+            if ((resultBean.getSeverity().contains("medium"))) {
+                validationSorted1List.add(0,resultBean);
+            }else {
+                validationSorted1List.add(resultBean);
+            }
+          }
+          validationSorted2List=validationSorted1List;
+          
+          for(ValidationResultBean resultBean:validationSorted2List){
+            if ((resultBean.getSeverity().contains("warning"))) {
+                validationSorted3List.add(0,resultBean);
+            }else {
+                validationSorted3List.add(resultBean);
+            }
+          }
+          
+          validationSorted4List = validationSorted3List;
+          
+          for(ValidationResultBean resultBean:validationSorted4List){
+            if (resultBean.isSuccessful()) {
+                validationSortedList.add(resultBean);
+            }else {
+                validationSortedList.add(0, resultBean);
+            }
+          }
+          validationResults = validationSortedList;
+                 
+          return validationResults;
     }
 
     /**

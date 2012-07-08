@@ -58,12 +58,49 @@ public class ValidationResultForm extends javax.swing.JDialog {
             this.validationResultsList = ObservableCollections.observableList(new ArrayList<ValidationResultBean>());
         }
         
+        ObservableList<ValidationResultBean>  validationSorted1List = ObservableCollections.observableList(new ArrayList<ValidationResultBean>());       
+          ObservableList<ValidationResultBean>  validationSorted2List = ObservableCollections.observableList(new ArrayList<ValidationResultBean>());       
+          ObservableList<ValidationResultBean>  validationSorted3List = ObservableCollections.observableList(new ArrayList<ValidationResultBean>());       
+          ObservableList<ValidationResultBean>  validationSorted4List = ObservableCollections.observableList(new ArrayList<ValidationResultBean>());       
+          ObservableList<ValidationResultBean>  validationSortedList = ObservableCollections.observableList(new ArrayList<ValidationResultBean>());       
+          
+          
+          for(ValidationResultBean resultBean:this.validationResultsList){
+            if ((resultBean.getSeverity().contains("medium"))) {
+                validationSorted1List.add(0,resultBean);
+            }else {
+                validationSorted1List.add(resultBean);
+            }
+          }
+          validationSorted2List=validationSorted1List;
+          
+          for(ValidationResultBean resultBean:validationSorted2List){
+            if ((resultBean.getSeverity().contains("warning"))) {
+                validationSorted3List.add(0,resultBean);
+            }else {
+                validationSorted3List.add(resultBean);
+            }
+          }
+          
+          validationSorted4List = validationSorted3List;
+          
+          for(ValidationResultBean resultBean:validationSorted4List){
+            if (resultBean.isSuccessful()) {
+                validationSortedList.add(resultBean);
+            }else {
+                validationSortedList.add(0, resultBean);
+            }
+          }
+          this.validationResultsList = validationSortedList;
+          
+        
         initComponents();
         lblMessage.setText(message);
         customizeForm();
     }
     
     public ObservableList<ValidationResultBean> getValidationResultsList() {
+        
         return validationResultsList;
     }
 
