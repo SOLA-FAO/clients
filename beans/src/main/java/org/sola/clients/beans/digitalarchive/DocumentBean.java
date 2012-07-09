@@ -34,6 +34,8 @@ import org.sola.clients.beans.AbstractIdBean;
 import org.sola.clients.beans.AbstractVersionedBean;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.common.FileUtility;
+import org.sola.common.SOLAException;
+import org.sola.common.messaging.ClientMessage;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.EntityAction;
 import org.sola.webservices.transferobjects.digitalarchive.DocumentBinaryTO;
@@ -158,6 +160,9 @@ public class DocumentBean extends AbstractIdBean {
             if (documentBinary != null) {
                 String fileName = "sola_arch_" + documentBinary.getNr() + "." + documentBinary.getExtension();
                 FileUtility.runFile(documentBinary.getBody(), fileName);
+            }
+            else {
+                throw new SOLAException(ClientMessage.SOURCE_NO_DOCUMENT); 
             }
         }
     }
