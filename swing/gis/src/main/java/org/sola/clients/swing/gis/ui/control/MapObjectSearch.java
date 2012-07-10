@@ -40,11 +40,15 @@ import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.swing.extended.Map;
 import org.geotools.swing.extended.util.Messaging;
 import org.sola.clients.swing.common.controls.FreeTextSearch;
+import org.sola.clients.swing.common.tasks.SolaTask;
+import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.gis.beans.SpatialSearchOptionBean;
 import org.sola.clients.swing.gis.beans.SpatialSearchResultBean;
 import org.sola.clients.swing.gis.data.PojoFeatureSource;
 import org.sola.common.MappingManager;
+import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.GisMessage;
+import org.sola.common.messaging.MessageUtility;
 import org.sola.services.boundary.wsclients.SearchClient;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.search.SpatialSearchResultTO;
@@ -58,8 +62,8 @@ import org.sola.webservices.transferobjects.search.SpatialSearchResultTO;
 public class MapObjectSearch extends FreeTextSearch {
 
     private Map map;
-    private SearchClient dataSource;
     private SpatialSearchOptionBean searchByObject;
+    private SolaTask searchTask = null;
 
     public MapObjectSearch() {
         super();
@@ -84,36 +88,60 @@ public class MapObjectSearch extends FreeTextSearch {
      * @param listModel
      */
     @Override
-    public void onNewSearchString(String searchString, DefaultListModel listModel) {
-        if (this.dataSource == null) {
-            this.dataSource = WSManager.getInstance().getSearchService();
-        }
+    public void onNewSearchString(final String searchString, final DefaultListModel listModel) {
 
+        // No serach is selected
         if (this.searchByObject == null) {
             return;
         }
 
-        // Execute the query
-        List<SpatialSearchResultTO> searchResults =
-                this.dataSource.searchSpatialObjects(this.searchByObject.getQueryName(), searchString);
-
-        listModel.clear();
-        
-        if (searchResults != null && searchResults.size() > 0) {
-            // Convert the TOs to Beans
-            List<SpatialSearchResultBean> beanList = new ArrayList<SpatialSearchResultBean>();
-            for (SpatialSearchResultTO searchResult : searchResults) {
-                beanList.add(MappingManager.getMapper().map(searchResult,
-                        SpatialSearchResultBean.class));
-
-            }   
-            // Sort the beans and then display them in the list. 
-            Collections.sort(beanList);
-            for (SpatialSearchResultBean bean : beanList) {
-                listModel.addElement(bean); 
-            }
+        // Check if a map search is currently running and if so, cancel it
+        if (searchTask != null && TaskManager.getInstance().isTaskRunning(searchTask.getId())) {
+            TaskManager.getInstance().removeTask(searchTask);
         }
-        
+
+        final List<SpatialSearchResultTO> searchResults = new ArrayList<SpatialSearchResultTO>();
+        final String queryName = this.searchByObject.getQueryName();
+        final String searchTitle = this.searchByObject.getTitle();
+        listModel.clear();
+
+        searchTask = new SolaTask<Void, Void>() {
+
+            @Override
+            public Void doTask() {
+                // Perform the search on a background thread
+                setMessage(MessageUtility.getLocalizedMessage(ClientMessage.PROGRESS_MSG_MAP_SEARCHING,
+                        new String[]{searchTitle}).getMessage());
+                try {
+                    // Allow a small delay on the background thread so that the tread can be cancelled
+                    // before executing the search if the user is still typing. 
+                    Thread.sleep(500);
+                    searchResults.addAll(WSManager.getInstance().getSearchService().searchSpatialObjects(queryName, searchString));
+                } catch (InterruptedException ex) {
+                }
+                return null;
+            }
+
+            @Override
+            public void taskDone() {
+                // Update the GUI using the primary EDT thread
+                if (searchResults.size() > 0) {
+                    // Convert the TOs to Beans
+                    List<SpatialSearchResultBean> beanList = new ArrayList<SpatialSearchResultBean>();
+                    for (SpatialSearchResultTO searchResult : searchResults) {
+                        beanList.add(MappingManager.getMapper().map(searchResult,
+                                SpatialSearchResultBean.class));
+
+                    }
+                    // Sort the beans and then display them in the list. 
+                    Collections.sort(beanList);
+                    for (SpatialSearchResultBean bean : beanList) {
+                        listModel.addElement(bean);
+                    }
+                }
+            }
+        };
+        TaskManager.getInstance().runTask(searchTask);
 
     }
 
