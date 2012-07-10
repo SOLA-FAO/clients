@@ -1,30 +1,26 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations
- * (FAO). All rights reserved.
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO). All rights
+ * reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without modification, are permitted
+ * provided that the following conditions are met:
  *
- * 1. Redistributions of source code must retain the above copyright notice,this
- * list of conditions and the following disclaimer. 2. Redistributions in binary
- * form must reproduce the above copyright notice,this list of conditions and
- * the following disclaimer in the documentation and/or other materials provided
- * with the distribution. 3. Neither the name of FAO nor the names of its
- * contributors may be used to endorse or promote products derived from this
- * software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this list of conditions
+ * and the following disclaimer. 2. Redistributions in binary form must reproduce the above
+ * copyright notice,this list of conditions and the following disclaimer in the documentation and/or
+ * other materials provided with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this software without
+ * specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+ * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.beans.application;
@@ -58,11 +54,9 @@ import org.sola.webservices.transferobjects.EntityAction;
 import org.sola.webservices.transferobjects.casemanagement.ApplicationTO;
 import org.sola.webservices.transferobjects.search.PropertyVerifierTO;
 
-
 /**
- * Represents full object of the application in the domain model. Could be
- * populated from the {@link ApplicationTO} object.<br /> For more information
- * see data dictionary <b>Application</b> schema.
+ * Represents full object of the application in the domain model. Could be populated from the {@link ApplicationTO}
+ * object.<br /> For more information see data dictionary <b>Application</b> schema.
  */
 @ApplicationCheck
 public class ApplicationBean extends ApplicationSummaryBean {
@@ -83,7 +77,6 @@ public class ApplicationBean extends ApplicationSummaryBean {
     public static final String ASSIGNEE_ID_PROPERTY = "assigneeId";
     public static final String STATUS_TYPE_PROPERTY = "statusType";
     public static final String APPLICATION_PROPERTY = "application";
-    
     private ApplicationActionTypeBean actionBean;
     private String actionNotes;
     private SolaList<ApplicationPropertyBean> propertyList;
@@ -93,7 +86,7 @@ public class ApplicationBean extends ApplicationSummaryBean {
     private BigDecimal tax;
     private BigDecimal totalAmountPaid;
     private BigDecimal totalFee;
-    @Size(min=1, message = ClientMessage.CHECK_APP_SERVICES_NOT_EMPTY, payload=Localized.class)
+    @Size(min = 1, message = ClientMessage.CHECK_APP_SERVICES_NOT_EMPTY, payload = Localized.class)
     private SolaObservableList<ApplicationServiceBean> serviceList;
     private SolaList<SourceBean> sourceList;
     private SolaObservableList<ApplicationLogBean> appLogList;
@@ -103,14 +96,11 @@ public class ApplicationBean extends ApplicationSummaryBean {
     private PartySummaryBean agent;
     private String assigneeId;
     private ApplicationStatusTypeBean statusBean;
-        
+
     /**
-     * Default constructor to create application bean. Initializes the following
-     * list of beans which are the parts of the application bean: <br /> {@link ApplicationActionTypeBean}
-     * <br /> {@link PartySummaryBean}
-     * <br /> {@link ApplicationPropertyBean}
-     * <br /> {@link ApplicationServiceBean}
-     * <br /> {@link SourceBean}
+     * Default constructor to create application bean. Initializes the following list of beans which
+     * are the parts of the application bean: <br /> {@link ApplicationActionTypeBean} <br /> {@link PartySummaryBean}
+     * <br /> {@link ApplicationPropertyBean} <br /> {@link ApplicationServiceBean} <br /> {@link SourceBean}
      */
     public ApplicationBean() {
         super();
@@ -139,8 +129,8 @@ public class ApplicationBean extends ApplicationSummaryBean {
     }
 
     /**
-     * Allow approval if the Application is assigned, has a status of lodged and
-     * all of the services are in an finalized state.
+     * Allow approval if the Application is assigned, has a status of lodged and all of the services
+     * are in an finalized state.
      *
      * @return
      */
@@ -251,8 +241,7 @@ public class ApplicationBean extends ApplicationSummaryBean {
     }
 
     /**
-     * Sets application status code and retrieves {@link ApplicationStatusTypeBean}
-     * from the cache.
+     * Sets application status code and retrieves {@link ApplicationStatusTypeBean} from the cache.
      *
      * @param value Application status code.
      */
@@ -272,9 +261,8 @@ public class ApplicationBean extends ApplicationSummaryBean {
     }
 
     /**
-     * Returns collection of {@link ApplicationBean} objects. This method is
-     * used by Jasper report designer to extract properties of application bean
-     * to help design a report.
+     * Returns collection of {@link ApplicationBean} objects. This method is used by Jasper report
+     * designer to extract properties of application bean to help design a report.
      */
     public static java.util.Collection generateCollection() {
         java.util.Vector collection = new java.util.Vector();
@@ -300,8 +288,7 @@ public class ApplicationBean extends ApplicationSummaryBean {
     }
 
     /**
-     * Sets application action code and retrieves {@link ApplicationActionTypeBean}
-     * from the cache.
+     * Sets application action code and retrieves {@link ApplicationActionTypeBean} from the cache.
      *
      * @param value Application action code.
      */
@@ -463,15 +450,13 @@ public class ApplicationBean extends ApplicationSummaryBean {
     }
 
     /**
-     * Adds new service ({@link ApplicationServiceBean}) into the application
-     * services list.
+     * Adds new service ({@link ApplicationServiceBean}) into the application services list.
      *
-     * @param requestTypeBean Request type (service) from available services
-     * list.
+     * @param requestTypeBean Request type (service) from available services list.
      */
     public void addService(RequestTypeBean requestTypeBean) {
-        
-       
+
+
         if (requestTypeBean != null && serviceList != null) {
             int order = 0;
 
@@ -487,11 +472,11 @@ public class ApplicationBean extends ApplicationSummaryBean {
 //                        return;
 //                    }
 //                }
-            
-             if (this.isFeePaid()) {
-              MessageUtility.displayMessage(ClientMessage.APPLICATION_WARNING_ADDEDSERVICE);
+
+            if (this.isFeePaid()) {
+                MessageUtility.displayMessage(ClientMessage.APPLICATION_WARNING_ADDEDSERVICE);
 //                        return;
-             }
+            }
             for (Iterator<ApplicationServiceBean> it = serviceList.iterator(); it.hasNext();) {
                 ApplicationServiceBean applicationServiceBean = it.next();
                 if (applicationServiceBean.getServiceOrder() > order) {
@@ -503,9 +488,9 @@ public class ApplicationBean extends ApplicationSummaryBean {
             newService.setApplicationId(this.getId());
             newService.setRequestTypeCode(requestTypeBean.getCode());
             newService.setServiceOrder(order + 1);
-            
-            
-            
+
+
+
             serviceList.add(newService);
         }
     }
@@ -586,8 +571,8 @@ public class ApplicationBean extends ApplicationSummaryBean {
     }
 
     /**
-     * Adds new property object ({@link ApplicationPropertyBean}) into the list
-     * of application properties.
+     * Adds new property object ({@link ApplicationPropertyBean}) into the list of application
+     * properties.
      *
      * @param firstPart First part of the property's identification code.
      * @param lastPart Second part of the property's identification code.
@@ -595,31 +580,32 @@ public class ApplicationBean extends ApplicationSummaryBean {
      * @param value The value of parcel.
      */
     public void addProperty(String firstPart, String lastPart, BigDecimal area, BigDecimal value) {
-        
+
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/application/Bundle");
-    
+
         if (propertyList != null) {
-               // property firstpart lastpart validation
-               if (firstPart.isEmpty()||firstPart==null||firstPart==""||firstPart.trim().equals("")){
-                        MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_FIRSTPART);
-                  return;      
-               }     
-               
-               if (lastPart.isEmpty()||lastPart==null||lastPart==""||lastPart.trim().equals("")){
-                        MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_LASTPART);
-                  return;      
-               }
-            
-                
-                if (firstPart.length()>20){
-                        MessageUtility.displayMessage(ClientMessage.CHECK_FIELD_INVALID_LENGTH_PAR, new Object[]{bundle.getString("ApplicationPanel.labFirstPart.text")});
-                  return;      
-                }
-                if (lastPart.length()>50){
-                        MessageUtility.displayMessage(ClientMessage.CHECK_FIELD_INVALID_LENGTH_PAR, new Object[]{bundle.getString("ApplicationPanel.labLastPart.text")});
-                  return;      
-                }
-                
+            // property firstpart lastpart validation
+            if (firstPart == null || (firstPart != null && firstPart.trim().isEmpty())) {
+                MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_FIRSTPART);
+                return;
+            }
+
+            if (lastPart == null || (lastPart != null && lastPart.trim().isEmpty())) {
+                MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_LASTPART);
+                return;
+            }
+
+            if (firstPart.length() > 20) {
+                MessageUtility.displayMessage(ClientMessage.CHECK_FIELD_INVALID_LENGTH_PAR, 
+                        new Object[]{bundle.getString("ApplicationPanel.labFirstPart.text")});
+                return;
+            }
+            if (lastPart.length() > 50) {
+                MessageUtility.displayMessage(ClientMessage.CHECK_FIELD_INVALID_LENGTH_PAR, 
+                        new Object[]{bundle.getString("ApplicationPanel.labLastPart.text")});
+                return;
+            }
+
             ApplicationPropertyBean newProperty = new ApplicationPropertyBean();
             newProperty.setArea(area);
             newProperty.setNameFirstpart(firstPart);
@@ -639,9 +625,8 @@ public class ApplicationBean extends ApplicationSummaryBean {
     }
 
     /**
-     * Verifies selected property object. Checks if object exists in the
-     * database and on the map. Checks for the list of incomplete applications,
-     * related to the selected property object.
+     * Verifies selected property object. Checks if object exists in the database and on the map.
+     * Checks for the list of incomplete applications, related to the selected property object.
      */
     public boolean verifyProperty() {
         if (selectedProperty != null) {
@@ -698,44 +683,44 @@ public class ApplicationBean extends ApplicationSummaryBean {
         // Validation updates the Application, so need to reload to get the
         // lastest rowversion, etc. 
         this.reload();
-           
-           
-          ObservableList<ValidationResultBean>  validationSorted1List = ObservableCollections.observableList(new ArrayList<ValidationResultBean>());       
-          ObservableList<ValidationResultBean>  validationSorted2List = ObservableCollections.observableList(new ArrayList<ValidationResultBean>());       
-          ObservableList<ValidationResultBean>  validationSorted3List = ObservableCollections.observableList(new ArrayList<ValidationResultBean>());       
-          ObservableList<ValidationResultBean>  validationSorted4List = ObservableCollections.observableList(new ArrayList<ValidationResultBean>());       
-          ObservableList<ValidationResultBean>  validationSortedList = ObservableCollections.observableList(new ArrayList<ValidationResultBean>());       
-          
-          
-          for(ValidationResultBean resultBean:validationResults){
+
+
+        ObservableList<ValidationResultBean> validationSorted1List = ObservableCollections.observableList(new ArrayList<ValidationResultBean>());
+        ObservableList<ValidationResultBean> validationSorted2List = ObservableCollections.observableList(new ArrayList<ValidationResultBean>());
+        ObservableList<ValidationResultBean> validationSorted3List = ObservableCollections.observableList(new ArrayList<ValidationResultBean>());
+        ObservableList<ValidationResultBean> validationSorted4List = ObservableCollections.observableList(new ArrayList<ValidationResultBean>());
+        ObservableList<ValidationResultBean> validationSortedList = ObservableCollections.observableList(new ArrayList<ValidationResultBean>());
+
+
+        for (ValidationResultBean resultBean : validationResults) {
             if ((resultBean.getSeverity().contains("medium"))) {
-                validationSorted1List.add(0,resultBean);
-            }else {
+                validationSorted1List.add(0, resultBean);
+            } else {
                 validationSorted1List.add(resultBean);
             }
-          }
-          validationSorted2List=validationSorted1List;
-          
-          for(ValidationResultBean resultBean:validationSorted2List){
+        }
+        validationSorted2List = validationSorted1List;
+
+        for (ValidationResultBean resultBean : validationSorted2List) {
             if ((resultBean.getSeverity().contains("warning"))) {
-                validationSorted3List.add(0,resultBean);
-            }else {
+                validationSorted3List.add(0, resultBean);
+            } else {
                 validationSorted3List.add(resultBean);
             }
-          }
-          
-          validationSorted4List = validationSorted3List;
-          
-          for(ValidationResultBean resultBean:validationSorted4List){
+        }
+
+        validationSorted4List = validationSorted3List;
+
+        for (ValidationResultBean resultBean : validationSorted4List) {
             if (resultBean.isSuccessful()) {
                 validationSortedList.add(resultBean);
-            }else {
+            } else {
                 validationSortedList.add(0, resultBean);
             }
-          }
-          validationResults = validationSortedList;
-                 
-          return validationResults;
+        }
+        validationResults = validationSortedList;
+
+        return validationResults;
     }
 
     /**
