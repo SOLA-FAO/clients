@@ -37,4 +37,8 @@ public class InitializeLayerException extends Exception {
     public InitializeLayerException(String message, Exception ex) {
         super(message, ex);
     }
+
+    public InitializeLayerException(Exception ex) {
+        super(ex);
+    }
 }

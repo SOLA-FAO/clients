@@ -110,13 +110,16 @@ public class MapObjectSearch extends FreeTextSearch {
             @Override
             public Void doTask() {
                 // Perform the search on a background thread
-                setMessage(MessageUtility.getLocalizedMessage(ClientMessage.PROGRESS_MSG_MAP_SEARCHING,
+                setMessage(MessageUtility.getLocalizedMessage(
+                        ClientMessage.PROGRESS_MSG_MAP_SEARCHING,
                         new String[]{searchTitle}).getMessage());
                 try {
                     // Allow a small delay on the background thread so that the tread can be cancelled
                     // before executing the search if the user is still typing. 
                     Thread.sleep(500);
-                    searchResults.addAll(WSManager.getInstance().getSearchService().searchSpatialObjects(queryName, searchString));
+                    searchResults.addAll(
+                            WSManager.getInstance().getSearchService().searchSpatialObjects(
+                            queryName, searchString));
                 } catch (InterruptedException ex) {
                 }
                 return null;

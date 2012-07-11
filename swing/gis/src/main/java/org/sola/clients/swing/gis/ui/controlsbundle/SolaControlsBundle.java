@@ -146,10 +146,12 @@ public abstract class SolaControlsBundle extends ControlsBundle {
             String wmsServerURL = configMapLayer.getWmsUrl();
             ArrayList<String> wmsLayerNames = new ArrayList<String>();
             String[] layerNameList = configMapLayer.getWmsLayers().split(";");
+            String wmsVersion = "1.1.0";
+            String format = "image/jpeg";
             java.util.Collections.addAll(wmsLayerNames, layerNameList);
-            this.getMap().addLayerWMS(
+            this.getMap().addLayerWms(
                     configMapLayer.getId(), configMapLayer.getTitle(), wmsServerURL, wmsLayerNames,
-                    configMapLayer.isVisible());
+                    configMapLayer.isVisible(), wmsVersion, format);
         } else if (configMapLayer.getTypeCode().equals("shape")) {
             this.getMap().addLayerShapefile(
                     configMapLayer.getId(),

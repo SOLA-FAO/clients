@@ -29,7 +29,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.geotools.map.extended.layer;
+package org.geotools.feature.extended;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import org.opengis.feature.simple.SimpleFeature;

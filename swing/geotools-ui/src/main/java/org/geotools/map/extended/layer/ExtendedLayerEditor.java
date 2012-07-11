@@ -31,6 +31,7 @@
  */
 package org.geotools.map.extended.layer;
 
+import org.geotools.feature.extended.VertexInformation;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.CoordinateList;
 import com.vividsolutions.jts.geom.Geometry;

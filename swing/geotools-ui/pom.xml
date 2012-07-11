@@ -32,7 +32,7 @@
         </pluginRepository>
     </pluginRepositories>
     <properties>
-        <geotools.version>8.0-M4</geotools.version>
+        <geotools.version>8.0-RC1</geotools.version>
     </properties>
     <dependencies>
         <dependency>
@@ -59,11 +59,6 @@
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-swing</artifactId>
-            <version>${geotools.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.geotools</groupId>
-            <artifactId>gt-image</artifactId>
             <version>${geotools.version}</version>
         </dependency>
         <dependency>

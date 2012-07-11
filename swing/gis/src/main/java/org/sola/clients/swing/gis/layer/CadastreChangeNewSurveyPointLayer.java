@@ -51,7 +51,7 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.sola.clients.swing.gis.Messaging;
 import org.sola.clients.swing.gis.beans.SurveyPointBean;
 import org.geotools.map.extended.layer.ExtendedLayerEditor;
-import org.geotools.map.extended.layer.VertexInformation;
+import org.geotools.feature.extended.VertexInformation;
 import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.sola.clients.swing.gis.ui.control.CadastreChangePointSurveyListForm;
 import org.sola.common.messaging.GisMessage;

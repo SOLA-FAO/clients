@@ -57,17 +57,13 @@ import javax.swing.JToolBar;
 import org.geotools.geometry.jts.Geometries;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.map.Layer;
+import org.geotools.map.extended.layer.*;
 import org.geotools.swing.JMapPane;
 import org.geotools.swing.event.MapMouseAdapter;
 import org.geotools.swing.event.MapMouseEvent;
 import org.geotools.swing.event.MapPaneAdapter;
 import org.geotools.swing.event.MapPaneEvent;
 import org.geotools.swing.extended.util.Messaging;
-import org.geotools.map.extended.layer.ExtendedLayer;
-import org.geotools.map.extended.layer.ExtendedLayerEditor;
-import org.geotools.map.extended.layer.ExtendedLayerGraphics;
-import org.geotools.map.extended.layer.ExtendedLayerShapefile;
-import org.geotools.map.extended.layer.ExtendedLayerWMS;
 import org.geotools.renderer.lite.RendererUtilities;
 import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.geotools.swing.extended.exception.InitializeMapException;
@@ -427,37 +423,24 @@ public class Map extends JMapPane {
     }
 
     /**
-     * It adds a layer of type WMS which is actually a WMS Server with a list of layers in it. Sets
-     * the layer visible by default.
-     *
-     * @param layerName The name
-     * @param layerTitle layer title
-     * @param URL The WMS Capabilities Location
-     * @param layerNames The list of layer names
-     * @return
-     */
-    public ExtendedLayerWMS addLayerWMS(
-            String layerName, String layerTitle, String URL, List<String> layerNames) {
-        return addLayerWMS(layerName, layerTitle, URL, layerNames, true);
-    }
-
-    /**
      * It adds a layer of type WMS which is actually a WMS Server with a list of layers in it.
      *
      * @param layerName The name
      * @param layerTitle layer title
-     * @param URL The WMS Capabilities Location
+     * @param URL The Url to the wms server
      * @param layerNames The list of layer names
      * @param visible Flag to indicate if the layer should be visible by default.
      * @return
      */
-    public ExtendedLayerWMS addLayerWMS(
-            String layerName, String layerTitle, String URL, List<String> layerNames,
-            boolean visible) {
-        ExtendedLayerWMS layer = null;
+    public ExtendedWmsLiteLayer addLayerWms(
+            String layerName, String layerTitle, String Url, List<String> layerNames,
+            boolean visible, String version, String format) {
+        ExtendedWmsLiteLayer layer = null;
         try {
-            layer = new ExtendedLayerWMS(layerName, layerTitle, this, URL, layerNames);
+            layer = new ExtendedWmsLiteLayer(
+                    layerName, layerTitle, Url, layerNames, this.getSrid(), version, format);
             layer.setVisible(visible);
+            this.addLayer(layer);
             this.getSolaLayers().put(layerName, layer);
         } catch (InitializeLayerException ex) {
             Messaging.getInstance().show(ex.getMessage());

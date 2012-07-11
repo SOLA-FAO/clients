@@ -43,7 +43,7 @@ import org.geotools.swing.event.MapMouseEvent;
 import org.opengis.feature.simple.SimpleFeature;
 import org.geotools.swing.extended.Map;
 import org.geotools.map.extended.layer.ExtendedLayerEditor;
-import org.geotools.map.extended.layer.VertexInformation;
+import org.geotools.feature.extended.VertexInformation;
 
 /**
  *

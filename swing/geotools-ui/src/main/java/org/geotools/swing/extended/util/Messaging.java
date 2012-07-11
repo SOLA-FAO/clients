@@ -55,7 +55,8 @@ public class Messaging {
         REMOVE_ALL_FEATURES_ERROR,
         LAYER_NOT_ADDED_ERROR,
         WMSLAYER_NOT_INITIALIZED_ERROR,
-        WMSLAYER_LAYER_NOT_FOUND_ERROR,
+        WMSLAYER_LAYER_RENDER_ERROR,
+        WMSLAYER_VERSION_MISSING_ERROR,
         UTILITIES_SLD_DOESNOT_EXIST_ERROR,
         UTILITIES_SLD_LOADING_ERROR,
         UTILITIES_COORDSYS_COULDNOT_BE_CREATED_ERROR,
@@ -140,8 +141,10 @@ public class Messaging {
             msgBody = "Layer could not be added.";
         } else if (messageId.equals(Messaging.Ids.WMSLAYER_NOT_INITIALIZED_ERROR.toString())) {
             msgBody = "WMS Layer is not initialized.";
-        } else if (messageId.equals(Messaging.Ids.WMSLAYER_LAYER_NOT_FOUND_ERROR.toString())) {
-            msgBody = "Layer %s not found in the wms server.";
+        } else if (messageId.equals(Messaging.Ids.WMSLAYER_LAYER_RENDER_ERROR.toString())) {
+            msgBody = "WMS Layer is not rendered.";
+        } else if (messageId.equals(Messaging.Ids.WMSLAYER_VERSION_MISSING_ERROR.toString())) {
+            msgBody = "Version of WMS Server is missing.";
         } else if (messageId.equals(Messaging.Ids.UTILITIES_SLD_DOESNOT_EXIST_ERROR.toString())) {
             msgBody = "SLD Resource %s does not exist.";
         } else if (messageId.equals(Messaging.Ids.UTILITIES_SLD_LOADING_ERROR.toString())) {

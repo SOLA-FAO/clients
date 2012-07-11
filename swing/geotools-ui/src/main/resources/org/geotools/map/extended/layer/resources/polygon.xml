@@ -12,13 +12,9 @@
           <Name>TEST</Name>
           <Title>Polygon</Title>
           <PolygonSymbolizer>
-            <Fill>
-              <CssParameter name="fill">#0000FF</CssParameter>
-              <CssParameter name="opacity">0.7</CssParameter>
-            </Fill>
             <Stroke>
               <CssParameter name="stroke">#00FF00</CssParameter>
-              <CssParameter name="stroke-width">3</CssParameter>
+              <CssParameter name="stroke-width">2</CssParameter>
             </Stroke>
           </PolygonSymbolizer>
         </Rule>

@@ -149,7 +149,8 @@ public class ControlsBundle extends javax.swing.JPanel {
 //        statusBar.removeAll();
         JMapStatusBar statusBar = new JMapStatusBar();
         statusBar.addItem(new JRendererStatusBarItem(map), false, true);
-        statusBar.addItem(new JCoordsStatusBarItem(map));
+        JCoordsStatusBarItem coordStatusItem = new JCoordsStatusBarItem(map);
+        statusBar.addItem(coordStatusItem);
         this.pnlStatusbar.add(statusBar, BorderLayout.CENTER);
         //statusBar.addItem(null);
     }
