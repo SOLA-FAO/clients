@@ -48,8 +48,8 @@ import org.sola.webservices.spatial.MapDefinitionTO;
 // CHOOSE WHICH TOOL IS PREFERRED FOR THE MAP PRINT COMMENTING AND UNCOMMENTING THE FOLLOWING LINES
 //this is the mapaction used for creating a jasper report map print
 import org.sola.clients.swing.gis.mapaction.SolaJasperPrint;
-import org.sola.clients.swing.gis.ui.control.MapScaleStatusBarItem;
-import org.sola.clients.swing.gis.ui.control.ScaleBarStatusBarItem;
+import org.geotools.swing.control.extended.MapScaleStatusBarItem;
+import org.geotools.swing.control.extended.ScaleBarStatusBarItem;
 //this is the mapaction used for creating a pdf map print
 //import org.sola.clients.swing.gis.mapaction.SolaPrint;
 
@@ -92,10 +92,6 @@ public abstract class SolaControlsBundle extends ControlsBundle {
             this.pojoDataAccess = pojoDataAccess;
             MapDefinitionTO mapDefinition = pojoDataAccess.getMapDefinition();
             super.Setup(mapDefinition.getSrid(), mapDefinition.getWktOfCrs(), true);
-            // Adds the Scale Bar and Map Scale to the status bar of the map. Uses MigLayout constraints
-            // to position the items on the status bar. 
-            this.getStatusBar().addItem(new ScaleBarStatusBarItem(this.getMap()), true, true, "push, align center");
-            this.getStatusBar().addItem(new MapScaleStatusBarItem(this.getMap()), true, true, "align right");
             this.addSearchPanel();
             InformationTool infoTool = new InformationTool(this.pojoDataAccess);
             this.getMap().addTool(infoTool, this.getToolbar(), true);

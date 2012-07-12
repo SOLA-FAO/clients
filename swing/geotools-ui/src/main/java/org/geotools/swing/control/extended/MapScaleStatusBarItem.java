@@ -23,7 +23,7 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-package org.sola.clients.swing.gis.ui.control;
+package org.geotools.swing.control.extended;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -38,8 +38,7 @@ import org.geotools.swing.event.MapPaneAdapter;
 import org.geotools.swing.event.MapPaneEvent;
 import org.geotools.swing.extended.Map;
 import org.geotools.swing.extended.exception.MapScaleException;
-import org.sola.common.messaging.GisMessage;
-import org.sola.common.messaging.MessageUtility;
+import org.geotools.swing.extended.util.Messaging;
 
 /**
  * A status bar item that displays the map scale and allows the user to change the map scale. The
@@ -65,7 +64,8 @@ public class MapScaleStatusBarItem extends StatusBarItem {
         // Creates a text field for the scale value that the user can update
         txtScale = new JTextField(6);
         txtScale.setHorizontalAlignment(JTextField.RIGHT);
-        lblScale = new JLabel(MessageUtility.getLocalizedMessageText(GisMessage.GENERAL_SCALE_LABEL));
+        lblScale = new JLabel(Messaging.getInstance().getMessageText(
+                Messaging.Ids.SCALE_LABEL.toString()));
         this.add(lblScale, BorderLayout.LINE_START);
         this.add(txtScale, BorderLayout.LINE_END);
 
@@ -100,7 +100,8 @@ public class MapScaleStatusBarItem extends StatusBarItem {
             String scaleText;
             double scale = theMap.getScale();
             if (scale < 0.01) {
-                scaleText = MessageUtility.getLocalizedMessageText(GisMessage.GENERAL_MIN_DISPLAY_SCALE);
+                scaleText = Messaging.getInstance().getMessageText(
+                        Messaging.Ids.MIN_DISPLAY_SCALE.toString());
             } else {
                 DecimalFormat df = new DecimalFormat("#,###,###");
                 df.setRoundingMode(RoundingMode.HALF_UP);
@@ -113,7 +114,8 @@ public class MapScaleStatusBarItem extends StatusBarItem {
             txtScale.setText(scaleText);
             suppressZoom = false;
         } catch (MapScaleException ex) {
-            txtScale.setText(MessageUtility.getLocalizedMessageText(GisMessage.GENERAL_INVALID_SCALE));
+            txtScale.setText(Messaging.getInstance().getMessageText(
+                    Messaging.Ids.MAP_SCALE_ERROR.toString()));
         }
     }
 
@@ -121,7 +123,7 @@ public class MapScaleStatusBarItem extends StatusBarItem {
      * Calculates the new bounding box for the map and zooms to that extent based on the scale value
      * entered by the user. Note that the zoom may not result in the exact scale entered due to the
      * curvature of the earth. For smaller scales (e.g. < 10,000) the zoom should be accurate. For
-     * high scales (e.g. > 200,000) the zoom may become increasingly inaccurate. 
+     * high scales (e.g. > 200,000) the zoom may become increasingly inaccurate.
      */
     private void zoomMap() {
         if (!suppressZoom) {
