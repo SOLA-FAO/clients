@@ -1,28 +1,26 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO). All rights
+ * reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without modification, are permitted
+ * provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this list of conditions
+ * and the following disclaimer. 2. Redistributions in binary form must reproduce the above
+ * copyright notice,this list of conditions and the following disclaimer in the documentation and/or
+ * other materials provided with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this software without
+ * specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+ * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 /*
@@ -50,17 +48,16 @@ import org.sola.webservices.spatial.MapDefinitionTO;
 // CHOOSE WHICH TOOL IS PREFERRED FOR THE MAP PRINT COMMENTING AND UNCOMMENTING THE FOLLOWING LINES
 //this is the mapaction used for creating a jasper report map print
 import org.sola.clients.swing.gis.mapaction.SolaJasperPrint;
+import org.sola.clients.swing.gis.ui.control.MapScaleStatusBarItem;
+import org.sola.clients.swing.gis.ui.control.ScaleBarStatusBarItem;
 //this is the mapaction used for creating a pdf map print
 //import org.sola.clients.swing.gis.mapaction.SolaPrint;
 
-
-
 /**
  * This is the basic abstract bundle used in Sola. It sets up the map control with common layers
- * from the layer definitions found in database. 
- * Also using the map definition the full extent and srid are defined.
- * It defines also extra resources for the SLDs.
- * 
+ * from the layer definitions found in database. Also using the map definition the full extent and
+ * srid are defined. It defines also extra resources for the SLDs.
+ *
  * @author Elton Manoku
  */
 public abstract class SolaControlsBundle extends ControlsBundle {
@@ -68,7 +65,6 @@ public abstract class SolaControlsBundle extends ControlsBundle {
     private static String extraSldResources = "/org/sola/clients/swing/gis/layer/resources/";
     private static boolean gisInitialized = false;
     private PojoDataAccess pojoDataAccess = null;
-
 // CHOOSE WHICH TOOL IS PREFERRED FOR THE MAP PRINT COMMENTING AND UNCOMMENTING THE FOLLOWING LINES
 //this is used for creating a pdf map print
 //    private SolaPrint solaPrint = null;
@@ -86,28 +82,33 @@ public abstract class SolaControlsBundle extends ControlsBundle {
 
     /**
      * Sets up the bundle.
-     * @param pojoDataAccess The data access library used to communicate with the server
-     * from where the map definitions are retrieved.
-     * 
+     *
+     * @param pojoDataAccess The data access library used to communicate with the server from where
+     * the map definitions are retrieved.
+     *
      */
     public void Setup(PojoDataAccess pojoDataAccess) {
         try {
             this.pojoDataAccess = pojoDataAccess;
             MapDefinitionTO mapDefinition = pojoDataAccess.getMapDefinition();
             super.Setup(mapDefinition.getSrid(), mapDefinition.getWktOfCrs(), true);
+            // Adds the Scale Bar and Map Scale to the status bar of the map. Uses MigLayout constraints
+            // to position the items on the status bar. 
+            this.getStatusBar().addItem(new ScaleBarStatusBarItem(this.getMap()), true, true, "push, align center");
+            this.getStatusBar().addItem(new MapScaleStatusBarItem(this.getMap()), true, true, "align right");
             this.addSearchPanel();
             InformationTool infoTool = new InformationTool(this.pojoDataAccess);
             this.getMap().addTool(infoTool, this.getToolbar(), true);
-           
-            
+
+
             // CHOOSE WHICH TOOL IS PREFERRED FOR THE MAP PRINT COMMENTING AND UNCOMMENTING THE FOLLOWING LINES
             //this is used for creating a pdf map print
             //            this.solaPrint = new SolaPrint(this.getMap());
             //this is used for creating a jasper report map print
             this.solaPrint = new SolaJasperPrint(this.getMap());
-           
+
             this.getMap().addMapAction(this.solaPrint, this.getToolbar(), true);
-            
+
             this.getMap().setFullExtent(
                     mapDefinition.getEast(),
                     mapDefinition.getWest(),
@@ -136,9 +137,10 @@ public abstract class SolaControlsBundle extends ControlsBundle {
 
     /**
      * It adds a layer in the map using map definition as retrieved by server
+     *
      * @param configMapLayer The map layer definition
      * @throws InitializeLayerException
-     * @throws SchemaException 
+     * @throws SchemaException
      */
     public void addLayerConfig(ConfigMapLayerTO configMapLayer)
             throws InitializeLayerException, SchemaException {
@@ -160,7 +162,7 @@ public abstract class SolaControlsBundle extends ControlsBundle {
                     configMapLayer.getStyle(),
                     configMapLayer.isVisible());
         } else if (configMapLayer.getTypeCode().equals("pojo")) {
-            ExtendedLayer layer = new PojoLayer(configMapLayer.getId(), this.pojoDataAccess, 
+            ExtendedLayer layer = new PojoLayer(configMapLayer.getId(), this.pojoDataAccess,
                     configMapLayer.isVisible());
             this.getMap().addLayer(layer);
         }
@@ -168,7 +170,8 @@ public abstract class SolaControlsBundle extends ControlsBundle {
 
     /**
      * Gets the Data access that is used to communicate with the server
-     * @return 
+     *
+     * @return
      */
     public PojoDataAccess getPojoDataAccess() {
         return pojoDataAccess;
@@ -176,25 +179,27 @@ public abstract class SolaControlsBundle extends ControlsBundle {
 
     /**
      * Refreshes the map
+     *
      * @param force True = If a layer can be marked to be refreshed always, it will be refreshed
      * even if the extent of the map is not changed. It is used when overridden by sub-classes.
      */
     public void refresh(boolean force) {
         this.getMap().refresh();
     }
-    
+
     /**
      * Sets the application id if the bundle is used within an application
-     * @param applicationId 
+     *
+     * @param applicationId
      */
-    public void setApplicationId(String applicationId){
+    public void setApplicationId(String applicationId) {
         this.solaPrint.setApplicationId(applicationId);
     }
-    
+
     /**
      * It adds the search panel to the left panel of the bundle
      */
-    private void addSearchPanel(){
+    private void addSearchPanel() {
         SearchPanel panel = new SearchPanel(this.getMap());
         this.addInLeftPanel(Messaging.getInstance().getMessageText(
                 GisMessage.LEFT_PANEL_TAB_FIND_TITLE), panel);
