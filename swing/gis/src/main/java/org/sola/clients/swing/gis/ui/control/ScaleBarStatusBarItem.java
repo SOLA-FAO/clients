@@ -110,14 +110,16 @@ public class ScaleBarStatusBarItem extends StatusBarItem {
                     lblScaleBar.setIcon(new ImageIcon(image));
                 } else {
                     lblScaleBar.setIcon(null);
-                    lblScaleBar.setText(MessageUtility.getLocalizedMessageText(GisMessage.GENERAL_MIN_DISPLAY_SCALE));
+                    lblScaleBar.setText(MessageUtility.getLocalizedMessageText(
+                            GisMessage.GENERAL_MIN_DISPLAY_SCALE));
                 }
                 previousScale = scale;
             }
 
         } catch (MapScaleException ex) {
             lblScaleBar.setIcon(null);
-            lblScaleBar.setText(MessageUtility.getLocalizedMessageText(GisMessage.GENERAL_INVALID_SCALE));
+            lblScaleBar.setText(MessageUtility.getLocalizedMessageText(
+                    GisMessage.GENERAL_INVALID_SCALE));
         }
     }
 }

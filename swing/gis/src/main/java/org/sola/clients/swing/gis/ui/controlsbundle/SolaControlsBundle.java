@@ -42,14 +42,14 @@ import org.sola.clients.swing.gis.layer.PojoLayer;
 import org.sola.clients.swing.gis.tool.InformationTool;
 import org.sola.clients.swing.gis.ui.control.SearchPanel;
 import org.sola.common.messaging.GisMessage;
-import org.sola.webservices.spatial.ConfigMapLayerTO;
-import org.sola.webservices.spatial.MapDefinitionTO;
 
 // CHOOSE WHICH TOOL IS PREFERRED FOR THE MAP PRINT COMMENTING AND UNCOMMENTING THE FOLLOWING LINES
 //this is the mapaction used for creating a jasper report map print
 import org.sola.clients.swing.gis.mapaction.SolaJasperPrint;
 import org.sola.clients.swing.gis.ui.control.MapScaleStatusBarItem;
 import org.sola.clients.swing.gis.ui.control.ScaleBarStatusBarItem;
+import org.sola.webservices.search.ConfigMapLayerTO;
+import org.sola.webservices.search.MapDefinitionTO;
 //this is the mapaction used for creating a pdf map print
 //import org.sola.clients.swing.gis.mapaction.SolaPrint;
 
@@ -145,11 +145,11 @@ public abstract class SolaControlsBundle extends ControlsBundle {
     public void addLayerConfig(ConfigMapLayerTO configMapLayer)
             throws InitializeLayerException, SchemaException {
         if (configMapLayer.getTypeCode().equals("wms")) {
-            String wmsServerURL = configMapLayer.getWmsUrl();
+            String wmsServerURL = configMapLayer.getUrl();
             ArrayList<String> wmsLayerNames = new ArrayList<String>();
             String[] layerNameList = configMapLayer.getWmsLayers().split(";");
-            String wmsVersion = "1.1.0";
-            String format = "image/jpeg";
+            String wmsVersion = configMapLayer.getWmsVersion();
+            String format = configMapLayer.getWmsFormat();
             java.util.Collections.addAll(wmsLayerNames, layerNameList);
             this.getMap().addLayerWms(
                     configMapLayer.getId(), configMapLayer.getTitle(), wmsServerURL, wmsLayerNames,

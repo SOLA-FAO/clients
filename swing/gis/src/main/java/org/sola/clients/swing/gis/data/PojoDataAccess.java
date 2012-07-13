@@ -33,10 +33,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import org.sola.common.MappingManager;
 import org.sola.clients.swing.gis.beans.TransactionCadastreChangeBean;
 import org.sola.clients.swing.gis.beans.TransactionCadastreRedefinitionBean;
+import org.sola.common.MappingManager;
 import org.sola.common.logging.LogUtility;
 import org.sola.common.messaging.MessageUtility;
 import org.sola.services.boundary.wsclients.CadastreClient;
@@ -44,12 +43,12 @@ import org.sola.services.boundary.wsclients.SearchClient;
 import org.sola.services.boundary.wsclients.SpatialClient;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.services.boundary.wsclients.exception.WebServiceClientException;
-import org.sola.webservices.spatial.ConfigMapLayerTO;
-import org.sola.webservices.spatial.MapDefinitionTO;
-import org.sola.webservices.spatial.QueryForNavigation;
+import org.sola.webservices.search.ConfigMapLayerTO;
+import org.sola.webservices.search.MapDefinitionTO;
 import org.sola.webservices.search.QueryForSelect;
-import org.sola.webservices.spatial.ResultForNavigationInfo;
 import org.sola.webservices.search.ResultForSelectionInfo;
+import org.sola.webservices.spatial.QueryForNavigation;
+import org.sola.webservices.spatial.ResultForNavigationInfo;
 import org.sola.webservices.transferobjects.transaction.TransactionCadastreChangeTO;
 import org.sola.webservices.transferobjects.transaction.TransactionCadastreRedefinitionTO;
 
@@ -93,7 +92,7 @@ public class PojoDataAccess {
      */
     public MapDefinitionTO getMapDefinition() {
         if (this.mapDefinition == null) {
-            this.mapDefinition = getSpatialService().getMapDefinition();
+            this.mapDefinition = getSearchService().getMapDefinition();
         }
         return this.mapDefinition;
     }

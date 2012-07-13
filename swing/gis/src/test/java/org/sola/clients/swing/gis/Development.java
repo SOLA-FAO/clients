@@ -48,7 +48,7 @@ import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForCadastreRedefinition;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleViewer;
 import org.sola.services.boundary.wsclients.WSManager;
-import org.sola.webservices.spatial.MapDefinitionTO;
+import org.sola.webservices.search.MapDefinitionTO;
 import org.sola.webservices.transferobjects.administrative.BaUnitTO;
 
 /**

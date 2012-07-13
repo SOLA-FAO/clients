@@ -88,8 +88,8 @@ public class Development {
                 directory.getAbsolutePath());
         mapCtrl.getMap().addLayerShapefile(
                 "Shape layer", "Title of shape layer", shapeFile, "polygon.xml");
-        mapCtrl.getMap().addLayerWms("wmsLayer", "WMS Layer", 
-                wmsServerURL, wmsLayerNames, true,  "1.1.0", "image/png");
+        //mapCtrl.getMap().addLayerWms("wmsLayer", "WMS Layer", 
+        //        wmsServerURL, wmsLayerNames, true,  "1.1.0", "image/png");
         ExtendedImageLayer imageLayer = new ExtendedImageLayer("image", "Image");
         //imageLayer.setRasterFile(new File("C:\\dev\\projects\\sola\\docs\\test\\test.jpg"));
         //imageLayer.setMinX(1785170);imageLayer.setMinY(5927351);

@@ -46,7 +46,7 @@ import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.MessageUtility;
 import org.sola.webservices.search.QueryForSelect;
 import org.sola.webservices.search.ResultForSelectionInfo;
-import org.sola.webservices.spatial.ConfigMapLayerTO;
+import org.sola.webservices.search.ConfigMapLayerTO;
 
 /**
  * The information tool searches where the mouse is clicked for objects. If objects are found, they

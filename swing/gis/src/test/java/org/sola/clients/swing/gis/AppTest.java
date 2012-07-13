@@ -41,7 +41,7 @@ import org.sola.common.messaging.MessageUtility;
 import org.sola.webservices.search.QueryForSelect;
 import org.sola.webservices.spatial.ResultForNavigationInfo;
 import org.sola.webservices.search.ResultForSelectionInfo;
-import org.sola.webservices.spatial.MapDefinitionTO;
+import org.sola.webservices.search.MapDefinitionTO;
 
 /**
  * Unit test for simple App.

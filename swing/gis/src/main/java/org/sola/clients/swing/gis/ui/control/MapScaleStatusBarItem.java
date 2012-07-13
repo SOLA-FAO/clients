@@ -65,7 +65,8 @@ public class MapScaleStatusBarItem extends StatusBarItem {
         // Creates a text field for the scale value that the user can update
         txtScale = new JTextField(6);
         txtScale.setHorizontalAlignment(JTextField.RIGHT);
-        lblScale = new JLabel(MessageUtility.getLocalizedMessageText(GisMessage.GENERAL_SCALE_LABEL));
+        lblScale = new JLabel(MessageUtility.getLocalizedMessageText(
+                GisMessage.GENERAL_SCALE_LABEL));
         this.add(lblScale, BorderLayout.LINE_START);
         this.add(txtScale, BorderLayout.LINE_END);
 
@@ -100,7 +101,8 @@ public class MapScaleStatusBarItem extends StatusBarItem {
             String scaleText;
             double scale = theMap.getScale();
             if (scale < 0.01) {
-                scaleText = MessageUtility.getLocalizedMessageText(GisMessage.GENERAL_MIN_DISPLAY_SCALE);
+                scaleText = MessageUtility.getLocalizedMessageText(
+                        GisMessage.GENERAL_MIN_DISPLAY_SCALE);
             } else {
                 DecimalFormat df = new DecimalFormat("#,###,###");
                 df.setRoundingMode(RoundingMode.HALF_UP);
@@ -113,7 +115,8 @@ public class MapScaleStatusBarItem extends StatusBarItem {
             txtScale.setText(scaleText);
             suppressZoom = false;
         } catch (MapScaleException ex) {
-            txtScale.setText(MessageUtility.getLocalizedMessageText(GisMessage.GENERAL_INVALID_SCALE));
+            txtScale.setText(MessageUtility.getLocalizedMessageText(
+                    GisMessage.GENERAL_INVALID_SCALE));
         }
     }
 

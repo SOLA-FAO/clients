@@ -35,7 +35,7 @@ import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.data.PojoFeatureSource;
 import org.geotools.map.extended.layer.ExtendedFeatureLayer;
 import org.geotools.swing.extended.exception.InitializeLayerException;
-import org.sola.webservices.spatial.ConfigMapLayerTO;
+import org.sola.webservices.search.ConfigMapLayerTO;
 
 /**
  * The layers of this type are used to draw the features from the server. These layers are mainly
