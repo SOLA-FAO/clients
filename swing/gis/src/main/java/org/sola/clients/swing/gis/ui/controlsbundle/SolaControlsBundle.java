@@ -48,6 +48,8 @@ import org.sola.common.messaging.GisMessage;
 import org.sola.clients.swing.gis.mapaction.SolaJasperPrint;
 import org.sola.webservices.search.ConfigMapLayerTO;
 import org.sola.webservices.search.MapDefinitionTO;
+import org.geotools.swing.control.extended.MapScaleStatusBarItem;
+import org.geotools.swing.control.extended.ScaleBarStatusBarItem;
 //this is the mapaction used for creating a pdf map print
 //import org.sola.clients.swing.gis.mapaction.SolaPrint;
 
