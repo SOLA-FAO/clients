@@ -23,7 +23,7 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-package org.sola.clients.swing.gis.ui.control;
+package org.geotools.swing.control.extended;
 
 import java.awt.Color;
 import java.awt.Toolkit;
@@ -35,13 +35,22 @@ import org.geotools.swing.event.MapPaneAdapter;
 import org.geotools.swing.event.MapPaneEvent;
 import org.geotools.swing.extended.Map;
 import org.geotools.swing.extended.exception.MapScaleException;
+import org.geotools.swing.extended.util.Messaging;
 import org.geotools.swing.extended.util.ScalebarGenerator;
-import org.sola.common.messaging.GisMessage;
-import org.sola.common.messaging.MessageUtility;
 
 /**
  * A status bar item that uses the {@linkplain ScalebarGenerator} to create an image of a scale bar
- * for display. The scale bar will redraw if the
+ * for display.
+ *
+ * Note that the screen resolution has a significant impact on the accuracy of the scale bar when
+ * displayed on screen. Unfortunately the Java Toolkit is not guaranteed to give an accurate DPI and
+ * will usually give a default value of 96.
+ *
+ * The true DPI for modern monitors can be much greater than 96 (e.g. up to 200). A +%10 fudge
+ * factor is used to attempt to correct the scale for display on modern 22 inch wide screen monitors
+ * but note that the fudge factor may in fact increase the inaccuracy of the scale bar on larger,
+ * smaller or older monitors. For this reason the scale bar should be considered indicative only and
+ * should not be used to obtain precise measurements from the screen.
  */
 public class ScaleBarStatusBarItem extends StatusBarItem {
 
@@ -57,9 +66,11 @@ public class ScaleBarStatusBarItem extends StatusBarItem {
     private final JLabel lblScaleBar;
     private ScalebarGenerator scaleBar;
     private double previousScale = 0;
+    private double scaleBarDpiFudge = 1.10;
 
     /**
-     * Initializes the scale bar for display.
+     * Initializes the scale bar for display. See {@linkplain ScaleBarStatusBarItem} for notes about
+     * the accuracy of the scale bar.
      *
      * @param map The map to link the scale bar with.
      */
@@ -90,12 +101,31 @@ public class ScaleBarStatusBarItem extends StatusBarItem {
     }
 
     /**
-     * Redraws the scale bar image if the scale of the map has changed.
+     * Fudge factor used to attempt to improve the accuracy of the scale bar for on screen display.
+     * Default value is 1.10. See {@linkplain ScaleBarStatusBarItem} for notes about the accuracy of
+     * the scale bar.
+     */
+    public void setScaleBarDpiFudge(double scaleBarDpiFudge) {
+        this.scaleBarDpiFudge = scaleBarDpiFudge;
+    }
+
+    /**
+     * Obtains the screen resolution (a.k.a. DPI or PPI) using the default Java Toolkit and applies
+     * a fudge factor to attempt to improve the accuracy of the scale bar. See {@linkplain ScaleBarStatusBarItem}
+     * for notes about the accuracy of the scale bar.
      *
-     * Note that the screen resolution has a significant impact on the accuracy of the scale bar
-     * when displayed on screen. Unfortunately the Toolkit is not guaranteed to give an accurate DPI
-     * and will usually give a default value of 96. This means the scale bar should be considered
-     * indicative only.
+     * This method can be overridden in descendent classes to provide an improved implementation if
+     * one is available.
+     *
+     * @return
+     */
+    protected double getScreenResolution() {
+        return Toolkit.getDefaultToolkit().getScreenResolution() * scaleBarDpiFudge;
+    }
+
+    /**
+     * Redraws the scale bar image if the scale of the map has changed. See {@linkplain ScaleBarStatusBarItem}
+     * for notes about the accuracy of the scale bar.
      *
      * @param theMap The map display
      */
@@ -103,23 +133,22 @@ public class ScaleBarStatusBarItem extends StatusBarItem {
         try {
             double scale = theMap.getScale();
             if (scale != previousScale) {
-                BufferedImage image = scaleBar.getImage(scale, DEFAULT_WIDTH,
-                        Toolkit.getDefaultToolkit().getScreenResolution());
+                BufferedImage image = scaleBar.getImage(scale, DEFAULT_WIDTH, getScreenResolution());
                 if (image != null) {
                     lblScaleBar.setText(null);
                     lblScaleBar.setIcon(new ImageIcon(image));
                 } else {
                     lblScaleBar.setIcon(null);
-                    lblScaleBar.setText(MessageUtility.getLocalizedMessageText(
-                            GisMessage.GENERAL_MIN_DISPLAY_SCALE));
+                    lblScaleBar.setText(Messaging.getInstance().getMessageText(
+                            Messaging.Ids.MIN_DISPLAY_SCALE.toString()));
                 }
                 previousScale = scale;
             }
 
         } catch (MapScaleException ex) {
             lblScaleBar.setIcon(null);
-            lblScaleBar.setText(MessageUtility.getLocalizedMessageText(
-                    GisMessage.GENERAL_INVALID_SCALE));
+            lblScaleBar.setText(Messaging.getInstance().getMessageText(
+                    Messaging.Ids.MAP_SCALE_ERROR.toString()));
         }
     }
 }

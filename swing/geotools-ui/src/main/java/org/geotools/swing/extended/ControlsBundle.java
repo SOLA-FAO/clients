@@ -31,7 +31,6 @@
  */
 package org.geotools.swing.extended;
 
-import org.geotools.swing.control.extended.Toc;
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -39,6 +38,9 @@ import javax.swing.JToolBar;
 import org.geotools.swing.control.JCoordsStatusBarItem;
 import org.geotools.swing.control.JMapStatusBar;
 import org.geotools.swing.control.JRendererStatusBarItem;
+import org.geotools.swing.control.extended.MapScaleStatusBarItem;
+import org.geotools.swing.control.extended.ScaleBarStatusBarItem;
+import org.geotools.swing.control.extended.Toc;
 import org.geotools.swing.extended.exception.InitializeMapException;
 import org.geotools.swing.extended.util.Messaging;
 import org.geotools.swing.mapaction.extended.FullExtent;
@@ -53,7 +55,7 @@ import org.geotools.swing.tool.extended.ExtendedZoominTool;
  * @author Elton Manoku
  */
 public class ControlsBundle extends javax.swing.JPanel {
-    
+
     private Map map;
     private JTabbedPane leftPanel;
     private Toc toc;
@@ -98,7 +100,7 @@ public class ControlsBundle extends javax.swing.JPanel {
         }
         this.pnlMap.setLayout(new BorderLayout());
         this.pnlMap.add(this.map, BorderLayout.CENTER);
-        
+
         this.setupToolbar();
         this.setupStatusBar();
     }
@@ -148,13 +150,20 @@ public class ControlsBundle extends javax.swing.JPanel {
         //JMapStatusBar statusBar = JMapStatusBar.createDefaultStatusBar(map);
         //statusBar.removeAll();
         statusBar = new JMapStatusBar();
-        statusBar.addItem(new JRendererStatusBarItem(map), false, true);
-        JCoordsStatusBarItem coordStatusItem = new JCoordsStatusBarItem(map);
+        statusBar.addItem(new JRendererStatusBarItem(this.getMap()), false, true);
+        JCoordsStatusBarItem coordStatusItem = new JCoordsStatusBarItem(this.getMap());
         statusBar.addItem(coordStatusItem);
+        // Adds the Scale Bar and Map Scale to the status bar of the map. Uses MigLayout constraints
+        // to position the items on the status bar. 
+        statusBar.addItem(new ScaleBarStatusBarItem(this.getMap()), false, true, "push, align center");
+        statusBar.addItem(new MapScaleStatusBarItem(this.getMap()), false, true, "align right");
         this.pnlStatusbar.add(statusBar, BorderLayout.CENTER);
         //statusBar.addItem(null);
     }
-    
+
+    /**
+     * Returns the status bar for the control bundle. 
+     */
     protected JMapStatusBar getStatusBar() {
         return statusBar;
     }

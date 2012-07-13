@@ -23,7 +23,7 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-package org.sola.clients.swing.gis.tool;
+package org.geotools.swing.extended.util;
 
 import com.vividsolutions.jts.geom.*;
 import com.vividsolutions.jts.linearref.LinearLocation;
