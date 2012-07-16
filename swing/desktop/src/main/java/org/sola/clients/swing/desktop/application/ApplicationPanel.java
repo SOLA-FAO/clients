@@ -1,30 +1,26 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations
- * (FAO). All rights reserved.
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO). All rights
+ * reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without modification, are permitted
+ * provided that the following conditions are met:
  *
- * 1. Redistributions of source code must retain the above copyright notice,this
- * list of conditions and the following disclaimer. 2. Redistributions in binary
- * form must reproduce the above copyright notice,this list of conditions and
- * the following disclaimer in the documentation and/or other materials provided
- * with the distribution. 3. Neither the name of FAO nor the names of its
- * contributors may be used to endorse or promote products derived from this
- * software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this list of conditions
+ * and the following disclaimer. 2. Redistributions in binary form must reproduce the above
+ * copyright notice,this list of conditions and the following disclaimer in the documentation and/or
+ * other materials provided with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this software without
+ * specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+ * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.desktop.application;
@@ -84,8 +80,8 @@ import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.casemanagement.ApplicationTO;
 
 /**
- * This form is used to create new application or edit existing one. <p>The
- * following list of beans is used to bind the data on the form:<br />
+ * This form is used to create new application or edit existing one. <p>The following list of beans
+ * is used to bind the data on the form:<br />
  * {@link ApplicationBean}, <br />{@link RequestTypeListBean}, <br />
  * {@link PartySummaryListBean}, <br />{@link CommunicationTypeListBean}, <br />
  * {@link SourceTypeListBean}, <br />{@link ApplicationDocumentsHelperBean}</p>
@@ -97,10 +93,8 @@ public class ApplicationPanel extends ContentPanel {
     private String applicationID;
 
     /**
-     * This method is used by the form designer to create {@link ApplicationBean}.
-     * It uses
-     * <code>applicationId</code> parameter passed to the form constructor.<br
-     * />
+     * This method is used by the form designer to create {@link ApplicationBean}. It uses
+     * <code>applicationId</code> parameter passed to the form constructor.<br />
      * <code>applicationId</code> should be initialized before
      * {@link ApplicationForm#initComponents} method call.
      */
@@ -490,8 +484,7 @@ public class ApplicationPanel extends ContentPanel {
     }
 
     /**
-     * Opens dialog form to display status change result for application or
-     * service.
+     * Opens dialog form to display status change result for application or service.
      */
     private void openValidationResultForm(List<ValidationResultBean> validationResultList,
             boolean isSuccess, String message) {
@@ -502,8 +495,7 @@ public class ApplicationPanel extends ContentPanel {
     }
 
     /**
-     * Checks if there are any changes on the form before proceeding with
-     * action.
+     * Checks if there are any changes on the form before proceeding with action.
      */
     private boolean checkSaveBeforeAction() {
         if (MainForm.checkBeanState(appBean)) {
@@ -2848,8 +2840,7 @@ public class ApplicationPanel extends ContentPanel {
     }//GEN-LAST:event_btnAddPropertyActionPerformed
 
     /**
-     * Opens {@link FileBrowserForm} to select digital copy of the document and
-     * get it attached.
+     * Opens {@link FileBrowserForm} to select digital copy of the document and get it attached.
      */
     private void tabDocumentsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabDocumentsMouseClicked
         if (evt.getClickCount() == 2) {
@@ -3058,7 +3049,8 @@ public class ApplicationPanel extends ContentPanel {
                 @Override
                 public Void doTask() {
                     setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_DOCUMENT_OPENING));
-                    DocumentBean.openDocument(appBean.getSelectedSource().getArchiveDocument().getId());
+                    DocumentBean.openDocument(appBean.getSelectedSource().getArchiveDocument().getId(),
+                            appBean.getSelectedSource().getArchiveDocument().getFileName());
                     return null;
                 }
             };
@@ -3080,8 +3072,7 @@ public class ApplicationPanel extends ContentPanel {
     }
 
     /**
-     * Clears fields on the <b>Properties</b> tab, after the new property is
-     * added into the list.
+     * Clears fields on the <b>Properties</b> tab, after the new property is added into the list.
      */
     private void clearPropertyFields() {
         txtFirstPart.setText(null);

@@ -59,6 +59,6 @@ public class FileBinaryBean extends FileInfoBean {
      */
     public static void openFile(String fileName) {
         FileBinaryTO fileBinaryTO = WSManager.getInstance().getDigitalArchive().getFileBinary(fileName);
-        FileUtility.runFile(fileBinaryTO.getContent(), fileBinaryTO.getName());
+        FileUtility.openFile(fileBinaryTO.getContent(), fileBinaryTO.getName());
     }
 }

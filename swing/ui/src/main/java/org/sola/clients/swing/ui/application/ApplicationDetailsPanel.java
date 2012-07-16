@@ -1042,7 +1042,8 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
         if (appBean.getSelectedSource() != null
                 && appBean.getSelectedSource().getArchiveDocument() != null) {
             // Try to open attached file
-            DocumentBean.openDocument(appBean.getSelectedSource().getArchiveDocument().getId());
+            DocumentBean.openDocument(appBean.getSelectedSource().getArchiveDocument().getId(), 
+                    appBean.getSelectedSource().getArchiveDocument().getFileName());
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables

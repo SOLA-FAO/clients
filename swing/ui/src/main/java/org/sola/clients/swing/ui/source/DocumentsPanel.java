@@ -172,7 +172,8 @@ public class DocumentsPanel extends javax.swing.JPanel {
                 @Override
                 public Void doTask() {
                     setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_DOCUMENT_OPENING));
-                    DocumentBean.openDocument(sourceListBean.getSelectedSource().getArchiveDocument().getId());
+                    DocumentBean.openDocument(sourceListBean.getSelectedSource().getArchiveDocument().getId(),
+                            sourceListBean.getSelectedSource().getArchiveDocument().getFileName());
                     return null;
                 }
             };

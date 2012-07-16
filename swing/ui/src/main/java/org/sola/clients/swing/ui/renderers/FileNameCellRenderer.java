@@ -54,7 +54,7 @@ public class FileNameCellRenderer extends DefaultTableCellRenderer {
         if (value != null) {
 
             String fileName = value.toString();
-            String fileExt = FileUtility.getFileExtesion(fileName);
+            String fileExt = FileUtility.getFileExtension(fileName);
 
             try {
                 if (fileExt != null) {

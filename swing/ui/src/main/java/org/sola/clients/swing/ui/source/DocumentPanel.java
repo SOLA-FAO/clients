@@ -122,7 +122,8 @@ public class DocumentPanel extends javax.swing.JPanel {
 
             @Override
             public void textClicked(MouseEvent e) {
-                DocumentBean.openDocument(getDocument().getArchiveDocument().getId());
+                DocumentBean.openDocument(getDocument().getArchiveDocument().getId(), 
+                        getDocument().getArchiveDocument().getFileName());
             }
         });
         customizeForm();

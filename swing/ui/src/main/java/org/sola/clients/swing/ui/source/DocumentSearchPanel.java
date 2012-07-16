@@ -1,30 +1,26 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations
- * (FAO). All rights reserved.
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO). All rights
+ * reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without modification, are permitted
+ * provided that the following conditions are met:
  *
- * 1. Redistributions of source code must retain the above copyright notice,this
- * list of conditions and the following disclaimer. 2. Redistributions in binary
- * form must reproduce the above copyright notice,this list of conditions and
- * the following disclaimer in the documentation and/or other materials provided
- * with the distribution. 3. Neither the name of FAO nor the names of its
- * contributors may be used to endorse or promote products derived from this
- * software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this list of conditions
+ * and the following disclaimer. 2. Redistributions in binary form must reproduce the above
+ * copyright notice,this list of conditions and the following disclaimer in the documentation and/or
+ * other materials provided with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this software without
+ * specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+ * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.ui.source;
@@ -47,12 +43,13 @@ import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.ui.renderers.AttachedDocumentCellRenderer;
 import org.sola.common.RolesConstants;
+import org.sola.common.SOLAException;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
 /**
- * This panel provides parameterized source (documents) search capabilities.
- * <p>The following list of beans is used to bind the data on the form:<br />
+ * This panel provides parameterized source (documents) search capabilities. <p>The following list
+ * of beans is used to bind the data on the form:<br />
  * {@link SourceSearchResultsListBean},<br />{@link SourceSearchParamsBean}</p>
  */
 public class DocumentSearchPanel extends javax.swing.JPanel {
@@ -61,7 +58,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
     public static final String EDIT_SOURCE = "editSource";
     public static final String SELECT_SOURCE = "selectSource";
     public static final String ATTACH_SOURCE = "attachSource";
-    
+
     /**
      * Default constructor to create form and initialize parameters.
      */
@@ -96,7 +93,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         btnPrint.setVisible(showPrintButton);
         menuPrint.setVisible(showPrintButton);
     }
-    
+
     public boolean isShowSelectButton() {
         return btnSelect.isVisible();
     }
@@ -105,7 +102,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         btnSelect.setVisible(showSelectButton);
         menuSelect.setVisible(showSelectButton);
     }
-    
+
     public boolean isShowAttachButton() {
         return btnAttach.isVisible();
     }
@@ -174,17 +171,23 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
     }
 
     private void openDocument() {
-        if(searchResultsList.getSelectedSource().getArchiveDocumentId() == null ||
-                searchResultsList.getSelectedSource().getArchiveDocumentId().isEmpty()){
+        if (searchResultsList.getSelectedSource().getArchiveDocumentId() == null
+                || searchResultsList.getSelectedSource().getArchiveDocumentId().isEmpty()) {
             return;
         }
-        
+
         SolaTask t = new SolaTask<Void, Void>() {
 
             @Override
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_DOCUMENT_OPENING));
-                DocumentBean.openDocument(searchResultsList.getSelectedSource().getArchiveDocumentId());
+                SourceBean selectedSource = SourceBean.getSource(searchResultsList.getSelectedSource().getId());
+                if (selectedSource != null && selectedSource.getArchiveDocument() != null) {
+                    DocumentBean.openDocument(selectedSource.getArchiveDocument().getId(),
+                            selectedSource.getArchiveDocument().getFileName());
+                } else {
+                    throw new SOLAException(ClientMessage.SOURCE_NO_DOCUMENT);
+                }
                 return null;
             }
         };
@@ -197,23 +200,23 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
                     searchResultsList.getSelectedSource().getId()));
         }
     }
-    
-    private void fireAttach(){
-        if(searchResultsList.getSelectedSource().getArchiveDocumentId()!=null &&
-                !searchResultsList.getSelectedSource().getArchiveDocumentId().isEmpty()){
-            firePropertyChange(ATTACH_SOURCE, null, 
+
+    private void fireAttach() {
+        if (searchResultsList.getSelectedSource().getArchiveDocumentId() != null
+                && !searchResultsList.getSelectedSource().getArchiveDocumentId().isEmpty()) {
+            firePropertyChange(ATTACH_SOURCE, null,
                     SourceBean.getSource(searchResultsList.getSelectedSource().getId()));
         }
     }
-    
-    private void fireSelect(){
+
+    private void fireSelect() {
         if (searchResultsList.getSelectedSource() != null) {
             firePropertyChange(SELECT_SOURCE, null, SourceBean.getSource(
                     searchResultsList.getSelectedSource().getId()));
         }
     }
-    
-    public void searchDocuments(){
+
+    public void searchDocuments() {
         SolaTask t = new SolaTask<Void, Void>() {
 
             @Override
@@ -934,7 +937,6 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
     private void menuSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSelectActionPerformed
         fireSelect();
     }//GEN-LAST:event_menuSelectActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAttach;
     private javax.swing.JButton btnClear;
