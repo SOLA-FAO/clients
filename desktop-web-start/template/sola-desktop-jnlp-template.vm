@@ -30,7 +30,7 @@
   </security>
 #end
   <resources>
-    <j2se version="1.7+"/>
+    <j2se version="1.7+" initial-heap-size="256m" max-heap-size="512m"/>
     ## The following properties identify the location of the SOLA Web Services and are used by the SOLA Desktop
     ## in preference to the properties file compiled into the jar. Note the $$context is replaced by the 
     ## webstart-jnlp-servlet with the context root of the SOLA Web Start web site. 
