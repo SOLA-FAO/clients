@@ -1573,6 +1573,7 @@ public class ApplicationPanel extends ContentPanel {
         jPanel23.setName("jPanel23"); // NOI18N
         jPanel23.setLayout(new java.awt.GridLayout(1, 4, 15, 0));
 
+        jPanel14.setMinimumSize(new java.awt.Dimension(28, 20));
         jPanel14.setName("jPanel14"); // NOI18N
 
         LafManager.getInstance().setLabProperties(labAgents);
