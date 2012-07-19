@@ -167,7 +167,7 @@ public class SourceBean extends SourceSummaryBean {
 
     public boolean docValid() {
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/source/Bundle");
-        if (this.getReferenceNr().toString().length() > 20) {
+        if (this.getReferenceNr() != null && this.getReferenceNr().toString().length() > 20) {
             MessageUtility.displayMessage(ClientMessage.CHECK_FIELD_INVALID_LENGTH_PAR, new Object[]{bundle.getString("DocumentPanel.jLabel2.text")});
             return false;
         }

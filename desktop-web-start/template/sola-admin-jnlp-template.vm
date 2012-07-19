@@ -43,7 +43,7 @@
     <property name="SOLA_WS_DIGITAL_ARCHIVE_URL" value="$$context/webservices/digitalarchive-service?wsdl"/>
     <property name="SOLA_WS_SPATIAL_SERVICE_URL" value="$$context/webservices/spatial-service?wsdl"/>
     <property name="SOLA_WS_ADMINISTRATIVE_SERVICE_URL" value="$$context/webservices/administrative-service?wsdl"/>
-
+    <property name="SOLA_WS_FILE_STREAMING_SERVICE_URL" value="$$context/webservices/filestreaming-service?wsdl"/>
      $dependencies
   </resources>
   <application-desc main-class="$mainClass"/>

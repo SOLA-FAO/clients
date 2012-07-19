@@ -85,7 +85,8 @@ public class Messaging {
         ADD_DIRECT_IMAGE_LOAD_IMAGE,
         MAP_SCALE_ERROR,
         MIN_DISPLAY_SCALE,
-        SCALE_LABEL
+        SCALE_LABEL, 
+        FAILED_OPEN_FILE
     };
     private static Messaging messaging = new Messaging();
 
@@ -206,7 +207,9 @@ public class Messaging {
         }else if(messageId.equals(Messaging.Ids.MIN_DISPLAY_SCALE.toString())){
             msgBody = "< 0.01";
         }else if(messageId.equals(Messaging.Ids.SCALE_LABEL.toString())){
-            msgBody = "Scale:.";
+            msgBody = "Scale:";
+        }else if(messageId.equals(Messaging.Ids.FAILED_OPEN_FILE.toString())){
+            msgBody = "File %s could not be opened.\nAttempt to open the file manually.";
         }
         return msgBody;
     }

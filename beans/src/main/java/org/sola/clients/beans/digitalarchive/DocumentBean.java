@@ -122,7 +122,7 @@ public class DocumentBean extends AbstractIdBean {
      * @see #getFileName(java.lang.String, int, java.lang.String)
      */
     public String getFileName() {
-        return DocumentBean.getFileName(getNr(), getRowVersion(), getExtension());
+        return FileUtility.generateFileName(getNr(), getRowVersion(), getExtension());
     }
 
     /**
@@ -151,7 +151,8 @@ public class DocumentBean extends AbstractIdBean {
         if (file != null && file.getName().contains(".")) {
             DocumentBinaryTO documentBinary = new DocumentBinaryTO();
             documentBinary.setDescription(file.getName());
-            documentBinary.setBody(FileUtility.getFileBinary(file.getAbsolutePath()));
+            documentBinary.setFileName(file.getAbsolutePath());
+//            documentBinary.setBody(FileUtility.getFileBinary(file.getAbsolutePath()));
             documentBinary.setExtension(FileUtility.getFileExtension(file.getName()));
             DocumentTO document = WSManager.getInstance().getDigitalArchive().createDocument(documentBinary);
             DocumentBean documentBean = TypeConverters.TransferObjectToBean(document,
@@ -172,9 +173,7 @@ public class DocumentBean extends AbstractIdBean {
         if (Id != null) {
             DocumentBinaryTO documentBinary = WSManager.getInstance().getDigitalArchive().getDocument(Id);
             if (documentBinary != null) {
-                String fileName = DocumentBean.getFileName(documentBinary.getNr(),
-                        documentBinary.getRowVersion(), documentBinary.getExtension());
-                FileUtility.openFile(documentBinary.getBody(), fileName);
+                FileUtility.openFile(documentBinary.getFileName());
             } else {
                 throw new SOLAException(ClientMessage.SOURCE_NO_DOCUMENT);
             }
@@ -196,17 +195,5 @@ public class DocumentBean extends AbstractIdBean {
         } else {
             FileUtility.openFile(fileName);
         }
-    }
-
-    /**
-     * Creates a versioned file name based on the document information.
-     *
-     * @param nr The number assigned to the document
-     * @param rowVersion The rowversion of the document.
-     * @param extension The file extension of the document.
-     * @see #getFileName() 
-     */
-    public static String getFileName(String nr, int rowVersion, String extension) {
-        return String.format("sola_%s_%s.%s", nr, rowVersion, extension);
     }
 }

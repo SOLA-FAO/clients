@@ -164,11 +164,25 @@ public class Print extends ExtendedAction {
      * @param location The location file
      */
     protected void showPrintableDocument(String location) {
-        try {
-            File file = new File(location);
-            Desktop.getDesktop().open(file);
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
+        boolean fileOpened = false;
+        if (Desktop.isDesktopSupported()) {
+            Desktop dt = Desktop.getDesktop();
+            if (dt.isSupported(Desktop.Action.OPEN)) {
+                try {
+                    dt.open(new File(location));
+                    fileOpened = true;
+                } catch (Exception ex) {
+                    // The file could not be opened. The most likely cause is there is no editor
+                    // installed for the file extension, but it may be due to file security 
+                    // restrictions. Either way, inform the user they should open the file manually. 
+                    fileOpened = false;
+                }
+            }
+        }
+        if (!fileOpened) {
+            // The Java Desktop is not supported on this platform. Raise a mesage to 
+            // tell the user they must manually open the document. 
+            Messaging.getInstance().show(Messaging.Ids.FAILED_OPEN_FILE.toString(), location);
         }
     }
 }
