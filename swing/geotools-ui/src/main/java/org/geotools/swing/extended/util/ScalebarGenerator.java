@@ -68,7 +68,7 @@ public class ScalebarGenerator {
     private int topMargin = 15;
     private Color colorBorderSegment = Color.DARK_GRAY;
     private Color colorSegmentEven = Color.BLACK;
-    private Color colorSegmentUneven = Color.BLUE;
+    private Color colorSegmentUneven = Color.WHITE;
     private Color colorText = Color.RED;
     private Font textFont = new Font(Font.SANS_SERIF, Font.BOLD, 10);
     private segmentMeasureUnitType segmentMeasureUnit = segmentMeasureUnitType.m;
