@@ -45,7 +45,7 @@ import java.util.Set;
 import javax.validation.ConstraintViolation;
 import org.sola.clients.beans.controls.ExtendedList;
 import org.sola.clients.beans.validation.ValidatorFactory;
-import org.sola.common.MappingManager;
+import org.sola.common.mapping.MappingManager;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 import org.sola.webservices.transferobjects.EntityAction;

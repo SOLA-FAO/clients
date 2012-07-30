@@ -35,7 +35,7 @@ import java.util.List;
 import org.dozer.DozerEventListener;
 import org.dozer.event.DozerEvent;
 import org.sola.clients.beans.AbstractBindingBean;
-import org.sola.common.MappingManager;
+import org.sola.common.mapping.MappingManager;
 import org.sola.webservices.transferobjects.AbstractTO;
 
 /**
@@ -71,17 +71,6 @@ public class GenericTranslatorListener implements DozerEventListener {
      */
     @Override
     public void postWritingDestinationValue(DozerEvent event) {
-        Object array = event.getFieldMap().getSrcFieldValue(event.getSourceObject());
-        if (array != null && array instanceof byte[]) {
-            try {
-                String name = event.getFieldMap().getDestFieldName();
-                name = "set" + name.substring(0, 1).toUpperCase() + name.substring(1);
-                Method method = event.getDestinationObject().getClass().getMethod(name, byte[].class);
-                method.invoke(event.getDestinationObject(), (byte[]) array);
-            } catch (Exception e) {
-                System.out.println("Error occured while assigning byte array value. " + e.getMessage());
-            }
-        }
     }
 
     /**
@@ -146,8 +135,8 @@ public class GenericTranslatorListener implements DozerEventListener {
                         if (sourceList != null && destinationList != null) {
                             for (Object o : sourceList) {
                                 // Call object mapping before adding into the list
-                                MappingManager.setEventListener(new GenericTranslatorListener());
-                                destinationList.add(MappingManager.getMapper().map(o, destinationChildClass));
+                                destinationList.add(MappingManager.getMapper(
+                                        new GenericTranslatorListener()).map(o, destinationChildClass));
                             }
                         }
                     } catch (Exception e) {

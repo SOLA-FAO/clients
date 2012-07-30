@@ -40,7 +40,7 @@ import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.layer.CadastreRedefinitionObjectLayer;
 import org.sola.clients.swing.gis.layer.CadastreRedefinitionNodeLayer;
 import org.sola.clients.swing.gis.to.CadastreObjectNodeExtraTO;
-import org.sola.common.MappingManager;
+import org.sola.common.mapping.MappingManager;
 import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.MessageUtility;
 import org.sola.webservices.transferobjects.cadastre.CadastreObjectNodeTO;
