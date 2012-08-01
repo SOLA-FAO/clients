@@ -69,6 +69,7 @@ public class ApplicationBean extends ApplicationSummaryBean {
     public static final String TAX_PROPERTY = "tax";
     public static final String TOTAL_AMOUNT_PAID_PROPERTY = "totalAmountPaid";
     public static final String TOTAL_FEE_PROPERTY = "totalFee";
+    public static final String RECEIPT_REF_PROPERTY = "receiptRef";
     public static final String SELECTED_SERVICE_PROPERTY = "selectedService";
     public static final String SELECTED_PROPPERTY_PROPERTY = "selectedProperty";
     public static final String SELECTED_SOURCE_PROPERTY = "selectedSource";
@@ -86,6 +87,7 @@ public class ApplicationBean extends ApplicationSummaryBean {
     private BigDecimal tax;
     private BigDecimal totalAmountPaid;
     private BigDecimal totalFee;
+    private String receiptRef;
     @Size(min = 1, message = ClientMessage.CHECK_APP_SERVICES_NOT_EMPTY, payload = Localized.class)
     private SolaObservableList<ApplicationServiceBean> serviceList;
     private SolaList<SourceBean> sourceList;
@@ -449,6 +451,16 @@ public class ApplicationBean extends ApplicationSummaryBean {
         propertySupport.firePropertyChange(TOTAL_FEE_PROPERTY, old, value);
     }
 
+    public String getReceiptRef() {
+        return receiptRef;
+    }
+
+    public void setReceiptRef(String value) {
+        String old = receiptRef;
+        this.receiptRef = value;
+        propertySupport.firePropertyChange(RECEIPT_REF_PROPERTY, old, value);
+    }
+
     /**
      * Adds new service ({@link ApplicationServiceBean}) into the application services list.
      *
@@ -596,12 +608,12 @@ public class ApplicationBean extends ApplicationSummaryBean {
             }
 
             if (firstPart.length() > 20) {
-                MessageUtility.displayMessage(ClientMessage.CHECK_FIELD_INVALID_LENGTH_PAR, 
+                MessageUtility.displayMessage(ClientMessage.CHECK_FIELD_INVALID_LENGTH_PAR,
                         new Object[]{bundle.getString("ApplicationPanel.labFirstPart.text")});
                 return;
             }
             if (lastPart.length() > 50) {
-                MessageUtility.displayMessage(ClientMessage.CHECK_FIELD_INVALID_LENGTH_PAR, 
+                MessageUtility.displayMessage(ClientMessage.CHECK_FIELD_INVALID_LENGTH_PAR,
                         new Object[]{bundle.getString("ApplicationPanel.labLastPart.text")});
                 return;
             }
