@@ -812,7 +812,7 @@ public class PropertyPanel extends ContentPanel {
                 || rrrCode.equalsIgnoreCase(RrrBean.CODE_MONUMENT)
                 || rrrCode.equalsIgnoreCase(RrrBean.CODE_LIFE_ESTATE)
                 || rrrCode.equalsIgnoreCase(RrrBean.CODE_CAVEAT)){
-            panel = new SimpleOwhershipPanel(rrrBean, applicationBean, applicationService, action);
+            panel = new SimpleRightholderPanel(rrrBean, applicationBean, applicationService, action);
             cardName = MainContentPanel.CARD_SIMPLE_OWNERSHIP;
         } else if (rrrCode.equalsIgnoreCase(RrrBean.CODE_OWNERSHIP)
                 || rrrCode.equalsIgnoreCase(RrrBean.CODE_STATE_OWNERSHIP)
