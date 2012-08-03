@@ -32,6 +32,7 @@ package org.sola.clients.swing.desktop.administrative;
 import java.awt.BorderLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.swing.ImageIcon;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -139,7 +140,12 @@ public class PropertyPanel extends ContentPanel {
                 baUnitAreaBean = new BaUnitAreaBean();
             }
             baUnitAreaBean1 = baUnitAreaBean;
-       
+            
+          if (baUnitAreaBean1.getCalculatedAreaSize()!= null) {   
+            if (!baUnitAreaBean1.getCalculatedAreaSize().equals(new BigDecimal(0)) ) {
+                baUnitAreaBean1.setSize(baUnitAreaBean1.getCalculatedAreaSize());
+            }
+          }  
         }
         
         return baUnitAreaBean1;

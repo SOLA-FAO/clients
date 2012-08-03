@@ -16,6 +16,7 @@
 package org.sola.clients.beans.administrative;
 
 import java.math.BigDecimal;
+import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.sola.clients.beans.AbstractIdBean;
 import org.sola.clients.beans.converters.TypeConverters;
@@ -33,10 +34,14 @@ public class BaUnitAreaBean extends AbstractIdBean {
     
     public static final String SIZE_PROPERTY = "size";
     public static final String BA_UNIT_ID_PROPERTY = "baUnitId";
-    public static final String TYPE_CODE = "typeCode";
+    public static final String TYPE_CODE_PROPERTY = "typeCode";
+    public static final String CALCULATED_AREA_SIZE_PROPERTY = "calculatedAreaSize";
+    
+    @NotNull(message = ClientMessage.CHECK_NOTNULL_EXPIRATION, payload = Localized.class)
     private BigDecimal size;
     private String baUnitId;
     private String typeCode;
+    private BigDecimal calculatedAreaSize;
     
     public BaUnitAreaBean() {
         super();
@@ -70,7 +75,17 @@ public class BaUnitAreaBean extends AbstractIdBean {
     public void setTypeCode(String val) {
         String old = typeCode;
         typeCode = val;
-        propertySupport.firePropertyChange(TYPE_CODE, old, val);
+        propertySupport.firePropertyChange(TYPE_CODE_PROPERTY, old, val);
+    }
+    
+    public BigDecimal getCalculatedAreaSize() {
+        return calculatedAreaSize;
+    }
+
+    public void setCalculatedAreaSize(BigDecimal val) {
+        BigDecimal old = calculatedAreaSize;
+        calculatedAreaSize = val;
+        propertySupport.firePropertyChange(CALCULATED_AREA_SIZE_PROPERTY, old, val);
     }
     
      public boolean createBaUnitArea(String baUnitId) {
