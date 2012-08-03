@@ -27,10 +27,10 @@
  */
 package org.sola.clients.swing.gis.tool;
 
-import org.geotools.feature.CollectionEvent;
 import org.geotools.geometry.DirectPosition2D;
 import org.geotools.geometry.jts.Geometries;
 import org.opengis.feature.simple.SimpleFeature;
+import org.sola.clients.swing.gis.beans.SurveyPointBean;
 import org.sola.clients.swing.gis.layer.CadastreChangeNewSurveyPointLayer;
 import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -57,7 +57,7 @@ public class CadastreChangeNodeTool extends CadastreChangeEditAbstractTool {
         this.setToolTip(toolTip);
         this.layer = targetLayer;
     }
-
+    
     /**
      * If the survey point is snapped to an existing node, it will be marked as linked.
      * It notifies also the listeners appropriately.
@@ -68,13 +68,16 @@ public class CadastreChangeNodeTool extends CadastreChangeEditAbstractTool {
     @Override
     protected SimpleFeature treatChangeVertex(DirectPosition2D mousePositionInMap) {
         SimpleFeature featureChanged = super.treatChangeVertex(mousePositionInMap);
-        if (featureChanged != null && featureChanged.getAttribute(
-                CadastreChangeNewSurveyPointLayer.LAYER_FIELD_ISBOUNDARY).equals(1)) {
-            featureChanged.setAttribute(CadastreChangeNewSurveyPointLayer.LAYER_FIELD_ISLINKED,
-                    ((this.getSnappedTarget() == SNAPPED_TARGET_TYPE.Vertex) ? 1 : 0));
-            this.layer.getFeatureCollection().notifyListeners(featureChanged,
-                    CollectionEvent.FEATURES_CHANGED);
+        if (featureChanged != null) {
+            SurveyPointBean bean = getLayer().getBean(featureChanged);
+            if (bean.isBoundary()){
+                bean.setLinked(this.getSnappedTarget() == SNAPPED_TARGET_TYPE.Vertex);
+            }
         }
         return featureChanged;
+    }
+    
+    private CadastreChangeNewSurveyPointLayer getLayer(){
+        return (CadastreChangeNewSurveyPointLayer)this.layer;
     }
 }

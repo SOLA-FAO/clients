@@ -53,6 +53,7 @@ import org.geotools.styling.StyleFactory;
 import org.geotools.styling.StyleFactoryImpl;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.feature.type.FeatureType;
 import org.opengis.feature.type.GeometryType;
 import org.geotools.swing.control.extended.TocSymbol;
@@ -78,6 +79,8 @@ public class ExtendedFeatureLayer extends ExtendedLayer {
     private Style style;
     private FeatureLayer featureLayer;
     private String filterExpressionForSnapping = null;
+    private String[] attributeNames = null;
+
     /**
      * It is used to read WKB and convert it to geometry
      */
@@ -321,5 +324,34 @@ public class ExtendedFeatureLayer extends ExtendedLayer {
         }
         return feature;
         
+    }
+    
+    /**
+     * Gets the names of the attributes excepts the geometry attribute
+     * @return 
+     */
+    public String[] getAttributeNames(){
+        if (this.attributeNames == null){
+            this.attributeNames = new String[this.featureSource.getSchema().getAttributeCount()-1];
+            int attrIndex=0; 
+            for(AttributeDescriptor attrDescriptor: 
+                    this.featureSource.getSchema().getAttributeDescriptors()){
+                if (this.featureSource.getSchema().getGeometryDescriptor() == attrDescriptor){
+                    continue;
+                }
+                this.attributeNames[attrIndex++] = 
+                        this.featureSource.getSchema().getDescriptor(attrIndex).getLocalName();
+            }
+        }
+        return this.attributeNames;
+    }
+    
+    /**
+     * Gets the name of the geometry attribute
+     * 
+     * @return 
+     */
+    public String getGeometryAttributeName(){
+        return this.featureSource.getSchema().getGeometryDescriptor().getLocalName();
     }
 }

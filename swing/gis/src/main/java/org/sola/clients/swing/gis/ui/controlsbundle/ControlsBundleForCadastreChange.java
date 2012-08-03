@@ -32,6 +32,7 @@ package org.sola.clients.swing.gis.ui.controlsbundle;
 import java.util.List;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.swing.extended.exception.InitializeLayerException;
+import org.sola.clients.swing.gis.beans.TransactionBean;
 import org.sola.clients.swing.gis.beans.TransactionCadastreChangeBean;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.layer.CadastreChangeNewCadastreObjectLayer;
@@ -75,17 +76,22 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
      */
     public ControlsBundleForCadastreChange(
             String applicationNumber,
-            TransactionCadastreChangeBean transactionBean,
+            String transactionStarterId,
+            //TransactionCadastreChangeBean transactionBean,
             String baUnitId,
             byte[] applicationLocation) {
-        super();
+        super(transactionStarterId);
         this.applicationNumber = applicationNumber;
-        this.transactionBean = transactionBean;
-        if (this.transactionBean == null) {
-            this.transactionBean = new TransactionCadastreChangeBean();
-        }
+//        this.transactionBean =  PojoDataAccess.getInstance().getTransactionCadastreChange(
+//                transactionStarterId);
+        
+//        if (this.transactionBean == null) {
+//            this.transactionBean = new TransactionCadastreChangeBean();
+//        }
 
         this.Setup(PojoDataAccess.getInstance());
+        
+        setTransaction();
 
         if (!this.transactionIsStarted()) {
             this.setTargetParcelsByBaUnit(baUnitId);
@@ -124,13 +130,30 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
     @Override
     public TransactionCadastreChangeBean getTransactionBean() {
         transactionBean.setCadastreObjectList(
-                this.newCadastreObjectLayer.getCadastreObjectList());
-        transactionBean.setSurveyPointList(this.newPointsLayer.getSurveyPointList());
+                this.newCadastreObjectLayer.getBeanListForTransaction());
+        transactionBean.setSurveyPointList(this.newPointsLayer.getBeanListForTransaction());
         transactionBean.setCadastreObjectTargetList(
-                this.targetParcelsLayer.getCadastreObjectTargetList());
+                this.targetParcelsLayer.getBeanListForTransaction());
         return transactionBean;
     }
 
+    @Override
+    public final void setTransaction() {
+        this.transactionBean =  PojoDataAccess.getInstance().getTransactionCadastreChange(
+                this.getTransactionStarterId());
+        //Reset the lists of beans in the layers
+        this.targetParcelsLayer.getBeanList().clear();
+        this.newCadastreObjectLayer.getBeanList().clear();
+        this.newPointsLayer.getBeanList().clear();
+        //Populate the lists of beans from the lists in transaction
+        this.targetParcelsLayer.setBeanList(this.transactionBean.getCadastreObjectTargetList());
+        this.newCadastreObjectLayer.setBeanList(
+                this.transactionBean.getCadastreObjectList());
+        this.newPointsLayer.setBeanList(this.transactionBean.getSurveyPointList());
+    }
+
+    
+    
     @Override
     protected void addLayers() throws InitializeLayerException {
         super.addLayers();
@@ -142,15 +165,7 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
         this.getMap().addLayer(newCadastreObjectLayer);
 
         this.newPointsLayer = new CadastreChangeNewSurveyPointLayer(this.newCadastreObjectLayer);
-        this.getMap().addLayer(newPointsLayer);
-
-        this.targetParcelsLayer.setCadastreObjectTargetList(
-                transactionBean.getCadastreObjectTargetList());
-
-        this.newPointsLayer.setSurveyPointList(this.transactionBean.getSurveyPointList());
-
-        this.newCadastreObjectLayer.setCadastreObjectList(
-                this.transactionBean.getCadastreObjectList());
+        this.getMap().addLayer(newPointsLayer);        
     }
 
     @Override
@@ -174,11 +189,12 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
                 new CadastreChangeNewParcelTool(this.newCadastreObjectLayer);
         newParcelTool.getTargetSnappingLayers().add(newPointsLayer);
         this.getMap().addTool(newParcelTool, this.getToolbar(), true);
-
+        
         this.getMap().addMapAction(new CadastreChangeNewCadastreObjectListFormShow(
                 this.getMap(), this.newCadastreObjectLayer.getHostForm()),
                 this.getToolbar(),
                 true);
+
         CadastreBoundarySelectTool cadastreBoundarySelectTool =
                 new CadastreBoundarySelectTool(
                 this.cadastreBoundaryPointLayer,

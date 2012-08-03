@@ -38,6 +38,8 @@ import java.util.List;
 /**
  * A node bean which represents data about a boundary node and related Cadastre Objects that share
  * that node.
+ * It is used only for retrieving information from the server. That is why it is not inheriting
+ * from binding beans.
  * 
  * @author Elton Manoku
  */

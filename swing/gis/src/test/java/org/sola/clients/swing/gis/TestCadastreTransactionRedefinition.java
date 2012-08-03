@@ -57,6 +57,7 @@ public class TestCadastreTransactionRedefinition extends ExtendedAction{
         TransactionCadastreRedefinitionBean bean = ctrl.getTransactionBean();        
         TransactionCadastreRedefinitionTO to = bean.getTO();
         bean.save();
+        ctrl.setTransaction();
     } 
     
 }

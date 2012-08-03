@@ -77,19 +77,19 @@ public class CadastreTransactionMapPanel extends ContentPanel {
     private void initializeMap() {
         if (applicationService.getRequestType().getCode().equals(
                 RequestTypeBean.CODE_CADASTRE_CHANGE)) {
-            TransactionCadastreChangeBean transactionBean =
-                    PojoDataAccess.getInstance().getTransactionCadastreChange(
-                    this.applicationService.getId());
+//            TransactionCadastreChangeBean transactionBean =
+//                    PojoDataAccess.getInstance().getTransactionCadastreChange(
+//                    this.applicationService.getId());
             this.mapControl = new ControlsBundleForCadastreChange(
-                    this.applicationBean.getNr(), transactionBean, this.getBaUnitId(),
-                    this.applicationBean.getLocation());
+                    this.applicationBean.getNr(), this.applicationService.getId(), 
+                    this.getBaUnitId(), this.applicationBean.getLocation());
         } else if (applicationService.getRequestType().getCode().equals(
                 RequestTypeBean.CODE_CADASTRE_REDEFINITION)) {
-            TransactionCadastreRedefinitionBean transactionBean =
-                    PojoDataAccess.getInstance().getTransactionCadastreRedefinition(
-                    this.applicationService.getId());
+//            TransactionCadastreRedefinitionBean transactionBean =
+//                    PojoDataAccess.getInstance().getTransactionCadastreRedefinition(
+//                    this.applicationService.getId());
             this.mapControl = new ControlsBundleForCadastreRedefinition(
-                    transactionBean, this.getBaUnitId(),
+                    this.applicationService.getId(), this.getBaUnitId(),
                     this.applicationBean.getLocation());
         }
         this.mapControl.setApplicationId(this.applicationBean.getId());

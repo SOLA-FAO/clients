@@ -31,25 +31,20 @@
  */
 package org.sola.clients.swing.gis.layer;
 
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.io.ParseException;
-import java.util.ArrayList;
 import java.util.List;
-import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.geometry.jts.Geometries;
-import org.geotools.map.extended.layer.ExtendedLayerGraphics;
 import org.geotools.swing.extended.exception.InitializeLayerException;
-import org.geotools.swing.extended.util.Messaging;
 import org.opengis.feature.simple.SimpleFeature;
+import org.sola.clients.swing.gis.beans.CadastreObjectNodeBean;
 import org.sola.clients.swing.gis.beans.CadastreObjectNodeTargetBean;
-import org.sola.common.messaging.GisMessage;
+import org.sola.clients.swing.gis.beans.CadastreObjectNodeTargetListBean;
 
 /**
  * Layer that maintains the collection of nodes that are targeted during the cadastre redefinition.
  * 
  * @author Elton Manoku
  */
-public class CadastreRedefinitionNodeLayer extends ExtendedLayerGraphics {
+public class CadastreRedefinitionNodeLayer extends AbstractSpatialObjectLayer {
 
     private static final String LAYER_NAME = "Modified Nodes";
     private static final String LAYER_STYLE_RESOURCE = "node_modified.xml";
@@ -59,66 +54,41 @@ public class CadastreRedefinitionNodeLayer extends ExtendedLayerGraphics {
      * @throws InitializeLayerException 
      */
     public CadastreRedefinitionNodeLayer() throws InitializeLayerException {
-        super(LAYER_NAME, Geometries.POINT, LAYER_STYLE_RESOURCE, null);
-    }
-    
-    /**
-     * Adds a node target bean to the layer. It transforms it to feature
-     * 
-     * @param nodeBean
-     * @return 
-     */
-    public SimpleFeature addNodeTarget(CadastreObjectNodeTargetBean nodeBean) {
-        return this.addNodeTarget(nodeBean.getNodeId(), nodeBean.getGeom());
+        super(LAYER_NAME, Geometries.POINT,
+                LAYER_STYLE_RESOURCE, null, CadastreObjectNodeTargetBean.class);
+        this.listBean = new CadastreObjectNodeTargetListBean();
+        //This is called after the listBean is initialized
+        initializeListBeanEvents();
     }
 
-    /**
-     * Adds a node target from a WKB object
-     * @param id
-     * @param geom
-     * @return 
-     */
-    public SimpleFeature addNodeTarget(String id, byte[] geom) {
-        SimpleFeature featureAdded = null;
-        try {
-            featureAdded = this.addFeature(id, geom, null);
-        } catch (ParseException ex) {
-            org.sola.common.logging.LogUtility.log(
-                    GisMessage.CADASTRE_REDEFINITION_ADD_NODE_ERROR, ex);
-            Messaging.getInstance().show(GisMessage.CADASTRE_REDEFINITION_ADD_NODE_ERROR);
-        }
-        return featureAdded;
+    @Override
+    public List<CadastreObjectNodeTargetBean> getBeanList() {
+        return super.getBeanList();
     }
     
     /**
-     * Gets the list of node targets
-     * @return 
-     */
-    public List<CadastreObjectNodeTargetBean> getNodeTargetList(){
-        List<CadastreObjectNodeTargetBean> nodeTargetList =
-                new ArrayList<CadastreObjectNodeTargetBean>();
-        SimpleFeature nodeFeature = null;
-        SimpleFeatureIterator iterator = 
-                (SimpleFeatureIterator)this.getFeatureCollection().features();
-        while(iterator.hasNext()){
-            nodeFeature = iterator.next();
-            CadastreObjectNodeTargetBean nodeTargetBean =
-                    new CadastreObjectNodeTargetBean();
-            nodeTargetBean.setNodeId(nodeFeature.getID());
-            nodeTargetBean.setGeom(wkbWriter.write((Geometry)nodeFeature.getDefaultGeometry()));
-            nodeTargetList.add(nodeTargetBean);
-        }
-        iterator.close();
-        return nodeTargetList;
+     * It adds a target node bean from a node bean
+     * 
+     * @param nodeBean 
+     */    
+    public void addNodeTarget(CadastreObjectNodeBean nodeBean){
+        CadastreObjectNodeTargetBean bean = new CadastreObjectNodeTargetBean();
+        bean.setGeom(nodeBean.getGeom());
+        bean.setNodeId(nodeBean.getId());
+        this.getBeanList().add(bean);
     }
     
     /**
-     * Sets the list of node targets
-     * @param targetList 
+     * Gets a feature searching by its bean nodeId property
+     * @param nodeId
+     * @return 
      */
-    public void addNodeTargetList(List<CadastreObjectNodeTargetBean> targetList){
-        for(CadastreObjectNodeTargetBean targetBean: targetList){
-            this.addNodeTarget(targetBean);
+    public SimpleFeature getFeatureByNodeId(String nodeId){
+        for(CadastreObjectNodeTargetBean bean:this.getBeanList()){
+            if (bean.getNodeId().equals(nodeId)){
+                return this.getFeatureCollection().getFeature(bean.getRowId());
+            }
         }
+        return null;
     }
 }

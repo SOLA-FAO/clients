@@ -34,16 +34,15 @@ package org.sola.clients.swing.gis.tool;
 import com.vividsolutions.jts.geom.*;
 import java.util.ArrayList;
 import java.util.List;
-import org.geotools.data.simple.SimpleFeatureIterator;
-import org.geotools.feature.CollectionEvent;
-import org.geotools.feature.FeatureCollection;
 import org.geotools.geometry.Envelope2D;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.map.extended.layer.ExtendedLayerGraphics;
+import org.geotools.swing.extended.util.GeometryUtility;
 import org.geotools.swing.extended.util.Messaging;
 import org.geotools.swing.tool.extended.ExtendedDrawRectangle;
 import org.opengis.feature.simple.SimpleFeature;
 import org.sola.clients.swing.gis.layer.CadastreBoundaryPointLayer;
+import org.sola.clients.swing.gis.layer.TargetBoundaryLayer;
 import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.MessageUtility;
 
@@ -55,11 +54,10 @@ import org.sola.common.messaging.MessageUtility;
 public class CadastreBoundarySelectTool extends ExtendedDrawRectangle {
 
     public final static String NAME = "cadastre-boundary-select";
-    private final static double FILTER_PRECISION = 0.01;
 
     private String toolTip = MessageUtility.getLocalizedMessage(
             GisMessage.CADASTRE_BOUNDARY_SELECT_TOOL_TOOLTIP).getMessage();
-    private ExtendedLayerGraphics targetLayer;
+    private TargetBoundaryLayer targetLayer;
     private ExtendedLayerGraphics targetNodeLayer;
     
     protected CadastreBoundaryPointLayer pointLayer;
@@ -76,7 +74,7 @@ public class CadastreBoundarySelectTool extends ExtendedDrawRectangle {
      */
     public CadastreBoundarySelectTool(
             CadastreBoundaryPointLayer pointLayer,
-            ExtendedLayerGraphics targetLayer,
+            TargetBoundaryLayer targetLayer,
             ExtendedLayerGraphics targetNodeLayer) {
         this.setToolName(NAME);
         this.setToolTip(toolTip);
@@ -109,7 +107,7 @@ public class CadastreBoundarySelectTool extends ExtendedDrawRectangle {
      * Gets the target layer
      * @return 
      */
-    protected ExtendedLayerGraphics getTargetLayer() {
+    protected TargetBoundaryLayer getTargetLayer() {
         return this.targetLayer;
     }
 
@@ -173,7 +171,7 @@ public class CadastreBoundarySelectTool extends ExtendedDrawRectangle {
         if (pointFeature != null) {
             this.pointLayer.setStartPoint((Point) pointFeature.getDefaultGeometry());
             this.targetCadastreObjectIds.addAll(
-                    this.getCadastreObjectTargetIdsFromNodeFeature(pointFeature));
+                    getTargetLayer().getCadastreObjectTargetIdsFromNodeFeature(pointFeature));
 
         }
     }
@@ -201,7 +199,8 @@ public class CadastreBoundarySelectTool extends ExtendedDrawRectangle {
             return true;
         }
         List<String> targetCadastreObjectIdsTmp = new ArrayList<String>();
-        List<String> targetIds = getCadastreObjectTargetIdsFromNodeFeature(pointFeature);
+        List<String> targetIds = 
+                getTargetLayer().getCadastreObjectTargetIdsFromNodeFeature(pointFeature);
         for (String id : targetIds) {
             if (!this.targetCadastreObjectIds.contains(id)) {
                 continue;
@@ -234,7 +233,7 @@ public class CadastreBoundarySelectTool extends ExtendedDrawRectangle {
         Coordinate startCoordinate = this.pointLayer.getStartPoint().getCoordinate();
         Coordinate endCoordinate = this.pointLayer.getEndPoint().getCoordinate();
         Polygon targetGeom =
-                (Polygon) this.targetLayer.getFeatureCollection().getFeature(
+                (Polygon) getTargetLayer().getFeatureByCadastreObjectId(
                 this.targetCadastreObjectIds.get(0)).getDefaultGeometry();
         LineString targetBoundaryGeom = this.getTargetBoundaryFromRing(
                 targetGeom.getExteriorRing(), clockwise, startCoordinate, endCoordinate);
@@ -259,14 +258,8 @@ public class CadastreBoundarySelectTool extends ExtendedDrawRectangle {
      */
     public final void clearSelection() {
         this.pointLayer.clearSelection();
-        SimpleFeature feature;
         for (String cadastreObjectId : this.targetCadastreObjectIds) {
-            feature = this.targetLayer.getFeatureCollection().getFeature(
-                    cadastreObjectId);
-            if (feature != null) {
-                this.targetLayer.getFeatureCollection().notifyListeners(
-                        feature, CollectionEvent.FEATURES_CHANGED);
-            }
+            getTargetLayer().notifyEventChanges(cadastreObjectId);
         }
         this.targetCadastreObjectIds.clear();
         //Disactivate editing of boundary
@@ -316,27 +309,8 @@ public class CadastreBoundarySelectTool extends ExtendedDrawRectangle {
             return null;
         }
 
-        return this.targetLayer.getGeometryFactory().createLineString(
+        return GeometryUtility.getGeometryFactory().createLineString(
                 boundaryCoordList.toCoordinateArray());
     }
 
-    /**
-     * Gets the ids of the cadastre objects that share a node. 
-     * 
-     * @param nodeFeature The feature node
-     * @return 
-     */
-    private List<String> getCadastreObjectTargetIdsFromNodeFeature(SimpleFeature nodeFeature) {
-        List<String> ids = new ArrayList<String>();
-        ReferencedEnvelope filterBbox = new ReferencedEnvelope(nodeFeature.getBounds());
-        filterBbox.expandBy(FILTER_PRECISION, FILTER_PRECISION);
-        FeatureCollection featureCollection =
-                this.getTargetLayer().getFeaturesInRange(filterBbox, null);
-        SimpleFeatureIterator iterator = (SimpleFeatureIterator) featureCollection.features();
-        while (iterator.hasNext()) {
-            ids.add(iterator.next().getID());
-        }
-        iterator.close();
-        return ids;
-    }
 }

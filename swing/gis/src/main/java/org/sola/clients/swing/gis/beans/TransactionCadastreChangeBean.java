@@ -107,4 +107,5 @@ public class TransactionCadastreChangeBean extends TransactionBean{
                 PojoDataAccess.getInstance().getCadastreService().saveTransactionCadastreChange(
                 this.getTO()), ValidationResultBean.class, null);
     }
+
 }

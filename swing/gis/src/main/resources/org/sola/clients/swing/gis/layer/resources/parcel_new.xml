@@ -21,7 +21,7 @@
           </PolygonSymbolizer>
            <TextSymbolizer>
              <Label>
-               <ogc:PropertyName>first_part</ogc:PropertyName>/<ogc:PropertyName>last_part</ogc:PropertyName>
+               <ogc:PropertyName>nameFirstpart</ogc:PropertyName>/<ogc:PropertyName>nameLastpart</ogc:PropertyName>
              </Label>
              <Font>
                <CssParameter name="font-family">Arial</CssParameter>

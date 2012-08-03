@@ -37,8 +37,8 @@ import org.geotools.geometry.Envelope2D;
 import org.opengis.feature.simple.SimpleFeature;
 import org.sola.clients.swing.gis.beans.CadastreObjectNodeBean;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
-import org.sola.clients.swing.gis.layer.CadastreRedefinitionObjectLayer;
 import org.sola.clients.swing.gis.layer.CadastreRedefinitionNodeLayer;
+import org.sola.clients.swing.gis.layer.CadastreRedefinitionObjectLayer;
 import org.sola.clients.swing.gis.to.CadastreObjectNodeExtraTO;
 import org.sola.common.MappingManager;
 import org.sola.common.messaging.GisMessage;
@@ -83,8 +83,7 @@ public class CadastreRedefinitionModifyNodeTool extends CadastreRedefinitionAbst
             if (nodeBean == null) {
                 return;
             }
-            nodeFeature = this.cadastreObjectNodeModifiedLayer.getFeatureCollection().getFeature(
-                    nodeBean.getId());
+        nodeFeature = this.cadastreObjectNodeModifiedLayer.getFeatureByNodeId(nodeBean.getId());
             nodeIsNewFromServer = true;
         }
         if (nodeFeature == null) {

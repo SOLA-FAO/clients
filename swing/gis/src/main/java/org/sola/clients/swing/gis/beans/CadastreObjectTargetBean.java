@@ -31,16 +31,20 @@
  */
 package org.sola.clients.swing.gis.beans;
 
-import java.io.Serializable;
+import com.vividsolutions.jts.geom.Geometry;
+import org.geotools.swing.extended.util.GeometryUtility;
 
 /**
  * It represents a Target Cadastre Object during the Cadastre change process.
  * 
  * @author Elton Manoku
  */
-public class CadastreObjectTargetBean implements Serializable{
+public class CadastreObjectTargetBean extends SpatialBean {
 
     private String cadastreObjectId;
+    private byte[] geomPolygonCurrent;
+    
+    private Geometry geomPolygonCurrentForFeature;
 
     public String getCadastreObjectId() {
         return cadastreObjectId;
@@ -50,20 +54,17 @@ public class CadastreObjectTargetBean implements Serializable{
         this.cadastreObjectId = cadastreObjectId;
     }
 
-    @Override
-    public boolean equals(Object target){
-        if (target.getClass() != this.getClass()){
-            return false;
-        }
-        CadastreObjectTargetBean targetBean = (CadastreObjectTargetBean) target;
-        return targetBean.getCadastreObjectId().equals(this.getCadastreObjectId());
+    public byte[] getGeomPolygonCurrent() {
+        return geomPolygonCurrent;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 71 * hash + (this.cadastreObjectId != null ? this.cadastreObjectId.hashCode() : 0);
-        return hash;
+    public void setGeomPolygonCurrent(byte[] geomPolygonCurrent) {
+        this.geomPolygonCurrent = geomPolygonCurrent.clone();
+        this.geomPolygonCurrentForFeature = 
+                GeometryUtility.getGeometryFromWkb(this.geomPolygonCurrent);
     }
-    
+
+    public Geometry getGeomPolygonCurrentForFeature() {
+        return geomPolygonCurrentForFeature;
+    }
 }

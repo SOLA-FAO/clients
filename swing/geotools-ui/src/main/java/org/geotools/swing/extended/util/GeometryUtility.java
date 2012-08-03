@@ -26,12 +26,16 @@
 package org.geotools.swing.extended.util;
 
 import com.vividsolutions.jts.geom.*;
+import com.vividsolutions.jts.io.ParseException;
+import com.vividsolutions.jts.io.WKBReader;
+import com.vividsolutions.jts.io.WKBWriter;
 import com.vividsolutions.jts.linearref.LinearLocation;
 import com.vividsolutions.jts.linearref.LocationIndexedLine;
 import java.util.ArrayList;
 import java.util.List;
 import org.geotools.geometry.jts.Geometries;
 import org.geotools.geometry.jts.JTSFactoryFinder;
+import org.geotools.swing.extended.exception.ReadGeometryException;
 
 /**
  * Provides geometry manipulation functions to support editing of spatial features such as adding or
@@ -40,6 +44,8 @@ import org.geotools.geometry.jts.JTSFactoryFinder;
 public class GeometryUtility {
 
     private static GeometryFactory geometryFactory = JTSFactoryFinder.getGeometryFactory();
+    private static WKBReader wkbReader = new WKBReader();
+    private static WKBWriter wkbWriter = new WKBWriter();
 
     /**
      * @return A JTS Geometry Factory that can be used to build the different types of geometry.
@@ -342,5 +348,17 @@ public class GeometryUtility {
             }
         }
         return result;
+    }
+
+    public static Geometry getGeometryFromWkb(byte[] geometry) {
+        try {
+            return wkbReader.read(geometry);
+        } catch (ParseException ex) {
+            throw new ReadGeometryException(ex);
+        }
+    }
+
+    public static byte[] getWkbFromGeometry(Geometry geometry) {
+        return wkbWriter.write(geometry);
     }
 }

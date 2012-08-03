@@ -33,6 +33,7 @@ package org.sola.clients.swing.gis.beans;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.sola.clients.beans.AbstractIdBean;
 import org.sola.clients.beans.validation.ValidationResultBean;
 import org.sola.webservices.transferobjects.transaction.TransactionTO;
 
@@ -45,8 +46,8 @@ import org.sola.webservices.transferobjects.transaction.TransactionTO;
  * 
  * @author Elton Manoku
  */
-public abstract class TransactionBean{
-    
+public abstract class TransactionBean extends AbstractIdBean{
+
     private String fromServiceId;
     List<TransactionSourceBean> transactionSourceList = new ArrayList<TransactionSourceBean>();
 
@@ -96,11 +97,19 @@ public abstract class TransactionBean{
      * Sets a list of ids of sources
      */
     public void setSourceIdList(List<String> sourceIdList){
-        this.transactionSourceList = new ArrayList<TransactionSourceBean>();
+        List<TransactionSourceBean> beansToRemove = new ArrayList<TransactionSourceBean>();
+        for(TransactionSourceBean bean:this.transactionSourceList){
+            if (!sourceIdList.contains(bean.getSourceId())){
+                beansToRemove.add(bean);
+            }
+        }
+        this.transactionSourceList.removeAll(beansToRemove);
         for(String sourceId: sourceIdList){
             TransactionSourceBean bean = new TransactionSourceBean();
             bean.setSourceId(sourceId);
-            this.transactionSourceList.add(bean);
+            if (!this.transactionSourceList.contains(bean)){
+                this.transactionSourceList.add(bean);
+            }
         }
     }
     
@@ -117,4 +126,5 @@ public abstract class TransactionBean{
      * @return 
      */
     public abstract List<ValidationResultBean> save();
+
 }

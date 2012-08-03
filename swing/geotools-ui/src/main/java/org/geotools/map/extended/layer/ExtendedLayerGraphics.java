@@ -158,13 +158,26 @@ public class ExtendedLayerGraphics extends ExtendedFeatureLayer {
     }
 
     /**
-     * It replaces a geometry of an existing feature
+     * It replaces a geometry of an existing feature. If the replacement is successful, it also
+     * fires the change event.
+     * 
      * @param ofFeature the target feature
      * @param newGeometry the new geometry
      * @return true if the geometry is successfully changed
      */
+    public boolean replaceFeatureGeometry(SimpleFeature ofFeature, Geometry newGeometry) {
+        return replaceFeatureGeometry(ofFeature, newGeometry, true);
+    }
+
+    /**
+     * It replaces the geometry of the feature.
+     * @param ofFeature The feature
+     * @param newGeometry New geometry to be replaced
+     * @param fireEvent If the event should be fired or not
+     * @return True if the geometry is successfully changed
+     */
     public boolean replaceFeatureGeometry(
-            SimpleFeature ofFeature, Geometry newGeometry) {
+            SimpleFeature ofFeature, Geometry newGeometry, boolean fireEvent) {
         if (!this.getFeatureCollection().contains(ofFeature)) {
             return false;
         }
@@ -176,7 +189,10 @@ public class ExtendedLayerGraphics extends ExtendedFeatureLayer {
         newGeometry.normalize();
         ofFeature.setDefaultGeometry(newGeometry);
         newGeometry.geometryChanged();
-        this.getFeatureCollection().notifyListeners(ofFeature, CollectionEvent.FEATURES_CHANGED);
+        if (fireEvent){
+            this.getFeatureCollection().notifyListeners(
+                    ofFeature, CollectionEvent.FEATURES_CHANGED);
+        }
         return true;
     }
 

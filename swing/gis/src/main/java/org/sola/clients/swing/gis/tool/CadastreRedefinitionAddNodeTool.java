@@ -34,11 +34,9 @@ package org.sola.clients.swing.gis.tool;
 import com.vividsolutions.jts.geom.*;
 import com.vividsolutions.jts.linearref.LinearLocation;
 import com.vividsolutions.jts.linearref.LocationIndexedLine;
-import java.util.ArrayList;
 import java.util.List;
 import org.geotools.geometry.Envelope2D;
 import org.opengis.feature.simple.SimpleFeature;
-import org.sola.clients.swing.gis.beans.CadastreObjectBean;
 import org.sola.clients.swing.gis.beans.CadastreObjectNodeBean;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.layer.CadastreRedefinitionNodeLayer;
@@ -84,13 +82,8 @@ public class CadastreRedefinitionAddNodeTool extends CadastreRedefinitionAbstrac
             return;
         }
         SimpleFeature nodeFeature =
-                this.cadastreObjectNodeModifiedLayer.getFeatureCollection().getFeature(
-                nodeBean.getId());
-        List<String> cadastreObjectTargetIds = new ArrayList<String>();
-        for (CadastreObjectBean coBean : nodeBean.getCadastreObjectList()) {
-            cadastreObjectTargetIds.add(coBean.getId());
-        }
-        this.insertNode(nodeFeature, cadastreObjectTargetIds);
+                this.cadastreObjectNodeModifiedLayer.getFeatureByNodeId(nodeBean.getId());
+        this.insertNode(nodeFeature);
         if (!this.manipulateNode(nodeFeature)) {
             this.removeNode(nodeFeature);
         }
@@ -122,16 +115,11 @@ public class CadastreRedefinitionAddNodeTool extends CadastreRedefinitionAbstrac
      * @param nodeFeature
      * @param cadastreObjectTargetIds The target cadastre object ids
      */
-    private void insertNode(SimpleFeature nodeFeature, List<String> cadastreObjectTargetIds) {
+    private void insertNode(SimpleFeature nodeFeature) {
         Geometry nodeFeatureGeom = (Geometry) nodeFeature.getDefaultGeometry();
         Coordinate coordinate = nodeFeatureGeom.getCoordinate();
-        for (String cadastreObjectTargetId : cadastreObjectTargetIds) {
-            SimpleFeature cadastreObjectFeature =
-                    this.cadastreObjectModifiedLayer.getFeatureCollection().getFeature(
-                    cadastreObjectTargetId);
-            if (cadastreObjectFeature == null) {
-                continue;
-            }
+        for(SimpleFeature cadastreObjectFeature: 
+                this.cadastreObjectModifiedLayer.getCadastreObjectFeatures(nodeFeature)){
             Polygon cadastreObjectGeom = (Polygon) cadastreObjectFeature.getDefaultGeometry();
             LinearRing exteriorRing = this.insertCoordinateInRing(
                     cadastreObjectGeom.getExteriorRing(), coordinate);

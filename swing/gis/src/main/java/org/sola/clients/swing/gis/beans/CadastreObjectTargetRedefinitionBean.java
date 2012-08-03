@@ -31,6 +31,9 @@
  */
 package org.sola.clients.swing.gis.beans;
 
+import com.vividsolutions.jts.geom.Geometry;
+import org.geotools.swing.extended.util.GeometryUtility;
+
 /**
  * It represents a cadastre object during the process of redefinition of the cadastre process.
  * This bean holds the current and changed geometry.
@@ -38,23 +41,30 @@ package org.sola.clients.swing.gis.beans;
  * @author Elton Manoku
  */
 public class CadastreObjectTargetRedefinitionBean extends CadastreObjectTargetBean {
-    
+    private static String FEATURE_GEOM_PROPERTY = "featureGeom";
     private byte[] geomPolygon;
-    private byte[] geomPolygonCurrent;
 
     public byte[] getGeomPolygon() {
         return geomPolygon;
     }
 
     public void setGeomPolygon(byte[] geomPolygon) {
-        this.geomPolygon = geomPolygon.clone();
+        setFeatureGeom(GeometryUtility.getGeometryFromWkb(geomPolygon));
     }
-
-    public byte[] getGeomPolygonCurrent() {
-        return geomPolygonCurrent;
+   
+    @Override
+    public void setFeatureGeom(Geometry geometryValue) {
+        super.setFeatureGeom((Geometry)geometryValue.clone());
+        this.geomPolygon = GeometryUtility.getWkbFromGeometry(geometryValue);
+        propertySupport.firePropertyChange(FEATURE_GEOM_PROPERTY, null, geometryValue);
     }
-
-    public void setGeomPolygonCurrent(byte[] geomPolygonCurrent) {
-        this.geomPolygonCurrent = geomPolygonCurrent.clone();
+    
+    /**
+     * Gets the flag if the old geometry of the cadastre object is the same with the new one.
+     * This is used to check if there is needed to still keep this bean or not.
+     * @return 
+     */
+    public boolean currentAndNewTheSame(){
+        return (getFeatureGeom().equalsTopo(getGeomPolygonCurrentForFeature()));
     }
 }

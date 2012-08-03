@@ -63,7 +63,14 @@ public abstract class ControlsBundleForTransaction extends ControlsBundleForWork
     private static final String IMAGE_LAYER_TITLE = "Image";
     protected CadastreBoundaryPointLayer cadastreBoundaryPointLayer = null;
     protected CadastreBoundaryEditTool cadastreBoundaryEditTool;
+    private String transactionStarterId;
 
+    
+    public ControlsBundleForTransaction(String transactionStarterId){
+        super();
+        this.transactionStarterId = transactionStarterId;
+    }
+    
     /**
      * It sets up the bundle. It calls the adding layer method and adding tools method. It also
      * identifies the pending layer which will be refreshed if a transaction is being saved in the
@@ -98,6 +105,10 @@ public abstract class ControlsBundleForTransaction extends ControlsBundleForWork
         }
     }
 
+    protected String getTransactionStarterId() {
+        return transactionStarterId;
+    }
+    
     /**
      * It zooms in the map where the transaction is happening
      *
@@ -129,7 +140,12 @@ public abstract class ControlsBundleForTransaction extends ControlsBundleForWork
      * @return
      */
     public abstract TransactionBean getTransactionBean();
-
+    
+    /**
+     * It sets the transaction.
+     */
+    public abstract void setTransaction();
+    
     /**
      * Adds layers that are needed for the transaction
      *

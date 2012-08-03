@@ -32,6 +32,7 @@
 package org.sola.clients.swing.gis.beans;
 
 import java.io.Serializable;
+import org.sola.clients.beans.AbstractVersionedBean;
 
 /**
  *
@@ -39,7 +40,7 @@ import java.io.Serializable;
  * 
  * @author Elton Manoku
  */
-public class TransactionSourceBean implements Serializable{
+public class TransactionSourceBean extends AbstractVersionedBean{
 
     private String sourceId;
 

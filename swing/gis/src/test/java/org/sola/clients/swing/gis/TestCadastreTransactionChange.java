@@ -56,6 +56,7 @@ public class TestCadastreTransactionChange extends ExtendedAction{
         TransactionCadastreChangeTO to = bean.getTO();
         System.out.println("Number of survey points: " + to.getSurveyPointList().size());
         bean.save();
+        ctrl.setTransaction();
     } 
     
 }

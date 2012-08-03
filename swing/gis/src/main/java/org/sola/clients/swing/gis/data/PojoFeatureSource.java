@@ -270,17 +270,6 @@ public class PojoFeatureSource implements SimpleFeatureSource {
             ResultForNavigationInfo resultInfo = this.dataSource.GetQueryData(
                     this.getSchema().getTypeName(), west, south, east, north,
                     this.getLayer().getSrid(), this.getLayer().getMapControl().getPixelResolution());
-            if (this.getLayer().getLayerName().equals("parcels")) {
-                System.out.println("layer name:" + this.getLayer().getLayerName());
-                System.out.println("west:" + west);
-                System.out.println("south:" + south);
-                System.out.println("east:" + east);
-                System.out.println("north:" + north);
-                System.out.println("srid:" + this.getLayer().getSrid());
-                System.out.println("pixelTolerance:" + this.getLayer().getMapControl().getPixelResolution());
-                System.out.println("NR Features Returned:" + resultInfo.getToAdd().size());
-                System.out.println("-----------------------------------");
-            }
             List<SimpleFeature> featuresToAdd = this.getFeaturesFromData(resultInfo.getToAdd());
             this.collection.clear();
             this.collection.addAll(featuresToAdd);

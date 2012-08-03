@@ -112,8 +112,7 @@ public abstract class CadastreRedefinitionAbstractNodeTool extends ExtendedDrawR
     protected final CadastreObjectNodeBean addNodeFromServer(Envelope2D env) {
         CadastreObjectNodeBean nodeBean = this.getNodeFromServer(env);
         if (nodeBean != null) {
-            this.cadastreObjectNodeModifiedLayer.addNodeTarget(
-                    nodeBean.getId(), nodeBean.getGeom());
+            this.cadastreObjectNodeModifiedLayer.addNodeTarget(nodeBean);
             this.cadastreObjectModifiedLayer.addCadastreObjects(nodeBean.getCadastreObjectList());
             this.getMapControl().refresh();
         }
@@ -208,6 +207,8 @@ public abstract class CadastreRedefinitionAbstractNodeTool extends ExtendedDrawR
             nodeFeatureGeom.getCoordinate().x = newCoordinateX;
             nodeFeatureGeom.getCoordinate().y = newCoordinateY;
             nodeFeatureGeom.geometryChanged();
+            this.cadastreObjectNodeModifiedLayer.getFeatureCollection().notifyListeners(
+                    nodeFeature, CollectionEvent.FEATURES_CHANGED);
             this.removeIfNodeNotUsed(nodeFeature);
             this.getMapControl().refresh();
         } else {

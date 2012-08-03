@@ -31,14 +31,15 @@
  */
 package org.sola.clients.swing.gis.beans;
 
-import java.io.Serializable;
+import com.vividsolutions.jts.geom.Geometry;
+import org.geotools.swing.extended.util.GeometryUtility;
 
 /**
  * A data bean which represents a node target during the Redefine cadastre process.
  * 
  * @author Elton Manoku
  */
-public class CadastreObjectNodeTargetBean implements Serializable {
+public class CadastreObjectNodeTargetBean extends SpatialBean {
     private String nodeId;
     private byte[] geom;
 
@@ -56,5 +57,14 @@ public class CadastreObjectNodeTargetBean implements Serializable {
 
     public void setGeom(byte[] geom) {
         this.geom = geom.clone();
+        if (getFeatureGeom() == null){
+            super.setFeatureGeom(GeometryUtility.getGeometryFromWkb(geom));
+        }
+    }
+
+    @Override
+    public void setFeatureGeom(Geometry geometryValue) {
+        super.setFeatureGeom(geometryValue);
+        setGeom(GeometryUtility.getWkbFromGeometry(geometryValue));
     }
 }

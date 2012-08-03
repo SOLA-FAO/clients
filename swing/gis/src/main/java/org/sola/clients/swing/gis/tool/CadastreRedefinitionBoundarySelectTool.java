@@ -40,6 +40,7 @@ import org.sola.clients.swing.gis.beans.CadastreObjectNodeBean;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.layer.CadastreBoundaryPointLayer;
 import org.sola.clients.swing.gis.layer.CadastreRedefinitionObjectLayer;
+import org.sola.clients.swing.gis.layer.TargetBoundaryLayer;
 import org.sola.clients.swing.gis.to.CadastreObjectNodeExtraTO;
 import org.sola.common.MappingManager;
 import org.sola.webservices.transferobjects.cadastre.CadastreObjectNodeTO;
@@ -57,7 +58,7 @@ public class CadastreRedefinitionBoundarySelectTool extends CadastreBoundarySele
     public CadastreRedefinitionBoundarySelectTool(
             PojoDataAccess dataAccess,
             CadastreBoundaryPointLayer pointLayer,
-            ExtendedLayerGraphics targetLayer,
+            TargetBoundaryLayer targetLayer,
             ExtendedLayerGraphics targetNodeLayer) {
         super(pointLayer, targetLayer, targetNodeLayer);
         this.dataAccess = dataAccess;
@@ -106,8 +107,7 @@ public class CadastreRedefinitionBoundarySelectTool extends CadastreBoundarySele
                 } else {
                     for (CadastreObjectBean coBean : nodeBean.getCadastreObjectList()) {
                         if (this.targetCadastreObjectIds.contains(coBean.getId())) {
-                            this.getTargetLayer().addCadastreObjectTarget(
-                                    coBean.getId(), null, coBean.getGeomPolygon());
+                            this.getTargetLayer().addCadastreObjectTarget(coBean);
                         }
                     }
                     this.pointLayer.setEndPoint(nodeBean.getGeom());

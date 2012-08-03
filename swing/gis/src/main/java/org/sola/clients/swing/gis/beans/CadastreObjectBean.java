@@ -31,43 +31,68 @@
  */
 package org.sola.clients.swing.gis.beans;
 
-import java.io.Serializable;
+import com.vividsolutions.jts.geom.Geometry;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import org.geotools.swing.extended.util.GeometryUtility;
 
 /**
  * Defines a cadastre object bean.
  * 
  * @author Elton Manoku
  */
-public class CadastreObjectBean implements Serializable {
-    private String id = "";
+public class CadastreObjectBean extends SpatialBean {
+    public static String NAME_FIRST_PART_PROPERTY = "nameFirstpart";
+    
+    private String id;
     private String nameFirstpart = "";
     private String nameLastpart = "";
     private String typeCode = "parcel";
     private byte[] geomPolygon;
     private List<SpatialValueAreaBean> spatialValueAreaList = new ArrayList<SpatialValueAreaBean>();
 
-    /**
-     * Gets id
+    public CadastreObjectBean(){
+        super();
+        generateId();
+    }
+
+    /** 
+     * Generates new ID for the cadastre object 
      */
+    public final void generateId(){
+        setId(UUID.randomUUID().toString());
+    }
+    
+    @Override
+    public void setFeatureGeom(Geometry geometryValue) {
+        super.setFeatureGeom(geometryValue);
+        this.setGeomPolygon(GeometryUtility.getWkbFromGeometry(geometryValue));
+    }
+
     public String getId() {
         return id;
     }
 
-    /**
-     * Sets id
-     */
     public void setId(String id) {
         this.id = id;
     }
-
+    
     public String getNameFirstpart() {
         return nameFirstpart;
     }
 
+    /**
+     * Sets the Name first part. It fires the change event to notify the corresponding feature
+     * for the change.
+     * 
+     * @param nameFirstpart 
+     */
     public void setNameFirstpart(String nameFirstpart) {
+        String oldValue = this.nameFirstpart;
         this.nameFirstpart = nameFirstpart;
+        propertySupport.firePropertyChange(NAME_FIRST_PART_PROPERTY, oldValue, nameFirstpart);
     }
 
     public String getNameLastpart() {
@@ -84,8 +109,11 @@ public class CadastreObjectBean implements Serializable {
 
     public void setGeomPolygon(byte[] geomPolygon) {
         this.geomPolygon = geomPolygon.clone();
+        if (getFeatureGeom() == null){
+            super.setFeatureGeom(GeometryUtility.getGeometryFromWkb(geomPolygon));
+        }
     }
-    
+   
     public List<SpatialValueAreaBean> getSpatialValueAreaList() {
         return spatialValueAreaList;
     }
@@ -101,25 +129,59 @@ public class CadastreObjectBean implements Serializable {
     public void setTypeCode(String typeCode) {
         this.typeCode = typeCode;
     }
-    
-    @Override
-    public boolean equals(Object target){
-        if (target.getClass() != this.getClass()){
-            return false;
+
+    public Double getCalculatedArea() {
+        for(SpatialValueAreaBean valueAreaBean: this.getSpatialValueAreaList()){
+            if (valueAreaBean.getTypeCode().equals(SpatialValueAreaBean.TYPE_OFFICIAL)){
+                return valueAreaBean.getSize().doubleValue();
+            }
         }
-        CadastreObjectBean targetBean = (CadastreObjectBean) target;
-        return targetBean.getId().equals(this.getId());
+        return null;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 13 * hash + (this.id != null ? this.id.hashCode() : 0);
-        return hash;
+    public void setCalculatedArea(Double calculatedArea) {
+        this.setArea(calculatedArea, SpatialValueAreaBean.TYPE_CALCULATED);
     }
 
+    public Double getOfficialArea() {
+        for(SpatialValueAreaBean valueAreaBean: this.getSpatialValueAreaList()){
+            if (valueAreaBean.getTypeCode().equals(SpatialValueAreaBean.TYPE_OFFICIAL)){
+                return valueAreaBean.getSize().doubleValue();
+            }
+        }
+        return null;
+    }
+
+    public void setOfficialArea(Double officialArea) {
+        this.setArea(officialArea, SpatialValueAreaBean.TYPE_OFFICIAL);
+    }
+
+    /**
+     * It sets the area for the cadastre object. The area is stored in the SpatialValueAreaBeans
+     * attached to this bean. So for changing the area, first it is located the appropriate
+     * SpatialValueAreaBean. if not found it is added one.
+     * 
+     * @param areaSize The size
+     * @param areaType The area type
+     */
+    private void setArea(Double areaSize, String areaType) {
+        SpatialValueAreaBean valueAreaBeanFound = null;
+        for(SpatialValueAreaBean valueAreaBean: this.getSpatialValueAreaList()){
+            if (valueAreaBean.getTypeCode().equals(areaType)){
+                valueAreaBeanFound = valueAreaBean;
+                break;
+            }
+        }
+        if (valueAreaBeanFound == null){
+            valueAreaBeanFound = new SpatialValueAreaBean();
+            valueAreaBeanFound.setTypeCode(areaType);
+            this.getSpatialValueAreaList().add(valueAreaBeanFound);
+        }
+        valueAreaBeanFound.setSize(BigDecimal.valueOf(areaSize));
+    }
+    
     @Override
     public String toString() {
         return String.format("%s / %s",this.nameFirstpart, this.nameLastpart);
-    }
+    }    
 }

@@ -13,11 +13,11 @@
         <ogc:Filter>
             <ogc:And>
                 <ogc:PropertyIsEqualTo>
-                    <ogc:PropertyName>is_boundary</ogc:PropertyName>
+                    <ogc:PropertyName>boundaryForFeature</ogc:PropertyName>
                     <ogc:Literal>1</ogc:Literal>
                 </ogc:PropertyIsEqualTo>
                 <ogc:PropertyIsEqualTo>
-                    <ogc:PropertyName>is_linked</ogc:PropertyName>
+                    <ogc:PropertyName>linkedForFeature</ogc:PropertyName>
                     <ogc:Literal>0</ogc:Literal>
                 </ogc:PropertyIsEqualTo>
             </ogc:And>
@@ -35,7 +35,7 @@
        </PointSymbolizer>
        <TextSymbolizer>
          <Label>
-           <ogc:PropertyName>label</ogc:PropertyName>
+           <ogc:PropertyName>id</ogc:PropertyName>
          </Label>
          <Font>
            <CssParameter name="font-family">Arial</CssParameter>
@@ -65,11 +65,11 @@
         <ogc:Filter>
             <ogc:And>
                 <ogc:PropertyIsEqualTo>
-                    <ogc:PropertyName>is_boundary</ogc:PropertyName>
+                    <ogc:PropertyName>boundaryForFeature</ogc:PropertyName>
                     <ogc:Literal>1</ogc:Literal>
                 </ogc:PropertyIsEqualTo>
                 <ogc:PropertyIsEqualTo>
-                    <ogc:PropertyName>is_linked</ogc:PropertyName>
+                    <ogc:PropertyName>linkedForFeature</ogc:PropertyName>
                     <ogc:Literal>1</ogc:Literal>
                 </ogc:PropertyIsEqualTo>
             </ogc:And>
@@ -87,7 +87,7 @@
        </PointSymbolizer>
        <TextSymbolizer>
          <Label>
-           <ogc:PropertyName>label</ogc:PropertyName>
+           <ogc:PropertyName>id</ogc:PropertyName>
          </Label>
          <Font>
            <CssParameter name="font-family">Arial</CssParameter>
@@ -116,7 +116,7 @@
         <Name>Not a node</Name>
         <ogc:Filter>
             <ogc:PropertyIsEqualTo>
-                <ogc:PropertyName>is_boundary</ogc:PropertyName>
+                <ogc:PropertyName>boundaryForFeature</ogc:PropertyName>
                 <ogc:Literal>0</ogc:Literal>
             </ogc:PropertyIsEqualTo>
         </ogc:Filter>
@@ -133,7 +133,7 @@
        </PointSymbolizer>
        <TextSymbolizer>
          <Label>
-           <ogc:PropertyName>label</ogc:PropertyName>
+           <ogc:PropertyName>id</ogc:PropertyName>
          </Label>
          <Font>
            <CssParameter name="font-family">Arial</CssParameter>

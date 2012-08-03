@@ -72,15 +72,13 @@ public final class ControlsBundleForCadastreRedefinition extends ControlsBundleF
      * @param applicationLocation Location of application that starts the cadastre change
      */
     public ControlsBundleForCadastreRedefinition(
-            TransactionCadastreRedefinitionBean transactionBean,
+            //TransactionCadastreRedefinitionBean transactionBean,
+            String transactionStarterId,
             String baUnitId,
             byte[] applicationLocation) {
-        super();
-        this.transactionBean = transactionBean;
-        if (this.transactionBean == null) {
-            this.transactionBean = new TransactionCadastreRedefinitionBean();
-        }
+        super(transactionStarterId);
         this.Setup(PojoDataAccess.getInstance());
+        setTransaction();
         this.zoomToInterestingArea(null, applicationLocation);
     }
 
@@ -96,27 +94,32 @@ public final class ControlsBundleForCadastreRedefinition extends ControlsBundleF
     @Override
     public TransactionCadastreRedefinitionBean getTransactionBean() {
         this.transactionBean.setCadastreObjectNodeTargetList(
-                this.cadastreObjectNodeModifiedLayer.getNodeTargetList());
+                this.cadastreObjectNodeModifiedLayer.getBeanListForTransaction());
         this.transactionBean.setCadastreObjectTargetList(
-                this.cadastreObjectModifiedLayer.getCadastreObjectTargetList());
+                this.cadastreObjectModifiedLayer.getBeanListForTransaction());
         return this.transactionBean;
     }
 
+    @Override
+    public final void setTransaction() {
+        this.transactionBean =  PojoDataAccess.getInstance().getTransactionCadastreRedefinition(
+                getTransactionStarterId());
+        this.cadastreObjectModifiedLayer.setBeanList(
+                this.transactionBean.getCadastreObjectTargetList());
+        this.cadastreObjectNodeModifiedLayer.setBeanList(
+                this.transactionBean.getCadastreObjectNodeTargetList());
+    }
+
+    
+    
     @Override
     protected void addLayers() throws InitializeLayerException {
         super.addLayers();
         this.cadastreObjectModifiedLayer = new CadastreRedefinitionObjectLayer();
         this.getMap().addLayer(this.cadastreObjectModifiedLayer);
 
-        this.cadastreObjectModifiedLayer.addCadastreObjectTargetList(
-                this.transactionBean.getCadastreObjectTargetList());
-
         this.cadastreObjectNodeModifiedLayer = new CadastreRedefinitionNodeLayer();
-        this.getMap().addLayer(this.cadastreObjectNodeModifiedLayer);
-
-        this.cadastreObjectNodeModifiedLayer.addNodeTargetList(
-                this.transactionBean.getCadastreObjectNodeTargetList());
-
+        this.getMap().addLayer(this.cadastreObjectNodeModifiedLayer);        
     }
 
     @Override
@@ -149,8 +152,8 @@ public final class ControlsBundleForCadastreRedefinition extends ControlsBundleF
     }
 
     public void reset() {
-        this.cadastreObjectModifiedLayer.removeFeatures();
-        this.cadastreObjectNodeModifiedLayer.removeFeatures();
+        this.cadastreObjectModifiedLayer.getBeanList().clear();
+        this.cadastreObjectNodeModifiedLayer.getBeanList().clear();
         ExtendedAction action = this.getMap().getMapActionByName(CadastreBoundarySelectTool.NAME);
         if (action != null) {
             ((CadastreBoundarySelectTool) action.getAttachedTool()).clearSelection();
