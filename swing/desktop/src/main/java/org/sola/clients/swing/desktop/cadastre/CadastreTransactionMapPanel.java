@@ -39,11 +39,8 @@ import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationPropertyBean;
 import org.sola.clients.beans.application.ApplicationServiceBean;
 import org.sola.clients.beans.referencedata.RequestTypeBean;
-import org.sola.clients.swing.gis.beans.TransactionCadastreChangeBean;
-import org.sola.clients.swing.gis.beans.TransactionCadastreRedefinitionBean;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForCadastreChange;
 import org.sola.clients.swing.ui.source.DocumentsManagementPanel;
-import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForCadastreRedefinition;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForTransaction;
 import org.sola.clients.swing.ui.ContentPanel;
@@ -77,17 +74,11 @@ public class CadastreTransactionMapPanel extends ContentPanel {
     private void initializeMap() {
         if (applicationService.getRequestType().getCode().equals(
                 RequestTypeBean.CODE_CADASTRE_CHANGE)) {
-//            TransactionCadastreChangeBean transactionBean =
-//                    PojoDataAccess.getInstance().getTransactionCadastreChange(
-//                    this.applicationService.getId());
             this.mapControl = new ControlsBundleForCadastreChange(
                     this.applicationBean.getNr(), this.applicationService.getId(), 
                     this.getBaUnitId(), this.applicationBean.getLocation());
         } else if (applicationService.getRequestType().getCode().equals(
                 RequestTypeBean.CODE_CADASTRE_REDEFINITION)) {
-//            TransactionCadastreRedefinitionBean transactionBean =
-//                    PojoDataAccess.getInstance().getTransactionCadastreRedefinition(
-//                    this.applicationService.getId());
             this.mapControl = new ControlsBundleForCadastreRedefinition(
                     this.applicationService.getId(), this.getBaUnitId(),
                     this.applicationBean.getLocation());
@@ -238,6 +229,7 @@ public class CadastreTransactionMapPanel extends ContentPanel {
         TransactionBean transactionBean = this.mapControl.getTransactionBean();
         transactionBean.setSourceIdList(this.documentsPanel.getSourceIds(false));
         List<ValidationResultBean> result = transactionBean.save();
+        this.mapControl.setTransaction();
         String message = MessageUtility.getLocalizedMessage(
                 GisMessage.CADASTRE_CHANGE_SAVED_SUCCESSFULLY).getMessage();
         this.mapControl.refresh(true);
