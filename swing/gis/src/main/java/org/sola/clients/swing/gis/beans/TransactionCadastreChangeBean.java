@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.beans.validation.ValidationResultBean;
-import org.sola.common.MappingManager;
+import org.sola.common.mapping.MappingManager;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.to.TransactionCadastreChangeExtraTO;
 import org.sola.webservices.transferobjects.transaction.TransactionCadastreChangeTO;

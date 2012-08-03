@@ -32,7 +32,7 @@
 package org.sola.clients.swing.gis.to;
 
 import java.util.List;
-import org.sola.common.MappingManager;
+import org.sola.common.mapping.MappingManager;
 import org.sola.webservices.transferobjects.cadastre.CadastreObjectNodeTO;
 import org.sola.webservices.transferobjects.cadastre.CadastreObjectTO;
 

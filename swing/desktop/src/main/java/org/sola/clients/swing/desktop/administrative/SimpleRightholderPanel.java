@@ -40,7 +40,7 @@ import org.sola.common.messaging.MessageUtility;
 /**
  * Form for managing simple ownership right. {@link RrrBean} is used to bind the data on the form.
  */
-public class SimpleOwhershipPanel extends ContentPanel {
+public class SimpleRightholderPanel extends ContentPanel {
 
     private ApplicationBean applicationBean;
     private ApplicationServiceBean appService;
@@ -75,7 +75,7 @@ public class SimpleOwhershipPanel extends ContentPanel {
     /**
      * Creates new form SimpleOwhershipPanel
      */
-    public SimpleOwhershipPanel(RrrBean rrrBean, ApplicationBean applicationBean, 
+    public SimpleRightholderPanel(RrrBean rrrBean, ApplicationBean applicationBean, 
             ApplicationServiceBean applicationService, RrrBean.RRR_ACTION rrrAction) {
         this.applicationBean = applicationBean;
         this.appService = applicationService;

@@ -45,7 +45,7 @@ import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.gis.beans.SpatialSearchOptionBean;
 import org.sola.clients.swing.gis.beans.SpatialSearchResultBean;
 import org.sola.clients.swing.gis.data.PojoFeatureSource;
-import org.sola.common.MappingManager;
+import org.sola.common.mapping.MappingManager;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.MessageUtility;

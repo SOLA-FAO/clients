@@ -38,7 +38,7 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import org.dozer.Mapper;
 import org.sola.clients.beans.AbstractBindingBean;
-import org.sola.common.MappingManager;
+import org.sola.common.mapping.MappingManager;
 
 /**
  * Provides static methods to convert various data types.
@@ -88,8 +88,7 @@ public final class TypeConverters {
      * @return 
      */
     private static Mapper getMapper() {
-        MappingManager.setEventListener(new GenericTranslatorListener());
-        return MappingManager.getMapper();        
+        return MappingManager.getMapper(new GenericTranslatorListener());        
     }
     
     /** 

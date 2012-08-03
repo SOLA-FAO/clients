@@ -29,7 +29,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
-import org.sola.common.MappingManager;
+import org.sola.common.mapping.MappingManager;
 import org.sola.webservices.transferobjects.search.SpatialSearchOptionTO;
 
 /**
