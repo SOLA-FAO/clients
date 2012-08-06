@@ -28,6 +28,7 @@
 package org.sola.clients.beans.administrative;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -48,6 +49,7 @@ import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.EntityAction;
 import org.sola.webservices.transferobjects.administrative.BaUnitTO;
 import org.sola.webservices.transferobjects.search.SpatialSearchResultTO;
+import org.sola.webservices.transferobjects.administrative.BaUnitAreaTO;
 
 /** 
  * Contains properties and methods to manage <b>BA Unit</b> object of the 
@@ -173,6 +175,8 @@ public class BaUnitBean extends BaUnitSummaryBean {
     public static final String ESTATE_TYPE_PROPERTY = "estateType";
     public static final String PENDING_ACTION_CODE_PROPERTY = "pendingActionCode";
     public static final String PENDING_ACTION_PROPERTY = "pendingTypeAction";
+    public static final String SELECTED_BA_UNIT_AREA_PROPERTY = "selectedBaUnitArea";
+    
     
     private SolaList<RrrBean> rrrList;
     private SolaList<BaUnitNotationBean> baUnitNotationList;
@@ -183,26 +187,40 @@ public class BaUnitBean extends BaUnitSummaryBean {
     private SolaObservableList<RrrShareWithStatus> rrrSharesList;
     private SolaList<RelatedBaUnitInfoBean> childBaUnits;
     private SolaList<RelatedBaUnitInfoBean> parentBaUnits;
+    private SolaList<BaUnitAreaBean> baUnitAreaList;
+    
     private transient CadastreObjectBean selectedParcel;
     private transient RrrBean selectedRight;
     private transient BaUnitNotationBean selectedBaUnitNotation;
     private transient RelatedBaUnitInfoBean selectedParentBaUnit;
     private transient RelatedBaUnitInfoBean selectedChildBaUnit;
+    private transient BaUnitAreaBean selectedBaUnitArea;
+    
     private String estateType;
     private TypeActionBean pendingTypeAction;
+    private BigDecimal calculatedAreaSize;
+
+    public BigDecimal getCalculatedAreaSize() {
+        return calculatedAreaSize;
+    }
+
+    public void setCalculatedAreaSize(BigDecimal calculatedAreaSize) {
+        this.calculatedAreaSize = calculatedAreaSize;
+    }
     
     public BaUnitBean() {
         super();
         rrrList = new SolaList();
         baUnitNotationList = new SolaList();
         cadastreObjectList = new SolaList();
+        baUnitAreaList = new SolaList();
         childBaUnits = new SolaList();
         parentBaUnits = new SolaList();
         sourceList = new SolaList();
         allBaUnitNotationList = new SolaObservableList<BaUnitNotationBean>();
         rrrSharesList = new SolaObservableList<RrrShareWithStatus>();
         rrrList.getFilteredList().addObservableListListener(new RrrListListener());
-        
+         
         sourceList.setExcludedStatuses(new String[]{StatusConstants.HISTORIC});
         rrrList.setExcludedStatuses(new String[]{StatusConstants.HISTORIC, StatusConstants.PREVIOUS});
         
@@ -600,6 +618,19 @@ public class BaUnitBean extends BaUnitSummaryBean {
                 WSManager.getInstance().getAdministrative().getBaUnitsByServiceId(serviceId),
                 BaUnitBean.class, null);
     }
+    
+    
+    /** 
+     * Returns o BA Unit Areas, for the Ba Unit Id. 
+     * @param baUnitId The ID of service, used pick up BA Units.
+     */
+    public static BaUnitAreaBean getBaUnitArea(String baUnitId){
+        return TypeConverters.TransferObjectToBean(
+                WSManager.getInstance().getAdministrative().getBaUnitAreas(baUnitId),
+                BaUnitAreaBean.class, null);
+    }
+    
+    
     
     /** 
      * Terminates/Cancel BaUnit. Creates pending record for further action. 
