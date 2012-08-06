@@ -888,7 +888,6 @@ public class PropertyPanel extends ContentPanel {
 
     private void saveBaUnit(final boolean showMessage, final boolean closeOnSave) {
 
-//        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle");
 
         if (baUnitBean1.validate(true).size() > 0) {
             return;
