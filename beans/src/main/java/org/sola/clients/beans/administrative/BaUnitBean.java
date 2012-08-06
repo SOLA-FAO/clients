@@ -28,6 +28,7 @@
 package org.sola.clients.beans.administrative;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -197,6 +198,15 @@ public class BaUnitBean extends BaUnitSummaryBean {
     
     private String estateType;
     private TypeActionBean pendingTypeAction;
+    private BigDecimal calculatedAreaSize;
+
+    public BigDecimal getCalculatedAreaSize() {
+        return calculatedAreaSize;
+    }
+
+    public void setCalculatedAreaSize(BigDecimal calculatedAreaSize) {
+        this.calculatedAreaSize = calculatedAreaSize;
+    }
     
     public BaUnitBean() {
         super();

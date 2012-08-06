@@ -139,11 +139,11 @@ public class PropertyPanel extends ContentPanel {
             }
             baUnitAreaBean1 = baUnitAreaBean;
             
-          if (baUnitAreaBean1.getCalculatedAreaSize()!= null) {   
-            if (!baUnitAreaBean1.getCalculatedAreaSize().equals(new BigDecimal(0)) ) {
-                baUnitAreaBean1.setSize(baUnitAreaBean1.getCalculatedAreaSize());
-            }
-          }  
+//          if (baUnitAreaBean1.getCalculatedAreaSize()!= null) {   
+//            if (!baUnitAreaBean1.getCalculatedAreaSize().equals(new BigDecimal(0)) ) {
+//                baUnitAreaBean1.setSize(baUnitAreaBean1.getCalculatedAreaSize());
+//            }
+//          }  
         }
         return baUnitAreaBean1;
     }
@@ -679,6 +679,13 @@ public class PropertyPanel extends ContentPanel {
      /**
      * Returns {@link BaUnitBean} by first and last name part.
      */
+    private BaUnitBean getBaUnit(String id) {
+        BaUnitTO baUnitTO = WSManager.getInstance().getAdministrative().getBaUnitById(id);
+        return TypeConverters.TransferObjectToBean(baUnitTO, BaUnitBean.class, null);
+    }
+     /**
+     * Returns {@link BaUnitBean} by first and last name part.
+     */
     private BaUnitAreaBean getBaUnitArea(String baUnitId) {
         BaUnitAreaTO baUnitAreaTO = WSManager.getInstance().getAdministrative().getBaUnitAreas(baUnitId);
         return TypeConverters.TransferObjectToBean(baUnitAreaTO, BaUnitAreaBean.class, null);
@@ -881,7 +888,7 @@ public class PropertyPanel extends ContentPanel {
 
     private void saveBaUnit(final boolean showMessage, final boolean closeOnSave) {
 
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle");
+//        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle");
 
         if (baUnitBean1.validate(true).size() > 0) {
             return;
@@ -895,7 +902,7 @@ public class PropertyPanel extends ContentPanel {
             if (baUnitAreaBean1 == null) {
                 return;
             } else {
-           
+                java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle");
                 if (baUnitAreaBean1.getSize()== null)
                 {
                     MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_FIELDS,
@@ -916,13 +923,32 @@ public class PropertyPanel extends ContentPanel {
                     baUnitBean1.saveBaUnit(applicationService.getId());
                 } else {
                     baUnitBean1.createBaUnit(applicationService.getId());
-                    if (txtArea.isEditable()) { 
-                        baUnitAreaBean1.createBaUnitArea(baUnitBean1.getId());
-                    }
                 }
                 if (closeOnSave) {
                     close();
                 }
+               
+               if (txtArea.isEditable()) { 
+                BaUnitBean baUnitBean2 = getBaUnit(baUnitBean1.getId());
+                if (baUnitBean2.getCalculatedAreaSize()!= null) {   
+                   if (!baUnitBean2.getCalculatedAreaSize().equals(new BigDecimal(0)) ) {
+                     if (MessageUtility.displayMessage(ClientMessage.BAUNIT_CONFIRM_AREA,
+                            new Object[]{baUnitBean2.getCalculatedAreaSize()}) == MessageUtility.BUTTON_ONE) {
+                        baUnitAreaBean1.setSize(baUnitBean2.getCalculatedAreaSize());
+                     }
+                       
+                   }
+                } 
+//               java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle");
+// 
+//               if (baUnitAreaBean1.getSize()== null)
+//                {
+//                    MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_FIELDS,
+//                            new Object[]{bundle.getString("PropertyPanel.labArea.text")});
+//                    return null;
+//                } 
+                baUnitAreaBean1.createBaUnitArea(baUnitBean1.getId());
+               } 
                 return null;
             }
 
@@ -932,6 +958,7 @@ public class PropertyPanel extends ContentPanel {
                     MessageUtility.displayMessage(ClientMessage.BAUNIT_SAVED);
                 }
                 saveBaUnitState();
+            
             }
         };
         TaskManager.getInstance().runTask(t);
