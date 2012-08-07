@@ -280,9 +280,15 @@ public class BaUnitBean extends BaUnitSummaryBean {
     }
     
     public void removeSelectedParcel() {
-        if (selectedParcel != null && cadastreObjectList != null) {
-            cadastreObjectList.safeRemove(selectedParcel, EntityAction.DISASSOCIATE);
+         if (selectedParcel != null && cadastreObjectList != null) {
+            if (selectedParcel.getStatusCode().equalsIgnoreCase(CadastreObjectBean.PENDING_STATUS)) {
+                cadastreObjectList.safeRemove(selectedParcel, EntityAction.DELETE);
+            } else {
+                cadastreObjectList.safeRemove(selectedParcel, EntityAction.DISASSOCIATE);
+            }
         }
+        
+        
     }
 
     public void removeSelectedRight() {

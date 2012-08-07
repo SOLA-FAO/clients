@@ -53,6 +53,7 @@ public class CadastreObjectBean extends AbstractTransactionedBean {
     public static final String CADASTRE_OBJECT_TYPE_PROPERTY = "cadastreObjectType";
     public static final String GEOM_POLYGON_PROPERTY = "geomPolygon";
     public static final String SELECTED_PROPERTY = "selected";
+    public static final String PENDING_STATUS = "pending";
     
     private Date approvalDatetime;
     private Date historicDatetime;
