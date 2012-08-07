@@ -37,6 +37,10 @@ import javax.swing.DefaultListModel;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.clients.beans.cadastre.CadastreObjectBean;
 import org.sola.clients.beans.converters.TypeConverters;
+import org.sola.clients.swing.common.tasks.SolaTask;
+import org.sola.clients.swing.common.tasks.TaskManager;
+import org.sola.common.messaging.ClientMessage;
+import org.sola.common.messaging.MessageUtility;
 import org.sola.services.boundary.wsclients.CadastreClient;
 
 /**
@@ -45,23 +49,54 @@ import org.sola.services.boundary.wsclients.CadastreClient;
  */
 public class CadastreObjectSearch extends FreeTextSearch {
 
-    private CadastreClient dataSource;
+    private SolaTask searchTask = null;
 
-    @Override
-    public void onNewSearchString(String searchString, DefaultListModel listModel) {
-        if (this.dataSource == null) {
-            this.dataSource = WSManager.getInstance().getCadastreService();
-        }
-
-        List<CadastreObjectBean> searchResult = new LinkedList<CadastreObjectBean>();
-        TypeConverters.TransferObjectListToBeanList(
-                this.dataSource.getCadastreObjectByParts(searchString), 
-                CadastreObjectBean.class, (List)searchResult);
-        
-        listModel.clear();
-        
-        for (CadastreObjectBean cadastreObject : searchResult) {
-            listModel.addElement(cadastreObject);
-        }
+    public CadastreObjectSearch() {
+        super();
+        this.setMinimalSearchStringLength(3);
     }
+    
+    @Override
+    public void onNewSearchString(final String searchString, final DefaultListModel listModel) {
+
+    // Check if a search is currently running and if so, cancel it
+    if (searchTask != null && TaskManager.getInstance().isTaskRunning(searchTask.getId())) {
+        TaskManager.getInstance().removeTask(searchTask);
+    }
+
+    // Use a SolaTask to make the search much smoother. 
+    final List<CadastreObjectBean> searchResult = new LinkedList<CadastreObjectBean>();
+    listModel.clear();
+    searchTask = new SolaTask<Void, Void>() {
+
+        @Override
+        public Void doTask() {
+            // Perform the search on a background thread
+            setMessage(MessageUtility.getLocalizedMessage(
+                    ClientMessage.PROGRESS_MSG_MAP_SEARCHING,
+                    new String[]{""}).getMessage());
+            try {
+                // Allow a small delay on the background thread so that the thread can be cancelled
+                // before executing the search if the user is still typing. 
+                Thread.sleep(500);
+                TypeConverters.TransferObjectListToBeanList(
+                        WSManager.getInstance().getCadastreService().getCadastreObjectByParts(searchString),
+                        CadastreObjectBean.class, (List) searchResult);
+            } catch (InterruptedException ex) {
+            }
+            return null;
+        }
+
+        @Override
+        public void taskDone() {
+            // Update the GUI using the primary EDT thread
+            if (searchResult.size() > 0) {
+                for (CadastreObjectBean cadastreObject : searchResult) {
+                    listModel.addElement(cadastreObject);
+                }
+            }
+        }
+    };
+    TaskManager.getInstance().runTask(searchTask);
+}
 }

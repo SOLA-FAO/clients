@@ -35,6 +35,10 @@ import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.beans.party.PartySearchParamsBean;
 import org.sola.clients.beans.party.PartySearchResultBean;
+import org.sola.clients.swing.common.tasks.SolaTask;
+import org.sola.clients.swing.common.tasks.TaskManager;
+import org.sola.common.messaging.ClientMessage;
+import org.sola.common.messaging.MessageUtility;
 import org.sola.services.boundary.wsclients.SearchClient;
 import org.sola.webservices.transferobjects.search.PartySearchParamsTO;
 
@@ -42,37 +46,64 @@ import org.sola.webservices.transferobjects.search.PartySearchParamsTO;
  * Quick search control for parties
  */
 public class PartyQuickSearch extends FreeTextSearch {
-    private SearchClient searchClient;
-    private PartySearchParamsBean searchParams;
     
-    public PartyQuickSearch(){
+    private PartySearchParamsBean searchParams;
+     private SolaTask searchTask = null;
+
+    public PartyQuickSearch() {
         super();
+        this.setMinimalSearchStringLength(1);
         searchParams = new PartySearchParamsBean();
     }
     
-    @Override
-    public void onNewSearchString(String searchString, DefaultListModel listModel) {
-        if (this.searchClient == null) {
-            this.searchClient = WSManager.getInstance().getSearchService();
-        }
-
-        searchParams.setName(searchString);
-        List<PartySearchResultBean> searchResult = new LinkedList<PartySearchResultBean>();
-        PartySearchParamsTO params = TypeConverters.BeanToTrasferObject(
-                searchParams, PartySearchParamsTO.class);
-        
-        TypeConverters.TransferObjectListToBeanList(searchClient.searchParties(params), 
-                PartySearchResultBean.class, (List)searchResult);
-        
-        listModel.clear();
-        
-        for (PartySearchResultBean party : searchResult) {
-            listModel.addElement(party);
-        }
-    }
 
     public PartySearchParamsBean getSearchParams() {
         return searchParams;
     }
+    
+    @Override
+    public void onNewSearchString(final String searchString, final DefaultListModel listModel) {
 
+    // Check if a search is currently running and if so, cancel it
+    if (searchTask != null && TaskManager.getInstance().isTaskRunning(searchTask.getId())) {
+        TaskManager.getInstance().removeTask(searchTask);
+    }
+    searchParams.setName(searchString);
+    // Use a SolaTask to make the search much smoother. 
+    final List<PartySearchResultBean> searchResult = new LinkedList<PartySearchResultBean>();
+    listModel.clear();
+    searchTask = new SolaTask<Void, Void>() {
+
+        @Override
+        public Void doTask() {
+            // Perform the search on a background thread
+            setMessage(MessageUtility.getLocalizedMessage(
+                    ClientMessage.PROGRESS_MSG_MAP_SEARCHING,
+                    new String[]{""}).getMessage());
+            try {
+                // Allow a small delay on the background thread so that the thread can be cancelled
+                // before executing the search if the user is still typing. 
+                Thread.sleep(500);
+                PartySearchParamsTO params = TypeConverters.BeanToTrasferObject(
+                searchParams, PartySearchParamsTO.class);
+                TypeConverters.TransferObjectListToBeanList(
+                        WSManager.getInstance().getSearchService().searchParties(params),
+                        PartySearchResultBean.class, (List) searchResult);
+            } catch (InterruptedException ex) {
+            }
+            return null;
+        }
+
+        @Override
+        public void taskDone() {
+            // Update the GUI using the primary EDT thread
+            if (searchResult.size() > 0) {
+                for (PartySearchResultBean party : searchResult) {
+                    listModel.addElement(party);
+                }
+            }
+        }
+    };
+    TaskManager.getInstance().runTask(searchTask);
+}    
 }
