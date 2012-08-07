@@ -47,7 +47,7 @@ public abstract class CadastreChangeEditAbstractTool extends ExtendedEditGeometr
         super.onSelectionChanged(selected);
         if (selected) {
             ExtendedAction action =
-                    this.getMapControl().getMapActionByName(CadastreBoundarySelectTool.NAME);
+                    this.getMapControl().getMapActionByName(CadastreBoundarySelectTool.MAP_ACTION_NAME);
             if (action != null) {
                 ((CadastreBoundarySelectTool) action.getAttachedTool()).clearSelection();
                 this.getMapControl().refresh();

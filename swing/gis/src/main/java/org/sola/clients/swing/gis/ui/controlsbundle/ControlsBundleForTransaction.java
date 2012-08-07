@@ -38,14 +38,17 @@ import org.geotools.map.extended.layer.ExtendedLayer;
 import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.geotools.swing.mapaction.extended.RemoveDirectImage;
 import org.geotools.swing.tool.extended.AddDirectImageTool;
+import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.swing.gis.Messaging;
 import org.sola.clients.swing.gis.beans.TransactionBean;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.data.PojoFeatureSource;
 import org.sola.clients.swing.gis.layer.CadastreBoundaryPointLayer;
 import org.sola.clients.swing.gis.layer.PojoLayer;
+import org.sola.clients.swing.gis.mapaction.SaveTransaction;
 import org.sola.clients.swing.gis.tool.CadastreBoundaryEditTool;
 import org.sola.clients.swing.gis.tool.CadastreBoundarySelectTool;
+import org.sola.clients.swing.gis.ui.control.MapDocumentsPanel;
 import org.sola.common.messaging.GisMessage;
 
 /**
@@ -64,10 +67,14 @@ public abstract class ControlsBundleForTransaction extends ControlsBundleForWork
     protected CadastreBoundaryPointLayer cadastreBoundaryPointLayer = null;
     protected CadastreBoundaryEditTool cadastreBoundaryEditTool;
     private String transactionStarterId;
+    private ApplicationBean applicationBean;
+    private MapDocumentsPanel documentsPanel;
 
     
-    public ControlsBundleForTransaction(String transactionStarterId){
+    public ControlsBundleForTransaction(
+            ApplicationBean applicationBean, String transactionStarterId){
         super();
+        this.applicationBean = applicationBean;
         this.transactionStarterId = transactionStarterId;
     }
     
@@ -82,6 +89,8 @@ public abstract class ControlsBundleForTransaction extends ControlsBundleForWork
     public void Setup(PojoDataAccess pojoDataAccess) {
         super.Setup(pojoDataAccess);
         try {
+            
+            this.addDocumentsPanel();
 
             //Adding layers
             this.addLayers();
@@ -103,6 +112,16 @@ public abstract class ControlsBundleForTransaction extends ControlsBundleForWork
             Messaging.getInstance().show(GisMessage.CADASTRE_CHANGE_ERROR_SETUP);
             org.sola.common.logging.LogUtility.log(GisMessage.CADASTRE_CHANGE_ERROR_SETUP, ex);
         }
+    }
+
+    @Override
+    protected void setupToolbar() {
+        this.getMap().addMapAction(new SaveTransaction(this), this.getToolbar(), true);
+        super.setupToolbar();
+    }
+
+    protected final MapDocumentsPanel getDocumentsPanel() {
+        return documentsPanel;
     }
 
     protected String getTransactionStarterId() {
@@ -168,6 +187,7 @@ public abstract class ControlsBundleForTransaction extends ControlsBundleForWork
         this.getMap().addTool(this.cadastreBoundaryEditTool, this.getToolbar(), false);
         this.getMap().addTool(new AddDirectImageTool(this.imageLayer), this.getToolbar(), true);
         this.getMap().addMapAction(new RemoveDirectImage(this.getMap()), this.getToolbar(), true);
+        this.setApplicationId(this.applicationBean.getId());
     }
 
     @Override
@@ -183,6 +203,14 @@ public abstract class ControlsBundleForTransaction extends ControlsBundleForWork
      * @param readOnly
      */
     public void setReadOnly(boolean readOnly) {
-        this.getMap().getMapActionByName(CadastreBoundarySelectTool.NAME).setEnabled(!readOnly);
+        this.getMap().getMapActionByName(SaveTransaction.MAPACTION_NAME).setEnabled(!readOnly);
+        this.getMap().getMapActionByName(CadastreBoundarySelectTool.MAP_ACTION_NAME).setEnabled(!readOnly);
     }
+    
+
+    private void addDocumentsPanel() {
+        this.documentsPanel = new  MapDocumentsPanel(this, this.applicationBean);
+        this.addInLeftPanel("Documents", this.documentsPanel);
+    }
+
 }

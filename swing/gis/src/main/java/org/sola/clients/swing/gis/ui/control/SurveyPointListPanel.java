@@ -102,7 +102,6 @@ public class SurveyPointListPanel extends javax.swing.JPanel {
         cmdRemove = new javax.swing.JButton();
         txtAcceptableShift = new javax.swing.JTextField();
         txtStandardDeviation = new javax.swing.JTextField();
-        cmdLoadFromExternalSource = new javax.swing.JButton();
         txtMeanShift = new javax.swing.JTextField();
         txtX = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -152,13 +151,6 @@ public class SurveyPointListPanel extends javax.swing.JPanel {
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, surveyPointListBean, org.jdesktop.beansbinding.ELProperty.create("${standardDeviation}"), txtStandardDeviation, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
-
-        cmdLoadFromExternalSource.setText(bundle.getString("SurveyPointListPanel.cmdLoadFromExternalSource.text")); // NOI18N
-        cmdLoadFromExternalSource.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmdLoadFromExternalSourceActionPerformed(evt);
-            }
-        });
 
         txtMeanShift.setEditable(false);
 
@@ -228,11 +220,11 @@ public class SurveyPointListPanel extends javax.swing.JPanel {
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtMeanShift, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtStandardDeviation, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
                         .addComponent(optionUrban, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(optionRural)
@@ -240,10 +232,9 @@ public class SurveyPointListPanel extends javax.swing.JPanel {
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtAcceptableShift, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 564, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(cmdLoadFromExternalSource, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtX, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -271,15 +262,13 @@ public class SurveyPointListPanel extends javax.swing.JPanel {
                     .addComponent(jLabel2)
                     .addComponent(jLabel5))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtY, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(cmdAdd)
-                        .addComponent(cmdRemove)
-                        .addComponent(jLabel3)
-                        .addComponent(jLabel4))
-                    .addComponent(cmdLoadFromExternalSource))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtY, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmdAdd)
+                    .addComponent(cmdRemove)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4))
                 .addGap(6, 6, 6)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
                 .addContainerGap())
@@ -319,12 +308,8 @@ public class SurveyPointListPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_cmdRemoveActionPerformed
 
-    private void cmdLoadFromExternalSourceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdLoadFromExternalSourceActionPerformed
-        Messaging.getInstance().show(GisMessage.GENERAL_UNDER_CONSTRUCTION);
-    }//GEN-LAST:event_cmdLoadFromExternalSourceActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cmdAdd;
-    private javax.swing.JButton cmdLoadFromExternalSource;
     private javax.swing.JButton cmdRemove;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

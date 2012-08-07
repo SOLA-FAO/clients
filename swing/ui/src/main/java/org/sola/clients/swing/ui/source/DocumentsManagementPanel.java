@@ -150,6 +150,15 @@ public class DocumentsManagementPanel extends javax.swing.JPanel {
         return documentsPanel.getSourceIds(onlyFiltered);
     }
     
+    /**
+     * Gets the selected source
+     * 
+     * @return
+     */
+    public final SourceBean getSelectedSourceBean(){
+        return documentsPanel.getSourceListBean().getSelectedSource();
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

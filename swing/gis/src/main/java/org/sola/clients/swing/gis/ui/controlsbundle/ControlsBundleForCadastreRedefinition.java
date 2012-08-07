@@ -34,6 +34,7 @@ package org.sola.clients.swing.gis.ui.controlsbundle;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.geotools.swing.mapaction.extended.ExtendedAction;
+import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.swing.gis.beans.TransactionCadastreRedefinitionBean;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.layer.CadastreRedefinitionNodeLayer;
@@ -72,14 +73,13 @@ public final class ControlsBundleForCadastreRedefinition extends ControlsBundleF
      * @param applicationLocation Location of application that starts the cadastre change
      */
     public ControlsBundleForCadastreRedefinition(
-            //TransactionCadastreRedefinitionBean transactionBean,
+            ApplicationBean applicationBean,
             String transactionStarterId,
-            String baUnitId,
-            byte[] applicationLocation) {
-        super(transactionStarterId);
+            String baUnitId) {
+        super(applicationBean, transactionStarterId);
         this.Setup(PojoDataAccess.getInstance());
         setTransaction();
-        this.zoomToInterestingArea(null, applicationLocation);
+        this.zoomToInterestingArea(null, applicationBean.getLocation());
     }
 
     @Override
@@ -97,6 +97,7 @@ public final class ControlsBundleForCadastreRedefinition extends ControlsBundleF
                 this.cadastreObjectNodeModifiedLayer.getBeanListForTransaction());
         this.transactionBean.setCadastreObjectTargetList(
                 this.cadastreObjectModifiedLayer.getBeanListForTransaction());
+        this.transactionBean.setSourceIdList(this.getDocumentsPanel().getSourceIds());
         return this.transactionBean;
     }
 
@@ -108,6 +109,7 @@ public final class ControlsBundleForCadastreRedefinition extends ControlsBundleF
                 this.transactionBean.getCadastreObjectTargetList());
         this.cadastreObjectNodeModifiedLayer.setBeanList(
                 this.transactionBean.getCadastreObjectNodeTargetList());
+        this.getDocumentsPanel().setSourceIds(this.transactionBean.getSourceIdList());
     }
 
     
@@ -154,7 +156,7 @@ public final class ControlsBundleForCadastreRedefinition extends ControlsBundleF
     public void reset() {
         this.cadastreObjectModifiedLayer.getBeanList().clear();
         this.cadastreObjectNodeModifiedLayer.getBeanList().clear();
-        ExtendedAction action = this.getMap().getMapActionByName(CadastreBoundarySelectTool.NAME);
+        ExtendedAction action = this.getMap().getMapActionByName(CadastreBoundarySelectTool.MAP_ACTION_NAME);
         if (action != null) {
             ((CadastreBoundarySelectTool) action.getAttachedTool()).clearSelection();
             this.getMap().refresh();

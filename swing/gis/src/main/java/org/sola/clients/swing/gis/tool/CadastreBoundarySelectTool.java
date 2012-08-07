@@ -53,7 +53,7 @@ import org.sola.common.messaging.MessageUtility;
  */
 public class CadastreBoundarySelectTool extends ExtendedDrawRectangle {
 
-    public final static String NAME = "cadastre-boundary-select";
+    public final static String MAP_ACTION_NAME = "cadastre-boundary-select";
 
     private String toolTip = MessageUtility.getLocalizedMessage(
             GisMessage.CADASTRE_BOUNDARY_SELECT_TOOL_TOOLTIP).getMessage();
@@ -76,7 +76,7 @@ public class CadastreBoundarySelectTool extends ExtendedDrawRectangle {
             CadastreBoundaryPointLayer pointLayer,
             TargetBoundaryLayer targetLayer,
             ExtendedLayerGraphics targetNodeLayer) {
-        this.setToolName(NAME);
+        this.setToolName(MAP_ACTION_NAME);
         this.setToolTip(toolTip);
         this.pointLayer = pointLayer;
         this.targetLayer = targetLayer;

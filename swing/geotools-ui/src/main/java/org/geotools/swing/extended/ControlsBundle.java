@@ -133,7 +133,7 @@ public class ControlsBundle extends javax.swing.JPanel {
     /**
      * It starts up the statusbar. It adds the basic navigation commands and tools.
      */
-    private void setupToolbar() {
+    protected void setupToolbar() {
         this.getMap().addMapAction(new FullExtent(this.getMap()), this.mapToolbar, true);
         this.getMap().addMapAction(
                 new org.geotools.swing.mapaction.extended.ZoomOutAction(this.getMap()),
@@ -147,8 +147,6 @@ public class ControlsBundle extends javax.swing.JPanel {
      */
     private void setupStatusBar() {
         this.pnlStatusbar.setLayout(new BorderLayout());
-        //JMapStatusBar statusBar = JMapStatusBar.createDefaultStatusBar(map);
-        //statusBar.removeAll();
         statusBar = new JMapStatusBar();
         statusBar.addItem(new JRendererStatusBarItem(this.getMap()), false, true);
         JCoordsStatusBarItem coordStatusItem = new JCoordsStatusBarItem(this.getMap());

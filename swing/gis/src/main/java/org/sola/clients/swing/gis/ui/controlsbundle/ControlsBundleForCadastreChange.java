@@ -32,6 +32,7 @@ package org.sola.clients.swing.gis.ui.controlsbundle;
 import java.util.List;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.swing.extended.exception.InitializeLayerException;
+import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.swing.gis.beans.TransactionBean;
 import org.sola.clients.swing.gis.beans.TransactionCadastreChangeBean;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
@@ -75,19 +76,11 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
      * @param applicationLocation Location of application that starts the cadastre change
      */
     public ControlsBundleForCadastreChange(
-            String applicationNumber,
+            ApplicationBean applicationBean,
             String transactionStarterId,
-            //TransactionCadastreChangeBean transactionBean,
-            String baUnitId,
-            byte[] applicationLocation) {
-        super(transactionStarterId);
-        this.applicationNumber = applicationNumber;
-//        this.transactionBean =  PojoDataAccess.getInstance().getTransactionCadastreChange(
-//                transactionStarterId);
-        
-//        if (this.transactionBean == null) {
-//            this.transactionBean = new TransactionCadastreChangeBean();
-//        }
+            String baUnitId) {
+        super(applicationBean, transactionStarterId);
+        this.applicationNumber = applicationBean.getNr();
 
         this.Setup(PojoDataAccess.getInstance());
         
@@ -96,7 +89,7 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
         if (!this.transactionIsStarted()) {
             this.setTargetParcelsByBaUnit(baUnitId);
         }
-        this.zoomToInterestingArea(null, applicationLocation);
+        this.zoomToInterestingArea(null, applicationBean.getLocation());
     }
 
     /**
@@ -134,6 +127,7 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
         transactionBean.setSurveyPointList(this.newPointsLayer.getBeanListForTransaction());
         transactionBean.setCadastreObjectTargetList(
                 this.targetParcelsLayer.getBeanListForTransaction());
+        transactionBean.setSourceIdList(this.getDocumentsPanel().getSourceIds());
         return transactionBean;
     }
 
@@ -150,6 +144,7 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
         this.newCadastreObjectLayer.setBeanList(
                 this.transactionBean.getCadastreObjectList());
         this.newPointsLayer.setBeanList(this.transactionBean.getSurveyPointList());
+        this.getDocumentsPanel().setSourceIds(this.transactionBean.getSourceIdList());
     }
 
     

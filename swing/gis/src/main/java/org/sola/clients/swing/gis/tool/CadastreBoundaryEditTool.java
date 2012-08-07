@@ -191,7 +191,7 @@ public class CadastreBoundaryEditTool extends ExtendedDrawToolWithSnapping {
      */
     private CadastreBoundarySelectTool getSelectTool() {
         ExtendedAction selectAction =
-                this.getMapControl().getMapActionByName(CadastreBoundarySelectTool.NAME);
+                this.getMapControl().getMapActionByName(CadastreBoundarySelectTool.MAP_ACTION_NAME);
         return (CadastreBoundarySelectTool) selectAction.getAttachedTool();
     }
 }

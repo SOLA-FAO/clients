@@ -29,28 +29,15 @@
  */
 package org.sola.clients.swing.gis.mapaction;
 
-import com.vividsolutions.jts.awt.PointShapeFactory.Point;
-import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import org.geotools.swing.extended.Map;
-import org.geotools.swing.extended.exception.MapScaleException;
-import org.geotools.swing.extended.exception.PrintLayoutException;
-import org.geotools.swing.extended.util.MapImageGenerator;
-import org.geotools.swing.extended.util.Messaging;
-import org.geotools.swing.extended.util.ScalebarGenerator;
 import org.geotools.swing.mapaction.extended.Print;
 import org.geotools.swing.mapaction.extended.print.PrintLayout;
-import org.geotools.swing.mapaction.extended.print.TextLayout;
-import org.geotools.swing.mapaction.extended.ui.IPrintUi;
 import org.sola.clients.beans.application.ApplicationServiceBean;
 import org.sola.clients.beans.referencedata.RequestTypeBean;
 import org.sola.clients.beans.security.SecurityBean;
-import org.sola.clients.reports.ReportManager;
-import org.sola.clients.swing.common.tasks.SolaTask;
-import org.sola.clients.swing.common.tasks.TaskManager;
-import org.sola.clients.swing.gis.ui.control.SolaPrintViewerForm;
 /**
  * This map action extends the Print map action that handles the print of the map according to a
  * layout. The user name and date is added in the layout and also it logs against the application
@@ -62,11 +49,9 @@ public class SolaPrint extends Print {
 
     private final static String FIELD_USER = "{userName}";
     private final static String FIELD_DATE = "{date}";
-    private String mapImageLocation;
-    private String scalebarImageLocation;
-    private String layoutName;
+    
     private String applicationId;
-    private IPrintUi printForm;
+
     public SolaPrint(Map map) {
         super(map);
     }
