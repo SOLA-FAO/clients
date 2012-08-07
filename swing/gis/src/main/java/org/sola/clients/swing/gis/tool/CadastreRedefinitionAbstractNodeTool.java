@@ -268,8 +268,7 @@ public abstract class CadastreRedefinitionAbstractNodeTool extends ExtendedDrawR
             }
         }
         if (success) {
-            this.cadastreObjectNodeModifiedLayer.removeFeature(nodeFeature.getID());
-            this.getMapControl().refresh();
+            this.cadastreObjectNodeModifiedLayer.removeFeature(nodeFeature.getID(), true);
         } else {
             for (SimpleFeature cadastreObjectFeature : cadastreObjects) {
                 if (backup.containsKey(cadastreObjectFeature.getID())) {
@@ -317,7 +316,7 @@ public abstract class CadastreRedefinitionAbstractNodeTool extends ExtendedDrawR
                 this.cadastreObjectModifiedLayer.getCadastreObjectFeatures(nodeFeature);
 
         if (cadastreObjects.isEmpty()) {
-            this.cadastreObjectNodeModifiedLayer.removeFeature(nodeFeature.getID());
+            this.cadastreObjectNodeModifiedLayer.removeFeature(nodeFeature.getID(), false);
             objectsAreRemoved = true;
         }
         return objectsAreRemoved;

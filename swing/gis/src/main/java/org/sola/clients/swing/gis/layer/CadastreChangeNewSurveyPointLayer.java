@@ -136,12 +136,12 @@ public final class CadastreChangeNewSurveyPointLayer extends AbstractSpatialObje
      * @return
      */
     @Override
-    public SimpleFeature removeFeature(String fid) {
+    public SimpleFeature removeFeature(String fid, boolean refreshMap) {
         if (this.pointIsUsedInNewCadastreObject(this.getFeatureCollection().getFeature(fid))) {
             Messaging.getInstance().show(GisMessage.CADASTRE_CHANGE_ERROR_POINT_FOUND_IN_PARCEL);
             return null;
         }
-        return super.removeFeature(fid);
+        return super.removeFeature(fid, refreshMap);
     }
 
     /**

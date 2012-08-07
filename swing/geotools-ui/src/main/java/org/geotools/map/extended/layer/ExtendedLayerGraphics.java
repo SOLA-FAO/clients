@@ -107,8 +107,13 @@ public class ExtendedLayerGraphics extends ExtendedFeatureLayer {
      */
     public SimpleFeature addFeature(String fid,
             com.vividsolutions.jts.geom.Geometry geom,
-            java.util.HashMap<String, Object> fieldsWithValues) {
-        return this.getFeatureCollection().addFeature(fid, geom, fieldsWithValues);
+            java.util.HashMap<String, Object> fieldsWithValues,
+            boolean refreshMap) {
+        SimpleFeature feature = this.getFeatureCollection().addFeature(fid, geom, fieldsWithValues);
+        if (refreshMap){
+            this.getMapControl().refresh();
+        }
+        return feature;
     }
 
     /**
@@ -121,9 +126,10 @@ public class ExtendedLayerGraphics extends ExtendedFeatureLayer {
      */
     public SimpleFeature addFeature(String fid,
             byte[] geomAsBytes,
-            java.util.HashMap<String, Object> fieldsWithValues) throws ParseException {
+            java.util.HashMap<String, Object> fieldsWithValues,
+            boolean refreshMap) throws ParseException {
         com.vividsolutions.jts.geom.Geometry geom = wkbReader.read(geomAsBytes);
-        return this.addFeature(fid, geom, fieldsWithValues);
+        return this.addFeature(fid, geom, fieldsWithValues, refreshMap);
     }
 
     /**
@@ -131,15 +137,22 @@ public class ExtendedLayerGraphics extends ExtendedFeatureLayer {
      * @param fid The fid to search for
      * @return The removed feature
      */
-    public SimpleFeature removeFeature(String fid) {
-        return this.getFeatureCollection().removeFeature(fid);
+    public SimpleFeature removeFeature(String fid, boolean refreshMap) {
+        SimpleFeature feature = this.getFeatureCollection().removeFeature(fid);
+        if (refreshMap){
+            this.getMapControl().refresh();
+        }
+        return feature;
     }
 
     /**
      * It removes all features.
      */
-    public void removeFeatures() {
+    public void removeFeatures(boolean refreshMap) {
         this.getFeatureCollection().clear();
+        if (refreshMap){
+            this.getMapControl().refresh();
+        }
     }
 
     /**

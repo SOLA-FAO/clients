@@ -65,7 +65,7 @@ public abstract class ControlsBundleForWorkingWithCO extends SolaControlsBundle 
             for (CadastreObjectTO cadastreObject : cadastreObjects) {
                 SimpleFeature featureAdded =
                         inLayer.addFeature(cadastreObject.getId(),
-                        cadastreObject.getGeomPolygon(), null);
+                        cadastreObject.getGeomPolygon(), null, false);
                 ReferencedEnvelope tmpEnvelope = JTS.toEnvelope(
                         (Geometry) featureAdded.getDefaultGeometry());
                 if (envelope == null) {

@@ -187,11 +187,12 @@ public abstract class AbstractSpatialObjectLayer extends ExtendedLayerEditor {
      */
     private void removeFeatures(List beanList) {
         for (SpatialBean bean : (List<SpatialBean>) beanList) {
-            this.removeFeature(bean.getRowId());
+            this.removeFeature(bean.getRowId(), false);
             if (!bean.isNew()){
                 removedItems.add(bean);
             }
         }
+        this.getMapControl().refresh();
     }
 
     /**
@@ -202,20 +203,25 @@ public abstract class AbstractSpatialObjectLayer extends ExtendedLayerEditor {
      */
     protected void newBeansAdded(ObservableList fromList, int startIndex, int total) {
         int endIndex = startIndex + total;
+        boolean featureIsAdded = false;
         for (int elementIndex = startIndex; elementIndex < endIndex; elementIndex++) {
             SpatialBean bean = (SpatialBean) fromList.get(elementIndex);
             bean.addPropertyChangeListener(this.beanPropertyChangeListener);
             if (this.getFeatureCollection().getFeature(bean.getRowId()) != null) {
                 continue;
             }
-            try {
+            try {                
                 this.addFeatureFromBean(bean);
+                featureIsAdded = true;
             } catch (ParseException ex) {
                 Messaging.getInstance().show(
                         GisMessage.CADASTRE_CHANGE_ERROR_ADDINGNEWCADASTREOBJECT_IN_START);
                 org.sola.common.logging.LogUtility.log(
                         GisMessage.CADASTRE_CHANGE_ERROR_ADDINGNEWCADASTREOBJECT_IN_START, ex);
             }
+        }
+        if (featureIsAdded){
+            this.getMapControl().refresh();
         }
     }
 
@@ -227,7 +233,7 @@ public abstract class AbstractSpatialObjectLayer extends ExtendedLayerEditor {
      */
     protected SimpleFeature addFeatureFromBean(SpatialBean bean) throws ParseException {
         return this.addFeature(bean.getRowId(), bean.getFeatureGeom(),
-                bean.getValues(this.getAttributeNames()));
+                bean.getValues(this.getAttributeNames()), false);
     }
 
     /**
@@ -310,14 +316,15 @@ public abstract class AbstractSpatialObjectLayer extends ExtendedLayerEditor {
     public SimpleFeature addFeature(
             String fid,
             Geometry geom,
-            java.util.HashMap<String, Object> fieldsWithValues) {
+            java.util.HashMap<String, Object> fieldsWithValues,
+            boolean refreshMap) {
         if (fid == null) {
             fid = java.util.UUID.randomUUID().toString();
         }
         if (fieldsWithValues == null) {
             fieldsWithValues = this.getFieldsWithValuesForNewFeatures(geom);
         }
-        SimpleFeature addedFeature = super.addFeature(fid, geom, fieldsWithValues);
+        SimpleFeature addedFeature = super.addFeature(fid, geom, fieldsWithValues, refreshMap);
         return addedFeature;
     }
 

@@ -313,8 +313,9 @@ public class SurveyPointListPanel extends javax.swing.JPanel {
         if (theBean.getSelectedBean() == null) {
             return;
         }
-        if (this.layer.removeFeature(theBean.getSelectedBean().getRowId()) != null) {
+        if (this.layer.removeFeature(theBean.getSelectedBean().getRowId(), false) != null) {
             theBean.setSelectedBean(null);
+            this.layer.getMapControl().refresh();
         }
     }//GEN-LAST:event_cmdRemoveActionPerformed
 

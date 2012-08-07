@@ -29,13 +29,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.geotools.swing.tool.extended;
+package org.geotools.swing.extended.tool;
 
 import com.vividsolutions.jts.geom.Geometry;
 import java.util.HashMap;
 import org.geotools.geometry.jts.Geometries;
-import org.opengis.feature.simple.SimpleFeature;
 import org.geotools.swing.extended.Map;
+import org.geotools.swing.tool.extended.ExtendedEditGeometryTool;
+import org.opengis.feature.simple.SimpleFeature;
 
 /**
  *
@@ -68,7 +69,7 @@ public class ExtendedDrawPolygon extends ExtendedEditGeometryTool{
         HashMap<String, Object> fieldsWithValues = new HashMap<String, Object>();
         fieldsWithValues.put("type", 2);
         fieldsWithValues.put("label", "aha");
-        return this.layer.addFeature(null, geometry, fieldsWithValues);
+        return this.layer.addFeature(null, geometry, fieldsWithValues, true);
     }
     
 }

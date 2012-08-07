@@ -86,6 +86,6 @@ public class CadastreChangeTargetCadastreObjectLayer extends AbstractSpatialObje
     protected SimpleFeature addFeatureFromBean(SpatialBean bean) throws ParseException {
         return this.addFeature(bean.getRowId(), 
                 ((CadastreObjectTargetBean)bean).getGeomPolygonCurrentForFeature(),
-                bean.getValues(this.getAttributeNames()));
+                bean.getValues(this.getAttributeNames()), false);
     }
 }

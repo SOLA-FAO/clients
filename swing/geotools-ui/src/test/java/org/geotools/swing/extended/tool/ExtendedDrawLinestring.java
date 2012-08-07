@@ -71,7 +71,7 @@ public class ExtendedDrawLinestring extends ExtendedEditGeometryTool{
         fieldsWithValues.put("type", 2);
         fieldsWithValues.put("label", "aha");
         this.getMapControl().getToc().changeNodeSwitch(toolName);
-        return this.layer.addFeature(null, geometry, fieldsWithValues);
+        return this.layer.addFeature(null, geometry, fieldsWithValues, true);
     }
     
 }

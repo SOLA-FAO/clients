@@ -74,8 +74,8 @@ public class ExtendedImageLayer extends ExtendedLayer {
      */
     public void setFirstPoint(Double x, Double y){
         Point point = this.pointLayer.getGeometryFactory().createPoint(new Coordinate(x, y));
-        this.pointLayer.removeFeatures();
-        this.pointLayer.addFeature(null, point, null);
+        this.pointLayer.removeFeatures(false);
+        this.pointLayer.addFeature(null, point, null, false);
         this.rasterLayer.setMinX(x);
         this.rasterLayer.setMinY(y);
         this.getMapControl().refresh();
@@ -88,7 +88,7 @@ public class ExtendedImageLayer extends ExtendedLayer {
      */
     public void setSecondPoint(Double x, Double y){
         Point point = this.pointLayer.getGeometryFactory().createPoint(new Coordinate(x, y));
-        this.pointLayer.addFeature(null, point, null);
+        this.pointLayer.addFeature(null, point, null, false);
         this.rasterLayer.setMaxX(x);
         this.rasterLayer.setMaxY(y);
         this.getMapControl().refresh();
@@ -105,7 +105,7 @@ public class ExtendedImageLayer extends ExtendedLayer {
             throws IOException, DirectImageNotValidFileException {
         this.rasterLayer.setRasterFile(rasterFile);
         if (rasterFile == null){
-            this.pointLayer.removeFeatures();
+            this.pointLayer.removeFeatures(false);
         }
     }
 

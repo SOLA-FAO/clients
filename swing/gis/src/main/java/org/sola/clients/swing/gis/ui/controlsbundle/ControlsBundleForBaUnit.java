@@ -85,7 +85,7 @@ public final class ControlsBundleForBaUnit extends ControlsBundleForWorkingWithC
         for (CadastreObjectBean coBean : cadastreObjectBeanList) {
             cadastreObjects.add(MappingManager.getMapper().map(coBean, CadastreObjectTO.class));
         }
-        layerForCadastreObjects.removeFeatures();
+        layerForCadastreObjects.removeFeatures(false);
         this.addCadastreObjectsInLayer(layerForCadastreObjects, cadastreObjects);
     }
 }

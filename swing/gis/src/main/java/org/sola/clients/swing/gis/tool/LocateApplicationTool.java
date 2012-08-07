@@ -89,14 +89,15 @@ public class LocateApplicationTool extends ExtendedEditGeometryTool {
      * @param existingLocation If null nothing is displayed
      */
     public void setLocationGeometry(Geometry existingLocation) {
-        this.layer.removeFeatures();
+        this.layer.removeFeatures(false);
         if (existingLocation != null) {
 
             for (int pointInd = 0; pointInd < existingLocation.getNumPoints(); pointInd++) {
                 this.layer.addFeature(null,
                         (Geometry) existingLocation.getGeometryN(pointInd).clone(),
-                        null);
+                        null, false);
             }
         }
+        this.getMapControl().refresh();
     }
 }
