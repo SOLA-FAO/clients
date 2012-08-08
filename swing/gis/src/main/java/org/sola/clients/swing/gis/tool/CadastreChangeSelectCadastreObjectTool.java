@@ -39,24 +39,26 @@ import org.sola.webservices.transferobjects.cadastre.CadastreObjectTO;
 /**
  * Tool used during the cadastre change to select target cadastre objects.
  *
- * @author rizzom
+ * @author MariaPaola Rizzo
  */
-public class CadastreChangeSelectParcelTool extends ExtendedTool {
-    
+public class CadastreChangeSelectCadastreObjectTool
+        extends ExtendedTool implements TargetCadastreObjectTool {
+
     public final static String NAME = "select-parcel";
     private String toolTip = MessageUtility.getLocalizedMessage(
             GisMessage.CADASTRE_CHANGE_TOOLTIP_SELECT_PARCEL).getMessage();
     private CadastreChangeTargetCadastreObjectLayer targetParcelsLayer = null;
     private PojoDataAccess dataAccess;
+    private String cadastreObjectType;
 
     /**
      * Constructor
      *
      * @param dataAccess The data access that handles communication with the web services
      */
-    public CadastreChangeSelectParcelTool(PojoDataAccess dataAccess) {
+    public CadastreChangeSelectCadastreObjectTool(PojoDataAccess dataAccess) {
         this.setToolName(NAME);
-        this.setIconImage("resources/select-parcel.png");
+        this.setIconImage(String.format("resources/%s.png", NAME));
         this.setToolTip(toolTip);
         this.dataAccess = dataAccess;
     }
@@ -79,6 +81,11 @@ public class CadastreChangeSelectParcelTool extends ExtendedTool {
         this.targetParcelsLayer = targetParcelsLayer;
     }
 
+    @Override
+    public void setCadastreObjectType(String cadastreObjectType) {
+        this.cadastreObjectType = cadastreObjectType;
+    }
+
     /**
      * The action of this tool. If a cadastre object is already selected it will be unselected,
      * otherwise it will be selected.
@@ -90,7 +97,7 @@ public class CadastreChangeSelectParcelTool extends ExtendedTool {
         DirectPosition2D pos = ev.getWorldPos();
         CadastreObjectTO cadastreObject =
                 this.dataAccess.getCadastreService().getCadastreObjectByPoint(
-                pos.x, pos.y, this.getMapControl().getSrid());
+                pos.x, pos.y, this.getMapControl().getSrid(), this.cadastreObjectType);
         if (cadastreObject == null) {
             Messaging.getInstance().show(GisMessage.PARCEL_TARGET_NOT_FOUND);
             return;
@@ -109,9 +116,10 @@ public class CadastreChangeSelectParcelTool extends ExtendedTool {
 
     /**
      * Gets the CadastreObjectTargetBean matching the cadastre object id
+     *
      * @param id The id of the cadastre object
-     * @return An instance of CadastreObjectTargetBean with the cadastreObjectId matching the id
-     * or if not found returns null.
+     * @return An instance of CadastreObjectTargetBean with the cadastreObjectId matching the id or
+     * if not found returns null.
      */
     private CadastreObjectTargetBean getBeanFromCadastreObjectId(String id) {
         for (CadastreObjectTargetBean bean : targetParcelsLayer.getBeanList()) {

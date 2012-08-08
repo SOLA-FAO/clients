@@ -56,7 +56,7 @@ public class CadastreChangeNewCadastreObjectLayer
     private static final String LAYER_FIELD_LAST_PART = "nameLastpart";
     private static final String LAYER_FIELD_OFFICIAL_AREA = "officialArea";
     private static final String LAYER_FIELD_CALCULATED_AREA = "calculatedArea";
-    private static final String LAYER_NAME = "New Parcels";
+    private static final String LAYER_NAME = "new_cadastre_object";
     private static final String LAYER_STYLE_RESOURCE = "parcel_new.xml";
     private static final String LAYER_ATTRIBUTE_DEFINITION =
             String.format("%s:String,%s:String,%s:Double,%s:Double",

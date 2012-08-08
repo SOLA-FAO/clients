@@ -52,7 +52,7 @@ import org.sola.common.messaging.GisMessage;
  */
 public final class CadastreChangeNewSurveyPointLayer extends AbstractSpatialObjectLayer {
 
-    private static final String LAYER_NAME = "New points";
+    private static final String LAYER_NAME = "new_survey_points";
     private static final String LAYER_STYLE_RESOURCE = "cadastrechange_newpoints.xml";
     private static final String LAYER_FIELD_ID = "id";
     private static final String LAYER_FIELD_ISBOUNDARY = "boundaryForFeature";

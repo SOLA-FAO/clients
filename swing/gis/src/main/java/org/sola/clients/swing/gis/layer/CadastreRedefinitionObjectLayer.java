@@ -51,7 +51,7 @@ import org.sola.clients.swing.gis.beans.SpatialBean;
 public class CadastreRedefinitionObjectLayer
         extends AbstractSpatialObjectLayer implements TargetBoundaryLayer {
 
-    private static final String LAYER_NAME = "Modified Parcels";
+    private static final String LAYER_NAME = "modified_cadastre_objects";
     private static final String LAYER_STYLE_RESOURCE = "parcel_modified.xml";
 
     /**

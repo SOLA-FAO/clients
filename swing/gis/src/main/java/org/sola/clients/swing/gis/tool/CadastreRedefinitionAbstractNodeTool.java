@@ -52,9 +52,11 @@ import org.sola.common.messaging.GisMessage;
  *
  * @author Elton Manoku
  */
-public abstract class CadastreRedefinitionAbstractNodeTool extends ExtendedDrawRectangle {
+public abstract class CadastreRedefinitionAbstractNodeTool
+        extends ExtendedDrawRectangle implements TargetCadastreObjectTool {
 
     private CadastreRedefinitionNodeModifyForm form = null;
+    protected String cadastreObjectType;
     protected PojoDataAccess dataAccess;
     protected CadastreRedefinitionObjectLayer cadastreObjectModifiedLayer;
     protected CadastreRedefinitionNodeLayer cadastreObjectNodeModifiedLayer;
@@ -76,6 +78,10 @@ public abstract class CadastreRedefinitionAbstractNodeTool extends ExtendedDrawR
         this.form = new CadastreRedefinitionNodeModifyForm();
     }
 
+    @Override
+    public void setCadastreObjectType(String cadastreObjectType) {
+        this.cadastreObjectType = cadastreObjectType;
+    }
     /**
      * If the tool is selected/ made active, then the irregular boundary procedure is reseted.
      *

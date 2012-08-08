@@ -65,12 +65,12 @@ public final class ControlsBundleForCadastreRedefinition extends ControlsBundleF
      * If bean has modified cadastre objects it is zoomed there, 
      * otherwise if baUnitId is present it is zoomed
      * there else it is zoomed in the application location.
-     * 
-     * @param transactionBean  The transaction bean. If this is already populated it means 
-     * the transaction is being opened again for change.
-     * @param baUnitId Id of the property that is defined in the application as a target for 
-     * this cadastre change.
-     * @param applicationLocation Location of application that starts the cadastre change
+     * @param applicationBean The application where the transaction is started
+     * identifiers
+     * @param transactionStarterId The id of the starter of the application. This will be 
+     * the service id.
+     * @param baUnitId Id of the property that is defined in the application as a target for this
+     * cadastre redefinition.
      */
     public ControlsBundleForCadastreRedefinition(
             ApplicationBean applicationBean,
@@ -78,7 +78,8 @@ public final class ControlsBundleForCadastreRedefinition extends ControlsBundleF
             String baUnitId) {
         super(applicationBean, transactionStarterId);
         this.Setup(PojoDataAccess.getInstance());
-        setTransaction();
+        this.setTargetCadastreObjectTypeConfiguration(getTargetCadastreObjectType());
+        this.setTransaction();
         this.zoomToInterestingArea(null, applicationBean.getLocation());
     }
 
@@ -124,35 +125,43 @@ public final class ControlsBundleForCadastreRedefinition extends ControlsBundleF
         this.getMap().addLayer(this.cadastreObjectNodeModifiedLayer);        
     }
 
+    private CadastreRedefinitionAddNodeTool addNodeTool;
+    private CadastreRedefinitionModifyNodeTool modifyNodeTool;
+    private CadastreRedefinitionBoundarySelectTool boundarySelectTool;
+    
     @Override
     protected void addToolsAndCommands() {
-        this.getMap().addTool(
-                new CadastreRedefinitionAddNodeTool(
+        this.addNodeTool = new CadastreRedefinitionAddNodeTool(
                 this.getPojoDataAccess(),
                 this.cadastreObjectNodeModifiedLayer,
-                this.cadastreObjectModifiedLayer),
-                this.getToolbar(),
-                true);
-        this.getMap().addTool(
-                new CadastreRedefinitionModifyNodeTool(
+                this.cadastreObjectModifiedLayer);
+        this.getMap().addTool(this.addNodeTool, this.getToolbar(), true);
+        this.modifyNodeTool = new CadastreRedefinitionModifyNodeTool(
                 this.getPojoDataAccess(),
                 this.cadastreObjectNodeModifiedLayer,
-                this.cadastreObjectModifiedLayer),
-                this.getToolbar(),
-                true);
+                this.cadastreObjectModifiedLayer);
+        this.getMap().addTool(this.modifyNodeTool, this.getToolbar(), true);
 
         this.getMap().addMapAction(new CadastreRedefinitionReset(this), this.getToolbar(), true);
-        CadastreBoundarySelectTool cadastreBoundarySelectTool =
+        this.boundarySelectTool =
                 new CadastreRedefinitionBoundarySelectTool(
                 this.getPojoDataAccess(),
                 this.cadastreBoundaryPointLayer,
                 this.cadastreObjectModifiedLayer,
                 this.cadastreObjectNodeModifiedLayer);
-        this.getMap().addTool(cadastreBoundarySelectTool, this.getToolbar(), true);
+        this.getMap().addTool(this.boundarySelectTool, this.getToolbar(), true);
         super.addToolsAndCommands();
         this.cadastreBoundaryEditTool.setTargetLayer(cadastreObjectModifiedLayer);
     }
 
+    @Override
+    protected void setTargetCadastreObjectTypeConfiguration(String targetCadastreObjectType) {
+        this.addNodeTool.setCadastreObjectType(targetCadastreObjectType);
+        this.modifyNodeTool.setCadastreObjectType(targetCadastreObjectType);
+        this.boundarySelectTool.setCadastreObjectType(targetCadastreObjectType);
+    }
+
+    
     public void reset() {
         this.cadastreObjectModifiedLayer.getBeanList().clear();
         this.cadastreObjectNodeModifiedLayer.getBeanList().clear();

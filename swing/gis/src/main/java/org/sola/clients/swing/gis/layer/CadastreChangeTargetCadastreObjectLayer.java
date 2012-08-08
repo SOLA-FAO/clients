@@ -47,7 +47,7 @@ import org.sola.clients.swing.gis.beans.SpatialBean;
  */
 public class CadastreChangeTargetCadastreObjectLayer extends AbstractSpatialObjectLayer {
 
-    private static final String LAYER_NAME = "Target Parcels";
+    private static final String LAYER_NAME = "target_cadastre_objects";
     private static final String LAYER_STYLE_RESOURCE = "parcel_target.xml";
 
     /**

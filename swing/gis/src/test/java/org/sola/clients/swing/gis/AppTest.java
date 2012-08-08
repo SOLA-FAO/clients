@@ -179,8 +179,20 @@ public class AppTest {
         System.out.println("Test messaging");
         org.geotools.swing.extended.util.Messaging.getInstance().setMessaging(new Messaging());
         //Messaging messaging = new Messaging();
-        LocalizedMessage msg = MessageUtility.getLocalizedMessage("Layer: {0}", new String[]{"layer"});
+        LocalizedMessage msg = MessageUtility.getLocalizedMessage(
+                "Layer: {0}", new String[]{"layer"});
         Messaging.getInstance().show(
                 GisMessage.GENERAL_RETRIEVE_FEATURES_ERROR, "Layer");
+
+        String layerName = "new_cadastre_object";
+        System.out.print(String.format("Get title for layer %s (found in resource): ", layerName));
+        System.out.println(String.format("Title: %s", 
+                ((Messaging)Messaging.getInstance()).getLayerTitle(layerName)));
+        layerName = "NNNNOTFOUND";
+        System.out.print(
+                String.format("Get title for layer %s (not found in resource): ", layerName));
+        System.out.println(String.format("Title: %s", 
+                ((Messaging)Messaging.getInstance()).getLayerTitle(layerName)));
     }
+    
 }

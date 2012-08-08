@@ -92,6 +92,7 @@ public abstract class AbstractSpatialObjectLayer extends ExtendedLayerEditor {
             String styleResource, String extraFieldsFormat, Class beanClass)
             throws InitializeLayerException {
         super(layerName, geometryType, styleResource, extraFieldsFormat);
+        this.setTitle(((Messaging)Messaging.getInstance()).getLayerTitle(layerName));
         this.beanClass = beanClass;
         this.initializeFeatureCollectionEvents();
     }

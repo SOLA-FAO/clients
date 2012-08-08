@@ -25,38 +25,47 @@
  */
 package org.sola.clients.swing.gis.tool;
 
+import com.vividsolutions.jts.geom.Geometry;
 import org.geotools.geometry.DirectPosition2D;
 import org.geotools.geometry.jts.Geometries;
 import org.geotools.swing.event.MapMouseEvent;
 import org.geotools.swing.extended.util.Messaging;
 import org.opengis.feature.simple.SimpleFeature;
+import org.sola.clients.swing.gis.beans.CadastreObjectBean;
 import org.sola.clients.swing.gis.layer.CadastreChangeNewCadastreObjectLayer;
 import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.MessageUtility;
 
 /**
  * Tool that is used to draw new cadastre objects during the cadastre change.
- * 
+ *
  * @author rizzom
  */
-public class CadastreChangeNewParcelTool extends CadastreChangeEditAbstractTool {
+public class CadastreChangeNewCadastreObjectTool
+        extends CadastreChangeEditAbstractTool implements TargetCadastreObjectTool {
 
     public final static String NAME = "new-parcel";
     private String toolTip = MessageUtility.getLocalizedMessage(
             GisMessage.CADASTRE_CHANGE_TOOLTIP_NEW_PARCEL).getMessage();
+    private String cadastreObjectType;
 
     /**
      * Constructor
-     * 
+     *
      * @param newCadastreObjectLayer The layer where the new cadastre objects are maintained
      */
-    public CadastreChangeNewParcelTool(
+    public CadastreChangeNewCadastreObjectTool(
             CadastreChangeNewCadastreObjectLayer newCadastreObjectLayer) {
         this.setToolName(NAME);
         this.setIconImage("resources/new-parcel.png");
         this.setToolTip(toolTip);
         this.setGeometryType(Geometries.POLYGON);
         this.layer = newCadastreObjectLayer;
+    }
+
+    @Override
+    public void setCadastreObjectType(String cadastreObjectType) {
+        this.cadastreObjectType = cadastreObjectType;
     }
 
     /**
@@ -86,5 +95,26 @@ public class CadastreChangeNewParcelTool extends CadastreChangeEditAbstractTool 
     @Override
     protected SimpleFeature treatChangeVertex(DirectPosition2D mousePositionInMap) {
         return null;
+    }
+
+    @Override
+    public SimpleFeature addFeature(Geometry geometry) {
+        SimpleFeature feature = super.addFeature(geometry);
+        if (feature != null) {
+            CadastreObjectBean bean = getLayer().getBean(feature);
+            if (bean != null) {
+                bean.setTypeCode(this.cadastreObjectType);
+            }
+        }
+        return feature;
+    }
+
+    /**
+     * Gets the layer where the new cadastre objects are added.
+     *
+     * @return
+     */
+    private CadastreChangeNewCadastreObjectLayer getLayer() {
+        return (CadastreChangeNewCadastreObjectLayer) this.layer;
     }
 }

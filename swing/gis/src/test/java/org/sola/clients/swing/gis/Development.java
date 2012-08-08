@@ -126,7 +126,7 @@ public class Development {
     /**
      * Test the controls bundle for cadastre change
      */
-    //@Ignore
+   // @Ignore
     @Test
     public void testUIControlsBundleForCadastreChange() throws Exception {
         System.out.println("Test ControlsBundle for cadastre change");
@@ -166,12 +166,9 @@ public class Development {
 
         SecurityBean.authenticate("test", "test".toCharArray(), this.getWSConfig());
 
-//        TransactionCadastreRedefinitionBean transactionBean =
-//                  PojoDataAccess.getInstance().getTransactionCadastreRedefinition("4000");
         ControlsBundleForCadastreRedefinition ctrl =
                 new ControlsBundleForCadastreRedefinition(
                 this.getApplicationBean("3001"), "4011", "3068323");
-        //ctrl.setReadOnly(true);
         this.displayControlsBundleForm(ctrl);
     }
 

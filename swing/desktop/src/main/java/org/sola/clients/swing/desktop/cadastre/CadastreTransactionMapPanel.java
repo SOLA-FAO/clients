@@ -67,7 +67,9 @@ public class CadastreTransactionMapPanel extends ContentPanel {
         if (applicationService.getRequestType().getCode().equals(
                 RequestTypeBean.CODE_CADASTRE_CHANGE)) {
             this.mapControl = new ControlsBundleForCadastreChange(
-                    this.applicationBean, this.applicationService.getId(), this.getBaUnitId());
+                    this.applicationBean, 
+                    this.applicationService.getId(), 
+                    this.getBaUnitId());
         } else if (applicationService.getRequestType().getCode().equals(
                 RequestTypeBean.CODE_CADASTRE_REDEFINITION)) {
             this.mapControl = new ControlsBundleForCadastreRedefinition(

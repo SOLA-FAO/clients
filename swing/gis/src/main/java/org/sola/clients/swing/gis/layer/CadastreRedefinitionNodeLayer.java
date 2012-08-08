@@ -46,7 +46,7 @@ import org.sola.clients.swing.gis.beans.CadastreObjectNodeTargetListBean;
  */
 public class CadastreRedefinitionNodeLayer extends AbstractSpatialObjectLayer {
 
-    private static final String LAYER_NAME = "Modified Nodes";
+    private static final String LAYER_NAME = "modified_nodes";
     private static final String LAYER_STYLE_RESOURCE = "node_modified.xml";
 
     /**

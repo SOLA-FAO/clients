@@ -62,17 +62,18 @@ public abstract class ControlsBundleForTransaction extends ControlsBundleForWork
 
     private PojoLayer pendingLayer = null;
     private ExtendedImageLayer imageLayer = null;
-    private static final String IMAGE_LAYER_NAME = "imageLayer";
-    private static final String IMAGE_LAYER_TITLE = "Image";
+    private static final String IMAGE_LAYER_NAME = "temporary_image";
     protected CadastreBoundaryPointLayer cadastreBoundaryPointLayer = null;
     protected CadastreBoundaryEditTool cadastreBoundaryEditTool;
     private String transactionStarterId;
     private ApplicationBean applicationBean;
     private MapDocumentsPanel documentsPanel;
+    private String cadastreObjectType = "parcel";
 
     
     public ControlsBundleForTransaction(
-            ApplicationBean applicationBean, String transactionStarterId){
+            ApplicationBean applicationBean, 
+            String transactionStarterId){
         super();
         this.applicationBean = applicationBean;
         this.transactionStarterId = transactionStarterId;
@@ -171,7 +172,8 @@ public abstract class ControlsBundleForTransaction extends ControlsBundleForWork
      * @throws InitializeLayerException
      */
     protected void addLayers() throws InitializeLayerException {
-        this.imageLayer = new ExtendedImageLayer(IMAGE_LAYER_NAME, IMAGE_LAYER_TITLE);
+        this.imageLayer = new ExtendedImageLayer(IMAGE_LAYER_NAME, 
+                ((Messaging)Messaging.getInstance()).getLayerTitle(IMAGE_LAYER_NAME));
         this.getMap().addLayer(this.imageLayer);
         this.cadastreBoundaryPointLayer = new CadastreBoundaryPointLayer();
         this.getMap().addLayer(this.cadastreBoundaryPointLayer);
@@ -206,7 +208,25 @@ public abstract class ControlsBundleForTransaction extends ControlsBundleForWork
         this.getMap().getMapActionByName(SaveTransaction.MAPACTION_NAME).setEnabled(!readOnly);
         this.getMap().getMapActionByName(CadastreBoundarySelectTool.MAP_ACTION_NAME).setEnabled(!readOnly);
     }
+
+    /**
+     * Gets the cadastre object type that will be targeted. This method can be overridden
+     * by subclasses.
+     * 
+     * @return 
+     */
+    public String getTargetCadastreObjectType(){
+        return this.cadastreObjectType;
+    }
     
+    /**
+     * It configures the tools to handle the given type of cadastre objects.
+     * It must be called after the Setup method because the Setup method initiates the tools.
+     * 
+     * @param targetCadastreObjectType 
+     */
+    protected abstract void setTargetCadastreObjectTypeConfiguration(
+            String targetCadastreObjectType);
 
     /**
      * It adds the panel where the documents are managed
