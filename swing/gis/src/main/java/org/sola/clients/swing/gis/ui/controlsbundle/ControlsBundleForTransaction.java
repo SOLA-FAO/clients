@@ -208,9 +208,13 @@ public abstract class ControlsBundleForTransaction extends ControlsBundleForWork
     }
     
 
+    /**
+     * It adds the panel where the documents are managed
+     */
     private void addDocumentsPanel() {
         this.documentsPanel = new  MapDocumentsPanel(this, this.applicationBean);
-        this.addInLeftPanel("Documents", this.documentsPanel);
+        this.addInLeftPanel(Messaging.getInstance().getMessageText(
+                GisMessage.LEFT_PANEL_TAB_DOCUMENTS_TITLE), this.documentsPanel);
     }
 
 }
