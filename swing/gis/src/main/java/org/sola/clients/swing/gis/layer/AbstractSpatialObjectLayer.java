@@ -60,10 +60,9 @@ import org.sola.webservices.transferobjects.EntityAction;
 
 /**
  * Abstract Layer that maintains a list of beans, which is synchronized with the feature collection.
- * For each feature there is a bean and viceversa. Not all attributes in the bean need to be 
- * in the feature and viceversa.
- * <br/> Optionally, it offers the interface for a host form to show information about the beans. 
- * Using the form the information about the beans can change.
+ * For each feature there is a bean and viceversa. Not all attributes in the bean need to be in the
+ * feature and viceversa. <br/> Optionally, it offers the interface for a host form to show
+ * information about the beans. Using the form the information about the beans can change.
  *
  * @author Elton Manoku
  */
@@ -75,24 +74,24 @@ public abstract class AbstractSpatialObjectLayer extends ExtendedLayerEditor {
     private List<SpatialBean> removedItems = new ArrayList<SpatialBean>();
     protected AbstractListSpatialBean listBean;
 
-
     /**
      * Constructor
+     *
      * @param layerName The layer name
      * @param geometryType The geometry type
      * @param styleResource The style
      * @param extraFieldsFormat Extra field information formated according to DataUtility of
      * geotools.
      * @param beanClass A class which will be used for initialization of beans.
-     * 
-     * @throws InitializeLayerException 
+     *
+     * @throws InitializeLayerException
      */
     public AbstractSpatialObjectLayer(
             String layerName, Geometries geometryType,
             String styleResource, String extraFieldsFormat, Class beanClass)
             throws InitializeLayerException {
         super(layerName, geometryType, styleResource, extraFieldsFormat);
-        this.setTitle(((Messaging)Messaging.getInstance()).getLayerTitle(layerName));
+        this.setTitle(((Messaging) Messaging.getInstance()).getLayerTitle(layerName));
         this.beanClass = beanClass;
         this.initializeFeatureCollectionEvents();
     }
@@ -111,9 +110,9 @@ public abstract class AbstractSpatialObjectLayer extends ExtendedLayerEditor {
     }
 
     /**
-     * It initializes the events on the list of the beans and also a change event handler for
-     * every bean. It is called after the listBean is
-     * initialized which happens in the constructor of the inheriting classes.
+     * It initializes the events on the list of the beans and also a change event handler for every
+     * bean. It is called after the listBean is initialized which happens in the constructor of the
+     * inheriting classes.
      *
      */
     protected void initializeListBeanEvents() {
@@ -136,7 +135,6 @@ public abstract class AbstractSpatialObjectLayer extends ExtendedLayerEditor {
             @Override
             public void listElementPropertyChanged(ObservableList ol, int i) {
             }
-            
         };
 
         ((SolaObservableList) this.getBeanList()).addObservableListListener(listListener);
@@ -152,15 +150,14 @@ public abstract class AbstractSpatialObjectLayer extends ExtendedLayerEditor {
     }
 
     /**
-     * It is called after the bean has been changed. If the property of the bean is also 
-     * in the list of attributes in the feature, the corresponding attribute in the feature is
-     * changed as well.
+     * It is called after the bean has been changed. If the property of the bean is also in the list
+     * of attributes in the feature, the corresponding attribute in the feature is changed as well.
      * If an attribute of the feature is changed, the map is refreshed.
-     * 
+     *
      * @param bean
      * @param propertyName
      * @param newValue
-     * @param oldValue 
+     * @param oldValue
      */
     protected void beanChanged(SpatialBean bean, String propertyName,
             Object newValue, Object oldValue) {
@@ -179,25 +176,43 @@ public abstract class AbstractSpatialObjectLayer extends ExtendedLayerEditor {
     }
 
     /**
-     * It is called when beans are removed. It removes the corresponding features from the layer.
-     * If the beans are not new, they are moved in the removedItems list.
-     * They are moved there, because when the full list of affected beans is created it must 
-     * include also beans that are removed but marked for deletion.
-     * 
-     * @param beanList 
+     * It is called when beans are removed. It removes the corresponding features from the layer. If
+     * the beans are not new, they are moved in the removedItems list. They are moved there, because
+     * when the full list of affected beans is created it must include also beans that are removed
+     * but marked for deletion.
+     *
+     * @param beanList
      */
     private void removeFeatures(List beanList) {
+        boolean featuresAreRemoved = false;
         for (SpatialBean bean : (List<SpatialBean>) beanList) {
-            this.removeFeature(bean.getRowId(), false);
-            if (!bean.isNew()){
-                removedItems.add(bean);
+            if (this.getFeatureCollection().getFeature(bean.getRowId()) != null) {
+                //Check if the feature is found in the feature collection. It can be that the feature
+                // has been removed before the bean has been removed.
+                //Remove the feature
+                SimpleFeature removedFeature = this.removeFeature(bean.getRowId(), false);
+                if (removedFeature != null) {
+                    //If feature is removed it means it returns the removed feature. Also
+                    // map control needs to be refreshed.
+                    featuresAreRemoved = true;
+                    if (!bean.isNew()) {
+                        removedItems.add(bean);
+                    }
+                } else {
+                    //If feature is not removed it means it should be added back again in the 
+                    //bean list
+                    getBeanList().add(bean);
+                }
             }
         }
-        this.getMapControl().refresh();
+        if (featuresAreRemoved) {
+            this.getMapControl().refresh();
+        }
     }
 
     /**
      * It is the event handler method called when new beans are added
+     *
      * @param fromList The list where the beans are added
      * @param startIndex The index where the new beans start
      * @param total The total of beans added
@@ -211,7 +226,7 @@ public abstract class AbstractSpatialObjectLayer extends ExtendedLayerEditor {
             if (this.getFeatureCollection().getFeature(bean.getRowId()) != null) {
                 continue;
             }
-            try {                
+            try {
                 this.addFeatureFromBean(bean);
                 featureIsAdded = true;
             } catch (ParseException ex) {
@@ -221,16 +236,17 @@ public abstract class AbstractSpatialObjectLayer extends ExtendedLayerEditor {
                         GisMessage.CADASTRE_CHANGE_ERROR_ADDINGNEWCADASTREOBJECT_IN_START, ex);
             }
         }
-        if (featureIsAdded){
+        if (featureIsAdded) {
             this.getMapControl().refresh();
         }
     }
 
     /**
      * It adds a feature from the bean.
+     *
      * @param bean
      * @return
-     * @throws ParseException 
+     * @throws ParseException
      */
     protected SimpleFeature addFeatureFromBean(SpatialBean bean) throws ParseException {
         return this.addFeature(bean.getRowId(), bean.getFeatureGeom(),
@@ -238,8 +254,8 @@ public abstract class AbstractSpatialObjectLayer extends ExtendedLayerEditor {
     }
 
     /**
-     * It initializes event handlers and form hosting. This is also called from the constructor 
-     * of the subclass. It is optional.
+     * It initializes event handlers and form hosting. This is also called from the constructor of
+     * the subclass. It is optional.
      */
     protected void initializeFormHosting(JPanel hostPanel) {
         JDialog host = new JDialog();
@@ -263,7 +279,8 @@ public abstract class AbstractSpatialObjectLayer extends ExtendedLayerEditor {
 
     /**
      * Sets the hosting component that is used to show the editor/table to change the attributes.
-     * @param hostForm 
+     *
+     * @param hostForm
      */
     public void setHostForm(Component hostForm) {
         this.hostForm = hostForm;
@@ -277,16 +294,17 @@ public abstract class AbstractSpatialObjectLayer extends ExtendedLayerEditor {
     public List getBeanList() {
         return listBean.getBeanList();
     }
-    
+
     /**
-     * Gets the list of current Spatial Beans 
-     * combined with the list of Beans that need to be removed.
-     * This list is needed when the beans are supposed to be sent to the server for processing.
-     * @return 
+     * Gets the list of current Spatial Beans combined with the list of Beans that need to be
+     * removed. This list is needed when the beans are supposed to be sent to the server for
+     * processing.
+     *
+     * @return
      */
-    public final List getBeanListForTransaction(){
+    public final List getBeanListForTransaction() {
         List finalList = new ArrayList(getBeanList());
-        for(SpatialBean bean:removedItems){
+        for (SpatialBean bean : removedItems) {
             bean.setEntityAction(EntityAction.DELETE);
             finalList.add(bean);
         }
@@ -330,10 +348,11 @@ public abstract class AbstractSpatialObjectLayer extends ExtendedLayerEditor {
     }
 
     /**
-     * Gets the attributes with their values for a new feature.
-     * For each layer it is supposed to be overridden.
+     * Gets the attributes with their values for a new feature. For each layer it is supposed to be
+     * overridden.
+     *
      * @param geom
-     * @return 
+     * @return
      */
     protected java.util.HashMap<String, Object> getFieldsWithValuesForNewFeatures(Geometry geom) {
         java.util.HashMap<String, Object> fieldsWithValues = new HashMap<String, Object>();
@@ -408,9 +427,9 @@ public abstract class AbstractSpatialObjectLayer extends ExtendedLayerEditor {
 
     /**
      * Initializes a bean.
-     * 
+     *
      * @param <T>
-     * @return 
+     * @return
      */
     private <T extends SpatialBean> T getNewBeanInstance() {
         T bean = null;

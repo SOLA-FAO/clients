@@ -58,7 +58,7 @@ import org.sola.common.messaging.GisMessage;
  *
  * @author Elton Manoku
  */
-public abstract class ControlsBundleForTransaction extends ControlsBundleForWorkingWithCO {
+public abstract class ControlsBundleForTransaction extends SolaControlsBundle {
 
     private PojoLayer pendingLayer = null;
     private ExtendedImageLayer imageLayer = null;

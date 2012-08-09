@@ -152,7 +152,7 @@ public class Development {
         SecurityBean.authenticate("test", "test".toCharArray(), this.getWSConfig());
         
         ControlsBundleForCadastreChange ctrl = new ControlsBundleForCadastreChange(
-                this.getApplicationBean("3000"), "4000", "3068324");
+                this.getApplicationBean("3000"), "4000", "3078053");
         
         //ctrl.setReadOnly(true);
 

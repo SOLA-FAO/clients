@@ -65,6 +65,7 @@ public class CadastreChangeNewCadastreObjectLayer
     private Integer firstPartGenerator = 1;
     private static final String LAST_PART_FORMAT = "SP %s";
     private String lastPart = "";
+    private CadastreObjectListPanel spatialObjectDisplayPanel;
 
     /**
      * Constructor for the layer.
@@ -81,7 +82,17 @@ public class CadastreChangeNewCadastreObjectLayer
         this.listBean = new CadastreObjectListBean();
         //This is called after the listBean is initialized
         initializeListBeanEvents();
-        initializeFormHosting(new CadastreObjectListPanel((CadastreObjectListBean) this.listBean));
+        this.spatialObjectDisplayPanel = 
+                new CadastreObjectListPanel((CadastreObjectListBean) this.listBean);
+        initializeFormHosting(this.spatialObjectDisplayPanel);
+    }
+
+    /**
+     * Gets the panel where the data about the cadastre objects are displayed
+     * @return 
+     */
+    public CadastreObjectListPanel getSpatialObjectDisplayPanel() {
+        return spatialObjectDisplayPanel;
     }
 
     /**
@@ -143,4 +154,6 @@ public class CadastreChangeNewCadastreObjectLayer
         iterator.close();
         return ids;
     }
+    
+    
 }

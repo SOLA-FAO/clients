@@ -21,8 +21,8 @@ public final class SurveyPointListBean extends AbstractListSpatialBean {
 
     private static String MEAN_PROPERTY = "mean";
     private static String STANDARD_DEVIATION_PROPERTY = "standardDeviation";
-    private Double mean;
-    private Double standardDeviation;
+    private Double mean = 0.0;
+    private Double standardDeviation = 0.0;
     private PropertyChangeListener beanPropertyChangeListener;
 
     public SurveyPointListBean() {
@@ -123,7 +123,11 @@ public final class SurveyPointListBean extends AbstractListSpatialBean {
             deltaX += bean.getDeltaX();
             deltaY += bean.getDeltaY();
         }
-        this.mean = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2)) / totalPoints;
+        if (totalPoints > 0) {
+            this.mean = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2)) / totalPoints;
+        } else {
+            this.mean = 0.0;
+        }
         propertySupport.firePropertyChange(MEAN_PROPERTY, oldValue, this.mean);
     }
 
@@ -142,17 +146,20 @@ public final class SurveyPointListBean extends AbstractListSpatialBean {
      */
     private void setStandardDeviation() {
         Double oldValue = this.standardDeviation;
-        Double mean = this.getMean();
         Double totalShift = 0.0;
         Integer totalPoints = 0;
         for (SurveyPointBean bean : this.getBeanList()) {
             if (!bean.isLinked()) {
                 continue;
             }
-            totalShift += Math.pow(bean.getShiftDistance() - mean, 2);
+            totalShift += Math.pow(bean.getShiftDistance() - this.getMean(), 2);
             totalPoints++;
         }
-        this.standardDeviation = Math.sqrt(totalShift / totalPoints);
+        if (totalPoints > 0) {
+            this.standardDeviation = Math.sqrt(totalShift / totalPoints);
+        } else {
+            this.standardDeviation = 0.0;
+        }
         propertySupport.firePropertyChange(
                 STANDARD_DEVIATION_PROPERTY, oldValue, this.standardDeviation);
     }

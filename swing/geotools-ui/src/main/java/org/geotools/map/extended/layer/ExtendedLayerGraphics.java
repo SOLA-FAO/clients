@@ -139,7 +139,7 @@ public class ExtendedLayerGraphics extends ExtendedFeatureLayer {
      */
     public SimpleFeature removeFeature(String fid, boolean refreshMap) {
         SimpleFeature feature = this.getFeatureCollection().removeFeature(fid);
-        if (refreshMap){
+        if (feature != null && refreshMap){
             this.getMapControl().refresh();
         }
         return feature;
