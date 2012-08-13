@@ -4,10 +4,15 @@
  */
 package org.sola.clients.swing.gis.ui.control;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import org.sola.clients.swing.gis.beans.CadastreObjectBean;
+import org.sola.clients.beans.source.SourceBean;
+import org.sola.clients.beans.source.SourceListBean;
+import org.sola.clients.swing.gis.beans.AbstractListSpatialBean;
 import org.sola.clients.swing.gis.beans.CadastreObjectListBean;
+import org.sola.clients.swing.gis.beans.SpatialBean;
 
 /**
  * A User Interface component that handles the management of the cadastre objects.
@@ -25,16 +30,25 @@ public class CadastreObjectListPanel extends javax.swing.JPanel {
     public CadastreObjectListPanel(CadastreObjectListBean bean) {
         this.theBean = bean;
         initComponents();
-        this.tableCadastreObject.getSelectionModel().addListSelectionListener(
-                new ListSelectionListener() {
-
-                    @Override
-                    public void valueChanged(ListSelectionEvent e) {
-                        cmdRemove.setEnabled(true);
-                    }
-                });
+        // Add a listner to the bean property of selected bean
+        theBean.addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals(AbstractListSpatialBean.SELECTED_BEAN_PROPERTY)) {
+                    customizeButtons((SpatialBean) evt.getNewValue());
+                }
+            }
+        });
     }
 
+    /**
+     * It changes the availability of buttons based in the selected bean
+     * @param selectedSource 
+     */
+    private void customizeButtons(SpatialBean selectedSource) {
+        cmdRemove.setEnabled(selectedSource != null);
+    }
+    
     /**
      * This constructor is only for the designer.
      */
@@ -53,10 +67,20 @@ public class CadastreObjectListPanel extends javax.swing.JPanel {
         return this.theBean;
     }
 
+    /**
+     * Gets the type of the cadastre objects that will be shown in the list
+     * @return 
+     */
     public String getCadastreObjectType() {
         return cadastreObjectType;
     }
 
+    /**
+     * Sets the type of the cadastre objects that will be shown in the list. Based in the type,
+     * different attributes of the cadastre object can be hidden or made visible.
+     * 
+     * @param cadastreObjectType 
+     */
     public void setCadastreObjectType(String cadastreObjectType) {
         this.cadastreObjectType = cadastreObjectType;
     }
@@ -135,9 +159,8 @@ public class CadastreObjectListPanel extends javax.swing.JPanel {
 
     private void cmdRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdRemoveActionPerformed
         if (theBean.getSelectedBean() != null) {
-            theBean.getBeanList().remove((CadastreObjectBean) theBean.getSelectedBean());
+            theBean.getBeanList().remove(theBean.getSelectedBean());
             theBean.setSelectedBean(null);
-
         }
     }//GEN-LAST:event_cmdRemoveActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -29,12 +29,9 @@ import java.awt.BorderLayout;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationPropertyBean;
 import org.sola.clients.beans.application.ApplicationServiceBean;
-import org.sola.clients.beans.referencedata.RequestTypeBean;
-import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForCadastreChange;
-import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForCadastreRedefinition;
+import org.sola.clients.beans.referencedata.CadastreObjectTypeBean;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForTransaction;
 import org.sola.clients.swing.ui.ContentPanel;
-import org.sola.clients.swing.ui.source.DocumentsManagementPanel;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.administrative.BaUnitTO;
 
@@ -64,18 +61,14 @@ public class CadastreTransactionMapPanel extends ContentPanel {
     }
 
     private void initializeMap() {
-        if (applicationService.getRequestType().getCode().equals(
-                RequestTypeBean.CODE_CADASTRE_CHANGE)) {
-            this.mapControl = new ControlsBundleForCadastreChange(
-                    this.applicationBean, 
-                    this.applicationService.getId(), 
-                    this.getBaUnitId());
-        } else if (applicationService.getRequestType().getCode().equals(
-                RequestTypeBean.CODE_CADASTRE_REDEFINITION)) {
-            this.mapControl = new ControlsBundleForCadastreRedefinition(
-                    this.applicationBean, this.applicationService.getId(), this.getBaUnitId());
-        }
+        this.mapControl = ControlsBundleForTransaction.getInstance(
+                applicationService.getRequestType().getCode(), this.applicationBean, 
+                this.applicationService.getId(), this.getBaUnitId(), getTargetCadastreObjectType());
         this.mapControl.setReadOnly(!this.applicationService.isManagementAllowed());
+    }
+    
+    private String getTargetCadastreObjectType(){
+        return CadastreObjectTypeBean.CODE_PARCEL;
     }
 
     private void addMapToForm() {
@@ -116,19 +109,6 @@ public class CadastreTransactionMapPanel extends ContentPanel {
             }
         }
         return baUnitId;
-    }
-
-    private DocumentsManagementPanel createDocumentsPanel() {
-        if (applicationBean == null) {
-            applicationBean = new ApplicationBean();
-        }
-
-        boolean allowEdit = true;
-
-        DocumentsManagementPanel panel = new DocumentsManagementPanel(
-                this.mapControl.getTransactionBean().getSourceIdList(),
-                applicationBean, allowEdit);
-        return panel;
     }
 
     /**

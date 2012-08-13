@@ -151,12 +151,12 @@ public class DocumentsManagementPanel extends javax.swing.JPanel {
     }
     
     /**
-     * Gets the selected source
+     * Gets the source list bean
      * 
      * @return
      */
-    public final SourceBean getSelectedSourceBean(){
-        return documentsPanel.getSourceListBean().getSelectedSource();
+    public final SourceListBean getSourceListBean(){
+        return documentsPanel.getSourceListBean();
     }
     
     @SuppressWarnings("unchecked")

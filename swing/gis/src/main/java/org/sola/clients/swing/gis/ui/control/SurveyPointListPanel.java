@@ -4,13 +4,16 @@
  */
 package org.sola.clients.swing.gis.ui.control;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import org.sola.clients.swing.gis.Messaging;
+import org.sola.clients.swing.gis.beans.AbstractListSpatialBean;
+import org.sola.clients.swing.gis.beans.SpatialBean;
 import org.sola.clients.swing.gis.beans.SurveyPointBean;
 import org.sola.clients.swing.gis.beans.SurveyPointListBean;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
-import org.sola.clients.swing.gis.layer.CadastreChangeNewSurveyPointLayer;
 import org.sola.common.messaging.GisMessage;
 
 /**
@@ -21,7 +24,6 @@ import org.sola.common.messaging.GisMessage;
 public class SurveyPointListPanel extends javax.swing.JPanel {
 
     private SurveyPointListBean theBean;
-    private CadastreChangeNewSurveyPointLayer layer;
 
     /**
      * This constructor must be used to initialize the bean.
@@ -35,14 +37,24 @@ public class SurveyPointListPanel extends javax.swing.JPanel {
                 optionRural.isSelected()
                 ? this.getAcceptanceShift(true).toString()
                 : this.getAcceptanceShift(false).toString());
-        this.tablePointList.getSelectionModel().addListSelectionListener(
-                new ListSelectionListener() {
+        
+        // Add a listner to the bean property of selected bean
+        theBean.addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals(AbstractListSpatialBean.SELECTED_BEAN_PROPERTY)) {
+                    customizeButtons((SpatialBean) evt.getNewValue());
+                }
+            }
+        });
+    }
 
-                    @Override
-                    public void valueChanged(ListSelectionEvent e) {
-                        cmdRemove.setEnabled(true);
-                    }
-                });
+    /**
+     * It changes the availability of buttons based in the selected bean
+     * @param selectedSource 
+     */
+    private void customizeButtons(SpatialBean selectedSource) {
+        cmdRemove.setEnabled(selectedSource != null);
     }
 
     /**
@@ -50,14 +62,6 @@ public class SurveyPointListPanel extends javax.swing.JPanel {
      */
     public SurveyPointListPanel() {
         initComponents();
-    }
-
-    /**
-     * Sets the layer used to display the survey points
-     * @param layer 
-     */
-    public void setLayer(CadastreChangeNewSurveyPointLayer layer) {
-        this.layer = layer;
     }
 
     /**
@@ -299,14 +303,11 @@ public class SurveyPointListPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_cmdAddActionPerformed
 
     private void cmdRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdRemoveActionPerformed
-        if (theBean.getSelectedBean() == null) {
-            return;
-        }
-        if (this.layer.removeFeature(theBean.getSelectedBean().getRowId(), false) != null) {
+        if (theBean.getSelectedBean() != null) {
+            theBean.getBeanList().remove((SurveyPointBean)theBean.getSelectedBean());
             theBean.setSelectedBean(null);
-            cmdRemove.setEnabled(false);
-            this.layer.getMapControl().refresh();
         }
+        
     }//GEN-LAST:event_cmdRemoveActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

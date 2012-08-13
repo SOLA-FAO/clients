@@ -152,7 +152,7 @@ public class Development {
         SecurityBean.authenticate("test", "test".toCharArray(), this.getWSConfig());
         
         ControlsBundleForCadastreChange ctrl = new ControlsBundleForCadastreChange(
-                this.getApplicationBean("3000"), "4000", "3078053");
+                this.getApplicationBean("3000"), "4000", "3078053", "parcel");
         
         //ctrl.setReadOnly(true);
 
@@ -168,7 +168,7 @@ public class Development {
 
         ControlsBundleForCadastreRedefinition ctrl =
                 new ControlsBundleForCadastreRedefinition(
-                this.getApplicationBean("3001"), "4011", "3068323");
+                this.getApplicationBean("3001"), "4011", "3068323", "parcel");
         this.displayControlsBundleForm(ctrl);
     }
 
