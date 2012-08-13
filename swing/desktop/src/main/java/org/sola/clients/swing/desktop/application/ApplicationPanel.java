@@ -816,7 +816,7 @@ public class ApplicationPanel extends ContentPanel {
             
             @Override
             public void taskDone() {
-                MessageUtility.displayMessage(ClientMessage.APPLICATION_SUCCESSFULLY_SAVED);
+//                MessageUtility.displayMessage(ClientMessage.APPLICATION_SUCCESSFULLY_SAVED);
                 customizeApplicationForm();
                 saveAppState();
                 
