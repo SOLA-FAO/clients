@@ -40,6 +40,7 @@ import org.geotools.geometry.jts.Geometries;
 import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.opengis.feature.simple.SimpleFeature;
 import org.sola.clients.swing.gis.Messaging;
+import org.sola.clients.swing.gis.beans.SpatialBean;
 import org.sola.clients.swing.gis.beans.SurveyPointBean;
 import org.sola.clients.swing.gis.beans.SurveyPointListBean;
 import org.sola.clients.swing.gis.ui.control.SurveyPointListPanel;
@@ -76,7 +77,7 @@ public final class CadastreChangeNewSurveyPointLayer extends AbstractSpatialObje
             throws InitializeLayerException {
         super(LAYER_NAME, Geometries.POINT,
                 LAYER_STYLE_RESOURCE, LAYER_ATTRIBUTE_DEFINITION, SurveyPointBean.class);
-        
+
         //Hide the layer of vertices
         this.getVerticesLayer().setVisible(false);
 
@@ -100,6 +101,12 @@ public final class CadastreChangeNewSurveyPointLayer extends AbstractSpatialObje
     @Override
     public List<SurveyPointBean> getBeanList() {
         return (List<SurveyPointBean>) super.getBeanList();
+    }
+
+    @Override
+    public <T extends SpatialBean> void setBeanList(List<T> beanList) {
+        super.setBeanList(beanList);
+        this.idGenerator = null;
     }
 
     /**
@@ -166,18 +173,23 @@ public final class CadastreChangeNewSurveyPointLayer extends AbstractSpatialObje
     }
 
     /**
-     * Gets a new id for a new point. If the generator is not initialized it searches first 
-     * in the existing points for the biggest id and starts generating from that number upwards.
-     * <br/> If the generator has to be changed, can be overridden.
+     * Gets a new id for a new point. If the generator is not initialized it searches first in the
+     * existing points for the biggest id and starts generating from that number upwards. <br/> If
+     * the generator has to be changed, can be overridden.
+     *
      * @return A unique number for a new point
      */
     protected String getPointId() {
         if (idGenerator == null) {
             idGenerator = 0;
             for (SurveyPointBean bean : getBeanList()) {
-                Integer beanId = Integer.parseInt(bean.getId());
-                if (idGenerator < beanId) {
-                    idGenerator = beanId;
+                try {
+                    Integer beanId = Integer.parseInt(bean.getId());
+                    if (idGenerator < beanId) {
+                        idGenerator = beanId;
+                    }
+                } catch (NumberFormatException ex) {
+                    //Ignore exception
                 }
             }
         }
