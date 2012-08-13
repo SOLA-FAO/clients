@@ -199,7 +199,7 @@ public class AppTest {
                 ((Messaging)Messaging.getInstance()).getLayerTitle(layerName)));
     }
     
-    //@Ignore
+    @Ignore
     @Test
     public void testExternalFileImporter() throws Exception {
         System.out.println("Test ExternalFileImporterSurveyPointBeans");
