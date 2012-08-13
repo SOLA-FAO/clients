@@ -53,7 +53,7 @@ import org.geotools.swing.extended.tool.ExtendedDrawLinestring;
 import org.geotools.swing.mapaction.extended.Print;
 import org.geotools.swing.mapaction.extended.RemoveDirectImage;
 import org.geotools.swing.tool.extended.AddDirectImageTool;
-import org.geotools.swing.tool.extended.ExtendedDrawPolygon;
+import org.geotools.swing.extended.tool.ExtendedDrawPolygon;
 import org.geotools.swing.tool.extended.ExtendedDrawToolWithSnapping;
 
 /**

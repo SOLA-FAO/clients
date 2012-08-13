@@ -29,35 +29,47 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.sola.clients.swing.gis;
+package org.geotools.swing.extended.tool;
 
-import org.sola.clients.swing.gis.beans.TransactionCadastreChangeBean;
-import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForCadastreChange;
-import org.geotools.swing.mapaction.extended.ExtendedAction;
-import org.sola.clients.swing.gis.beans.TransactionCadastreRedefinitionBean;
-import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForCadastreRedefinition;
-import org.sola.webservices.transferobjects.transaction.TransactionCadastreChangeTO;
-import org.sola.webservices.transferobjects.transaction.TransactionCadastreRedefinitionTO;
+import com.vividsolutions.jts.geom.Geometry;
+import java.util.HashMap;
+import org.geotools.geometry.jts.Geometries;
+import org.geotools.swing.extended.Map;
+import org.geotools.swing.tool.extended.ExtendedEditGeometryTool;
+import org.opengis.feature.simple.SimpleFeature;
 
 /**
  *
+ * This is used for testing purposes to show how to extend the {@see ExtendedEditGeometryTool}
+ * 
  * @author Elton Manoku
  */
-public class TestCadastreTransactionRedefinition extends ExtendedAction{
-    private ControlsBundleForCadastreRedefinition ctrl;
- 
-  public TestCadastreTransactionRedefinition(ControlsBundleForCadastreRedefinition ctrl) {
-     super(ctrl.getMap(), "test bean", "test bean", ""); 
-     this.ctrl = ctrl;   
-  }
- 
+public class ExtendedDrawPolygon extends ExtendedEditGeometryTool{
+    private String toolName = "polygon";
+    private String extraFields = "label:\"\",type:0";
+    private String layerResourceTest = "test_editor_polygon.xml";
+
+    public ExtendedDrawPolygon(){
+        this.setToolName(toolName);
+        this.setLayerName(toolName);
+        this.setGeometryType(Geometries.POLYGON);
+        this.setSldResource(layerResourceTest);
+        this.setExtraFieldsFormat(extraFields);
+    }
     
     @Override
-    public void onClick(){
-        TransactionCadastreRedefinitionBean bean = ctrl.getTransactionBean();        
-        TransactionCadastreRedefinitionTO to = bean.getTO();
-        bean.save();
-        ctrl.setTransaction();
-    } 
+    public void setMapControl(Map mapControl){
+        super.setMapControl(mapControl);
+        this.layer.setFilterExpressionForSnapping("type=2");
+        this.getTargetSnappingLayers().add(this.layer);
+    }
+
+   @Override
+    public SimpleFeature addFeature(Geometry geometry){
+        HashMap<String, Object> fieldsWithValues = new HashMap<String, Object>();
+        fieldsWithValues.put("type", 2);
+        fieldsWithValues.put("label", "aha");
+        return this.layer.addFeature(null, geometry, fieldsWithValues, true);
+    }
     
 }

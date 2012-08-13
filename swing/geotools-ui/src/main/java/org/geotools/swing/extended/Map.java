@@ -59,8 +59,6 @@ import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.map.Layer;
 import org.geotools.map.extended.layer.*;
 import org.geotools.swing.JMapPane;
-import org.geotools.swing.event.MapMouseAdapter;
-import org.geotools.swing.event.MapMouseEvent;
 import org.geotools.swing.event.MapPaneAdapter;
 import org.geotools.swing.event.MapPaneEvent;
 import org.geotools.swing.extended.util.Messaging;
@@ -288,7 +286,7 @@ public class Map extends JMapPane {
                 newMinX, newMaxX, newMinY, newMaxY, env.getCoordinateReferenceSystem());
 
         this.setDisplayArea(env);
-        this.refresh();
+        //this.refresh();
     }
 
     /**
@@ -553,7 +551,7 @@ public class Map extends JMapPane {
     public void addMapAction(
             AbstractAction action, boolean hasTool, JToolBar inToolbar, boolean enabled) {
         action.setEnabled(enabled);
-        AbstractButton btn = null;
+        AbstractButton btn;
         if (hasTool) {
             btn = new ExtendedToolItem(action);
         } else {
@@ -788,7 +786,7 @@ public class Map extends JMapPane {
         ExtendedLayerGraphics selectionLayer =
                 (ExtendedLayerGraphics) getSolaLayers().get(SELECTION_LAYER_NAME);
         if (selectionLayer != null) {
-            selectionLayer.addFeature(id, geom, null);
+            selectionLayer.addFeature(id, geom, null, false);
         }
     }
 
@@ -800,7 +798,7 @@ public class Map extends JMapPane {
                 (ExtendedLayerGraphics) getSolaLayers().get(SELECTION_LAYER_NAME);
         if (selectionLayer != null
                 && selectionLayer.getFeatureCollection().size() > 0) {
-            selectionLayer.removeFeatures();
+            selectionLayer.removeFeatures(false);
         }
     }
 }

@@ -145,15 +145,15 @@ public class CadastreBoundaryPointLayer extends ExtendedLayerGraphics {
         }
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put(LAYER_FIELD_LABEL, labelToUse);
-        this.addFeature(labelToUse, pointGeom, params);
+        this.addFeature(labelToUse, pointGeom, params, false);
     }
 
     /**
      * Reset the selected boundary
      */
     public void clearSelection() {
-        this.removeFeatures();
-        this.boundaryLayer.removeFeatures();
+        this.removeFeatures(false);
+        this.boundaryLayer.removeFeatures(false);
     }
 
     /**
@@ -161,8 +161,8 @@ public class CadastreBoundaryPointLayer extends ExtendedLayerGraphics {
      * @param boundaryGeometry 
      */
     public void setTargetBoundary(LineString boundaryGeometry) {
-        this.boundaryLayer.removeFeatures();
-        this.boundaryLayer.addFeature(BOUNDARY_FEATURE_ID, boundaryGeometry, null);
+        this.boundaryLayer.removeFeatures(false);
+        this.boundaryLayer.addFeature(BOUNDARY_FEATURE_ID, boundaryGeometry, null, false);
     }
 
     /**

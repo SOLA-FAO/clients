@@ -189,7 +189,9 @@ public abstract class SolaControlsBundle extends ControlsBundle {
      * @param applicationId
      */
     public void setApplicationId(String applicationId) {
-        this.solaPrint.setApplicationId(applicationId);
+        if (this.solaPrint != null){
+            this.solaPrint.setApplicationId(applicationId);
+        }
     }
 
     /**

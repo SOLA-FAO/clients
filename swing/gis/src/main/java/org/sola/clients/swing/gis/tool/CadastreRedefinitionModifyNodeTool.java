@@ -105,7 +105,7 @@ public class CadastreRedefinitionModifyNodeTool extends CadastreRedefinitionAbst
         CadastreObjectNodeTO nodeTO =
                 this.dataAccess.getCadastreService().getCadastreObjectNode(
                 env.getMinX(), env.getMinY(), env.getMaxX(), env.getMaxY(),
-                this.getMapControl().getSrid());
+                this.getMapControl().getSrid(), this.cadastreObjectType);
         
         if (nodeTO == null) {
             return null;
@@ -128,7 +128,6 @@ public class CadastreRedefinitionModifyNodeTool extends CadastreRedefinitionAbst
             this.cadastreObjectModifiedLayer.getFeatureCollection().notifyListeners(
                     cadastreObjectFeature, CollectionEvent.FEATURES_CHANGED);
         }
-        this.cadastreObjectNodeModifiedLayer.removeFeature(nodeFeature.getID());
-        this.getMapControl().refresh();
+        this.cadastreObjectNodeModifiedLayer.removeFeature(nodeFeature.getID(), true);
     }
 }

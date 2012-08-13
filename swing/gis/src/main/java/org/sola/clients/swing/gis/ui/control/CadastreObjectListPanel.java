@@ -17,6 +17,7 @@ import org.sola.clients.swing.gis.beans.CadastreObjectListBean;
 public class CadastreObjectListPanel extends javax.swing.JPanel {
 
     private CadastreObjectListBean theBean = null;
+    private String cadastreObjectType;
 
     /**
      * This constructor must be used to initialize the bean.
@@ -50,6 +51,14 @@ public class CadastreObjectListPanel extends javax.swing.JPanel {
             return new CadastreObjectListBean();
         }
         return this.theBean;
+    }
+
+    public String getCadastreObjectType() {
+        return cadastreObjectType;
+    }
+
+    public void setCadastreObjectType(String cadastreObjectType) {
+        this.cadastreObjectType = cadastreObjectType;
     }
 
     /**

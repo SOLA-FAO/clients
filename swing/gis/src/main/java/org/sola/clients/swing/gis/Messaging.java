@@ -45,9 +45,13 @@ import org.sola.common.messaging.MessageUtility;
  */
 public class Messaging extends org.geotools.swing.extended.util.Messaging {
 
+    private static java.util.ResourceBundle bundleForLayerTitles = 
+                java.util.ResourceBundle.getBundle(
+                "org/sola/clients/swing/gis/layer/resources/LayerTitles");
+
     public Messaging() {
     }
-
+    
     /**
      * This method is called in geotools ui to show messages.
      * @param msg 
@@ -63,7 +67,15 @@ public class Messaging extends org.geotools.swing.extended.util.Messaging {
         String msgSolaCode = this.getSolaMessageCode(messageCode);
         return MessageUtility.getLocalizedMessage(msgSolaCode, args).getMessage();
     }
-
+    
+    public String getLayerTitle(String layerName){
+        String layerTitle = layerName;
+        if (bundleForLayerTitles.containsKey(layerName)){
+            layerTitle = bundleForLayerTitles.getString(layerName);
+        }
+        return layerTitle;
+    }
+    
     private String getSolaMessageCode(String messageId) {
         String solaMsgCode = messageId;
         try {

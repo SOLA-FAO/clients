@@ -100,7 +100,7 @@ public class CadastreRedefinitionAddNodeTool extends CadastreRedefinitionAbstrac
         CadastreObjectNodeTO nodeTO =
                 this.dataAccess.getCadastreService().getCadastreObjectNodePotential(
                 env.getMinX(), env.getMinY(), env.getMaxX(), env.getMaxY(),
-                this.getMapControl().getSrid());
+                this.getMapControl().getSrid(), this.cadastreObjectType);
         if (nodeTO == null) {
             return null;
         }

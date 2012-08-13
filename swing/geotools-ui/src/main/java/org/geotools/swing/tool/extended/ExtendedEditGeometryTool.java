@@ -38,12 +38,12 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
-import org.geotools.geometry.DirectPosition2D;
-import org.geotools.swing.event.MapMouseEvent;
-import org.opengis.feature.simple.SimpleFeature;
-import org.geotools.swing.extended.Map;
-import org.geotools.map.extended.layer.ExtendedLayerEditor;
 import org.geotools.feature.extended.VertexInformation;
+import org.geotools.geometry.DirectPosition2D;
+import org.geotools.map.extended.layer.ExtendedLayerEditor;
+import org.geotools.swing.event.MapMouseEvent;
+import org.geotools.swing.extended.Map;
+import org.opengis.feature.simple.SimpleFeature;
 
 /**
  *
@@ -280,7 +280,7 @@ public abstract class ExtendedEditGeometryTool extends ExtendedDrawToolWithSnapp
      * @param geometry 
      */
     public SimpleFeature addFeature(Geometry geometry){
-        return this.layer.addFeature(null, geometry, null);
+        return this.layer.addFeature(null, geometry, null, true);
     }
 
     /**
