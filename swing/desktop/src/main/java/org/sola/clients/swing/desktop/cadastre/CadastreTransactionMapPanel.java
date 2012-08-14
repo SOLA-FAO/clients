@@ -44,15 +44,41 @@ public class CadastreTransactionMapPanel extends ContentPanel {
     private ApplicationServiceBean applicationService;
     private ApplicationPropertyBean applicationProperty;
     private ControlsBundleForTransaction mapControl = null;
+    private String targetCadastreObjectType = CadastreObjectTypeBean.CODE_PARCEL;
 
+    /**
+     * It initiates the panel with the target cadastre object type as being parcel.
+     * 
+     * @param applicationBean
+     * @param applicationService
+     * @param applicationProperty 
+     */
     public CadastreTransactionMapPanel(
             ApplicationBean applicationBean,
             ApplicationServiceBean applicationService,
             ApplicationPropertyBean applicationProperty) {
+        this(applicationBean, applicationService, 
+                applicationProperty, CadastreObjectTypeBean.CODE_PARCEL);
+    }
+
+    /**
+     * It initiates the panel with the target cadastre object type as parameter.
+     * 
+     * @param applicationBean
+     * @param applicationService
+     * @param applicationProperty
+     * @param targetCadastreObjectType 
+     */
+    public CadastreTransactionMapPanel(
+            ApplicationBean applicationBean,
+            ApplicationServiceBean applicationService,
+            ApplicationPropertyBean applicationProperty,
+            String targetCadastreObjectType) {
 
         this.applicationBean = applicationBean;
         this.applicationService = applicationService;
         this.applicationProperty = applicationProperty;
+        this.targetCadastreObjectType = targetCadastreObjectType;
         this.initializeMap();
 
         initComponents();
@@ -68,7 +94,7 @@ public class CadastreTransactionMapPanel extends ContentPanel {
     }
     
     private String getTargetCadastreObjectType(){
-        return CadastreObjectTypeBean.CODE_PARCEL;
+        return targetCadastreObjectType;
     }
 
     private void addMapToForm() {
