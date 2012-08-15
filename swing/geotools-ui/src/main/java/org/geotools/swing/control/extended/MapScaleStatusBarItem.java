@@ -37,7 +37,6 @@ import org.geotools.swing.control.StatusBarItem;
 import org.geotools.swing.event.MapPaneAdapter;
 import org.geotools.swing.event.MapPaneEvent;
 import org.geotools.swing.extended.Map;
-import org.geotools.swing.extended.exception.MapScaleException;
 import org.geotools.swing.extended.util.Messaging;
 
 /**
@@ -96,27 +95,22 @@ public class MapScaleStatusBarItem extends StatusBarItem {
      * @param theMap The map linked to the scale.
      */
     private void setScale(Map theMap) {
-        try {
-            String scaleText;
-            double scale = theMap.getScale();
-            if (scale < 0.01) {
-                scaleText = Messaging.getInstance().getMessageText(
-                        Messaging.Ids.MIN_DISPLAY_SCALE.toString());
-            } else {
-                DecimalFormat df = new DecimalFormat("#,###,###");
-                df.setRoundingMode(RoundingMode.HALF_UP);
-                if (scale < 1) {
-                    df = new DecimalFormat("0.##");
-                }
-                scaleText = df.format(scale);
+        String scaleText;
+        double scale = theMap.getScale();
+        if (scale < 0.01) {
+            scaleText = Messaging.getInstance().getMessageText(
+                    Messaging.Ids.MIN_DISPLAY_SCALE.toString());
+        } else {
+            DecimalFormat df = new DecimalFormat("#,###,###");
+            df.setRoundingMode(RoundingMode.HALF_UP);
+            if (scale < 1) {
+                df = new DecimalFormat("0.##");
             }
-            suppressZoom = true;
-            txtScale.setText(scaleText);
-            suppressZoom = false;
-        } catch (MapScaleException ex) {
-            txtScale.setText(Messaging.getInstance().getMessageText(
-                    Messaging.Ids.MAP_SCALE_ERROR.toString()));
+            scaleText = df.format(scale);
         }
+        suppressZoom = true;
+        txtScale.setText(scaleText);
+        suppressZoom = false;
     }
 
     /**
@@ -141,8 +135,6 @@ public class MapScaleStatusBarItem extends StatusBarItem {
                 env.expandBy(deltaWidth * 0.5, deltaHeight * 0.5);
                 this.map.setDisplayArea(env);
             } catch (NumberFormatException ex) {
-                setScale(this.map);
-            } catch (MapScaleException mex) {
                 setScale(this.map);
             }
         }

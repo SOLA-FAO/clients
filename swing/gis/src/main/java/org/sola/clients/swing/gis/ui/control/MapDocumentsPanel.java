@@ -9,7 +9,6 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import org.geotools.swing.extended.util.Messaging;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.digitalarchive.DocumentBean;
 import org.sola.clients.beans.source.SourceBean;
@@ -23,7 +22,6 @@ import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForTransaction
 import org.sola.clients.swing.ui.source.DocumentsManagementPanel;
 import org.sola.common.FileUtility;
 import org.sola.common.messaging.ClientMessage;
-import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.MessageUtility;
 import org.sola.services.boundary.wsclients.WSManager;
 
@@ -75,6 +73,7 @@ public class MapDocumentsPanel extends javax.swing.JPanel {
         }
 
         boolean allowEdit = true;
+        boolean allowAddingOfNewDocuments = false;
 
         DocumentsManagementPanel panel = new DocumentsManagementPanel(
                 new ArrayList<String>(), applicationBean, allowEdit);
@@ -87,6 +86,7 @@ public class MapDocumentsPanel extends javax.swing.JPanel {
                 }
             }
         });
+        panel.setAllowAddingOfNewDocuments(allowAddingOfNewDocuments);
         return panel;
     }
 

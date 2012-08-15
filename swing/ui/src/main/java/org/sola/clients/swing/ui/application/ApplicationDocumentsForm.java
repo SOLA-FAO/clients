@@ -91,6 +91,15 @@ public class ApplicationDocumentsForm extends javax.swing.JDialog {
             fireUpdatedSourceEvent((SourceBean) documentsPanel.getSourceListBean().getSelectedSource().copy());
         }
     }
+    
+    /**
+     * It disables the tab where a new document can be added.
+     * 
+     * @param allow 
+     */
+    public void allowAddingOfNewDocuments(boolean allow){
+        tabs.setEnabledAt(1, allow);
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

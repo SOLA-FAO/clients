@@ -47,6 +47,7 @@ public class DocumentsManagementPanel extends javax.swing.JPanel {
     private ApplicationDocumentsForm applicationDocumentsForm;
     private SolaList<SourceBean> sourceList;
     private boolean allowEdit = true;
+    private boolean allowAddingOfNewDocuments = true;
     
     /** Creates new instance of {@link DocumentsPanel}. */
     private DocumentsPanel createDocumentsPanel() {
@@ -157,6 +158,16 @@ public class DocumentsManagementPanel extends javax.swing.JPanel {
      */
     public final SourceListBean getSourceListBean(){
         return documentsPanel.getSourceListBean();
+    }
+    
+    /**
+     * Sets the property to allow new documents that are not defined in 
+     * application to be added in the list.
+     * 
+     * @param allow 
+     */
+    public void setAllowAddingOfNewDocuments(boolean allow){
+        allowAddingOfNewDocuments = allow;
     }
     
     @SuppressWarnings("unchecked")
@@ -332,6 +343,7 @@ public class DocumentsManagementPanel extends javax.swing.JPanel {
         applicationDocumentsForm.setLocationRelativeTo(this);
         applicationDocumentsForm.addPropertyChangeListener(
                 SourceListBean.SELECTED_SOURCE_PROPERTY, listener);
+        applicationDocumentsForm.allowAddingOfNewDocuments(allowAddingOfNewDocuments);
         applicationDocumentsForm.setVisible(true);
         applicationDocumentsForm.removePropertyChangeListener(
                 SourceListBean.SELECTED_SOURCE_PROPERTY, listener);

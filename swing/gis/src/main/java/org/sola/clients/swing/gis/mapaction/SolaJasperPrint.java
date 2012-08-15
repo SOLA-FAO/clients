@@ -31,7 +31,6 @@ package org.sola.clients.swing.gis.mapaction;
 
 import java.io.IOException;
 import org.geotools.swing.extended.Map;
-import org.geotools.swing.extended.exception.MapScaleException;
 import org.geotools.swing.extended.exception.PrintLayoutException;
 import org.geotools.swing.extended.util.MapImageGenerator;
 import org.geotools.swing.extended.util.Messaging;
@@ -43,6 +42,7 @@ import org.sola.clients.beans.application.ApplicationServiceBean;
 import org.sola.clients.beans.referencedata.RequestTypeBean;
 import org.sola.clients.reports.ReportManager;
 import org.sola.clients.swing.gis.ui.control.SolaPrintViewerForm;
+
 /**
  * This map action extends the Print map action that handles the print of the map according to a
  * layout. The user name and date is added in the layout and also it logs against the application
@@ -54,13 +54,13 @@ public class SolaJasperPrint extends Print {
 
     private String applicationId;
     private IPrintUi printForm;
-    
+
     public SolaJasperPrint(Map map) {
         super(map);
         //the following changes the layout properties file for 
         //the org.geotools.swing.mapaction.extended.Print.java
         // in order to use it for jasper report print map
-        this.layoutLocation = "resources/print/layoutsJasper.properties";      
+        this.layoutLocation = "resources/print/layoutsJasper.properties";
     }
 
     /**
@@ -74,39 +74,29 @@ public class SolaJasperPrint extends Print {
     }
 
     /**
-     * This method calls the start screen for the print action. 
-     * If it is needed to completely change the way the print action starts you should rewrite this
-     * method. Checkout super.onClick() for an example how you can rewrite it.
+     * This method calls the start screen for the print action. If it is needed to completely change
+     * the way the print action starts you should rewrite this method. Checkout super.onClick() for
+     * an example how you can rewrite it.
      */
     @Override
     public void onClick() {
 
-            if (this.printForm == null) {
-                this.printForm = this.getPrintForm();
-            }
-            try {
-                this.printForm.setPrintLayoutList(this.getPrintLayouts());
-            } catch (PrintLayoutException ex) {
-                Messaging.getInstance().show(Messaging.Ids.PRINT_LAYOUT_GENERATION_ERROR.toString());
-            }
-
-            try {
-                this.printForm.setScale(this.getMapControl().getScale().intValue());
-                this.printForm.setVisibility(true);
-                if (this.printForm.getPrintLayout() == null) {
-                    return;
-                }
-                Print(this.printForm.getPrintLayout(),
-                        this.printForm.getScale());
-
-            } catch (MapScaleException ex) {
-                Messaging.getInstance().show(Messaging.Ids.PRINT_LAYOUT_GENERATION_ERROR.toString());
-            }
+        if (this.printForm == null) {
+            this.printForm = this.getPrintForm();
+        }
+        try {
+            this.printForm.setPrintLayoutList(this.getPrintLayouts());
+        } catch (PrintLayoutException ex) {
+            Messaging.getInstance().show(Messaging.Ids.PRINT_LAYOUT_GENERATION_ERROR.toString());
+        }
+        this.printForm.setScale(this.getMapControl().getScale().intValue());
+        this.printForm.setVisibility(true);
+        if (this.printForm.getPrintLayout() == null) {
+            return;
+        }
+        Print(this.printForm.getPrintLayout(), this.printForm.getScale());
     }
 
-    
-    
-    
     /**
      * Additionally to the standard functionality of printing, it supplies the values of user and
      * date to the layout so it can print them as well. Also if the print succeeds it logs against
@@ -114,23 +104,23 @@ public class SolaJasperPrint extends Print {
      *
      * This method is used to call an alternative print engine which uses Jasper report Tool
      *
-     * @param layout A layout identifier. This is used to distinguish between many layouts
-     * the user can choose from and to call the report for that layout
+     * @param layout A layout identifier. This is used to distinguish between many layouts the user
+     * can choose from and to call the report for that layout
      * @param scale This is the scale of the map for which the print will be done
      */
     protected void Print(PrintLayout layout, double scale) {
-             
+
         //This is the image width of the map. It is given in pixels or in points.
         Double mapImageWidth = Double.valueOf(layout.getMap().getWidth());
         //This is the image height of the map. It is given in pixels or in points.
         Double mapImageHeight = Double.valueOf(layout.getMap().getHeight());
-        
+
         //This is the DPI. Normally the printer has a DPI, the monitor has a DPI. 
         //Also Jasper engine should have a DPI, which is 72. With this DPI pixels and points are equal
         int dpi = 72;
         //Here it is possible to change the image format for the map image
         String imageFormat = "png";
-        
+
         //This is the image width of the scalebar. It is given in pixels or in points.
         //The real width might change from the given size because the scalebar dynamicly looks
         //for the best width. 
@@ -141,33 +131,32 @@ public class SolaJasperPrint extends Print {
             //This gives back the absolute location of the map image. 
             String mapImageLocation = mapImageGenerator.getImageAsFileLocation(
                     mapImageWidth, mapImageHeight, scale, dpi, imageFormat);
-            
+
             ScalebarGenerator scalebarGenerator = new ScalebarGenerator();
             //This gives back the absolute location of the scalebar image. 
             String scalebarImageLocation = scalebarGenerator.getImageAsFileLocation(
                     scale, scalebarImageWidth, dpi);
-                               
-            ApplicationServiceBean serviceBean = new ApplicationServiceBean(); 
+
+            ApplicationServiceBean serviceBean = new ApplicationServiceBean();
             serviceBean.setRequestTypeCode(RequestTypeBean.CODE_CADASTRE_PRINT);
             if (this.applicationId != null) {
                 serviceBean.setApplicationId(this.applicationId);
             }
             serviceBean.saveInformationService();
-            
+
             //This will be the bean containing data for the report. 
             //it is the data source for the report
             //it must be replaced with appropriate bean if needed
-             Object dataBean = new Object();
-             
+            Object dataBean = new Object();
+
             //   This is to call the report generation         
-	    SolaPrintViewerForm form = new SolaPrintViewerForm(
-		ReportManager.getSolaPrintReport(
-                    layout.getId(), dataBean, mapImageLocation, scalebarImageLocation)
-            );
+            SolaPrintViewerForm form = new SolaPrintViewerForm(
+                    ReportManager.getSolaPrintReport(
+                    layout.getId(), dataBean, mapImageLocation, scalebarImageLocation));
             // this is to visualize the generated report            
-	    form.setVisible(true);
-	 
-         
+            form.setVisible(true);
+
+
         } catch (IOException ex) {
         }
     }

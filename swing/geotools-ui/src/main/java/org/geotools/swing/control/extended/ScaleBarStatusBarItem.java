@@ -34,7 +34,6 @@ import org.geotools.swing.control.StatusBarItem;
 import org.geotools.swing.event.MapPaneAdapter;
 import org.geotools.swing.event.MapPaneEvent;
 import org.geotools.swing.extended.Map;
-import org.geotools.swing.extended.exception.MapScaleException;
 import org.geotools.swing.extended.util.Messaging;
 import org.geotools.swing.extended.util.ScalebarGenerator;
 
@@ -130,25 +129,19 @@ public class ScaleBarStatusBarItem extends StatusBarItem {
      * @param theMap The map display
      */
     private void redrawScaleBar(Map theMap) {
-        try {
-            double scale = theMap.getScale();
-            if (scale != previousScale) {
-                BufferedImage image = scaleBar.getImage(scale, DEFAULT_WIDTH, getScreenResolution());
-                if (image != null) {
-                    lblScaleBar.setText(null);
-                    lblScaleBar.setIcon(new ImageIcon(image));
-                } else {
-                    lblScaleBar.setIcon(null);
-                    lblScaleBar.setText(Messaging.getInstance().getMessageText(
-                            Messaging.Ids.MIN_DISPLAY_SCALE.toString()));
-                }
-                previousScale = scale;
+        double scale = theMap.getScale();
+        if (scale != previousScale) {
+            BufferedImage image = scaleBar.getImage(scale, DEFAULT_WIDTH, getScreenResolution());
+            if (image != null) {
+                lblScaleBar.setText(null);
+                lblScaleBar.setIcon(new ImageIcon(image));
+            } else {
+                lblScaleBar.setIcon(null);
+                lblScaleBar.setText(Messaging.getInstance().getMessageText(
+                        Messaging.Ids.MIN_DISPLAY_SCALE.toString()));
             }
-
-        } catch (MapScaleException ex) {
-            lblScaleBar.setIcon(null);
-            lblScaleBar.setText(Messaging.getInstance().getMessageText(
-                    Messaging.Ids.MAP_SCALE_ERROR.toString()));
+            previousScale = scale;
         }
+
     }
 }

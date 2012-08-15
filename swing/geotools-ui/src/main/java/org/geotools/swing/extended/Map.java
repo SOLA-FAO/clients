@@ -65,10 +65,8 @@ import org.geotools.swing.extended.util.Messaging;
 import org.geotools.renderer.lite.RendererUtilities;
 import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.geotools.swing.extended.exception.InitializeMapException;
-import org.geotools.swing.extended.exception.MapScaleException;
 import org.geotools.swing.mapaction.extended.ExtendedAction;
 import org.geotools.swing.tool.extended.ExtendedTool;
-import org.opengis.referencing.operation.TransformException;
 
 /**
  * This is an extension of the swing control {
@@ -669,20 +667,12 @@ public class Map extends JMapPane {
     }
 
     /**
-     * Gets the current scale of the map.
+     * Gets the current scale of the map. The calculation happens according to OGC specification.
      *
-     * @return
+     * @return The scale
      */
-    public Double getScale() throws MapScaleException {
-        try {
-            return RendererUtilities.calculateScale(
-                    this.getDisplayArea(), this.getWidth(),
-                    this.getHeight(), null);
-        } catch (TransformException trnsEx) {
-            throw new MapScaleException(trnsEx);
-        } catch (FactoryException trnsEx) {
-            throw new MapScaleException(trnsEx);
-        }
+    public Double getScale() {
+        return RendererUtilities.calculateOGCScale(this.getDisplayArea(), this.getWidth(), null);
     }
 
     /**
