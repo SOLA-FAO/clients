@@ -28,12 +28,15 @@ package org.sola.clients.swing.gis;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.WKBWriter;
 import com.vividsolutions.jts.io.WKTReader;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.sola.clients.swing.gis.beans.SurveyPointBean;
+import org.sola.clients.swing.gis.data.ExternalFileImporterSurveyPointBeans;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.LocalizedMessage;
@@ -171,6 +174,7 @@ public class AppTest {
         return wkbWriter.write(geom);
     }
 
+    @Ignore
     @Test
     public void testMessaging() throws Exception {
         if (skipIntegrationTest()) {
@@ -195,4 +199,21 @@ public class AppTest {
                 ((Messaging)Messaging.getInstance()).getLayerTitle(layerName)));
     }
     
+    @Ignore
+    @Test
+    public void testExternalFileImporter() throws Exception {
+        System.out.println("Test ExternalFileImporterSurveyPointBeans");
+        File directory = new File(".");
+        String sampleFile = 
+                String.format("%s\\src\\test\\java\\org\\sola\\clients\\swing\\gis"
+                + "\\sample\\data\\survey_points.csv",
+                directory.getAbsolutePath());
+        List<SurveyPointBean> beanList = 
+                ExternalFileImporterSurveyPointBeans.getInstance().getBeans(sampleFile);
+        for(SurveyPointBean bean:beanList){
+            System.out.println(String.format("Bean found X:%s Y:%s Point:%s", 
+                    bean.getX(), bean.getY(), bean.getFeatureGeom().toText()));
+        }
+    }
+       
 }

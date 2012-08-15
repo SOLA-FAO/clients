@@ -42,6 +42,7 @@ import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.opengis.feature.simple.SimpleFeature;
 import org.sola.clients.swing.gis.beans.CadastreObjectBean;
 import org.sola.clients.swing.gis.beans.CadastreObjectListBean;
+import org.sola.clients.swing.gis.beans.SpatialBean;
 import org.sola.clients.swing.gis.ui.control.CadastreObjectListPanel;
 
 /**
@@ -62,7 +63,7 @@ public class CadastreChangeNewCadastreObjectLayer
             String.format("%s:String,%s:String,%s:Double,%s:Double",
             LAYER_FIELD_FIRST_PART, LAYER_FIELD_LAST_PART,
             LAYER_FIELD_OFFICIAL_AREA, LAYER_FIELD_CALCULATED_AREA);
-    private Integer firstPartGenerator = 1;
+    private Integer firstPartGenerator = 0;
     private static final String LAST_PART_FORMAT = "SP %s";
     private String lastPart = "";
     private CadastreObjectListPanel spatialObjectDisplayPanel;
@@ -82,14 +83,15 @@ public class CadastreChangeNewCadastreObjectLayer
         this.listBean = new CadastreObjectListBean();
         //This is called after the listBean is initialized
         initializeListBeanEvents();
-        this.spatialObjectDisplayPanel = 
+        this.spatialObjectDisplayPanel =
                 new CadastreObjectListPanel((CadastreObjectListBean) this.listBean);
         initializeFormHosting(this.spatialObjectDisplayPanel);
     }
 
     /**
      * Gets the panel where the data about the cadastre objects are displayed
-     * @return 
+     *
+     * @return
      */
     public CadastreObjectListPanel getSpatialObjectDisplayPanel() {
         return spatialObjectDisplayPanel;
@@ -105,14 +107,17 @@ public class CadastreChangeNewCadastreObjectLayer
         return (List<CadastreObjectBean>) super.getBeanList();
     }
 
-    
-    
+    @Override
+    public <T extends SpatialBean> void setBeanList(List<T> beanList) {
+        super.setBeanList(beanList);
+        this.firstPartGenerator= null;
+    }
+
     @Override
     protected HashMap<String, Object> getFieldsWithValuesForNewFeatures(Geometry geom) {
         HashMap<String, Object> fieldsWithValues = new HashMap<String, Object>();
-        firstPartGenerator++;
         fieldsWithValues.put(CadastreChangeNewCadastreObjectLayer.LAYER_FIELD_FIRST_PART,
-                firstPartGenerator.toString());
+                this.getNameFirstPart());
         fieldsWithValues.put(CadastreChangeNewCadastreObjectLayer.LAYER_FIELD_LAST_PART,
                 this.lastPart);
         fieldsWithValues.put(CadastreChangeNewCadastreObjectLayer.LAYER_FIELD_OFFICIAL_AREA,
@@ -135,7 +140,7 @@ public class CadastreChangeNewCadastreObjectLayer
     @Override
     public void notifyEventChanges(String forFeatureOfCadastreObjectId) {
         SimpleFeature feature = this.getFeatureByCadastreObjectId(forFeatureOfCadastreObjectId);
-        if (feature != null){
+        if (feature != null) {
             this.getFeatureCollection().notifyListeners(feature, CollectionEvent.FEATURES_CHANGED);
         }
     }
@@ -154,6 +159,29 @@ public class CadastreChangeNewCadastreObjectLayer
         iterator.close();
         return ids;
     }
-    
-    
+
+    /**
+     * Gets a new first part for a new cadastre object. If the generator is not initialized it
+     * searches first in the existing cadastre objects for the biggest id and starts generating from
+     * that number upwards. <br/> If the generator has to be changed, can be overridden.
+     *
+     * @return A unique number
+     */
+    protected String getNameFirstPart() {
+        if (this.firstPartGenerator == null) {
+            this.firstPartGenerator = 0;
+            for (CadastreObjectBean bean : this.getBeanList()) {
+                try {
+                    int tmpValue = Integer.parseInt(bean.getNameFirstpart());
+                    if (tmpValue > this.firstPartGenerator) {
+                        this.firstPartGenerator = tmpValue;
+                    }
+                } catch (NumberFormatException ex) {
+                    //Ignore exception
+                }
+            }
+        }
+        this.firstPartGenerator++;
+        return this.firstPartGenerator.toString();
+    }
 }

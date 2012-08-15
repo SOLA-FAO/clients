@@ -29,16 +29,13 @@
  */
 package org.sola.clients.swing.gis.ui.controlsbundle;
 
-import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import org.geotools.geometry.jts.Geometries;
-import org.geotools.geometry.jts.JTS;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.map.extended.layer.ExtendedLayerGraphics;
 import org.geotools.swing.extended.exception.InitializeLayerException;
-import org.opengis.feature.simple.SimpleFeature;
 import org.sola.clients.beans.cadastre.CadastreObjectBean;
 import org.sola.clients.beans.controls.SolaList;
 import org.sola.clients.swing.gis.Messaging;
@@ -107,20 +104,17 @@ public final class ControlsBundleForBaUnit extends SolaControlsBundle {
         }
 
         try {
-            ReferencedEnvelope envelope = null;
+            boolean featureAdded = false;
             for (CadastreObjectTO cadastreObject : cadastreObjects) {
-                SimpleFeature featureAdded =
-                        inLayer.addFeature(cadastreObject.getId(),
-                        cadastreObject.getGeomPolygon(), null, false);
-                ReferencedEnvelope tmpEnvelope = JTS.toEnvelope(
-                        (Geometry) featureAdded.getDefaultGeometry());
-                if (envelope == null) {
-                    envelope = tmpEnvelope;
-                } else {
-                    envelope.expandToInclude(tmpEnvelope);
+                if (cadastreObject.getGeomPolygon() == null){
+                    continue;
                 }
+                inLayer.addFeature(cadastreObject.getId(),
+                        cadastreObject.getGeomPolygon(), null, false);
+                featureAdded = true;
             }
-            if (envelope != null) {
+            if (featureAdded) {
+                ReferencedEnvelope envelope = inLayer.getFeatureCollection().getBounds();
                 envelope.expandBy(10);
                 this.getMap().setDisplayArea(envelope);
             }

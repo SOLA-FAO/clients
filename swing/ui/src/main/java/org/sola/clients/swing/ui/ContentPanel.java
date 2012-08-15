@@ -42,6 +42,7 @@ public class ContentPanel extends JPanel {
     private PropertyChangeListener headerPanelListener;
     private boolean closeOnHide = false;
     private String helpTopic;
+    public String whichChangeEvent;
     
     public ContentPanel() {
         super();
@@ -82,7 +83,9 @@ public class ContentPanel extends JPanel {
         } catch (Exception e) {
         }
     }
-
+    
+    
+    
     public MainContentPanel getMainContentPanel() {
         return mainContentPanel;
     }
@@ -106,9 +109,11 @@ public class ContentPanel extends JPanel {
      */
     private void handleHeaderPanelPropertyChanges(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals(HeaderPanel.CLOSE_BUTTON_CLICKED)) {
+            this.whichChangeEvent=HeaderPanel.CLOSE_BUTTON_CLICKED;
             if (panelClosing()) {
                 close();
             }
+            refreshDashboard();
         }
         if (evt.getPropertyName().equals(HeaderPanel.HELP_BUTTON_CLICKED)) {
             showHelp();
@@ -132,6 +137,13 @@ public class ContentPanel extends JPanel {
             firePropertyChange(HeaderPanel.CLOSE_BUTTON_CLICKED, false, true);
         }
     }
+    
+    
+    public void refreshDashboard() {
+        this.repaint();    
+    }
+    
+
 
     /**
      * This method is called each time when panel is added to the main content

@@ -39,6 +39,7 @@ import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.geotools.swing.mapaction.extended.RemoveDirectImage;
 import org.geotools.swing.tool.extended.AddDirectImageTool;
 import org.sola.clients.beans.application.ApplicationBean;
+import org.sola.clients.beans.referencedata.RequestTypeBean;
 import org.sola.clients.swing.gis.Messaging;
 import org.sola.clients.swing.gis.beans.TransactionBean;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
@@ -68,7 +69,6 @@ public abstract class ControlsBundleForTransaction extends SolaControlsBundle {
     private String transactionStarterId;
     private ApplicationBean applicationBean;
     private MapDocumentsPanel documentsPanel;
-    private String cadastreObjectType = "parcel";
 
     
     public ControlsBundleForTransaction(
@@ -77,6 +77,23 @@ public abstract class ControlsBundleForTransaction extends SolaControlsBundle {
         super();
         this.applicationBean = applicationBean;
         this.transactionStarterId = transactionStarterId;
+    }
+    
+    public static ControlsBundleForTransaction getInstance(
+            String requestTypeCode,
+            ApplicationBean applicationBean,
+            String transactionStarterId,
+            String baUnitId,
+            String targetCadastreObjectType){
+        ControlsBundleForTransaction instance = null;
+        if (requestTypeCode.equals(RequestTypeBean.CODE_CADASTRE_CHANGE)) {
+            instance = new ControlsBundleForCadastreChange(
+                    applicationBean, transactionStarterId, baUnitId, targetCadastreObjectType);
+        } else if (requestTypeCode.equals(RequestTypeBean.CODE_CADASTRE_REDEFINITION)) {
+            instance = new ControlsBundleForCadastreRedefinition(
+                    applicationBean, transactionStarterId, baUnitId, targetCadastreObjectType);
+        }
+        return instance;
     }
     
     /**
@@ -91,13 +108,13 @@ public abstract class ControlsBundleForTransaction extends SolaControlsBundle {
         super.Setup(pojoDataAccess);
         try {
             
-            this.addDocumentsPanel();
-
             //Adding layers
             this.addLayers();
 
             //Adding tools and commands
             this.addToolsAndCommands();
+
+            this.addDocumentsPanel();
 
             for (ExtendedLayer solaLayer : this.getMap().getSolaLayers().values()) {
                 if (solaLayer.getClass().equals(PojoLayer.class)) {
@@ -167,6 +184,13 @@ public abstract class ControlsBundleForTransaction extends SolaControlsBundle {
     public abstract void setTransaction();
     
     /**
+     * Gets if the transaction is already started before.
+     *
+     * @return True if the transaction was already started and now is read back for modifications
+     */
+    protected abstract boolean transactionIsStarted();
+
+    /**
      * Adds layers that are needed for the transaction
      *
      * @throws InitializeLayerException
@@ -207,16 +231,6 @@ public abstract class ControlsBundleForTransaction extends SolaControlsBundle {
     public void setReadOnly(boolean readOnly) {
         this.getMap().getMapActionByName(SaveTransaction.MAPACTION_NAME).setEnabled(!readOnly);
         this.getMap().getMapActionByName(CadastreBoundarySelectTool.MAP_ACTION_NAME).setEnabled(!readOnly);
-    }
-
-    /**
-     * Gets the cadastre object type that will be targeted. This method can be overridden
-     * by subclasses.
-     * 
-     * @return 
-     */
-    public String getTargetCadastreObjectType(){
-        return this.cadastreObjectType;
     }
     
     /**

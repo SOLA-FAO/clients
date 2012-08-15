@@ -36,6 +36,10 @@ import org.sola.webservices.transferobjects.referencedata.BaUnitTypeTO;
  * For more information see data dictionary <b>Cadastre</b> schema.
  */
 public class CadastreObjectTypeBean extends AbstractCodeBean {
+    
+    public static final String CODE_PARCEL = "parcel";
+    public static final String CODE_BUILDING = "building";
+
     public CadastreObjectTypeBean() {
         super();
     }

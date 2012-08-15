@@ -37,7 +37,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 import org.geotools.swing.extended.Map;
-import org.geotools.swing.extended.exception.MapScaleException;
 import org.geotools.swing.extended.exception.PrintLayoutException;
 import org.geotools.swing.extended.util.Messaging;
 import org.geotools.swing.mapaction.extended.print.PrintLayout;
@@ -80,23 +79,17 @@ public class Print extends ExtendedAction {
             Messaging.getInstance().show(Messaging.Ids.PRINT_LAYOUT_GENERATION_ERROR.toString());
         }
 
-        try {
-            this.printForm.setScale(this.getMapControl().getScale().intValue());
-            this.printForm.setVisibility(true);
-            if (this.printForm.getPrintLayout() == null) {
-                return;
-            }
-
-
-            String printLocation = this.print(
-                    this.printForm.getPrintLayout(),
-                    this.printForm.getScale(),
-                    this.printForm.getExtraFields());
-            this.showPrintableDocument(printLocation);
-
-        } catch (MapScaleException ex) {
-            Messaging.getInstance().show(Messaging.Ids.PRINT_LAYOUT_GENERATION_ERROR.toString());
+        this.printForm.setScale(this.getMapControl().getScale().intValue());
+        this.printForm.setVisibility(true);
+        if (this.printForm.getPrintLayout() == null) {
+            return;
         }
+
+        String printLocation = this.print(
+                this.printForm.getPrintLayout(),
+                this.printForm.getScale(),
+                this.printForm.getExtraFields());
+        this.showPrintableDocument(printLocation);
     }
 
     /**

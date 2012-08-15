@@ -34,7 +34,6 @@ import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.swing.gis.beans.CadastreObjectTargetBean;
-import org.sola.clients.swing.gis.beans.TransactionBean;
 import org.sola.clients.swing.gis.beans.TransactionCadastreChangeBean;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.layer.CadastreChangeNewCadastreObjectLayer;
@@ -79,24 +78,20 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
     public ControlsBundleForCadastreChange(
             ApplicationBean applicationBean,
             String transactionStarterId,
-            String baUnitId) {
+            String baUnitId,
+            String targetCadastreObjectType) {
         super(applicationBean, transactionStarterId);
         this.applicationNumber = applicationBean.getNr();
         this.Setup(PojoDataAccess.getInstance());
-        this.setTargetCadastreObjectTypeConfiguration(getTargetCadastreObjectType());
+        this.setTargetCadastreObjectTypeConfiguration(targetCadastreObjectType);
         this.setTransaction();
-
         if (!this.transactionIsStarted()) {
-            this.setTargetParcelsByBaUnit(baUnitId);
+            this.setTargetCadastreObjectsOfBaUnit(baUnitId);
         }
         this.zoomToInterestingArea(null, applicationBean.getLocation());
     }
 
-    /**
-     * Gets if the transaction is already started before.
-     *
-     * @return True if the transaction was already started and now is read back for modifications
-     */
+    @Override
     protected boolean transactionIsStarted() {
         return (this.newPointsLayer.getFeatureCollection().size() > 0
                 || this.targetParcelsLayer.getFeatureCollection().size() > 0);
@@ -227,7 +222,7 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
      *
      * @param baUnitId
      */
-    public void setTargetParcelsByBaUnit(String baUnitId) {
+    private void setTargetCadastreObjectsOfBaUnit(String baUnitId) {
         List<CadastreObjectTO> cadastreObjects =
                 this.getPojoDataAccess().getCadastreService().getCadastreObjectsByBaUnit(baUnitId);
         for (CadastreObjectTO cadastreObjectTo : cadastreObjects) {

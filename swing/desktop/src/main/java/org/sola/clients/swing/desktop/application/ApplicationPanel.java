@@ -58,6 +58,7 @@ import org.sola.clients.swing.common.controls.AutoCompletion;
 import org.sola.clients.swing.common.converters.BigDecimalMoneyConverter;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
+import org.sola.clients.swing.desktop.DashBoardPanel;
 import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.desktop.ReportViewerForm;
 import org.sola.clients.swing.desktop.administrative.PropertyPanel;
@@ -68,6 +69,7 @@ import org.sola.clients.swing.desktop.source.DocumentSearchPanel;
 import org.sola.clients.swing.desktop.source.TransactionedDocumentsPanel;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForApplicationLocation;
 import org.sola.clients.swing.ui.ContentPanel;
+import org.sola.clients.swing.ui.HeaderPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.clients.swing.ui.renderers.*;
 import org.sola.clients.swing.ui.source.DocumentPanel;
@@ -234,6 +236,8 @@ public class ApplicationPanel extends ContentPanel {
         customizeApplicationForm();
         customizePropertyButtons();
         customizeDocumentsButtons();
+        
+        
     }
     
     /**
@@ -809,11 +813,11 @@ public class ApplicationPanel extends ContentPanel {
                     close();
                 }
                 return null;
-            }
+         }
             
             @Override
             public void taskDone() {
-                MessageUtility.displayMessage(ClientMessage.APPLICATION_SUCCESSFULLY_SAVED);
+//                MessageUtility.displayMessage(ClientMessage.APPLICATION_SUCCESSFULLY_SAVED);
                 customizeApplicationForm();
                 saveAppState();
                 
@@ -822,9 +826,40 @@ public class ApplicationPanel extends ContentPanel {
                     applicationID = appBean.getId();
                 }
                 firePropertyChange(APPLICATION_SAVED_PROPERTY, false, true);
+                
+                refreshDashboard();   
+                
             }
         };
+        
         TaskManager.getInstance().runTask(t);
+        
+    }
+    
+    public void refreshDashboard() {
+            PropertyChangeListener listener = new PropertyChangeListener() {
+
+                    @Override
+                    public void propertyChange(PropertyChangeEvent e) {
+                        if (e.getPropertyName().equals(ApplicationPanel.APPLICATION_SAVED_PROPERTY)) {
+                            System.out.println("public void propertyChange");
+                        }
+                    }
+                };
+                
+                if (getMainContentPanel() != null) {
+                    DashBoardPanel dashBoardPanel = new DashBoardPanel();
+                    dashBoardPanel.addPropertyChangeListener(ApplicationBean.ASSIGNEE_ID_PROPERTY, listener);
+                      if (whichChangeEvent==HeaderPanel.CLOSE_BUTTON_CLICKED) {
+                        getMainContentPanel().addPanel(dashBoardPanel, MainContentPanel.CARD_DASHBOARD, true);  
+                      } else {
+                        if (MessageUtility.displayMessage(ClientMessage.GENERAL_BACK_TO_DASHBOARD)
+                            == MessageUtility.BUTTON_ONE) {
+                            getMainContentPanel().addPanel(dashBoardPanel, MainContentPanel.CARD_DASHBOARD, true);
+                        }
+                      }  
+                }
+             
     }
     
     private void openSeachDocuments() {
@@ -3185,6 +3220,7 @@ public class ApplicationPanel extends ContentPanel {
                                 openValidationResultForm(result, true, message);
                             }
                             saveAppState();
+                            refreshDashboard();  
                         }
                     };
             TaskManager.getInstance().runTask(t);
