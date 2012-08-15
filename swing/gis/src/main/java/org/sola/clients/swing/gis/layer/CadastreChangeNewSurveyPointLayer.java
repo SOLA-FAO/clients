@@ -45,6 +45,7 @@ import org.sola.clients.swing.gis.beans.SurveyPointBean;
 import org.sola.clients.swing.gis.beans.SurveyPointListBean;
 import org.sola.clients.swing.gis.ui.control.SurveyPointListPanel;
 import org.sola.common.messaging.GisMessage;
+import org.sola.common.messaging.MessageUtility;
 
 /**
  * Layer of the survey points that is used during the cadastre change
@@ -90,7 +91,10 @@ public final class CadastreChangeNewSurveyPointLayer extends AbstractSpatialObje
         initializeListBeanEvents();
         SurveyPointListPanel uiComponent =
                 new SurveyPointListPanel((SurveyPointListBean) this.listBean);
-        initializeFormHosting(uiComponent);
+        initializeFormHosting(
+                MessageUtility.getLocalizedMessageText(
+                GisMessage.CADASTRE_CHANGE_FORM_SURVEYPOINT_TITLE), 
+                uiComponent);
     }
 
     /**
