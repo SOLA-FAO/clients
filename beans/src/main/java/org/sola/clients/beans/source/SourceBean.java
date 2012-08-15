@@ -138,7 +138,7 @@ public class SourceBean extends SourceSummaryBean {
     }
 
     /**
-     * Static method to attaches source to the transaction.
+     * Static method to attach source to the transaction.
      *
      * @param serviceId Application service id, bound to transaction.
      * @param sourceId ID of the source.

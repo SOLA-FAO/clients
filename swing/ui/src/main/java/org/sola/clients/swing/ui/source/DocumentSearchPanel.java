@@ -230,6 +230,8 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
             public void taskDone() {
                 if (searchResultsList.getSourceSearchResultsList().size() > 100) {
                     MessageUtility.displayMessage(ClientMessage.SEARCH_TOO_MANY_RESULTS, new String[]{"100"});
+                } else if (searchResultsList.getSourceSearchResultsList().size() < 1) {
+                    MessageUtility.displayMessage(ClientMessage.SEARCH_NO_RESULTS);
                 }
                 lblResults.setText(String.format("(%s)", searchResultsList.getSourceSearchResultsList().size()));
             }

@@ -50,6 +50,7 @@ public class RequestTypeBean extends AbstractCodeBean {
     public static final String CODE_CADASTRE_CHANGE = "cadastreChange";
     public static final String CODE_CADASTRE_REDEFINITION = "redefineCadastre";
     public static final String CODE_REG_POWER_OF_ATTORNEY = "regnPowerOfAttorney";
+    public static final String CODE_CANCEL_POWER_OF_ATTORNEY = "cnclPowerOfAttorney";
     public static final String CODE_REG_STANDARD_DOCUMENT = "regnStandardDocument";
     public static final String CODE_NEW_APARTMENT = "newApartment";
     public static final String CODE_NEW_FREEHOLD = "newFreehold";
