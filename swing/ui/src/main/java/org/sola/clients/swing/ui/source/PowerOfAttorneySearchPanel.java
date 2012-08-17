@@ -22,7 +22,7 @@ import org.sola.common.messaging.MessageUtility;
  */
 public class PowerOfAttorneySearchPanel extends javax.swing.JPanel {
 
-    public static final String SELECTED_POWER_OF_ATTORNEY = "selectedPowerOfAttorney";
+    public static final String SELECT_POWER_OF_ATTORNEY = "selectedPowerOfAttorney";
     public static final String SELECTED_POWER_OF_ATTORNEY_SEARCH_RESULT = "selectedPowerOfAttorneySearchResult";
     /**
      * Default form constructor.
@@ -113,7 +113,7 @@ public class PowerOfAttorneySearchPanel extends javax.swing.JPanel {
     
     private void fireSelect() {
         if (powerOfAttorneySearchResults.getSelectedPowerOfAttorney() != null) {
-            firePropertyChange(SELECTED_POWER_OF_ATTORNEY, null, PowerOfAttorneyBean.getPowerOfAttorney(
+            firePropertyChange(SELECT_POWER_OF_ATTORNEY, null, PowerOfAttorneyBean.getPowerOfAttorney(
                     powerOfAttorneySearchResults.getSelectedPowerOfAttorney().getId()));
         }
     }

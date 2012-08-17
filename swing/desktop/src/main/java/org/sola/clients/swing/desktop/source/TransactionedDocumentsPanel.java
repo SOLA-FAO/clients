@@ -149,6 +149,7 @@ public class TransactionedDocumentsPanel extends ContentPanel {
             ((CardLayout) pnlCards.getLayout()).show(pnlCards, CARD_POWER_OF_ATTORNEY);
             tabsDocumentSelection.removeTabAt(tabsDocumentSelection.indexOfComponent(tabApplicationDocuments));
             tabsDocumentSelection.removeTabAt(tabsDocumentSelection.indexOfComponent(tabDocumentSearch));
+            powerOfAttorneyList.loadPowerOfAttorneyByService(appService.getId());
         } else {
             // Other documents
             selectedDocumentsPanel.getSourceListBean().loadSourceByService(appService.getId());
