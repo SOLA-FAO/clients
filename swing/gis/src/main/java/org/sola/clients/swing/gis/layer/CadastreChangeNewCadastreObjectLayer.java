@@ -44,6 +44,8 @@ import org.sola.clients.swing.gis.beans.CadastreObjectBean;
 import org.sola.clients.swing.gis.beans.CadastreObjectListBean;
 import org.sola.clients.swing.gis.beans.SpatialBean;
 import org.sola.clients.swing.gis.ui.control.CadastreObjectListPanel;
+import org.sola.common.messaging.GisMessage;
+import org.sola.common.messaging.MessageUtility;
 
 /**
  * Layer that has the features of the new cadastre objects during the cadastre change
@@ -85,7 +87,10 @@ public class CadastreChangeNewCadastreObjectLayer
         initializeListBeanEvents();
         this.spatialObjectDisplayPanel =
                 new CadastreObjectListPanel((CadastreObjectListBean) this.listBean);
-        initializeFormHosting(this.spatialObjectDisplayPanel);
+        initializeFormHosting(
+                MessageUtility.getLocalizedMessageText(
+                GisMessage.CADASTRE_CHANGE_FORM_NEW_OBJECTS_TITLE), 
+                this.spatialObjectDisplayPanel);
     }
 
     /**

@@ -48,6 +48,7 @@ import org.geotools.feature.CollectionListener;
 import org.geotools.geometry.jts.Geometries;
 import org.geotools.map.extended.layer.ExtendedLayerEditor;
 import org.geotools.swing.extended.exception.InitializeLayerException;
+import org.geotools.swing.tool.extended.ui.UiUtil;
 import org.jdesktop.observablecollections.ObservableList;
 import org.jdesktop.observablecollections.ObservableListListener;
 import org.opengis.feature.simple.SimpleFeature;
@@ -257,15 +258,8 @@ public abstract class AbstractSpatialObjectLayer extends ExtendedLayerEditor {
      * It initializes event handlers and form hosting. This is also called from the constructor of
      * the subclass. It is optional.
      */
-    protected void initializeFormHosting(JPanel hostPanel) {
-        JDialog host = new JDialog();
-        host.setAlwaysOnTop(true);
-        host.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
-        host.setPreferredSize(hostPanel.getPreferredSize());
-        host.getContentPane().add(hostPanel);
-        host.pack();
-
-        this.setHostForm(host);
+    protected void initializeFormHosting(String title, JPanel hostPanel) {
+        this.setHostForm(UiUtil.getInstance().getDialog(title, hostPanel));
     }
 
     /**
