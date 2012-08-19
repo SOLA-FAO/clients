@@ -876,4 +876,11 @@ public class ApplicationBean extends ApplicationSummaryBean {
         ApplicationTO app = WSManager.getInstance().getCaseManagementService().getApplication(this.getId());
         TypeConverters.TransferObjectToBean(app, ApplicationBean.class, this);
     }
+    
+    /** Returns {@link ApplicationBean} by the given transaction ID. */
+    public static ApplicationBean getApplicationByTransactionId(String transactionId){
+        return TypeConverters.TransferObjectToBean(
+                WSManager.getInstance().getCaseManagementService().getApplicationByTransactionId(transactionId),
+                ApplicationBean.class, null);
+    }
 }

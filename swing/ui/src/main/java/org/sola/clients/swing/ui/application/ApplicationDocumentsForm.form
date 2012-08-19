@@ -29,7 +29,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="tabs" pref="672" max="32767" attributes="0"/>
+              <Component id="tabs" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -38,7 +38,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="tabs" pref="414" max="32767" attributes="0"/>
+              <Component id="tabs" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -215,7 +215,9 @@
                 </Property>
                 <Property name="showAttachButton" type="boolean" value="false"/>
                 <Property name="showEditButton" type="boolean" value="false"/>
+                <Property name="showOpenApplicationButton" type="boolean" value="false"/>
                 <Property name="showPrintButton" type="boolean" value="false"/>
+                <Property name="showViewButton" type="boolean" value="false"/>
               </Properties>
             </Component>
           </SubComponents>
@@ -262,6 +264,8 @@
                 <Property name="name" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                   <ResourceString bundle="org/sola/clients/swing/ui/application/Bundle.properties" key="ApplicationDocumentsForm.powerOfAttorneySearchPanel.name" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                 </Property>
+                <Property name="showOpenApplicationButton" type="boolean" value="false"/>
+                <Property name="showViewButton" type="boolean" value="false"/>
               </Properties>
             </Component>
           </SubComponents>

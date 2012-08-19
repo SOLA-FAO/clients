@@ -3,6 +3,7 @@ package org.sola.clients.swing.ui.source;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.JFormattedTextField;
+import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.digitalarchive.DocumentBean;
 import org.sola.clients.beans.source.PowerOfAttorneyBean;
 import org.sola.clients.beans.source.PowerOfAttorneySearchResultBean;
@@ -24,6 +25,9 @@ public class PowerOfAttorneySearchPanel extends javax.swing.JPanel {
 
     public static final String SELECT_POWER_OF_ATTORNEY = "selectedPowerOfAttorney";
     public static final String SELECTED_POWER_OF_ATTORNEY_SEARCH_RESULT = "selectedPowerOfAttorneySearchResult";
+    public static final String OPEN_APPLICATION = "openApplication";
+    public static final String VIEW_POWER_OF_ATTORNEY = "viewPowerOfAttorney";
+    
     /**
      * Default form constructor.
      */
@@ -50,6 +54,24 @@ public class PowerOfAttorneySearchPanel extends javax.swing.JPanel {
     public void setShowSelectButton(boolean showSelectButton) {
         btnSelect.setVisible(showSelectButton);
         menuSelect.setVisible(showSelectButton);
+    }
+    
+    public boolean isShowOpenApplicationButton() {
+        return btnSelect.isVisible();
+    }
+
+    public void setShowOpenApplicationButton(boolean show) {
+        btnOpenApplication.setVisible(show);
+        menuOpenApplication.setVisible(show);
+    }
+    
+    public boolean isShowViewButton() {
+        return btnView.isVisible();
+    }
+
+    public void setShowViewButton(boolean show) {
+        btnView.setVisible(show);
+        menuView.setVisible(show);
     }
     
     private void showCalendar(JFormattedTextField dateField) {
@@ -81,10 +103,18 @@ public class PowerOfAttorneySearchPanel extends javax.swing.JPanel {
                 && !powerOfAttorneySearchResults.getSelectedPowerOfAttorney().getArchiveDocumentId().isEmpty()) {
             enabled = true;
         }
-        btnOpen.setEnabled(enabled);
-        menuOpen.setEnabled(enabled);
+        btnOpenAttachment.setEnabled(enabled);
+        menuOpenAttachment.setEnabled(enabled);
         btnSelect.setEnabled(selected);
         menuSelect.setEnabled(selected);
+        btnView.setEnabled(selected);
+        menuView.setEnabled(selected);
+        if(selected && powerOfAttorneySearchResults.getSelectedPowerOfAttorney().getTransactionId()!=null){
+            btnOpenApplication.setEnabled(true);
+        } else {
+            btnOpenApplication.setEnabled(false);
+        }
+        menuOpenApplication.setEnabled(btnOpenApplication.isEnabled());
     }
     
     private void openDocument() {
@@ -111,10 +141,67 @@ public class PowerOfAttorneySearchPanel extends javax.swing.JPanel {
         TaskManager.getInstance().runTask(t);
     }
     
+    private void firePowerOfAttorneyEvent(final String evtName){
+        if (powerOfAttorneySearchResults.getSelectedPowerOfAttorney() == null) {
+            return;
+        }
+        
+        SolaTask t = new SolaTask<Void, Void>() {
+
+            PowerOfAttorneyBean powerOfAttorney;
+
+            @Override
+            public Void doTask() {
+                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_DOCUMENT_GETTING));
+                powerOfAttorney = PowerOfAttorneyBean.getPowerOfAttorney(
+                    powerOfAttorneySearchResults.getSelectedPowerOfAttorney().getId());
+                return null;
+            }
+
+            @Override
+            protected void taskDone() {
+                if (powerOfAttorney == null) {
+                    MessageUtility.displayMessage(ClientMessage.SOURCE_NOT_FOUND);
+                } else {
+                    firePropertyChange(evtName, null, powerOfAttorney);
+                }
+            }
+        };
+        TaskManager.getInstance().runTask(t);
+    }
+    
+    private void fireViewPowerOfAttorney() {
+        firePowerOfAttorneyEvent(VIEW_POWER_OF_ATTORNEY);
+    }
+    
     private void fireSelect() {
+        firePowerOfAttorneyEvent(SELECT_POWER_OF_ATTORNEY);
+    }
+    
+    private void fireOpenApplication() {
         if (powerOfAttorneySearchResults.getSelectedPowerOfAttorney() != null) {
-            firePropertyChange(SELECT_POWER_OF_ATTORNEY, null, PowerOfAttorneyBean.getPowerOfAttorney(
-                    powerOfAttorneySearchResults.getSelectedPowerOfAttorney().getId()));
+            SolaTask t = new SolaTask<Void, Void>() {
+
+                ApplicationBean app;
+
+                @Override
+                public Void doTask() {
+                    setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_APP_GETTING));
+                    app = ApplicationBean.getApplicationByTransactionId(
+                            powerOfAttorneySearchResults.getSelectedPowerOfAttorney().getTransactionId());
+                    return null;
+                }
+
+                @Override
+                protected void taskDone() {
+                    if (app == null) {
+                        MessageUtility.displayMessage(ClientMessage.APPLICATION_NOT_FOUND);
+                    } else {
+                        firePropertyChange(OPEN_APPLICATION, null, app);
+                    }
+                }
+            };
+            TaskManager.getInstance().runTask(t);
         }
     }
     
@@ -141,7 +228,7 @@ public class PowerOfAttorneySearchPanel extends javax.swing.JPanel {
         };
         TaskManager.getInstance().runTask(t);
     }
-    
+        
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -149,7 +236,9 @@ public class PowerOfAttorneySearchPanel extends javax.swing.JPanel {
 
         powerOfAttorneySearchResults = new org.sola.clients.beans.source.PowerOfAttorneySearchResultListBean();
         popUpPowerOfAttorneySearchResults = new javax.swing.JPopupMenu();
-        menuOpen = new javax.swing.JMenuItem();
+        menuView = new javax.swing.JMenuItem();
+        menuOpenAttachment = new javax.swing.JMenuItem();
+        menuOpenApplication = new javax.swing.JMenuItem();
         menuSelect = new javax.swing.JMenuItem();
         searchParams = new org.sola.clients.beans.source.PowerOfAttorneySearchParamsBean();
         jPanel1 = new javax.swing.JPanel();
@@ -174,32 +263,56 @@ public class PowerOfAttorneySearchPanel extends javax.swing.JPanel {
         btnSubmissionDateTo = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
-        btnOpen = new javax.swing.JButton();
+        btnView = new javax.swing.JButton();
+        btnOpenAttachment = new javax.swing.JButton();
+        btnOpenApplication = new javax.swing.JButton();
         btnSelect = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JToolBar.Separator();
         jLabel6 = new javax.swing.JLabel();
         lblSearchResultCount = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableSearchResults = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
-        jPanel14 = new javax.swing.JPanel();
-        jLabel12 = new javax.swing.JLabel();
-        btnSearch = new javax.swing.JButton();
         jPanel13 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         btnClear = new javax.swing.JButton();
+        jPanel14 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        btnSearch = new javax.swing.JButton();
 
-        menuOpen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/folder-open-document.png"))); // NOI18N
+        menuView.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/view.png"))); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/source/Bundle"); // NOI18N
-        menuOpen.setText(bundle.getString("PowerOfAttorneySearchPanel.menuOpen.text")); // NOI18N
-        menuOpen.addActionListener(new java.awt.event.ActionListener() {
+        menuView.setText(bundle.getString("PowerOfAttorneySearchPanel.menuView.text")); // NOI18N
+        menuView.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuOpenActionPerformed(evt);
+                menuViewActionPerformed(evt);
             }
         });
-        popUpPowerOfAttorneySearchResults.add(menuOpen);
+        popUpPowerOfAttorneySearchResults.add(menuView);
+
+        menuOpenAttachment.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/folder-open-document.png"))); // NOI18N
+        menuOpenAttachment.setText(bundle.getString("PowerOfAttorneySearchPanel.menuOpenAttachment.text")); // NOI18N
+        menuOpenAttachment.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuOpenAttachmentActionPerformed(evt);
+            }
+        });
+        popUpPowerOfAttorneySearchResults.add(menuOpenAttachment);
+
+        menuOpenApplication.setText(bundle.getString("PowerOfAttorneySearchPanel.menuOpenApplication.text")); // NOI18N
+        menuOpenApplication.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuOpenApplicationActionPerformed(evt);
+            }
+        });
+        popUpPowerOfAttorneySearchResults.add(menuOpenApplication);
 
         menuSelect.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/select.png"))); // NOI18N
         menuSelect.setText(bundle.getString("PowerOfAttorneySearchPanel.menuSelect.text")); // NOI18N
+        menuSelect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuSelectActionPerformed(evt);
+            }
+        });
         popUpPowerOfAttorneySearchResults.add(menuSelect);
 
         jLabel1.setText(bundle.getString("PowerOfAttorneySearchPanel.jLabel1.text")); // NOI18N
@@ -373,16 +486,37 @@ public class PowerOfAttorneySearchPanel extends javax.swing.JPanel {
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
-        btnOpen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/folder-open-document.png"))); // NOI18N
-        btnOpen.setText(bundle.getString("PowerOfAttorneySearchPanel.btnOpen.text")); // NOI18N
-        btnOpen.setFocusable(false);
-        btnOpen.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnOpen.addActionListener(new java.awt.event.ActionListener() {
+        btnView.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/view.png"))); // NOI18N
+        btnView.setText(bundle.getString("PowerOfAttorneySearchPanel.btnView.text")); // NOI18N
+        btnView.setFocusable(false);
+        btnView.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOpenActionPerformed(evt);
+                btnViewActionPerformed(evt);
             }
         });
-        jToolBar1.add(btnOpen);
+        jToolBar1.add(btnView);
+
+        btnOpenAttachment.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/folder-open-document.png"))); // NOI18N
+        btnOpenAttachment.setText(bundle.getString("PowerOfAttorneySearchPanel.btnOpenAttachment.text")); // NOI18N
+        btnOpenAttachment.setFocusable(false);
+        btnOpenAttachment.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnOpenAttachment.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOpenAttachmentActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnOpenAttachment);
+
+        btnOpenApplication.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/folder-open-document-text.png"))); // NOI18N
+        btnOpenApplication.setText(bundle.getString("PowerOfAttorneySearchPanel.btnOpenApplication.text")); // NOI18N
+        btnOpenApplication.setFocusable(false);
+        btnOpenApplication.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnOpenApplication.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOpenApplicationActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnOpenApplication);
 
         btnSelect.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/select.png"))); // NOI18N
         btnSelect.setText(bundle.getString("PowerOfAttorneySearchPanel.btnSelect.text")); // NOI18N
@@ -455,33 +589,6 @@ public class PowerOfAttorneySearchPanel extends javax.swing.JPanel {
         tableSearchResults.getColumnModel().getColumn(7).setHeaderValue(bundle.getString("PowerOfAttorneySearchPanel.tableSearchResults.columnModel.title5")); // NOI18N
         tableSearchResults.getColumnModel().getColumn(7).setCellRenderer(new AttachedDocumentCellRenderer());
 
-        jLabel12.setText(bundle.getString("PowerOfAttorneySearchPanel.jLabel12.text")); // NOI18N
-
-        btnSearch.setText(bundle.getString("PowerOfAttorneySearchPanel.btnSearch.text")); // NOI18N
-        btnSearch.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSearchActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
-        jPanel14.setLayout(jPanel14Layout);
-        jPanel14Layout.setHorizontalGroup(
-            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btnSearch, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
-            .addGroup(jPanel14Layout.createSequentialGroup()
-                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        jPanel14Layout.setVerticalGroup(
-            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel14Layout.createSequentialGroup()
-                .addComponent(jLabel12)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnSearch)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
         jLabel11.setText(bundle.getString("PowerOfAttorneySearchPanel.jLabel11.text")); // NOI18N
 
         btnClear.setText(bundle.getString("PowerOfAttorneySearchPanell.btnClear.text")); // NOI18N
@@ -508,6 +615,33 @@ public class PowerOfAttorneySearchPanel extends javax.swing.JPanel {
                 .addComponent(btnClear))
         );
 
+        jLabel7.setText(bundle.getString("PowerOfAttorneySearchPanel.jLabel7.text")); // NOI18N
+
+        btnSearch.setText(bundle.getString("PowerOfAttorneySearchPanel.btnSearch.text")); // NOI18N
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
+        jPanel14.setLayout(jPanel14Layout);
+        jPanel14Layout.setHorizontalGroup(
+            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(btnSearch, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+            .addGroup(jPanel14Layout.createSequentialGroup()
+                .addComponent(jLabel7)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        jPanel14Layout.setVerticalGroup(
+            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel14Layout.createSequentialGroup()
+                .addComponent(jLabel7)
+                .addGap(6, 6, 6)
+                .addComponent(btnSearch)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -526,39 +660,36 @@ public class PowerOfAttorneySearchPanel extends javax.swing.JPanel {
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel14, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 540, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 483, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(jPanel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(jPanel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE))
         );
 
         bindingGroup.bind();
@@ -580,33 +711,55 @@ public class PowerOfAttorneySearchPanel extends javax.swing.JPanel {
         searchDocuments();
     }//GEN-LAST:event_btnSearchActionPerformed
 
-    private void btnOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
+    private void btnOpenAttachmentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenAttachmentActionPerformed
         openDocument();
-    }//GEN-LAST:event_btnOpenActionPerformed
+    }//GEN-LAST:event_btnOpenAttachmentActionPerformed
 
-    private void menuOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpenActionPerformed
+    private void menuOpenAttachmentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpenAttachmentActionPerformed
         openDocument();
-    }//GEN-LAST:event_menuOpenActionPerformed
+    }//GEN-LAST:event_menuOpenAttachmentActionPerformed
 
     private void btnSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectActionPerformed
         fireSelect();
     }//GEN-LAST:event_btnSelectActionPerformed
 
+    private void btnOpenApplicationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenApplicationActionPerformed
+        fireOpenApplication();
+    }//GEN-LAST:event_btnOpenApplicationActionPerformed
+
+    private void menuOpenApplicationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpenApplicationActionPerformed
+        fireOpenApplication();
+    }//GEN-LAST:event_menuOpenApplicationActionPerformed
+
+    private void btnViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewActionPerformed
+        fireViewPowerOfAttorney();
+    }//GEN-LAST:event_btnViewActionPerformed
+
+    private void menuViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuViewActionPerformed
+        fireViewPowerOfAttorney();
+    }//GEN-LAST:event_menuViewActionPerformed
+
+    private void menuSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSelectActionPerformed
+        fireSelect();
+    }//GEN-LAST:event_menuSelectActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClear;
-    private javax.swing.JButton btnOpen;
+    private javax.swing.JButton btnOpenApplication;
+    private javax.swing.JButton btnOpenAttachment;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnSelect;
     private javax.swing.JButton btnSubmissionDateFrom;
     private javax.swing.JButton btnSubmissionDateTo;
+    private javax.swing.JButton btnView;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel13;
@@ -621,8 +774,10 @@ public class PowerOfAttorneySearchPanel extends javax.swing.JPanel {
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel lblSearchResultCount;
-    private javax.swing.JMenuItem menuOpen;
+    private javax.swing.JMenuItem menuOpenApplication;
+    private javax.swing.JMenuItem menuOpenAttachment;
     private javax.swing.JMenuItem menuSelect;
+    private javax.swing.JMenuItem menuView;
     private javax.swing.JPopupMenu popUpPowerOfAttorneySearchResults;
     private org.sola.clients.beans.source.PowerOfAttorneySearchResultListBean powerOfAttorneySearchResults;
     private org.sola.clients.beans.source.PowerOfAttorneySearchParamsBean searchParams;

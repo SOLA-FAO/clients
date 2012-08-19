@@ -44,7 +44,6 @@ import org.sola.common.logging.LogUtility;
  * The main class of the application.
  */
 public class DesktopApplication {
-
     /**
      * Main method to run the application.
      *
@@ -89,8 +88,7 @@ public class DesktopApplication {
                         if (evt.getPropertyName().equals(LoginPanel.LOGIN_RESULT)) {
                             if (((Boolean) evt.getNewValue())) {
                                 loginForm.dispose();
-                                MainForm mainForm = new MainForm();
-                                mainForm.setVisible(true);
+                                MainForm.getInstance().setVisible(true);
                             }
                         }
                     }

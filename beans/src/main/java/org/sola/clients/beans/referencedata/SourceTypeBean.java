@@ -38,8 +38,21 @@ import org.sola.webservices.transferobjects.referencedata.SourceTypeTO;
  * <br />This bean is used as a part of {@link SourceBean}.
  */
 public class SourceTypeBean extends AbstractCodeBean {
-
+    
+    public static final String FOR_REGISTRATION = "forRegistration";
+    private boolean  forRegistration;
+    
     public SourceTypeBean() {
         super();
+    }
+
+    public boolean isForRegistration() {
+        return forRegistration;
+    }
+
+    public void setForRegistration(boolean forRegistration) {
+        boolean oldValue = this.forRegistration;
+        this.forRegistration = forRegistration;
+        propertySupport.firePropertyChange(FOR_REGISTRATION, oldValue, this.forRegistration);
     }
 }

@@ -216,7 +216,9 @@ public class ApplicationDocumentsForm extends javax.swing.JDialog {
         documentSearchPanel.setName(bundle.getString("ApplicationDocumentsForm.documentSearchPanel.name")); // NOI18N
         documentSearchPanel.setShowAttachButton(false);
         documentSearchPanel.setShowEditButton(false);
+        documentSearchPanel.setShowOpenApplicationButton(false);
         documentSearchPanel.setShowPrintButton(false);
+        documentSearchPanel.setShowViewButton(false);
 
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -240,6 +242,8 @@ public class ApplicationDocumentsForm extends javax.swing.JDialog {
         jPanel3.setName(bundle.getString("ApplicationDocumentsForm.jPanel3.name")); // NOI18N
 
         powerOfAttorneySearchPanel.setName(bundle.getString("ApplicationDocumentsForm.powerOfAttorneySearchPanel.name")); // NOI18N
+        powerOfAttorneySearchPanel.setShowOpenApplicationButton(false);
+        powerOfAttorneySearchPanel.setShowViewButton(false);
 
         org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -266,14 +270,14 @@ public class ApplicationDocumentsForm extends javax.swing.JDialog {
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(tabs, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 672, Short.MAX_VALUE)
+                .add(tabs)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(tabs, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 414, Short.MAX_VALUE)
+                .add(tabs)
                 .addContainerGap())
         );
 
