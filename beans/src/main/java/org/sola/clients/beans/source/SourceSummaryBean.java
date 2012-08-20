@@ -54,6 +54,11 @@ public class SourceSummaryBean extends AbstractTransactionedBean {
     public static final String SUBMISSION_PROPERTY = "submission";
     public static final String SOURCE_TYPE_CODE_PROPERTY = "typeCode";
     public static final String SOURCE_TYPE_PROPERTY = "sourceType";
+    public static final String OWNER_NAME_PROPERTY = "ownerName";
+    public static final String VERSION_PROPERTY = "version";
+    public static final String DESCRIPTION_PROPERTY = "description";
+    public static final String TRANSACTION_ID_PROPERTY = "transactionId";
+    
     private Date acceptance;
     private String archiveId;
     private String archiveDocumentId;
@@ -65,7 +70,11 @@ public class SourceSummaryBean extends AbstractTransactionedBean {
     private Date submission;
     @NotNull(message = ClientMessage.CHECK_NOTNULL_SOURCETYPE, payload=Localized.class)
     private SourceTypeBean sourceType;
-
+    private String ownerName;
+    private String version;
+    private String description;
+    private String transactionId;
+    
     public SourceSummaryBean() {
         super();
         sourceType = new SourceTypeBean();
@@ -82,6 +91,10 @@ public class SourceSummaryBean extends AbstractTransactionedBean {
         this.setRowId(null);
         this.setRowVersion(0);
         this.setSubmission(null);
+        this.setDescription(null);
+        this.setVersion(null);
+        this.setOwnerName(null);
+        this.setTransactionId(null);
     }
 
     public String getTypeCode() {
@@ -179,5 +192,45 @@ public class SourceSummaryBean extends AbstractTransactionedBean {
         Date old = submission;
         submission = value;
         propertySupport.firePropertyChange(SUBMISSION_PROPERTY, old, value);
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        String oldValue = this.description;
+        this.description = description;
+        propertySupport.firePropertyChange(DESCRIPTION_PROPERTY, oldValue, this.description);
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        String oldValue = this.ownerName;
+        this.ownerName = ownerName;
+        propertySupport.firePropertyChange(OWNER_NAME_PROPERTY, oldValue, this.ownerName);
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        String oldValue = this.version;
+        this.version = version;
+        propertySupport.firePropertyChange(VERSION_PROPERTY, oldValue, this.version);
+    }
+
+    public String getTransactionId() {
+        return transactionId;
+    }
+
+    public void setTransactionId(String transactionId) {
+        String oldValue = this.transactionId;
+        this.transactionId = transactionId;
+        propertySupport.firePropertyChange(TRANSACTION_ID_PROPERTY, oldValue, this.transactionId);
     }
 }

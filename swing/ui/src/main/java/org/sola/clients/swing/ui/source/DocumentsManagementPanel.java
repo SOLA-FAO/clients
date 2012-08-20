@@ -247,7 +247,7 @@ public class DocumentsManagementPanel extends javax.swing.JPanel {
         });
         jToolBar1.add(btnRemove);
 
-        btnView.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/view.png"))); // NOI18N
+        btnView.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/folder-open-document.png"))); // NOI18N
         btnView.setText(bundle.getString("DocumentsManagementPanel.btnView.text")); // NOI18N
         btnView.setFocusable(false);
         btnView.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);

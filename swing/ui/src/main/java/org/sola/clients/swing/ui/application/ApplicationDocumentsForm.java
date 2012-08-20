@@ -34,6 +34,8 @@ import org.sola.clients.swing.ui.source.DocumentPanel;
 import org.sola.clients.beans.controls.SolaList;
 import org.sola.clients.swing.ui.source.DocumentsPanel;
 import org.sola.clients.beans.source.SourceBean;
+import org.sola.clients.swing.ui.source.DocumentSearchPanel;
+import org.sola.clients.swing.ui.source.PowerOfAttorneySearchPanel;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
@@ -77,6 +79,26 @@ public class ApplicationDocumentsForm extends javax.swing.JDialog {
                 }
             }
         });
+        
+        documentSearchPanel.addPropertyChangeListener(new PropertyChangeListener() {
+
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if(evt.getPropertyName().equals(DocumentSearchPanel.SELECT_SOURCE)){
+                    addDocument(SourceBean.getSource(documentSearchPanel.getSelectedSource().getId()));
+                }
+            }
+        });
+        
+        powerOfAttorneySearchPanel.addPropertyChangeListener(new PropertyChangeListener() {
+
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if(evt.getPropertyName().equals(PowerOfAttorneySearchPanel.SELECT_POWER_OF_ATTORNEY)){
+                    addDocument(SourceBean.getSource(powerOfAttorneySearchPanel.getSelectedPowerOfAttorney().getId()));
+                }
+            }
+        });
     }
 
     private void fireUpdatedSourceEvent(SourceBean source) {
@@ -84,11 +106,11 @@ public class ApplicationDocumentsForm extends javax.swing.JDialog {
         this.dispose();
     }
 
-    public void addDocument() {
-        if (documentsPanel.getSourceListBean().getSelectedSource() == null) {
+    public void addDocument(SourceBean source) {
+        if (source == null) {
             MessageUtility.displayMessage(ClientMessage.GENERAL_SELECT_DOCUMENT);
         } else {
-            fireUpdatedSourceEvent((SourceBean) documentsPanel.getSourceListBean().getSelectedSource().copy());
+            fireUpdatedSourceEvent(source);
         }
     }
     
@@ -108,9 +130,14 @@ public class ApplicationDocumentsForm extends javax.swing.JDialog {
         tabs = new javax.swing.JTabbedPane();
         panelApplicationDocs = new javax.swing.JPanel();
         documentsPanel = createDocumentsPanel();
-        btnAdd = new javax.swing.JButton();
+        jToolBar1 = new javax.swing.JToolBar();
+        btnSelect = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         documentPanel = new org.sola.clients.swing.ui.source.DocumentPanel();
+        jPanel1 = new javax.swing.JPanel();
+        documentSearchPanel = new org.sola.clients.swing.ui.source.DocumentSearchPanel();
+        jPanel3 = new javax.swing.JPanel();
+        powerOfAttorneySearchPanel = new org.sola.clients.swing.ui.source.PowerOfAttorneySearchPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/application/Bundle"); // NOI18N
@@ -124,13 +151,19 @@ public class ApplicationDocumentsForm extends javax.swing.JDialog {
 
         documentsPanel.setName("documentsPanel"); // NOI18N
 
-        btnAdd.setText(bundle.getString("ApplicationDocumentsForm.btnAdd.text")); // NOI18N
-        btnAdd.setName("btnAdd"); // NOI18N
-        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+        jToolBar1.setFloatable(false);
+        jToolBar1.setRollover(true);
+        jToolBar1.setName(bundle.getString("ApplicationDocumentsForm.jToolBar1.name")); // NOI18N
+
+        btnSelect.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/select.png"))); // NOI18N
+        btnSelect.setText(bundle.getString("ApplicationDocumentsForm.btnSelect.text")); // NOI18N
+        btnSelect.setName("btnSelect"); // NOI18N
+        btnSelect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddActionPerformed(evt);
+                btnSelectActionPerformed(evt);
             }
         });
+        jToolBar1.add(btnSelect);
 
         org.jdesktop.layout.GroupLayout panelApplicationDocsLayout = new org.jdesktop.layout.GroupLayout(panelApplicationDocs);
         panelApplicationDocs.setLayout(panelApplicationDocsLayout);
@@ -138,18 +171,18 @@ public class ApplicationDocumentsForm extends javax.swing.JDialog {
             panelApplicationDocsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(panelApplicationDocsLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(panelApplicationDocsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(btnAdd, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 72, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(documentsPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 529, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(13, Short.MAX_VALUE))
+                .add(panelApplicationDocsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, documentsPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 647, Short.MAX_VALUE)
+                    .add(jToolBar1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         panelApplicationDocsLayout.setVerticalGroup(
             panelApplicationDocsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(panelApplicationDocsLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(documentsPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 178, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(jToolBar1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(btnAdd, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
+                .add(documentsPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 333, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -165,7 +198,7 @@ public class ApplicationDocumentsForm extends javax.swing.JDialog {
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(documentPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 532, Short.MAX_VALUE)
+                .add(documentPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 647, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -173,10 +206,63 @@ public class ApplicationDocumentsForm extends javax.swing.JDialog {
             .add(jPanel2Layout.createSequentialGroup()
                 .add(23, 23, 23)
                 .add(documentPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 142, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(64, Short.MAX_VALUE))
+                .addContainerGap(221, Short.MAX_VALUE))
         );
 
         tabs.addTab(bundle.getString("ApplicationDocumentsForm.jPanel2.TabConstraints.tabTitle"), jPanel2); // NOI18N
+
+        jPanel1.setName(bundle.getString("ApplicationDocumentsForm.jPanel1.name")); // NOI18N
+
+        documentSearchPanel.setName(bundle.getString("ApplicationDocumentsForm.documentSearchPanel.name")); // NOI18N
+        documentSearchPanel.setShowAttachButton(false);
+        documentSearchPanel.setShowEditButton(false);
+        documentSearchPanel.setShowOpenApplicationButton(false);
+        documentSearchPanel.setShowPrintButton(false);
+        documentSearchPanel.setShowViewButton(false);
+
+        org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(documentSearchPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 647, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(documentSearchPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        tabs.addTab(bundle.getString("ApplicationDocumentsForm.jPanel1.TabConstraints.tabTitle"), jPanel1); // NOI18N
+
+        jPanel3.setName(bundle.getString("ApplicationDocumentsForm.jPanel3.name")); // NOI18N
+
+        powerOfAttorneySearchPanel.setName(bundle.getString("ApplicationDocumentsForm.powerOfAttorneySearchPanel.name")); // NOI18N
+        powerOfAttorneySearchPanel.setShowOpenApplicationButton(false);
+        powerOfAttorneySearchPanel.setShowViewButton(false);
+
+        org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(powerOfAttorneySearchPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 647, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(powerOfAttorneySearchPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        tabs.addTab(bundle.getString("ApplicationDocumentsForm.jPanel3.TabConstraints.tabTitle"), jPanel3); // NOI18N
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -184,29 +270,38 @@ public class ApplicationDocumentsForm extends javax.swing.JDialog {
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(tabs, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 557, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(tabs)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(tabs, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(tabs)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        addDocument();
-    }//GEN-LAST:event_btnAddActionPerformed
+    private void btnSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectActionPerformed
+        if(documentsPanel.getSourceListBean().getSelectedSource()==null){
+            MessageUtility.displayMessage(ClientMessage.GENERAL_SELECT_DOCUMENT);
+        } else{
+            addDocument((SourceBean)documentsPanel.getSourceListBean().getSelectedSource().copy());
+        }
+    }//GEN-LAST:event_btnSelectActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnSelect;
     private org.sola.clients.swing.ui.source.DocumentPanel documentPanel;
+    private org.sola.clients.swing.ui.source.DocumentSearchPanel documentSearchPanel;
     private org.sola.clients.swing.ui.source.DocumentsPanel documentsPanel;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JPanel panelApplicationDocs;
+    private org.sola.clients.swing.ui.source.PowerOfAttorneySearchPanel powerOfAttorneySearchPanel;
     private javax.swing.JTabbedPane tabs;
     // End of variables declaration//GEN-END:variables
 }

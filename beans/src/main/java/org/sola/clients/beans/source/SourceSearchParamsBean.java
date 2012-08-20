@@ -46,6 +46,9 @@ public class SourceSearchParamsBean extends AbstractBindingBean {
     public static final String TO_RECORDATION_DATE_PROPERTY = "toRecordationDate";
     public static final String FROM_SUBMISSION_DATE_PROPERTY = "fromSubmissionDate";
     public static final String TO_SUBMISSION_DATE_PROPERTY = "toSubmissionDate";
+    public static final String OWNER_NAME_PROPERTY = "ownerName";
+    public static final String VERSION_PROPERTY = "version";
+    public static final String DESCRIPTION_PROPERTY = "description";
     
     private String laNumber;
     private String refNumber;
@@ -54,6 +57,9 @@ public class SourceSearchParamsBean extends AbstractBindingBean {
     private Date fromSubmissionDate;
     private Date toSubmissionDate;
     private SourceTypeBean sourceType;
+    private String ownerName;
+    private String version;
+    private String description;
     
     public SourceSearchParamsBean(){
         super();
@@ -140,5 +146,35 @@ public class SourceSearchParamsBean extends AbstractBindingBean {
             this.sourceType = new SourceTypeBean();
         }
         this.setJointRefDataBean(this.sourceType, sourceType, SOURCE_TYPE_PROPERTY);
+    }
+    
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        String oldValue = this.description;
+        this.description = description;
+        propertySupport.firePropertyChange(DESCRIPTION_PROPERTY, oldValue, this.description);
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        String oldValue = this.ownerName;
+        this.ownerName = ownerName;
+        propertySupport.firePropertyChange(OWNER_NAME_PROPERTY, oldValue, this.ownerName);
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        String oldValue = this.version;
+        this.version = version;
+        propertySupport.firePropertyChange(VERSION_PROPERTY, oldValue, this.version);
     }
 }

@@ -39,7 +39,7 @@
           <Group type="102" alignment="0" attributes="0">
               <Component id="headerPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jScrollPane1" pref="498" max="32767" attributes="0"/>
+              <Component id="jScrollPane1" pref="505" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -83,7 +83,7 @@
                           <Component id="groupSelectedDocuments" max="32767" attributes="0"/>
                           <Component id="pnlCards" max="32767" attributes="0"/>
                           <Component id="groupPanel1" max="32767" attributes="1"/>
-                          <Component id="tabsDocumentSelection" alignment="0" max="32767" attributes="1"/>
+                          <Component id="tabsDocumentSelection" alignment="0" pref="0" max="32767" attributes="1"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -146,7 +146,7 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jToolBar2" min="-2" pref="25" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="applicationDocumentsPanel" pref="214" max="32767" attributes="0"/>
+                              <Component id="applicationDocumentsPanel" pref="221" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -202,11 +202,11 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="1" attributes="0">
+                          <Group type="102" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="documentSeachPanel" alignment="0" pref="631" max="32767" attributes="0"/>
-                                  <Component id="jToolBar3" alignment="0" pref="631" max="32767" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jToolBar3" pref="631" max="32767" attributes="0"/>
+                                  <Component id="documentSearchPanel" pref="0" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
@@ -218,22 +218,13 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jToolBar3" min="-2" pref="25" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="documentSeachPanel" pref="214" max="32767" attributes="0"/>
+                              <Component id="documentSearchPanel" pref="221" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
                   </Layout>
                   <SubComponents>
-                    <Component class="org.sola.clients.swing.ui.source.DocumentSearchPanel" name="documentSeachPanel">
-                      <Properties>
-                        <Property name="name" type="java.lang.String" value="documentSeachPanel" noResource="true"/>
-                        <Property name="showAttachButton" type="boolean" value="false"/>
-                        <Property name="showEditButton" type="boolean" value="false"/>
-                        <Property name="showPrintButton" type="boolean" value="false"/>
-                        <Property name="showSelectButton" type="boolean" value="false"/>
-                      </Properties>
-                    </Component>
                     <Container class="javax.swing.JToolBar" name="jToolBar3">
                       <Properties>
                         <Property name="floatable" type="boolean" value="false"/>
@@ -259,6 +250,17 @@
                         </Component>
                       </SubComponents>
                     </Container>
+                    <Component class="org.sola.clients.swing.desktop.source.DocumentSearchPanel" name="documentSearchPanel">
+                      <Properties>
+                        <Property name="name" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/sola/clients/swing/desktop/source/Bundle.properties" key="TransactionedDocumentsPanel.documentSearchPanel.name" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
+                        <Property name="showAttachButton" type="boolean" value="false"/>
+                        <Property name="showEditButton" type="boolean" value="false"/>
+                        <Property name="showPrintButton" type="boolean" value="false"/>
+                        <Property name="showSelectButton" type="boolean" value="false"/>
+                      </Properties>
+                    </Component>
                   </SubComponents>
                 </Container>
                 <Container class="javax.swing.JPanel" name="tabPowerOfAttorneySearch">
@@ -283,8 +285,8 @@
                           <Group type="102" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jToolBar5" max="32767" attributes="0"/>
-                                  <Component id="powerOfAttorneySearchPanel" pref="631" max="32767" attributes="0"/>
+                                  <Component id="jToolBar5" pref="631" max="32767" attributes="0"/>
+                                  <Component id="powerOfAttorneySearchPanel" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
@@ -295,8 +297,8 @@
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jToolBar5" min="-2" pref="25" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="powerOfAttorneySearchPanel" pref="214" max="32767" attributes="0"/>
+                              <EmptySpace pref="10" max="32767" attributes="0"/>
+                              <Component id="powerOfAttorneySearchPanel" min="-2" pref="217" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -334,7 +336,7 @@
                         </Component>
                       </SubComponents>
                     </Container>
-                    <Component class="org.sola.clients.swing.ui.source.PowerOfAttorneySearchPanel" name="powerOfAttorneySearchPanel">
+                    <Component class="org.sola.clients.swing.desktop.source.PowerOfAttorneySearchPanel" name="powerOfAttorneySearchPanel">
                       <Properties>
                         <Property name="name" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="org/sola/clients/swing/desktop/source/Bundle.properties" key="TransactionedDocumentsPanel.powerOfAttorneySearchPanel.name" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>

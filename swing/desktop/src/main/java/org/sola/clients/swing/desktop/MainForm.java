@@ -41,7 +41,10 @@ import java.util.logging.Level;
 import javax.swing.ImageIcon;
 import net.sf.jasperreports.engine.JasperPrint;
 import org.sola.clients.beans.AbstractBindingBean;
+import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.security.SecurityBean;
+import org.sola.clients.beans.source.PowerOfAttorneyBean;
+import org.sola.clients.beans.source.SourceBean;
 import org.sola.clients.swing.common.DefaultExceptionHandler;
 import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.common.LocalizationManager;
@@ -53,7 +56,9 @@ import org.sola.clients.swing.desktop.application.ApplicationSearchPanel;
 import org.sola.clients.swing.desktop.cadastre.MapPanelForm;
 import org.sola.clients.swing.desktop.party.PartySearchPanelForm;
 import org.sola.clients.swing.desktop.reports.LodgementReportParamsForm;
-import org.sola.clients.swing.desktop.source.DocumentSearchPanel;
+import org.sola.clients.swing.desktop.source.DocumentSearchForm;
+import org.sola.clients.swing.desktop.source.DocumentViewForm;
+import org.sola.clients.swing.desktop.source.PowerOfAttorneyViewForm;
 import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.common.RolesConstants;
 import org.sola.common.help.HelpUtility;
@@ -67,9 +72,24 @@ import org.sola.common.messaging.MessageUtility;
 public class MainForm extends javax.swing.JFrame {
 
     /**
+     * Private class to hold singleton instance of the MainForm.
+     */
+    private static class MainFormHolder {
+
+        private static final MainForm INSTANCE = new MainForm();
+    }
+
+    /**
+     * Returns a singleton instance of {@link MainForm}.
+     */
+    public static MainForm getInstance() {
+        return MainFormHolder.INSTANCE;
+    }
+
+    /**
      * Default constructor.
      */
-    public MainForm() {
+    private MainForm() {
         URL imgURL = this.getClass().getResource("/images/sola/logo_icon.jpg");
         this.setIconImage(new ImageIcon(imgURL).getImage());
 
@@ -124,20 +144,6 @@ public class MainForm extends javax.swing.JFrame {
 
     private void setOffLogLevel() {
         LogUtility.setLogLevel(Level.OFF);
-    }
-
-    private void openNewApplicationForm() {
-        SolaTask t = new SolaTask<Void, Void>() {
-
-            @Override
-            public Void doTask() {
-                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_APPNEW));
-                ApplicationPanel applicationPanel = new ApplicationPanel();
-                pnlContent.addPanel(applicationPanel, MainContentPanel.CARD_APPLICATION, true);
-                return null;
-            }
-        };
-        TaskManager.getInstance().runTask(t);
     }
 
     private void openMap() {
@@ -198,7 +204,7 @@ public class MainForm extends javax.swing.JFrame {
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_DOCUMENTSEARCH));
                 if (!pnlContent.isPanelOpened(MainContentPanel.CARD_DOCUMENT_SEARCH)) {
-                    DocumentSearchPanel documentSearchPanel = new DocumentSearchPanel();
+                    DocumentSearchForm documentSearchPanel = new DocumentSearchForm();
                     pnlContent.addPanel(documentSearchPanel, MainContentPanel.CARD_DOCUMENT_SEARCH);
                 }
                 pnlContent.showPanel(MainContentPanel.CARD_DOCUMENT_SEARCH);
@@ -232,6 +238,10 @@ public class MainForm extends javax.swing.JFrame {
             pnlContent.addPanel(dashBoard, MainContentPanel.CARD_DASHBOARD);
         }
         pnlContent.showPanel(MainContentPanel.CARD_DASHBOARD);
+    }
+
+    public MainContentPanel getMainContentPanel() {
+        return pnlContent;
     }
 
     private void showAboutBox() {
@@ -295,7 +305,94 @@ public class MainForm extends javax.swing.JFrame {
         }
         return hasChanges;
     }
+    
+    /** 
+     * Opens Application form and shows provided application. 
+     * @param app Application to show on the form.
+     */
+    public void openApplicationForm(final ApplicationBean app) {
+        SolaTask t = new SolaTask<Void, Void>() {
 
+            @Override
+            public Void doTask() {
+                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_APP));
+                ApplicationPanel form = new ApplicationPanel(app);
+                getMainContentPanel().addPanel(form, MainContentPanel.CARD_APPLICATION, true);
+                return null;
+            }
+        };
+        TaskManager.getInstance().runTask(t);
+    }
+    
+    /** 
+     * Opens Application form and shows provided application. 
+     * @param ID Application ID to load application by and show on the form.
+     */
+    public void openApplicationForm(final String id) {
+        SolaTask t = new SolaTask<Void, Void>() {
+
+            @Override
+            public Void doTask() {
+                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_APP));
+                ApplicationPanel form = new ApplicationPanel(id);
+                getMainContentPanel().addPanel(form, MainContentPanel.CARD_APPLICATION, true);
+                return null;
+            }
+        };
+        TaskManager.getInstance().runTask(t);
+    }
+
+    /** Opens Application form to create new application. */
+    public void openApplicationForm() {
+        SolaTask t = new SolaTask<Void, Void>() {
+
+            @Override
+            public Void doTask() {
+                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_APPNEW));
+                ApplicationPanel applicationPanel = new ApplicationPanel();
+                getMainContentPanel().addPanel(applicationPanel, MainContentPanel.CARD_APPLICATION, true);
+                return null;
+            }
+        };
+        TaskManager.getInstance().runTask(t);
+    }
+    
+    /** 
+     * Opens {@link DocumentViewForm} form and shows provided document. 
+     * @param source Source to show on the form.
+     */
+    public void openDocumentViewForm(final SourceBean source) {
+        SolaTask t = new SolaTask<Void, Void>() {
+
+            @Override
+            public Void doTask() {
+                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_DOCUMENT_FORM_OPENING));
+                DocumentViewForm form = new DocumentViewForm(source);
+                getMainContentPanel().addPanel(form, MainContentPanel.CARD_VIEW_SOURCE, true);
+                return null;
+            }
+        };
+        TaskManager.getInstance().runTask(t);
+    }
+    
+    /** 
+     * Opens {@link PowerOfAttorneyViewForm} form and shows provided document. 
+     * @param powerOfAttorney Power of attorney to show on the form.
+     */
+    public void openDocumentViewForm(final PowerOfAttorneyBean powerOfAttorney) {
+        SolaTask t = new SolaTask<Void, Void>() {
+
+            @Override
+            public Void doTask() {
+                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_DOCUMENT_FORM_OPENING));
+                PowerOfAttorneyViewForm form = new PowerOfAttorneyViewForm(powerOfAttorney);
+                getMainContentPanel().addPanel(form, MainContentPanel.CARD_VIEW_POWER_OF_ATTORNEY, true);
+                return null;
+            }
+        };
+        TaskManager.getInstance().runTask(t);
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -680,7 +777,7 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_menuOffLogLevelActionPerformed
 
     private void menuNewApplicationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuNewApplicationActionPerformed
-        openNewApplicationForm();
+        openApplicationForm();
     }//GEN-LAST:event_menuNewApplicationActionPerformed
 
     private void menuSearchApplicationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSearchApplicationActionPerformed
@@ -704,7 +801,7 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnShowDashboardActionPerformed
 
     private void btnNewApplicationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewApplicationActionPerformed
-        openNewApplicationForm();
+        openApplicationForm();
     }//GEN-LAST:event_btnNewApplicationActionPerformed
 
     private void btnSearchApplicationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchApplicationsActionPerformed
@@ -734,13 +831,15 @@ public class MainForm extends javax.swing.JFrame {
     private void btnOpenBaUnitSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenBaUnitSearchActionPerformed
         searchBaUnit();
     }//GEN-LAST:event_btnOpenBaUnitSearchActionPerformed
-    
+
     private void openLodgementReportParamsForm() {
-           LodgementReportParamsForm reportDateChooser = new LodgementReportParamsForm(this, true);
-            reportDateChooser.setVisible(true);
+        LodgementReportParamsForm reportDateChooser = new LodgementReportParamsForm(this, true);
+        reportDateChooser.setVisible(true);
     }
-    
-    /** Opens {@link ReportViewerForm} to display report.*/
+
+    /**
+     * Opens {@link ReportViewerForm} to display report.
+     */
     private void showReport(JasperPrint report) {
         ReportViewerForm form = new ReportViewerForm(report);
         form.setVisible(true);
@@ -754,7 +853,6 @@ public class MainForm extends javax.swing.JFrame {
     private void menuPersonsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuPersonsActionPerformed
         openSearchParties();
     }//GEN-LAST:event_menuPersonsActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToolBar applicationsMain;
     private javax.swing.JButton btnDocumentSearch;

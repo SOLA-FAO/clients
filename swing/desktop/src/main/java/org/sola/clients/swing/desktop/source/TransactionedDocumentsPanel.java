@@ -119,7 +119,7 @@ public class TransactionedDocumentsPanel extends ContentPanel {
             }
         });
 
-        documentSeachPanel.addPropertyChangeListener(new PropertyChangeListener() {
+        documentSearchPanel.addPropertyChangeListener(new PropertyChangeListener() {
 
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
@@ -149,6 +149,7 @@ public class TransactionedDocumentsPanel extends ContentPanel {
             ((CardLayout) pnlCards.getLayout()).show(pnlCards, CARD_POWER_OF_ATTORNEY);
             tabsDocumentSelection.removeTabAt(tabsDocumentSelection.indexOfComponent(tabApplicationDocuments));
             tabsDocumentSelection.removeTabAt(tabsDocumentSelection.indexOfComponent(tabDocumentSearch));
+            powerOfAttorneyList.loadPowerOfAttorneyByService(appService.getId());
         } else {
             // Other documents
             selectedDocumentsPanel.getSourceListBean().loadSourceByService(appService.getId());
@@ -262,13 +263,13 @@ public class TransactionedDocumentsPanel extends ContentPanel {
         jToolBar2 = new javax.swing.JToolBar();
         btnAddDocumentFromApplication = new javax.swing.JButton();
         tabDocumentSearch = new javax.swing.JPanel();
-        documentSeachPanel = new org.sola.clients.swing.ui.source.DocumentSearchPanel();
         jToolBar3 = new javax.swing.JToolBar();
         btnAddDocumentFromSearch = new javax.swing.JButton();
+        documentSearchPanel = new org.sola.clients.swing.desktop.source.DocumentSearchPanel();
         tabPowerOfAttorneySearch = new javax.swing.JPanel();
         jToolBar5 = new javax.swing.JToolBar();
         btnAttachPowerOfAttorneySearch = new javax.swing.JButton();
-        powerOfAttorneySearchPanel = new org.sola.clients.swing.ui.source.PowerOfAttorneySearchPanel();
+        powerOfAttorneySearchPanel = new org.sola.clients.swing.desktop.source.PowerOfAttorneySearchPanel();
         groupPanel1 = new org.sola.clients.swing.ui.GroupPanel();
         groupSelectedDocuments = new org.sola.clients.swing.ui.GroupPanel();
         pnlCards = new javax.swing.JPanel();
@@ -335,19 +336,13 @@ public class TransactionedDocumentsPanel extends ContentPanel {
                 .addContainerGap()
                 .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(applicationDocumentsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
+                .addComponent(applicationDocumentsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         tabsDocumentSelection.addTab(bundle.getString("TransactionedDocumentsPanel.tabApplicationDocuments.TabConstraints.tabTitle"), tabApplicationDocuments); // NOI18N
 
         tabDocumentSearch.setName("tabDocumentSearch"); // NOI18N
-
-        documentSeachPanel.setName("documentSeachPanel"); // NOI18N
-        documentSeachPanel.setShowAttachButton(false);
-        documentSeachPanel.setShowEditButton(false);
-        documentSeachPanel.setShowPrintButton(false);
-        documentSeachPanel.setShowSelectButton(false);
 
         jToolBar3.setFloatable(false);
         jToolBar3.setRollover(true);
@@ -363,15 +358,21 @@ public class TransactionedDocumentsPanel extends ContentPanel {
         });
         jToolBar3.add(btnAddDocumentFromSearch);
 
+        documentSearchPanel.setName(bundle.getString("TransactionedDocumentsPanel.documentSearchPanel.name")); // NOI18N
+        documentSearchPanel.setShowAttachButton(false);
+        documentSearchPanel.setShowEditButton(false);
+        documentSearchPanel.setShowPrintButton(false);
+        documentSearchPanel.setShowSelectButton(false);
+
         javax.swing.GroupLayout tabDocumentSearchLayout = new javax.swing.GroupLayout(tabDocumentSearch);
         tabDocumentSearch.setLayout(tabDocumentSearchLayout);
         tabDocumentSearchLayout.setHorizontalGroup(
             tabDocumentSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabDocumentSearchLayout.createSequentialGroup()
+            .addGroup(tabDocumentSearchLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(tabDocumentSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(documentSeachPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 631, Short.MAX_VALUE)
-                    .addComponent(jToolBar3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 631, Short.MAX_VALUE))
+                .addGroup(tabDocumentSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jToolBar3, javax.swing.GroupLayout.DEFAULT_SIZE, 631, Short.MAX_VALUE)
+                    .addComponent(documentSearchPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
         tabDocumentSearchLayout.setVerticalGroup(
@@ -380,7 +381,7 @@ public class TransactionedDocumentsPanel extends ContentPanel {
                 .addContainerGap()
                 .addComponent(jToolBar3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(documentSeachPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
+                .addComponent(documentSearchPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -414,8 +415,8 @@ public class TransactionedDocumentsPanel extends ContentPanel {
             .addGroup(tabPowerOfAttorneySearchLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(tabPowerOfAttorneySearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jToolBar5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(powerOfAttorneySearchPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 631, Short.MAX_VALUE))
+                    .addComponent(jToolBar5, javax.swing.GroupLayout.DEFAULT_SIZE, 631, Short.MAX_VALUE)
+                    .addComponent(powerOfAttorneySearchPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         tabPowerOfAttorneySearchLayout.setVerticalGroup(
@@ -423,8 +424,8 @@ public class TransactionedDocumentsPanel extends ContentPanel {
             .addGroup(tabPowerOfAttorneySearchLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jToolBar5, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(powerOfAttorneySearchPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addComponent(powerOfAttorneySearchPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -561,7 +562,7 @@ public class TransactionedDocumentsPanel extends ContentPanel {
                     .addComponent(groupSelectedDocuments, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(pnlCards, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(groupPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(tabsDocumentSelection))
+                    .addComponent(tabsDocumentSelection, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -592,7 +593,7 @@ public class TransactionedDocumentsPanel extends ContentPanel {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(headerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 498, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 505, Short.MAX_VALUE))
         );
 
         bindingGroup.bind();
@@ -615,7 +616,7 @@ public class TransactionedDocumentsPanel extends ContentPanel {
 
     private void btnAddDocumentFromSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddDocumentFromSearchActionPerformed
         if (MessageUtility.displayMessage(ClientMessage.SOURCE_ATTACH_TRANSACTION_WARNING) == MessageUtility.BUTTON_ONE) {
-            attachToTransaction(documentSeachPanel.getSelectedSource());
+            attachToTransaction(documentSearchPanel.getSelectedSource());
         }
     }//GEN-LAST:event_btnAddDocumentFromSearchActionPerformed
 
@@ -642,7 +643,7 @@ public class TransactionedDocumentsPanel extends ContentPanel {
     private javax.swing.JButton btnRemovePowerOfAttorney;
     private javax.swing.JPanel cardDocuments;
     private javax.swing.JPanel cardPowerOfAttorney;
-    private org.sola.clients.swing.ui.source.DocumentSearchPanel documentSeachPanel;
+    private org.sola.clients.swing.desktop.source.DocumentSearchPanel documentSearchPanel;
     private org.sola.clients.swing.ui.GroupPanel groupPanel1;
     private org.sola.clients.swing.ui.GroupPanel groupSelectedDocuments;
     private org.sola.clients.swing.ui.HeaderPanel headerPanel;
@@ -656,7 +657,7 @@ public class TransactionedDocumentsPanel extends ContentPanel {
     private javax.swing.JToolBar jToolBar5;
     private javax.swing.JPanel pnlCards;
     private org.sola.clients.beans.source.PowerOfAttorneyListBean powerOfAttorneyList;
-    private org.sola.clients.swing.ui.source.PowerOfAttorneySearchPanel powerOfAttorneySearchPanel;
+    private org.sola.clients.swing.desktop.source.PowerOfAttorneySearchPanel powerOfAttorneySearchPanel;
     private org.sola.clients.swing.ui.source.DocumentsPanel selectedDocumentsPanel;
     private javax.swing.JPanel tabApplicationDocuments;
     private javax.swing.JPanel tabDocumentSearch;
