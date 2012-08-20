@@ -352,6 +352,10 @@ public class ApplicationBean extends ApplicationSummaryBean {
     }
 
     public ApplicationPropertyBean getSelectedProperty() {
+        if (getPropertyList().size() == 1) {
+            ApplicationPropertyBean onlyOneProperty=getPropertyList().get(0) ;
+            selectedProperty = onlyOneProperty;
+        }
         return selectedProperty;
     }
 
