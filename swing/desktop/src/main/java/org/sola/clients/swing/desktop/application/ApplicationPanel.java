@@ -97,6 +97,7 @@ public class ApplicationPanel extends ContentPanel {
     private ControlsBundleForApplicationLocation mapControl = null;
     public static final String APPLICATION_SAVED_PROPERTY = "applicationSaved";
     private String applicationID;
+    private boolean isDashboard = false;
 
     /**
      * This method is used by the form designer to create {@link ApplicationBean}.
@@ -158,6 +159,19 @@ public class ApplicationPanel extends ContentPanel {
         initComponents();
         postInit();
     }
+    
+     /**
+     * This constructor is used to open existing application for editing.
+     *
+     * @param applicationId ID of application to open.
+     */
+    public ApplicationPanel(String applicationId, boolean dashBoard) {
+        this.applicationID = applicationId;
+        this.isDashboard = dashBoard;
+        initComponents();
+        postInit();
+    }
+    
     
     /**
      * This constructor is used to open existing application for editing.
@@ -868,9 +882,10 @@ public class ApplicationPanel extends ContentPanel {
             }
         };
 
-        if (getMainContentPanel() != null) {
+        if (getMainContentPanel() != null && this.isDashboard) {
             DashBoardPanel dashBoardPanel = new DashBoardPanel();
             dashBoardPanel.addPropertyChangeListener(ApplicationBean.ASSIGNEE_ID_PROPERTY, listener);
+            
             if (whichChangeEvent == HeaderPanel.CLOSE_BUTTON_CLICKED) {
                 getMainContentPanel().addPanel(dashBoardPanel, MainContentPanel.CARD_DASHBOARD, true);
             } else {
