@@ -376,7 +376,7 @@ public class DocumentPanel extends javax.swing.JPanel {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(jLabel5)
-                .addGap(0, 68, Short.MAX_VALUE))
+                .addGap(0, 67, Short.MAX_VALUE))
             .addComponent(txtOwnerName)
         );
         jPanel4Layout.setVerticalGroup(

@@ -143,7 +143,6 @@ public class DocumentViewerPanel extends javax.swing.JPanel {
         jLabel9.setText(bundle.getString("DocumentViewerPanel.jLabel9.text")); // NOI18N
         jLabel9.setName(bundle.getString("DocumentViewerPanel.jLabel9.name")); // NOI18N
 
-        txtDescription.setBackground(new java.awt.Color(255, 255, 255));
         txtDescription.setEditable(false);
         txtDescription.setName(bundle.getString("DocumentViewerPanel.txtDescription.name")); // NOI18N
 
@@ -175,7 +174,6 @@ public class DocumentViewerPanel extends javax.swing.JPanel {
         jLabel1.setText(bundle.getString("DocumentViewerPanel.jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
 
-        jTextField1.setBackground(new java.awt.Color(255, 255, 255));
         jTextField1.setEditable(false);
         jTextField1.setName("jTextField1"); // NOI18N
 
@@ -207,7 +205,6 @@ public class DocumentViewerPanel extends javax.swing.JPanel {
         jLabel2.setText(bundle.getString("DocumentViewerPanel.jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
 
-        jTextField2.setBackground(new java.awt.Color(255, 255, 255));
         jTextField2.setEditable(false);
         jTextField2.setName("jTextField2"); // NOI18N
 
@@ -220,7 +217,7 @@ public class DocumentViewerPanel extends javax.swing.JPanel {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(jLabel2)
-                .addGap(0, 74, Short.MAX_VALUE))
+                .addGap(0, 45, Short.MAX_VALUE))
             .addComponent(jTextField2)
         );
         jPanel4Layout.setVerticalGroup(
@@ -239,7 +236,6 @@ public class DocumentViewerPanel extends javax.swing.JPanel {
         jLabel4.setText(bundle.getString("DocumentViewerPanel.jLabel4.text")); // NOI18N
         jLabel4.setName("jLabel4"); // NOI18N
 
-        jTextField4.setBackground(new java.awt.Color(255, 255, 255));
         jTextField4.setEditable(false);
         jTextField4.setName("jTextField4"); // NOI18N
 
@@ -252,7 +248,7 @@ public class DocumentViewerPanel extends javax.swing.JPanel {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addComponent(jLabel4)
-                .addGap(0, 50, Short.MAX_VALUE))
+                .addGap(0, 61, Short.MAX_VALUE))
             .addComponent(jTextField4)
         );
         jPanel5Layout.setVerticalGroup(
@@ -271,7 +267,6 @@ public class DocumentViewerPanel extends javax.swing.JPanel {
         jLabel5.setText(bundle.getString("DocumentViewerPanel.jLabel5.text")); // NOI18N
         jLabel5.setName("jLabel5"); // NOI18N
 
-        jFormattedTextField1.setBackground(new java.awt.Color(255, 255, 255));
         jFormattedTextField1.setEditable(false);
         jFormattedTextField1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.LONG))));
         jFormattedTextField1.setName("jFormattedTextField1"); // NOI18N
@@ -304,7 +299,6 @@ public class DocumentViewerPanel extends javax.swing.JPanel {
         jLabel3.setText(bundle.getString("DocumentViewerPanel.jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
 
-        jFormattedTextField3.setBackground(new java.awt.Color(255, 255, 255));
         jFormattedTextField3.setEditable(false);
         jFormattedTextField3.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.LONG))));
         jFormattedTextField3.setName("jFormattedTextField3"); // NOI18N
@@ -337,7 +331,6 @@ public class DocumentViewerPanel extends javax.swing.JPanel {
         jLabel6.setText(bundle.getString("DocumentViewerPanel.jLabel6.text")); // NOI18N
         jLabel6.setName("jLabel6"); // NOI18N
 
-        jFormattedTextField2.setBackground(new java.awt.Color(255, 255, 255));
         jFormattedTextField2.setEditable(false);
         jFormattedTextField2.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.LONG))));
         jFormattedTextField2.setName("jFormattedTextField2"); // NOI18N
@@ -402,7 +395,6 @@ public class DocumentViewerPanel extends javax.swing.JPanel {
         jLabel10.setText(bundle.getString("DocumentViewerPanel.jLabel10.text")); // NOI18N
         jLabel10.setName(bundle.getString("DocumentViewerPanel.jLabel10.name")); // NOI18N
 
-        txtOwnerName.setBackground(new java.awt.Color(255, 255, 255));
         txtOwnerName.setEditable(false);
         txtOwnerName.setName(bundle.getString("DocumentViewerPanel.txtOwnerName.name")); // NOI18N
 
@@ -415,7 +407,7 @@ public class DocumentViewerPanel extends javax.swing.JPanel {
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel10Layout.createSequentialGroup()
                 .addComponent(jLabel10)
-                .addGap(0, 27, Short.MAX_VALUE))
+                .addGap(0, 39, Short.MAX_VALUE))
             .addComponent(txtOwnerName)
         );
         jPanel10Layout.setVerticalGroup(
@@ -433,7 +425,6 @@ public class DocumentViewerPanel extends javax.swing.JPanel {
         jLabel8.setText(bundle.getString("DocumentViewerPanel.jLabel8.text")); // NOI18N
         jLabel8.setName("jLabel8"); // NOI18N
 
-        jTextField7.setBackground(new java.awt.Color(255, 255, 255));
         jTextField7.setEditable(false);
         jTextField7.setName("jTextField7"); // NOI18N
 
