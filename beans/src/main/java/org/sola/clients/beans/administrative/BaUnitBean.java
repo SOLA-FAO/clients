@@ -30,6 +30,7 @@ package org.sola.clients.beans.administrative;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import org.jdesktop.observablecollections.ObservableCollections;
@@ -43,6 +44,7 @@ import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.beans.referencedata.StatusConstants;
 import org.sola.clients.beans.referencedata.TypeActionBean;
 import org.sola.clients.beans.source.SourceBean;
+import org.sola.clients.beans.utils.RrrComparatorByRegistrationDate;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 import org.sola.services.boundary.wsclients.WSManager;
@@ -167,6 +169,7 @@ public class BaUnitBean extends BaUnitSummaryBean {
     }
     
     private static final String BAUNIT_ID_SEARCH = "system_search.cadastre_object_by_baunit_id";
+    public static final String SELECTED_HISTORIC_RIGHT_PROPERTY = "selectedHistoricRight";
     public static final String SELECTED_PARCEL_PROPERTY = "selectedParcel";
     public static final String SELECTED_RIGHT_PROPERTY = "selectedRight";
     public static final String SELECTED_BA_UNIT_NOTATION_PROPERTY = "selectedBaUnitNotation";
@@ -189,8 +192,11 @@ public class BaUnitBean extends BaUnitSummaryBean {
     private SolaList<RelatedBaUnitInfoBean> parentBaUnits;
     private SolaList<BaUnitAreaBean> baUnitAreaList;
     
+    
     private transient CadastreObjectBean selectedParcel;
+    private transient SolaList<RrrBean> rrrHistoricList;
     private transient RrrBean selectedRight;
+    private transient RrrBean selectedHistoricRight;
     private transient BaUnitNotationBean selectedBaUnitNotation;
     private transient RelatedBaUnitInfoBean selectedParentBaUnit;
     private transient RelatedBaUnitInfoBean selectedChildBaUnit;
@@ -211,6 +217,7 @@ public class BaUnitBean extends BaUnitSummaryBean {
     public BaUnitBean() {
         super();
         rrrList = new SolaList();
+        rrrHistoricList = new SolaList<RrrBean>();
         baUnitNotationList = new SolaList();
         cadastreObjectList = new SolaList();
         baUnitAreaList = new SolaList();
@@ -223,10 +230,45 @@ public class BaUnitBean extends BaUnitSummaryBean {
          
         sourceList.setExcludedStatuses(new String[]{StatusConstants.HISTORIC});
         rrrList.setExcludedStatuses(new String[]{StatusConstants.HISTORIC, StatusConstants.PREVIOUS});
+        rrrHistoricList.setExcludedStatuses(new String[]{StatusConstants.CURRENT, StatusConstants.PENDING});
+
         
         AllBaUnitNotationsListUpdater allBaUnitNotationsListener = new AllBaUnitNotationsListUpdater();
-        rrrList.getFilteredList().addObservableListListener(allBaUnitNotationsListener);
-        baUnitNotationList.getFilteredList().addObservableListListener(allBaUnitNotationsListener);
+//        rrrList.getFilteredList().addObservableListListener(allBaUnitNotationsListener);
+//        baUnitNotationList.getFilteredList().addObservableListListener(allBaUnitNotationsListener);
+        
+          rrrList.addObservableListListener(allBaUnitNotationsListener);
+          baUnitNotationList.addObservableListListener(allBaUnitNotationsListener);
+          
+          rrrList.addObservableListListener(new ObservableListListener() {
+            
+            RrrComparatorByRegistrationDate sorter = new RrrComparatorByRegistrationDate();
+            
+            @Override
+            public void listElementsAdded(ObservableList list, int index, int length) {
+                for (int i = index; i < length + index; i++) {
+                    rrrHistoricList.add((RrrBean) list.get(i));
+                }
+                Collections.sort(rrrHistoricList.getFilteredList(), sorter);
+            }
+
+            @Override
+            public void listElementsRemoved(ObservableList list, int index, List oldElements) {
+                rrrHistoricList.removeAll(oldElements);
+                Collections.sort(rrrHistoricList.getFilteredList(), sorter);
+            }
+
+            @Override
+            public void listElementReplaced(ObservableList list, int index, Object oldElement) {
+                rrrHistoricList.set(rrrHistoricList.indexOf(oldElement), (RrrBean)oldElement);
+                Collections.sort(rrrHistoricList.getFilteredList(), sorter);
+            }
+
+            @Override
+            public void listElementPropertyChanged(ObservableList list, int index) {
+            }
+        });
+        
     }
 
     public void createPaperTitle(SourceBean source) {
@@ -378,6 +420,16 @@ public class BaUnitBean extends BaUnitSummaryBean {
         propertySupport.firePropertyChange(SELECTED_RIGHT_PROPERTY,
                 null, selectedRight);
     }
+    
+     public RrrBean getSelectedHistoricRight() {
+        return selectedHistoricRight;
+    }
+
+    public void setSelectedHistoricRight(RrrBean selectedHistoricRight) {
+        this.selectedHistoricRight = selectedHistoricRight;
+        propertySupport.firePropertyChange(SELECTED_HISTORIC_RIGHT_PROPERTY,
+                null, selectedHistoricRight);
+    }
 
     public SolaList<BaUnitNotationBean> getBaUnitNotationList() {
         return baUnitNotationList;
@@ -497,6 +549,10 @@ public class BaUnitBean extends BaUnitSummaryBean {
 
     public ObservableList<RrrBean> getRrrFilteredList() {
         return rrrList.getFilteredList();
+    }
+    
+    public ObservableList<RrrBean> getRrrHistoricList() {
+        return rrrHistoricList.getFilteredList();
     }
 
     public void addRrr(RrrBean rrrBean) {
