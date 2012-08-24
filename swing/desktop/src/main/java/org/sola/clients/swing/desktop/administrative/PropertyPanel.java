@@ -246,6 +246,8 @@ public class PropertyPanel extends ContentPanel {
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(BaUnitBean.SELECTED_RIGHT_PROPERTY)) {
                     customizeRightsButtons((RrrBean) evt.getNewValue());
+                } else if (evt.getPropertyName().equals(BaUnitBean.SELECTED_HISTORIC_RIGHT_PROPERTY)) {
+                    customizeHistoricRightsViewButton();
                 } else if (evt.getPropertyName().equals(BaUnitBean.SELECTED_BA_UNIT_NOTATION_PROPERTY)) {
                     customizeNotationButtons((BaUnitNotationBean) evt.getNewValue());
                 } else if (evt.getPropertyName().equals(BaUnitBean.SELECTED_PARCEL_PROPERTY)) {
@@ -321,6 +323,7 @@ public class PropertyPanel extends ContentPanel {
         customizeParentPropertyButtons();
         customizeChildPropertyButtons();
         customizeTerminationButton();
+        customizeHistoricRightsViewButton();
         
         
         btnNext.setVisible(false);
@@ -492,6 +495,10 @@ public class PropertyPanel extends ContentPanel {
      */
     private void customizePrintButton() {
         btnPrintBaUnit.setEnabled(baUnitBean1.getRowVersion() > 0);
+    }
+    
+    private void customizeHistoricRightsViewButton() {
+        btnViewHistoricRight.setEnabled(baUnitBean1.getSelectedHistoricRight() != null);
     }
 
     /**
