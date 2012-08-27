@@ -27,6 +27,7 @@
  */
 package org.sola.clients.beans.administrative;
 
+import java.util.Date;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.sola.clients.beans.AbstractTransactionedBean;
@@ -45,6 +46,7 @@ public class BaUnitNotationBean extends AbstractTransactionedBean {
     public static final String TRANSACTION_ID_PROPERTY = "transactionId";
     public static final String NOTATION_TEXT_PROPERTY = "notationText";
     public static final String REFERENCE_NR_PROPERTY = "referenceNr";
+    public static final String CHANGE_TIME_PROPERTY = "changeTime";
     
     private String baUnitId;
     private String transactionId;
@@ -53,6 +55,18 @@ public class BaUnitNotationBean extends AbstractTransactionedBean {
     @NotEmpty(message= ClientMessage.CHECK_NOTNULL_NOTATION, payload=Localized.class)
     private String notationText;
     private String referenceNr;
+    private Date changeTime;
+
+    public Date getChangeTime() {
+        return changeTime;
+    }
+
+    public void setChangeTime(Date changeTime) {
+        Date oldValue = this.changeTime;
+        this.changeTime = changeTime;
+        propertySupport.firePropertyChange(CHANGE_TIME_PROPERTY, oldValue, changeTime);
+    }
+    
     
     public BaUnitNotationBean(){
         super();
