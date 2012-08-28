@@ -1052,11 +1052,11 @@ public class PartyPanel extends javax.swing.JPanel {
     private javax.swing.Box.Filler filler1;
     private javax.swing.JPanel fullPanel;
     private org.sola.clients.beans.referencedata.GenderTypeListBean genderTypes;
-    private org.sola.clients.swing.ui.GroupPanel groupPanel1;
+    public org.sola.clients.swing.ui.GroupPanel groupPanel1;
     private org.sola.clients.swing.ui.GroupPanel groupPanel2;
     private org.sola.clients.beans.referencedata.IdTypeListBean idTypes;
     private javax.swing.JRadioButton individualButton;
-    private javax.swing.JPanel jPanel1;
+    public javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
