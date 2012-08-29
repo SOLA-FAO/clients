@@ -1760,13 +1760,13 @@ public class PropertyPanel extends ContentPanel {
         columnBinding.setColumnName("Registration Date");
         columnBinding.setColumnClass(java.util.Date.class);
         columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${nr}"));
+        columnBinding.setColumnName("Nr");
+        columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${status.displayValue}"));
         columnBinding.setColumnName("Status.display Value");
         columnBinding.setColumnClass(String.class);
-        columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${locked}"));
-        columnBinding.setColumnName("Locked");
-        columnBinding.setColumnClass(Boolean.class);
         columnBinding.setEditable(false);
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitBean1, org.jdesktop.beansbinding.ELProperty.create("${selectedRight}"), tableRights, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
@@ -1779,12 +1779,16 @@ public class PropertyPanel extends ContentPanel {
         });
         jScrollPane2.setViewportView(tableRights);
         tableRights.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("PropertyPanel.tableRights.columnModel.title0")); // NOI18N
+        tableRights.getColumnModel().getColumn(1).setPreferredWidth(120);
+        tableRights.getColumnModel().getColumn(1).setMaxWidth(120);
         tableRights.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("PropertyPanel.tableRights.columnModel.title1")); // NOI18N
-        tableRights.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PropertyPanel.tableRights.columnModel.title2")); // NOI18N
-        tableRights.getColumnModel().getColumn(3).setPreferredWidth(40);
-        tableRights.getColumnModel().getColumn(3).setMaxWidth(40);
-        tableRights.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("PropertyPanel.tableRights.columnModel.title3")); // NOI18N
-        tableRights.getColumnModel().getColumn(3).setCellRenderer(new LockCellRenderer());
+        tableRights.getColumnModel().getColumn(1).setCellRenderer(new DateTimeRenderer());
+        tableRights.getColumnModel().getColumn(2).setPreferredWidth(100);
+        tableRights.getColumnModel().getColumn(2).setMaxWidth(100);
+        tableRights.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PropertyPanel.tableRights.columnModel.title3")); // NOI18N
+        tableRights.getColumnModel().getColumn(3).setPreferredWidth(100);
+        tableRights.getColumnModel().getColumn(3).setMaxWidth(100);
+        tableRights.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("PropertyPanel.tableRights.columnModel.title2")); // NOI18N
 
         jToolBar2.setFloatable(false);
         jToolBar2.setRollover(true);
@@ -1937,13 +1941,12 @@ public class PropertyPanel extends ContentPanel {
         columnBinding.setColumnName("Registration Date");
         columnBinding.setColumnClass(java.util.Date.class);
         columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${nr}"));
+        columnBinding.setColumnName("Nr");
+        columnBinding.setColumnClass(String.class);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${status.displayValue}"));
         columnBinding.setColumnName("Status.display Value");
         columnBinding.setColumnClass(String.class);
-        columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${locked}"));
-        columnBinding.setColumnName("Locked");
-        columnBinding.setColumnClass(Boolean.class);
         columnBinding.setEditable(false);
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitBean1, org.jdesktop.beansbinding.ELProperty.create("${selectedHistoricRight}"), tableRightsHistory, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
@@ -1956,11 +1959,15 @@ public class PropertyPanel extends ContentPanel {
         });
         jScrollPane8.setViewportView(tableRightsHistory);
         tableRightsHistory.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("PropertyPanel.tableRightsHistory.columnModel.title0")); // NOI18N
+        tableRightsHistory.getColumnModel().getColumn(1).setPreferredWidth(120);
         tableRightsHistory.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("PropertyPanel.tableRightsHistory.columnModel.title1")); // NOI18N
-        tableRightsHistory.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PropertyPanel.tableRightsHistory.columnModel.title2")); // NOI18N
-        tableRightsHistory.getColumnModel().getColumn(3).setPreferredWidth(40);
-        tableRightsHistory.getColumnModel().getColumn(3).setMaxWidth(40);
-        tableRightsHistory.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("PropertyPanel.tableRightsHistory.columnModel.title3")); // NOI18N
+        tableRightsHistory.getColumnModel().getColumn(1).setCellRenderer(new DateTimeRenderer());
+        tableRightsHistory.getColumnModel().getColumn(2).setPreferredWidth(100);
+        tableRightsHistory.getColumnModel().getColumn(2).setMaxWidth(100);
+        tableRightsHistory.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PropertyPanel.tableRightsHistory.columnModel.title3")); // NOI18N
+        tableRightsHistory.getColumnModel().getColumn(3).setPreferredWidth(100);
+        tableRightsHistory.getColumnModel().getColumn(3).setMaxWidth(100);
+        tableRightsHistory.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("PropertyPanel.tableRightsHistory.columnModel.title2")); // NOI18N
 
         org.jdesktop.layout.GroupLayout jPanel17Layout = new org.jdesktop.layout.GroupLayout(jPanel17);
         jPanel17.setLayout(jPanel17Layout);
@@ -2082,14 +2089,13 @@ public class PropertyPanel extends ContentPanel {
         tableNotations.getColumnModel().getColumn(0).setPreferredWidth(120);
         tableNotations.getColumnModel().getColumn(0).setMaxWidth(120);
         tableNotations.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("PropertyPanel.tableNotations.columnModel.title3")); // NOI18N
-        tableNotations.getColumnModel().getColumn(0).setCellEditor(null);
         tableNotations.getColumnModel().getColumn(0).setCellRenderer(new DateTimeRenderer());
         tableNotations.getColumnModel().getColumn(1).setPreferredWidth(100);
         tableNotations.getColumnModel().getColumn(1).setMaxWidth(100);
         tableNotations.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("PropertyPanel.tableNotations.columnModel.title0")); // NOI18N
         tableNotations.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PropertyPanel.tableNotations.columnModel.title1")); // NOI18N
-        tableNotations.getColumnModel().getColumn(3).setResizable(false);
-        tableNotations.getColumnModel().getColumn(3).setPreferredWidth(180);
+        tableNotations.getColumnModel().getColumn(3).setPreferredWidth(100);
+        tableNotations.getColumnModel().getColumn(3).setMaxWidth(100);
         tableNotations.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("PropertyPanel.tableNotations.columnModel.title2")); // NOI18N
 
         jToolBar3.setFloatable(false);
