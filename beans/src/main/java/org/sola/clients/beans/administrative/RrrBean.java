@@ -132,6 +132,15 @@ public class RrrBean extends AbstractTransactionedBean {
     private transient RrrShareBean selectedShare;
     private transient boolean selected;
     private transient PartySummaryBean selectedRightholder;
+    private String concatenatedName;
+
+    public String getConcatenatedName() {
+        return concatenatedName;
+    }
+
+    public void setConcatenatedName(String concatenatedName) {
+        this.concatenatedName = concatenatedName;
+    }
 
     public RrrBean() {
         super();
