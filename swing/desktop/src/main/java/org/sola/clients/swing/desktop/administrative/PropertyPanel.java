@@ -993,6 +993,19 @@ public class PropertyPanel extends ContentPanel {
         saveBaUnitState();
     }
 
+    
+    private String getTerminateMessage () {
+        String whichMessage = ClientMessage.BAUNIT_CONFIRM_TERMINATION;  
+         for(int i=0; i<baUnitBean1.getRrrFilteredList().size(); i++){
+           if ( baUnitBean1.getRrrFilteredList().get(i).getStatus().getCode().equals(StatusConstants.CURRENT)) { 
+                whichMessage = ClientMessage.BAUNIT_CURRENT_RRR_EXIST_CONFIRM_TERMINATION;
+            return whichMessage;
+           }
+         }   
+           
+        return whichMessage;   
+    }
+    
     private void terminateBaUnit(){
         if (baUnitBean1.getPendingActionCode() != null && baUnitBean1.getPendingActionCode().equals(TypeActionBean.CODE_CANCEL)) {
             saveBaUnit();
@@ -1001,7 +1014,8 @@ public class PropertyPanel extends ContentPanel {
             customizeForm();
             saveBaUnitState();
         } else {
-            if (MessageUtility.displayMessage(ClientMessage.BAUNIT_CONFIRM_TERMINATION) == MessageUtility.BUTTON_ONE) {
+           String whichMessage = getTerminateMessage();
+            if (MessageUtility.displayMessage(whichMessage) == MessageUtility.BUTTON_ONE) {
                 saveBaUnit();
                 baUnitBean1.terminateBaUnit(applicationService.getId());
                 MessageUtility.displayMessage(ClientMessage.BAUNIT_TERMINATED);
