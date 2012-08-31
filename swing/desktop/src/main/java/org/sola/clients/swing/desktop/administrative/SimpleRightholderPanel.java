@@ -159,6 +159,14 @@ public class SimpleRightholderPanel extends ContentPanel {
     }
     
     private boolean saveRrr() {
+        
+        if (rrrBean.getFilteredRightHolderList().size() <1 ) {
+             java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
+             MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_FIELDS,
+                            new Object[]{bundle.getString("SimpleOwhershipPanel.groupPanel1.titleText")});
+                    return false;
+        } 
+        
         if (rrrBean.validate(true, Default.class, SimpleOwnershipValidationGroup.class).size() < 1) {
             firePropertyChange(UPDATED_RRR, null, rrrBean);
             close();
