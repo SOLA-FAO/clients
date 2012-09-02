@@ -2946,6 +2946,7 @@ public class ApplicationPanel extends ContentPanel {
 
         appBean.addProperty(txtFirstPart.getText(), txtLastPart.getText(), area, value);
         clearPropertyFields();
+        verifySelectedProperty();
         txtFirstPart.requestFocus();
     }//GEN-LAST:event_btnAddPropertyActionPerformed
 

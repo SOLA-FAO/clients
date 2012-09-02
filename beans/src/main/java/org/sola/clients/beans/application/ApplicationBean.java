@@ -631,6 +631,7 @@ public class ApplicationBean extends ApplicationSummaryBean {
             newProperty.setNameLastpart(lastPart);
             newProperty.setTotalValue(value);
             propertyList.addAsNew(newProperty);
+            selectedProperty = newProperty;
         }
     }
 
