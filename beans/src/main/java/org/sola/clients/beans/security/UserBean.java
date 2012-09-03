@@ -56,6 +56,16 @@ public class UserBean extends UserSummaryBean {
     @Size(min=1, message=ClientMessage.CHECK_MIN_USERGROUP, payload=Localized.class)
     private SolaList<UserGroupBean> userGroups;
     private SolaList<RoleBean> roles;
+    private String password;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     
     public UserBean() {
         super();
@@ -158,4 +168,5 @@ public class UserBean extends UserSummaryBean {
         userTO.setEntityAction(EntityAction.DELETE);
         WSManager.getInstance().getAdminService().saveUser(userTO);
     }
+    
 }

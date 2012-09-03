@@ -409,6 +409,7 @@ public class MainForm extends javax.swing.JFrame {
         btnManageParties = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JToolBar.Separator();
         btnOpenMap = new javax.swing.JButton();
+        btnSetPassword = new javax.swing.JButton();
         statusPanel = new javax.swing.JPanel();
         labStatus = new javax.swing.JLabel();
         taskPanel1 = new org.sola.clients.swing.common.tasks.TaskPanel();
@@ -539,6 +540,18 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         applicationsMain.add(btnOpenMap);
+
+        btnSetPassword.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/lock--pencil.png"))); // NOI18N
+        btnSetPassword.setText(bundle.getString("MainForm.btnSetPassword.text")); // NOI18N
+        btnSetPassword.setFocusable(false);
+        btnSetPassword.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnSetPassword.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSetPassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSetPasswordActionPerformed(evt);
+            }
+        });
+        applicationsMain.add(btnSetPassword);
 
         statusPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         statusPanel.setPreferredSize(new java.awt.Dimension(1024, 24));
@@ -853,6 +866,33 @@ public class MainForm extends javax.swing.JFrame {
     private void menuPersonsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuPersonsActionPerformed
         openSearchParties();
     }//GEN-LAST:event_menuPersonsActionPerformed
+
+    private void btnSetPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetPasswordActionPerformed
+        editPassword();
+    }//GEN-LAST:event_btnSetPasswordActionPerformed
+    
+    private void editPassword() {
+            showPasswordPanel();
+    }  
+    
+      /** Shows password panel. */
+    private void showPasswordPanel() {
+        SolaTask t = new SolaTask<Void, Void>() {
+
+            @Override
+            public Void doTask() {
+//                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_MAP));
+                if (!pnlContent.isPanelOpened(MainContentPanel.CARD_USER_PROFILE)) {
+                    UserProfileForm panel = new UserProfileForm(SecurityBean.getCurrentUser().getUserName());
+                    pnlContent.addPanel(panel, MainContentPanel.CARD_USER_PROFILE);
+                }
+                pnlContent.showPanel(MainContentPanel.CARD_USER_PROFILE);
+                return null;
+            }
+        };
+        TaskManager.getInstance().runTask(t);
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToolBar applicationsMain;
     private javax.swing.JButton btnDocumentSearch;
@@ -861,6 +901,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JButton btnOpenBaUnitSearch;
     private javax.swing.JButton btnOpenMap;
     private javax.swing.JButton btnSearchApplications;
+    private javax.swing.JButton btnSetPassword;
     private javax.swing.JButton btnShowDashboard;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JToolBar.Separator jSeparator1;
