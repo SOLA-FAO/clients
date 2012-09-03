@@ -83,6 +83,8 @@ public class MainContentPanel extends javax.swing.JPanel {
     public final static String CARD_SOURCE = "sourcePanel";
     public final static String CARD_VIEW_SOURCE = "viewSourcePanel";
     public final static String CARD_VIEW_POWER_OF_ATTORNEY = "viewPowerOfAttorneyPanel";
+    public final static String CARD_USER_PROFILE = "userProfile";
+
     
     private HashMap<String, Component> cards;
     private ArrayList<String> cardsIndex;
