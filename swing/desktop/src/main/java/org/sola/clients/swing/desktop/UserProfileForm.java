@@ -52,8 +52,11 @@ public class UserProfileForm extends ContentPanel {
      * @param userName Username for which password is going to be reset.
      */
     public UserProfileForm(String userName) {
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/Bundle"); // NOI18N
         initComponents();
         userPasswordPanel.setUserName(userName);
+        userPasswordPanel.jLabel1.setText(bundle.getString("UserProfileForm.newpassword.text"));
+        userPasswordPanel.jLabel2.setText(bundle.getString("UserProfileForm.confirmnewpassword.text"));
         headerPanel.setTitleText(String.format(headerPanel.getTitleText(), userName));
         this.user = SecurityBean.getCurrentUser();
         txtFirstName.setText(this.user.getFirstName());
