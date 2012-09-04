@@ -1,28 +1,26 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO). All rights
+ * reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without modification, are permitted
+ * provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this list of conditions
+ * and the following disclaimer. 2. Redistributions in binary form must reproduce the above
+ * copyright notice,this list of conditions and the following disclaimer in the documentation and/or
+ * other materials provided with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this software without
+ * specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+ * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 /*
@@ -50,10 +48,10 @@ import org.geotools.swing.mapaction.extended.print.PrintLayout;
 
 /**
  * A form used during the print operation to define some parameters before printing.
- * 
+ *
  * @author Elton Manoku
  */
-public class PrintForm extends javax.swing.JDialog implements IPrintUi{
+public class PrintForm extends javax.swing.JDialog implements IPrintUi {
 
     private boolean continueWithPrinting = false;
     private PrintLayout printLayout;
@@ -63,11 +61,15 @@ public class PrintForm extends javax.swing.JDialog implements IPrintUi{
     private Object btnFont = "Button.font";
     private Object cmbFont = "ComboBox.font";
     private Object labFont = "Label.font";
-    
 
+    /**
+     * Creates the print form.
+     *
+     */
     public PrintForm() {
         initComponents();
-        java.util.ResourceBundle bundleTitle = java.util.ResourceBundle.getBundle("org/geotools/swing/mapaction/extended/ui/Bundle"); // NOI18N
+        java.util.ResourceBundle bundleTitle = java.util.ResourceBundle.getBundle(
+                "org/geotools/swing/mapaction/extended/ui/Bundle"); // NOI18N
         this.setTitle((bundleTitle.getString("PrintForm.title.text")));
         this.setAlwaysOnTop(true);
         this.setModalityType(ModalityType.APPLICATION_MODAL);
@@ -89,34 +91,29 @@ public class PrintForm extends javax.swing.JDialog implements IPrintUi{
         return printLayout;
     }
 
-    public List<PrintLayout> getPrintLayoutList() {
-        return printLayoutList;
-    }
-
     @Override
     public void setPrintLayoutList(List<PrintLayout> printLayoutList) {
-       
+
         this.printLayoutList = printLayoutList;
         this.cmdLayout.removeAllItems();
         for (PrintLayout layout : this.printLayoutList) {
             this.cmdLayout.addItem(layout);
         }
     }
-   
+
     @Override
-    public void setVisibility(boolean visible){
+    public void setVisibility(boolean visible) {
         this.setVisible(visible);
     }
-    
+
     @Override
-    public java.util.Map<String, Object> getExtraFields(){
+    public java.util.Map<String, Object> getExtraFields() {
         return new HashMap<String, Object>();
     }
-    
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+
+    /**
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT
+     * modify this code. The content of this method is always regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -225,9 +222,8 @@ private void cmdPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 }//GEN-LAST:event_cmdPrintActionPerformed
 
 private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-this.continueWithPrinting = false;
+    this.continueWithPrinting = false;
 }//GEN-LAST:event_formComponentShown
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cmdLayout;
     private javax.swing.JButton cmdPrint;

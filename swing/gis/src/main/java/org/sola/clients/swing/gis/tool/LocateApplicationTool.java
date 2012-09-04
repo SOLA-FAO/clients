@@ -53,6 +53,10 @@ public class LocateApplicationTool extends ExtendedEditGeometryTool {
     String toolTip =  MessageUtility.getLocalizedMessage(
                             GisMessage.CADASTRE_TOOLTIP_ADD_LOCATION).getMessage();
     
+    /**
+     * Creates the tool used to define the location of the application in the map.
+     * 
+     */
     public LocateApplicationTool() {
         this.setToolName(toolName);
         this.setLayerName(layerName);

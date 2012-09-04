@@ -42,14 +42,12 @@ import org.sola.clients.swing.gis.layer.PojoLayer;
 import org.sola.clients.swing.gis.tool.InformationTool;
 import org.sola.clients.swing.gis.ui.control.SearchPanel;
 import org.sola.common.messaging.GisMessage;
+import org.sola.webservices.search.ConfigMapLayerTO;
+import org.sola.webservices.search.MapDefinitionTO;
 
 // CHOOSE WHICH TOOL IS PREFERRED FOR THE MAP PRINT COMMENTING AND UNCOMMENTING THE FOLLOWING LINES
 //this is the mapaction used for creating a jasper report map print
 import org.sola.clients.swing.gis.mapaction.SolaJasperPrint;
-import org.sola.webservices.search.ConfigMapLayerTO;
-import org.sola.webservices.search.MapDefinitionTO;
-import org.geotools.swing.control.extended.MapScaleStatusBarItem;
-import org.geotools.swing.control.extended.ScaleBarStatusBarItem;
 //this is the mapaction used for creating a pdf map print
 //import org.sola.clients.swing.gis.mapaction.SolaPrint;
 
@@ -71,6 +69,9 @@ public abstract class SolaControlsBundle extends ControlsBundle {
 //this is used for creating a jasper report map print
     private SolaJasperPrint solaPrint = null;
 
+    /**
+     * Constructor of the abstract class
+     */
     public SolaControlsBundle() {
         super();
         if (!gisInitialized) {
@@ -189,7 +190,7 @@ public abstract class SolaControlsBundle extends ControlsBundle {
      * @param applicationId
      */
     public void setApplicationId(String applicationId) {
-        if (this.solaPrint != null){
+        if (this.solaPrint != null) {
             this.solaPrint.setApplicationId(applicationId);
         }
     }

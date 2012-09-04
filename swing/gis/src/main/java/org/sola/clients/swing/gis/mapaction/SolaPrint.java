@@ -52,6 +52,11 @@ public class SolaPrint extends Print {
     
     private String applicationId;
 
+    /**
+     * Constructor of the map action.
+     * 
+     * @param map  The map control with which the map action will interact 
+     */
     public SolaPrint(Map map) {
         super(map);
     }

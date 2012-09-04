@@ -48,6 +48,9 @@ public class ExtendedPan extends ExtendedTool {
     private String toolTip =  
             Messaging.getInstance().getMessageText(Messaging.Ids.GEOTOOL_TOOLTIP_PAN.toString());
    
+    /**
+     * Creates the tool.
+     */
     public ExtendedPan() {
         this.setToolName(NAME);
         this.setToolTip(toolTip);

@@ -63,10 +63,20 @@ import org.sola.common.messaging.MessageUtility;
  */
 public final class CadastreChangeNewCadastreObjectListFormShow extends ComponentShow {
 
+    /**
+     * The name of the map action
+     */
     public final static String MAPACTION_NAME = "newcadastralobjectformshow";
 
+    /**
+     * Constructor of the map action that is used to show the component 
+     * where the new cadastre objects are shown.
+     * 
+     * @param mapObj The map control that will be interacting with the map action
+     * @param formToShow The component to show
+     */
     public CadastreChangeNewCadastreObjectListFormShow(Map mapObj, Component formToShow) {
-        super(mapObj, formToShow, "newcadastralobjectformshow",
+        super(mapObj, formToShow, MAPACTION_NAME,
                 MessageUtility.getLocalizedMessage(GisMessage.CADASTRE_OBJ_LIST_SHOW).getMessage(),
                 "resources/undo-new-parcelmaking.png");
     }

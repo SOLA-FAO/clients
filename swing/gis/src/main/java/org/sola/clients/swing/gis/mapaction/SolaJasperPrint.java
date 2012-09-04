@@ -55,6 +55,11 @@ public class SolaJasperPrint extends Print {
     private String applicationId;
     private IPrintUi printForm;
 
+    /**
+     * Constructor of the jasper based reporting engine print map action.
+     * 
+     * @param map The map control with which the map action will interact 
+     */
     public SolaJasperPrint(Map map) {
         super(map);
         //the following changes the layout properties file for 

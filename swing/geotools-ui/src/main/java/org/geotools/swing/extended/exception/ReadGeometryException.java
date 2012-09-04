@@ -9,8 +9,15 @@ package org.geotools.swing.extended.exception;
  * @author Manoku
  */
 public class ReadGeometryException extends RuntimeException{
-    
+
+    private final static String MESSAGE =
+            "Error while converting geometry from WKB to Geometry.";
+    /**
+     * Creates an exception
+     * 
+     * @param ex 
+     */
     public ReadGeometryException(Exception ex){
-        super("Error while converting geometry from WKB to Geometry.", ex);
+        super(MESSAGE, ex);
     }
 }

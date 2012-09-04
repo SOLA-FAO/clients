@@ -47,20 +47,40 @@ import org.sola.webservices.transferobjects.transaction.TransactionSourceTO;
 public class TransactionCadastreChangeExtraTO 
 extends org.sola.webservices.transferobjects.transaction.TransactionCadastreChangeTO{
 
+    /**
+     * Sets the list of new cadastre objects
+     * 
+     * @param newCadastreObjectList 
+     */
     public void setCadastreObjectList(List<CadastreObjectExtraTO> newCadastreObjectList) {
         for(CadastreObjectExtraTO coExtraTO: newCadastreObjectList){
             this.cadastreObjectList.add(coExtraTO);
         }
     }
     
+    /**
+     * Sets the list of sources that are attached to the transaction
+     * 
+     * @param transactionSourceList 
+     */
     public void setTransactionSourceList(List<TransactionSourceTO> transactionSourceList) {
         this.transactionSourceList = transactionSourceList;
     }
 
+    /**
+     * Sets the list of survey points
+     * 
+     * @param surveyPointList 
+     */
     public void setSurveyPointList(List<SurveyPointTO> surveyPointList) {
         this.surveyPointList = surveyPointList;
     }
 
+    /**
+     * Sets the list of target cadastre objects
+     * 
+     * @param cadastreObjectTargetList 
+     */
     public void setCadastreObjectTargetList(List<CadastreObjectTargetTO> cadastreObjectTargetList) {
         this.cadastreObjectTargetList = cadastreObjectTargetList;
     }

@@ -45,6 +45,11 @@ public class ZoomOutAction extends ExtendedAction{
 
     private double zoomFactor = 0.5;
     
+    /**
+     * Creates the map action used to zoom out the map.
+     * 
+     * @param mapControl The map control with which the map action will interact 
+     */
     public ZoomOutAction(Map mapControl) {        
         super(mapControl, "zoomout", 
                 Messaging.getInstance().getMessageText(

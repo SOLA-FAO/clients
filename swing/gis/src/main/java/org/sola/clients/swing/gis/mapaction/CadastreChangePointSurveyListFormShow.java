@@ -39,10 +39,20 @@ import org.sola.common.messaging.MessageUtility;
  */
 public final class CadastreChangePointSurveyListFormShow extends ComponentShow {
 
+    /**
+     * The name of the map action
+     */
     public final static String MAPACTION_NAME = "point-show";
 
+    /**
+     * Constructor of the map action that is used to show the component 
+     * where the new survey points are shown.
+     * 
+     * @param mapObj The map control that will be interacting with the map action
+     * @param pointSurveyListForm The component to show
+     */
     public CadastreChangePointSurveyListFormShow(Map mapObj, Component pointSurveyListForm) {
-        super(mapObj, pointSurveyListForm, "point-show",
+        super(mapObj, pointSurveyListForm, MAPACTION_NAME,
                 MessageUtility.getLocalizedMessage(
                 GisMessage.CADASTRE_CHANGE_POINTS_SHOW).getMessage(),
                 "resources/point-show.png");

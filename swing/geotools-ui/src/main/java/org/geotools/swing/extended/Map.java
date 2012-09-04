@@ -217,6 +217,7 @@ public class Map extends JMapPane {
 
         this.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
 
+            @Override
             public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
                 handleMouseWheelEvent(evt);
             }

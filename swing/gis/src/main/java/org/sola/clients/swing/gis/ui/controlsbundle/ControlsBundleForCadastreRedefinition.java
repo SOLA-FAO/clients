@@ -169,10 +169,14 @@ public final class ControlsBundleForCadastreRedefinition extends ControlsBundleF
         this.boundarySelectTool.setCadastreObjectType(targetCadastreObjectType);
     }
 
+    /**
+     * It resets the transaction. All modifications are wiped out.
+     */
     public void reset() {
         this.cadastreObjectModifiedLayer.getBeanList().clear();
         this.cadastreObjectNodeModifiedLayer.getBeanList().clear();
-        ExtendedAction action = this.getMap().getMapActionByName(CadastreBoundarySelectTool.MAP_ACTION_NAME);
+        ExtendedAction action = this.getMap().getMapActionByName(
+                CadastreBoundarySelectTool.MAP_ACTION_NAME);
         if (action != null) {
             ((CadastreBoundarySelectTool) action.getAttachedTool()).clearSelection();
             this.getMap().refresh();

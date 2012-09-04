@@ -35,6 +35,11 @@ package org.geotools.swing.extended.exception;
 public class PrintLayoutException extends Exception {
 
     private final static String MESSAGE = "Print layout failed.";
+
+    /**
+     * Creates an exception
+     * @param ex 
+     */
     public PrintLayoutException(Exception ex) {
         super(MESSAGE, ex);
     }

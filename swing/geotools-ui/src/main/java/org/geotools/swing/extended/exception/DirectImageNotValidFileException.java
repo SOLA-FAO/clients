@@ -34,6 +34,11 @@ package org.geotools.swing.extended.exception;
 public class DirectImageNotValidFileException extends Exception {
 
     private static final String MESSAGE = "Format of the image is not recognised.";
+
+    /**
+     * Creates an exception
+     * 
+     */
     public DirectImageNotValidFileException() {
         super(MESSAGE);
     }

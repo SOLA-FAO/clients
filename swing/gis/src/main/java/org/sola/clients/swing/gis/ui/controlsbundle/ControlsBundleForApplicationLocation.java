@@ -54,6 +54,9 @@ public final class ControlsBundleForApplicationLocation extends SolaControlsBund
     WKBWriter wkbWritter = null;
     WKBReader wkbReader = null;
 
+    /**
+     * Creates the controls bundle used in the application form.
+     */
     public ControlsBundleForApplicationLocation() {
         super();
         this.Setup(PojoDataAccess.getInstance());

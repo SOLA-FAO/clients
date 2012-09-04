@@ -56,8 +56,17 @@ import org.geotools.swing.mapaction.extended.ui.PrintForm;
 public class Print extends ExtendedAction {
 
     private IPrintUi printForm;
+    /**
+     * The resource location of the layouts.
+     * 
+     */
     protected String layoutLocation = "resources/print/layouts.properties";
 
+    /**
+     * Creates the print map action.
+     * 
+     * @param mapControl The map control with which the map action will interact
+     */
     public Print(Map mapControl) {
         super(mapControl, "print",
                 Messaging.getInstance().getMessageText(Messaging.Ids.PRINT.toString()),

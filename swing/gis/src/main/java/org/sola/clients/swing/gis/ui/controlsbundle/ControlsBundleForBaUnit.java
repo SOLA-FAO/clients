@@ -56,6 +56,9 @@ public final class ControlsBundleForBaUnit extends SolaControlsBundle {
     private final String CADASTRE_OBJECTS_LAYERNAME = "Current property cadastre objects";
     private final String STYLE_RESOURCE = "parcel_highlighted.xml";
 
+    /**
+     * Creates a controls bundle for display in the property form
+     */
     public ControlsBundleForBaUnit() {
         super();
         this.Setup(PojoDataAccess.getInstance());

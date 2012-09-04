@@ -36,6 +36,11 @@ import org.geotools.swing.extended.util.Messaging;
  */
 public class GeometryInvalidException extends Exception {
 
+    /**
+     * Creates an exception
+     * 
+     * @param ex 
+     */
     public GeometryInvalidException(Exception ex) {
         super(Messaging.Ids.DRAWINGTOOL_GEOMETRY_NOT_VALID_ERROR.toString(), ex);
     }

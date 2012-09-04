@@ -44,6 +44,11 @@ public final class LocateApplicationRemove extends ExtendedAction {
 
     private ControlsBundleForApplicationLocation mapControlApplicationLocation;
 
+    /**
+     * Constructor of the map action that is used to remove the application location geometry.
+     * 
+     * @param mapControl  The map control with which the map action will interact 
+     */
     public LocateApplicationRemove(ControlsBundleForApplicationLocation mapControl) {
         super(mapControl.getMap(), "location-remove",
                 MessageUtility.getLocalizedMessage(

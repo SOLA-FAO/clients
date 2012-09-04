@@ -41,6 +41,11 @@ import org.sola.webservices.transferobjects.cadastre.SpatialValueAreaTO;
 public class CadastreObjectExtraTO extends 
         org.sola.webservices.transferobjects.cadastre.CadastreObjectTO{
 
+    /**
+     * Sets the list of Spatial value areas
+     * 
+     * @param spatialValueAreaList 
+     */
     public void setSpatialValueAreaList(List<SpatialValueAreaTO> spatialValueAreaList) {
         this.spatialValueAreaList = spatialValueAreaList;
     }

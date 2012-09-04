@@ -55,6 +55,14 @@ public class CadastreRedefinitionBoundarySelectTool
     private PojoDataAccess dataAccess;
     private String cadastreObjectType;
 
+    /**
+     * Creates the tool.
+     * 
+     * @param dataAccess The data access library that is used to communicate with the server
+     * @param pointLayer The same as in {@see CadastreBoundaryEditTool} 
+     * @param targetLayer The same as in {@see CadastreBoundaryEditTool} 
+     * @param targetNodeLayer The same as in {@see CadastreBoundaryEditTool} 
+     */
     public CadastreRedefinitionBoundarySelectTool(
             PojoDataAccess dataAccess,
             CadastreBoundaryPointLayer pointLayer,

@@ -95,37 +95,73 @@ public class DirectImageForm extends javax.swing.JDialog {
         return success;
     }
 
+    /**
+     * Sets the X coordinate of the first point in the map
+     * 
+     * @param firstPointInMapX 
+     */
     public void setFirstPointInMapX(Double firstPointInMapX) {
         this.firstPointInMapX = firstPointInMapX;
     }
 
+    /**
+     * Sets the Y coordinate of the first point in the map
+     * 
+     * @param firstPointInMapY 
+     */
     public void setFirstPointInMapY(Double firstPointInMapY) {
         this.firstPointInMapY = firstPointInMapY;
     }
 
+    /**
+     * Sets the X coordinate of the second point in the map
+     * 
+     * @param secondPointInMapX 
+     */
     public void setSecondPointInMapX(Double secondPointInMapX) {
         this.secondPointInMapX = secondPointInMapX;
     }
 
+    /**
+     * Sets the Y coordinate of the second point in the map
+     * 
+     * @param secondPointInMapY 
+     */
     public void setSecondPointInMapY(Double secondPointInMapY) {
         this.secondPointInMapY = secondPointInMapY;
     }
 
+    /**
+     * Gets the left bottom X map coordinate of the image
+     * @return 
+     */
     public Double getLeftBottomImageCornerInMapX() {
         return this.firstPointInMapX - (this.getImageResolution() * this.pnlImage.getFirstPointX());
     }
 
+    /**
+     * Gets the left bottom Y map coordinate of the image
+     * @return 
+     */
     public Double getLeftBottomImageCornerInMapY() {
         return this.firstPointInMapY - (this.getImageResolution()
                 * (this.pnlImage.getImageHeight() - this.pnlImage.getFirstPointY()));
     }
 
+    /**
+     * Gets the top right X map coordinate of the image
+     * @return 
+     */
     public Double getRightTopImageCornerInTheMapX() {
         return this.secondPointInMapX
                 + (this.getImageResolution()
                 * (this.pnlImage.getImageWidth() - this.pnlImage.getSecondPointX()));
     }
 
+    /**
+     * Gets the top right Y map coordinate of the image
+     * @return 
+     */
     public Double getRightTopImageCornerInTheMapY() {
         return this.secondPointInMapY
                 + (this.getImageResolution() * this.pnlImage.getSecondPointY());

@@ -40,6 +40,10 @@ import org.sola.clients.swing.gis.data.PojoDataAccess;
  */
 public final class ControlsBundleViewer extends SolaControlsBundle{
     
+    /**
+     * Creates the controls bundle viewer component.
+     * 
+     */
     public ControlsBundleViewer(){
         super();
         this.Setup(PojoDataAccess.getInstance());

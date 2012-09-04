@@ -40,6 +40,11 @@ import org.geotools.swing.extended.util.Messaging;
  */
 public class FullExtent extends ExtendedAction{
     
+    /**
+     * Creates the map action.
+     * 
+     * @param mapControl The map control with which the map action will interact
+     */
     public FullExtent(Map mapControl) {        
         super(mapControl, "fullextent", Messaging.getInstance().getMessageText(
                 Messaging.Ids.GEOTOOL_TOOLTIP_FULL_EXTENT.toString()), 

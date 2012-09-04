@@ -129,13 +129,10 @@ public class ExtendedAction extends AbstractAction{
         return this.attachedTool;
     }
     
-    private void attachTool(ExtendedTool solaTool){
-        if (this.getAttachedTool() == null){
-            this.attachedTool = solaTool;
-           this.attachedTool.setMapControl(this.getMapControl());
-        }
-    }
-
+    /**
+     * It activates the tool attached with the map action.
+     * 
+     */
     public void activateTool(){
         if (this.getAttachedTool() != null){
             this.getMapControl().setCursorTool(this.getAttachedTool());
@@ -158,6 +155,13 @@ public class ExtendedAction extends AbstractAction{
      */
     public void onClick(){
         //This can be overriden. It is called when the actionPerformed is called.
+    }
+
+    private void attachTool(ExtendedTool solaTool){
+        if (this.getAttachedTool() == null){
+            this.attachedTool = solaTool;
+           this.attachedTool.setMapControl(this.getMapControl());
+        }
     }
 }
 

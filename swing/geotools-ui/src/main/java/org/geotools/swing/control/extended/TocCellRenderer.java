@@ -44,10 +44,14 @@ public class TocCellRenderer implements TreeCellRenderer {
 
     private DefaultTreeCellRenderer defaultRenderer = new DefaultTreeCellRenderer();
 
+    /**
+     * Creates the renderer for the cell used in the TOC.
+     */
     public TocCellRenderer() {
         super();
     }
 
+    @Override
     public Component getTreeCellRendererComponent(JTree tree, Object value,
             boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
         Component result;

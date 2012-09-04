@@ -34,10 +34,19 @@ package org.geotools.swing.extended.exception;
  */
 public class InitializeLayerException extends Exception {
 
+    /**
+     * Creates an exception with a message.
+     * @param message
+     * @param ex 
+     */
     public InitializeLayerException(String message, Exception ex) {
         super(message, ex);
     }
 
+    /**
+     * Creates an exception without a message.
+     * @param ex 
+     */
     public InitializeLayerException(Exception ex) {
         super(ex);
     }

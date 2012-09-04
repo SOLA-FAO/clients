@@ -42,6 +42,10 @@ import org.geotools.swing.mapaction.extended.ExtendedAction;
  */
 public class ExtendedToolItem extends JToggleButton {
 
+    /**
+     * Creates a tool item.
+     * @param action The action that can activate the tool.
+     */
     public ExtendedToolItem(AbstractAction action) {
         super(action);
     }

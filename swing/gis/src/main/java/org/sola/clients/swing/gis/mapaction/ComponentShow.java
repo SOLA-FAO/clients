@@ -42,6 +42,15 @@ public abstract class ComponentShow extends ExtendedAction {
 
     private Component componentToShow;
 
+    /**
+     * Constructor
+     * 
+     * @param mapCtrl The map control with which the map action will interact 
+     * @param componentToShow The component to hide/show
+     * @param name The name
+     * @param tooltip Tooltip to be shown on mouse over
+     * @param iconResource The resource of the icon to be displayed
+     */
     public ComponentShow(Map mapCtrl, Component componentToShow,
             String name, String tooltip, String iconResource) {
         super(mapCtrl, name, tooltip, iconResource);

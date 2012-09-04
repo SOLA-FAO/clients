@@ -54,10 +54,22 @@ import org.sola.webservices.transferobjects.cadastre.CadastreObjectNodeTO;
  */
 public class CadastreRedefinitionAddNodeTool extends CadastreRedefinitionAbstractNodeTool {
 
+    /**
+     * The name of the tool.
+     * 
+     */
     public final static String NAME = "add-node";
     private String toolTip = MessageUtility.getLocalizedMessage(
             GisMessage.CADASTRE_TOOLTIP_ADD_NODE).getMessage();
 
+    /**
+     * Creates an instance of CadastreRedefinitionAddNodeTool
+     * @param dataAccess See constructor of {@see CadastreRedefinitionAbstractNodeTool}
+     * @param cadastreObjectNodeModifiedLayer 
+     * See constructor of {@see CadastreRedefinitionAbstractNodeTool}
+     * @param cadastreObjectModifiedLayer 
+     * See constructor of {@see CadastreRedefinitionAbstractNodeTool}
+     */
     public CadastreRedefinitionAddNodeTool(PojoDataAccess dataAccess,
             CadastreRedefinitionNodeLayer cadastreObjectNodeModifiedLayer,
             CadastreRedefinitionObjectLayer cadastreObjectModifiedLayer) {

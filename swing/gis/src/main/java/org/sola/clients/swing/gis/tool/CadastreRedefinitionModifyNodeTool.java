@@ -56,6 +56,13 @@ public class CadastreRedefinitionModifyNodeTool extends CadastreRedefinitionAbst
     private String toolTip = MessageUtility.getLocalizedMessage(
             GisMessage.CADASTRE_TOOLTIP_CHANGE_NODE).getMessage();
 
+    /**
+     * Creates the tool for modifying an existing node. For more information see
+     * {@see CadastreRedefinitionAbstractNodeTool}.
+     * @param dataAccess
+     * @param cadastreObjectNodeModifiedLayer
+     * @param cadastreObjectModifiedLayer 
+     */
     public CadastreRedefinitionModifyNodeTool(PojoDataAccess dataAccess,
             CadastreRedefinitionNodeLayer cadastreObjectNodeModifiedLayer,
             CadastreRedefinitionObjectLayer cadastreObjectModifiedLayer) {

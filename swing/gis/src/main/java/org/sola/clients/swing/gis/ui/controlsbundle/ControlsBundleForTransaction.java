@@ -70,7 +70,14 @@ public abstract class ControlsBundleForTransaction extends SolaControlsBundle {
     private ApplicationBean applicationBean;
     private MapDocumentsPanel documentsPanel;
 
-    
+    /**
+     * Creates a controls bundle for transaction component.
+     * 
+     * @param applicationBean The application bean of the application from where
+     * the transaction starts
+     * @param transactionStarterId The id of the starter of the transaction. This will be the 
+     * service id.
+     */
     public ControlsBundleForTransaction(
             ApplicationBean applicationBean, 
             String transactionStarterId){
@@ -79,6 +86,19 @@ public abstract class ControlsBundleForTransaction extends SolaControlsBundle {
         this.transactionStarterId = transactionStarterId;
     }
     
+    /**
+     * Gets an instance of a transaction bundle depending in the type of the request
+     * 
+     * @param requestTypeCode The type of the request for which to create the transaction bundle
+     * @param applicationBean The application bean of the application where the transaction is
+     * starting
+     * @param transactionStarterId The transaction starter id. It will be the id of the service
+     * that will start the transaction
+     * @param baUnitId The id of the ba unit which will be used to identify the 
+     * cadastre object being targeted
+     * @param targetCadastreObjectType the type of the cadastre object type being targeted
+     * @return 
+     */
     public static ControlsBundleForTransaction getInstance(
             String requestTypeCode,
             ApplicationBean applicationBean,
@@ -138,10 +158,18 @@ public abstract class ControlsBundleForTransaction extends SolaControlsBundle {
         super.setupToolbar();
     }
 
+    /**
+     * Gets the panel where the documents attached to the transaction are managed
+     * @return 
+     */
     protected final MapDocumentsPanel getDocumentsPanel() {
         return documentsPanel;
     }
 
+    /**
+     * Gets the transaction starter id
+     * @return 
+     */
     protected String getTransactionStarterId() {
         return transactionStarterId;
     }
@@ -216,6 +244,10 @@ public abstract class ControlsBundleForTransaction extends SolaControlsBundle {
         this.setApplicationId(this.applicationBean.getId());
     }
 
+    /**
+     * It refreshes the map control part of the bundle.
+     * @param force If true it forces the refresh of the pending layer
+     */
     @Override
     public void refresh(boolean force) {
         this.pendingLayer.setForceRefresh(force);

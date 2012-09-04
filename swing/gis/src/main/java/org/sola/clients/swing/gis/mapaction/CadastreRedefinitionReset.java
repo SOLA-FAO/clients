@@ -44,9 +44,17 @@ import org.sola.common.messaging.MessageUtility;
  */
 public final class CadastreRedefinitionReset extends ExtendedAction {
 
+    /**
+     * The name of the map action
+     */
     public final static String MAPACTION_NAME = "cadastre-redefinition-reset";
+
     private ControlsBundleForCadastreRedefinition mapControl;
 
+    /**
+     * Constructor of the map action.
+     * @param mapControl The map control with which the map action will interact 
+     */
     public CadastreRedefinitionReset(ControlsBundleForCadastreRedefinition mapControl) {
         super(mapControl.getMap(), MAPACTION_NAME,
                 MessageUtility.getLocalizedMessage(

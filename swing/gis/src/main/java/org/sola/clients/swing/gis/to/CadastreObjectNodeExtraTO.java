@@ -55,6 +55,10 @@ public class CadastreObjectNodeExtraTO extends CadastreObjectNodeTO{
         MappingManager.getMapper().map(cadastreObjectNodeTO, this);
     }
     
+    /**
+     * Sets the list of cadastre objects
+     * @param cadastreObjectList 
+     */
     public void setCadastreObjectList(List<CadastreObjectTO> cadastreObjectList) {
         this.cadastreObjectList = cadastreObjectList;
     }

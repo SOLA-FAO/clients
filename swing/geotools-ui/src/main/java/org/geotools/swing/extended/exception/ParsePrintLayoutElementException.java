@@ -34,6 +34,12 @@ package org.geotools.swing.extended.exception;
  */
 public class ParsePrintLayoutElementException extends Exception {
 
+    /**
+     * Creates an exception with a message.
+     * 
+     * @param message
+     * @param ex 
+     */
     public ParsePrintLayoutElementException(String message, Exception ex) {
         super(message, ex);
     }

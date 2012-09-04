@@ -44,6 +44,11 @@ import org.geotools.swing.tool.extended.AddDirectImageTool;
  */
 public class RemoveDirectImage extends ExtendedAction{
     
+    /**
+     * Creates the map action.
+     * 
+     * @param mapControl The map control with which the map action will interact
+     */
     public RemoveDirectImage(Map mapControl) {        
         super(mapControl, "image-remove", Messaging.getInstance().getMessageText(
                 Messaging.Ids.REMOVE_DIRECT_IMAGE_TOOLTIP.toString()), 
