@@ -65,6 +65,9 @@ public class MapObjectSearch extends FreeTextSearch {
     private SpatialSearchOptionBean searchByObject;
     private SolaTask searchTask = null;
 
+    /**
+     * Creates a map object search object
+     */
     public MapObjectSearch() {
         super();
         this.setHideListIfNotNeeded(false);
