@@ -1,4 +1,4 @@
-/*
+/**
  *    GeoTools - The Open Source Java GIS Toolkit
  *    http://geotools.org
  *
@@ -19,10 +19,8 @@ package org.geotools.swing.control;
 
 import java.awt.Dimension;
 import java.awt.Insets;
-
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-
 import org.geotools.swing.MapPane;
 import org.geotools.swing.event.MapPaneAdapter;
 import org.geotools.swing.event.MapPaneEvent;

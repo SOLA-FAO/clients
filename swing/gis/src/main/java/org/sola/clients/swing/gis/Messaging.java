@@ -25,10 +25,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package org.sola.clients.swing.gis;
 
 import java.lang.reflect.Field;
@@ -53,7 +50,9 @@ public class Messaging extends org.geotools.swing.extended.util.Messaging {
     }
     
     /**
-     * This method is called in geotools ui to show messages.
+     * This method is called in geotools ui to show messages. It overrides the functionality 
+     * of geotools to display the message in the style of Sola.
+     * 
      * @param msg 
      */
     @Override
@@ -62,12 +61,27 @@ public class Messaging extends org.geotools.swing.extended.util.Messaging {
         MessageUtility.displayMessage(msgSolaCode, args);
     }
 
+    /**
+     * Gets the message text localized using Sola functionality.
+     * 
+     * @param messageCode
+     * @param args
+     * @return 
+     */
     @Override
     public String getMessageText(String messageCode, Object... args) {
         String msgSolaCode = this.getSolaMessageCode(messageCode);
         return MessageUtility.getLocalizedMessage(msgSolaCode, args).getMessage();
     }
     
+    /**
+     * Gets the title of the layer localized. If layer is not found in the resource, 
+     * the layer name is returned. The resource is found in
+     * org/sola/clients/swing/gis/layer/resources/LayerTitles.properties.
+     * 
+     * @param layerName
+     * @return 
+     */
     public String getLayerTitle(String layerName){
         String layerTitle = layerName;
         if (bundleForLayerTitles.containsKey(layerName)){

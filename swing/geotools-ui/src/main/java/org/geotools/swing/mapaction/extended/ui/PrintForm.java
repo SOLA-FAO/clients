@@ -23,16 +23,7 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
-/*
- * PrintForm.java
- *
- * Created on Dec 20, 2011, 4:57:31 PM
- */
 package org.geotools.swing.mapaction.extended.ui;
 
 import java.awt.ComponentOrientation;

@@ -25,10 +25,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package org.sola.clients.swing.gis.layer;
 
 import com.vividsolutions.jts.geom.LineString;
@@ -63,6 +60,11 @@ public class CadastreBoundaryPointLayer extends ExtendedLayerGraphics {
     private static final String LAYER_BOUNDARY_STYLE_RESOURCE = "cadastreboundary.xml";
     private static final String BOUNDARY_FEATURE_ID = "1";
 
+    /**
+     * Creates the layer.
+     * 
+     * @throws InitializeLayerException 
+     */
     public CadastreBoundaryPointLayer() throws InitializeLayerException {
         super(LAYER_NAME, Geometries.POINT, LAYER_STYLE_RESOURCE, LAYER_ATTRIBUTE_DEFINITION);
         this.setShowInToc(false);

@@ -25,10 +25,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package org.sola.clients.swing.gis.beans;
 
 import com.vividsolutions.jts.geom.Geometry;
@@ -44,6 +41,7 @@ import org.geotools.swing.extended.util.GeometryUtility;
  * @author Elton Manoku
  */
 public class CadastreObjectBean extends SpatialBean {
+    
     public static String NAME_FIRST_PART_PROPERTY = "nameFirstpart";
     
     private String id;
@@ -53,6 +51,9 @@ public class CadastreObjectBean extends SpatialBean {
     private byte[] geomPolygon;
     private List<SpatialValueAreaBean> spatialValueAreaList = new ArrayList<SpatialValueAreaBean>();
 
+    /**
+     * Creates a cadastre object bean
+     */
     public CadastreObjectBean(){
         super();
         generateId();
@@ -107,6 +108,12 @@ public class CadastreObjectBean extends SpatialBean {
         return geomPolygon;
     }
 
+    /**
+     * Sets the geometry of the cadastre object. If the feature related geometry is not present,
+     * it is also set.
+     * 
+     * @param geomPolygon 
+     */
     public void setGeomPolygon(byte[] geomPolygon) {
         this.geomPolygon = geomPolygon.clone();
         if (getFeatureGeom() == null){
@@ -130,6 +137,13 @@ public class CadastreObjectBean extends SpatialBean {
         this.typeCode = typeCode;
     }
 
+    /**
+     * Gets the calculated area of the cadastre object. The calculated area is the 
+     * area value found in the {@see SpatialValueAreaBean.TYPE_CALCULATED} of the
+     * {@see spatialValueAreaList} property.
+     * 
+     * @return 
+     */
     public Double getCalculatedArea() {
         for(SpatialValueAreaBean valueAreaBean: this.getSpatialValueAreaList()){
             if (valueAreaBean.getTypeCode().equals(SpatialValueAreaBean.TYPE_OFFICIAL)){
@@ -139,10 +153,24 @@ public class CadastreObjectBean extends SpatialBean {
         return null;
     }
 
+    /**
+     * Sets the calculated area of the cadastre object. The calculated area is set in the 
+     * {@see SpatialValueAreaBean} of type {@see SpatialValueAreaBean.TYPE_CALCULATED} found
+     * in the {@see spatialValueAreaList} property.
+     * 
+     * @param calculatedArea 
+     */
     public void setCalculatedArea(Double calculatedArea) {
         this.setArea(calculatedArea, SpatialValueAreaBean.TYPE_CALCULATED);
     }
 
+    /**
+     * Gets the official area of the cadastre object. The official area is the 
+     * area value found in the {@see SpatialValueAreaBean.TYPE_OFFICIAL} of the
+     * {@see spatialValueAreaList} property.
+     * 
+     * @return 
+     */
     public Double getOfficialArea() {
         for(SpatialValueAreaBean valueAreaBean: this.getSpatialValueAreaList()){
             if (valueAreaBean.getTypeCode().equals(SpatialValueAreaBean.TYPE_OFFICIAL)){
@@ -152,6 +180,13 @@ public class CadastreObjectBean extends SpatialBean {
         return null;
     }
 
+    /**
+     * Sets the official area of the cadastre object. The official area is set in the 
+     * {@see SpatialValueAreaBean} of type {@see SpatialValueAreaBean.TYPE_OFFICIAL} found
+     * in the {@see spatialValueAreaList} property.
+     * 
+     * @param officialArea 
+     */
     public void setOfficialArea(Double officialArea) {
         this.setArea(officialArea, SpatialValueAreaBean.TYPE_OFFICIAL);
     }

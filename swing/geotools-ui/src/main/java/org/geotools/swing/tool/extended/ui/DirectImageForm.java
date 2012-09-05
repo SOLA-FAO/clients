@@ -25,16 +25,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
-/*
- * DirectImageForm.java
- *
- * Created on Mar 5, 2012, 3:01:59 PM
- */
 package org.geotools.swing.tool.extended.ui;
 
 import java.awt.image.BufferedImage;
@@ -62,7 +53,9 @@ public class DirectImageForm extends javax.swing.JDialog {
     private Double secondPointInMapX;
     private Double secondPointInMapY;
 
-    /** Creates new form DirectImageForm */
+    /** 
+     * Creates new form DirectImageForm 
+     */
     public DirectImageForm() {
         initComponents();
         this.lblAction.setText("TEST");

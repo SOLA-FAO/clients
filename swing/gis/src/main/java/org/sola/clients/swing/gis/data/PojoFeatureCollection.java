@@ -25,10 +25,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package org.sola.clients.swing.gis.data;
 
 import org.geotools.data.collection.ListFeatureCollection;
@@ -45,5 +42,4 @@ public class PojoFeatureCollection extends ListFeatureCollection{
     public PojoFeatureCollection(SimpleFeatureType type){
         super(type);
     }
-    
 }

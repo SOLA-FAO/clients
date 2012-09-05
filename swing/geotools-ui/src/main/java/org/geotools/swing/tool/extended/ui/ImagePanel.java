@@ -25,16 +25,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
-/*
- * ImagePanel.java
- *
- * Created on Mar 5, 2012, 12:49:16 PM
- */
 package org.geotools.swing.tool.extended.ui;
 
 import java.awt.BasicStroke;

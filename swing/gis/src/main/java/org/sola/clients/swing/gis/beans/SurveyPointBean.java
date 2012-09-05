@@ -25,10 +25,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package org.sola.clients.swing.gis.beans;
 
 import com.vividsolutions.jts.geom.Coordinate;
@@ -113,11 +110,20 @@ public class SurveyPointBean extends SpatialBean{
         this.makeGeom();
     }
 
-    
+    /*
+     * Gets if the point is marked as boundary
+     */
     public boolean isBoundary() {
         return boundary;
     }
 
+    /**
+     * Sets the point to be considered as boundary. It fires the property of boundaryForFeature
+     * in the same point. This property is needed to fire the changebean event which will cause
+     * the corresponding feature of this bean to be refreshed as well.
+     * 
+     * @param boundary 
+     */
     public void setBoundary(boolean boundary) {
         int oldValueBoundaryForFeature = getBoundaryForFeature();
         this.boundary = boundary;
@@ -125,18 +131,40 @@ public class SurveyPointBean extends SpatialBean{
                 BOUNDARY_FOR_FEATURE_PROPERTY, oldValueBoundaryForFeature, getBoundaryForFeature());
     }
 
+    /**
+     * Gets if the point is boundary. This is the property as used from the corresponding feature.
+     * @return 
+     */
     public int getBoundaryForFeature(){
         return isBoundary()?1:0;
     }
 
+    /**
+     * Sets the point to be considered as boundary. This setter is used when the boundary 
+     * is changed in the corresponding feature. The setter sets actually the boundary Property.
+     * 
+     * @param value 
+     */
     public void setBoundaryForFeature(int value){
         setBoundary(value ==1);
     }
     
+    /**
+     * Gets the geometry of the point
+     * @return 
+     */
     public byte[] getGeom() {
         return geom;
     }
 
+    /**
+     * Sets the geometry of the point. It also sets the geometry that is used from the 
+     * corresponding feature. <br/>
+     * It calculates also the shift distance between the original position and the new position
+     * and the x, y properties.
+     * 
+     * @param geometry 
+     */
     public void setGeom(byte[] geometry) {
         this.geom = geometry.clone();
         if (getFeatureGeom() == null){
@@ -145,11 +173,23 @@ public class SurveyPointBean extends SpatialBean{
         }
         setXAndY();
     }
-        
+       
+    /**
+     * Gets the original geometry of the point.
+     * 
+     * @return 
+     */
     public byte[] getOriginalGeom() {
         return originalGeom;
     }
 
+    /**
+     * Sets the original geometry of the point. If the geometry used by the corresponding feature
+     * is null it sets that also and it calculates the shift distance between the original position
+     * and the current position of the point.
+     * 
+     * @param originalGeom 
+     */
     public void setOriginalGeom(byte[] originalGeom) {
         this.originalGeom = originalGeom.clone();
         if (this.originalGeometryForFeature == null){
@@ -159,6 +199,14 @@ public class SurveyPointBean extends SpatialBean{
         }
     }  
 
+    /**
+     * Sets the geometry that is used from the corresponding feature. This updates also the 
+     * geometry of the point itself.
+     * If the original geometry is not present it means the bean is new and created in the map
+     * so the original geometry gets the same value. <br/>
+     * It also calculates the shift distance between the original and current position of the point.
+     * @param geometryValue 
+     */
     @Override
     public void setFeatureGeom(Geometry geometryValue){
         super.setFeatureGeom(geometryValue);
@@ -170,18 +218,38 @@ public class SurveyPointBean extends SpatialBean{
         calculateShift();
     }
 
+    /**
+     * Gets the point id
+     * @return 
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * Sets the point id
+     * 
+     * @param id 
+     */
     public void setId(String id) {
         this.id = id;
     }
 
+    /**
+     * Gets if the point is linked
+     * @return 
+     */
     public boolean isLinked() {
         return linked;
     }
 
+    /**
+     * Sets if the point is linked or not. It fires the change event of the linked property
+     * used by corresponding feature. This makes it possible to refresh the feature on this
+     * change because the presentation of the point in the map has to change as well.
+     * 
+     * @param linked 
+     */
     public void setLinked(boolean linked) {
         int oldValue = getLinkedForFeature();
         this.linked = linked;
@@ -189,18 +257,37 @@ public class SurveyPointBean extends SpatialBean{
                 LINKED_FOR_FEATURE_PROPERTY, oldValue, getLinkedForFeature());
     }
 
+    /**
+     * Gets if the point is linked. This is the feature related property.
+     * 
+     * @return 
+     */
     public int getLinkedForFeature(){
         return isLinked()?1:0;
     }
 
+    /**
+     * Sets the feature related property if the point is linked. 
+     * It actually changes the linked property of the point.
+     * 
+     * @param value 
+     */
     public void setLinkedForFeature(int value){
         setLinked(value ==1);
     }
 
+    /**
+     * Gets the absolute delta between the original and current x coordinate 
+     * @return 
+     */
     public Double getDeltaX(){
         return Math.abs(originalGeometryForFeature.getX() - ((Point)this.getFeatureGeom()).getX());        
     }
-    
+
+    /**
+     * Gets the absolute delta between the original and current y coordinate 
+     * @return 
+     */
     public Double getDeltaY(){
         return Math.abs(originalGeometryForFeature.getY() - ((Point)this.getFeatureGeom()).getY());        
     }

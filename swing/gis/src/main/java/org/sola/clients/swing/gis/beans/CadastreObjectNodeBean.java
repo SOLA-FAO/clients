@@ -25,10 +25,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package org.sola.clients.swing.gis.beans;
 
 import java.io.Serializable;
@@ -48,6 +45,9 @@ public class CadastreObjectNodeBean implements Serializable {
     private byte[] geom;
     List<CadastreObjectBean> cadastreObjectList = new ArrayList<CadastreObjectBean>();
     
+    /**
+     * Creates the bean
+     */
     public CadastreObjectNodeBean(){
     }
 
@@ -92,7 +92,5 @@ public class CadastreObjectNodeBean implements Serializable {
         int hash = 3;
         hash = 79 * hash + (this.id != null ? this.id.hashCode() : 0);
         return hash;
-    }
-    
-     
+    }    
 }

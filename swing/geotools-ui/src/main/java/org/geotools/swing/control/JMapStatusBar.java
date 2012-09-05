@@ -1,4 +1,4 @@
-/*
+/**
  *    GeoTools - The Open Source Java GIS Toolkit
  *    http://geotools.org
  *
@@ -14,6 +14,7 @@
  *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  *    Lesser General Public License for more details.
  */
+
 package org.geotools.swing.control;
 
 import java.awt.Color;
