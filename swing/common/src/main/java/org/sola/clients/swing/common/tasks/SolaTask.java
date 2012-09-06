@@ -102,7 +102,7 @@ public abstract class SolaTask<T, V> {
     public final T get() {
         try {
             return task.get();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             propertySupport.firePropertyChange(EXCEPTION_RISED, null, e);
             return null;
         }
