@@ -162,9 +162,9 @@ public class CadastreObjectBean extends AbstractTransactionedBean {
         return geomPolygon;
     }
 
-    public void setGeomPolygon(byte[] geomPolygon) {
+    public void setGeomPolygon(byte[] geomPolygon) { //NOSONAR
         byte[] old = this.geomPolygon;
-        this.geomPolygon = geomPolygon;
+        this.geomPolygon = geomPolygon; //NOSONAR
         propertySupport.firePropertyChange(GEOM_POLYGON_PROPERTY, old, this.geomPolygon);
     }
 

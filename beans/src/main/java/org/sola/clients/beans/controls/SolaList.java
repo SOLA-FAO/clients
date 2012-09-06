@@ -143,11 +143,11 @@ public class SolaList<E extends AbstractBindingBean> extends ExtendedList<E> {
      * @param excludedStatuses Array of statuses used to filter out parent list
      * @param includedStatuses Array of statuses used to include items from parent list
      */
-    public SolaList(List<E> list, String[] excludedStatuses, String[] includedStatuses) {
+    public SolaList(List<E> list, String[] excludedStatuses, String[] includedStatuses) { //NOSONAR
         super(list);
         StatusAndActionFilter filter = new StatusAndActionFilter();
-        this.includedStatuses = includedStatuses;
-        this.excludedStatuses = excludedStatuses;
+        this.includedStatuses = includedStatuses; //NOSONAR
+        this.excludedStatuses = excludedStatuses; //NOSONAR
         setFilter(filter);
     }
 
@@ -157,8 +157,8 @@ public class SolaList<E extends AbstractBindingBean> extends ExtendedList<E> {
     }
 
     /** Sets excluded statuses array. */
-    public void setExcludedStatuses(String[] excludedStatuses) {
-        this.excludedStatuses = excludedStatuses;
+    public void setExcludedStatuses(String[] excludedStatuses) { //NOSONAR
+        this.excludedStatuses = excludedStatuses; //NOSONAR
         super.filter();
     }
 
@@ -168,8 +168,8 @@ public class SolaList<E extends AbstractBindingBean> extends ExtendedList<E> {
     }
 
     /** Sets included statuses array. */
-    public void setIncludedStatuses(String[] includedStatuses) {
-        this.includedStatuses = includedStatuses;
+    public void setIncludedStatuses(String[] includedStatuses) { //NOSONAR
+        this.includedStatuses = includedStatuses; //NOSONAR
         super.filter();
     }
 

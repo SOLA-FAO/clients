@@ -53,12 +53,11 @@ public class PartySummaryBean extends AbstractIdBean {
     public static final String TYPE_PROPERTY = "type";
     public static final String IS_RIGHTHOLDER_PROPERTY = "rightHolder";
     public static final String ROLE_CODE_PROPERTY = "roleCode";
-    
     @NotEmpty(message = ClientMessage.CHECK_NOTNULL_NAME, payload = Localized.class)
-    @Length(max = 255, message =  ClientMessage.CHECK_FIELD_INVALID_LENGTH_NAME, payload=Localized.class)
+    @Length(max = 255, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH_NAME, payload = Localized.class)
     private String name;
     @NotEmpty(message = ClientMessage.CHECK_NOTNULL_LASTNAME, payload = Localized.class, groups = PartyIndividualValidationGroup.class)
-    @Length(max = 50, message =  ClientMessage.CHECK_FIELD_INVALID_LENGTH_LASTNAME, payload=Localized.class)
+    @Length(max = 50, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH_LASTNAME, payload = Localized.class)
     private String lastName;
     private String extId;
     private boolean rightHolder;
@@ -100,13 +99,13 @@ public class PartySummaryBean extends AbstractIdBean {
     }
 
     /**
-     * @return The full name of the party  being the concatenation of the name and 
-     * lastName properties separated by a space.
+     * @return The full name of the party being the concatenation of the name and lastName
+     * properties separated by a space.
      */
     public String getFullName() {
         String fullName = getName() == null ? "" : getName();
-        fullName = getLastName() == null ? fullName : fullName + " " + getLastName(); 
-        return fullName.trim(); 
+        fullName = getLastName() == null ? fullName : fullName + " " + getLastName();
+        return fullName.trim();
     }
 
     public PartyTypeBean getType() {
@@ -147,10 +146,10 @@ public class PartySummaryBean extends AbstractIdBean {
 
     @Override
     public String toString() {
-        if ( !(String.format("%s", lastName).isEmpty())&&String.format("%s", lastName)==null&&String.format("%s", lastName)==""){
-            return String.format("%s %s", name, lastName);    
+        if (lastName != null && !lastName.trim().isEmpty()) {
+            return String.format("%s %s", name, lastName);
         } else {
             return String.format("%s", name);
-        }   
+        }
     }
 }

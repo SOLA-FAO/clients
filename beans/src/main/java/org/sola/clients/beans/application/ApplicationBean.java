@@ -348,9 +348,9 @@ public class ApplicationBean extends ApplicationSummaryBean {
         return location;
     }
 
-    public void setLocation(byte[] value) {
+    public void setLocation(byte[] value) { //NOSONAR
         byte[] old = location;
-        location = value;
+        location = value; //NOSONAR
         propertySupport.firePropertyChange(LOCATION_PROPERTY, old, value);
     }
 

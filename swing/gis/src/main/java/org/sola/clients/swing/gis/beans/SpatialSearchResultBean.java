@@ -66,8 +66,8 @@ public class SpatialSearchResultBean extends AbstractBindingBean implements Comp
         return theGeom;
     }
 
-    public void setTheGeom(byte[] theGeom) {
-        this.theGeom = theGeom;
+    public void setTheGeom(byte[] theGeom) { //NOSONAR
+        this.theGeom = theGeom; //NOSONAR
     }
 
     @Override
