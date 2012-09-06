@@ -23,19 +23,15 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.sola.clients.swing.gis.data;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.swing.gis.beans.TransactionCadastreChangeBean;
 import org.sola.clients.swing.gis.beans.TransactionCadastreRedefinitionBean;
-import org.sola.common.mapping.MappingManager;
 import org.sola.common.logging.LogUtility;
 import org.sola.common.messaging.MessageUtility;
 import org.sola.services.boundary.wsclients.CadastreClient;
@@ -206,7 +202,8 @@ public class PojoDataAccess {
         if (objTO == null) {
             transactionBean.setFromServiceId(serviceId);
         } else {
-            MappingManager.getMapper().map(objTO, transactionBean);
+            transactionBean = TypeConverters.TransferObjectToBean(objTO, 
+                    TransactionCadastreChangeBean.class, null);
         }
         return transactionBean;
     }
@@ -226,7 +223,8 @@ public class PojoDataAccess {
         if (objTO == null) {
             transactionBean.setFromServiceId(serviceId);
         } else {
-            MappingManager.getMapper().map(objTO, transactionBean);
+             transactionBean = TypeConverters.TransferObjectToBean(objTO, 
+                     TransactionCadastreRedefinitionBean.class, null);
         }
         return transactionBean;
     }

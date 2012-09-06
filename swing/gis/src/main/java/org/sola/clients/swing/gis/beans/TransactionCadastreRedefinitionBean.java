@@ -25,18 +25,12 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.sola.clients.swing.gis.beans;
 
 import java.util.ArrayList;
 import java.util.List;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.beans.validation.ValidationResultBean;
-import org.sola.clients.swing.gis.to.TransactionCadastreRedefinitionExtraTO;
-import org.sola.common.mapping.MappingManager;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.webservices.transferobjects.transaction.TransactionCadastreRedefinitionTO;
 
@@ -82,13 +76,19 @@ public class TransactionCadastreRedefinitionBean extends TransactionBean {
         this.cadastreObjectTargetList = cadastreObjectTargetList;
     }
 
+    /**
+     * Returns the Transfer Object for this Cadastre Redefinition bean. 
+     * @return 
+     */
     @Override
     public TransactionCadastreRedefinitionTO getTO() {
-        TransactionCadastreRedefinitionExtraTO to = new TransactionCadastreRedefinitionExtraTO();
-        MappingManager.getMapper().map(this, to);
-        return to;
+        return TypeConverters.BeanToTrasferObject(this, TransactionCadastreRedefinitionTO.class);
     }
 
+    /**
+     * Saves the details of the Cadastre Redefinition to the SOLA database
+     * @return 
+     */
     @Override
     public List<ValidationResultBean> save() {
         return TypeConverters.TransferObjectListToBeanList(

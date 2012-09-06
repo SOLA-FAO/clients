@@ -28,8 +28,9 @@ package org.sola.clients.swing.gis.beans;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import org.sola.clients.beans.AbstractBindingBean;
+import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
-import org.sola.common.mapping.MappingManager;
 import org.sola.webservices.transferobjects.search.SpatialSearchOptionTO;
 
 /**
@@ -37,7 +38,7 @@ import org.sola.webservices.transferobjects.search.SpatialSearchOptionTO;
  *
  * @author soladev
  */
-public class SpatialSearchOptionBean {
+public class SpatialSearchOptionBean extends AbstractBindingBean {
 
     private static List<SpatialSearchOptionBean> instanceList = null;
     private String queryName;
@@ -47,6 +48,9 @@ public class SpatialSearchOptionBean {
     private int minSearchStrLen;
     private BigDecimal zoomInBuffer;
 
+    /**
+     * Constructor for the bean. 
+     */
     public SpatialSearchOptionBean() {
     }
 
@@ -63,8 +67,8 @@ public class SpatialSearchOptionBean {
                     PojoDataAccess.getInstance().getSearchService().getSpatialSearchOptions();
             if (searchOptions != null) {
                 for (SpatialSearchOptionTO searchOption : searchOptions) {
-                    instanceList.add(MappingManager.getMapper().map(searchOption,
-                            SpatialSearchOptionBean.class));
+                    instanceList.add(TypeConverters.TransferObjectToBean(searchOption,
+                            SpatialSearchOptionBean.class, null));
                 }
             }
         }

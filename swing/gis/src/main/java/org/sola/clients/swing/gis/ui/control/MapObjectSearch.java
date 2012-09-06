@@ -23,10 +23,6 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.sola.clients.swing.gis.ui.control;
 
 import com.vividsolutions.jts.geom.Geometry;
@@ -39,17 +35,16 @@ import org.geotools.geometry.jts.JTS;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.swing.extended.Map;
 import org.geotools.swing.extended.util.Messaging;
+import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.swing.common.controls.FreeTextSearch;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.gis.beans.SpatialSearchOptionBean;
 import org.sola.clients.swing.gis.beans.SpatialSearchResultBean;
 import org.sola.clients.swing.gis.data.PojoFeatureSource;
-import org.sola.common.mapping.MappingManager;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.MessageUtility;
-import org.sola.services.boundary.wsclients.SearchClient;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.search.SpatialSearchResultTO;
 
@@ -133,12 +128,8 @@ public class MapObjectSearch extends FreeTextSearch {
                 // Update the GUI using the primary EDT thread
                 if (searchResults.size() > 0) {
                     // Convert the TOs to Beans
-                    List<SpatialSearchResultBean> beanList = new ArrayList<SpatialSearchResultBean>();
-                    for (SpatialSearchResultTO searchResult : searchResults) {
-                        beanList.add(MappingManager.getMapper().map(searchResult,
-                                SpatialSearchResultBean.class));
-
-                    }
+                    List<SpatialSearchResultBean> beanList = TypeConverters.TransferObjectListToBeanList(
+                            searchResults, SpatialSearchResultBean.class, null);
                     // Sort the beans and then display them in the list. 
                     Collections.sort(beanList);
                     for (SpatialSearchResultBean bean : beanList) {

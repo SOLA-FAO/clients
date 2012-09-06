@@ -25,22 +25,17 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.sola.clients.swing.gis.tool;
 
 import java.util.List;
 import org.geotools.feature.CollectionEvent;
 import org.geotools.geometry.Envelope2D;
 import org.opengis.feature.simple.SimpleFeature;
+import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.swing.gis.beans.CadastreObjectNodeBean;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.layer.CadastreRedefinitionNodeLayer;
 import org.sola.clients.swing.gis.layer.CadastreRedefinitionObjectLayer;
-import org.sola.clients.swing.gis.to.CadastreObjectNodeExtraTO;
-import org.sola.common.mapping.MappingManager;
 import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.MessageUtility;
 import org.sola.webservices.transferobjects.cadastre.CadastreObjectNodeTO;
@@ -52,6 +47,9 @@ import org.sola.webservices.transferobjects.cadastre.CadastreObjectNodeTO;
  */
 public class CadastreRedefinitionModifyNodeTool extends CadastreRedefinitionAbstractNodeTool {
 
+    /**
+     * Name of the tool (change-node)
+     */
     public final static String NAME = "change-node";
     private String toolTip = MessageUtility.getLocalizedMessage(
             GisMessage.CADASTRE_TOOLTIP_CHANGE_NODE).getMessage();
@@ -117,8 +115,8 @@ public class CadastreRedefinitionModifyNodeTool extends CadastreRedefinitionAbst
         if (nodeTO == null) {
             return null;
         }
-        CadastreObjectNodeBean nodeBean = MappingManager.getMapper().map(
-                new CadastreObjectNodeExtraTO(nodeTO), CadastreObjectNodeBean.class);
+        CadastreObjectNodeBean nodeBean = TypeConverters.TransferObjectToBean(nodeTO, 
+                CadastreObjectNodeBean.class, null);
         return nodeBean;
     }
 
