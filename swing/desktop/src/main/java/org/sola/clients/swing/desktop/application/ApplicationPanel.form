@@ -2112,7 +2112,7 @@
                           <Group type="102" attributes="0">
                               <EmptySpace min="-2" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="scrollDocuments" pref="428" max="32767" attributes="1"/>
+                                  <Component id="scrollDocuments" pref="429" max="32767" attributes="1"/>
                                   <Component id="jToolBar1" alignment="0" pref="442" max="32767" attributes="0"/>
                                   <Component id="jPanel1" alignment="0" max="32767" attributes="1"/>
                               </Group>

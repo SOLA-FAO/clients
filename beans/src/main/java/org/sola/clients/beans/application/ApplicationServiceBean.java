@@ -218,6 +218,13 @@ public class ApplicationServiceBean extends ApplicationServiceSummaryBean {
                 WSManager.getInstance().getCaseManagementService().serviceActionRevert(this.getId(), this.getRowVersion()),
                 ValidationResultBean.class, null);
     }
+    
+   /** Start service back to the pending state */
+    public List<ValidationResultBean> start() {
+        return TypeConverters.TransferObjectListToBeanList(
+                WSManager.getInstance().getCaseManagementService().serviceActionStart(this.getId(), this.getRowVersion()),
+                ValidationResultBean.class, null);
+    }
 
     /** Indicates whether service can be managed */
     public boolean isManagementAllowed() {

@@ -146,7 +146,7 @@ public class ApplicationPanel extends ContentPanel {
      * Default constructor to create new application.
      */
     public ApplicationPanel() {
-        this((String)null);
+        this((String) null);
     }
 
     /**
@@ -159,8 +159,8 @@ public class ApplicationPanel extends ContentPanel {
         initComponents();
         postInit();
     }
-    
-     /**
+
+    /**
      * This constructor is used to open existing application for editing.
      *
      * @param applicationId ID of application to open.
@@ -171,8 +171,7 @@ public class ApplicationPanel extends ContentPanel {
         initComponents();
         postInit();
     }
-    
-    
+
     /**
      * This constructor is used to open existing application for editing.
      *
@@ -588,6 +587,18 @@ public class ApplicationPanel extends ContentPanel {
 
     private void launchService(final boolean readOnly) {
         if (appBean.getSelectedService() != null) {
+                    appBean.getSelectedService().start();
+//            SolaTask t = new SolaTask() {
+//**
+//                @Override
+//                public Boolean doTask() {
+//                    //neil to change message
+//                    setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_APP_VALIDATING));
+//                    appBean.getSelectedService().start();
+//                    return true;
+//                }
+//            };
+//            TaskManager.getInstance().runTask(t);
             String requestType = appBean.getSelectedService().getRequestTypeCode();
 
             // Determine what form to start for selected service
@@ -885,7 +896,7 @@ public class ApplicationPanel extends ContentPanel {
         if (getMainContentPanel() != null && this.isDashboard) {
             DashBoardPanel dashBoardPanel = new DashBoardPanel();
             dashBoardPanel.addPropertyChangeListener(ApplicationBean.ASSIGNEE_ID_PROPERTY, listener);
-            
+
             if (whichChangeEvent == HeaderPanel.CLOSE_BUTTON_CLICKED) {
                 getMainContentPanel().addPanel(dashBoardPanel, MainContentPanel.CARD_DASHBOARD, true);
             } else {
@@ -3422,6 +3433,43 @@ public class ApplicationPanel extends ContentPanel {
                 TaskManager.getInstance().runTask(t);
             }
         }
+    }
+
+    private void startService2() {
+        final ApplicationServiceBean selectedService = appBean.getSelectedService();
+
+        if (selectedService != null) {
+
+            final String serviceName = selectedService.getRequestType().getDisplayValue();
+
+            SolaTask t = new SolaTask<Void, Void>() {
+
+                List<ValidationResultBean> result;
+
+                @Override
+                protected Void doTask() {
+                    setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_SERVICE_REVERTING));
+                    result = selectedService.revert();
+                    return null;
+                }
+
+                @Override
+                protected void taskDone() {
+                    String message = MessageUtility.getLocalizedMessage(
+                            ClientMessage.APPLICATION_SERVICE_REVERT_SUCCESS,
+                            new String[]{serviceName}).getMessage();
+
+                    appBean.reload();
+                    customizeApplicationForm();
+                    saveAppState();
+                    if (result != null) {
+                        openValidationResultForm(result, true, message);
+                    }
+                }
+            };
+            TaskManager.getInstance().runTask(t);
+        }
+
     }
 
     private void cancelService() {
