@@ -61,6 +61,7 @@ public class CadastreTransactionMapPanel extends ContentPanel {
             ApplicationPropertyBean applicationProperty) {
         this(applicationBean, applicationService, 
                 applicationProperty, CadastreObjectTypeBean.CODE_PARCEL);
+        saveTransactionState();
     }
 
     /**
@@ -85,8 +86,8 @@ public class CadastreTransactionMapPanel extends ContentPanel {
 
         initComponents();
         customizeForm();
-        saveTransactionState();
         this.addMapToForm();
+        saveTransactionState();
     }
 
     private void initializeMap() {
@@ -125,7 +126,7 @@ public class CadastreTransactionMapPanel extends ContentPanel {
             }
         }
         headerPanel.setTitleText(title);
-    }
+     }
 
     private String getBaUnitId() {
         String baUnitId = null;
@@ -148,8 +149,8 @@ public class CadastreTransactionMapPanel extends ContentPanel {
     private boolean saveTransaction() {
        SaveTransaction actionSave = new SaveTransaction(this.mapControl);
        actionSave.onClick();
-       saveTransactionState();
-        close();
+       close();
+        saveTransactionState();
         return true;
     }
     @Override
