@@ -66,6 +66,7 @@ public class ApplicationServiceBean extends ApplicationServiceSummaryBean {
     private Date expectedCompletionDate;
     private Date lodgingDatetime;
     private BigDecimal valueFee;
+    private String concatenatedName;
 
     /** 
      * Creates object's instance and initializes the following beans, which are 
@@ -289,5 +290,11 @@ public class ApplicationServiceBean extends ApplicationServiceSummaryBean {
         return collection;
     }
 
-    
+    public String getConcatenatedName() {
+        return concatenatedName;
+    }
+
+    public void setConcatenatedName(String concatenatedName) {
+        this.concatenatedName = concatenatedName;
+    }
 }
