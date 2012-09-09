@@ -29,10 +29,14 @@
  */
 package org.sola.clients.swing.gis.mapaction;
 
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import javax.swing.Action;
 import org.geotools.swing.mapaction.extended.ExtendedAction;
+import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.clients.beans.validation.ValidationResultBean;
+import org.sola.clients.swing.common.DefaultExceptionHandler;
 import org.sola.clients.swing.gis.beans.TransactionBean;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForTransaction;
 import org.sola.clients.swing.ui.validation.ValidationResultForm;
@@ -65,7 +69,19 @@ public class SaveTransaction extends ExtendedAction {
                 MessageUtility.getLocalizedMessage(ClientMessage.GENERAL_LABELS_SAVE).getMessage());
         this.transactionControlsBundle = transactionControlsBundle;
     }
-
+     /**
+     * Calls {@link AbstractBindingBean#saveStateHash()} method to make a hash
+     * of object's state
+     */
+    public static void saveBeanState(AbstractBindingBean bean) {
+        try {
+            bean.saveStateHash();
+        } catch (IOException ex) {
+            DefaultExceptionHandler.handleException(ex);
+        } catch (NoSuchAlgorithmException ex) {
+            DefaultExceptionHandler.handleException(ex);
+        }
+    }
     /**
      * After it saves the transaction, if there is no critical violation, it reads it from database
      * and refreshes the gui.
@@ -83,5 +99,6 @@ public class SaveTransaction extends ExtendedAction {
                 null, true, result, true, message);
         resultForm.setLocationRelativeTo(this.transactionControlsBundle);
         resultForm.setVisible(true);
+        saveBeanState(this.transactionControlsBundle.getTransactionBean());
     }
 }
