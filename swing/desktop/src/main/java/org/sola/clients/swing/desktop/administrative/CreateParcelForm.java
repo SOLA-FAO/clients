@@ -27,10 +27,14 @@
  */
 package org.sola.clients.swing.desktop.administrative;
 
+import java.util.LinkedList;
+import java.util.List;
 import javax.swing.ImageIcon;
 import org.sola.clients.beans.cadastre.CadastreObjectBean;
+import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
+import org.sola.services.boundary.wsclients.WSManager;
 
 /** Dialog form to create new parcel or search existing one. */
 public class CreateParcelForm extends javax.swing.JDialog {
@@ -125,6 +129,16 @@ public class CreateParcelForm extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
 private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
+    
+    String parcelName = parcelPanel.getCadastreObject().getNameFirstpart()+' ' +parcelPanel.getCadastreObject().getNameLastpart();
+    final List<CadastreObjectBean> searchResult = new LinkedList<CadastreObjectBean>();
+     TypeConverters.TransferObjectListToBeanList(
+                        WSManager.getInstance().getCadastreService().getCadastreObjectByAllParts(parcelName),
+                        CadastreObjectBean.class, (List) searchResult);
+    if (searchResult.size() > 0) {
+      MessageUtility.displayMessage(ClientMessage.BAUNIT_PARCEL_EXISTS);
+      return;
+    }
     if(parcelPanel.getCadastreObject().validate(true).size()<=0){
         parcelPanel.getCadastreObject().setStatusCode("pending");
         this.firePropertyChange(SELECTED_PARCEL, null, parcelPanel.getCadastreObject());
