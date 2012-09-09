@@ -587,18 +587,16 @@ public class ApplicationPanel extends ContentPanel {
 
     private void launchService(final boolean readOnly) {
         if (appBean.getSelectedService() != null) {
-                    appBean.getSelectedService().start();
-//            SolaTask t = new SolaTask() {
-//**
-//                @Override
-//                public Boolean doTask() {
-//                    //neil to change message
-//                    setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_APP_VALIDATING));
-//                    appBean.getSelectedService().start();
-//                    return true;
-//                }
-//            };
-//            TaskManager.getInstance().runTask(t);
+            appBean.getSelectedService().start();
+
+            SolaTask t1 = new SolaTask() {
+
+                public Boolean doTask() {
+                    setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_SERVICE_STARTING));
+                    return true;
+                }
+            };
+          
             String requestType = appBean.getSelectedService().getRequestTypeCode();
 
             // Determine what form to start for selected service
@@ -730,7 +728,7 @@ public class ApplicationPanel extends ContentPanel {
 
             } else {
 
-                // Try to get BA Units, craeted through the service
+                // Try to get BA Units, created through the service
                 List<BaUnitBean> baUnitsList = BaUnitBean.getBaUnitsByServiceId(appBean.getSelectedService().getId());
 
                 if (baUnitsList != null && baUnitsList.size() > 0) {
