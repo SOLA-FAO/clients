@@ -964,7 +964,7 @@ public class PropertyPanel extends ContentPanel {
                 }
                
                
-               if ( (!txtArea.getText().equals(null))&& txtArea.getText() != "") { 
+               if ( (!txtArea.getText().equals(null))&&txtArea.getText()!= ""&&(!txtArea.getText().isEmpty())) { 
                    baUnitAreaBean1.createBaUnitArea(baUnitBean1.getId());
                } 
                 return null;
