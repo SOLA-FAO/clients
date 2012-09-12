@@ -69,7 +69,6 @@ import org.sola.common.messaging.MessageUtility;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.administrative.BaUnitAreaTO;
 import org.sola.webservices.transferobjects.administrative.BaUnitTO;
-import org.sola.webservices.transferobjects.cadastre.SpatialValueAreaTO;
 
 /**
  * This form is used to manage property object ({@codeBaUnit}).

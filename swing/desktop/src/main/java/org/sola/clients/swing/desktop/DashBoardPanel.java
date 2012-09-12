@@ -134,7 +134,7 @@ public class DashBoardPanel extends ContentPanel {
             } else {
                 isUnassignEnabled = SecurityBean.isInRole(RolesConstants.APPLICATION_UNASSIGN_FROM_OTHERS);
             }
-            isEditEnabled = SecurityBean.isInRole(RolesConstants.APPLICATION_EDIT_APPS);
+            isEditEnabled = SecurityBean.isInRole(RolesConstants.APPLICATION_EDIT_APPS, RolesConstants.APPLICATION_VIEW_APPS);
         }
 
         btnUnassignApplication.setEnabled(isUnassignEnabled);
@@ -154,13 +154,13 @@ public class DashBoardPanel extends ContentPanel {
             isAssignEnabled = false;
             isEditEnabled = false;
         } else {
-            if (SecurityBean.isInRole(RolesConstants.APPLICATION_UNASSIGN_FROM_YOURSELF)
-                    || SecurityBean.isInRole(RolesConstants.APPLICATION_UNASSIGN_FROM_OTHERS)) {
+            if (SecurityBean.isInRole(RolesConstants.APPLICATION_ASSIGN_TO_YOURSELF)
+                    || SecurityBean.isInRole(RolesConstants.APPLICATION_ASSIGN_TO_OTHERS)) {
                 isAssignEnabled = true;
             } else {
                 isAssignEnabled = false;
             }
-            isEditEnabled = SecurityBean.isInRole(RolesConstants.APPLICATION_EDIT_APPS);
+            isEditEnabled = SecurityBean.isInRole(RolesConstants.APPLICATION_EDIT_APPS, RolesConstants.APPLICATION_VIEW_APPS);
         }
 
         btnAssignApplication.setEnabled(isAssignEnabled);
