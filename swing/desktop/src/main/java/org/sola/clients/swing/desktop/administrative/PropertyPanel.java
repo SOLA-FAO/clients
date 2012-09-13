@@ -102,7 +102,7 @@ public class PropertyPanel extends ContentPanel {
     java.util.ResourceBundle resourceBundle;
     private PropertyChangeListener newPropertyWizardListener;
     public BaUnitBean whichBaUnitSelected;
-
+    private boolean isBtnNext = false; 
     /**
      * Creates {@link BaUnitBean} used to bind form components.
      */
@@ -302,7 +302,20 @@ public class PropertyPanel extends ContentPanel {
             labArea.setEnabled(true);
             labArea.setVisible(true);
         }
-
+         
+        if (baUnitBean1.isNew()) {
+            areaPanel.setEnabled(true);
+            areaPanel.setEnabled(true);
+            txtArea.setEnabled(true);
+            txtArea.setEditable(true);              
+            txtArea.setVisible(true);
+            labArea.setEnabled(true);
+            labArea.setVisible(true);
+        } else {    
+            txtArea.setEditable(false);              
+        }
+        
+        
         if (applicationBean != null && applicationService != null) {
             headerPanel.setTitleText(String.format("%s, %s",
                     headerPanel.getTitleText(),
@@ -323,8 +336,10 @@ public class PropertyPanel extends ContentPanel {
         customizeTerminationButton();
         customizeHistoricRightsViewButton();
         
+        isBtnNext = false;  
         
-        btnNext.setVisible(false);
+//        TO BE REMOVED btnNext after well tested and before pushing the code
+        btnNext.setVisible(false);  
         btnNext.setEnabled(false);
         
     }
@@ -348,10 +363,12 @@ public class PropertyPanel extends ContentPanel {
                         public void propertyChange(PropertyChangeEvent evt) {
                             if (evt.getPropertyName().equals(NewPropertyWizardPanel.SELECTED_RESULT_PROPERTY)) {
                              if (addParentProperty((Object[]) evt.getNewValue())) {
-                               btnNext.setVisible(true);
-                               btnNext.setEnabled(true);
-                               tabsMain.setEnabled(false);
-                               btnAddParent.setEnabled(false);
+                                    //                               btnNext.setVisible(true);
+                                    //                               btnNext.setEnabled(true);
+                               isBtnNext = true;
+                               btnNextAction();
+//                               tabsMain.setEnabled(false);
+//                               btnAddParent.setEnabled(false);
                              }
                             }
                         }
@@ -925,7 +942,8 @@ public class PropertyPanel extends ContentPanel {
          return;   
         }
         
-        if (txtArea.isEditable()|| btnNext.isEnabled()) { 
+        if (txtArea.isEditable()|| isBtnNext ) {
+//                btnNext.isEnabled()) { 
             if (baUnitAreaBean1 == null) {
                 return;
             } else {
@@ -2634,7 +2652,7 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     }//GEN-LAST:event_mapPanelComponentShown
 
     private void btnNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextActionPerformed
-        if (btnNext.isEnabled()) { 
+//        if (btnNext.isEnabled()) { 
 
             String  cadastreObj="";
               for (int i=0, n=baUnitBean1.getCadastreObjectList().getFilteredList().size(); i < n; i++) {    
@@ -2658,9 +2676,40 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
             tabsMain.setEnabled(true);    
             tabsMain.setSelectedIndex(tabsMain.indexOfComponent(jPanel7));
             txtArea.requestFocus(true);
-        }       
+//        }       
     }//GEN-LAST:event_btnNextActionPerformed
+    
+    
+     private void btnNextAction() {                                        
+//        if (btnNext.isEnabled()) { 
 
+            String  cadastreObj="";
+              for (int i=0, n=baUnitBean1.getCadastreObjectList().getFilteredList().size(); i < n; i++) {    
+                  if (cadastreObj == "") {
+                    cadastreObj=baUnitBean1.getCadastreObjectList().getFilteredList().get(i).getId();
+                  } else {
+                   cadastreObj = cadastreObj+" "+baUnitBean1.getCadastreObjectList().getFilteredList().get(i).getId();
+                  }
+               }
+            
+              BaUnitBean baUnitBean2 = getBaUnitWithCadObject(this.whichBaUnitSelected.getNameFirstpart(),this.whichBaUnitSelected.getNameLastpart(),cadastreObj );
+              if (baUnitBean2.getCalculatedAreaSize()!= null) {   
+                   if (!baUnitBean2.getCalculatedAreaSize().equals(new BigDecimal(0)) ) {
+                     if (MessageUtility.displayMessage(ClientMessage.BAUNIT_CONFIRM_AREA,
+                            new Object[]{baUnitBean2.getCalculatedAreaSize()}) == MessageUtility.BUTTON_ONE) {
+                        baUnitAreaBean1.setSize(baUnitBean2.getCalculatedAreaSize());
+                     }
+                   }
+                }
+              
+            tabsMain.setEnabled(true);    
+            tabsMain.setSelectedIndex(tabsMain.indexOfComponent(jPanel7));
+            txtArea.requestFocus(true);
+//        }       
+    }                                       
+    
+    
+    
     private void btnViewHistoricRightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewHistoricRightActionPerformed
         if (baUnitBean1.getSelectedHistoricRight() != null) {
             openRightForm(baUnitBean1.getSelectedHistoricRight(), RrrBean.RRR_ACTION.VIEW);
