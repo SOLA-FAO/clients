@@ -198,7 +198,8 @@ public class PropertyPanel extends ContentPanel {
         resourceBundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle");
         initComponents();
         portInit();
-    }
+        
+   }
 
     /**
      * Form constructor.
@@ -226,6 +227,8 @@ public class PropertyPanel extends ContentPanel {
         resourceBundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle");
         initComponents();
         portInit();
+        
+      
     }
 
     /**
@@ -311,11 +314,9 @@ public class PropertyPanel extends ContentPanel {
             txtArea.setVisible(true);
             labArea.setEnabled(true);
             labArea.setVisible(true);
-        } else {    
-            txtArea.setEditable(false);              
-        }
+        } 
         
-        
+       
         if (applicationBean != null && applicationService != null) {
             headerPanel.setTitleText(String.format("%s, %s",
                     headerPanel.getTitleText(),
@@ -384,6 +385,7 @@ public class PropertyPanel extends ContentPanel {
                         if (applicationService != null) {
                             allowSelection = !applicationService.getRequestTypeCode().equalsIgnoreCase(RequestTypeBean.CODE_NEW_DIGITAL_TITLE);
                         }
+                     
                         NewPropertyWizardPanel newPropertyWizardPanel = new NewPropertyWizardPanel(applicationBean, allowSelection);
                         newPropertyWizardPanel.addPropertyChangeListener(newPropertyWizardListener);
                         getMainContentPanel().addPanel(newPropertyWizardPanel, MainContentPanel.CARD_NEW_PROPERTY_WIZARD, true);
@@ -561,7 +563,7 @@ public class PropertyPanel extends ContentPanel {
                 || !applicationService.getRequestTypeCode().equalsIgnoreCase(RequestTypeBean.CODE_CANCEL_PROPERTY)) {
             enabled = false;
         }
-
+      
         // Determine what should be shown on the button, terminate or cancelling of termination.
         if (baUnitBean1.getPendingActionCode() != null && applicationService.getRequestTypeCode().equalsIgnoreCase(RequestTypeBean.CODE_CANCEL_PROPERTY)) {    
             // Show cancel
@@ -602,6 +604,8 @@ public class PropertyPanel extends ContentPanel {
             cbxRightType.setEnabled(true);
 
             // Restrict selection of right type by application service
+            
+       
             if (applicationService != null && applicationService.getRequestType() != null
                     && applicationService.getRequestType().getRrrTypeCode() != null) {
                 rrrTypes.setSelectedRightByCode(applicationService.getRequestType().getRrrTypeCode());
@@ -674,6 +678,7 @@ public class PropertyPanel extends ContentPanel {
      */
     private boolean isActionAllowed(String action) {
         boolean result = true;
+      
         if (applicationService != null && applicationService.getRequestType() != null
                 && applicationService.getRequestType().getTypeActionCode() != null) {
             result = applicationService.getRequestType().getTypeActionCode().equalsIgnoreCase(action);
@@ -686,6 +691,7 @@ public class PropertyPanel extends ContentPanel {
      */
     private boolean isRightTypeAllowed(String rrrTypeCode) {
         boolean result = true;
+      
         if (rrrTypeCode != null && applicationService != null
                 && applicationService.getRequestType() != null
                 && applicationService.getRequestType().getRrrTypeCode() != null) {
@@ -918,20 +924,7 @@ public class PropertyPanel extends ContentPanel {
         getMainContentPanel().addPanel(panel, cardName, true);
     }
     
-    
-    private boolean returnBigInteger (String size) {
-        boolean isValid = false;
-        //Initialize reg ex for size. 
-        String expression =  "[0-9\\s]*+$";  
-        CharSequence inputStr = size;
-        Pattern pattern = Pattern.compile(expression);
-        Matcher matcher = pattern.matcher(inputStr);
-        if(matcher.matches()){
-        isValid = true;
-        }
-        return isValid;
-    } 
-    
+
     private void saveBaUnit(final boolean showMessage, final boolean closeOnSave) {
 
         if (baUnitBean1.validate(true).size() > 0) {
@@ -943,23 +936,20 @@ public class PropertyPanel extends ContentPanel {
         }
         
         if (txtArea.isEditable()|| isBtnNext ) {
-//                btnNext.isEnabled()) { 
+
             if (baUnitAreaBean1 == null) {
                 return;
             } else {
                 java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle");
                 if (baUnitAreaBean1.getSize()== null)
                 {
-                    MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_FIELDS,
+                    MessageUtility.displayMessage(ClientMessage.CHECK_BAUNITAREA_VALUE,
                             new Object[]{bundle.getString("PropertyPanel.labArea.text")});
+                    txtArea.setText(null);
+                    txtArea.requestFocus();
                     return;
                 }
-                if (! returnBigInteger (txtArea.getText()))
-                {
-                    MessageUtility.displayMessage(ClientMessage.CHECK_BAUNITAREA_INTEGER,
-                            new Object[]{bundle.getString("PropertyPanel.labArea.text")});
-                    return;
-                }
+
                 
                 baUnitAreaBean1.setTypeCode("officialArea");
                 baUnitAreaBean1.setBaUnitId(baUnitBean1.getId());
@@ -971,6 +961,8 @@ public class PropertyPanel extends ContentPanel {
             @Override
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_SAVING));
+               
+     
                 if (baUnitID != null && !baUnitID.equals("")) {
                     baUnitBean1.saveBaUnit(applicationService.getId());
                 } else {
@@ -2043,7 +2035,7 @@ public class PropertyPanel extends ContentPanel {
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel16, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 594, Short.MAX_VALUE)
+                .add(jPanel16, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -2443,7 +2435,7 @@ public class PropertyPanel extends ContentPanel {
                         .add(pnlNextButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(btnNext))
-                    .add(jPanel14, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 594, Short.MAX_VALUE))
+                    .add(jPanel14, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         pnlPriorPropertiesLayout.setVerticalGroup(
