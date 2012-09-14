@@ -98,6 +98,7 @@ public class ApplicationPanel extends ContentPanel {
     public static final String APPLICATION_SAVED_PROPERTY = "applicationSaved";
     private String applicationID;
     private boolean isDashboard = false;
+    ApplicationServiceBean service;
 
     /**
      * This method is used by the form designer to create {@link ApplicationBean}.
@@ -496,7 +497,7 @@ public class ApplicationPanel extends ContentPanel {
                     setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PROPERTY));
                     ApplicationBean applicationBean = appBean.copy();
                     PropertyPanel propertyPnl = new PropertyPanel(applicationBean,
-                            applicationBean.getSelectedService(), baUnitBean, readOnly);
+                            service, baUnitBean, readOnly);
                     getMainContentPanel().addPanel(propertyPnl, MainContentPanel.CARD_PROPERTY_PANEL, true);
                     return null;
                 }
@@ -514,6 +515,7 @@ public class ApplicationPanel extends ContentPanel {
 
     private void openPropertyForm(final ApplicationPropertyBean applicationProperty, final boolean readOnly) {
         if (applicationProperty != null) {
+                   
             SolaTask t = new SolaTask<Void, Void>() {
 
                 @Override
@@ -521,7 +523,7 @@ public class ApplicationPanel extends ContentPanel {
                     setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PROPERTY));
                     ApplicationBean applicationBean = appBean.copy();
                     PropertyPanel propertyPnl = new PropertyPanel(applicationBean,
-                            applicationBean.getSelectedService(), applicationProperty.getNameFirstpart(),
+                            service, applicationProperty.getNameFirstpart(),
                             applicationProperty.getNameLastpart(), readOnly);
                     getMainContentPanel().addPanel(propertyPnl, MainContentPanel.CARD_PROPERTY_PANEL, true);
                     return null;
@@ -718,10 +720,10 @@ public class ApplicationPanel extends ContentPanel {
 
                 if (baUnitsList != null && baUnitsList.size() > 0) {
                     if (baUnitsList.size() > 1) {
-                        // Show BA Unit Selection Form
+                       // Show BA Unit Selection Form
                         BaUnitsListPanel baUnitListPanel = new BaUnitsListPanel(baUnitsList);
                         baUnitListPanel.addPropertyChangeListener(new PropertyChangeListener() {
-
+                        
                             @Override
                             public void propertyChange(PropertyChangeEvent evt) {
                                 if (evt.getPropertyName().equals(BaUnitsListPanel.SELECTED_BAUNIT_PROPERTY)
@@ -734,7 +736,7 @@ public class ApplicationPanel extends ContentPanel {
                         });
                         getMainContentPanel().addPanel(baUnitListPanel, MainContentPanel.CARD_BAUNIT_SELECT_PANEL, true);
                     } else {
-                        openPropertyForm(service, baUnitsList.get(0), readOnly);
+                       openPropertyForm(service, baUnitsList.get(0), readOnly);
                     }
                 } else {
 
@@ -749,6 +751,8 @@ public class ApplicationPanel extends ContentPanel {
                     } else {
 
                         // Open property form for existing title changes
+                        this.service = service;
+                        
                         if (appBean.getPropertyList().getFilteredList().size() == 1) {
                             openPropertyForm(appBean.getPropertyList().getFilteredList().get(0), readOnly);
                         } else if (appBean.getPropertyList().getFilteredList().size() > 1) {
@@ -3329,7 +3333,8 @@ public class ApplicationPanel extends ContentPanel {
      */
     private void startService() {
         final ApplicationServiceBean selectedService = appBean.getSelectedService();
-
+         
+       
         if (selectedService != null) {
 
             SolaTask t = new SolaTask<Void, Void>() {
