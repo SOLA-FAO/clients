@@ -98,6 +98,9 @@ public class MapDocumentsPanel extends javax.swing.JPanel {
      */
     private void customizeButtons(SourceBean selectedSource) {
         cmdAddInMap.setEnabled(false);
+        if (selectedSource == null || selectedSource.getArchiveDocument() == null) {
+            return; 
+        }
         DocumentBean documentBean = selectedSource.getArchiveDocument();
         if (documentBean == null) {
             //No attachement
