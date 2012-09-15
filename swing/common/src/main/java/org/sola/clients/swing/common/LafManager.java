@@ -285,17 +285,16 @@ if (theme=="green") {
         UIManager.put("control", new Color(245,250,240)); /*DEFAULT BACKGROUND (214,217,223)    OUR OLD [226,244,224*/
         UIManager.put("info", new Color(242,242,189)); /*TOOL TIP INFO (242,242,189)*/
         UIManager.put("nimbusAlertYellow", new Color(255,220,35));  /*ALERT TRIANGLE (255,220,35)*/	 
-        UIManager.put("nimbusDisabledText", new Color(242,242,189));	/*(142,143,145)*/ 
+        UIManager.put("nimbusDisabledText", new Color(50,50,50));	/*(142,143,145)*/ 
         UIManager.put("nimbusFocus", new Color(107,142,35));	 /*(115,164,209)*/ 
-        UIManager.put("nimbusGreen", new Color(140,179,50));	 /*(176,179,50)*/
+        UIManager.put("nimbusGreen", new Color(176,179,50));	 /*(176,179,50)*/
         UIManager.put("nimbusInfoBlue", new Color(47,190,180));	 /*(47,92,180)*/
         UIManager.put("nimbusLightBackground", new Color(255,255,255));  /*(255,255,255)*/	 
         UIManager.put("nimbusOrange", new Color(191,120,4));	  /*(191,98,4)*/
         UIManager.put("nimbusRed", new Color(140,60,34));	 /*(169,46,34)*/
         UIManager.put("nimbusSelectedText", new Color(255,255,255));  /*(255,255,255)*/ 	 
-        UIManager.put("nimbusSelectionBackground", new Color(124,205,124)); /*SELECTED ELEMENT (57,105,138)*/	 
+        UIManager.put("nimbusSelectionBackground", new Color(57,105,138)); /*SELECTED ELEMENT (57,105,138)*/	 
 //        UIManager.put("text", new Color(0,0,0));  /*(0,0,0)*/
-
 //      ####  Secondary Colors   #####
          UIManager.put("activeCaption", new Color(186,190,198)); 	/*(186,190,198)*/ 
          UIManager.put("background", new Color(214,217,223));           /*(214,217,223)*/ 
