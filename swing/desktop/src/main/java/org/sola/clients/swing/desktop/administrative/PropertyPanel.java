@@ -1740,9 +1740,6 @@ public class PropertyPanel extends ContentPanel {
         columnBinding.setColumnName("Locked");
         columnBinding.setColumnClass(Boolean.class);
         columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${id}"));
-        columnBinding.setColumnName("Id");
-        columnBinding.setColumnClass(String.class);
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitBean1, org.jdesktop.beansbinding.ELProperty.create("${selectedParcel}"), tableParcels, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
         bindingGroup.addBinding(binding);
@@ -1757,7 +1754,6 @@ public class PropertyPanel extends ContentPanel {
         tableParcels.getColumnModel().getColumn(5).setMaxWidth(40);
         tableParcels.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title5")); // NOI18N
         tableParcels.getColumnModel().getColumn(5).setCellRenderer(new LockCellRenderer());
-        tableParcels.getColumnModel().getColumn(6).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title6")); // NOI18N
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
