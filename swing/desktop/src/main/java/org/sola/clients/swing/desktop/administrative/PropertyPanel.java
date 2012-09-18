@@ -692,7 +692,13 @@ public class PropertyPanel extends ContentPanel {
      */
     private boolean isActionAllowed(String action) {
         boolean result = true;
-      
+ 
+        if (RrrTypeActionConstants.CANCEL.equalsIgnoreCase(action)) {
+            // Default to false if the action is cancel as cannot have cancel and vary/new actions
+            // supported by the same service.
+            result = false; 
+        }
+        
         if (applicationService != null && applicationService.getRequestType() != null
                 && applicationService.getRequestType().getTypeActionCode() != null) {
             result = applicationService.getRequestType().getTypeActionCode().equalsIgnoreCase(action);
