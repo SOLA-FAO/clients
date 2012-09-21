@@ -181,9 +181,10 @@ public class PartyPanelForm extends ContentPanel {
             btnSave.setText(MessageUtility.getLocalizedMessage(
                     ClientMessage.GENERAL_LABELS_SAVE_AND_CLOSE).getMessage());
             
+           if (partyBean == null) { 
             partyPanel.jPanel1.setVisible(false);
             partyPanel.groupPanel1.setVisible(false);
-            
+           } 
         } else {
             btnSave.setText(MessageUtility.getLocalizedMessage(
                     ClientMessage.GENERAL_LABELS_SAVE).getMessage());
