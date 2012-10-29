@@ -17,6 +17,7 @@
         <module>gis</module>
         <module>desktop</module>
         <module>ui</module>
-    <module>admin</module>
-  </modules>
+        <module>admin</module>
+        <module>bulk-operations</module>
+    </modules>
 </project>
