@@ -126,7 +126,7 @@ public class Development {
     /**
      * Test the controls bundle for cadastre change
      */
-   //@Ignore
+   @Ignore
     @Test
     public void testUIControlsBundleForCadastreChange() throws Exception {
         System.out.println("Test ControlsBundle for cadastre change");
@@ -171,6 +171,17 @@ public class Development {
                 this.getApplicationBean("3001"), "4011", "3068323", "parcel");
         this.displayControlsBundleForm(ctrl);
     }
+
+//    //@Ignore
+//    @Test
+//    public void testImportPanel() throws Exception {
+//        System.out.println("Test import panel");
+//
+//       // SecurityBean.authenticate("test", "test".toCharArray(), this.getWSConfig());
+//
+//        ImportSpatialPanel ctrl = new ImportSpatialPanel();
+//        this.displayControlsBundleForm(ctrl);
+//    }
 
     private HashMap<String, String> getWSConfig() {
         HashMap<String, String> wsConfig = new HashMap<String, String>();

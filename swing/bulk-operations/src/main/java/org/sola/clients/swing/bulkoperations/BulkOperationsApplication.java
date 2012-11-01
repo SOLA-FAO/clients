@@ -4,12 +4,15 @@
  */
 package org.sola.clients.swing.bulkoperations;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import org.sola.clients.beans.security.SecurityBean;
+import org.sola.clients.swing.bulkoperations.spatialobjects.ImportSpatialPanel;
 import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.common.LocalizationManager;
 import org.sola.clients.swing.ui.DesktopClientExceptionHandler;
@@ -23,7 +26,26 @@ import org.sola.common.logging.LogUtility;
  * @author Elton Manoku
  */
 public class BulkOperationsApplication {
+
+    private static void displayControlsBundleForm(Component ctrl) {
+        JDialog controlContainer = new JDialog();
+        //controlContainer.setAlwaysOnTop(true);
+        controlContainer.setModal(true);
+        ctrl.setPreferredSize(new Dimension(600, 600));
+        controlContainer.getContentPane().add(ctrl);
+        controlContainer.pack();
+        controlContainer.setVisible(true);
+    }
     
+//    public static void main(String[] args) {
+//        System.out.println("Test import panel");
+//
+//       // SecurityBean.authenticate("test", "test".toCharArray(), this.getWSConfig());
+//
+//        ImportSpatialPanel ctrl = new ImportSpatialPanel();
+//        displayControlsBundleForm(ctrl);
+//    
+//    }
     /** Main method to run the application. 
      * @param args Array of input parameters.
      */
