@@ -6,13 +6,14 @@ package org.sola.clients.swing.bulkoperations.beans;
 
 import java.io.File;
 import org.sola.clients.beans.AbstractBindingBean;
+import org.sola.clients.beans.AbstractCodeBean;
 import org.sola.clients.beans.controls.SolaObservableList;
 
 /**
  *
  * @author Elton Manoku
  */
-public class SpatialSourceBean extends AbstractBindingBean {
+public abstract class  SpatialSourceBean extends AbstractCodeBean {
     
     private String geometryType;
     private int featuresNumber;
@@ -21,13 +22,6 @@ public class SpatialSourceBean extends AbstractBindingBean {
     
     private File sourceFile;
     
-    public static SpatialSourceBean getInstance(SpatialSourceTypeBean sourceType){
-        if (sourceType.getCode().equals(SpatialSourceTypeBean.CODE_SHAPE)){
-            return new SpatialSourceShapefileBean();
-        }
-        return null;
-    }
-
     public SolaObservableList<SpatialAttributeBean> getAttributes() {
         return attributes;
     }
@@ -62,8 +56,6 @@ public class SpatialSourceBean extends AbstractBindingBean {
      * It loads attributes for a specific source.
      * For each kind of source type, this method should be overridden.
      */
-    protected void loadAttributes(){
-        
-    }
+    protected abstract void loadAttributes();
     
 }

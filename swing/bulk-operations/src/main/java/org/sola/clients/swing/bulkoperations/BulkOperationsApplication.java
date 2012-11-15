@@ -31,21 +31,21 @@ public class BulkOperationsApplication {
         JDialog controlContainer = new JDialog();
         //controlContainer.setAlwaysOnTop(true);
         controlContainer.setModal(true);
-        ctrl.setPreferredSize(new Dimension(600, 600));
+        ctrl.setPreferredSize(new Dimension(800, 600));
         controlContainer.getContentPane().add(ctrl);
         controlContainer.pack();
         controlContainer.setVisible(true);
     }
     
-//    public static void main(String[] args) {
-//        System.out.println("Test import panel");
-//
-//       // SecurityBean.authenticate("test", "test".toCharArray(), this.getWSConfig());
-//
-//        ImportSpatialPanel ctrl = new ImportSpatialPanel();
-//        displayControlsBundleForm(ctrl);
-//    
-//    }
+    public static void mainTest(String[] args) {
+        System.out.println("Test import panel");
+
+       // SecurityBean.authenticate("test", "test".toCharArray(), this.getWSConfig());
+
+        ImportSpatialPanel ctrl = new ImportSpatialPanel();
+        displayControlsBundleForm(ctrl);
+    
+    }
     /** Main method to run the application. 
      * @param args Array of input parameters.
      */

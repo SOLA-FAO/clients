@@ -4,14 +4,11 @@
  */
 package org.sola.clients.swing.bulkoperations.beans;
 
-import org.sola.clients.beans.controls.SolaObservableList;
+import org.sola.clients.beans.AbstractCodeBean;
 
 /**
  *
  * @author Elton Manoku
  */
-public class SpatialDestinationBean {
-    private SpatialDestinationTypeBean type;
-    private SolaObservableList<SpatialDestinationAttributeBean> attributes;
-    
+public class SpatialDestinationBean extends AbstractCodeBean{
 }

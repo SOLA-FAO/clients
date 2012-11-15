@@ -17,6 +17,11 @@ import org.opengis.feature.type.AttributeDescriptor;
 public class SpatialSourceShapefileBean extends SpatialSourceBean {
 
     private SimpleFeatureSource featureSource;
+    
+    public SpatialSourceShapefileBean(){
+        setCode("shp");
+        setDisplayValue("Shapefile");
+    }
 
     @Override
     protected void loadAttributes() {

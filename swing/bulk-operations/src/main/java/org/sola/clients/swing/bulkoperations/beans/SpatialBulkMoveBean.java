@@ -13,32 +13,26 @@ import org.sola.clients.beans.controls.SolaObservableList;
  */
 public class SpatialBulkMoveBean extends AbstractBindingBean{
     
-    private static String DESTINATION_TYPE_PROPERTY = "destinationType";
-    private SpatialSourceBean source = new SpatialSourceBean();
-    private SpatialDestinationTypeBean destinationType;
-    private SolaObservableList<SpatialDestinationAttributeBean> destinationAttributes
-            = new SolaObservableList<SpatialDestinationAttributeBean>();
-
-    public SolaObservableList<SpatialDestinationAttributeBean> getDestinationAttributes() {
-        return destinationAttributes;
-    }
-
-    public SpatialDestinationTypeBean getDestinationType() {
-        return destinationType;
-    }
-
-    public void setDestinationType(SpatialDestinationTypeBean destinationType) {
-        SpatialDestinationTypeBean old = this.destinationType;
-        this.destinationType = destinationType;
-        propertySupport.firePropertyChange(DESTINATION_TYPE_PROPERTY, old, this.destinationType);
-    }
+    public static final String PROPERTY_SOURCE = "source";
+    private SpatialSourceBean source = new SpatialSourceShapefileBean();
+    private SpatialDestinationBean destination = new SpatialDestinationBean();
 
     public SpatialSourceBean getSource() {
         return source;
     }
 
     public void setSource(SpatialSourceBean source) {
+        SpatialSourceBean old = this.source;
         this.source = source;
+        propertySupport.firePropertyChange(PROPERTY_SOURCE, old, source);
+    }
+
+    public SpatialDestinationBean getDestination() {
+        return destination;
+    }
+
+    public void setDestination(SpatialDestinationBean destination) {
+        this.destination = destination;
     }
         
 }
