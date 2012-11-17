@@ -5,7 +5,7 @@
 package org.sola.clients.swing.bulkoperations.beans;
 
 import java.io.File;
-import org.sola.clients.beans.AbstractBindingBean;
+import java.util.List;
 import org.sola.clients.beans.AbstractCodeBean;
 import org.sola.clients.beans.controls.SolaObservableList;
 
@@ -58,4 +58,10 @@ public abstract class  SpatialSourceBean extends AbstractCodeBean {
      */
     protected abstract void loadAttributes();
     
+    /**
+     * Retrieves the list of features from the source.
+     * @return 
+     */
+    protected abstract List<SpatialSourceObjectBean> getFeatures(
+            List<SpatialAttributeBean> onlyAttributes);
 }

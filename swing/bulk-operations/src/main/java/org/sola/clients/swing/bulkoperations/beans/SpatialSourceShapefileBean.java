@@ -4,11 +4,18 @@
  */
 package org.sola.clients.swing.bulkoperations.beans;
 
+import com.vividsolutions.jts.geom.Geometry;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import org.geotools.data.FileDataStore;
 import org.geotools.data.FileDataStoreFinder;
+import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.data.simple.SimpleFeatureSource;
+import org.geotools.swing.extended.util.GeometryUtility;
+import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.type.AttributeDescriptor;
+import org.sola.common.logging.LogUtility;
 
 /**
  *
@@ -17,8 +24,8 @@ import org.opengis.feature.type.AttributeDescriptor;
 public class SpatialSourceShapefileBean extends SpatialSourceBean {
 
     private SimpleFeatureSource featureSource;
-    
-    public SpatialSourceShapefileBean(){
+
+    public SpatialSourceShapefileBean() {
         setCode("shp");
         setDisplayValue("Shapefile");
     }
@@ -49,6 +56,31 @@ public class SpatialSourceShapefileBean extends SpatialSourceBean {
             attributeBean.setDataType(bindingName);
             getAttributes().add(attributeBean);
         }
-       
+    }
+
+    @Override
+    protected List<SpatialSourceObjectBean> getFeatures(List<SpatialAttributeBean> onlyAttributes) {
+        List<SpatialSourceObjectBean> spatialObjectList = new ArrayList<SpatialSourceObjectBean>();
+        try {
+            SimpleFeature feature;
+            SimpleFeatureIterator iterator = featureSource.getFeatures().features();
+            while (iterator.hasNext()) {
+                feature = iterator.next();
+                SpatialSourceObjectBean spatialObject = new SpatialSourceObjectBean();
+                spatialObject.setTheGeom(GeometryUtility.getWkbFromGeometry(
+                        (Geometry)feature.getDefaultGeometry()));
+                for(SpatialAttributeBean attribute: onlyAttributes){
+                    spatialObject.getFieldsWithValues().put(
+                            attribute.getName(),
+                            feature.getAttribute(attribute.getName()));
+                }
+                spatialObjectList.add(spatialObject);
+            }
+            iterator.close();
+        } catch (IOException ex) {
+             LogUtility.log("Error retrieving features from shapefile.", ex);
+             throw new RuntimeException("Error retrieving features from shapefile.", ex);
+        }
+        return spatialObjectList;
     }
 }

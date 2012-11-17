@@ -4,8 +4,9 @@
  */
 package org.sola.clients.swing.bulkoperations.beans;
 
+import java.util.List;
 import org.sola.clients.beans.AbstractBindingBean;
-import org.sola.clients.beans.controls.SolaObservableList;
+import org.sola.clients.swing.gis.beans.SpatialBean;
 
 /**
  *
@@ -15,7 +16,7 @@ public class SpatialBulkMoveBean extends AbstractBindingBean{
     
     public static final String PROPERTY_SOURCE = "source";
     private SpatialSourceBean source = new SpatialSourceShapefileBean();
-    private SpatialDestinationBean destination = new SpatialDestinationBean();
+    private SpatialDestinationBean destination = new SpatialDestinationParcelBean();
 
     public SpatialSourceBean getSource() {
         return source;
@@ -33,6 +34,10 @@ public class SpatialBulkMoveBean extends AbstractBindingBean{
 
     public void setDestination(SpatialDestinationBean destination) {
         this.destination = destination;
+    }
+    
+    public <T extends SpatialBean> List<T> getBeans(){
+        return getDestination().getBeans(getSource());
     }
         
 }

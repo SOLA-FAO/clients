@@ -7,6 +7,7 @@ package org.sola.clients.swing.bulkoperations.spatialobjects;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.util.List;
 import java.util.Set;
 import javax.swing.JPanel;
 import org.geotools.swing.data.JFileDataStoreChooser;
@@ -16,7 +17,9 @@ import org.sola.clients.beans.AbstractListBean;
 import org.sola.clients.swing.bulkoperations.beans.SpatialBulkMoveBean;
 import org.sola.clients.swing.bulkoperations.beans.SpatialDestinationBean;
 import org.sola.clients.swing.bulkoperations.beans.SpatialSourceBean;
+import org.sola.clients.swing.gis.beans.SpatialBean;
 import org.sola.clients.swing.ui.ContentPanel;
+import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.common.logging.LogUtility;
 import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -335,7 +338,12 @@ public class ImportSpatialPanel extends ContentPanel {
     }//GEN-LAST:event_cmdBrowseActionPerformed
 
     private void btnMoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveActionPerformed
-        MessageUtility.displayMessage(GisMessage.GENERAL_UNDER_CONSTRUCTION);
+        List<SpatialBean> beans = spatialBulkMove.getBeans();
+        System.out.println(String.format(
+                "%s features has been retrieved and converted to cadastre objects.", beans.size()));
+        MapPanel mapPanel = new MapPanel(null);
+        this.getMainContentPanel().addPanel(mapPanel, mapPanel.getName(), true);
+        mapPanel.getMapControl().getNewCadastreObjectLayer().setBeanList(beans);
     }//GEN-LAST:event_btnMoveActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnMove;
