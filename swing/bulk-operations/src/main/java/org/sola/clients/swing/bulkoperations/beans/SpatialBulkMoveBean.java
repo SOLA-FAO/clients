@@ -36,7 +36,7 @@ public class SpatialBulkMoveBean extends AbstractBindingBean{
         this.destination = destination;
     }
     
-    public <T extends SpatialBean> List<T> getBeans(){
+    public List<SpatialUnitTemporaryBean> getBeans(){
         return getDestination().getBeans(getSource());
     }
         

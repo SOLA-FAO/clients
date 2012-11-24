@@ -4,8 +4,10 @@
  */
 package org.sola.clients.swing.bulkoperations.beans;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import org.geotools.swing.extended.util.GeometryUtility;
 import org.sola.clients.swing.gis.beans.CadastreObjectBean;
 import org.sola.clients.swing.gis.beans.SpatialBean;
 
@@ -19,10 +21,12 @@ public class SpatialDestinationParcelBean extends SpatialDestinationBean {
     private static String PROPERTY_NAME_FIRST_PART = "nameFirstPart";
     private static String PROPERTY_OFFICIAL_AREA = "officialArea";
     private static String PROPERTY_GENERATE_FIRST_PART = "generateFirstPart";
+    private static String SPATIAL_UNIT_TEMPORARY_TYPE = "cadastre_object";
     private String nameLastPart;
     private SpatialAttributeBean nameFirstPart;
     private SpatialAttributeBean officialArea;
     private boolean generateFirstPart = false;
+    private String cadastreObjectTypeCode = "parcel";
 
     public SpatialDestinationParcelBean() {
         setCode("parcel");
@@ -70,8 +74,8 @@ public class SpatialDestinationParcelBean extends SpatialDestinationBean {
     }
 
     @Override
-    public <T extends SpatialBean> List<T> getBeans(SpatialSourceBean fromSource) {
-        List<T> beans = new ArrayList<T>();
+    public List<SpatialUnitTemporaryBean> getBeans(SpatialSourceBean fromSource) {
+        List<SpatialUnitTemporaryBean> beans = new ArrayList<SpatialUnitTemporaryBean>();
         List<SpatialAttributeBean> onlyAttributes = new ArrayList<SpatialAttributeBean>();
         onlyAttributes.add(officialArea);
         if (!isGenerateFirstPart()) {
@@ -79,17 +83,20 @@ public class SpatialDestinationParcelBean extends SpatialDestinationBean {
         }
 
         for (SpatialSourceObjectBean sourceObject : fromSource.getFeatures(onlyAttributes)) {
-            CadastreObjectBean parcel = new CadastreObjectBean();
-            parcel.setGeomPolygon(sourceObject.getTheGeom());
-            parcel.setOfficialArea(
-                    Double.valueOf(
-                    sourceObject.getFieldsWithValues().get(officialArea.getName()).toString()));
-            parcel.setNameLastpart(getNameLastPart());
+            SpatialUnitTemporaryBean bean = new  SpatialUnitTemporaryBean();
+            bean.setTypeCode(SPATIAL_UNIT_TEMPORARY_TYPE);
+            bean.setCadastreObjectTypeCode(cadastreObjectTypeCode);
+            bean.setGeom(sourceObject.getTheGeom());
+            
+            bean.setOfficialArea(BigDecimal.valueOf(
+                    Double.valueOf(sourceObject.getFieldsWithValues().get(
+                        officialArea.getName()).toString())));
+            bean.setNameLastpart(getNameLastPart());
             if (!isGenerateFirstPart()){
-                parcel.setNameFirstpart(
+                bean.setNameFirstpart(
                         sourceObject.getFieldsWithValues().get(nameFirstPart.getName()).toString());
             }
-            beans.add((T)parcel);
+            beans.add(bean);
         }
         return beans;
     }

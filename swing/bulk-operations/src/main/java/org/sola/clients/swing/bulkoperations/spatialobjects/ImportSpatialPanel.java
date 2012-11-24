@@ -14,9 +14,7 @@ import org.geotools.swing.data.JFileDataStoreChooser;
 import org.jdesktop.beansbinding.Binding;
 import org.reflections.Reflections;
 import org.sola.clients.beans.AbstractListBean;
-import org.sola.clients.swing.bulkoperations.beans.SpatialBulkMoveBean;
-import org.sola.clients.swing.bulkoperations.beans.SpatialDestinationBean;
-import org.sola.clients.swing.bulkoperations.beans.SpatialSourceBean;
+import org.sola.clients.swing.bulkoperations.beans.*;
 import org.sola.clients.swing.gis.beans.SpatialBean;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
@@ -338,12 +336,17 @@ public class ImportSpatialPanel extends ContentPanel {
     }//GEN-LAST:event_cmdBrowseActionPerformed
 
     private void btnMoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveActionPerformed
-        List<SpatialBean> beans = spatialBulkMove.getBeans();
+        List<SpatialUnitTemporaryBean> beans = spatialBulkMove.getBeans();
         System.out.println(String.format(
                 "%s features has been retrieved and converted to cadastre objects.", beans.size()));
-        MapPanel mapPanel = new MapPanel(null);
-        this.getMainContentPanel().addPanel(mapPanel, mapPanel.getName(), true);
-        mapPanel.getMapControl().getNewCadastreObjectLayer().setBeanList(beans);
+        TransactionBulkOperationSpatial transaction =
+                new TransactionBulkOperationSpatial();
+        transaction.setSpatialUnitTemporaryList(beans);
+        transaction.save();
+        System.out.println(String.format("Transaction with id: %s is saved.", transaction.getId()));
+//        MapPanel mapPanel = new MapPanel(null);
+//        this.getMainContentPanel().addPanel(mapPanel, mapPanel.getName(), true);
+//        mapPanel.getMapControl().getNewCadastreObjectLayer().setBeanList(beans);
     }//GEN-LAST:event_btnMoveActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnMove;
