@@ -13,5 +13,7 @@ import org.sola.clients.beans.AbstractCodeBean;
  */
 public abstract class SpatialDestinationBean extends AbstractCodeBean{
     
+    public abstract String getPanelName();
+    
     public abstract List<SpatialUnitTemporaryBean> getBeans(SpatialSourceBean fromSource);
 }

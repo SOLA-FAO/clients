@@ -7,32 +7,42 @@ package org.sola.clients.swing.bulkoperations.beans;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import org.geotools.swing.extended.util.GeometryUtility;
-import org.sola.clients.swing.gis.beans.CadastreObjectBean;
-import org.sola.clients.swing.gis.beans.SpatialBean;
+import org.sola.clients.beans.cache.CacheManager;
+import org.sola.clients.beans.referencedata.CadastreObjectTypeBean;
+import org.sola.clients.swing.bulkoperations.spatialobjects.SpatialDestinationCadastreObjectPanel;
 
 /**
  *
  * @author Elton Manoku
  */
-public class SpatialDestinationParcelBean extends SpatialDestinationBean {
+public class SpatialDestinationCadastreObjectBean extends SpatialDestinationBean {
 
     private static String PROPERTY_NAME_LAST_PART = "nameLastPart";
     private static String PROPERTY_NAME_FIRST_PART = "nameFirstPart";
     private static String PROPERTY_OFFICIAL_AREA = "officialArea";
     private static String PROPERTY_GENERATE_FIRST_PART = "generateFirstPart";
-    private static String SPATIAL_UNIT_TEMPORARY_TYPE = "cadastre_object";
+    private static String PROPERTY_CADASTRE_OBJECT_TYPE_CODE = "cadastreObjectTypeCode";
+    private static String PROPERTY_CADASTRE_OBJECT_TYPE = "cadastreObjectType";
     private String nameLastPart;
     private SpatialAttributeBean nameFirstPart;
     private SpatialAttributeBean officialArea;
     private boolean generateFirstPart = false;
-    private String cadastreObjectTypeCode = "parcel";
+    private CadastreObjectTypeBean cadastreObjectType = new CadastreObjectTypeBean();
+    
+    private String code = "cadastre_object";
+    private String displayValue = "Cadastre object";
 
-    public SpatialDestinationParcelBean() {
-        setCode("parcel");
-        setDisplayValue("Parcel");
+    public SpatialDestinationCadastreObjectBean() {
+        setCode(code);
+        setDisplayValue(displayValue);
+        setCadastreObjectTypeCode(CadastreObjectTypeBean.CODE_PARCEL);
     }
 
+    @Override
+    public String getPanelName() {
+        return SpatialDestinationCadastreObjectPanel.PANEL_NAME;
+    }
+    
     public boolean isGenerateFirstPart() {
         return generateFirstPart;
     }
@@ -73,6 +83,26 @@ public class SpatialDestinationParcelBean extends SpatialDestinationBean {
         propertySupport.firePropertyChange(PROPERTY_OFFICIAL_AREA, old, value);
     }
 
+    public CadastreObjectTypeBean getCadastreObjectType() {
+        return cadastreObjectType;
+    }
+
+    public void setCadastreObjectType(CadastreObjectTypeBean cadastreObjectType) {
+        this.setJointRefDataBean(
+                this.cadastreObjectType, cadastreObjectType, PROPERTY_CADASTRE_OBJECT_TYPE);
+    }
+
+    public String getCadastreObjectTypeCode() {
+        return cadastreObjectType.getCode();
+    }
+
+    public void setCadastreObjectTypeCode(String value) {
+        String old = getCadastreObjectTypeCode();
+        setCadastreObjectType(CacheManager.getBeanByCode(
+                CacheManager.getCadastreObjectTypes(), value));        
+        propertySupport.firePropertyChange(PROPERTY_CADASTRE_OBJECT_TYPE_CODE, old, value);
+    }
+
     @Override
     public List<SpatialUnitTemporaryBean> getBeans(SpatialSourceBean fromSource) {
         List<SpatialUnitTemporaryBean> beans = new ArrayList<SpatialUnitTemporaryBean>();
@@ -84,8 +114,8 @@ public class SpatialDestinationParcelBean extends SpatialDestinationBean {
 
         for (SpatialSourceObjectBean sourceObject : fromSource.getFeatures(onlyAttributes)) {
             SpatialUnitTemporaryBean bean = new  SpatialUnitTemporaryBean();
-            bean.setTypeCode(SPATIAL_UNIT_TEMPORARY_TYPE);
-            bean.setCadastreObjectTypeCode(cadastreObjectTypeCode);
+            bean.setTypeCode(code);
+            bean.setCadastreObjectTypeCode(getCadastreObjectTypeCode());
             bean.setGeom(sourceObject.getTheGeom());
             
             bean.setOfficialArea(BigDecimal.valueOf(

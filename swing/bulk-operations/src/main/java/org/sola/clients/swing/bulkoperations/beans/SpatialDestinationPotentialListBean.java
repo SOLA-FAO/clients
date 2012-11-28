@@ -5,8 +5,8 @@
 package org.sola.clients.swing.bulkoperations.beans;
 
 import java.util.Set;
-import org.jdesktop.observablecollections.ObservableList;
 import org.reflections.Reflections;
+import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.clients.beans.AbstractListBean;
 import org.sola.clients.beans.controls.SolaObservableList;
 import org.sola.common.logging.LogUtility;
@@ -17,6 +17,13 @@ import org.sola.common.logging.LogUtility;
  */
 public class SpatialDestinationPotentialListBean extends AbstractListBean{
 
+    public static final String SELECTED_BEAN_PROPERTY = "selectedSpatialDestinationBean";
+   // public static final String SELECTED_BEAN_PROPERTY = "selectedBean";
+
+    public SpatialDestinationPotentialListBean(){
+        super();
+    }
+    
     @Override
     protected SolaObservableList initializeBeanList() {
         SolaObservableList<SpatialDestinationBean> list =
@@ -37,9 +44,15 @@ public class SpatialDestinationPotentialListBean extends AbstractListBean{
         return list;
     }
 
-    @Override
-    public SpatialDestinationBean getSelectedBean() {
+    public SpatialDestinationBean getSelectedSpatialDestinationBean(){
         return (SpatialDestinationBean)super.getSelectedBean();
+    }
+    
+
+    public void setSelectedSpatialDestinationBean(SpatialDestinationBean newValue) {
+        SpatialDestinationBean old = getSelectedSpatialDestinationBean();
+        super.setSelectedBean((AbstractBindingBean)newValue);
+        propertySupport.firePropertyChange(SELECTED_BEAN_PROPERTY, old, newValue);
     }
     
 }

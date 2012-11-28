@@ -13,17 +13,17 @@ import org.sola.clients.swing.bulkoperations.beans.SpatialDestinationBean;
  *
  * @author Elton Manoku
  */
-public class SpatialDestinationParcelPanel 
+public class SpatialDestinationCadastreObjectPanel 
 extends javax.swing.JPanel implements ISpatialDestinationUI{
 
-    private static String PANEL_NAME = "SpatialDestinationParcelBean";
+    public static String PANEL_NAME = "SpatialDestinationCadastreObject";
     
     private ObservableList<SpatialAttributeBean> sourceAttributes =
             new SolaObservableList<SpatialAttributeBean>();
     /**
-     * Creates new form SpatialDestinationParcelPanel
+     * Creates new form SpatialDestinationCadastreObjectPanel
      */
-    public SpatialDestinationParcelPanel() {
+    public SpatialDestinationCadastreObjectPanel() {
         initComponents();
         this.setName(PANEL_NAME);
     }
@@ -47,7 +47,8 @@ extends javax.swing.JPanel implements ISpatialDestinationUI{
     private void initComponents() {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        bean = new org.sola.clients.swing.bulkoperations.beans.SpatialDestinationParcelBean();
+        bean = new org.sola.clients.swing.bulkoperations.beans.SpatialDestinationCadastreObjectBean();
+        cadastreObjectTypeList = new org.sola.clients.beans.referencedata.CadastreObjectTypeListBean();
         txtNameLastPart = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         cmbNameFirstPart = new javax.swing.JComboBox();
@@ -55,12 +56,14 @@ extends javax.swing.JPanel implements ISpatialDestinationUI{
         chkGenerateFirstPart = new javax.swing.JCheckBox();
         cmbOfficialArea = new javax.swing.JComboBox();
         jLabel3 = new javax.swing.JLabel();
+        cmbCadastreObjectType = new javax.swing.JComboBox();
+        jLabel4 = new javax.swing.JLabel();
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, bean, org.jdesktop.beansbinding.ELProperty.create("${nameLastPart}"), txtNameLastPart, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/bulkoperations/spatialobjects/Bundle"); // NOI18N
-        jLabel1.setText(bundle.getString("SpatialDestinationParcelPanel.jLabel1.text")); // NOI18N
+        jLabel1.setText(bundle.getString("SpatialDestinationCadastreObjectPanel.jLabel1.text")); // NOI18N
 
         cmbNameFirstPart.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -70,9 +73,9 @@ extends javax.swing.JPanel implements ISpatialDestinationUI{
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, bean, org.jdesktop.beansbinding.ELProperty.create("${nameFirstPart}"), cmbNameFirstPart, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
-        jLabel2.setText(bundle.getString("SpatialDestinationParcelPanel.jLabel2.text")); // NOI18N
+        jLabel2.setText(bundle.getString("SpatialDestinationCadastreObjectPanel.jLabel2.text")); // NOI18N
 
-        chkGenerateFirstPart.setText(bundle.getString("SpatialDestinationParcelPanel.chkGenerateFirstPart.text")); // NOI18N
+        chkGenerateFirstPart.setText(bundle.getString("SpatialDestinationCadastreObjectPanel.chkGenerateFirstPart.text")); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, bean, org.jdesktop.beansbinding.ELProperty.create("${generateFirstPart}"), chkGenerateFirstPart, org.jdesktop.beansbinding.BeanProperty.create("selected"));
         bindingGroup.addBinding(binding);
@@ -91,7 +94,15 @@ extends javax.swing.JPanel implements ISpatialDestinationUI{
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, bean, org.jdesktop.beansbinding.ELProperty.create("${officialArea}"), cmbOfficialArea, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
-        jLabel3.setText(bundle.getString("SpatialDestinationParcelPanel.jLabel3.text")); // NOI18N
+        jLabel3.setText(bundle.getString("SpatialDestinationCadastreObjectPanel.jLabel3.text")); // NOI18N
+
+        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cadastreObjectTypeList}");
+        jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, cadastreObjectTypeList, eLProperty, cmbCadastreObjectType);
+        bindingGroup.addBinding(jComboBoxBinding);
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, bean, org.jdesktop.beansbinding.ELProperty.create("${cadastreObjectType}"), cmbCadastreObjectType, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        jLabel4.setText(bundle.getString("SpatialDestinationCadastreObjectPanel.jLabel4.text")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -100,14 +111,18 @@ extends javax.swing.JPanel implements ISpatialDestinationUI{
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cmbCadastreObjectType, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(34, 34, 34))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(txtNameLastPart, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(chkGenerateFirstPart)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                        .addComponent(chkGenerateFirstPart)))
+                .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(cmbNameFirstPart, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
@@ -115,23 +130,25 @@ extends javax.swing.JPanel implements ISpatialDestinationUI{
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
                     .addComponent(cmbOfficialArea, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
+                .addGap(22, 22, 22)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
-                    .addComponent(jLabel3))
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtNameLastPart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cmbNameFirstPart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(chkGenerateFirstPart)
-                    .addComponent(cmbOfficialArea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(28, Short.MAX_VALUE))
+                    .addComponent(cmbOfficialArea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbCadastreObjectType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(42, Short.MAX_VALUE))
         );
 
         bindingGroup.bind();
@@ -142,13 +159,16 @@ extends javax.swing.JPanel implements ISpatialDestinationUI{
     }//GEN-LAST:event_chkGenerateFirstPartActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private org.sola.clients.swing.bulkoperations.beans.SpatialDestinationParcelBean bean;
+    private org.sola.clients.swing.bulkoperations.beans.SpatialDestinationCadastreObjectBean bean;
+    private org.sola.clients.beans.referencedata.CadastreObjectTypeListBean cadastreObjectTypeList;
     private javax.swing.JCheckBox chkGenerateFirstPart;
+    private javax.swing.JComboBox cmbCadastreObjectType;
     private javax.swing.JComboBox cmbNameFirstPart;
     private javax.swing.JComboBox cmbOfficialArea;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JTextField txtNameLastPart;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
