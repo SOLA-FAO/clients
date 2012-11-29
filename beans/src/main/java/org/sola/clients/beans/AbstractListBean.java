@@ -40,7 +40,7 @@ import org.sola.clients.beans.controls.SolaObservableList;
  * @author Elton Manoku
  */
 public abstract class AbstractListBean extends AbstractBindingBean{
-    public static final String SELECTED_BEAN_PROPERTY = "selectedBean";
+//    public static final String SELECTED_BEAN_PROPERTY = "selectedBean";
     private SolaObservableList beanList;
     private AbstractBindingBean selectedBean;
 
@@ -79,8 +79,6 @@ public abstract class AbstractListBean extends AbstractBindingBean{
      * @param newValue 
      */
     public <T extends AbstractBindingBean> void setSelectedBean(T newValue) {
-        AbstractBindingBean oldValue = this.selectedBean;
         this.selectedBean = newValue;
-        propertySupport.firePropertyChange(SELECTED_BEAN_PROPERTY, oldValue, newValue);
     }
 }

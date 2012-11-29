@@ -7,6 +7,7 @@ package org.sola.clients.swing.bulkoperations.beans;
 import java.util.Set;
 import org.jdesktop.observablecollections.ObservableList;
 import org.reflections.Reflections;
+import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.clients.beans.AbstractListBean;
 import org.sola.clients.beans.controls.SolaObservableList;
 import org.sola.common.logging.LogUtility;
@@ -16,6 +17,8 @@ import org.sola.common.logging.LogUtility;
  * @author Elton Manoku
  */
 public class SpatialSourcePotentialListBean extends AbstractListBean{
+
+    public static final String SELECTED_BEAN_PROPERTY = "selectedSpatialSourceBean";
 
     @Override
     protected SolaObservableList initializeBeanList() {
@@ -37,9 +40,13 @@ public class SpatialSourcePotentialListBean extends AbstractListBean{
         return list;
     }
 
-    @Override
-    public SpatialSourceBean getSelectedBean() {
+    public SpatialSourceBean getSelectedSpatialSourceBean() {
         return (SpatialSourceBean)super.getSelectedBean();
     }
     
+    public void setSelectedSpatialSourceBean(AbstractBindingBean newValue) {
+        AbstractBindingBean old = getSelectedBean();
+        super.setSelectedBean((AbstractBindingBean)newValue);
+        propertySupport.firePropertyChange(SELECTED_BEAN_PROPERTY, old, newValue);
+    }
 }

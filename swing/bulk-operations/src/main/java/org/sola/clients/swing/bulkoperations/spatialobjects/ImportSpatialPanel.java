@@ -13,16 +13,9 @@ import javax.swing.JPanel;
 import org.geotools.swing.data.JFileDataStoreChooser;
 import org.jdesktop.beansbinding.Binding;
 import org.reflections.Reflections;
-import org.sola.clients.beans.AbstractListBean;
-import org.sola.clients.swing.bulkoperations.beans.SpatialBulkMoveBean;
-import org.sola.clients.swing.bulkoperations.beans.SpatialDestinationBean;
-import org.sola.clients.swing.bulkoperations.beans.SpatialSourceBean;
-import org.sola.clients.swing.gis.beans.SpatialBean;
+import org.sola.clients.swing.bulkoperations.beans.*;
 import org.sola.clients.swing.ui.ContentPanel;
-import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.common.logging.LogUtility;
-import org.sola.common.messaging.GisMessage;
-import org.sola.common.messaging.MessageUtility;
 
 /**
  *
@@ -65,14 +58,15 @@ public class ImportSpatialPanel extends ContentPanel {
 
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                if (AbstractListBean.SELECTED_BEAN_PROPERTY.equals(evt.getPropertyName())) {
+                if (evt.getPropertyName().equals(
+                        SpatialDestinationPotentialListBean.SELECTED_BEAN_PROPERTY)) {
                     destinationChanged((SpatialDestinationBean) evt.getNewValue());
                 }
             }
         });
 
         if (spatialDestinationPotentialList.getBeanList().size() > 0) {
-            spatialDestinationPotentialList.setSelectedBean(
+            spatialDestinationPotentialList.setSelectedSpatialDestinationBean(
                     (SpatialDestinationBean) spatialDestinationPotentialList.getBeanList().get(0));
         }
 
@@ -88,7 +82,7 @@ public class ImportSpatialPanel extends ContentPanel {
     }
 
     private void destinationChanged(SpatialDestinationBean newDestination) {
-        String panelName = newDestination.getClass().getSimpleName();
+        String panelName = newDestination.getPanelName();
         pnlMainPanel.showPanel(panelName);
         spatialBulkMove.setDestination(
                 ((ISpatialDestinationUI) pnlMainPanel.getPanel(panelName)).getBean());
@@ -126,15 +120,15 @@ public class ImportSpatialPanel extends ContentPanel {
     }
 
     private void setSourceAttributesInDestinationPanel() {
-        if (spatialDestinationPotentialList.getSelectedBean() == null) {
+        if (spatialBulkMove.getSource() == null) {
             return;
         }
-        if (spatialBulkMove.getSource() == null) {
+        if (spatialBulkMove.getDestination() == null) {
             return;
         }
         ISpatialDestinationUI activeDestinationPanel =
                 (ISpatialDestinationUI) pnlMainPanel.getPanel(
-                spatialDestinationPotentialList.getSelectedBean().getClass().getSimpleName());
+                spatialBulkMove.getDestination().getPanelName());
         activeDestinationPanel.getSourceAttributes().clear();
         activeDestinationPanel.getSourceAttributes().addAll(
                 spatialBulkMove.getSource().getAttributes());
@@ -214,7 +208,7 @@ public class ImportSpatialPanel extends ContentPanel {
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${beanList}");
         jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, spatialDestinationPotentialList, eLProperty, cmbDestination);
         bindingGroup.addBinding(jComboBoxBinding);
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, spatialDestinationPotentialList, org.jdesktop.beansbinding.ELProperty.create("${selectedBean}"), cmbDestination, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, spatialDestinationPotentialList, org.jdesktop.beansbinding.ELProperty.create("${selectedSpatialDestinationBean}"), cmbDestination, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         jLabel4.setText(bundle.getString("ImportSpatialPanel.jLabel4.text")); // NOI18N
@@ -257,22 +251,22 @@ public class ImportSpatialPanel extends ContentPanel {
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(pnlMainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(81, 81, 81)
                                 .addComponent(btnMove))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel4)
-                                    .addComponent(cmbDestination, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addComponent(pnlMainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(cmbDestination, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(groupPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(groupPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(cmbSourceType, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel2)
-                                    .addGroup(layout.createSequentialGroup()
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                         .addComponent(txtSourcePath)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(cmdBrowse))
@@ -320,14 +314,18 @@ public class ImportSpatialPanel extends ContentPanel {
                 .addGap(18, 18, 18)
                 .addComponent(groupPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel4)
-                .addGap(3, 3, 3)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cmbDestination, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(pnlMainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnMove)
-                .addContainerGap(21, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(3, 3, 3)
+                        .addComponent(cmbDestination, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pnlMainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 13, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnMove)))
+                .addContainerGap())
         );
 
         bindingGroup.bind();
@@ -338,12 +336,20 @@ public class ImportSpatialPanel extends ContentPanel {
     }//GEN-LAST:event_cmdBrowseActionPerformed
 
     private void btnMoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveActionPerformed
-        List<SpatialBean> beans = spatialBulkMove.getBeans();
+
+        if (spatialBulkMove.validate(true).size() >0){
+            return;
+        }
+        List<SpatialUnitTemporaryBean> beans = spatialBulkMove.getBeans();
         System.out.println(String.format(
                 "%s features has been retrieved and converted to cadastre objects.", beans.size()));
-        MapPanel mapPanel = new MapPanel(null);
-        this.getMainContentPanel().addPanel(mapPanel, mapPanel.getName(), true);
-        mapPanel.getMapControl().getNewCadastreObjectLayer().setBeanList(beans);
+        TransactionBulkOperationSpatial transaction = new TransactionBulkOperationSpatial();
+        transaction.setSpatialUnitTemporaryList(beans);
+        transaction.save();
+        System.out.println(String.format("Transaction with id: %s is saved.", transaction.getId()));
+//        MapPanel mapPanel = new MapPanel(null);
+//        this.getMainContentPanel().addPanel(mapPanel, mapPanel.getName(), true);
+//        mapPanel.getMapControl().getNewCadastreObjectLayer().setBeanList(beans);
     }//GEN-LAST:event_btnMoveActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnMove;
