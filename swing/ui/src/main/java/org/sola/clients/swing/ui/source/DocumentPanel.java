@@ -49,6 +49,7 @@ public class DocumentPanel extends javax.swing.JPanel {
     public static final String UPDATED_SOURCE = "updatedSource";
     private boolean allowEditing = true;
     private SourceBean document;
+    public DocumentBean archiveDocument;
 
     public DocumentPanel(SourceBean document) {
         this.document = document;
@@ -122,7 +123,7 @@ public class DocumentPanel extends javax.swing.JPanel {
 
             @Override
             public void textClicked(MouseEvent e) {
-                DocumentBean.openDocument(getDocument().getArchiveDocument().getId(), 
+                DocumentBean.openDocument(getDocument().getArchiveDocument().getId(),
                         getDocument().getArchiveDocument().getFileName());
             }
         });
@@ -173,15 +174,20 @@ public class DocumentPanel extends javax.swing.JPanel {
         SourceBean updatedSource;
         if (getDocument().isNew()) {
             updatedSource = getDocument().copy();
-            clearFields();
+            if (!updatedSource.getTypeCode().contentEquals("publicNotification")) {
+                clearFields();
+            }
         } else {
             updatedSource = getDocument();
         }
         firePropertyChange(UPDATED_SOURCE, null, updatedSource);
     }
 
-    public boolean saveDocument(){
+    public boolean saveDocument() {
         if (getDocument().validate(true).size() < 1) {
+            if (!this.archiveDocument.getId().equals("")){
+              getDocument().setArchiveDocument(this.archiveDocument);
+            }
             getDocument().save();
             fireDocumentChangeEvent();
             return true;
@@ -189,7 +195,7 @@ public class DocumentPanel extends javax.swing.JPanel {
             return false;
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -508,16 +514,16 @@ public class DocumentPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
-       if (getDocument().docValid()){  
-        if (getDocument().validate(true).size() < 1) {
-            fireDocumentChangeEvent();
+        if (getDocument().docValid()) {
+            if (getDocument().validate(true).size() < 1) {
+                fireDocumentChangeEvent();
+            }
         }
-       } 
     }//GEN-LAST:event_btnOkActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private org.sola.clients.swing.common.controls.BrowseControl browseAttachment;
-    private javax.swing.JButton btnOk;
-    private javax.swing.JComboBox cbxDocType;
+    public org.sola.clients.swing.common.controls.BrowseControl browseAttachment;
+    public javax.swing.JButton btnOk;
+    public javax.swing.JComboBox cbxDocType;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -535,9 +541,9 @@ public class DocumentPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel9;
     private javax.swing.JPanel pnlAddButton;
     private org.sola.clients.beans.referencedata.SourceTypeListBean sourceTypeListBean;
-    private javax.swing.JTextField txtDescription;
-    private javax.swing.JFormattedTextField txtDocRecordDate;
-    private javax.swing.JTextField txtDocRefNumber;
+    public javax.swing.JTextField txtDescription;
+    public javax.swing.JFormattedTextField txtDocRecordDate;
+    public javax.swing.JTextField txtDocRefNumber;
     private javax.swing.JTextField txtOwnerName;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables

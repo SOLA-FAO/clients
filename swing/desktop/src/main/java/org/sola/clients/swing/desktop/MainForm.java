@@ -56,6 +56,7 @@ import org.sola.clients.swing.desktop.application.ApplicationSearchPanel;
 import org.sola.clients.swing.desktop.cadastre.MapPanelForm;
 import org.sola.clients.swing.desktop.party.PartySearchPanelForm;
 import org.sola.clients.swing.desktop.reports.LodgementReportParamsForm;
+import org.sola.clients.swing.desktop.reports.SysRegListingParamsForm;
 import org.sola.clients.swing.desktop.source.DocumentSearchForm;
 import org.sola.clients.swing.desktop.source.DocumentViewForm;
 import org.sola.clients.swing.desktop.source.PowerOfAttorneyViewForm;
@@ -437,6 +438,10 @@ public class MainForm extends javax.swing.JFrame {
         menuShowMap = new javax.swing.JMenuItem();
         menuReportsDesktop = new javax.swing.JMenu();
         menuLodgementReport = new javax.swing.JMenuItem();
+        menuSystematic = new javax.swing.JMenu();
+        menuPublicNotification = new javax.swing.JMenuItem();
+        menuOwnerName = new javax.swing.JMenuItem();
+        menuStateLand = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
         jmiContextHelp = new javax.swing.JMenuItem();
@@ -730,6 +735,34 @@ public class MainForm extends javax.swing.JFrame {
 
         menuBar.add(menuReportsDesktop);
 
+        menuSystematic.setText(bundle.getString("MainForm.menuSystematic.text")); // NOI18N
+
+        menuPublicNotification.setText(bundle.getString("MainForm.menuPublicNotification.text")); // NOI18N
+        menuPublicNotification.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuPublicNotificationActionPerformed(evt);
+            }
+        });
+        menuSystematic.add(menuPublicNotification);
+
+        menuOwnerName.setText(bundle.getString("MainForm.menuOwnerName.text")); // NOI18N
+        menuOwnerName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuOwnerNameActionPerformed(evt);
+            }
+        });
+        menuSystematic.add(menuOwnerName);
+
+        menuStateLand.setText(bundle.getString("MainForm.menuStateLand.text")); // NOI18N
+        menuStateLand.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuStateLandActionPerformed(evt);
+            }
+        });
+        menuSystematic.add(menuStateLand);
+
+        menuBar.add(menuSystematic);
+
         helpMenu.setText(bundle.getString("MainForm.helpMenu.text")); // NOI18N
 
         aboutMenuItem.setText(bundle.getString("MainForm.aboutMenuItem.text")); // NOI18N
@@ -849,7 +882,12 @@ public class MainForm extends javax.swing.JFrame {
         LodgementReportParamsForm reportDateChooser = new LodgementReportParamsForm(this, true);
         reportDateChooser.setVisible(true);
     }
-
+    
+     private void openSysRegListingParamsForm(String report) {
+        SysRegListingParamsForm reportDateChooser = new SysRegListingParamsForm(this, true, report);
+        reportDateChooser.setVisible(true);
+    }
+    
     /**
      * Opens {@link ReportViewerForm} to display report.
      */
@@ -870,6 +908,18 @@ public class MainForm extends javax.swing.JFrame {
     private void btnSetPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetPasswordActionPerformed
         editPassword();
     }//GEN-LAST:event_btnSetPasswordActionPerformed
+
+    private void menuPublicNotificationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuPublicNotificationActionPerformed
+         openSysRegListingParamsForm("ParcelNumber");
+    }//GEN-LAST:event_menuPublicNotificationActionPerformed
+
+    private void menuOwnerNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOwnerNameActionPerformed
+        openSysRegListingParamsForm("Owners");
+    }//GEN-LAST:event_menuOwnerNameActionPerformed
+
+    private void menuStateLandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuStateLandActionPerformed
+        openSysRegListingParamsForm("StateLand");
+    }//GEN-LAST:event_menuStateLandActionPerformed
     
     private void editPassword() {
             showPasswordPanel();
@@ -924,11 +974,15 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenu menuMap;
     private javax.swing.JMenuItem menuNewApplication;
     private javax.swing.JMenuItem menuOffLogLevel;
+    private javax.swing.JMenuItem menuOwnerName;
     private javax.swing.JMenuItem menuPersons;
+    private javax.swing.JMenuItem menuPublicNotification;
     private javax.swing.JMenu menuReportsDesktop;
     private javax.swing.JMenu menuSearch;
     private javax.swing.JMenuItem menuSearchApplication;
     private javax.swing.JMenuItem menuShowMap;
+    private javax.swing.JMenuItem menuStateLand;
+    private javax.swing.JMenu menuSystematic;
     private javax.swing.JMenu menuView;
     private org.sola.clients.swing.ui.MainContentPanel pnlContent;
     private javax.swing.JPanel statusPanel;
