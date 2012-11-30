@@ -49,6 +49,8 @@ public class SysRegListingParamsForm extends javax.swing.JDialog {
     private String tmpLocation = "";
     private String report;
     private static String cachePath = System.getProperty("user.home") + "/sola/cache/documents/";
+    private String reportdate;
+    private String reportTogenerate;
 
     /**
      * Creates new form SysRegListingParamsForm
@@ -72,12 +74,6 @@ public class SysRegListingParamsForm extends javax.swing.JDialog {
         } catch (Exception ex) {
             Logger.getLogger(SysRegListingParamsForm.class.getName()).log(Level.SEVERE, null, ex);
         }
-//        try {
-//            saveDocument("");
-//        } catch (Exception ex) {
-//            Logger.getLogger(SysRegListingParamsForm.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-
     }
 
     protected void postProcessReport(JasperPrint populatedReport) throws Exception {
@@ -85,26 +81,27 @@ public class SysRegListingParamsForm extends javax.swing.JDialog {
         System.out.println("Inside postProcessReport");
 
         System.out.println("start download");
-        Date currentdate = new Date(System.currentTimeMillis());
-        SimpleDateFormat formatter = new SimpleDateFormat("ddMMyy");
-        String reportdate = formatter.format(currentdate);
+//        Date currentdate = new Date(System.currentTimeMillis());
+//        SimpleDateFormat formatter = new SimpleDateFormat("ddMMyy");
+//        String reportdate = formatter.format(currentdate);
+        
         Date recDate = (Date) txtFromDate.getValue();
         String location = this.tmpLocation.replace(" ", "_");
-        String reportTogenerate = this.report + "_" +location + "_" + reportdate + ".pdf";
+//        String reportTogenerate = this.report + "_" + location + "_" + this.reportdate + ".pdf";
 
         JRPdfExporter exporterPdf = new JRPdfExporter();
 
         exporterPdf.setParameter(JRXlsExporterParameter.JASPER_PRINT, populatedReport);
         exporterPdf.setParameter(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.TRUE);
         exporterPdf.setParameter(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS, Boolean.TRUE);
-        //exporterPdf.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND,Boolean.FALSE);
-        exporterPdf.setParameter(JRXlsExporterParameter.OUTPUT_FILE_NAME, cachePath + reportTogenerate);
+        exporterPdf.setParameter(JRXlsExporterParameter.OUTPUT_FILE_NAME, cachePath + this.reportTogenerate);
 
         exporterPdf.exportReport();
-        FileUtility.saveFileFromStream(null, reportTogenerate);
+        FileUtility.saveFileFromStream(null, this.reportTogenerate);
 
         System.out.println("End download");
-        saveDocument(reportTogenerate, recDate, reportdate);
+        saveDocument(this.reportTogenerate, recDate, this.reportdate);
+//        showDocMessage(reportTogenerate);
     }
 
     private void saveDocument(String fileName, Date recDate, String subDate) throws Exception {
@@ -123,6 +120,13 @@ public class SysRegListingParamsForm extends javax.swing.JDialog {
 
         documentPanel.btnOk.doClick();
         documentPanel.saveDocument();
+
+    }
+
+    private void showDocMessage(String fileName) {
+
+        String params = cachePath + fileName;
+        MessageUtility.displayMessage(ClientMessage.SOURCE_SYS_REP_GENERATED, new Object[]{params});
 
     }
 
@@ -308,17 +312,29 @@ public class SysRegListingParamsForm extends javax.swing.JDialog {
 
         if (dateFilled) {
 
-            if (this.report.contentEquals("Owners")) {
-                ownerNameListingListBean.passParameter(tmpLocation);
-                showReport(ReportManager.getSysRegPubDisOwnerNameReport(ownerNameListingListBean, tmpFrom, tmpTo, tmpLocation, reportRequested));
-            }
-            if (this.report.contentEquals("StateLand")) {
-                stateLandListingListBean.passParameter(tmpLocation);
-                showReport(ReportManager.getSysRegPubDisStateLandReport(stateLandListingListBean, tmpFrom, tmpTo, tmpLocation, reportRequested));
-            }
-            if (this.report.contentEquals("ParcelNumber")) {
-                parcelNumberListingListBean.passParameter(tmpLocation);
-                showReport(ReportManager.getSysRegPubDisParcelNameReport(parcelNumberListingListBean, tmpFrom, tmpTo, tmpLocation, reportRequested));
+            if (tmpFrom.after(tmpTo)) {
+                MessageUtility.displayMessage(ClientMessage.CHECK_FROM_TO_DATE);
+                dateFilled = false;
+                return;
+            } else {
+                Date currentdate = new Date(System.currentTimeMillis());
+                SimpleDateFormat formatter = new SimpleDateFormat("ddMMyy");
+                this.reportdate = formatter.format(currentdate);
+                this.reportTogenerate = this.report + "_" + tmpLocation + "_" + this.reportdate + ".pdf";
+                showDocMessage(this.reportTogenerate);
+                
+                if (this.report.contentEquals("Owners")) {
+                    ownerNameListingListBean.passParameter(tmpLocation);
+                    showReport(ReportManager.getSysRegPubDisOwnerNameReport(ownerNameListingListBean, tmpFrom, tmpTo, tmpLocation, reportRequested));
+                }
+                if (this.report.contentEquals("StateLand")) {
+                    stateLandListingListBean.passParameter(tmpLocation);
+                    showReport(ReportManager.getSysRegPubDisStateLandReport(stateLandListingListBean, tmpFrom, tmpTo, tmpLocation, reportRequested));
+                }
+                if (this.report.contentEquals("ParcelNumber")) {
+                    parcelNumberListingListBean.passParameter(tmpLocation);
+                    showReport(ReportManager.getSysRegPubDisParcelNameReport(parcelNumberListingListBean, tmpFrom, tmpTo, tmpLocation, reportRequested));
+                }
             }
             this.dispose();
         }
