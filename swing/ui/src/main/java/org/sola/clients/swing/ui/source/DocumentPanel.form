@@ -92,6 +92,9 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnOkActionPerformed"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>
@@ -183,6 +186,7 @@
               </BindingProperties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="cbxDocType.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));"/>
+                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
               </AuxValues>
             </Component>
           </SubComponents>
@@ -232,6 +236,7 @@
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="txtDocRecordDate.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));&#xa;txtDocRecordDate.setHorizontalAlignment(JTextField.LEADING);"/>
                 <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="txtDocRecordDate.setFont(new java.awt.Font(&quot;Thaoma&quot;, 0, 12));"/>
+                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel3">
@@ -296,6 +301,7 @@
               </BindingProperties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="txtDocRefNumber.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));&#xa;txtDocRefNumber.setHorizontalAlignment(JTextField.LEADING);"/>
+                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
               </AuxValues>
             </Component>
           </SubComponents>
@@ -431,6 +437,9 @@
                   <Property name="name" type="java.lang.String" value="DocAttachment"/>
                 </BindingProperty>
               </BindingProperties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+              </AuxValues>
             </Component>
           </SubComponents>
         </Container>
@@ -487,6 +496,9 @@
                   <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
                 </BindingProperty>
               </BindingProperties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+              </AuxValues>
             </Component>
           </SubComponents>
         </Container>
