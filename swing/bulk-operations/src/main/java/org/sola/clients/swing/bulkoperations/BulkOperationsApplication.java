@@ -38,7 +38,7 @@ public class BulkOperationsApplication {
         controlContainer.setVisible(true);
     }
     
-    public static void main(String[] args) {
+    public static void mainT(String[] args) {
         System.out.println("Test import panel");
 
        SecurityBean.authenticate("test", "test".toCharArray(), getWSConfig());
@@ -64,7 +64,7 @@ public class BulkOperationsApplication {
     /** Main method to run the application. 
      * @param args Array of input parameters.
      */
-    public static void mainM(String[] args) {
+    public static void main(String[] args) {
         // Show splash screen
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         int x = ((dim.width) / 2);
