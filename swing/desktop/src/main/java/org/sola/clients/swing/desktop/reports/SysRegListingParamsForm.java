@@ -101,7 +101,6 @@ public class SysRegListingParamsForm extends javax.swing.JDialog {
 
         System.out.println("End download");
         saveDocument(this.reportTogenerate, recDate, this.reportdate);
-//        showDocMessage(reportTogenerate);
     }
 
     private void saveDocument(String fileName, Date recDate, String subDate) throws Exception {

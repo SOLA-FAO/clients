@@ -49,6 +49,7 @@ import org.sola.clients.beans.system.BrListBean;
 import org.sola.clients.beans.systematicregistration.OwnerNameListingListBean;
 import org.sola.clients.beans.systematicregistration.ParcelNumberListingListBean;
 import org.sola.clients.beans.systematicregistration.StateLandListingListBean;
+import org.sola.clients.beans.systematicregistration.SysRegCertificatesListBean;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
@@ -413,6 +414,39 @@ public class ReportManager {
         try {
             return JasperFillManager.fillReport(
                     ReportManager.class.getResourceAsStream("/reports/SysRegPubDisStateLand.jasper"),
+                    inputParameters, jds);
+        } catch (JRException ex) {
+            MessageUtility.displayMessage(ClientMessage.REPORT_GENERATION_FAILED,
+                    new Object[]{ex.getLocalizedMessage()});
+            return null;
+        }
+    }
+
+    /**
+     * Generates and displays <b>Systematic registration Certificates
+     * report</b>.
+     *
+     * @param certificatesList List Parcel list bean containing data for the
+     * report.
+     *
+     */
+    public static JasperPrint getSysRegCertificatesReport(SysRegCertificatesListBean certificatesList,
+            String nr, String location) {
+        HashMap inputParameters = new HashMap();
+//	Date currentdate = new Date(System.currentTimeMillis());
+//        inputParameters.put("CURRENT_DATE", currentdate);
+        
+        inputParameters.put("REPORT_LOCALE", Locale.getDefault());
+        inputParameters.put("USER", SecurityBean.getCurrentUser().getFullUserName());
+        inputParameters.put("LOCATION", location);
+        inputParameters.put("NR", nr);
+        SysRegCertificatesListBean[] beans = new SysRegCertificatesListBean[1];
+        beans[0] = certificatesList;
+        JRDataSource jds = new JRBeanArrayDataSource(beans);
+
+        try {
+            return JasperFillManager.fillReport(
+                    ReportManager.class.getResourceAsStream("/reports/SysRegCertificates.jasper"),
                     inputParameters, jds);
         } catch (JRException ex) {
             MessageUtility.displayMessage(ClientMessage.REPORT_GENERATION_FAILED,
