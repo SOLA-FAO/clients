@@ -6,6 +6,7 @@ package org.sola.clients.swing.bulkoperations.beans;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.validation.constraints.NotNull;
 import org.sola.clients.swing.bulkoperations.spatialobjects.SpatialDestinationOtherObjectPanel;
 
 /**
@@ -25,6 +26,7 @@ public class SpatialDestinationOtherObjectBean extends SpatialDestinationBean {
     private String displayValue = "Other object";
 
     public SpatialDestinationOtherObjectBean() {
+        super();
         setCode(code);
         setDisplayValue(displayValue);
     }
@@ -34,6 +36,7 @@ public class SpatialDestinationOtherObjectBean extends SpatialDestinationBean {
         return SpatialDestinationOtherObjectPanel.PANEL_NAME;
     }
 
+    @NotNull(message = "Attribute to give the label value is missing")
     public SpatialAttributeBean getLabelAttribute() {
         return labelAttribute;
     }
@@ -44,6 +47,7 @@ public class SpatialDestinationOtherObjectBean extends SpatialDestinationBean {
         propertySupport.firePropertyChange(PROPERTY_LABEL_ATTRIBUTE, old, value);
     }
 
+    @NotNull(message = "Type of the object is missing")
     public String getType() {
         return type;
     }
@@ -63,7 +67,7 @@ public class SpatialDestinationOtherObjectBean extends SpatialDestinationBean {
 
         for (SpatialSourceObjectBean sourceObject : fromSource.getFeatures(onlyAttributes)) {
             SpatialUnitTemporaryBean bean = new  SpatialUnitTemporaryBean();
-            bean.setTypeCode(code);
+            bean.setTypeCode(getType());
             bean.setLabel(
                     sourceObject.getFieldsWithValues().get(labelAttribute.getName()).toString());
             bean.setGeom(sourceObject.getTheGeom());            

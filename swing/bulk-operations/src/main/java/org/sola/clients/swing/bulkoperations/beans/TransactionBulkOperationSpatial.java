@@ -16,11 +16,22 @@ import org.sola.webservices.transferobjects.transaction.TransactionBulkOperation
  * @author Elton Manoku
  */
 public class TransactionBulkOperationSpatial extends AbstractIdBean {
-    List<SpatialUnitTemporaryBean> spatialUnitTemporaryList;
+    
+    private boolean generateFirstPart = false;
+    private List<SpatialUnitTemporaryBean> spatialUnitTemporaryList;
 
     public TransactionBulkOperationSpatial(){
         super();
     }
+
+    public boolean isGenerateFirstPart() {
+        return generateFirstPart;
+    }
+
+    public void setGenerateFirstPart(boolean generateFirstPart) {
+        this.generateFirstPart = generateFirstPart;
+    }
+    
     public List<SpatialUnitTemporaryBean> getSpatialUnitTemporaryList() {
         return spatialUnitTemporaryList;
     }
@@ -36,5 +47,10 @@ public class TransactionBulkOperationSpatial extends AbstractIdBean {
         return TypeConverters.TransferObjectListToBeanList(
                 WSManager.getInstance().getCadastreService().saveTransactionBulkOperationSpatial(
                 this.getTO()), ValidationResultBean.class, null);
+    }
+    
+    public boolean reject(){
+        return WSManager.getInstance().getCadastreService().rejectTransactionBulkOperationSpatial(
+                getTO());
     }
 }

@@ -80,6 +80,7 @@ public final class ControlsBundleForCadastreRedefinition extends ControlsBundleF
         super(applicationBean, transactionStarterId);
         this.Setup(PojoDataAccess.getInstance());
         this.setTargetCadastreObjectTypeConfiguration(targetCadastreObjectType);
+        this.refreshTransactionFromServer();
         this.setTransaction();
         ReferencedEnvelope interestingArea = null;
         if (!this.transactionIsStarted()) {
@@ -96,7 +97,7 @@ public final class ControlsBundleForCadastreRedefinition extends ControlsBundleF
     @Override
     protected void zoomToInterestingArea(
             ReferencedEnvelope interestingArea, byte[] applicationLocation) {
-        if (interestingArea == null 
+        if (interestingArea == null
                 && this.cadastreObjectModifiedLayer.getFeatureCollection().size() > 0) {
             interestingArea = this.cadastreObjectModifiedLayer.getFeatureCollection().getBounds();
         }
@@ -114,9 +115,13 @@ public final class ControlsBundleForCadastreRedefinition extends ControlsBundleF
     }
 
     @Override
-    public final void setTransaction() {
+    public void refreshTransactionFromServer() {
         this.transactionBean = PojoDataAccess.getInstance().getTransactionCadastreRedefinition(
-                getTransactionStarterId());
+                this.getTransactionStarterId());
+    }
+
+    @Override
+    public final void setTransaction() {
         this.cadastreObjectModifiedLayer.setBeanList(
                 this.transactionBean.getCadastreObjectTargetList());
         this.cadastreObjectNodeModifiedLayer.setBeanList(

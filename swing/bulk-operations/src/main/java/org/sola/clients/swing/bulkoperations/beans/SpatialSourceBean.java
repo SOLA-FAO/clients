@@ -6,6 +6,7 @@ package org.sola.clients.swing.bulkoperations.beans;
 
 import java.io.File;
 import java.util.List;
+import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.sola.clients.beans.AbstractCodeBean;
 import org.sola.clients.beans.controls.SolaObservableList;
 
@@ -21,6 +22,11 @@ public abstract class  SpatialSourceBean extends AbstractCodeBean {
             new SolaObservableList<SpatialAttributeBean>();
     
     private File sourceFile;
+    
+    public SpatialSourceBean(){
+        super();
+        setStatus("c");
+    }
     
     public SolaObservableList<SpatialAttributeBean> getAttributes() {
         return attributes;
@@ -64,4 +70,11 @@ public abstract class  SpatialSourceBean extends AbstractCodeBean {
      */
     protected abstract List<SpatialSourceObjectBean> getFeatures(
             List<SpatialAttributeBean> onlyAttributes);
+    
+    /**
+     * Retrieves the extent where all the features are found.
+     * 
+     * @return 
+     */
+    public abstract ReferencedEnvelope getExtent();
 }

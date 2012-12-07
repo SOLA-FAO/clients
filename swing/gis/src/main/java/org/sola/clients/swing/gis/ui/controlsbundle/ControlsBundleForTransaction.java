@@ -212,6 +212,11 @@ public abstract class ControlsBundleForTransaction extends SolaControlsBundle {
     public abstract void setTransaction();
     
     /**
+     * It refreshes the transaction by retrieving its information again from the server.
+     */
+    public abstract void refreshTransactionFromServer();
+
+    /**
      * Gets if the transaction is already started before.
      *
      * @return True if the transaction was already started and now is read back for modifications
@@ -241,7 +246,9 @@ public abstract class ControlsBundleForTransaction extends SolaControlsBundle {
         this.getMap().addTool(this.cadastreBoundaryEditTool, this.getToolbar(), false);
         this.getMap().addTool(new AddDirectImageTool(this.imageLayer), this.getToolbar(), true);
         this.getMap().addMapAction(new RemoveDirectImage(this.getMap()), this.getToolbar(), true);
-        this.setApplicationId(this.applicationBean.getId());
+        if (this.applicationBean != null){
+            this.setApplicationId(this.applicationBean.getId());
+        }
     }
 
     /**
@@ -278,6 +285,9 @@ public abstract class ControlsBundleForTransaction extends SolaControlsBundle {
      * It adds the panel where the documents are managed
      */
     private void addDocumentsPanel() {
+        if (this.applicationBean == null){
+            return;
+        }
         this.documentsPanel = new  MapDocumentsPanel(this, this.applicationBean);
         this.addInLeftPanel(Messaging.getInstance().getMessageText(
                 GisMessage.LEFT_PANEL_TAB_DOCUMENTS_TITLE), this.documentsPanel);

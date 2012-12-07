@@ -22,7 +22,7 @@ public class MainForm extends javax.swing.JFrame {
      */
     public MainForm() {
         initComponents();
-
+        this.setExtendedState(MAXIMIZED_BOTH);
     }
 
     /**
@@ -117,8 +117,8 @@ public class MainForm extends javax.swing.JFrame {
                 .addComponent(lblUser)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblUserName, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 437, Short.MAX_VALUE)
-                .addComponent(pnlTaskPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 142, Short.MAX_VALUE)
+                .addComponent(pnlTaskPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 612, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         pnlStatusBarLayout.setVerticalGroup(
             pnlStatusBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

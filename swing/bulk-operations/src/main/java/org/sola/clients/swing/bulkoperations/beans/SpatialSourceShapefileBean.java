@@ -8,10 +8,12 @@ import com.vividsolutions.jts.geom.Geometry;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.validation.constraints.NotNull;
 import org.geotools.data.FileDataStore;
 import org.geotools.data.FileDataStoreFinder;
 import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.data.simple.SimpleFeatureSource;
+import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.swing.extended.util.GeometryUtility;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.type.AttributeDescriptor;
@@ -23,9 +25,11 @@ import org.sola.common.logging.LogUtility;
  */
 public class SpatialSourceShapefileBean extends SpatialSourceBean {
 
+    @NotNull(message = "Source is not yet selected")
     private SimpleFeatureSource featureSource;
 
     public SpatialSourceShapefileBean() {
+        super();
         setCode("shp");
         setDisplayValue("Shapefile");
     }
@@ -83,4 +87,15 @@ public class SpatialSourceShapefileBean extends SpatialSourceBean {
         }
         return spatialObjectList;
     }
+
+    @Override
+    public ReferencedEnvelope getExtent() {
+        try {
+        return featureSource.getFeatures().getBounds();
+        } catch (IOException ex) {
+             LogUtility.log("Error retrieving features from shapefile.", ex);
+             throw new RuntimeException("Error retrieving features from shapefile.", ex);
+        }        
+    }
+        
 }

@@ -56,7 +56,8 @@ extends javax.swing.JPanel implements ISpatialDestinationUI {
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/bulkoperations/spatialobjects/Bundle"); // NOI18N
         jLabel1.setText(bundle.getString("SpatialDestinationOtherObjectPanel.jLabel1.text")); // NOI18N
 
-        txtType.setText(bundle.getString("SpatialDestinationOtherObjectPanel.txtType.text")); // NOI18N
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, bean, org.jdesktop.beansbinding.ELProperty.create("${type}"), txtType, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
 
         jLabel2.setText(bundle.getString("SpatialDestinationOtherObjectPanel.jLabel2.text")); // NOI18N
 
@@ -65,7 +66,7 @@ extends javax.swing.JPanel implements ISpatialDestinationUI {
         org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${sourceAttributes}");
         org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, cmbLabelAttribute);
         bindingGroup.addBinding(jComboBoxBinding);
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, bean, org.jdesktop.beansbinding.ELProperty.create("${labelAttribute}"), cmbLabelAttribute, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, bean, org.jdesktop.beansbinding.ELProperty.create("${labelAttribute}"), cmbLabelAttribute, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

@@ -209,6 +209,25 @@ public class PojoDataAccess {
     }
 
     /**
+     * Gets a cadastre change transaction
+     *
+     * @param serviceId The service id which initializes the transaction
+     * @return
+     */
+    public TransactionCadastreChangeBean getTransactionCadastreChangeById(String id) {
+        TransactionCadastreChangeTO objTO =
+                getInstance().getCadastreService().getTransactionCadastreChangeById(id);
+        TransactionCadastreChangeBean transactionBean = new TransactionCadastreChangeBean();
+        if (objTO == null) {
+            transactionBean.setId(id);
+        } else {
+            transactionBean = TypeConverters.TransferObjectToBean(objTO, 
+                    TransactionCadastreChangeBean.class, null);
+        }
+        return transactionBean;
+    }
+
+    /**
      * Gets a cadastre redefinition transaction
      *
      * @param serviceId The service id which initializes the transaction

@@ -58,6 +58,9 @@
     <Component class="org.sola.clients.swing.ui.HeaderPanel" name="headerPanel">
       <Properties>
         <Property name="name" type="java.lang.String" value="headerPanel" noResource="true"/>
+        <Property name="titleText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+          <ResourceString bundle="org/sola/clients/swing/bulkoperations/spatialobjects/Bundle.properties" key="MapPanel.headerPanel.titleText" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+        </Property>
       </Properties>
     </Component>
   </SubComponents>

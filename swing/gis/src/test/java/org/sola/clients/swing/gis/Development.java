@@ -44,6 +44,7 @@ import javax.swing.JDialog;
 import org.geotools.swing.extended.util.GeometryUtility;
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.swing.gis.beans.CadastreObjectBean;
+import org.sola.clients.swing.gis.beans.TransactionCadastreChangeBean;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForBaUnit;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForCadastreChange;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
@@ -126,7 +127,7 @@ public class Development {
     /**
      * Test the controls bundle for cadastre change
      */
-   @Ignore
+    @Ignore
     @Test
     public void testUIControlsBundleForCadastreChange() throws Exception {
         System.out.println("Test ControlsBundle for cadastre change");
@@ -153,6 +154,27 @@ public class Development {
         
         ControlsBundleForCadastreChange ctrl = new ControlsBundleForCadastreChange(
                 this.getApplicationBean("3000"), "4000", "3078053", "parcel");
+        
+        //ctrl.setReadOnly(true);
+
+        this.displayControlsBundleForm(ctrl);
+    }
+
+    /**
+     * Test the controls bundle for cadastre change
+     */
+    //@Ignore
+    @Test
+    public void testUIControlsBundleForCadastreChangeById() throws Exception {
+        System.out.println("Test ControlsBundle for cadastre change");
+        
+        SecurityBean.authenticate("test", "test".toCharArray(), this.getWSConfig());
+                    String transactionId = "0e9625c4-c723-4ec3-bc5c-138b47c3f56c";
+
+        TransactionCadastreChangeBean trns = 
+                PojoDataAccess.getInstance().getTransactionCadastreChangeById(transactionId);
+        ControlsBundleForCadastreChange ctrl = new ControlsBundleForCadastreChange(
+                trns, "parcel", "AAAA");
         
         //ctrl.setReadOnly(true);
 

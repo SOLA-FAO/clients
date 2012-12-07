@@ -59,9 +59,10 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
     private CadastreChangeTargetCadastreObjectLayer targetParcelsLayer = null;
     private CadastreChangeNewCadastreObjectLayer newCadastreObjectLayer = null;
     private CadastreChangeNewSurveyPointLayer newPointsLayer = null;
-    private String applicationNumber = "";
+    private String lastPartEntry = "";
     private CadastreChangeSelectCadastreObjectTool selectTargetCadastreObjectTool;
     private CadastreChangeNewCadastreObjectTool newCadastreObjectTool;
+    private String lastPartTemplate = "SP %s";
 
     /**
      * Constructor. It sets up the bundle by adding layers and tools that are relevant. Finally, it
@@ -81,14 +82,41 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
             String baUnitId,
             String targetCadastreObjectType) {
         super(applicationBean, transactionStarterId);
-        this.applicationNumber = applicationBean.getNr();
+        this.lastPartEntry = applicationBean.getNr();
         this.Setup(PojoDataAccess.getInstance());
         this.setTargetCadastreObjectTypeConfiguration(targetCadastreObjectType);
+        this.refreshTransactionFromServer();
         this.setTransaction();
         if (!this.transactionIsStarted()) {
             this.setTargetCadastreObjectsOfBaUnit(baUnitId);
         }
         this.zoomToInterestingArea(null, applicationBean.getLocation());
+    }
+
+    /**
+     * Constructor. It sets up the bundle by adding layers and tools that are relevant. Finally, it
+     * zooms in the interested zone. The interested zone is defined in the following order: <br/> If
+     * bean has survey points it is zoomed there, otherwise if baUnitId is present it is zoomed
+     * there else it is zoomed in the application location.
+     *
+     * @param applicationBean The application where the transaction is started identifiers
+     * @param transactionStarterId The id of the starter of the application. This will be the
+     * service id.
+     * @param baUnitId Id of the property that is defined in the application as a target for this
+     * cadastre change.
+     */
+    public ControlsBundleForCadastreChange(
+            TransactionCadastreChangeBean transactionBean,
+            String targetCadastreObjectType,
+            String lastPartEntry) {
+        super(null, null);
+        this.transactionBean = transactionBean;
+        this.lastPartEntry = lastPartEntry;
+        this.lastPartTemplate = "%s";
+        this.Setup(PojoDataAccess.getInstance());
+        this.setTargetCadastreObjectTypeConfiguration(targetCadastreObjectType);
+        this.setTransaction();
+        this.zoomToInterestingArea(null, null);
     }
 
     @Override
@@ -122,14 +150,27 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
         transactionBean.setSurveyPointList(this.newPointsLayer.getBeanListForTransaction());
         transactionBean.setCadastreObjectTargetList(
                 this.targetParcelsLayer.getBeanListForTransaction());
-        transactionBean.setSourceIdList(this.getDocumentsPanel().getSourceIds());
+        if (this.getDocumentsPanel() != null){
+            transactionBean.setSourceIdList(this.getDocumentsPanel().getSourceIds());
+        }
         return transactionBean;
     }
 
     @Override
+    public void refreshTransactionFromServer() {
+        if (this.getTransactionStarterId() != null){
+            this.transactionBean = PojoDataAccess.getInstance().getTransactionCadastreChange(
+                    this.getTransactionStarterId());
+        }else if (this.transactionBean != null){
+            this.transactionBean = PojoDataAccess.getInstance().getTransactionCadastreChangeById(
+                    this.transactionBean.getId());
+        }else{
+            this.transactionBean = new TransactionCadastreChangeBean();
+        }
+    }
+    
+    @Override
     public final void setTransaction() {
-        this.transactionBean = PojoDataAccess.getInstance().getTransactionCadastreChange(
-                this.getTransactionStarterId());
         //Reset the lists of beans in the layers
         this.targetParcelsLayer.getBeanList().clear();
         this.newCadastreObjectLayer.getBeanList().clear();
@@ -139,7 +180,9 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
         this.newCadastreObjectLayer.setBeanList(
                 this.transactionBean.getCadastreObjectList());
         this.newPointsLayer.setBeanList(this.transactionBean.getSurveyPointList());
-        this.getDocumentsPanel().setSourceIds(this.transactionBean.getSourceIdList());
+        if (this.getDocumentsPanel() != null){
+            this.getDocumentsPanel().setSourceIds(this.transactionBean.getSourceIdList());
+        }
     }
 
     @Override
@@ -149,7 +192,7 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
         this.getMap().addLayer(targetParcelsLayer);
 
         this.newCadastreObjectLayer = new CadastreChangeNewCadastreObjectLayer(
-                this.applicationNumber);
+                getLastPart(this.lastPartEntry));
         this.getMap().addLayer(newCadastreObjectLayer);
 
         this.newPointsLayer = new CadastreChangeNewSurveyPointLayer(this.newCadastreObjectLayer);
@@ -231,5 +274,9 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
             bean.setGeomPolygonCurrent(cadastreObjectTo.getGeomPolygon());
             this.targetParcelsLayer.getBeanList().add(bean);
         }
+    }
+    
+    private String getLastPart(String lastPartEntry){
+        return String.format(lastPartTemplate, lastPartEntry);
     }
 }

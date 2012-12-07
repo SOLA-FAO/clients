@@ -91,6 +91,7 @@ public class SaveTransaction extends ExtendedAction {
     public void onClick() {
         TransactionBean transactionBean = transactionControlsBundle.getTransactionBean();
         List<ValidationResultBean> result = transactionBean.save();
+        this.transactionControlsBundle.refreshTransactionFromServer();
         this.transactionControlsBundle.setTransaction();
         String message = MessageUtility.getLocalizedMessage(
                 GisMessage.CADASTRE_CHANGE_SAVED_SUCCESSFULLY).getMessage();

@@ -66,7 +66,6 @@ public class CadastreChangeNewCadastreObjectLayer
             LAYER_FIELD_FIRST_PART, LAYER_FIELD_LAST_PART,
             LAYER_FIELD_OFFICIAL_AREA, LAYER_FIELD_CALCULATED_AREA);
     private Integer firstPartGenerator = 0;
-    private static final String LAST_PART_FORMAT = "SP %s";
     private String lastPart = "";
     private CadastreObjectListPanel spatialObjectDisplayPanel;
 
@@ -81,7 +80,7 @@ public class CadastreChangeNewCadastreObjectLayer
             throws InitializeLayerException {
         super(LAYER_NAME, Geometries.POLYGON,
                 LAYER_STYLE_RESOURCE, LAYER_ATTRIBUTE_DEFINITION, CadastreObjectBean.class);
-        this.lastPart = String.format(LAST_PART_FORMAT, applicationNumber);
+        this.lastPart = applicationNumber;
         this.listBean = new CadastreObjectListBean();
         //This is called after the listBean is initialized
         initializeListBeanEvents();

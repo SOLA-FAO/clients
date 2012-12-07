@@ -153,8 +153,8 @@
                   <Component id="lblUser" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Component id="lblUserName" min="-2" pref="104" max="-2" attributes="0"/>
-                  <EmptySpace pref="437" max="32767" attributes="0"/>
-                  <Component id="pnlTaskPanel" min="-2" pref="317" max="-2" attributes="0"/>
+                  <EmptySpace pref="142" max="32767" attributes="0"/>
+                  <Component id="pnlTaskPanel" min="-2" pref="612" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>

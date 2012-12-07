@@ -7,6 +7,7 @@ package org.sola.clients.swing.bulkoperations.beans;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import javax.validation.constraints.NotNull;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.referencedata.CadastreObjectTypeBean;
 import org.sola.clients.swing.bulkoperations.spatialobjects.SpatialDestinationCadastreObjectPanel;
@@ -33,6 +34,7 @@ public class SpatialDestinationCadastreObjectBean extends SpatialDestinationBean
     private String displayValue = "Cadastre object";
 
     public SpatialDestinationCadastreObjectBean() {
+        super();
         setCode(code);
         setDisplayValue(displayValue);
         setCadastreObjectTypeCode(CadastreObjectTypeBean.CODE_PARCEL);
@@ -63,6 +65,7 @@ public class SpatialDestinationCadastreObjectBean extends SpatialDestinationBean
         propertySupport.firePropertyChange(PROPERTY_NAME_FIRST_PART, old, value);
     }
 
+    @NotNull(message = "Last part is missing")
     public String getNameLastPart() {
         return nameLastPart;
     }
@@ -73,6 +76,7 @@ public class SpatialDestinationCadastreObjectBean extends SpatialDestinationBean
         propertySupport.firePropertyChange(PROPERTY_NAME_LAST_PART, old, value);
     }
 
+    @NotNull(message = "Attribute to give the offical area value is missing")
     public SpatialAttributeBean getOfficialArea() {
         return officialArea;
     }
@@ -96,7 +100,7 @@ public class SpatialDestinationCadastreObjectBean extends SpatialDestinationBean
         return cadastreObjectType.getCode();
     }
 
-    public void setCadastreObjectTypeCode(String value) {
+    public final void setCadastreObjectTypeCode(String value) {
         String old = getCadastreObjectTypeCode();
         setCadastreObjectType(CacheManager.getBeanByCode(
                 CacheManager.getCadastreObjectTypes(), value));        
