@@ -51,7 +51,8 @@ public class SpatialBulkMoveBean extends AbstractBindingBean {
     public TransactionBulkOperationSpatial sendToServer() {
         TransactionBulkOperationSpatial transaction = new TransactionBulkOperationSpatial();
         if (getDestination().getClass().equals(SpatialDestinationCadastreObjectBean.class)) {
-            transaction.setGenerateFirstPart(true);
+            transaction.setGenerateFirstPart(
+                    ((SpatialDestinationCadastreObjectBean)getDestination()).isGenerateFirstPart());
         }
         transaction.setSpatialUnitTemporaryList(getBeans());
         transaction.save();
