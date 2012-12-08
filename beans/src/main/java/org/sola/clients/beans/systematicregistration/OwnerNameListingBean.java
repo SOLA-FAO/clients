@@ -34,7 +34,8 @@ public class OwnerNameListingBean extends AbstractIdBean {
     public static final String INDUSTRIAL_PROPERTY = "industrial";
     public static final String BAUNIT_PROPERTY = "baUnitId";
 //    public static final String CONCATENATED_NAME_PROPERTY = "concatenatedName";
-   
+    public static final String PUBLIC_NOTIFICATION_DURATION_PROPERTY = "publicNotificationDuration";
+
     private String nameFirstpart;
     private String nameLastpart;
     private String landUsecode;
@@ -45,6 +46,16 @@ public class OwnerNameListingBean extends AbstractIdBean {
     private BigDecimal commercial;
     private BigDecimal agricultural;
     private BigDecimal industrial;
+    
+    private String publicNotificationDuration;
+
+    public String getPublicNotificationDuration() {
+        return publicNotificationDuration;
+    }
+
+    public void setPublicNotificationDuration(String publicNotificationDuration) {
+        this.publicNotificationDuration = publicNotificationDuration;
+    }
 
     public BigDecimal getAgricultural() {
         return agricultural;

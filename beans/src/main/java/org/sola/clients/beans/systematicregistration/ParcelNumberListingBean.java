@@ -31,6 +31,8 @@ public class ParcelNumberListingBean extends AbstractIdBean {
     public static final String SIZE_PROPERTY = "size";
     public static final String BAUNIT_PROPERTY = "baUnitId";
     public static final String CONCATENATED_NAME_PROPERTY = "concatenatedName";
+    public static final String PUBLIC_NOTIFICATION_DURATION_PROPERTY = "publicNotificationDuration";
+    
     
     private String nameFirstpart;
     private String nameLastpart;
@@ -38,6 +40,15 @@ public class ParcelNumberListingBean extends AbstractIdBean {
     private String landUsecode;
     private String baUnitId;
     private String concatenatedName;
+    private String publicNotificationDuration;
+
+    public String getPublicNotificationDuration() {
+        return publicNotificationDuration;
+    }
+
+    public void setPublicNotificationDuration(String publicNotificationDuration) {
+        this.publicNotificationDuration = publicNotificationDuration;
+    }
 
     
     public String getBaUnitId() {

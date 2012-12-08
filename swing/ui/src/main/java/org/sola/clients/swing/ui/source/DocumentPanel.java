@@ -174,7 +174,7 @@ public class DocumentPanel extends javax.swing.JPanel {
         SourceBean updatedSource;
         if (getDocument().isNew()) {
             updatedSource = getDocument().copy();
-            if (!updatedSource.getTypeCode().contentEquals("publicNotification")) {
+            if (!(updatedSource.getTypeCode().contentEquals("publicNotification")) && !(updatedSource.getTypeCode().contentEquals("title"))) {
                 clearFields();
             }
         } else {

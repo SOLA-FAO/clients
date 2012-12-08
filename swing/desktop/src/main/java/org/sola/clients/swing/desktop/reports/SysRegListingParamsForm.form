@@ -68,10 +68,7 @@
                           <Component id="cadastreObjectSearch" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="viewReport" min="-2" max="-2" attributes="0"/>
-                          <Component id="btnShowCalendarTo" min="-2" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="viewReport" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace pref="11" max="32767" attributes="0"/>
@@ -96,7 +93,6 @@
                       <Component id="labLocation" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Component id="txtToDate" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnShowCalendarTo" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="btnShowCalendarFrom" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -172,12 +168,14 @@
     </Component>
     <Component class="javax.swing.JFormattedTextField" name="txtToDate">
       <Properties>
+        <Property name="editable" type="boolean" value="false"/>
         <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
           <Format subtype="1" type="1"/>
         </Property>
         <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
           <ResourceString bundle="org/sola/clients/swing/desktop/reports/Bundle.properties" key="SysRegListingParamsForm.txtToDate.toolTipText" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
         </Property>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="txtToDate.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));&#xa;txtToDate.setHorizontalAlignment(JTextField.LEADING);"/>
@@ -225,22 +223,6 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnShowCalendarFromActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="btnShowCalendarTo">
-      <Properties>
-        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/images/common/calendar.png"/>
-        </Property>
-        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="org/sola/clients/swing/desktop/reports/Bundle.properties" key="SysRegListingParamsForm.btnShowCalendarTo.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-        </Property>
-        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="null"/>
-        </Property>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnShowCalendarToActionPerformed"/>
       </Events>
     </Component>
     <Component class="org.sola.clients.swing.ui.cadastre.LocationSearch" name="cadastreObjectSearch">
