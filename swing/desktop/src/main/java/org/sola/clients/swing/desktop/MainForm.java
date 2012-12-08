@@ -56,6 +56,7 @@ import org.sola.clients.swing.desktop.application.ApplicationSearchPanel;
 import org.sola.clients.swing.desktop.cadastre.MapPanelForm;
 import org.sola.clients.swing.desktop.party.PartySearchPanelForm;
 import org.sola.clients.swing.desktop.reports.LodgementReportParamsForm;
+import org.sola.clients.swing.desktop.reports.SysRegCertParamsForm;
 import org.sola.clients.swing.desktop.reports.SysRegListingParamsForm;
 import org.sola.clients.swing.desktop.source.DocumentSearchForm;
 import org.sola.clients.swing.desktop.source.DocumentViewForm;
@@ -439,9 +440,11 @@ public class MainForm extends javax.swing.JFrame {
         menuReportsDesktop = new javax.swing.JMenu();
         menuLodgementReport = new javax.swing.JMenuItem();
         menuSystematic = new javax.swing.JMenu();
+        menuPublicDisplay = new javax.swing.JMenu();
         menuPublicNotification = new javax.swing.JMenuItem();
         menuOwnerName = new javax.swing.JMenuItem();
         menuStateLand = new javax.swing.JMenuItem();
+        menuCertificates = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
         jmiContextHelp = new javax.swing.JMenuItem();
@@ -737,13 +740,15 @@ public class MainForm extends javax.swing.JFrame {
 
         menuSystematic.setText(bundle.getString("MainForm.menuSystematic.text")); // NOI18N
 
+        menuPublicDisplay.setText(bundle.getString("MainForm.menuPublicDisplay.text")); // NOI18N
+
         menuPublicNotification.setText(bundle.getString("MainForm.menuPublicNotification.text")); // NOI18N
         menuPublicNotification.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuPublicNotificationActionPerformed(evt);
             }
         });
-        menuSystematic.add(menuPublicNotification);
+        menuPublicDisplay.add(menuPublicNotification);
 
         menuOwnerName.setText(bundle.getString("MainForm.menuOwnerName.text")); // NOI18N
         menuOwnerName.addActionListener(new java.awt.event.ActionListener() {
@@ -751,7 +756,7 @@ public class MainForm extends javax.swing.JFrame {
                 menuOwnerNameActionPerformed(evt);
             }
         });
-        menuSystematic.add(menuOwnerName);
+        menuPublicDisplay.add(menuOwnerName);
 
         menuStateLand.setText(bundle.getString("MainForm.menuStateLand.text")); // NOI18N
         menuStateLand.addActionListener(new java.awt.event.ActionListener() {
@@ -759,7 +764,17 @@ public class MainForm extends javax.swing.JFrame {
                 menuStateLandActionPerformed(evt);
             }
         });
-        menuSystematic.add(menuStateLand);
+        menuPublicDisplay.add(menuStateLand);
+
+        menuSystematic.add(menuPublicDisplay);
+
+        menuCertificates.setText(bundle.getString("MainForm.menuCertificates.text")); // NOI18N
+        menuCertificates.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuCertificatesActionPerformed(evt);
+            }
+        });
+        menuSystematic.add(menuCertificates);
 
         menuBar.add(menuSystematic);
 
@@ -887,7 +902,12 @@ public class MainForm extends javax.swing.JFrame {
         SysRegListingParamsForm reportDateChooser = new SysRegListingParamsForm(this, true, report);
         reportDateChooser.setVisible(true);
     }
-    
+     
+     
+     private void openSysRegCertificatesParamsForm() {
+      SysRegCertParamsForm certificateGenerator = new SysRegCertParamsForm(null, true);
+        certificateGenerator.setVisible(true);
+     }
     /**
      * Opens {@link ReportViewerForm} to display report.
      */
@@ -920,6 +940,10 @@ public class MainForm extends javax.swing.JFrame {
     private void menuStateLandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuStateLandActionPerformed
         openSysRegListingParamsForm("StateLand");
     }//GEN-LAST:event_menuStateLandActionPerformed
+
+    private void menuCertificatesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCertificatesActionPerformed
+        openSysRegCertificatesParamsForm();
+    }//GEN-LAST:event_menuCertificatesActionPerformed
     
     private void editPassword() {
             showPasswordPanel();
@@ -964,6 +988,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenu menuApplications;
     private javax.swing.JMenuItem menuBaUnitSearch;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenuItem menuCertificates;
     private javax.swing.JMenuItem menuDefaultLogLevel;
     private javax.swing.JMenuItem menuDocumentSearch;
     private javax.swing.JMenuItem menuLangEN;
@@ -976,6 +1001,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuOffLogLevel;
     private javax.swing.JMenuItem menuOwnerName;
     private javax.swing.JMenuItem menuPersons;
+    private javax.swing.JMenu menuPublicDisplay;
     private javax.swing.JMenuItem menuPublicNotification;
     private javax.swing.JMenu menuReportsDesktop;
     private javax.swing.JMenu menuSearch;

@@ -19,6 +19,7 @@ import java.awt.ComponentOrientation;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,6 +32,8 @@ import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 import org.sola.clients.beans.administrative.BaUnitBean;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.beans.digitalarchive.DocumentBean;
+import org.sola.clients.beans.systematicregistration.SysRegCertificatesBean;
+import org.sola.clients.beans.systematicregistration.SysRegCertificatesListBean;
 import org.sola.clients.reports.ReportManager;
 import org.sola.clients.swing.common.controls.CalendarForm;
 import org.sola.clients.swing.desktop.MainForm;
@@ -50,14 +53,13 @@ import org.sola.webservices.transferobjects.administrative.BaUnitTO;
 public class SysRegCertParamsForm extends javax.swing.JDialog {
 
     private String location;
-    
-    private String title;
+    private String title = "Certificate ";
     private String nr;
     private String tmpLocation = "";
     private static String cachePath = System.getProperty("user.home") + "/sola/cache/documents/";
     private String reportdate;
     private String reportTogenerate;
-    private Date   currentDate; 
+    private Date currentDate;
 
     /**
      * Creates new form SysRegCertParamsForm
@@ -67,10 +69,10 @@ public class SysRegCertParamsForm extends javax.swing.JDialog {
         initComponents();
         this.location = location;
         this.nr = nr;
-        if (! nr.equals(null)){
-            this.title = "Certificate " + nr;
+        if (nr != null) {
+            this.title = this.title + nr;
         }
-        if (location != null){
+        if (location != null) {
             this.title = this.title + location;
         }
         this.setTitle(this.title);
@@ -82,6 +84,7 @@ public class SysRegCertParamsForm extends javax.swing.JDialog {
     public SysRegCertParamsForm(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.setTitle(this.title);
     }
 
     /**
@@ -89,8 +92,10 @@ public class SysRegCertParamsForm extends javax.swing.JDialog {
      */
     private void showReport(JasperPrint report) {
         ReportViewerForm form = new ReportViewerForm(report);
-        form.setVisible(true);
-        form.setAlwaysOnTop(true);
+        if (nr != null) {
+            form.setVisible(true);
+            form.setAlwaysOnTop(true);
+        }
         try {
             postProcessReport(report);
         } catch (Exception ex) {
@@ -103,13 +108,9 @@ public class SysRegCertParamsForm extends javax.swing.JDialog {
         System.out.println("Inside postProcessReport");
 
         System.out.println("start download");
-//        Date currentdate = new Date(System.currentTimeMillis());
-//        SimpleDateFormat formatter = new SimpleDateFormat("ddMMyy");
-//        String reportdate = formatter.format(currentdate);
 
         Date recDate = this.currentDate;
         String location = this.tmpLocation.replace(" ", "_");
-//        String reportTogenerate = this.report + "_" + location + "_" + this.reportdate + ".pdf";
 
         JRPdfExporter exporterPdf = new JRPdfExporter();
 
@@ -123,13 +124,20 @@ public class SysRegCertParamsForm extends javax.swing.JDialog {
 
         System.out.println("End download");
         saveDocument(this.reportTogenerate, recDate, this.reportdate);
+        FileUtility.deleteFileFromCache(this.reportTogenerate);
     }
 
     private void saveDocument(String fileName, Date recDate, String subDate) throws Exception {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yy");
         String reportdate = formatter.format(recDate);
         documentPanel.browseAttachment.setText(fileName);
-        documentPanel.cbxDocType.setSelectedIndex(12);
+        for (int i = 0, n = documentPanel.cbxDocType.getItemCount(); i < n; i++) {
+            if (documentPanel.cbxDocType.getItemAt(i).toString().contains("Title")) {
+                documentPanel.cbxDocType.setSelectedIndex(i);
+                break;
+            }
+        }
+
         documentPanel.txtDocRefNumber.setText(reportdate);
         documentPanel.txtDocRecordDate.setText(reportdate);
         documentPanel.txtDocRecordDate.setValue(this.currentDate);
@@ -146,7 +154,7 @@ public class SysRegCertParamsForm extends javax.swing.JDialog {
 
     private void showDocMessage(String fileName) {
 
-        String params = cachePath + fileName;
+        String params = this.title+":  "+fileName;
         MessageUtility.displayMessage(ClientMessage.SOURCE_SYS_REP_GENERATED, new Object[]{params});
 
     }
@@ -218,14 +226,15 @@ public class SysRegCertParamsForm extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-     /**
+
+    /**
      * Returns {@link BaUnitBean} by first and last name part.
      */
     private BaUnitBean getBaUnit(String id) {
         BaUnitTO baUnitTO = WSManager.getInstance().getAdministrative().getBaUnitById(id);
         return TypeConverters.TransferObjectToBean(baUnitTO, BaUnitBean.class, null);
     }
-    
+
     private void btnGenCertificateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenCertificateActionPerformed
         if (cadastreObjectSearch.getSelectedElement() != null) {
             this.location = cadastreObjectSearch.getSelectedElement().toString();
@@ -239,21 +248,25 @@ public class SysRegCertParamsForm extends javax.swing.JDialog {
         this.currentDate = currentdate;
         SimpleDateFormat formatter = new SimpleDateFormat("ddMMyy");
         this.reportdate = formatter.format(currentdate);
-        this.reportTogenerate = this.nr + "_" + tmpLocation + "_" + this.reportdate + ".pdf";
-        showDocMessage(this.reportTogenerate);
 
-        if (!nr.equals(null)) {
+        if (nr != null) {
             sysRegCertificatesListBean.passParameterApp(tmpLocation, nr);
         } else {
             sysRegCertificatesListBean.passParameter(tmpLocation);
         }
-        
-        String baUnitId= sysRegCertificatesListBean.getSysRegCertificates().get(0).getBaUnitId();
-        
-        showReport(ReportManager.getBaUnitReport(getBaUnit(baUnitId)));
-       
-        
-//        showReport(ReportManager.getSysRegCertificatesReport(sysRegCertificatesListBean, nr, tmpLocation));
+
+        String baUnitId = null;
+        int i = 0;
+        System.out.println("i   " + i);
+        showDocMessage(this.tmpLocation);
+
+        for (Iterator<SysRegCertificatesBean> it = sysRegCertificatesListBean.getSysRegCertificates().iterator(); it.hasNext();) {
+            SysRegCertificatesBean appBaunit = it.next();
+            baUnitId = appBaunit.getBaUnitId();
+            this.reportTogenerate = baUnitId + "_" + tmpLocation + "_" + this.reportdate + ".pdf";
+            showReport(ReportManager.getBaUnitReport(getBaUnit(baUnitId)));
+            i = i + 1;
+        }
         this.dispose();
 
     }//GEN-LAST:event_btnGenCertificateActionPerformed

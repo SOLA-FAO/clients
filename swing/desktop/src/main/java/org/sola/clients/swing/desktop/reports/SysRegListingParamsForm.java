@@ -17,7 +17,9 @@ package org.sola.clients.swing.desktop.reports;
 
 import java.awt.ComponentOrientation;
 import java.io.File;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.logging.Level;
@@ -84,7 +86,7 @@ public class SysRegListingParamsForm extends javax.swing.JDialog {
 //        Date currentdate = new Date(System.currentTimeMillis());
 //        SimpleDateFormat formatter = new SimpleDateFormat("ddMMyy");
 //        String reportdate = formatter.format(currentdate);
-        
+
         Date recDate = (Date) txtFromDate.getValue();
         String location = this.tmpLocation.replace(" ", "_");
 //        String reportTogenerate = this.report + "_" + location + "_" + this.reportdate + ".pdf";
@@ -101,13 +103,22 @@ public class SysRegListingParamsForm extends javax.swing.JDialog {
 
         System.out.println("End download");
         saveDocument(this.reportTogenerate, recDate, this.reportdate);
+        FileUtility.deleteFileFromCache(this.reportTogenerate);
+
     }
 
     private void saveDocument(String fileName, Date recDate, String subDate) throws Exception {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yy");
         String reportdate = formatter.format(recDate);
         documentPanel.browseAttachment.setText(fileName);
-        documentPanel.cbxDocType.setSelectedIndex(12);
+
+        for (int i = 0, n = documentPanel.cbxDocType.getItemCount(); i < n; i++) {
+            if (documentPanel.cbxDocType.getItemAt(i).toString().contains("Public Notification for Systematic Registration")) {
+                documentPanel.cbxDocType.setSelectedIndex(i);
+                break;
+            }
+        }
+
         documentPanel.txtDocRefNumber.setText(reportdate);
         documentPanel.txtDocRecordDate.setText(reportdate);
         documentPanel.txtDocRecordDate.setValue(txtFromDate.getValue());
@@ -124,7 +135,7 @@ public class SysRegListingParamsForm extends javax.swing.JDialog {
 
     private void showDocMessage(String fileName) {
 
-        String params = cachePath + fileName;
+        String params = fileName;
         MessageUtility.displayMessage(ClientMessage.SOURCE_SYS_REP_GENERATED, new Object[]{params});
 
     }
@@ -157,7 +168,6 @@ public class SysRegListingParamsForm extends javax.swing.JDialog {
         viewReport = new javax.swing.JButton();
         labLocation = new javax.swing.JLabel();
         btnShowCalendarFrom = new javax.swing.JButton();
-        btnShowCalendarTo = new javax.swing.JButton();
         cadastreObjectSearch = new org.sola.clients.swing.ui.cadastre.LocationSearch();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -180,8 +190,10 @@ public class SysRegListingParamsForm extends javax.swing.JDialog {
         labNotificationTo.setText(bundle.getString("SysRegListingParamsForm.labNotificationTo.text")); // NOI18N
 
         txtToDate.setFont(new java.awt.Font("Tahoma", 0, 12));
+        txtToDate.setEditable(false);
         txtToDate.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
         txtToDate.setToolTipText(bundle.getString("SysRegListingParamsForm.txtToDate.toolTipText")); // NOI18N
+        txtToDate.setEnabled(false);
         txtToDate.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
         txtToDate.setHorizontalAlignment(JTextField.LEADING);
 
@@ -200,15 +212,6 @@ public class SysRegListingParamsForm extends javax.swing.JDialog {
         btnShowCalendarFrom.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnShowCalendarFromActionPerformed(evt);
-            }
-        });
-
-        btnShowCalendarTo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/calendar.png"))); // NOI18N
-        btnShowCalendarTo.setText(bundle.getString("SysRegListingParamsForm.btnShowCalendarTo.text")); // NOI18N
-        btnShowCalendarTo.setBorder(null);
-        btnShowCalendarTo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnShowCalendarToActionPerformed(evt);
             }
         });
 
@@ -242,9 +245,7 @@ public class SysRegListingParamsForm extends javax.swing.JDialog {
                                             .addComponent(txtToDate, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                             .addComponent(cadastreObjectSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(viewReport)
-                            .addComponent(btnShowCalendarTo))))
+                        .addComponent(viewReport)))
                 .addContainerGap(11, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -263,7 +264,6 @@ public class SysRegListingParamsForm extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(labLocation))
                     .addComponent(txtToDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnShowCalendarTo)
                     .addComponent(btnShowCalendarFrom))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -284,7 +284,7 @@ public class SysRegListingParamsForm extends javax.swing.JDialog {
     private void viewReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewReportActionPerformed
         boolean dateFilled = false;
         Date tmpFrom;
-        Date tmpTo;
+        Date tmpTo = (Date) txtFromDate.getValue();
         String reportRequested = "subTitlePN";
         if (cadastreObjectSearch.getSelectedElement() != null) {
             this.location = cadastreObjectSearch.getSelectedElement().toString();
@@ -301,54 +301,90 @@ public class SysRegListingParamsForm extends javax.swing.JDialog {
             tmpFrom = (Date) txtFromDate.getValue();
             dateFilled = true;
         }
-        if (txtToDate.getValue() == null) {
-            MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_DATETO);
-            dateFilled = true;
-            return;
-        } else {
-            tmpTo = (Date) txtToDate.getValue();
-        }
+
 
         if (dateFilled) {
 
-            if (tmpFrom.after(tmpTo)) {
-                MessageUtility.displayMessage(ClientMessage.CHECK_FROM_TO_DATE);
-                dateFilled = false;
-                return;
-            } else {
-                Date currentdate = new Date(System.currentTimeMillis());
-                SimpleDateFormat formatter = new SimpleDateFormat("ddMMyy");
-                this.reportdate = formatter.format(currentdate);
-                this.reportTogenerate = this.report + "_" + tmpLocation + "_" + this.reportdate + ".pdf";
-                showDocMessage(this.reportTogenerate);
-                
-                if (this.report.contentEquals("Owners")) {
-                    ownerNameListingListBean.passParameter(tmpLocation);
+            Date currentdate = new Date(System.currentTimeMillis());
+            SimpleDateFormat formatter = new SimpleDateFormat("ddMMyy");
+            this.reportdate = formatter.format(currentdate);
+            this.reportTogenerate = this.report + "_" + tmpLocation + "_" + this.reportdate + ".pdf";
+            showDocMessage(this.reportTogenerate);
+
+            if (this.report.contentEquals("Owners")) {
+                ownerNameListingListBean.passParameter(tmpLocation);
+                if (ownerNameListingListBean.getOwnerNameListing().isEmpty()) {
+                    MessageUtility.displayMessage(ClientMessage.NO_REPORT_GENERATION);
+                    dateFilled = false;
+                    return;
+                } else {
+                    try {
+                        tmpTo = formatter.parse(addPubliNotificationDuration(txtFromDate.getValue(), ownerNameListingListBean.getOwnerNameListing().get(0).getPublicNotificationDuration()));
+                    } catch (ParseException ex) {
+                        Logger.getLogger(SysRegListingParamsForm.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    txtToDate.setText(tmpTo.toString());
                     showReport(ReportManager.getSysRegPubDisOwnerNameReport(ownerNameListingListBean, tmpFrom, tmpTo, tmpLocation, reportRequested));
                 }
-                if (this.report.contentEquals("StateLand")) {
-                    stateLandListingListBean.passParameter(tmpLocation);
+            }
+            if (this.report.contentEquals("StateLand")) {
+                stateLandListingListBean.passParameter(tmpLocation);
+                if (stateLandListingListBean.getStateLandListing().isEmpty()) {
+                    MessageUtility.displayMessage(ClientMessage.NO_REPORT_GENERATION);
+                    dateFilled = false;
+                    return;
+                } else {
+                    try {
+                        tmpTo = formatter.parse(addPubliNotificationDuration(txtFromDate.getValue(), stateLandListingListBean.getStateLandListing().get(0).getPublicNotificationDuration()));
+                    } catch (ParseException ex) {
+                        Logger.getLogger(SysRegListingParamsForm.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    txtToDate.setText(tmpTo.toString());
                     showReport(ReportManager.getSysRegPubDisStateLandReport(stateLandListingListBean, tmpFrom, tmpTo, tmpLocation, reportRequested));
                 }
-                if (this.report.contentEquals("ParcelNumber")) {
-                    parcelNumberListingListBean.passParameter(tmpLocation);
+            }
+            if (this.report.contentEquals("ParcelNumber")) {
+                parcelNumberListingListBean.passParameter(tmpLocation);
+                if (parcelNumberListingListBean.getParcelNumberListing().isEmpty()) {
+                    MessageUtility.displayMessage(ClientMessage.NO_REPORT_GENERATION);
+                    dateFilled = false;
+                    return;
+                } else {
+                    try {
+                        tmpTo = formatter.parse(addPubliNotificationDuration(txtFromDate.getValue(), parcelNumberListingListBean.getParcelNumberListing().get(0).getPublicNotificationDuration()));
+                    } catch (ParseException ex) {
+                        Logger.getLogger(SysRegListingParamsForm.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    txtToDate.setText(tmpTo.toString());
                     showReport(ReportManager.getSysRegPubDisParcelNameReport(parcelNumberListingListBean, tmpFrom, tmpTo, tmpLocation, reportRequested));
                 }
             }
+
             this.dispose();
         }
     }//GEN-LAST:event_viewReportActionPerformed
 
+    private String addPubliNotificationDuration(Object dateFrom, String pubDuration) {
+        SimpleDateFormat sdf = new SimpleDateFormat("ddMMyy");
+        String dt = sdf.format(dateFrom);
+
+        Calendar c = Calendar.getInstance();
+        int duration = Integer.parseInt(pubDuration);
+        try {
+            c.setTime(sdf.parse(dt));
+        } catch (ParseException ex) {
+            Logger.getLogger(SysRegListingParamsForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        c.add(Calendar.DATE, duration);  // number of days to add
+        dt = sdf.format(c.getTime());  // dt is now the new date
+        return dt;
+    }
+
     private void btnShowCalendarFromActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowCalendarFromActionPerformed
         showCalendar(txtFromDate);
     }//GEN-LAST:event_btnShowCalendarFromActionPerformed
-
-    private void btnShowCalendarToActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowCalendarToActionPerformed
-        showCalendar(txtToDate);
-    }//GEN-LAST:event_btnShowCalendarToActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnShowCalendarFrom;
-    private javax.swing.JButton btnShowCalendarTo;
     private org.sola.clients.beans.cadastre.CadastreObjectBean cadastreObjectBean;
     private org.sola.clients.swing.ui.cadastre.LocationSearch cadastreObjectSearch;
     private org.sola.clients.swing.ui.source.DocumentPanel documentPanel;
