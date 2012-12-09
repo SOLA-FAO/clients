@@ -273,7 +273,7 @@ public class ImportSpatialPanel extends ContentPanel {
         jLabel9 = new javax.swing.JLabel();
         txtSourceFeaturesNr = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
-        headerPanel1 = new org.sola.clients.swing.ui.HeaderPanel();
+        headerPanel = new org.sola.clients.swing.ui.HeaderPanel();
         pnlMainPanel = new org.sola.clients.swing.ui.MainContentPanel();
         groupPanel3 = new org.sola.clients.swing.ui.GroupPanel();
         pnlPostProcess = new javax.swing.JPanel();
@@ -282,13 +282,16 @@ public class ImportSpatialPanel extends ContentPanel {
         lblInformationText = new javax.swing.JLabel();
         lblInformation = new javax.swing.JLabel();
 
+        setHeaderPanel(headerPanel);
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/bulkoperations/spatialobjects/Bundle"); // NOI18N
+        setHelpTopic(bundle.getString("ImportSpatialPanel.helpTopic")); // NOI18N
+
         org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${beanList}");
         org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, spatialSourcePotentialList, eLProperty, cmbSourceType);
         bindingGroup.addBinding(jComboBoxBinding);
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, spatialBulkMove, org.jdesktop.beansbinding.ELProperty.create("${source}"), cmbSourceType, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/bulkoperations/spatialobjects/Bundle"); // NOI18N
         jLabel1.setText(bundle.getString("ImportSpatialPanel.jLabel1.text")); // NOI18N
 
         jLabel2.setText(bundle.getString("ImportSpatialPanel.jLabel2.text")); // NOI18N
@@ -354,7 +357,7 @@ public class ImportSpatialPanel extends ContentPanel {
 
         jLabel10.setText(bundle.getString("ImportSpatialPanel.jLabel10.text")); // NOI18N
 
-        headerPanel1.setTitleText(bundle.getString("ImportSpatialPanel.headerPanel1.titleText")); // NOI18N
+        headerPanel.setTitleText(bundle.getString("ImportSpatialPanel.headerPanel.titleText")); // NOI18N
 
         groupPanel3.setTitleText(bundle.getString("ImportSpatialPanel.groupPanel3.titleText")); // NOI18N
 
@@ -410,7 +413,7 @@ public class ImportSpatialPanel extends ContentPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(headerPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(headerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -453,7 +456,7 @@ public class ImportSpatialPanel extends ContentPanel {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(headerPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(headerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(13, 13, 13)
                 .addComponent(groupPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(7, 7, 7)
@@ -530,7 +533,7 @@ public class ImportSpatialPanel extends ContentPanel {
     private org.sola.clients.swing.ui.GroupPanel groupPanel1;
     private org.sola.clients.swing.ui.GroupPanel groupPanel2;
     private org.sola.clients.swing.ui.GroupPanel groupPanel3;
-    private org.sola.clients.swing.ui.HeaderPanel headerPanel1;
+    private org.sola.clients.swing.ui.HeaderPanel headerPanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;

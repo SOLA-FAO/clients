@@ -8,6 +8,7 @@ import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.swing.bulkoperations.spatialobjects.ImportSpatialPanel;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
+import org.sola.common.help.HelpUtility;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
@@ -22,7 +23,10 @@ public class MainForm extends javax.swing.JFrame {
      */
     public MainForm() {
         initComponents();
+         HelpUtility.getInstance().registerHelpMenu(jmiContextHelp, "1_blk_overview");
+
         this.setExtendedState(MAXIMIZED_BOTH);
+        
     }
 
     /**
@@ -58,7 +62,6 @@ public class MainForm extends javax.swing.JFrame {
 
         toolbarMain = new javax.swing.JToolBar();
         btnLoadSpatialObjects = new javax.swing.JButton();
-        btnHelp = new javax.swing.JButton();
         pnlStatusBar = new javax.swing.JPanel();
         lblUser = new javax.swing.JLabel();
         lblUserName = new javax.swing.JLabel();
@@ -68,7 +71,7 @@ public class MainForm extends javax.swing.JFrame {
         menuFile = new javax.swing.JMenu();
         menuExit = new javax.swing.JMenuItem();
         menuHelp = new javax.swing.JMenu();
-        menuHelpTophics = new javax.swing.JMenuItem();
+        jmiContextHelp = new javax.swing.JMenuItem();
         menuAbout = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -95,13 +98,6 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         toolbarMain.add(btnLoadSpatialObjects);
-
-        btnHelp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/help.png"))); // NOI18N
-        btnHelp.setText(bundle.getString("MainForm.btnHelp.text")); // NOI18N
-        btnHelp.setFocusable(false);
-        btnHelp.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnHelp.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        toolbarMain.add(btnHelp);
 
         pnlStatusBar.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -141,8 +137,9 @@ public class MainForm extends javax.swing.JFrame {
 
         menuHelp.setText(bundle.getString("MainForm.menuHelp.text")); // NOI18N
 
-        menuHelpTophics.setText(bundle.getString("MainForm.menuHelpTophics.text")); // NOI18N
-        menuHelp.add(menuHelpTophics);
+        jmiContextHelp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/help.png"))); // NOI18N
+        jmiContextHelp.setText(bundle.getString("MainForm.jmiContextHelp.text")); // NOI18N
+        menuHelp.add(jmiContextHelp);
 
         menuAbout.setText(bundle.getString("MainForm.menuAbout.text")); // NOI18N
         menuHelp.add(menuAbout);
@@ -184,15 +181,14 @@ public class MainForm extends javax.swing.JFrame {
         loadSpatialObjectPanel();
     }//GEN-LAST:event_btnLoadSpatialObjectsActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnHelp;
     private javax.swing.JButton btnLoadSpatialObjects;
+    private javax.swing.JMenuItem jmiContextHelp;
     private javax.swing.JLabel lblUser;
     private javax.swing.JLabel lblUserName;
     private javax.swing.JMenuItem menuAbout;
     private javax.swing.JMenuItem menuExit;
     private javax.swing.JMenu menuFile;
     private javax.swing.JMenu menuHelp;
-    private javax.swing.JMenuItem menuHelpTophics;
     private javax.swing.JMenuBar menuMain;
     private org.sola.clients.swing.ui.MainContentPanel pnlMain;
     private javax.swing.JPanel pnlStatusBar;
