@@ -18,6 +18,7 @@ import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.gis.beans.TransactionCadastreChangeBean;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.ui.ContentPanel;
+import org.sola.clients.swing.ui.validation.ValidationResultForm;
 import org.sola.common.logging.LogUtility;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -236,12 +237,21 @@ public class ImportSpatialPanel extends ContentPanel {
     private void setPostLoadEnabled(boolean enable) {
         btnOpenMap.setEnabled(enable);
         btnRollback.setEnabled(enable);
+        btnOpenValidations.setEnabled(enable);
         if (!enable) {
             transactionCadastreChange = null;
             transaction = null;
             String informationResourceName = "ImportSpatialPanel.lblInformationText.text";
             lblInformationText.setText(bundle.getString(informationResourceName));
+            spatialBulkMove.getValidationResults().clear();
         }
+    }
+    
+    private void openValidations(){
+        ValidationResultForm validationForm = new ValidationResultForm(
+                null, true, spatialBulkMove.getValidationResults(), true, 
+                bundle.getString("ImportSpatialPanel.validationScreen.title"));
+        validationForm.setVisible(true);
     }
 
     /**
@@ -281,6 +291,7 @@ public class ImportSpatialPanel extends ContentPanel {
         btnRollback = new javax.swing.JButton();
         lblInformationText = new javax.swing.JLabel();
         lblInformation = new javax.swing.JLabel();
+        btnOpenValidations = new javax.swing.JButton();
 
         setHeaderPanel(headerPanel);
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/bulkoperations/spatialobjects/Bundle"); // NOI18N
@@ -313,13 +324,16 @@ public class ImportSpatialPanel extends ContentPanel {
         org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${name}"));
         columnBinding.setColumnName("Name");
         columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${dataType}"));
         columnBinding.setColumnName("Data Type");
         columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();
         jScrollPane1.setViewportView(listAttributes);
         listAttributes.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("ImportSpatialPanel.listAttributes.columnModel.title0")); // NOI18N
+        listAttributes.getColumnModel().getColumn(1).setMaxWidth(120);
         listAttributes.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("ImportSpatialPanel.listAttributes.columnModel.title1")); // NOI18N
 
         jLabel3.setText(bundle.getString("ImportSpatialPanel.jLabel3.text")); // NOI18N
@@ -379,6 +393,13 @@ public class ImportSpatialPanel extends ContentPanel {
 
         lblInformation.setText(bundle.getString("ImportSpatialPanel.lblInformation.text")); // NOI18N
 
+        btnOpenValidations.setText(bundle.getString("ImportSpatialPanel.btnOpenValidations.text")); // NOI18N
+        btnOpenValidations.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOpenValidationsActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlPostProcessLayout = new javax.swing.GroupLayout(pnlPostProcess);
         pnlPostProcess.setLayout(pnlPostProcessLayout);
         pnlPostProcessLayout.setHorizontalGroup(
@@ -388,7 +409,9 @@ public class ImportSpatialPanel extends ContentPanel {
                 .addComponent(lblInformation)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblInformationText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnOpenValidations)
+                .addGap(5, 5, 5)
                 .addComponent(btnRollback)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnOpenMap))
@@ -403,7 +426,8 @@ public class ImportSpatialPanel extends ContentPanel {
                         .addComponent(lblInformationText))
                     .addGroup(pnlPostProcessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnOpenMap)
-                        .addComponent(btnRollback)))
+                        .addComponent(btnRollback)
+                        .addComponent(btnOpenValidations)))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
 
@@ -438,10 +462,10 @@ public class ImportSpatialPanel extends ContentPanel {
                                         .addComponent(jLabel9)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(txtSourceGeometryType, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(10, 10, 10)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel3)))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING)
@@ -523,9 +547,15 @@ public class ImportSpatialPanel extends ContentPanel {
     private void btnOpenMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenMapActionPerformed
         openMap();
     }//GEN-LAST:event_btnOpenMapActionPerformed
+
+    private void btnOpenValidationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenValidationsActionPerformed
+        openValidations();
+    }//GEN-LAST:event_btnOpenValidationsActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnMove;
     private javax.swing.JButton btnOpenMap;
+    private javax.swing.JButton btnOpenValidations;
     private javax.swing.JButton btnRollback;
     private javax.swing.JComboBox cmbDestination;
     private javax.swing.JComboBox cmbSourceType;

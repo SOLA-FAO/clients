@@ -17,7 +17,7 @@ public class SpatialSourceObjectBean {
     public HashMap<String, Object> getFieldsWithValues() {
         return this.fieldsWithValues;
     }
-
+        
     public byte[] getTheGeom() {
         return theGeom;
     }

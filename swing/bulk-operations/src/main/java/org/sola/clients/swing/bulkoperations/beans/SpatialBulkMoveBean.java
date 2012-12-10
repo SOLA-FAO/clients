@@ -9,7 +9,10 @@ import java.util.List;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.constraints.NotNull;
+import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingBean;
+import org.sola.clients.beans.controls.SolaObservableList;
+import org.sola.clients.beans.validation.ValidationResultBean;
 
 /**
  *
@@ -21,6 +24,8 @@ public class SpatialBulkMoveBean extends AbstractBindingBean {
     public static final String PROPERTY_DESTINATION = "destination";
     private SpatialSourceBean source = new SpatialSourceShapefileBean();
     private SpatialDestinationBean destination = new SpatialDestinationCadastreObjectBean();
+    private ObservableList<ValidationResultBean> validationResults 
+            = new SolaObservableList<ValidationResultBean>();
 
     @NotNull(message = "Source must be present")
     public SpatialSourceBean getSource() {
@@ -48,6 +53,10 @@ public class SpatialBulkMoveBean extends AbstractBindingBean {
         return getDestination().getBeans(getSource());
     }
 
+    public ObservableList<ValidationResultBean> getValidationResults() {
+        return validationResults;
+    }
+    
     public TransactionBulkOperationSpatial sendToServer() {
         TransactionBulkOperationSpatial transaction = new TransactionBulkOperationSpatial();
         if (getDestination().getClass().equals(SpatialDestinationCadastreObjectBean.class)) {
@@ -55,7 +64,8 @@ public class SpatialBulkMoveBean extends AbstractBindingBean {
                     ((SpatialDestinationCadastreObjectBean)getDestination()).isGenerateFirstPart());
         }
         transaction.setSpatialUnitTemporaryList(getBeans());
-        transaction.save();
+        validationResults.clear();
+        validationResults.addAll(transaction.save());
         return transaction;
     }
 
