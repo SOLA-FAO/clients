@@ -205,30 +205,41 @@ public class ImportSpatialPanel extends ContentPanel {
     }
 
     private void openMap() {
-        MapPanel mapPanel = null;
-        if (spatialBulkMove.getDestination().getClass().equals(
-                SpatialDestinationCadastreObjectBean.class)) {
-            if (transactionCadastreChange == null) {
-                return;
-            }
-            if (transactionCadastreChange.getSurveyPointList().size() > 0) {
-                SpatialDestinationCadastreObjectBean destinationBean =
-                        (SpatialDestinationCadastreObjectBean) spatialBulkMove.getDestination();
-                mapPanel = new MapPanel(
-                        transactionCadastreChange,
-                        destinationBean.getCadastreObjectTypeCode(),
-                        destinationBean.getNameLastPart());
-            }
-        }
-        if (mapPanel == null) {
-            mapPanel = new MapPanel(spatialBulkMove.getSource().getExtent());
-        }
-        this.getMainContentPanel().addPanel(mapPanel, mapPanel.getName(), true);
+        SolaTask t = new SolaTask<Void, Void>() {
 
+            @Override
+            public Void doTask() {
+                MapPanel mapPanel = null;
+                if (spatialBulkMove.getDestination().getClass().equals(
+                        SpatialDestinationCadastreObjectBean.class)) {
+                    if (transactionCadastreChange == null) {
+                        return null;
+                    }
+                    if (transactionCadastreChange.getSurveyPointList().size() > 0) {
+                    setMessage(MessageUtility.getLocalizedMessageText(
+                            ClientMessage.PROGRESS_MSG_OPEN_CADASTRE_CHANGE));
+                        SpatialDestinationCadastreObjectBean destinationBean =
+                                (SpatialDestinationCadastreObjectBean) spatialBulkMove.getDestination();
+                        mapPanel = new MapPanel(
+                                transactionCadastreChange,
+                                destinationBean.getCadastreObjectTypeCode(),
+                                destinationBean.getNameLastPart());
+                    }
+                }
+                if (mapPanel == null) {
+                    setMessage(MessageUtility.getLocalizedMessageText(
+                            ClientMessage.PROGRESS_MSG_OPEN_MAP));
+                    mapPanel = new MapPanel(spatialBulkMove.getSource().getExtent());
+                }
+                getMainContentPanel().addPanel(mapPanel, mapPanel.getName(), true);
+                return null;
+            }
+        };
+        TaskManager.getInstance().runTask(t);
     }
 
     private void rollback() {
-        if (transaction != null){
+        if (transaction != null) {
             transaction.reject();
         }
         setPostLoadEnabled(false);
@@ -246,10 +257,10 @@ public class ImportSpatialPanel extends ContentPanel {
             spatialBulkMove.getValidationResults().clear();
         }
     }
-    
-    private void openValidations(){
+
+    private void openValidations() {
         ValidationResultForm validationForm = new ValidationResultForm(
-                null, true, spatialBulkMove.getValidationResults(), true, 
+                null, true, spatialBulkMove.getValidationResults(), true,
                 bundle.getString("ImportSpatialPanel.validationScreen.title"));
         validationForm.setVisible(true);
     }
@@ -551,7 +562,6 @@ public class ImportSpatialPanel extends ContentPanel {
     private void btnOpenValidationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenValidationsActionPerformed
         openValidations();
     }//GEN-LAST:event_btnOpenValidationsActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnMove;
     private javax.swing.JButton btnOpenMap;

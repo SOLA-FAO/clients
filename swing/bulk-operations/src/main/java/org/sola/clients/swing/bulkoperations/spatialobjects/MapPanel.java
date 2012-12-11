@@ -74,7 +74,9 @@ public class MapPanel extends ContentPanel {
 
     private void initializeMap(ReferencedEnvelope extentToShow){
         this.mapControl = new ControlsBundleViewer();
-        this.mapControl.getMap().setDisplayArea(extentToShow);
+        if (extentToShow != null){
+            this.mapControl.getMap().setDisplayArea(extentToShow);
+        }
     }
 
     private void addMapToForm() {
