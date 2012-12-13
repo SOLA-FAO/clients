@@ -31,13 +31,10 @@ package org.sola.clients.swing.gis.mapaction;
 
 import java.io.IOException;
 import org.geotools.swing.extended.Map;
-import org.geotools.swing.extended.exception.PrintLayoutException;
 import org.geotools.swing.extended.util.MapImageGenerator;
-import org.geotools.swing.extended.util.Messaging;
 import org.geotools.swing.extended.util.ScalebarGenerator;
 import org.geotools.swing.mapaction.extended.Print;
 import org.geotools.swing.mapaction.extended.print.PrintLayout;
-import org.geotools.swing.mapaction.extended.ui.IPrintUi;
 import org.sola.clients.beans.application.ApplicationServiceBean;
 import org.sola.clients.beans.referencedata.RequestTypeBean;
 import org.sola.clients.reports.ReportManager;
@@ -53,19 +50,23 @@ import org.sola.clients.swing.gis.ui.control.SolaPrintViewerForm;
 public class SolaJasperPrint extends Print {
 
     private String applicationId;
-    private IPrintUi printForm;
 
     /**
      * Constructor of the jasper based reporting engine print map action.
-     * 
-     * @param map The map control with which the map action will interact 
+     *
+     * @param map The map control with which the map action will interact
      */
     public SolaJasperPrint(Map map) {
-        super(map);
+        super(map, "print");
+    }
+
+    public SolaJasperPrint(Map map, String actionName) {
+        super(map, actionName);
         //the following changes the layout properties file for 
         //the org.geotools.swing.mapaction.extended.Print.java
         // in order to use it for jasper report print map
         this.layoutLocation = "resources/print/layoutsJasper.properties";
+        
     }
 
     /**
@@ -86,20 +87,12 @@ public class SolaJasperPrint extends Print {
     @Override
     public void onClick() {
 
-        if (this.printForm == null) {
-            this.printForm = this.getPrintForm();
-        }
-        try {
-            this.printForm.setPrintLayoutList(this.getPrintLayouts());
-        } catch (PrintLayoutException ex) {
-            Messaging.getInstance().show(Messaging.Ids.PRINT_LAYOUT_GENERATION_ERROR.toString());
-        }
-        this.printForm.setScale(this.getMapControl().getScale().intValue());
-        this.printForm.setVisibility(true);
-        if (this.printForm.getPrintLayout() == null) {
+        getPrintForm().setScale(this.getMapControl().getScale().intValue());
+        getPrintForm().setVisibility(true);
+        if (getPrintForm().getPrintLayout() == null) {
             return;
         }
-        Print(this.printForm.getPrintLayout(), this.printForm.getScale());
+        Print(getPrintForm().getPrintLayout(), getPrintForm().getScale());
     }
 
     /**
@@ -131,15 +124,17 @@ public class SolaJasperPrint extends Print {
         //for the best width. 
         //So in Jasper the width/height of the scalebar is not restricted 
         Double scalebarImageWidth = Double.valueOf(layout.getScalebar().getWidth());
+        String mapImageLocation = null;
+        String scalebarImageLocation = null;
         try {
             MapImageGenerator mapImageGenerator = new MapImageGenerator(this.getMapControl());
             //This gives back the absolute location of the map image. 
-            String mapImageLocation = mapImageGenerator.getImageAsFileLocation(
+            mapImageLocation = mapImageGenerator.getImageAsFileLocation(
                     mapImageWidth, mapImageHeight, scale, dpi, imageFormat);
 
             ScalebarGenerator scalebarGenerator = new ScalebarGenerator();
             //This gives back the absolute location of the scalebar image. 
-            String scalebarImageLocation = scalebarGenerator.getImageAsFileLocation(
+            scalebarImageLocation = scalebarGenerator.getImageAsFileLocation(
                     scale, scalebarImageWidth, dpi);
 
             ApplicationServiceBean serviceBean = new ApplicationServiceBean();
@@ -148,21 +143,25 @@ public class SolaJasperPrint extends Print {
                 serviceBean.setApplicationId(this.applicationId);
             }
             serviceBean.saveInformationService();
-
-            //This will be the bean containing data for the report. 
-            //it is the data source for the report
-            //it must be replaced with appropriate bean if needed
-            Object dataBean = new Object();
-
-            //   This is to call the report generation         
-            SolaPrintViewerForm form = new SolaPrintViewerForm(
-                    ReportManager.getSolaPrintReport(
-                    layout.getId(), dataBean, mapImageLocation, scalebarImageLocation));
-            // this is to visualize the generated report            
-            form.setVisible(true);
-
-
+            generateAndShowReport(layout.getId(), mapImageLocation, scalebarImageLocation);
         } catch (IOException ex) {
+            throw new RuntimeException(ex);
         }
+    }
+    
+    protected void generateAndShowReport(
+            String layoutId, String mapImageLocation, String scalebarImageLocation )
+    throws IOException{
+        //This will be the bean containing data for the report. 
+        //it is the data source for the report
+        //it must be replaced with appropriate bean if needed
+        Object dataBean = new Object();
+
+        //   This is to call the report generation         
+        SolaPrintViewerForm form = new SolaPrintViewerForm(
+                ReportManager.getSolaPrintReport(
+                layoutId, dataBean, mapImageLocation, scalebarImageLocation));
+        // this is to visualize the generated report            
+        form.setVisible(true);
     }
 }

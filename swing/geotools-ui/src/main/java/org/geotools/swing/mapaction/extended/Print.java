@@ -58,19 +58,28 @@ public class Print extends ExtendedAction {
     private IPrintUi printForm;
     /**
      * The resource location of the layouts.
-     * 
+     *
      */
     protected String layoutLocation = "resources/print/layouts.properties";
 
     /**
      * Creates the print map action.
-     * 
+     *
      * @param mapControl The map control with which the map action will interact
      */
     public Print(Map mapControl) {
-        super(mapControl, "print",
+        this(mapControl, "print");
+    }
+
+    /**
+     * Creates the print map action.
+     *
+     * @param mapControl The map control with which the map action will interact
+     */
+    public Print(Map mapControl, String actionName) {
+        super(mapControl, actionName,
                 Messaging.getInstance().getMessageText(Messaging.Ids.PRINT.toString()),
-                "resources/print.png");
+                String.format("resources/%s.png", actionName));
     }
 
     /**
@@ -79,25 +88,17 @@ public class Print extends ExtendedAction {
      */
     @Override
     public void onClick() {
-        if (this.printForm == null) {
-            this.printForm = this.getPrintForm();
-        }
-        try {
-            this.printForm.setPrintLayoutList(this.getPrintLayouts());
-        } catch (PrintLayoutException ex) {
-            Messaging.getInstance().show(Messaging.Ids.PRINT_LAYOUT_GENERATION_ERROR.toString());
-        }
 
-        this.printForm.setScale(this.getMapControl().getScale().intValue());
-        this.printForm.setVisibility(true);
-        if (this.printForm.getPrintLayout() == null) {
+        getPrintForm().setScale(this.getMapControl().getScale().intValue());
+        getPrintForm().setVisibility(true);
+        if (getPrintForm().getPrintLayout() == null) {
             return;
         }
 
         String printLocation = this.print(
-                this.printForm.getPrintLayout(),
-                this.printForm.getScale(),
-                this.printForm.getExtraFields());
+                getPrintForm().getPrintLayout(),
+                getPrintForm().getScale(),
+                getPrintForm().getExtraFields());
         this.showPrintableDocument(printLocation);
     }
 
@@ -108,7 +109,20 @@ public class Print extends ExtendedAction {
      * @return
      */
     protected IPrintUi getPrintForm() {
-        return new PrintForm();
+        if (printForm == null) {
+            printForm = new PrintForm();
+            setLayouts();
+        }
+        return printForm;
+    }
+
+    protected final void setLayouts() {
+        try {
+            getPrintForm().setPrintLayoutList(this.getPrintLayouts());
+        } catch (PrintLayoutException ex) {
+            Messaging.getInstance().show(
+                    Messaging.Ids.PRINT_LAYOUT_GENERATION_ERROR.toString());
+        }
     }
 
     /**

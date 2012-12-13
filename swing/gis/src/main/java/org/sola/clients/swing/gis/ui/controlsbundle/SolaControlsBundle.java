@@ -139,7 +139,7 @@ public abstract class SolaControlsBundle extends ControlsBundle {
      * @throws InitializeLayerException
      * @throws SchemaException
      */
-    public void addLayerConfig(ConfigMapLayerTO configMapLayer)
+    private void addLayerConfig(ConfigMapLayerTO configMapLayer)
             throws InitializeLayerException, SchemaException {
         if (configMapLayer.getTypeCode().equals("wms")) {
             String wmsServerURL = configMapLayer.getUrl();
@@ -193,6 +193,10 @@ public abstract class SolaControlsBundle extends ControlsBundle {
         if (this.solaPrint != null) {
             this.solaPrint.setApplicationId(applicationId);
         }
+    }
+
+    public SolaJasperPrint getSolaPrint() {
+        return solaPrint;
     }
 
     /**

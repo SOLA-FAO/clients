@@ -54,6 +54,7 @@ import org.sola.clients.swing.desktop.administrative.BaUnitSearchPanel;
 import org.sola.clients.swing.desktop.application.ApplicationPanel;
 import org.sola.clients.swing.desktop.application.ApplicationSearchPanel;
 import org.sola.clients.swing.desktop.cadastre.MapPanelForm;
+import org.sola.clients.swing.desktop.cadastre.MapPublicDisplayPanel;
 import org.sola.clients.swing.desktop.party.PartySearchPanelForm;
 import org.sola.clients.swing.desktop.reports.LodgementReportParamsForm;
 import org.sola.clients.swing.desktop.reports.SysRegCertParamsForm;
@@ -159,6 +160,23 @@ public class MainForm extends javax.swing.JFrame {
                     pnlContent.addPanel(mapPanel, MainContentPanel.CARD_MAP);
                 }
                 pnlContent.showPanel(MainContentPanel.CARD_MAP);
+                return null;
+            }
+        };
+        TaskManager.getInstance().runTask(t);
+    }
+
+    private void openMapPublicDisplay() {
+        SolaTask t = new SolaTask<Void, Void>() {
+
+            @Override
+            public Void doTask() {
+                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_MAP));
+                if (!pnlContent.isPanelOpened(MapPublicDisplayPanel.PANEL_NAME)) {
+                    MapPublicDisplayPanel mapPanel = new MapPublicDisplayPanel();
+                    pnlContent.addPanel(mapPanel, MapPublicDisplayPanel.PANEL_NAME);
+                }
+                pnlContent.showPanel(MapPublicDisplayPanel.PANEL_NAME);
                 return null;
             }
         };
@@ -444,6 +462,7 @@ public class MainForm extends javax.swing.JFrame {
         menuPublicNotification = new javax.swing.JMenuItem();
         menuOwnerName = new javax.swing.JMenuItem();
         menuStateLand = new javax.swing.JMenuItem();
+        menuItemMapPublicDisplay = new javax.swing.JMenuItem();
         menuCertificates = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
@@ -768,6 +787,14 @@ public class MainForm extends javax.swing.JFrame {
 
         menuSystematic.add(menuPublicDisplay);
 
+        menuItemMapPublicDisplay.setText(bundle.getString("MainForm.menuItemMapPublicDisplay.text")); // NOI18N
+        menuItemMapPublicDisplay.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemMapPublicDisplayActionPerformed(evt);
+            }
+        });
+        menuSystematic.add(menuItemMapPublicDisplay);
+
         menuCertificates.setText(bundle.getString("MainForm.menuCertificates.text")); // NOI18N
         menuCertificates.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -944,6 +971,10 @@ public class MainForm extends javax.swing.JFrame {
     private void menuCertificatesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCertificatesActionPerformed
         openSysRegCertificatesParamsForm();
     }//GEN-LAST:event_menuCertificatesActionPerformed
+
+    private void menuItemMapPublicDisplayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemMapPublicDisplayActionPerformed
+        openMapPublicDisplay();
+    }//GEN-LAST:event_menuItemMapPublicDisplayActionPerformed
     
     private void editPassword() {
             showPasswordPanel();
@@ -991,6 +1022,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuCertificates;
     private javax.swing.JMenuItem menuDefaultLogLevel;
     private javax.swing.JMenuItem menuDocumentSearch;
+    private javax.swing.JMenuItem menuItemMapPublicDisplay;
     private javax.swing.JMenuItem menuLangEN;
     private javax.swing.JMenuItem menuLangIT;
     private javax.swing.JMenu menuLanguage;

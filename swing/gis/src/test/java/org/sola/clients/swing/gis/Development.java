@@ -48,8 +48,7 @@ import org.sola.clients.swing.gis.beans.TransactionCadastreChangeBean;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForBaUnit;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForCadastreChange;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
-import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForCadastreRedefinition;
-import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleViewer;
+import org.sola.clients.swing.gis.ui.controlsbundle.*;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.search.MapDefinitionTO;
 import org.sola.webservices.transferobjects.administrative.BaUnitTO;
@@ -72,6 +71,19 @@ public class Development {
         ControlsBundleViewer ctrl = new ControlsBundleViewer();
         this.displayControlsBundleForm(ctrl);
     }
+
+    /**
+     * Test the controls bundle for setting the location of an application
+     */
+    //@Ignore
+    @Test
+    public void testUIControlsBundleForPublicDisplay() throws Exception {
+        System.out.println("Test ControlsBundle for public display");
+        SecurityBean.authenticate("test", "test".toCharArray(), this.getWSConfig());
+        ControlsBundleForPublicDisplay ctrl = new ControlsBundleForPublicDisplay();
+        this.displayControlsBundleForm(ctrl);
+    }
+
 
     /**
      * Test the controls bundle for setting the location of an application
@@ -163,7 +175,7 @@ public class Development {
     /**
      * Test the controls bundle for cadastre change
      */
-    //@Ignore
+    @Ignore
     @Test
     public void testUIControlsBundleForCadastreChangeById() throws Exception {
         System.out.println("Test ControlsBundle for cadastre change");

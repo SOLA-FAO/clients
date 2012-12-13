@@ -29,6 +29,7 @@ import java.awt.BorderLayout;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.sola.clients.swing.gis.beans.TransactionCadastreChangeBean;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForCadastreChange;
+import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForPublicDisplay;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleViewer;
 import org.sola.clients.swing.gis.ui.controlsbundle.SolaControlsBundle;
 import org.sola.clients.swing.ui.ContentPanel;
@@ -73,7 +74,7 @@ public class MapPanel extends ContentPanel {
     }
 
     private void initializeMap(ReferencedEnvelope extentToShow){
-        this.mapControl = new ControlsBundleViewer();
+        this.mapControl = new ControlsBundleForPublicDisplay();
         if (extentToShow != null){
             this.mapControl.getMap().setDisplayArea(extentToShow);
         }

@@ -320,6 +320,44 @@ public class ReportManager {
         }
     }
 
+    public static JasperPrint getMapPublicDisplayReport(
+            String layoutId, String areaDescription,
+            String mapImageLocation, String scalebarImageLocation) throws IOException {
+
+        // Image Location of the north-arrow image
+        String navigatorImage = "/images/sola/north-arrow.png";
+        HashMap inputParameters = new HashMap();
+        inputParameters.put("REPORT_LOCALE", Locale.getDefault());
+        inputParameters.put("USER_NAME", SecurityBean.getCurrentUser().getFullUserName());
+        inputParameters.put("MAP_IMAGE", mapImageLocation);
+        inputParameters.put("SCALE_IMAGE", scalebarImageLocation);
+        inputParameters.put("NAVIGATOR_IMAGE",
+                ReportManager.class.getResourceAsStream(navigatorImage));
+        inputParameters.put("LAYOUT", layoutId);
+        inputParameters.put("INPUT_DATE",
+                DateFormat.getInstance().format(Calendar.getInstance().getTime()));
+        inputParameters.put("AREA_DESCRIPTION", areaDescription);
+
+
+        //This will be the bean containing data for the report. 
+        //it is the data source for the report
+        //it must be replaced with appropriate bean if needed
+        Object[] beans = new Object[1];
+        beans[0] = new Object();
+        JRDataSource jds = new JRBeanArrayDataSource(beans);
+
+        try {
+            JasperPrint jasperPrint = JasperFillManager.fillReport(
+                    ReportManager.class.getResourceAsStream(
+                    "/reports/map/" + layoutId + ".jasper"), inputParameters, jds);
+            return jasperPrint;
+        } catch (JRException ex) {
+            MessageUtility.displayMessage(ClientMessage.REPORT_GENERATION_FAILED,
+                    new Object[]{ex.getLocalizedMessage()});
+            return null;
+        }
+    }
+    
     /**
      * Generates and displays <b>Systematic registration Public display
      * report</b>.
