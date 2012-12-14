@@ -4,15 +4,23 @@
  */
 package org.sola.clients.swing.bulkoperations.sources;
 
+import java.io.File;
+import javax.swing.filechooser.FileFilter;
+import org.sola.clients.swing.common.tasks.SolaTask;
+import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.ui.ContentPanel;
+import org.sola.common.messaging.ClientMessage;
+import org.sola.common.messaging.MessageUtility;
 
 /**
  *
- * @author Manoku
+ * @author Elton Manoku
  */
 public class LoadSourcesPanel extends ContentPanel {
 
     private static String PANEL_NAME = "LOAD_SOURCES_PANEL";
+    private static java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle(
+            "org/sola/clients/swing/bulkoperations/sources/Bundle");
 
     /**
      * Creates new form LoadSourcesPanel
@@ -20,6 +28,52 @@ public class LoadSourcesPanel extends ContentPanel {
     public LoadSourcesPanel() {
         initComponents();
         this.setName(PANEL_NAME);
+        folderChooser.setFileFilter(new FileFilter() {
+
+            @Override
+            public boolean accept(File f) {
+                return f.isDirectory();
+            }
+
+            @Override
+            public String getDescription() {
+                return bundle.getString("LoadSourcesPanel.folderChooser.DirectoriesOnlyText");
+            }
+        });
+        setPostLoadEnabled(false);
+    }
+
+    private void setPostLoadEnabled(boolean enable) {
+        btnRollback.setEnabled(enable);
+        if (!enable) {
+//            transactionCadastreChange = null;
+//            transaction = null;
+            String informationResourceName = "LoadSourcesPanel.lblInformationText.text";
+            lblInformationText.setText(bundle.getString(informationResourceName));
+//            spatialBulkMove.getValidationResults().clear();
+        }
+    }
+    
+    private void convertAndSendToServer() {
+
+        SolaTask t = new SolaTask<Void, Void>() {
+
+            @Override
+            public Void doTask() {
+                setMessage(MessageUtility.getLocalizedMessageText(
+                        ClientMessage.BULK_OPERATIONS_LOAD_SOURCE_AND_SENDTOSERVER));
+                //transaction = spatialBulkMove.sendToServer();
+                return null;
+            }
+
+            @Override
+            protected void taskDone() {
+                super.taskDone();
+                setPostLoadEnabled(true);
+            }
+        };
+        TaskManager.getInstance().runTask(t);
+
     }
 
     /**
@@ -31,26 +85,97 @@ public class LoadSourcesPanel extends ContentPanel {
     private void initComponents() {
 
         headerPanel = new org.sola.clients.swing.ui.HeaderPanel();
+        folderChooser = new javax.swing.JFileChooser();
+        btnLoad = new javax.swing.JButton();
+        lblInformation = new javax.swing.JLabel();
+        lblInformationText = new javax.swing.JLabel();
+        btnRollback = new javax.swing.JButton();
+        groupPanel1 = new org.sola.clients.swing.ui.GroupPanel();
+        groupPanel2 = new org.sola.clients.swing.ui.GroupPanel();
 
         setHeaderPanel(headerPanel);
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/bulkoperations/sources/Bundle"); // NOI18N
         headerPanel.setTitleText(bundle.getString("LoadSourcesPanel.headerPanel.titleText")); // NOI18N
 
+        folderChooser.setAcceptAllFileFilterUsed(false);
+        folderChooser.setControlButtonsAreShown(false);
+        folderChooser.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
+
+        btnLoad.setText(bundle.getString("LoadSourcesPanel.btnLoad.text")); // NOI18N
+        btnLoad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoadActionPerformed(evt);
+            }
+        });
+
+        lblInformation.setText(bundle.getString("LoadSourcesPanel.lblInformation.text")); // NOI18N
+
+        lblInformationText.setText(bundle.getString("LoadSourcesPanel.lblInformationText.text")); // NOI18N
+
+        btnRollback.setText(bundle.getString("LoadSourcesPanel.btnRollback.text")); // NOI18N
+
+        groupPanel1.setTitleText(bundle.getString("LoadSourcesPanel.groupPanel1.titleText")); // NOI18N
+
+        groupPanel2.setTitleText(bundle.getString("LoadSourcesPanel.groupPanel2.titleText")); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(headerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 635, Short.MAX_VALUE)
+            .addComponent(headerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(groupPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 564, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(btnLoad)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblInformation)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblInformationText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnRollback))
+                    .addComponent(folderChooser, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 476, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+            .addComponent(groupPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(headerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 316, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(groupPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(23, 23, 23)
+                .addComponent(folderChooser, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(groupPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(24, 24, 24)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnLoad)
+                    .addComponent(lblInformation)
+                    .addComponent(lblInformationText)
+                    .addComponent(btnRollback))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnLoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadActionPerformed
+        setPostLoadEnabled(false);
+//        if (spatialBulkMove.validate(true).size() > 0) {
+//            return;
+//        }
+        convertAndSendToServer();
+    }//GEN-LAST:event_btnLoadActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnLoad;
+    private javax.swing.JButton btnRollback;
+    private javax.swing.JFileChooser folderChooser;
+    private org.sola.clients.swing.ui.GroupPanel groupPanel1;
+    private org.sola.clients.swing.ui.GroupPanel groupPanel2;
     private org.sola.clients.swing.ui.HeaderPanel headerPanel;
+    private javax.swing.JLabel lblInformation;
+    private javax.swing.JLabel lblInformationText;
     // End of variables declaration//GEN-END:variables
 }
