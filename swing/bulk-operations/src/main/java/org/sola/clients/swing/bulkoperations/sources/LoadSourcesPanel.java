@@ -6,6 +6,7 @@ package org.sola.clients.swing.bulkoperations.sources;
 
 import java.io.File;
 import javax.swing.filechooser.FileFilter;
+import org.sola.clients.swing.bulkoperations.beans.SourceBulkMoveBean;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.ui.ContentPanel;
@@ -21,6 +22,8 @@ public class LoadSourcesPanel extends ContentPanel {
     private static String PANEL_NAME = "LOAD_SOURCES_PANEL";
     private static java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle(
             "org/sola/clients/swing/bulkoperations/sources/Bundle");
+    
+    private SourceBulkMoveBean bulkMove = new SourceBulkMoveBean();
 
     /**
      * Creates new form LoadSourcesPanel
@@ -55,6 +58,8 @@ public class LoadSourcesPanel extends ContentPanel {
     }
     
     private void convertAndSendToServer() {
+        setPostLoadEnabled(false);
+        bulkMove.setBaseFolder(folderChooser.getSelectedFile());
 
         SolaTask t = new SolaTask<Void, Void>() {
 
@@ -62,7 +67,7 @@ public class LoadSourcesPanel extends ContentPanel {
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(
                         ClientMessage.BULK_OPERATIONS_LOAD_SOURCE_AND_SENDTOSERVER));
-                //transaction = spatialBulkMove.sendToServer();
+                bulkMove.sendToServer();
                 return null;
             }
 
@@ -161,10 +166,6 @@ public class LoadSourcesPanel extends ContentPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadActionPerformed
-        setPostLoadEnabled(false);
-//        if (spatialBulkMove.validate(true).size() > 0) {
-//            return;
-//        }
         convertAndSendToServer();
     }//GEN-LAST:event_btnLoadActionPerformed
 
