@@ -49,11 +49,10 @@ public class LoadSourcesPanel extends ContentPanel {
     private void setPostLoadEnabled(boolean enable) {
         btnRollback.setEnabled(enable);
         if (!enable) {
-//            transactionCadastreChange = null;
-//            transaction = null;
+            bulkMove.setTransaction(null);
             String informationResourceName = "LoadSourcesPanel.lblInformationText.text";
             lblInformationText.setText(bundle.getString(informationResourceName));
-//            spatialBulkMove.getValidationResults().clear();
+            bulkMove.getValidationResults().clear();
         }
     }
     
@@ -79,6 +78,13 @@ public class LoadSourcesPanel extends ContentPanel {
         };
         TaskManager.getInstance().runTask(t);
 
+    }
+
+    private void rollback() {
+        if (bulkMove.getTransaction() != null) {
+            bulkMove.getTransaction().reject();
+        }
+        setPostLoadEnabled(false);
     }
 
     /**
@@ -119,6 +125,11 @@ public class LoadSourcesPanel extends ContentPanel {
         lblInformationText.setText(bundle.getString("LoadSourcesPanel.lblInformationText.text")); // NOI18N
 
         btnRollback.setText(bundle.getString("LoadSourcesPanel.btnRollback.text")); // NOI18N
+        btnRollback.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRollbackActionPerformed(evt);
+            }
+        });
 
         groupPanel1.setTitleText(bundle.getString("LoadSourcesPanel.groupPanel1.titleText")); // NOI18N
 
@@ -168,6 +179,10 @@ public class LoadSourcesPanel extends ContentPanel {
     private void btnLoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadActionPerformed
         convertAndSendToServer();
     }//GEN-LAST:event_btnLoadActionPerformed
+
+    private void btnRollbackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRollbackActionPerformed
+        rollback();
+    }//GEN-LAST:event_btnRollbackActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLoad;

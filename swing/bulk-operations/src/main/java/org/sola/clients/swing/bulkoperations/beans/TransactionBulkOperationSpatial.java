@@ -5,7 +5,6 @@
 package org.sola.clients.swing.bulkoperations.beans;
 
 import java.util.List;
-import org.sola.clients.beans.AbstractIdBean;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.beans.validation.ValidationResultBean;
 import org.sola.services.boundary.wsclients.WSManager;
@@ -15,14 +14,10 @@ import org.sola.webservices.transferobjects.transaction.TransactionBulkOperation
  *
  * @author Elton Manoku
  */
-public class TransactionBulkOperationSpatial extends AbstractIdBean {
+public class TransactionBulkOperationSpatial extends TransactionBulkOperation {
     
     private boolean generateFirstPart = false;
     private List<SpatialUnitTemporaryBean> spatialUnitTemporaryList;
-
-    public TransactionBulkOperationSpatial(){
-        super();
-    }
 
     public boolean isGenerateFirstPart() {
         return generateFirstPart;
@@ -45,12 +40,8 @@ public class TransactionBulkOperationSpatial extends AbstractIdBean {
     
     public List<ValidationResultBean> save() {
         return TypeConverters.TransferObjectListToBeanList(
-                WSManager.getInstance().getCadastreService().saveTransactionBulkOperationSpatial(
+                WSManager.getInstance().getBulkOperationsService().saveTransactionBulkOperationSpatial(
                 this.getTO()), ValidationResultBean.class, null);
     }
     
-    public boolean reject(){
-        return WSManager.getInstance().getCadastreService().rejectTransactionBulkOperationSpatial(
-                getTO());
-    }
 }
