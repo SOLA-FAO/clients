@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import org.geotools.swing.data.JFileDataStoreChooser;
 import org.jdesktop.beansbinding.Binding;
 import org.reflections.Reflections;
+import org.sola.clients.swing.bulkoperations.ValidationResultPanel;
 import org.sola.clients.swing.bulkoperations.beans.*;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
@@ -259,10 +260,9 @@ public class ImportSpatialPanel extends ContentPanel {
     }
 
     private void openValidations() {
-        ValidationResultForm validationForm = new ValidationResultForm(
-                null, true, spatialBulkMove.getValidationResults(), true,
-                bundle.getString("ImportSpatialPanel.validationScreen.title"));
-        validationForm.setVisible(true);
+        ValidationResultPanel validationPanel = new ValidationResultPanel();
+        validationPanel.getValidationResultList().addAll(spatialBulkMove.getValidationResults());
+        getMainContentPanel().addPanel(validationPanel, validationPanel.getName(), true);
     }
 
     /**

@@ -5,7 +5,6 @@
 package org.sola.clients.swing.bulkoperations;
 
 import org.sola.clients.beans.security.SecurityBean;
-import org.sola.clients.swing.bulkoperations.beans.SpatialDestinationCadastreObjectBean;
 import org.sola.clients.swing.bulkoperations.sources.LoadSourcesPanel;
 import org.sola.clients.swing.bulkoperations.spatialobjects.ImportSpatialPanel;
 import org.sola.clients.swing.bulkoperations.spatialobjects.MapPanel;

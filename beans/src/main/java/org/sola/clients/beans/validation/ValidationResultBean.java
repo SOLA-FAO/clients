@@ -35,6 +35,8 @@ import org.sola.webservices.transferobjects.ValidationResult;
  * Could be populated from {@link ValidationResult}
  */
 public class ValidationResultBean extends AbstractBindingBean {
+    
+    public static final String SEVERITY_WARNING = "warning";
     private String name;
     private boolean successful;
     private String feedback;
