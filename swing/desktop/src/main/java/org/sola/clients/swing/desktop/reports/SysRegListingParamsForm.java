@@ -21,6 +21,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,12 +32,16 @@ import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 import org.sola.clients.beans.digitalarchive.DocumentBean;
+import org.sola.clients.beans.validation.ValidationResultBean;
 import org.sola.clients.reports.ReportManager;
 import org.sola.clients.swing.common.controls.CalendarForm;
+import org.sola.clients.swing.common.tasks.SolaTask;
+import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.desktop.ReportViewerForm;
 import org.sola.clients.swing.desktop.source.DocumentForm;
 import org.sola.clients.swing.ui.MainContentPanel;
+import org.sola.clients.swing.ui.validation.ValidationResultForm;
 import org.sola.common.FileUtility;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -62,6 +67,8 @@ public class SysRegListingParamsForm extends javax.swing.JDialog {
         initComponents();
         this.report = report;
         this.setTitle("Report " + report);
+        this.txtToDate.setVisible(false);
+        this.labNotificationTo.setVisible(false);
     }
 
     /**
@@ -186,6 +193,11 @@ public class SysRegListingParamsForm extends javax.swing.JDialog {
         txtFromDate.setToolTipText(bundle.getString("SysRegListingParamsForm.txtFromDate.toolTipText")); // NOI18N
         txtFromDate.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
         txtFromDate.setHorizontalAlignment(JTextField.LEADING);
+        txtFromDate.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                txtFromDatePropertyChange(evt);
+            }
+        });
 
         labNotificationTo.setText(bundle.getString("SysRegListingParamsForm.labNotificationTo.text")); // NOI18N
 
@@ -318,6 +330,13 @@ public class SysRegListingParamsForm extends javax.swing.JDialog {
                     dateFilled = false;
                     return;
                 } else {
+                    List<ValidationResultBean> result = null;
+                    result = parcelNumberListingListBean.publicDisplay(tmpLocation);
+                    String message = MessageUtility.getLocalizedMessage(
+                            ClientMessage.REPORT_GENERATION_SUCCESS,
+                            new String[]{ownerNameListingListBean.getOwnerNameListing().get(0).getNameLastpart()}).getMessage();
+                    openValidationResultForm(result, true, message);
+
                     try {
                         tmpTo = formatter.parse(addPubliNotificationDuration(txtFromDate.getValue(), ownerNameListingListBean.getOwnerNameListing().get(0).getPublicNotificationDuration()));
                     } catch (ParseException ex) {
@@ -334,6 +353,13 @@ public class SysRegListingParamsForm extends javax.swing.JDialog {
                     dateFilled = false;
                     return;
                 } else {
+                    List<ValidationResultBean> result = null;
+                    result = parcelNumberListingListBean.publicDisplay(tmpLocation);
+                    String message = MessageUtility.getLocalizedMessage(
+                            ClientMessage.REPORT_GENERATION_SUCCESS,
+                            new String[]{stateLandListingListBean.getStateLandListing().get(0).getNameLastpart()}).getMessage();
+                    openValidationResultForm(result, true, message);
+
                     try {
                         tmpTo = formatter.parse(addPubliNotificationDuration(txtFromDate.getValue(), stateLandListingListBean.getStateLandListing().get(0).getPublicNotificationDuration()));
                     } catch (ParseException ex) {
@@ -345,11 +371,20 @@ public class SysRegListingParamsForm extends javax.swing.JDialog {
             }
             if (this.report.contentEquals("ParcelNumber")) {
                 parcelNumberListingListBean.passParameter(tmpLocation);
+
+
                 if (parcelNumberListingListBean.getParcelNumberListing().isEmpty()) {
                     MessageUtility.displayMessage(ClientMessage.NO_REPORT_GENERATION);
                     dateFilled = false;
                     return;
                 } else {
+                    List<ValidationResultBean> result = null;
+                    result = parcelNumberListingListBean.publicDisplay(tmpLocation);
+                    String message = MessageUtility.getLocalizedMessage(
+                            ClientMessage.REPORT_GENERATION_SUCCESS,
+                            new String[]{parcelNumberListingListBean.getParcelNumberListing().get(0).getNameLastpart()}).getMessage();
+                    openValidationResultForm(result, true, message);
+
                     try {
                         tmpTo = formatter.parse(addPubliNotificationDuration(txtFromDate.getValue(), parcelNumberListingListBean.getParcelNumberListing().get(0).getPublicNotificationDuration()));
                     } catch (ParseException ex) {
@@ -363,6 +398,18 @@ public class SysRegListingParamsForm extends javax.swing.JDialog {
             this.dispose();
         }
     }//GEN-LAST:event_viewReportActionPerformed
+
+    /**
+     * Opens dialog form to display status change result for application or
+     * service.
+     */
+    private void openValidationResultForm(List<ValidationResultBean> validationResultList,
+            boolean isSuccess, String message) {
+        ValidationResultForm resultForm = new ValidationResultForm(
+                null, true, validationResultList, isSuccess, message);
+        resultForm.setLocationRelativeTo(this);
+        resultForm.setVisible(true);
+    }
 
     private String addPubliNotificationDuration(Object dateFrom, String pubDuration) {
         SimpleDateFormat sdf = new SimpleDateFormat("ddMMyy");
@@ -383,6 +430,11 @@ public class SysRegListingParamsForm extends javax.swing.JDialog {
     private void btnShowCalendarFromActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowCalendarFromActionPerformed
         showCalendar(txtFromDate);
     }//GEN-LAST:event_btnShowCalendarFromActionPerformed
+
+    private void txtFromDatePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_txtFromDatePropertyChange
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtFromDatePropertyChange
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnShowCalendarFrom;
     private org.sola.clients.beans.cadastre.CadastreObjectBean cadastreObjectBean;

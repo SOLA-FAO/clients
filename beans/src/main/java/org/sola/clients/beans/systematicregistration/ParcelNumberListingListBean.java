@@ -19,6 +19,7 @@ import java.util.List;
 import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.clients.beans.controls.SolaObservableList;
 import org.sola.clients.beans.converters.TypeConverters;
+import org.sola.clients.beans.validation.ValidationResultBean;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.administrative.SysRegPubDisParcelNameTO;
 
@@ -72,4 +73,16 @@ public class ParcelNumberListingListBean extends AbstractBindingBean {
         TypeConverters.TransferObjectListToBeanList(sysRegListingTO,
                 ParcelNumberListingBean.class, (List) parcels);
     }
+    
+     /**
+     * Withdraws application
+     */
+    public List<ValidationResultBean> publicDisplay(String params) {
+        List<ValidationResultBean> result = TypeConverters.TransferObjectListToBeanList(
+                WSManager.getInstance().getAdministrative().publicDisplay(params),
+                ValidationResultBean.class, null);
+       
+        return result;
+    }
+
 }

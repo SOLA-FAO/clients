@@ -149,6 +149,9 @@
           <ResourceString bundle="org/sola/clients/swing/desktop/reports/Bundle.properties" key="SysRegListingParamsForm.txtFromDate.toolTipText" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="txtFromDatePropertyChange"/>
+      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="txtFromDate.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));&#xa;txtFromDate.setHorizontalAlignment(JTextField.LEADING);"/>
         <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="txtFromDate.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 12));"/>
