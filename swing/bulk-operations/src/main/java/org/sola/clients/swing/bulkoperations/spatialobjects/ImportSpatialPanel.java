@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import org.geotools.swing.data.JFileDataStoreChooser;
 import org.jdesktop.beansbinding.Binding;
 import org.reflections.Reflections;
+import org.sola.clients.swing.bulkoperations.FileBrowser;
 import org.sola.clients.swing.bulkoperations.ValidationResultPanel;
 import org.sola.clients.swing.bulkoperations.beans.*;
 import org.sola.clients.swing.common.tasks.SolaTask;
@@ -119,8 +120,10 @@ public class ImportSpatialPanel extends ContentPanel {
         if (spatialBulkMove.getSource() == null) {
             return;
         }
-        File sourceFile = JFileDataStoreChooser.showOpenFile(
-                spatialBulkMove.getSource().getCode(), null);
+        File sourceFile = FileBrowser.showFileChooser(
+                this, spatialBulkMove.getSource().getCode());
+//        File sourceFile = JFileDataStoreChooser.showOpenFile(
+//                spatialBulkMove.getSource().getCode(), null);
         if (sourceFile == null) {
             return;
         }
