@@ -29,7 +29,6 @@ public class SpatialDestinationCadastreObjectBean extends SpatialDestinationBean
     private SpatialAttributeBean officialArea;
     private boolean generateFirstPart = false;
     private CadastreObjectTypeBean cadastreObjectType = new CadastreObjectTypeBean();
-    
     private String code = "cadastre_object";
     private String displayValue = "Cadastre object";
 
@@ -44,7 +43,7 @@ public class SpatialDestinationCadastreObjectBean extends SpatialDestinationBean
     public String getPanelName() {
         return SpatialDestinationCadastreObjectPanel.PANEL_NAME;
     }
-    
+
     public boolean isGenerateFirstPart() {
         return generateFirstPart;
     }
@@ -103,7 +102,7 @@ public class SpatialDestinationCadastreObjectBean extends SpatialDestinationBean
     public final void setCadastreObjectTypeCode(String value) {
         String old = getCadastreObjectTypeCode();
         setCadastreObjectType(CacheManager.getBeanByCode(
-                CacheManager.getCadastreObjectTypes(), value));        
+                CacheManager.getCadastreObjectTypes(), value));
         propertySupport.firePropertyChange(PROPERTY_CADASTRE_OBJECT_TYPE_CODE, old, value);
     }
 
@@ -115,18 +114,21 @@ public class SpatialDestinationCadastreObjectBean extends SpatialDestinationBean
         if (!isGenerateFirstPart()) {
             onlyAttributes.add(nameFirstPart);
         }
-
+        
         for (SpatialSourceObjectBean sourceObject : fromSource.getFeatures(onlyAttributes)) {
-            SpatialUnitTemporaryBean bean = new  SpatialUnitTemporaryBean();
+            SpatialUnitTemporaryBean bean = new SpatialUnitTemporaryBean();
             bean.setTypeCode(code);
             bean.setCadastreObjectTypeCode(getCadastreObjectTypeCode());
             bean.setGeom(sourceObject.getTheGeom());
-            
-            bean.setOfficialArea(BigDecimal.valueOf(
-                    Double.valueOf(sourceObject.getFieldsWithValues().get(
+            try {
+                bean.setOfficialArea(BigDecimal.valueOf(
+                        Double.valueOf(sourceObject.getFieldsWithValues().get(
                         officialArea.getName()).toString())));
+            } catch (NumberFormatException ex) {
+                bean.setOfficialArea(null);
+            }
             bean.setNameLastpart(getNameLastPart());
-            if (!isGenerateFirstPart()){
+            if (!isGenerateFirstPart()) {
                 bean.setNameFirstpart(
                         sourceObject.getFieldsWithValues().get(nameFirstPart.getName()).toString());
             }
