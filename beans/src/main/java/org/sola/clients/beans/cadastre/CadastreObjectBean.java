@@ -34,6 +34,7 @@ import org.hibernate.validator.constraints.Length;
 import org.sola.clients.beans.AbstractTransactionedBean;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.referencedata.CadastreObjectTypeBean;
+import org.sola.clients.beans.referencedata.LandUseTypeBean;
 import org.sola.clients.beans.validation.Localized;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.webservices.transferobjects.cadastre.CadastreObjectTO;
@@ -54,6 +55,8 @@ public class CadastreObjectBean extends AbstractTransactionedBean {
     public static final String GEOM_POLYGON_PROPERTY = "geomPolygon";
     public static final String SELECTED_PROPERTY = "selected";
     public static final String PENDING_STATUS = "pending";
+    public static final String LAND_USE_TYPE_PROPERTY = "landUseType";
+    public static final String LAND_USE_CODE_PROPERTY = "landUseCode";
     
     private Date approvalDatetime;
     private Date historicDatetime;
@@ -69,6 +72,8 @@ public class CadastreObjectBean extends AbstractTransactionedBean {
     private CadastreObjectTypeBean cadastreObjectType;
     private byte[] geomPolygon;
     private transient boolean selected;
+    private LandUseTypeBean landUseType;
+    
     
     public CadastreObjectBean() {
         super();
@@ -146,6 +151,23 @@ public class CadastreObjectBean extends AbstractTransactionedBean {
                 CacheManager.getCadastreObjectTypes(), typeCode));
         propertySupport.firePropertyChange(TYPE_CODE_PROPERTY, oldValue, typeCode);
     }
+    public String getLandUseCode() {
+        if (landUseType != null) {
+            return landUseType.getCode();
+        } else {
+            return null;
+        }
+    }
+
+    public void setLandUseCode(String landUseCode) {
+        String oldValue = null;
+        if (landUseType != null) {
+            oldValue = landUseType.getCode();
+        }
+        setLandUseType(CacheManager.getBeanByCode(
+                CacheManager.getLandUseTypes(), landUseCode));
+        propertySupport.firePropertyChange(LAND_USE_CODE_PROPERTY, oldValue, landUseCode);
+    }
 
     public CadastreObjectTypeBean getCadastreObjectType() {
         return cadastreObjectType;
@@ -156,6 +178,16 @@ public class CadastreObjectBean extends AbstractTransactionedBean {
             this.cadastreObjectType = new CadastreObjectTypeBean();
         }
         this.setJointRefDataBean(this.cadastreObjectType, cadastreObjectType, CADASTRE_OBJECT_TYPE_PROPERTY);
+    }
+     public LandUseTypeBean getLandUseType() {
+        return landUseType;
+    }
+
+    public void setLandUseType(LandUseTypeBean landUseType) {
+        if(this.landUseType==null){
+            this.landUseType = new LandUseTypeBean();
+        }
+        this.setJointRefDataBean(this.landUseType, landUseType, LAND_USE_TYPE_PROPERTY);
     }
 
     public byte[] getGeomPolygon() {
