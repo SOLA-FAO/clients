@@ -52,6 +52,7 @@ public class SourceSummaryBean extends AbstractTransactionedBean {
     public static final String RECORDATION_PROPERTY = "recordation";
     public static final String REFERENCE_NR_PROPERTY = "referenceNr";
     public static final String SUBMISSION_PROPERTY = "submission";
+    public static final String EXPIRATION_DATE_PROPERTY = "expirationDate";
     public static final String SOURCE_TYPE_CODE_PROPERTY = "typeCode";
     public static final String SOURCE_TYPE_PROPERTY = "sourceType";
     public static final String OWNER_NAME_PROPERTY = "ownerName";
@@ -60,6 +61,7 @@ public class SourceSummaryBean extends AbstractTransactionedBean {
     public static final String TRANSACTION_ID_PROPERTY = "transactionId";
     
     private Date acceptance;
+    private Date expirationDate;
     private String archiveId;
     private String archiveDocumentId;
     private String laNr;
@@ -75,6 +77,7 @@ public class SourceSummaryBean extends AbstractTransactionedBean {
     private String description;
     private String transactionId;
     
+    
     public SourceSummaryBean() {
         super();
         sourceType = new SourceTypeBean();
@@ -83,6 +86,7 @@ public class SourceSummaryBean extends AbstractTransactionedBean {
     public void clean() {
         this.setId(UUID.randomUUID().toString());
         this.setAcceptance(null);
+        this.setExpirationDate(null);
         this.setArchiveDocumentId(null);
         this.setEntityAction(null);
         this.setLaNr(null);
@@ -133,7 +137,17 @@ public class SourceSummaryBean extends AbstractTransactionedBean {
         acceptance = value;
         propertySupport.firePropertyChange(ACCEPTANCE_PROPERTY, old, value);
     }
+    
+    
+    public Date getExpirationDate() {
+        return expirationDate;
+    }
 
+    public void setExpirationDate(Date value) {
+        Date old = expirationDate;
+        expirationDate = value;
+        propertySupport.firePropertyChange(EXPIRATION_DATE_PROPERTY, old, value);
+    }
     public String getArchiveId() {
         return archiveId;
     }

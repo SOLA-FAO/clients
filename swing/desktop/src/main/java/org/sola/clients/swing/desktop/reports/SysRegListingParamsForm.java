@@ -90,13 +90,10 @@ public class SysRegListingParamsForm extends javax.swing.JDialog {
         System.out.println("Inside postProcessReport");
 
         System.out.println("start download");
-//        Date currentdate = new Date(System.currentTimeMillis());
-//        SimpleDateFormat formatter = new SimpleDateFormat("ddMMyy");
-//        String reportdate = formatter.format(currentdate);
 
         Date recDate = (Date) txtFromDate.getValue();
+        Date expDate = (Date) txtToDate.getValue();
         String location = this.tmpLocation.replace(" ", "_");
-//        String reportTogenerate = this.report + "_" + location + "_" + this.reportdate + ".pdf";
 
         JRPdfExporter exporterPdf = new JRPdfExporter();
 
@@ -109,14 +106,15 @@ public class SysRegListingParamsForm extends javax.swing.JDialog {
         FileUtility.saveFileFromStream(null, this.reportTogenerate);
 
         System.out.println("End download");
-        saveDocument(this.reportTogenerate, recDate, this.reportdate);
+        saveDocument(this.reportTogenerate, recDate, this.reportdate, expDate);
         FileUtility.deleteFileFromCache(this.reportTogenerate);
 
     }
 
-    private void saveDocument(String fileName, Date recDate, String subDate) throws Exception {
+    private void saveDocument(String fileName, Date recDate, String subDate, Date expDate) throws Exception {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yy");
         String reportdate = formatter.format(recDate);
+        String expiration = formatter.format(expDate);
         documentPanel.browseAttachment.setText(fileName);
 
         for (int i = 0, n = documentPanel.cbxDocType.getItemCount(); i < n; i++) {
@@ -126,9 +124,11 @@ public class SysRegListingParamsForm extends javax.swing.JDialog {
             }
         }
 
-        documentPanel.txtDocRefNumber.setText(reportdate);
+        documentPanel.txtDocRefNumber.setText(tmpLocation);
         documentPanel.txtDocRecordDate.setText(reportdate);
         documentPanel.txtDocRecordDate.setValue(txtFromDate.getValue());
+        documentPanel.txtExpiration.setText(expiration);
+        documentPanel.txtExpiration.setValue(txtToDate.getValue());
 
         DocumentBean document = new DocumentBean();
         File file = new File(cachePath + fileName);
@@ -391,6 +391,7 @@ public class SysRegListingParamsForm extends javax.swing.JDialog {
                         Logger.getLogger(SysRegListingParamsForm.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     txtToDate.setText(tmpTo.toString());
+                    txtToDate.setValue(tmpTo);
                     showReport(ReportManager.getSysRegPubDisParcelNameReport(parcelNumberListingListBean, tmpFrom, tmpTo, tmpLocation, reportRequested));
                 }
             }

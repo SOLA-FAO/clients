@@ -93,6 +93,7 @@ public class DocumentPanel extends javax.swing.JPanel {
         cbxDocType.setEnabled(allowEditing);
         txtDocRecordDate.setEnabled(allowEditing);
         txtDocRefNumber.setEnabled(allowEditing);
+        txtExpiration.setEnabled(allowEditing);
         browseAttachment.setDisplayBrowseButton(allowEditing);
         browseAttachment.setDisplayDeleteButton(allowEditing);
         btnOk.setEnabled(allowEditing);
@@ -103,6 +104,7 @@ public class DocumentPanel extends javax.swing.JPanel {
      * sets text of OK button.
      */
     private void postInit() {
+        txtExpiration.setVisible(false);
         cbxDocType.setSelectedIndex(-1);
         // Init browse attachment
         browseAttachment.addBrowseControlEventListener(new BrowseControlListener() {
@@ -213,6 +215,7 @@ public class DocumentPanel extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
         txtDocRecordDate = new javax.swing.JFormattedTextField();
         jLabel3 = new javax.swing.JLabel();
+        txtExpiration = new javax.swing.JFormattedTextField();
         jPanel7 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         txtDocRefNumber = new javax.swing.JTextField();
@@ -316,14 +319,22 @@ public class DocumentPanel extends javax.swing.JPanel {
         jLabel3.setText(bundle.getString("DocumentPanel.jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
 
+        txtExpiration.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
+        txtExpiration.setText(bundle.getString("DocumentPanel.txtExpiration.text")); // NOI18N
+        txtExpiration.setName(bundle.getString("DocumentPanel.txtExpiration.name")); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${document.expirationDate}"), txtExpiration, org.jdesktop.beansbinding.BeanProperty.create("value"));
+        bindingGroup.addBinding(binding);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jLabel3)
-                .addGap(0, 55, Short.MAX_VALUE))
+                .addGap(0, 77, Short.MAX_VALUE))
             .addComponent(txtDocRecordDate)
+            .addComponent(txtExpiration)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -331,7 +342,8 @@ public class DocumentPanel extends javax.swing.JPanel {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtDocRecordDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(txtExpiration, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jPanel7.setName(bundle.getString("DocumentPanel.jPanel7.name")); // NOI18N
@@ -354,7 +366,7 @@ public class DocumentPanel extends javax.swing.JPanel {
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addComponent(jLabel2)
-                .addGap(0, 14, Short.MAX_VALUE))
+                .addGap(0, 31, Short.MAX_VALUE))
             .addComponent(txtDocRefNumber)
         );
         jPanel7Layout.setVerticalGroup(
@@ -381,10 +393,10 @@ public class DocumentPanel extends javax.swing.JPanel {
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(txtOwnerName)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(jLabel5)
-                .addGap(0, 67, Short.MAX_VALUE))
-            .addComponent(txtOwnerName)
+                .addGap(0, 36, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -403,9 +415,9 @@ public class DocumentPanel extends javax.swing.JPanel {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
@@ -521,6 +533,7 @@ public class DocumentPanel extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_btnOkActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public org.sola.clients.swing.common.controls.BrowseControl browseAttachment;
     public javax.swing.JButton btnOk;
@@ -545,6 +558,7 @@ public class DocumentPanel extends javax.swing.JPanel {
     public javax.swing.JTextField txtDescription;
     public javax.swing.JFormattedTextField txtDocRecordDate;
     public javax.swing.JTextField txtDocRefNumber;
+    public javax.swing.JFormattedTextField txtExpiration;
     private javax.swing.JTextField txtOwnerName;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
