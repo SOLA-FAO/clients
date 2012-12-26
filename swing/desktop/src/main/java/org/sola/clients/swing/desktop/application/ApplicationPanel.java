@@ -100,7 +100,7 @@ public class ApplicationPanel extends ContentPanel {
     private String applicationID;
     private boolean isDashboard = false;
     ApplicationServiceBean service;
-
+    ApplicationPropertyBean property;
     /**
      * This method is used by the form designer to create {@link ApplicationBean}.
      * It uses
@@ -184,7 +184,14 @@ public class ApplicationPanel extends ContentPanel {
         initComponents();
         postInit();
     }
-
+    
+     public ApplicationPropertyBean getProperty() {
+        if (property == null) {
+            property = new ApplicationPropertyBean();
+        }
+        return property;
+    }
+    
     /**
      * Runs post initialization actions to customize form elements.
      */
@@ -953,6 +960,7 @@ public class ApplicationPanel extends ContentPanel {
         menuDispatch = new javax.swing.JMenuItem();
         menuArchive = new javax.swing.JMenuItem();
         jFormattedTextField1 = new javax.swing.JFormattedTextField();
+        landUseTypeListBean1 = new org.sola.clients.beans.referencedata.LandUseTypeListBean();
         pnlHeader = new org.sola.clients.swing.ui.HeaderPanel();
         jToolBar3 = new javax.swing.JToolBar();
         btnSave = new javax.swing.JButton();
@@ -1036,17 +1044,19 @@ public class ApplicationPanel extends ContentPanel {
         jPanel16 = new javax.swing.JPanel();
         labFirstPart = new javax.swing.JLabel();
         txtFirstPart = new javax.swing.JTextField();
+        labArea = new javax.swing.JLabel();
+        txtArea = new javax.swing.JTextField();
         jPanel17 = new javax.swing.JPanel();
         txtLastPart = new javax.swing.JTextField();
         labLastPart = new javax.swing.JLabel();
-        jPanel18 = new javax.swing.JPanel();
-        labArea = new javax.swing.JLabel();
-        txtArea = new javax.swing.JTextField();
-        jPanel19 = new javax.swing.JPanel();
         labValue = new javax.swing.JLabel();
         txtValue = new javax.swing.JTextField();
-        jPanel21 = new javax.swing.JPanel();
+        jPanel18 = new javax.swing.JPanel();
+        labLandUse = new javax.swing.JLabel();
+        cbxLandUse = new javax.swing.JComboBox();
+        jPanel19 = new javax.swing.JPanel();
         btnAddProperty = new javax.swing.JButton();
+        jPanel21 = new javax.swing.JPanel();
         documentPanel = new javax.swing.JPanel();
         scrollDocuments = new javax.swing.JScrollPane();
         tabDocuments = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
@@ -2121,27 +2131,24 @@ public class ApplicationPanel extends ContentPanel {
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${nameFirstpart}"));
         columnBinding.setColumnName("Name Firstpart");
         columnBinding.setColumnClass(String.class);
-        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${nameLastpart}"));
         columnBinding.setColumnName("Name Lastpart");
         columnBinding.setColumnClass(String.class);
-        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${area}"));
         columnBinding.setColumnName("Area");
         columnBinding.setColumnClass(java.math.BigDecimal.class);
-        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${totalValue}"));
         columnBinding.setColumnName("Total Value");
         columnBinding.setColumnClass(java.math.BigDecimal.class);
-        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${verifiedExists}"));
         columnBinding.setColumnName("Verified Exists");
         columnBinding.setColumnClass(Boolean.class);
-        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${verifiedLocation}"));
         columnBinding.setColumnName("Verified Location");
         columnBinding.setColumnClass(Boolean.class);
-        columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${landUseType.displayValue}"));
+        columnBinding.setColumnName("Land Use Type.display Value");
+        columnBinding.setColumnClass(String.class);
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, appBean, org.jdesktop.beansbinding.ELProperty.create("${selectedProperty}"), tabPropertyDetails, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
         bindingGroup.addBinding(binding);
@@ -2153,6 +2160,7 @@ public class ApplicationPanel extends ContentPanel {
         tabPropertyDetails.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("ApplicationPanel.tabPropertyDetails.columnModel.title3")); // NOI18N
         tabPropertyDetails.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("ApplicationPanel.tabPropertyDetails.columnModel.title4")); // NOI18N
         tabPropertyDetails.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("ApplicationPanel.tabPropertyDetails.columnModel.title6")); // NOI18N
+        tabPropertyDetails.getColumnModel().getColumn(6).setHeaderValue(bundle.getString("ApplicationPanel.tabPropertyDetails.columnModel.title6_1")); // NOI18N
 
         jPanel20.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         jPanel20.setName("jPanel20"); // NOI18N
@@ -2174,14 +2182,27 @@ public class ApplicationPanel extends ContentPanel {
         txtFirstPart.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
         txtFirstPart.setHorizontalAlignment(JTextField.LEADING);
 
+        LafManager.getInstance().setLabProperties(labArea);
+        labArea.setText(bundle.getString("ApplicationPanel.labArea.text")); // NOI18N
+        labArea.setName("labArea"); // NOI18N
+
+        txtArea.setText(bundle.getString("ApplicationPanel.txtArea.text")); // NOI18N
+        txtArea.setName("txtArea"); // NOI18N
+        txtArea.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
+        txtArea.setHorizontalAlignment(JTextField.LEADING);
+
         javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
         jPanel16.setLayout(jPanel16Layout);
         jPanel16Layout.setHorizontalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel16Layout.createSequentialGroup()
                 .addComponent(labFirstPart)
-                .addContainerGap(74, Short.MAX_VALUE))
-            .addComponent(txtFirstPart, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
+                .addContainerGap(98, Short.MAX_VALUE))
+            .addComponent(txtFirstPart, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)
+            .addGroup(jPanel16Layout.createSequentialGroup()
+                .addComponent(labArea)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(txtArea)
         );
         jPanel16Layout.setVerticalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2189,7 +2210,11 @@ public class ApplicationPanel extends ContentPanel {
                 .addComponent(labFirstPart)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(txtFirstPart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(55, 55, 55))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(labArea)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtArea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4))
         );
 
         propertypartPanel.add(jPanel16);
@@ -2205,59 +2230,6 @@ public class ApplicationPanel extends ContentPanel {
         labLastPart.setText(bundle.getString("ApplicationPanel.labLastPart.text")); // NOI18N
         labLastPart.setName("labLastPart"); // NOI18N
 
-        javax.swing.GroupLayout jPanel17Layout = new javax.swing.GroupLayout(jPanel17);
-        jPanel17.setLayout(jPanel17Layout);
-        jPanel17Layout.setHorizontalGroup(
-            jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel17Layout.createSequentialGroup()
-                .addComponent(labLastPart)
-                .addContainerGap(75, Short.MAX_VALUE))
-            .addComponent(txtLastPart, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
-        );
-        jPanel17Layout.setVerticalGroup(
-            jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel17Layout.createSequentialGroup()
-                .addComponent(labLastPart)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtLastPart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
-        );
-
-        propertypartPanel.add(jPanel17);
-
-        jPanel18.setName("jPanel18"); // NOI18N
-
-        LafManager.getInstance().setLabProperties(labArea);
-        labArea.setText(bundle.getString("ApplicationPanel.labArea.text")); // NOI18N
-        labArea.setName("labArea"); // NOI18N
-
-        txtArea.setText(bundle.getString("ApplicationPanel.txtArea.text")); // NOI18N
-        txtArea.setName("txtArea"); // NOI18N
-        txtArea.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-        txtArea.setHorizontalAlignment(JTextField.LEADING);
-
-        javax.swing.GroupLayout jPanel18Layout = new javax.swing.GroupLayout(jPanel18);
-        jPanel18.setLayout(jPanel18Layout);
-        jPanel18Layout.setHorizontalGroup(
-            jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel18Layout.createSequentialGroup()
-                .addComponent(labArea)
-                .addContainerGap(70, Short.MAX_VALUE))
-            .addComponent(txtArea, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
-        );
-        jPanel18Layout.setVerticalGroup(
-            jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel18Layout.createSequentialGroup()
-                .addComponent(labArea)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtArea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
-        );
-
-        propertypartPanel.add(jPanel18);
-
-        jPanel19.setName("jPanel19"); // NOI18N
-
         LafManager.getInstance().setLabProperties(labValue);
         labValue.setText(bundle.getString("ApplicationPanel.labValue.text")); // NOI18N
         labValue.setName("labValue"); // NOI18N
@@ -2267,28 +2239,68 @@ public class ApplicationPanel extends ContentPanel {
         txtValue.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
         txtValue.setHorizontalAlignment(JTextField.LEADING);
 
-        javax.swing.GroupLayout jPanel19Layout = new javax.swing.GroupLayout(jPanel19);
-        jPanel19.setLayout(jPanel19Layout);
-        jPanel19Layout.setHorizontalGroup(
-            jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel19Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanel17Layout = new javax.swing.GroupLayout(jPanel17);
+        jPanel17.setLayout(jPanel17Layout);
+        jPanel17Layout.setHorizontalGroup(
+            jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(txtLastPart, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)
+            .addGroup(jPanel17Layout.createSequentialGroup()
+                .addComponent(labLastPart)
+                .addContainerGap(99, Short.MAX_VALUE))
+            .addGroup(jPanel17Layout.createSequentialGroup()
                 .addComponent(labValue)
-                .addContainerGap(92, Short.MAX_VALUE))
-            .addComponent(txtValue, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(txtValue, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)
         );
-        jPanel19Layout.setVerticalGroup(
-            jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel19Layout.createSequentialGroup()
-                .addComponent(labValue)
+        jPanel17Layout.setVerticalGroup(
+            jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel17Layout.createSequentialGroup()
+                .addComponent(labLastPart)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addComponent(txtLastPart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(labValue)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtValue)
+                .addGap(6, 6, 6))
         );
 
-        propertypartPanel.add(jPanel19);
+        propertypartPanel.add(jPanel17);
 
-        jPanel21.setName("jPanel21"); // NOI18N
-        jPanel21.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 18));
+        jPanel18.setName("jPanel18"); // NOI18N
+
+        labLandUse.setText(bundle.getString("ApplicationPanel.labLandUse.text")); // NOI18N
+        labLandUse.setName(bundle.getString("ApplicationPanel.labLandUse.name")); // NOI18N
+
+        cbxLandUse.setName(bundle.getString("ApplicationPanel.cbxLandUse.name")); // NOI18N
+
+        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${landUseTypeList}");
+        jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, landUseTypeListBean1, eLProperty, cbxLandUse);
+        bindingGroup.addBinding(jComboBoxBinding);
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${property.landUseType}"), cbxLandUse, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        javax.swing.GroupLayout jPanel18Layout = new javax.swing.GroupLayout(jPanel18);
+        jPanel18.setLayout(jPanel18Layout);
+        jPanel18Layout.setHorizontalGroup(
+            jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(cbxLandUse, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel18Layout.createSequentialGroup()
+                .addComponent(labLandUse, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 71, Short.MAX_VALUE))
+        );
+        jPanel18Layout.setVerticalGroup(
+            jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel18Layout.createSequentialGroup()
+                .addComponent(labLandUse)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbxLandUse, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(54, Short.MAX_VALUE))
+        );
+
+        propertypartPanel.add(jPanel18);
+
+        jPanel19.setName("jPanel19"); // NOI18N
 
         LafManager.getInstance().setBtnProperties(btnAddProperty);
         btnAddProperty.setText(bundle.getString("ApplicationPanel.btnAddProperty.text")); // NOI18N
@@ -2299,7 +2311,26 @@ public class ApplicationPanel extends ContentPanel {
                 btnAddPropertyActionPerformed(evt);
             }
         });
-        jPanel21.add(btnAddProperty);
+
+        javax.swing.GroupLayout jPanel19Layout = new javax.swing.GroupLayout(jPanel19);
+        jPanel19.setLayout(jPanel19Layout);
+        jPanel19Layout.setHorizontalGroup(
+            jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel19Layout.createSequentialGroup()
+                .addComponent(btnAddProperty)
+                .addGap(0, 49, Short.MAX_VALUE))
+        );
+        jPanel19Layout.setVerticalGroup(
+            jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel19Layout.createSequentialGroup()
+                .addGap(0, 71, Short.MAX_VALUE)
+                .addComponent(btnAddProperty))
+        );
+
+        propertypartPanel.add(jPanel19);
+
+        jPanel21.setName("jPanel21"); // NOI18N
+        jPanel21.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 18));
 
         javax.swing.GroupLayout jPanel20Layout = new javax.swing.GroupLayout(jPanel20);
         jPanel20.setLayout(jPanel20Layout);
@@ -2317,8 +2348,8 @@ public class ApplicationPanel extends ContentPanel {
             .addGroup(jPanel20Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel21, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
-                    .addComponent(propertypartPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)))
+                    .addComponent(jPanel21, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
+                    .addComponent(propertypartPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout propertyPanelLayout = new javax.swing.GroupLayout(propertyPanel);
@@ -2341,7 +2372,7 @@ public class ApplicationPanel extends ContentPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tbPropertyDetails, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(scrollPropertyDetails, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
+                .addComponent(scrollPropertyDetails, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -2472,7 +2503,7 @@ public class ApplicationPanel extends ContentPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(addDocumentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 423, Short.MAX_VALUE)
+                .addComponent(addDocumentPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 423, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -2966,8 +2997,8 @@ public class ApplicationPanel extends ContentPanel {
             value = new BigDecimal(txtValue.getText());
         } catch (Exception e) {
         }
-
-        appBean.addProperty(txtFirstPart.getText(), txtLastPart.getText(), area, value);
+        String landUse = this.getProperty().getLandUseCode();
+        appBean.addProperty(txtFirstPart.getText(), txtLastPart.getText(), area, value,landUse);
         clearPropertyFields();
         verifySelectedProperty();
         txtFirstPart.requestFocus();
@@ -3669,6 +3700,7 @@ public class ApplicationPanel extends ContentPanel {
     private javax.swing.JButton btnViewService;
     private javax.swing.JComboBox cbxAgents;
     public javax.swing.JComboBox cbxCommunicationWay;
+    private javax.swing.JComboBox cbxLandUse;
     private javax.swing.JCheckBox cbxPaid;
     private org.sola.clients.beans.referencedata.CommunicationTypeListBean communicationTypes;
     public javax.swing.JPanel contactPanel;
@@ -3729,6 +3761,7 @@ public class ApplicationPanel extends ContentPanel {
     private javax.swing.JLabel labFax;
     private javax.swing.JLabel labFirstPart;
     private javax.swing.JLabel labFixedFee;
+    private javax.swing.JLabel labLandUse;
     private javax.swing.JLabel labLastName;
     private javax.swing.JLabel labLastPart;
     private javax.swing.JLabel labName;
@@ -3741,6 +3774,7 @@ public class ApplicationPanel extends ContentPanel {
     private javax.swing.JLabel labTotalFee2;
     private javax.swing.JLabel labTotalFee3;
     private javax.swing.JLabel labValue;
+    private org.sola.clients.beans.referencedata.LandUseTypeListBean landUseTypeListBean1;
     public javax.swing.JPanel mapPanel;
     private javax.swing.JMenuItem menuAddService;
     private javax.swing.JMenuItem menuApprove;

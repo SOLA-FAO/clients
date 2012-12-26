@@ -40,10 +40,7 @@ import org.sola.clients.beans.controls.SolaObservableList;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.beans.party.PartyBean;
 import org.sola.clients.beans.party.PartySummaryBean;
-import org.sola.clients.beans.referencedata.ApplicationActionTypeBean;
-import org.sola.clients.beans.referencedata.ApplicationStatusTypeBean;
-import org.sola.clients.beans.referencedata.RequestTypeBean;
-import org.sola.clients.beans.referencedata.StatusConstants;
+import org.sola.clients.beans.referencedata.*;
 import org.sola.clients.beans.source.SourceBean;
 import org.sola.clients.beans.validation.Localized;
 import org.sola.clients.beans.validation.ValidationResultBean;
@@ -598,7 +595,7 @@ public class ApplicationBean extends ApplicationSummaryBean {
      * @param area The area of parcel.
      * @param value The value of parcel.
      */
-    public void addProperty(String firstPart, String lastPart, BigDecimal area, BigDecimal value) {
+    public void addProperty(String firstPart, String lastPart, BigDecimal area, BigDecimal value, String landUse) {
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/application/Bundle");
 
@@ -624,12 +621,13 @@ public class ApplicationBean extends ApplicationSummaryBean {
                         new Object[]{bundle.getString("ApplicationPanel.labLastPart.text")});
                 return;
             }
-
+            
             ApplicationPropertyBean newProperty = new ApplicationPropertyBean();
             newProperty.setArea(area);
             newProperty.setNameFirstpart(firstPart);
             newProperty.setNameLastpart(lastPart);
             newProperty.setTotalValue(value);
+            newProperty.setLandUseCode(landUse);
             propertyList.addAsNew(newProperty);
             selectedProperty = newProperty;
         }
