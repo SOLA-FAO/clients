@@ -20,6 +20,7 @@ public abstract class  SpatialSourceBean extends AbstractCodeBean {
     private int featuresNumber;
     private SolaObservableList<SpatialAttributeBean> attributes =
             new SolaObservableList<SpatialAttributeBean>();
+    private boolean ifMultiUseFirstGeometry = true;
     
     private File sourceFile;
     
@@ -46,6 +47,14 @@ public abstract class  SpatialSourceBean extends AbstractCodeBean {
 
     public void setFeaturesNumber(int featuresNumber) {
         this.featuresNumber = featuresNumber;
+    }
+
+    public boolean isIfMultiUseFirstGeometry() {
+        return ifMultiUseFirstGeometry;
+    }
+
+    public void setIfMultiUseFirstGeometry(boolean ifMultiUseFirstGeometry) {
+        this.ifMultiUseFirstGeometry = ifMultiUseFirstGeometry;
     }
 
     public File getSourceFile() {

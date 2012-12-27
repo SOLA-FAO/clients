@@ -71,8 +71,12 @@ public class SpatialSourceShapefileBean extends SpatialSourceBean {
             while (iterator.hasNext()) {
                 feature = iterator.next();
                 SpatialSourceObjectBean spatialObject = new SpatialSourceObjectBean();
-                spatialObject.setTheGeom(GeometryUtility.getWkbFromGeometry(
-                        (Geometry)feature.getDefaultGeometry()));
+                Geometry geometry =(Geometry)feature.getDefaultGeometry();
+                if (geometry.getGeometryType().toLowerCase().startsWith("multi")
+                        && isIfMultiUseFirstGeometry()){
+                    geometry = geometry.getGeometryN(0);
+                }
+                spatialObject.setTheGeom(GeometryUtility.getWkbFromGeometry(geometry));
                 for(SpatialAttributeBean attribute: onlyAttributes){
                     spatialObject.getFieldsWithValues().put(
                             attribute.getName(),
