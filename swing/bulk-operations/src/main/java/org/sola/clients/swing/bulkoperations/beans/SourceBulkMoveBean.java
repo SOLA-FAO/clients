@@ -31,8 +31,8 @@ public class SourceBulkMoveBean {
 
     public SourceBulkMoveBean() {
         allowedExtensions.add(".tiff");
+        allowedExtensions.add(".tif");
         allowedExtensions.add(".pdf");
-        allowedExtensions.add(".jpg");
     }
 
     public TransactionBulkOperationSource getTransaction() {

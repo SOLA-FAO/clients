@@ -88,9 +88,17 @@ public class PojoDataAccess {
      */
     public MapDefinitionTO getMapDefinition() {
         if (this.mapDefinition == null) {
-            this.mapDefinition = getSearchService().getMapDefinition();
+            this.resetMapDefinition();
         }
         return this.mapDefinition;
+    }
+
+    /**
+     * It resets the map definition.
+     */
+    public void resetMapDefinition(){
+        this.mapDefinition = getSearchService().getMapDefinition();
+        this.mapLayerInfoList = null;
     }
 
     /**

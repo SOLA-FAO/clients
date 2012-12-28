@@ -229,6 +229,8 @@ public class ImportSpatialPanel extends ContentPanel {
                                 destinationBean.getCadastreObjectTypeCode(),
                                 destinationBean.getNameLastPart());
                     }
+                }else{
+                    PojoDataAccess.getInstance().resetMapDefinition();
                 }
                 if (mapPanel == null) {
                     setMessage(MessageUtility.getLocalizedMessageText(
