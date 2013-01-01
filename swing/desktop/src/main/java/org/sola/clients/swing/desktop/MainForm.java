@@ -59,6 +59,7 @@ import org.sola.clients.swing.desktop.party.PartySearchPanelForm;
 import org.sola.clients.swing.desktop.reports.LodgementReportParamsForm;
 import org.sola.clients.swing.desktop.reports.SysRegCertParamsForm;
 import org.sola.clients.swing.desktop.reports.SysRegListingParamsForm;
+import org.sola.clients.swing.desktop.reports.SysRegManagementParamsForm;
 import org.sola.clients.swing.desktop.source.DocumentSearchForm;
 import org.sola.clients.swing.desktop.source.DocumentViewForm;
 import org.sola.clients.swing.desktop.source.PowerOfAttorneyViewForm;
@@ -325,9 +326,10 @@ public class MainForm extends javax.swing.JFrame {
         }
         return hasChanges;
     }
-    
-    /** 
-     * Opens Application form and shows provided application. 
+
+    /**
+     * Opens Application form and shows provided application.
+     *
      * @param app Application to show on the form.
      */
     public void openApplicationForm(final ApplicationBean app) {
@@ -343,9 +345,10 @@ public class MainForm extends javax.swing.JFrame {
         };
         TaskManager.getInstance().runTask(t);
     }
-    
-    /** 
-     * Opens Application form and shows provided application. 
+
+    /**
+     * Opens Application form and shows provided application.
+     *
      * @param ID Application ID to load application by and show on the form.
      */
     public void openApplicationForm(final String id) {
@@ -362,7 +365,9 @@ public class MainForm extends javax.swing.JFrame {
         TaskManager.getInstance().runTask(t);
     }
 
-    /** Opens Application form to create new application. */
+    /**
+     * Opens Application form to create new application.
+     */
     public void openApplicationForm() {
         SolaTask t = new SolaTask<Void, Void>() {
 
@@ -376,9 +381,10 @@ public class MainForm extends javax.swing.JFrame {
         };
         TaskManager.getInstance().runTask(t);
     }
-    
-    /** 
-     * Opens {@link DocumentViewForm} form and shows provided document. 
+
+    /**
+     * Opens {@link DocumentViewForm} form and shows provided document.
+     *
      * @param source Source to show on the form.
      */
     public void openDocumentViewForm(final SourceBean source) {
@@ -394,9 +400,10 @@ public class MainForm extends javax.swing.JFrame {
         };
         TaskManager.getInstance().runTask(t);
     }
-    
-    /** 
-     * Opens {@link PowerOfAttorneyViewForm} form and shows provided document. 
+
+    /**
+     * Opens {@link PowerOfAttorneyViewForm} form and shows provided document.
+     *
      * @param powerOfAttorney Power of attorney to show on the form.
      */
     public void openDocumentViewForm(final PowerOfAttorneyBean powerOfAttorney) {
@@ -412,7 +419,7 @@ public class MainForm extends javax.swing.JFrame {
         };
         TaskManager.getInstance().runTask(t);
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -464,6 +471,7 @@ public class MainForm extends javax.swing.JFrame {
         menuStateLand = new javax.swing.JMenuItem();
         menuItemMapPublicDisplay = new javax.swing.JMenuItem();
         menuCertificates = new javax.swing.JMenuItem();
+        menuManagement = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
         jmiContextHelp = new javax.swing.JMenuItem();
@@ -803,6 +811,14 @@ public class MainForm extends javax.swing.JFrame {
         });
         menuSystematic.add(menuCertificates);
 
+        menuManagement.setText(bundle.getString("MainForm.menuManagement.text")); // NOI18N
+        menuManagement.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuManagementActionPerformed(evt);
+            }
+        });
+        menuSystematic.add(menuManagement);
+
         menuBar.add(menuSystematic);
 
         helpMenu.setText(bundle.getString("MainForm.helpMenu.text")); // NOI18N
@@ -924,17 +940,22 @@ public class MainForm extends javax.swing.JFrame {
         LodgementReportParamsForm reportDateChooser = new LodgementReportParamsForm(this, true);
         reportDateChooser.setVisible(true);
     }
-    
-     private void openSysRegListingParamsForm(String report) {
+
+    private void openSysRegListingParamsForm(String report) {
         SysRegListingParamsForm reportDateChooser = new SysRegListingParamsForm(this, true, report);
         reportDateChooser.setVisible(true);
     }
-     
-     
-     private void openSysRegCertificatesParamsForm() {
-      SysRegCertParamsForm certificateGenerator = new SysRegCertParamsForm(null, true);
+
+    private void openSysRegCertificatesParamsForm() {
+        SysRegCertParamsForm certificateGenerator = new SysRegCertParamsForm(null, true);
         certificateGenerator.setVisible(true);
-     }
+    }
+
+    private void openSysRegManagementParamsForm() {
+        SysRegManagementParamsForm managementGenerator = new SysRegManagementParamsForm(this, true);
+        managementGenerator.setVisible(true);
+    }
+
     /**
      * Opens {@link ReportViewerForm} to display report.
      */
@@ -957,7 +978,7 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSetPasswordActionPerformed
 
     private void menuPublicNotificationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuPublicNotificationActionPerformed
-         openSysRegListingParamsForm("ParcelNumber");
+        openSysRegListingParamsForm("ParcelNumber");
     }//GEN-LAST:event_menuPublicNotificationActionPerformed
 
     private void menuOwnerNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOwnerNameActionPerformed
@@ -975,12 +996,18 @@ public class MainForm extends javax.swing.JFrame {
     private void menuItemMapPublicDisplayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemMapPublicDisplayActionPerformed
         openMapPublicDisplay();
     }//GEN-LAST:event_menuItemMapPublicDisplayActionPerformed
-    
+
+    private void menuManagementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuManagementActionPerformed
+        openSysRegManagementParamsForm();
+    }//GEN-LAST:event_menuManagementActionPerformed
+
     private void editPassword() {
-            showPasswordPanel();
-    }  
-    
-      /** Shows password panel. */
+        showPasswordPanel();
+    }
+
+    /**
+     * Shows password panel.
+     */
     private void showPasswordPanel() {
         SolaTask t = new SolaTask<Void, Void>() {
 
@@ -997,7 +1024,6 @@ public class MainForm extends javax.swing.JFrame {
         };
         TaskManager.getInstance().runTask(t);
     }
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToolBar applicationsMain;
     private javax.swing.JButton btnDocumentSearch;
@@ -1028,6 +1054,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenu menuLanguage;
     private javax.swing.JMenuItem menuLodgementReport;
     private javax.swing.JMenu menuLogLevel;
+    private javax.swing.JMenuItem menuManagement;
     private javax.swing.JMenu menuMap;
     private javax.swing.JMenuItem menuNewApplication;
     private javax.swing.JMenuItem menuOffLogLevel;
