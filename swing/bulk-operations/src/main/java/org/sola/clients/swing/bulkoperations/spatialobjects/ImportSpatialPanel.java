@@ -34,8 +34,6 @@ public class ImportSpatialPanel extends ContentPanel {
     private static String PANEL_NAME = "IMPORT_SPATIAL_PANEL";
     private static java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle(
             "org/sola/clients/swing/bulkoperations/spatialobjects/Bundle");
-    private TransactionCadastreChangeBean transactionCadastreChange = null;
-    private TransactionBulkOperationSpatial transaction = null;
 
     /**
      * Creates new form ImportSpatialPanel
@@ -122,8 +120,6 @@ public class ImportSpatialPanel extends ContentPanel {
         }
         File sourceFile = FileBrowser.showFileChooser(
                 this, spatialBulkMove.getSource().getCode());
-//        File sourceFile = JFileDataStoreChooser.showOpenFile(
-//                spatialBulkMove.getSource().getCode(), null);
         if (sourceFile == null) {
             return;
         }
@@ -168,44 +164,28 @@ public class ImportSpatialPanel extends ContentPanel {
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(
                         ClientMessage.BULK_OPERATIONS_CONVERT_FEATURES_TO_BEANS_AND_SENDTOSERVER));
-                transaction = spatialBulkMove.sendToServer();
+                //transaction = 
+                        spatialBulkMove.sendToServer();
                 return null;
             }
 
             @Override
             protected void taskDone() {
                 super.taskDone();
-                afterConversion(transaction);
+                afterConversion();
             }
         };
         TaskManager.getInstance().runTask(t);
 
     }
 
-    private void afterConversion(TransactionBulkOperationSpatial transaction) {
-        if (spatialBulkMove.getDestination().getClass().equals(
-                SpatialDestinationCadastreObjectBean.class)) {
-            afterConversionOfCadastreObject(transaction);
-        } else {
-            afterConversionOfOtherObject(transaction);
-        }
-        setPostLoadEnabled(true);
-    }
-
-    private void afterConversionOfCadastreObject(TransactionBulkOperationSpatial transaction) {
-        transactionCadastreChange =
-                PojoDataAccess.getInstance().getTransactionCadastreChangeById(transaction.getId());
-
+    private void afterConversion() {
         String informationResourceName = "ImportSpatialPanel.lblInformationText.text.success";
-        if (transactionCadastreChange.getSurveyPointList().size() > 0) {
+        if (spatialBulkMove.hasValidationProblems()) {
             informationResourceName = "ImportSpatialPanel.lblInformationText.text.problem";
         }
         lblInformationText.setText(bundle.getString(informationResourceName));
-    }
-
-    private void afterConversionOfOtherObject(TransactionBulkOperationSpatial transaction) {
-        String informationResourceName = "ImportSpatialPanel.lblInformationText.text.success";
-        lblInformationText.setText(bundle.getString(informationResourceName));
+        setPostLoadEnabled(true);
     }
 
     private void openMap() {
@@ -214,21 +194,16 @@ public class ImportSpatialPanel extends ContentPanel {
             @Override
             public Void doTask() {
                 MapPanel mapPanel = null;
-                if (spatialBulkMove.getDestination().getClass().equals(
-                        SpatialDestinationCadastreObjectBean.class)) {
-                    if (transactionCadastreChange == null) {
-                        return null;
-                    }
-                    if (transactionCadastreChange.getSurveyPointList().size() > 0) {
+                if (spatialBulkMove.getTransactionCadastreChange() != null){
                     setMessage(MessageUtility.getLocalizedMessageText(
                             ClientMessage.PROGRESS_MSG_OPEN_CADASTRE_CHANGE));
                         SpatialDestinationCadastreObjectBean destinationBean =
                                 (SpatialDestinationCadastreObjectBean) spatialBulkMove.getDestination();
                         mapPanel = new MapPanel(
-                                transactionCadastreChange,
+                                spatialBulkMove.getTransactionCadastreChange(),
                                 destinationBean.getCadastreObjectTypeCode(),
                                 destinationBean.getNameLastPart());
-                    }
+                    
                 }else{
                     PojoDataAccess.getInstance().resetMapDefinition();
                 }
@@ -245,8 +220,8 @@ public class ImportSpatialPanel extends ContentPanel {
     }
 
     private void rollback() {
-        if (transaction != null) {
-            transaction.reject();
+        if (spatialBulkMove.getTransaction() != null) {
+            spatialBulkMove.getTransaction().reject();
         }
         setPostLoadEnabled(false);
     }
@@ -256,11 +231,9 @@ public class ImportSpatialPanel extends ContentPanel {
         btnRollback.setEnabled(enable);
         btnOpenValidations.setEnabled(enable);
         if (!enable) {
-            transactionCadastreChange = null;
-            transaction = null;
             String informationResourceName = "ImportSpatialPanel.lblInformationText.text";
             lblInformationText.setText(bundle.getString(informationResourceName));
-            spatialBulkMove.getValidationResults().clear();
+            spatialBulkMove.reset();
         }
     }
 

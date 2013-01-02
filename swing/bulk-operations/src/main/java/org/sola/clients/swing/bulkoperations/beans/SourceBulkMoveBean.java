@@ -21,30 +21,22 @@ import org.sola.common.messaging.MessageUtility;
  *
  * @author Elton Manoku
  */
-public class SourceBulkMoveBean {
+public class SourceBulkMoveBean extends AbstractBulkMoveBean{
 
     private File baseFolder;
     private List<SourceBean> sourceList = null;
     private List<String> allowedExtensions = new ArrayList<String>();
-    private ObservableList<ValidationResultBean> validationResults = new SolaObservableList<ValidationResultBean>();
-    private TransactionBulkOperationSource transaction = null;
 
+    
     public SourceBulkMoveBean() {
         allowedExtensions.add(".tiff");
         allowedExtensions.add(".tif");
         allowedExtensions.add(".pdf");
     }
 
+    @Override
     public TransactionBulkOperationSource getTransaction() {
-        return transaction;
-    }
-
-    public void setTransaction(TransactionBulkOperationSource transaction) {
-        this.transaction = transaction;
-    }
-
-    public ObservableList<ValidationResultBean> getValidationResults() {
-        return validationResults;
+        return (TransactionBulkOperationSource) super.getTransaction();
     }
 
     public File getBaseFolder() {
@@ -57,6 +49,14 @@ public class SourceBulkMoveBean {
 
     public List<String> getAllowedExtensions() {
         return allowedExtensions;
+    }
+
+    @Override
+    public void sendToServer() {
+        getValidationResults().clear();
+        setTransaction(new TransactionBulkOperationSource());
+        getTransaction().setSourceList(getSources());
+        getValidationResults().addAll(getTransaction().save());
     }
 
     private FileFilter getSourceFileFilter() {
@@ -99,7 +99,7 @@ public class SourceBulkMoveBean {
                     ClientMessage.BULK_OPERATIONS_LOAD_SOURCE_TYPE_NOT_FOUND, params).getMessage();
             validationBean.setFeedback(feedback);
             validationBean.setSuccessful(false);
-            validationResults.add(validationBean);
+            getValidationResults().add(validationBean);
             return;
         }
         for (File sourceFile : sourceTypeFolder.listFiles(getSourceFileFilter())) {
@@ -119,12 +119,5 @@ public class SourceBulkMoveBean {
             name = name.substring(0, pos);
         }
         return name;
-    }
-
-    public void sendToServer() {
-        validationResults.clear();
-        transaction = new TransactionBulkOperationSource();
-        transaction.setSourceList(getSources());
-        validationResults.addAll(transaction.save());
     }
 }

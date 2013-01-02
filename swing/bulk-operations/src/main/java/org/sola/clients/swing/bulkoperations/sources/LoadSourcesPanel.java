@@ -50,8 +50,7 @@ public class LoadSourcesPanel extends ContentPanel {
         btnRollback.setEnabled(enable);
         String informationResourceName = "LoadSourcesPanel.lblInformationText.text";
         if (!enable) {
-            bulkMove.setTransaction(null);
-            bulkMove.getValidationResults().clear();
+            bulkMove.reset();
         } else {
             informationResourceName = bulkMove.getValidationResults().isEmpty()
                     ? "LoadSourcesPanel.lblInformationText.text.success"

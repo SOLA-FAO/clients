@@ -9,23 +9,22 @@ import java.util.List;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.constraints.NotNull;
-import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingBean;
-import org.sola.clients.beans.controls.SolaObservableList;
 import org.sola.clients.beans.validation.ValidationResultBean;
+import org.sola.clients.swing.gis.beans.TransactionCadastreChangeBean;
+import org.sola.clients.swing.gis.data.PojoDataAccess;
 
 /**
  *
  * @author Elton Manoku
  */
-public class SpatialBulkMoveBean extends AbstractBindingBean {
+public class SpatialBulkMoveBean extends AbstractBulkMoveBean {
 
     public static final String PROPERTY_SOURCE = "source";
     public static final String PROPERTY_DESTINATION = "destination";
     private SpatialSourceBean source = new SpatialSourceShapefileBean();
     private SpatialDestinationBean destination = new SpatialDestinationCadastreObjectBean();
-    private ObservableList<ValidationResultBean> validationResults 
-            = new SolaObservableList<ValidationResultBean>();
+    private TransactionCadastreChangeBean transactionCadastreChange = null;
 
     @NotNull(message = "Source must be present")
     public SpatialSourceBean getSource() {
@@ -53,20 +52,46 @@ public class SpatialBulkMoveBean extends AbstractBindingBean {
         return getDestination().getBeans(getSource());
     }
 
-    public ObservableList<ValidationResultBean> getValidationResults() {
-        return validationResults;
+    public TransactionCadastreChangeBean getTransactionCadastreChange() {
+        return transactionCadastreChange;
+    }
+
+    @Override
+    public TransactionBulkOperationSpatial getTransaction() {
+        return (TransactionBulkOperationSpatial) super.getTransaction();
+    }
+
+    @Override
+    public void reset() {
+        super.reset();
+        transactionCadastreChange = null;
+    }
+
+    @Override
+    public void sendToServer() {
+        reset();
+        setTransaction(new TransactionBulkOperationSpatial());
+        if (getDestination().getClass().equals(SpatialDestinationCadastreObjectBean.class)) {
+            getTransaction().setGenerateFirstPart(
+                    ((SpatialDestinationCadastreObjectBean) getDestination()).isGenerateFirstPart());
+        }
+        getTransaction().setSpatialUnitTemporaryList(getBeans());
+        getValidationResults().addAll(getTransaction().save());
+        if (getDestination().getClass().equals(SpatialDestinationCadastreObjectBean.class)
+                && hasValidationProblems()) {
+            transactionCadastreChange =
+                    PojoDataAccess.getInstance().getTransactionCadastreChangeById(
+                    getTransaction().getId());
+        }
     }
     
-    public TransactionBulkOperationSpatial sendToServer() {
-        validationResults.clear();
-        TransactionBulkOperationSpatial transaction = new TransactionBulkOperationSpatial();
-        if (getDestination().getClass().equals(SpatialDestinationCadastreObjectBean.class)) {
-            transaction.setGenerateFirstPart(
-                    ((SpatialDestinationCadastreObjectBean)getDestination()).isGenerateFirstPart());
+    public boolean hasValidationProblems(){
+        for(ValidationResultBean validationResult: getValidationResults()){
+            if (!validationResult.isSuccessful()){
+                return true;
+            }
         }
-        transaction.setSpatialUnitTemporaryList(getBeans());
-        validationResults.addAll(transaction.save());
-        return transaction;
+        return false;
     }
 
     @Override
