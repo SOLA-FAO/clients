@@ -43,6 +43,8 @@ public class SysRegManagementParamsForm extends javax.swing.JDialog {
     public SysRegManagementParamsForm(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.labSearchArea.setVisible(false);
+        this.cadastreObjectSearch.setVisible(false);
     }
 
     /**
@@ -135,7 +137,6 @@ public class SysRegManagementParamsForm extends javax.swing.JDialog {
             .addGroup(reportViewerPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(reportViewerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(labSearchArea)
                     .addGroup(reportViewerPanelLayout.createSequentialGroup()
                         .addComponent(labFromDate, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(98, 98, 98)
@@ -148,11 +149,10 @@ public class SysRegManagementParamsForm extends javax.swing.JDialog {
                         .addComponent(txtToDate, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnShowCalendarTo))
-                    .addGroup(reportViewerPanelLayout.createSequentialGroup()
-                        .addComponent(cadastreObjectSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(viewReport)))
-                .addContainerGap())
+                    .addComponent(labSearchArea)
+                    .addComponent(cadastreObjectSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(viewReport))
+                .addContainerGap(84, Short.MAX_VALUE))
         );
         reportViewerPanelLayout.setVerticalGroup(
             reportViewerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -171,13 +171,13 @@ public class SysRegManagementParamsForm extends javax.swing.JDialog {
                             .addComponent(btnShowCalendarFrom)
                             .addComponent(txtToDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(btnShowCalendarTo))
-                .addGap(30, 30, 30)
+                .addGap(18, 18, 18)
+                .addComponent(viewReport)
+                .addGap(13, 13, 13)
                 .addComponent(labSearchArea)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(reportViewerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cadastreObjectSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(viewReport))
-                .addContainerGap(137, Short.MAX_VALUE))
+                .addComponent(cadastreObjectSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(116, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -230,14 +230,14 @@ public class SysRegManagementParamsForm extends javax.swing.JDialog {
         boolean dateFilled = false;
         Date tmpFrom;
         Date tmpTo = (Date) txtFromDate.getValue();
-        if (cadastreObjectSearch.getSelectedElement() != null) {
-            this.location = cadastreObjectSearch.getSelectedElement().toString();
-            tmpLocation = (this.location.substring(this.location.indexOf("/") + 1).trim());
-            searchParams.setNameLastpart(tmpLocation);
-        } else {
-            MessageUtility.displayMessage(ClientMessage.CHECK_SELECT_LOCATION);
-            return;
-        }
+//        if (cadastreObjectSearch.getSelectedElement() != null) {
+//            this.location = cadastreObjectSearch.getSelectedElement().toString();
+//            tmpLocation = (this.location.substring(this.location.indexOf("/") + 1).trim());
+//            searchParams.setNameLastpart(tmpLocation);
+//        } else {
+//            MessageUtility.displayMessage(ClientMessage.CHECK_SELECT_LOCATION);
+//            return;
+//        }
 
         if (txtFromDate.getValue() == null) {
             MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_DATEFROM);

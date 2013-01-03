@@ -77,6 +77,8 @@ public class SysRegManagementBean extends AbstractIdBean {
     
       private Integer counter;
       private String  descr;
+      private String  area;
+      
       
       
 
@@ -108,6 +110,16 @@ public class SysRegManagementBean extends AbstractIdBean {
     public void setDescr(String descr) {
         this.descr = descr;
     }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+    
+    
     
         
 //    public BigDecimal getApplication() {
