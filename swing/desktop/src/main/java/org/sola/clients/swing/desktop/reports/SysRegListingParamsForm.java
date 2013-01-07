@@ -129,7 +129,7 @@ public class SysRegListingParamsForm extends javax.swing.JDialog {
         documentPanel.txtDocRecordDate.setValue(txtFromDate.getValue());
         documentPanel.txtExpiration.setText(expiration);
         documentPanel.txtExpiration.setValue(txtToDate.getValue());
-
+        documentPanel.txtDescription.setText(this.reportTogenerate);
         DocumentBean document = new DocumentBean();
         File file = new File(cachePath + fileName);
         document = DocumentBean.createDocumentFromLocalFile(file);
