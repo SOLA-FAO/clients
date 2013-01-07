@@ -343,6 +343,7 @@ public class SysRegListingParamsForm extends javax.swing.JDialog {
                         Logger.getLogger(SysRegListingParamsForm.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     txtToDate.setText(tmpTo.toString());
+                    txtToDate.setValue(tmpTo);
                     showReport(ReportManager.getSysRegPubDisOwnerNameReport(ownerNameListingListBean, tmpFrom, tmpTo, tmpLocation, reportRequested));
                 }
             }
@@ -366,6 +367,7 @@ public class SysRegListingParamsForm extends javax.swing.JDialog {
                         Logger.getLogger(SysRegListingParamsForm.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     txtToDate.setText(tmpTo.toString());
+                    txtToDate.setValue(tmpTo);
                     showReport(ReportManager.getSysRegPubDisStateLandReport(stateLandListingListBean, tmpFrom, tmpTo, tmpLocation, reportRequested));
                 }
             }
