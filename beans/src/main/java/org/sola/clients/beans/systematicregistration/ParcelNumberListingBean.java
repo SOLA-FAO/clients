@@ -32,8 +32,7 @@ public class ParcelNumberListingBean extends AbstractIdBean {
     public static final String BAUNIT_PROPERTY = "baUnitId";
     public static final String CONCATENATED_NAME_PROPERTY = "concatenatedName";
     public static final String PUBLIC_NOTIFICATION_DURATION_PROPERTY = "publicNotificationDuration";
-    
-    
+    public static final String NAME_PROPERTY = "name";
     private String nameFirstpart;
     private String nameLastpart;
     private BigDecimal size;
@@ -41,6 +40,7 @@ public class ParcelNumberListingBean extends AbstractIdBean {
     private String baUnitId;
     private String concatenatedName;
     private String publicNotificationDuration;
+    private String name;
 
     public String getPublicNotificationDuration() {
         return publicNotificationDuration;
@@ -50,7 +50,6 @@ public class ParcelNumberListingBean extends AbstractIdBean {
         this.publicNotificationDuration = publicNotificationDuration;
     }
 
-    
     public String getBaUnitId() {
         return baUnitId;
     }
@@ -66,8 +65,7 @@ public class ParcelNumberListingBean extends AbstractIdBean {
     public void setConcatenatedName(String concatenatedName) {
         this.concatenatedName = concatenatedName;
     }
-   
-    
+
     public String getLandUsecode() {
         return landUsecode;
     }
@@ -98,5 +96,13 @@ public class ParcelNumberListingBean extends AbstractIdBean {
 
     public void setSize(BigDecimal size) {
         this.size = size;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
