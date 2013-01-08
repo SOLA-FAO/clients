@@ -5,7 +5,8 @@
 package org.sola.clients.swing.bulkoperations;
 
 /**
- *
+ * Splash form.
+ * 
  * @author Elton Manoku
  */
 public class SplashForm extends javax.swing.JWindow {

@@ -4,16 +4,12 @@
  */
 package org.sola.clients.swing.bulkoperations;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.HashMap;
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import org.sola.clients.beans.security.SecurityBean;
-import org.sola.clients.swing.bulkoperations.spatialobjects.ImportSpatialPanel;
 import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.common.LocalizationManager;
 import org.sola.clients.swing.ui.DesktopClientExceptionHandler;
@@ -23,43 +19,11 @@ import org.sola.common.RolesConstants;
 import org.sola.common.logging.LogUtility;
 
 /**
- *
+ * This is the singletone starting class of the bulk operations application.
+ * 
  * @author Elton Manoku
  */
 public class BulkOperationsApplication {
-
-    private static void displayControlsBundleForm(Component ctrl) {
-        JDialog controlContainer = new JDialog();
-        //controlContainer.setAlwaysOnTop(true);
-        controlContainer.setModal(true);
-        ctrl.setPreferredSize(new Dimension(800, 600));
-        controlContainer.getContentPane().add(ctrl);
-        controlContainer.pack();
-        controlContainer.setVisible(true);
-    }
-    
-    public static void mainT(String[] args) {
-        System.out.println("Test import panel");
-
-       SecurityBean.authenticate("test", "test".toCharArray(), getWSConfig());
-
-        ImportSpatialPanel ctrl = new ImportSpatialPanel();
-        displayControlsBundleForm(ctrl);
-    
-    }
-    
-    private static HashMap<String, String> getWSConfig() {
-        HashMap<String, String> wsConfig = new HashMap<String, String>();
-        wsConfig.put("SOLA_WS_CASE_MANAGEMENT_SERVICE_URL", "http://localhost:8080/sola/webservices/casemanagement-service?wsdl");
-        wsConfig.put("SOLA_WS_REFERENCE_DATA_SERVICE_URL", "http://localhost:8080/sola/webservices/referencedata-service?wsdl");
-        wsConfig.put("SOLA_WS_ADMIN_SERVICE_URL", "http://localhost:8080/sola/webservices/admin-service?wsdl");
-        wsConfig.put("SOLA_WS_CADASTRE_SERVICE_URL", "http://localhost:8080/sola/webservices/cadastre-service?wsdl");
-        wsConfig.put("SOLA_WS_SEARCH_SERVICE_URL", "http://localhost:8080/sola/webservices/search-service?wsdl");
-        wsConfig.put("SOLA_WS_DIGITAL_ARCHIVE_URL", "http://localhost:8080/sola/webservices/digitalarchive-service?wsdl");
-        wsConfig.put("SOLA_WS_SPATIAL_SERVICE_URL", "http://localhost:8080/sola/webservices/spatial-service?wsdl");
-        wsConfig.put("SOLA_WS_ADMINISTRATIVE_SERVICE_URL", "http://localhost:8080/sola/webservices/administrative-service?wsdl");
-        return wsConfig;
-    }
     
     /** Main method to run the application. 
      * @param args Array of input parameters.

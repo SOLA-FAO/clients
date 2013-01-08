@@ -12,7 +12,8 @@ import org.sola.clients.swing.ui.renderers.TableCellTextAreaRenderer;
 import org.sola.clients.swing.ui.renderers.ViolationCellRenderer;
 
 /**
- *
+ * The panel where the validation results are displayed. 
+ * 
  * @author Elton Manoku
  */
 public class ValidationResultPanel extends ContentPanel {

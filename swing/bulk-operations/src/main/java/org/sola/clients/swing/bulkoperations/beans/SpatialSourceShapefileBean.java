@@ -20,7 +20,8 @@ import org.opengis.feature.type.AttributeDescriptor;
 import org.sola.common.logging.LogUtility;
 
 /**
- *
+ * The spatial source of type Shapefile. It expects a shapefile as a source of
+ * the features.
  * @author Elton Manoku
  */
 public class SpatialSourceShapefileBean extends SpatialSourceBean {

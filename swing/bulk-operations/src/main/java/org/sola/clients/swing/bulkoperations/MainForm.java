@@ -15,7 +15,8 @@ import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
 /**
- *
+ * The main form of the application. This is the form where everything is open.
+ * 
  * @author Elton Manoku
  */
 public class MainForm extends javax.swing.JFrame {

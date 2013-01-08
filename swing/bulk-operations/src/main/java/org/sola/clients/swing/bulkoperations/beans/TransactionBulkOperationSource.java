@@ -12,7 +12,8 @@ import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.transaction.TransactionBulkOperationSourceTO;
 
 /**
- *
+ * The transaction that sends the documents (sources) to the server.
+ * 
  * @author Elton Manoku
  */
 public class TransactionBulkOperationSource extends TransactionBulkOperation {

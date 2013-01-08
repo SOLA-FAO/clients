@@ -13,7 +13,10 @@ import org.sola.clients.beans.referencedata.CadastreObjectTypeBean;
 import org.sola.clients.swing.bulkoperations.spatialobjects.SpatialDestinationCadastreObjectPanel;
 
 /**
- *
+ * The spatial destination type cadastre object. 
+ * This destination type is chosen to convert the source features to 
+ * cadastre object complaint beans.
+ * 
  * @author Elton Manoku
  */
 public class SpatialDestinationCadastreObjectBean extends SpatialDestinationBean {
