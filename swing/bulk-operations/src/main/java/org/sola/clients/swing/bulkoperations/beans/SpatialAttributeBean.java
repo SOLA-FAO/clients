@@ -7,7 +7,8 @@ package org.sola.clients.swing.bulkoperations.beans;
 import org.sola.clients.beans.AbstractBindingBean;
 
 /**
- *
+ * It represents an attribute during the spatial bulk move.
+ * 
  * @author Elton Manoku
  */
 public class SpatialAttributeBean extends AbstractBindingBean{

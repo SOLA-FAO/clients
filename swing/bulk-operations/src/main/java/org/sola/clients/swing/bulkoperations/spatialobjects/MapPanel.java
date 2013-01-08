@@ -30,12 +30,13 @@ import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.sola.clients.swing.gis.beans.TransactionCadastreChangeBean;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForCadastreChange;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForPublicDisplay;
-import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleViewer;
 import org.sola.clients.swing.gis.ui.controlsbundle.SolaControlsBundle;
 import org.sola.clients.swing.ui.ContentPanel;
 
 /**
- * Used to produce cadastre changes.
+ * The panel that displays the map in the application.
+ * 
+ * @author Elton Manoku
  */
 public class MapPanel extends ContentPanel {
 

@@ -10,7 +10,8 @@ import org.sola.clients.beans.controls.SolaObservableList;
 import org.sola.clients.beans.validation.ValidationResultBean;
 
 /**
- *
+ * This class is used as the abstract class for all bulk move beans. It encapsulates 
+ * common functionality and properties used in all bulk move beans.
  * @author Elton Manoku
  */
 public abstract class AbstractBulkMoveBean extends AbstractBindingBean {
@@ -31,10 +32,20 @@ public abstract class AbstractBulkMoveBean extends AbstractBindingBean {
         return validationResults;
     }
 
+    /**
+     * It resets the bulk operation by setting the associated transaction to null
+     * and clearing validation result list.
+     */
     public void reset() {
         this.transaction = null;
         validationResults.clear();
     }
     
+    /**
+     * It starts the process of bulk upload. After the method is finished,
+     * the transaction property must be present and the validation result list
+     * is populated with validation rules. <br/>
+     * For each kind of bulk move, it has to be implemented.
+     */
     public abstract void sendToServer();
 }

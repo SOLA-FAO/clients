@@ -11,7 +11,10 @@ import org.sola.clients.beans.AbstractCodeBean;
 import org.sola.clients.beans.controls.SolaObservableList;
 
 /**
- *
+ * Abstract bean that encapsulates common functionality and properties for a 
+ * spatial source. <br/>
+ * If there will be added a new source type, it has to inherit from this bean.
+ * 
  * @author Elton Manoku
  */
 public abstract class  SpatialSourceBean extends AbstractCodeBean {

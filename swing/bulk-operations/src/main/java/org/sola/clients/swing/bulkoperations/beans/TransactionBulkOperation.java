@@ -10,7 +10,9 @@ import org.sola.clients.beans.validation.ValidationResultBean;
 import org.sola.services.boundary.wsclients.WSManager;
 
 /**
- *
+ * Abstract transaction that handles only the bulk operations. Every bulk operation
+ * transaction must inherit from this class.
+ * 
  * @author Elton Manoku
  */
 public abstract class TransactionBulkOperation extends AbstractIdBean {
@@ -19,8 +21,19 @@ public abstract class TransactionBulkOperation extends AbstractIdBean {
         super();
     }
 
+    /**
+     * It saves the transaction in the server. It returns back the list of 
+     * validation rules if any.
+     * 
+     * @return 
+     */
     public abstract List<ValidationResultBean> save();
 
+    /**
+     * It rejects/ rolls back the transaction.
+     * 
+     * @return 
+     */
     public boolean reject() {
         return WSManager.getInstance().getBulkOperationsService().rejectTransaction(
                 getId(), getRowVersion());

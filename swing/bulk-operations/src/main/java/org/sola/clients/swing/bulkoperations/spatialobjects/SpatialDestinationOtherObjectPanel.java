@@ -10,8 +10,9 @@ import org.sola.clients.swing.bulkoperations.beans.SpatialAttributeBean;
 import org.sola.clients.swing.bulkoperations.beans.SpatialDestinationBean;
 
 /**
+ * The panel that defines the UI for the spatial destination type cadastre object.
  *
- * @author Manoku
+ * @author Elton Manoku
  */
 public class SpatialDestinationOtherObjectPanel 
 extends javax.swing.JPanel implements ISpatialDestinationUI {

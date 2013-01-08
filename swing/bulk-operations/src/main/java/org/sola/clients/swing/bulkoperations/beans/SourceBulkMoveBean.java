@@ -8,9 +8,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.List;
-import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.cache.CacheManager;
-import org.sola.clients.beans.controls.SolaObservableList;
 import org.sola.clients.beans.digitalarchive.DocumentBean;
 import org.sola.clients.beans.source.SourceBean;
 import org.sola.clients.beans.validation.ValidationResultBean;
@@ -18,7 +16,9 @@ import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
 /**
- *
+ * It is used to upload documents (sources is called within the framework of Sola)
+ * from a given folder to the source schema in the database.
+ * 
  * @author Elton Manoku
  */
 public class SourceBulkMoveBean extends AbstractBulkMoveBean{
@@ -27,7 +27,10 @@ public class SourceBulkMoveBean extends AbstractBulkMoveBean{
     private List<SourceBean> sourceList = null;
     private List<String> allowedExtensions = new ArrayList<String>();
 
-    
+    /**
+     * The constructor initializes also the filter for files that will be considered
+     * for upload.
+     */
     public SourceBulkMoveBean() {
         allowedExtensions.add(".tiff");
         allowedExtensions.add(".tif");
@@ -39,6 +42,10 @@ public class SourceBulkMoveBean extends AbstractBulkMoveBean{
         return (TransactionBulkOperationSource) super.getTransaction();
     }
 
+    /**
+     * Gets the folder where the documents are found.
+     * @return 
+     */
     public File getBaseFolder() {
         return baseFolder;
     }
@@ -47,6 +54,11 @@ public class SourceBulkMoveBean extends AbstractBulkMoveBean{
         this.baseFolder = baseFolder;
     }
 
+    /**
+     * The list of allowed extensions.
+     * 
+     * @return 
+     */
     public List<String> getAllowedExtensions() {
         return allowedExtensions;
     }

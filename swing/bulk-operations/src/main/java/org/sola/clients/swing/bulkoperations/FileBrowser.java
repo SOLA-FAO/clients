@@ -11,7 +11,8 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
- *
+ * Common control that is used to open files given a filter.
+ * 
  * @author Elton Manoku
  */
 public class FileBrowser extends JFileChooser {

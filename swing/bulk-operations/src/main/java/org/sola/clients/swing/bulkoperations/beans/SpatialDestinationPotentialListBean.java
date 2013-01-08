@@ -12,7 +12,10 @@ import org.sola.clients.beans.controls.SolaObservableList;
 import org.sola.common.logging.LogUtility;
 
 /**
- *
+ * Bean that generates a list of potential spatial destination types.
+ * For generating the list reflection is used where every class that inherits from 
+ * SpatialDestinationBean is considered as valid destination type.
+ * 
  * @author Elton Manoku
  */
 public class SpatialDestinationPotentialListBean extends AbstractListBean{

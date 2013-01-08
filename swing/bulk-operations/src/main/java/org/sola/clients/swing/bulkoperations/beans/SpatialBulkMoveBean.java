@@ -15,8 +15,11 @@ import org.sola.clients.swing.gis.beans.TransactionCadastreChangeBean;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 
 /**
- *
- * @author Elton Manoku
+ * It is used to upload spatial features from a spatial dataset like a shapefile
+ * to cadastre schema. Depending in the destination, the features are uploaded
+ * as cadastre objects or spatial units.
+ * 
+* @author Elton Manoku
  */
 public class SpatialBulkMoveBean extends AbstractBulkMoveBean {
 
@@ -48,6 +51,11 @@ public class SpatialBulkMoveBean extends AbstractBulkMoveBean {
         propertySupport.firePropertyChange(PROPERTY_DESTINATION, old, value);
     }
 
+    /**
+     * Gets the list of beans that are derived from the source features.
+     * 
+     * @return 
+     */
     public List<SpatialUnitTemporaryBean> getBeans() {
         return getDestination().getBeans(getSource());
     }
@@ -85,6 +93,11 @@ public class SpatialBulkMoveBean extends AbstractBulkMoveBean {
         }
     }
     
+    /**
+     * True if there are problems found with the bulk move process.
+     * It checks if there is any unsuccessful validation rule found.
+     * @return 
+     */
     public boolean hasValidationProblems(){
         for(ValidationResultBean validationResult: getValidationResults()){
             if (!validationResult.isSuccessful()){

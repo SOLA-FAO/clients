@@ -10,7 +10,11 @@ import javax.validation.constraints.NotNull;
 import org.sola.clients.swing.bulkoperations.spatialobjects.SpatialDestinationOtherObjectPanel;
 
 /**
- *
+ * The spatial destination type other object. 
+ * This destination type is chosen to convert the source features to 
+ * other object complaint beans. The other object type can be anything rather than
+ * cadastre object.
+ * 
  * @author Elton Manoku
  */
 public class SpatialDestinationOtherObjectBean extends SpatialDestinationBean {

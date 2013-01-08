@@ -11,6 +11,7 @@ import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.transaction.TransactionBulkOperationSpatialTO;
 
 /**
+ * The transaction that sends the spatial objects to the server.
  *
  * @author Elton Manoku
  */
@@ -38,6 +39,7 @@ public class TransactionBulkOperationSpatial extends TransactionBulkOperation {
         return TypeConverters.BeanToTrasferObject(this, TransactionBulkOperationSpatialTO.class);
     }
     
+    @Override
     public List<ValidationResultBean> save() {
         return TypeConverters.TransferObjectListToBeanList(
                 WSManager.getInstance().getBulkOperationsService().saveTransactionBulkOperationSpatial(

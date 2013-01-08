@@ -15,7 +15,8 @@ import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
 /**
- *
+ * The panel that handles the bulk operations for loading documents (sources).
+ * 
  * @author Elton Manoku
  */
 public class LoadSourcesPanel extends ContentPanel {

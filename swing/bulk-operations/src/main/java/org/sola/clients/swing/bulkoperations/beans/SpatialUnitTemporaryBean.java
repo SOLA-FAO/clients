@@ -8,7 +8,8 @@ import java.math.BigDecimal;
 import org.sola.clients.beans.AbstractIdBean;
 
 /**
- *
+ * A class that defines the spatial unit after being converted from features from the source.
+ * 
  * @author Elton Manoku
  */
 public class SpatialUnitTemporaryBean extends AbstractIdBean{

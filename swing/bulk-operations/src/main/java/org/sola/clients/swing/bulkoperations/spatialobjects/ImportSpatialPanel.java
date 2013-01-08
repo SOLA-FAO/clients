@@ -9,7 +9,6 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.Set;
 import javax.swing.JPanel;
-import org.geotools.swing.data.JFileDataStoreChooser;
 import org.jdesktop.beansbinding.Binding;
 import org.reflections.Reflections;
 import org.sola.clients.swing.bulkoperations.FileBrowser;
@@ -17,15 +16,14 @@ import org.sola.clients.swing.bulkoperations.ValidationResultPanel;
 import org.sola.clients.swing.bulkoperations.beans.*;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
-import org.sola.clients.swing.gis.beans.TransactionCadastreChangeBean;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.ui.ContentPanel;
-import org.sola.clients.swing.ui.validation.ValidationResultForm;
 import org.sola.common.logging.LogUtility;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
 /**
+ * The panel that handles the bulk operations for loading spatial objects.
  *
  * @author Elton Manoku
  */
