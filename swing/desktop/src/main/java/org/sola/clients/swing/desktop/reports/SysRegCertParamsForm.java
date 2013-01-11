@@ -92,10 +92,10 @@ public class SysRegCertParamsForm extends javax.swing.JDialog {
      */
     private void showReport(JasperPrint report) {
         ReportViewerForm form = new ReportViewerForm(report);
-        if (nr != null) {
-            form.setVisible(true);
-            form.setAlwaysOnTop(true);
-        }
+//        if (nr != null) {
+//            form.setVisible(true);
+//            form.setAlwaysOnTop(true);
+//        }
         try {
             postProcessReport(report);
         } catch (Exception ex) {
@@ -146,10 +146,11 @@ public class SysRegCertParamsForm extends javax.swing.JDialog {
         File file = new File(cachePath + fileName);
         document = DocumentBean.createDocumentFromLocalFile(file);
         documentPanel.archiveDocument = document;
-
+        
         documentPanel.btnOk.doClick();
         documentPanel.saveDocument();
-
+        
+        documentPanel.getDocument().clean2();
     }
 
     private void showDocMessage(String fileName) {
@@ -265,7 +266,6 @@ public class SysRegCertParamsForm extends javax.swing.JDialog {
             showReport(ReportManager.getBaUnitReport(getBaUnit(baUnitId)));
             i = i + 1;
         }
-        
         if (i==0) {
          MessageUtility.displayMessage(ClientMessage.NO_CERTIFICATE_GENERATION);
         } else {
