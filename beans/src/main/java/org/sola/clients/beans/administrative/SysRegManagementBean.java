@@ -51,10 +51,8 @@ public class SysRegManagementBean extends AbstractIdBean {
 //    public static final String PARCEL_APPR_AGR_PROPERTY = "parcelapprovedagricultural";
 //    public static final String SIZE_APPR_AGR_PROPERTY = "sizeapprovedagricultural";
 //    public static final String OBJECTION_PROPERTY = "objection";
-      
-      public static final String COUNTER_PROPERTY = "counter";
-      public static final String DESCR_PROPERTY = "descr";
-    
+    public static final String COUNTER_PROPERTY = "counter";
+    public static final String DESCR_PROPERTY = "descr";
     private ObservableList<SysRegManagementBean> menagementList;
 //    private BigDecimal application;
 //    private BigDecimal spatial;
@@ -74,13 +72,9 @@ public class SysRegManagementBean extends AbstractIdBean {
 //    private BigDecimal parcelapprovedagricultural;
 //    private BigDecimal sizeapprovedagricultural;
 //    private BigDecimal objection;
-    
-      private Integer counter;
-      private String  descr;
-      private String  area;
-      
-      
-      
+    private BigDecimal counter;
+    private String descr;
+    private String area;
 
     public SysRegManagementBean() {
 //        super();
@@ -95,11 +89,11 @@ public class SysRegManagementBean extends AbstractIdBean {
         this.menagementList = menagementList;
     }
 
-    public Integer getCounter() {
+    public BigDecimal getCounter() {
         return counter;
     }
 
-    public void setCounter(Integer counter) {
+    public void setCounter(BigDecimal counter) {
         this.counter = counter;
     }
 
@@ -118,10 +112,7 @@ public class SysRegManagementBean extends AbstractIdBean {
     public void setArea(String area) {
         this.area = area;
     }
-    
-    
-    
-        
+
 //    public BigDecimal getApplication() {
 //        return application;
 //    }
@@ -265,8 +256,6 @@ public class SysRegManagementBean extends AbstractIdBean {
 //    public void setSpatial(BigDecimal spatial) {
 //        this.spatial = spatial;
 //    }
-
-    
     /**
      * Returns collection of {@link ApplicationBean} objects. This method is
      * used by Jasper report designer to extract properties of application bean

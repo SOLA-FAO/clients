@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="systematic registration management" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" resourceBundle="org.sola.clients.reports.locale.SysRegMenagement">
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="32"/>
 	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
@@ -68,7 +68,7 @@
 		<queryString>
 			<![CDATA[]]>
 		</queryString>
-		<field name="counter" class="java.lang.Integer">
+		<field name="counter" class="java.math.BigDecimal">
 			<fieldDescription><![CDATA[counter]]></fieldDescription>
 		</field>
 		<field name="descr" class="java.lang.String">
@@ -173,7 +173,7 @@
 	<detail>
 		<band height="198" splitType="Stretch">
 			<componentElement>
-				<reportElement key="table 2" style="table 2" x="0" y="0" width="555" height="198"/>
+				<reportElement key="table 2" style="table 2" stretchType="RelativeToTallestObject" x="0" y="0" width="555" height="198"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="management">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanArrayDataSource($F{menagementList}.toArray())]]></dataSourceExpression>
