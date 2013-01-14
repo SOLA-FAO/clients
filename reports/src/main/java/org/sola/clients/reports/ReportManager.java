@@ -469,18 +469,16 @@ public class ReportManager {
      * report.
      *
      */
-    public static JasperPrint getSysRegCertificatesReport(SysRegCertificatesListBean certificatesList,
-            String nr, String location) {
+    public static JasperPrint getSysRegCertificatesReport(BaUnitBean baUnitBean, String location) {
         HashMap inputParameters = new HashMap();
-//	Date currentdate = new Date(System.currentTimeMillis());
-//        inputParameters.put("CURRENT_DATE", currentdate);
-        
         inputParameters.put("REPORT_LOCALE", Locale.getDefault());
         inputParameters.put("USER", SecurityBean.getCurrentUser().getFullUserName());
         inputParameters.put("LOCATION", location);
-        inputParameters.put("NR", nr);
-        SysRegCertificatesListBean[] beans = new SysRegCertificatesListBean[1];
-        beans[0] = certificatesList;
+        inputParameters.put("AREA", location);
+//        SysRegCertificatesListBean[] beans = new SysRegCertificatesListBean[1];
+//        beans[0] = certificatesList;
+        BaUnitBean[] beans = new BaUnitBean[1];
+        beans[0] = baUnitBean;
         JRDataSource jds = new JRBeanArrayDataSource(beans);
 
         try {

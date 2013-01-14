@@ -263,7 +263,8 @@ public class SysRegCertParamsForm extends javax.swing.JDialog {
             SysRegCertificatesBean appBaunit = it.next();
              baUnitId = appBaunit.getBaUnitId();
             this.reportTogenerate = baUnitId + "_" + tmpLocation + "_" + this.reportdate + ".pdf";
-            showReport(ReportManager.getBaUnitReport(getBaUnit(baUnitId)));
+//            showReport(ReportManager.getBaUnitReport(getBaUnit(baUnitId)));
+            showReport(ReportManager.getSysRegCertificatesReport(getBaUnit(baUnitId),tmpLocation));
             i = i + 1;
         }
         if (i==0) {
