@@ -37,6 +37,7 @@ import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import javax.swing.DefaultRowSorter;
 import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JTextField;
@@ -62,6 +63,7 @@ import org.sola.clients.swing.common.controls.AutoCompletion;
 import org.sola.clients.swing.common.converters.BigDecimalMoneyConverter;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
+import org.sola.clients.swing.common.utils.InternalNumberComparator;
 import org.sola.clients.swing.desktop.DashBoardPanel;
 import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.desktop.ReportViewerForm;
@@ -196,6 +198,9 @@ public class ApplicationPanel extends ContentPanel {
      * Runs post initialization actions to customize form elements.
      */
     private void postInit() {
+        InternalNumberComparator comp = new InternalNumberComparator();
+        DefaultRowSorter rowSorter= (DefaultRowSorter) this.tabDocuments.getRowSorter();
+        rowSorter.setComparator(3, comp);
 
         addDocumentPanel.addPropertyChangeListener(new PropertyChangeListener() {
 
@@ -2446,6 +2451,7 @@ public class ApplicationPanel extends ContentPanel {
         tabDocuments.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("ApplicationPanel.tabDocuments.columnModel.title1_1")); // NOI18N
         tabDocuments.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("ApplicationPanel.tabDocuments.columnModel.title2_1")); // NOI18N
         tabDocuments.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("ApplicationPanel.tabDocuments.columnModel.title3_1")); // NOI18N
+        tabDocuments.getColumnModel().getColumn(3).setCellRenderer(null);
         tabDocuments.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("ApplicationPanel.tabDocuments.columnModel.title4_1")); // NOI18N
         tabDocuments.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("ApplicationPanel.tabDocuments.columnModel.title5")); // NOI18N
         tabDocuments.getColumnModel().getColumn(6).setHeaderValue(bundle.getString("ApplicationPanel.tabDocuments.columnModel.title7")); // NOI18N

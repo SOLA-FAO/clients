@@ -29,6 +29,7 @@ package org.sola.clients.swing.ui.source;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import javax.swing.DefaultRowSorter;
 import javax.swing.JFormattedTextField;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.digitalarchive.DocumentBean;
@@ -40,6 +41,7 @@ import org.sola.clients.beans.source.SourceSearchResultBean;
 import org.sola.clients.swing.common.controls.CalendarForm;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
+import org.sola.clients.swing.common.utils.InternalNumberComparator;
 import org.sola.clients.swing.ui.renderers.AttachedDocumentCellRenderer;
 import org.sola.common.SOLAException;
 import org.sola.common.messaging.ClientMessage;
@@ -61,6 +63,13 @@ public class PowerOfAttorneySearchPanel extends javax.swing.JPanel {
     public PowerOfAttorneySearchPanel() {
         initComponents();
         customizeButtons();
+        
+        InternalNumberComparator comp = new InternalNumberComparator();
+        DefaultRowSorter rowSorter= (DefaultRowSorter) this.tableSearchResults.getRowSorter();
+        rowSorter.setComparator(1, comp);
+
+        
+        
         powerOfAttorneySearchResults.addPropertyChangeListener(new PropertyChangeListener() {
 
             @Override

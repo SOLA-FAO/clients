@@ -2268,7 +2268,9 @@
                                     <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="ApplicationPanel.tabDocuments.columnModel.title3_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                                   </Title>
                                   <Editor/>
-                                  <Renderer/>
+                                  <Renderer editor="org.netbeans.modules.form.ComponentChooserEditor">
+                                    <ComponentRef name="null"/>
+                                  </Renderer>
                                 </Column>
                                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                                   <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">

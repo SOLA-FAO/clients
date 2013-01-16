@@ -31,6 +31,7 @@ package org.sola.clients.swing.ui.source;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import javax.swing.DefaultRowSorter;
 import javax.swing.JFormattedTextField;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationServiceBean;
@@ -46,6 +47,7 @@ import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.common.controls.CalendarForm;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
+import org.sola.clients.swing.common.utils.InternalNumberComparator;
 import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.clients.swing.ui.renderers.AttachedDocumentCellRenderer;
 import org.sola.common.RolesConstants;
@@ -73,6 +75,11 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
     public DocumentSearchPanel() {
         initComponents();
         customizeButtons();
+        InternalNumberComparator comp = new InternalNumberComparator();
+        DefaultRowSorter rowSorter= (DefaultRowSorter) this.tblSearchResults.getRowSorter();
+        rowSorter.setComparator(1, comp);
+
+        
         cbxSourceType.setSelectedIndex(-1);
         searchResultsList.addPropertyChangeListener(new PropertyChangeListener() {
 
@@ -527,6 +534,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         tblSearchResults.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("DocumentSeachPanel.tblSearchResults.columnModel.title5_1_1")); // NOI18N
         tblSearchResults.getColumnModel().getColumn(1).setMaxWidth(70);
         tblSearchResults.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("DocumentSeachPanel.tblSearchResults.columnModel.title1_1_1")); // NOI18N
+        tblSearchResults.getColumnModel().getColumn(1).setCellRenderer(null);
         tblSearchResults.getColumnModel().getColumn(2).setMaxWidth(70);
         tblSearchResults.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("DocumentSearchPanel.tblSearchResults.columnModel.title2_1")); // NOI18N
         tblSearchResults.getColumnModel().getColumn(3).setMaxWidth(60);

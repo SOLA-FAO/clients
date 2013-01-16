@@ -32,6 +32,7 @@ package org.sola.clients.swing.ui.source;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
+import javax.swing.DefaultRowSorter;
 import javax.swing.JPopupMenu;
 import org.sola.clients.beans.controls.SolaList;
 import org.sola.clients.beans.digitalarchive.DocumentBean;
@@ -39,6 +40,7 @@ import org.sola.clients.beans.source.SourceBean;
 import org.sola.clients.beans.source.SourceListBean;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
+import org.sola.clients.swing.common.utils.InternalNumberComparator;
 import org.sola.clients.swing.ui.renderers.AttachedDocumentCellRenderer;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -115,6 +117,12 @@ public class DocumentsPanel extends javax.swing.JPanel {
      * Makes post initialization tasks to bind listener on {@link SourceListBean}.
      */
     private void postInit() {
+        
+        InternalNumberComparator comp = new InternalNumberComparator();
+        DefaultRowSorter rowSorter= (DefaultRowSorter) this.tableDocuments.getRowSorter();
+        rowSorter.setComparator(3, comp);
+
+        
         sourceListBean.addPropertyChangeListener(new PropertyChangeListener() {
 
             @Override
@@ -263,6 +271,7 @@ public class DocumentsPanel extends javax.swing.JPanel {
         tableDocuments.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("DocumentsPanel.tableDocuments.columnModel.title1_1")); // NOI18N
         tableDocuments.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("DocumentsPanel.tableDocuments.columnModel.title2_1")); // NOI18N
         tableDocuments.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("DocumentsPanel.tableDocuments.columnModel.title3_1")); // NOI18N
+        tableDocuments.getColumnModel().getColumn(3).setCellRenderer(null);
         tableDocuments.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("DocumentsPanel.tableDocuments.columnModel.title4")); // NOI18N
         tableDocuments.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("DocumentsPanel.tableDocuments.columnModel.title5")); // NOI18N
         tableDocuments.getColumnModel().getColumn(6).setPreferredWidth(30);
