@@ -85,6 +85,8 @@ public class LocalizationManager {
         }
 
     }
+    
+    
 
     /** Restarts application. */
     public static boolean restartApplication(Class<?> applicationMainClass) {

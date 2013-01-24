@@ -36,8 +36,10 @@ import java.beans.PropertyChangeListener;
 import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.common.LocalizationManager;
 import org.sola.clients.swing.ui.DesktopClientExceptionHandler;
-import org.sola.clients.swing.ui.security.LoginForm;
-import org.sola.clients.swing.ui.security.LoginPanel;
+//It has been necessary to move loginForm and LoginPanel to org.sola.clients.swing.desktop package
+//in order to manage the language changes. Thus, these import have been commented
+//import org.sola.clients.swing.ui.security.LoginForm;
+//import org.sola.clients.swing.ui.security.LoginPanel;
 import org.sola.common.logging.LogUtility;
 
 /**

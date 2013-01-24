@@ -48,6 +48,7 @@ import org.sola.clients.beans.source.SourceBean;
 import org.sola.clients.swing.common.DefaultExceptionHandler;
 import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.common.LocalizationManager;
+import org.sola.clients.swing.common.controls.LanguageCombobox;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.desktop.administrative.BaUnitSearchPanel;
@@ -107,6 +108,13 @@ public class MainForm extends javax.swing.JFrame {
                 postInit();
             }
         });
+    }
+
+    /**
+     * Create combobox with languages
+     */
+    private LanguageCombobox createLanguageCombobox() {
+        return new LanguageCombobox(MainForm.class);
     }
 
     /**
@@ -437,6 +445,7 @@ public class MainForm extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JToolBar.Separator();
         btnOpenMap = new javax.swing.JButton();
         btnSetPassword = new javax.swing.JButton();
+        languageCombobox = createLanguageCombobox();
         statusPanel = new javax.swing.JPanel();
         labStatus = new javax.swing.JLabel();
         taskPanel1 = new org.sola.clients.swing.common.tasks.TaskPanel();
@@ -479,6 +488,7 @@ public class MainForm extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/Bundle"); // NOI18N
         setTitle(bundle.getString("MainForm.title")); // NOI18N
+        setPreferredSize(new java.awt.Dimension(990, 621));
 
         applicationsMain.setFloatable(false);
         applicationsMain.setRollover(true);
@@ -588,6 +598,15 @@ public class MainForm extends javax.swing.JFrame {
         });
         applicationsMain.add(btnSetPassword);
 
+        languageCombobox.setPreferredSize(new java.awt.Dimension(150, 20));
+        languageCombobox.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
+        languageCombobox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                languageComboboxActionPerformed(evt);
+            }
+        });
+        applicationsMain.add(languageCombobox);
+
         statusPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         statusPanel.setPreferredSize(new java.awt.Dimension(1024, 24));
 
@@ -607,7 +626,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtUserName, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(taskPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 683, Short.MAX_VALUE))
+                .addComponent(taskPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 738, Short.MAX_VALUE))
         );
         statusPanelLayout.setVerticalGroup(
             statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -843,9 +862,9 @@ public class MainForm extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(statusPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 935, Short.MAX_VALUE)
-            .addComponent(applicationsMain, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 935, Short.MAX_VALUE)
-            .addComponent(pnlContent, javax.swing.GroupLayout.DEFAULT_SIZE, 935, Short.MAX_VALUE)
+            .addComponent(statusPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 990, Short.MAX_VALUE)
+            .addComponent(applicationsMain, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 990, Short.MAX_VALUE)
+            .addComponent(pnlContent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1001,6 +1020,32 @@ public class MainForm extends javax.swing.JFrame {
         openSysRegManagementParamsForm();
     }//GEN-LAST:event_menuManagementActionPerformed
 
+    private void languageComboboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_languageComboboxActionPerformed
+        
+         if (!(MessageUtility.displayMessage(ClientMessage.CONFIRM_CHANGE_LANGUAGE) == MessageUtility.BUTTON_ONE)) {
+           languageCombobox.confirmedChange = false;
+         }    
+         else {
+             languageCombobox.confirmedChange = true;
+         }
+        
+        
+        if (languageCombobox.confirmedChange) {
+            final MainForm mainForm = new MainForm();
+            this.dispose();
+
+            java.awt.EventQueue.invokeLater(new Runnable() {
+
+                @Override
+                public void run() {
+                    mainForm.setVisible(true);
+                }
+            });
+        }
+        
+        languageCombobox.confirmedChange = true;
+    }//GEN-LAST:event_languageComboboxActionPerformed
+
     private void editPassword() {
         showPasswordPanel();
     }
@@ -1041,6 +1086,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JToolBar.Separator jSeparator4;
     private javax.swing.JMenuItem jmiContextHelp;
     private javax.swing.JLabel labStatus;
+    private org.sola.clients.swing.common.controls.LanguageCombobox languageCombobox;
     private javax.swing.JMenuItem menuAllLogLevel;
     private javax.swing.JMenu menuApplications;
     private javax.swing.JMenuItem menuBaUnitSearch;
