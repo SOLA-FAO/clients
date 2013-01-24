@@ -59,7 +59,9 @@ public class ShareSizeValidator implements ConstraintValidator<TotalShareSize, L
             }
         }
 
-        if(requiredTotalSize!=totalSize){
+        // Allow for inaccuracy of floating pt number calculation by multiplying 
+        // by 10,000 (i.e 4dp).
+        if (requiredTotalSize * 10000 != (Math.round(totalSize * 10000))) {
             result=false;
         }
         
