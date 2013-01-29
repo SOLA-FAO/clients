@@ -752,7 +752,7 @@ public class PartySearchPanel extends JPanel {
     private javax.swing.JMenuItem menuView;
     private org.sola.clients.beans.referencedata.PartyRoleTypeListBean partyRoleTyps;
     private org.sola.clients.beans.party.PartySearchParamsBean partySearchParams;
-    private org.sola.clients.beans.party.PartySearchResultListBean partySearchResuls;
+    public org.sola.clients.beans.party.PartySearchResultListBean partySearchResuls;
     private org.sola.clients.beans.referencedata.PartyTypeListBean partyTypes;
     private javax.swing.JPanel pnlSearch;
     private javax.swing.JPopupMenu popupParties;

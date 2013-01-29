@@ -39,6 +39,7 @@ import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.desktop.party.PartyPanelForm;
+import org.sola.clients.swing.desktop.party.PartySearchPanelForm;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.clients.swing.ui.renderers.FormattersFactory;
@@ -60,7 +61,6 @@ public class SharePanel extends ContentPanel {
             }
         }
     }
-    
     private RrrBean.RRR_ACTION rrrAction;
     public static final String UPDATED_RRR_SHARE = "updatedRrrShare";
 
@@ -101,7 +101,6 @@ public class SharePanel extends ContentPanel {
             btnAddOwner.setEnabled(false);
             btnRemoveOwner.setEnabled(false);
         }
-
         rrrShareBean.addPropertyChangeListener(new PropertyChangeListener() {
 
             @Override
@@ -111,6 +110,32 @@ public class SharePanel extends ContentPanel {
                 }
             }
         });
+    }
+
+    private void openSelectRightHolderForm() {
+        final RightHolderFormListener listener = new RightHolderFormListener();
+
+        SolaTask t = new SolaTask<Void, Void>() {
+
+            @Override
+            public Void doTask() {
+                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PERSON));
+                PartySearchPanelForm partySearchForm = null;
+
+                partySearchForm = initializePartySearchForm(partySearchForm);
+
+                partySearchForm.addPropertyChangeListener(listener);
+                getMainContentPanel().addPanel(partySearchForm, MainContentPanel.CARD_SEARCH_PERSONS, true);
+                return null;
+            }
+        };
+        TaskManager.getInstance().runTask(t);
+    }
+
+    private PartySearchPanelForm initializePartySearchForm(PartySearchPanelForm partySearchForm) {
+        partySearchForm = new PartySearchPanelForm(true, this.rrrShareBean);
+        return partySearchForm;
+
     }
 
     /**
@@ -135,6 +160,7 @@ public class SharePanel extends ContentPanel {
         final RightHolderFormListener listener = new RightHolderFormListener();
 
         SolaTask t = new SolaTask<Void, Void>() {
+
             @Override
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PERSON));
@@ -154,6 +180,7 @@ public class SharePanel extends ContentPanel {
     }
 
     private boolean saveRrrShare() {
+
         if (rrrShareBean.validate(true).size() < 1) {
             firePropertyChange(UPDATED_RRR_SHARE, null, rrrShareBean);
             close();
@@ -173,7 +200,7 @@ public class SharePanel extends ContentPanel {
         }
         return true;
     }
-    
+
     private void viewOwner() {
         if (rrrShareBean.getSelectedRightHolder() != null) {
             openRightHolderForm(rrrShareBean.getSelectedRightHolder(), true);
@@ -214,15 +241,17 @@ public class SharePanel extends ContentPanel {
         txtNominator = new javax.swing.JFormattedTextField();
         headerPanel = new org.sola.clients.swing.ui.HeaderPanel();
         groupPanel1 = new org.sola.clients.swing.ui.GroupPanel();
+        jToolBar2 = new javax.swing.JToolBar();
+        btnSave = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tableOwners = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
         jToolBar1 = new javax.swing.JToolBar();
         btnAddOwner = new javax.swing.JButton();
         btnEditOwner = new javax.swing.JButton();
         btnRemoveOwner = new javax.swing.JButton();
         btnViewOwner = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tableOwners = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
-        jToolBar2 = new javax.swing.JToolBar();
-        btnSave = new javax.swing.JButton();
+        btnSelectExisting = new javax.swing.JButton();
 
         popupOwners.setName("popupOwners"); // NOI18N
 
@@ -297,6 +326,46 @@ public class SharePanel extends ContentPanel {
         groupPanel1.setName("groupPanel1"); // NOI18N
         groupPanel1.setTitleText(bundle.getString("SharePanel.groupPanel1.titleText")); // NOI18N
 
+        jToolBar2.setFloatable(false);
+        jToolBar2.setRollover(true);
+        jToolBar2.setName("jToolBar2"); // NOI18N
+
+        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/save.png"))); // NOI18N
+        btnSave.setText(bundle.getString("SharePanel.btnSave.text")); // NOI18N
+        btnSave.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnSave.setName("btnSave"); // NOI18N
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(btnSave);
+
+        jPanel1.setName(bundle.getString("SharePanel.jPanel1.name")); // NOI18N
+
+        jScrollPane1.setName("jScrollPane1"); // NOI18N
+
+        tableOwners.setComponentPopupMenu(popupOwners);
+        tableOwners.setName("tableOwners"); // NOI18N
+
+        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${filteredRightHolderList}");
+        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrShareBean, eLProperty, tableOwners);
+        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${name}"));
+        columnBinding.setColumnName("Name");
+        columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${lastName}"));
+        columnBinding.setColumnName("Last Name");
+        columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
+        bindingGroup.addBinding(jTableBinding);
+        jTableBinding.bind();binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrShareBean, org.jdesktop.beansbinding.ELProperty.create("${selectedRightHolder}"), tableOwners, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
+        bindingGroup.addBinding(binding);
+
+        jScrollPane1.setViewportView(tableOwners);
+        tableOwners.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("SharePanel.tableOwners.columnModel.title0")); // NOI18N
+        tableOwners.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("SharePanel.tableOwners.columnModel.title1")); // NOI18N
+
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
         jToolBar1.setName("jToolBar1"); // NOI18N
@@ -326,6 +395,7 @@ public class SharePanel extends ContentPanel {
 
         btnRemoveOwner.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
         btnRemoveOwner.setText(bundle.getString("SharePanel.btnRemoveOwner.text")); // NOI18N
+        btnRemoveOwner.setToolTipText(bundle.getString("btnRemoveOwner.tooltip.text")); // NOI18N
         btnRemoveOwner.setName("btnRemoveOwner"); // NOI18N
         btnRemoveOwner.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -344,56 +414,49 @@ public class SharePanel extends ContentPanel {
         });
         jToolBar1.add(btnViewOwner);
 
-        jScrollPane1.setName("jScrollPane1"); // NOI18N
-
-        tableOwners.setComponentPopupMenu(popupOwners);
-        tableOwners.setName("tableOwners"); // NOI18N
-
-        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${filteredRightHolderList}");
-        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrShareBean, eLProperty, tableOwners);
-        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${name}"));
-        columnBinding.setColumnName("Name");
-        columnBinding.setColumnClass(String.class);
-        columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${lastName}"));
-        columnBinding.setColumnName("Last Name");
-        columnBinding.setColumnClass(String.class);
-        columnBinding.setEditable(false);
-        bindingGroup.addBinding(jTableBinding);
-        jTableBinding.bind();binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrShareBean, org.jdesktop.beansbinding.ELProperty.create("${selectedRightHolder}"), tableOwners, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
-        bindingGroup.addBinding(binding);
-
-        jScrollPane1.setViewportView(tableOwners);
-        tableOwners.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("SharePanel.tableOwners.columnModel.title0")); // NOI18N
-        tableOwners.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("SharePanel.tableOwners.columnModel.title1")); // NOI18N
-
-        jToolBar2.setFloatable(false);
-        jToolBar2.setRollover(true);
-        jToolBar2.setName("jToolBar2"); // NOI18N
-
-        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/save.png"))); // NOI18N
-        btnSave.setText(bundle.getString("SharePanel.btnSave.text")); // NOI18N
-        btnSave.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnSave.setName("btnSave"); // NOI18N
-        btnSave.addActionListener(new java.awt.event.ActionListener() {
+        btnSelectExisting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/search.png"))); // NOI18N
+        btnSelectExisting.setText(bundle.getString("SharePanel.btnSelectExisting.text")); // NOI18N
+        btnSelectExisting.setFocusable(false);
+        btnSelectExisting.setName(bundle.getString("SharePanel.btnSelectExisting.name")); // NOI18N
+        btnSelectExisting.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSelectExisting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveActionPerformed(evt);
+                btnSelectExistingActionPerformed(evt);
             }
         });
-        jToolBar2.add(btnSave);
+        jToolBar1.add(btnSelectExisting);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 859, Short.MAX_VALUE)
+                    .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 859, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(headerPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 429, Short.MAX_VALUE)
-            .addComponent(jToolBar2, javax.swing.GroupLayout.DEFAULT_SIZE, 429, Short.MAX_VALUE)
+            .addComponent(headerPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jToolBar2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(groupPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE)
-                    .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE)
+                    .addComponent(groupPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 879, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -402,7 +465,8 @@ public class SharePanel extends ContentPanel {
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtDenominator, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 177, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -420,10 +484,8 @@ public class SharePanel extends ContentPanel {
                 .addGap(18, 18, 18)
                 .addComponent(groupPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         bindingGroup.bind();
@@ -465,16 +527,21 @@ public class SharePanel extends ContentPanel {
         viewOwner();
     }//GEN-LAST:event_menuViewOwnerActionPerformed
 
+    private void btnSelectExistingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectExistingActionPerformed
+        openSelectRightHolderForm();
+    }//GEN-LAST:event_btnSelectExistingActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddOwner;
     private javax.swing.JButton btnEditOwner;
     private javax.swing.JButton btnRemoveOwner;
     private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnSelectExisting;
     private javax.swing.JButton btnViewOwner;
     private org.sola.clients.swing.ui.GroupPanel groupPanel1;
     private org.sola.clients.swing.ui.HeaderPanel headerPanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;

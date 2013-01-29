@@ -1,35 +1,40 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.desktop.party;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import org.sola.clients.beans.administrative.RrrBean;
+import org.sola.clients.beans.administrative.RrrShareBean;
 import org.sola.clients.beans.party.PartyBean;
+import org.sola.clients.beans.party.PartySummaryBean;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.desktop.application.ApplicationPanel;
@@ -44,6 +49,10 @@ import org.sola.common.messaging.MessageUtility;
  * Holds {@link PartySearchPanel} component.
  */
 public class PartySearchPanelForm extends ContentPanel {
+
+    private boolean selectParty = false;
+    private RrrBean rrrBean;
+    private RrrShareBean rrrShareBean;
 
     /**
      * Default constructor.
@@ -63,6 +72,61 @@ public class PartySearchPanelForm extends ContentPanel {
         });
     }
 
+    public PartySearchPanelForm(boolean selectParty, RrrBean rrrBean) {
+        this.selectParty = selectParty;
+        this.rrrBean = rrrBean;
+        initComponents();
+        partySearchPanel.setShowAddButton(false);
+        partySearchPanel.setShowEditButton(false);
+        partySearchPanel.setShowRemoveButton(false);
+        partySearchPanel.setShowViewButton(false);
+        partySearchPanel.setShowSelectButton(selectParty);
+        partySearchPanel.addPropertyChangeListener(new PropertyChangeListener() {
+
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals(partySearchPanel.SELECT_PARTY_PROPERTY)) {
+                    addElementList("rrrBean");
+                }
+            }
+        });
+
+    }
+
+    public PartySearchPanelForm(boolean selectParty, RrrShareBean rrrShareBean) {
+        this.selectParty = selectParty;
+        this.rrrShareBean = rrrShareBean;
+        initComponents();
+        partySearchPanel.setShowAddButton(false);
+        partySearchPanel.setShowEditButton(false);
+        partySearchPanel.setShowRemoveButton(false);
+        partySearchPanel.setShowViewButton(false);
+        partySearchPanel.setShowSelectButton(selectParty);
+        partySearchPanel.addPropertyChangeListener(new PropertyChangeListener() {
+
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals(partySearchPanel.SELECT_PARTY_PROPERTY)) {
+                    addElementList("rrrShareBean");
+                }
+            }
+        });
+
+    }
+
+    private void addElementList(String bean) {
+        if (this.partySearchPanel.partySearchResuls.getSelectedPartySearchResult() != null) {
+            PartySummaryBean partySummary = this.partySearchPanel.partySearchResuls.getSelectedPartySearchResult();
+            if (bean.contentEquals("rrrBean")) {
+                this.rrrBean.getFilteredRightHolderList().add(partySummary);
+            }
+            if (bean.contentEquals("rrrShareBean")) {
+                this.rrrShareBean.getFilteredRightHolderList().add(partySummary);
+            }
+            this.headerPanel.firePropertyChange(headerPanel.CLOSE_BUTTON_CLICKED, false, true);
+        }
+    }
+
     private void handleSearchPanelEvents(final PropertyChangeEvent evt) {
         SolaTask t = new SolaTask<Void, Void>() {
 
@@ -70,7 +134,6 @@ public class PartySearchPanelForm extends ContentPanel {
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PERSON));
                 PartyPanelForm panel = null;
-
                 if (evt.getPropertyName().equals(PartySearchPanel.CREATE_NEW_PARTY_PROPERTY)) {
                     panel = new PartyPanelForm(true, null, false, false);
                     panel.addPropertyChangeListener(new PropertyChangeListener() {

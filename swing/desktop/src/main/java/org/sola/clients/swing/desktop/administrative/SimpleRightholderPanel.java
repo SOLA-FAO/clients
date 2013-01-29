@@ -43,6 +43,7 @@ import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.desktop.party.PartyPanelForm;
+import org.sola.clients.swing.desktop.party.PartySearchPanelForm;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.clients.swing.ui.source.DocumentsManagementPanel;
@@ -255,6 +256,35 @@ public class SimpleRightholderPanel extends ContentPanel {
         TaskManager.getInstance().runTask(t);
     }
     
+    
+     private void openSelectRightHolderForm() {
+        final RightHolderFormListener listener = new RightHolderFormListener();
+
+        SolaTask t = new SolaTask<Void, Void>() {
+
+            @Override
+            public Void doTask() {
+                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PERSON));
+                PartySearchPanelForm partySearchForm = null;
+
+                partySearchForm = initializePartySearchForm(partySearchForm);
+
+                partySearchForm.addPropertyChangeListener(listener);
+                getMainContentPanel().addPanel(partySearchForm, MainContentPanel.CARD_SEARCH_PERSONS, true);
+                return null;
+            }
+        };
+        TaskManager.getInstance().runTask(t);
+    }
+
+    private PartySearchPanelForm initializePartySearchForm(PartySearchPanelForm partySearchForm) {
+        partySearchForm = new PartySearchPanelForm(true, this.rrrBean);
+        return partySearchForm;
+
+    }
+
+    
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -286,6 +316,7 @@ public class SimpleRightholderPanel extends ContentPanel {
         btnEditOwner = new javax.swing.JButton();
         btnRemoveOwner = new javax.swing.JButton();
         btnViewOwner = new javax.swing.JButton();
+        btnSelectExisting = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableOwners = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
         jPanel3 = new javax.swing.JPanel();
@@ -426,6 +457,17 @@ public class SimpleRightholderPanel extends ContentPanel {
         });
         jToolBar2.add(btnViewOwner);
 
+        btnSelectExisting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/search.png"))); // NOI18N
+        btnSelectExisting.setText(bundle.getString("SimpleRightholderPanel.btnSelectExisting.text_1")); // NOI18N
+        btnSelectExisting.setFocusable(false);
+        btnSelectExisting.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSelectExisting.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSelectExistingActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(btnSelectExisting);
+
         tableOwners.setComponentPopupMenu(popUpOwners);
 
         org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${filteredRightHolderList}");
@@ -562,11 +604,16 @@ public class SimpleRightholderPanel extends ContentPanel {
         saveRrr();
     }//GEN-LAST:event_btnSaveActionPerformed
 
+    private void btnSelectExistingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectExistingActionPerformed
+        openSelectRightHolderForm();
+    }//GEN-LAST:event_btnSelectExistingActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddOwner;
     private javax.swing.JButton btnEditOwner;
     private javax.swing.JButton btnRemoveOwner;
     private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnSelectExisting;
     private javax.swing.JButton btnViewOwner;
     private javax.swing.JCheckBox cbxIsPrimary;
     private org.sola.clients.swing.ui.source.DocumentsManagementPanel documentsManagementPanel;

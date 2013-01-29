@@ -96,6 +96,9 @@
     <Component class="org.sola.clients.beans.party.PartySearchParamsBean" name="partySearchParams">
     </Component>
     <Component class="org.sola.clients.beans.party.PartySearchResultListBean" name="partySearchResuls">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+      </AuxValues>
     </Component>
   </NonVisualComponents>
   <AuxValues>
