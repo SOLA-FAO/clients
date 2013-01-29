@@ -111,7 +111,7 @@ public class LanguageCombobox extends JComboBox {
         }
     }
     private boolean showMessage = true;
-    public boolean confirmedChange = true;
+    public boolean confirmedChange = false;
     private String[] languageStrings = {"English", "Italian", "नेपाली"};
     private String[] languageIconNames = {"en.jpg", "it.jpg", "np.png"};
     private ImageIcon[] languageIcons;
@@ -188,11 +188,12 @@ public class LanguageCombobox extends JComboBox {
             } else if ("नेपाली".equalsIgnoreCase(languageStrings[language])) {
                 LocalizationManager.setLanguage(applicationMainClass, "np", "NP");
             }
-            if (showMessage && confirmedChange) {
+            if (showMessage) {
                 LocalizationManager.loadLanguage(applicationMainClass);
-                MessageUtility.displayMessage(ClientMessage.GENERAL_UPDATE_LANG);
-//                LocalizationManager.restartApplication(applicationMainClass);
-
+                if (! this.confirmedChange){
+                  MessageUtility.displayMessage(ClientMessage.GENERAL_UPDATE_LANG);
+                  LocalizationManager.restartApplication(applicationMainClass);
+                }
             }
         }
     }
