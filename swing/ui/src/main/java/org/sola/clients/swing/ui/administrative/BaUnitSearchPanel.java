@@ -409,7 +409,13 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
 
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    
+     public void clickFind() {
+        btnSearchActionPerformed(null);
+    }
+    
+    
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         SolaTask t = new SolaTask<Void, Void>() {
 

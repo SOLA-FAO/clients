@@ -47,6 +47,15 @@ public class DocumentSearchForm extends ContentPanel {
         return documentSearchPanel;
     }
 
+    public void clickFind() {
+        if (this.jTabbedPane1.getSelectedIndex() == 0) {
+            documentSearchPanel.searchDocuments();
+        }
+        if (this.jTabbedPane1.getSelectedIndex() == 1) {
+            powerOfAttorneySearchPanel.searchDocuments();
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

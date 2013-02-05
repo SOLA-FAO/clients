@@ -77,7 +77,12 @@ public class BaUnitSearchPanel extends ContentPanel {
         };
         TaskManager.getInstance().runTask(t);
     }
-
+    
+    
+     public void clickFind() {
+        baUnitSearchPanel.clickFind();
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

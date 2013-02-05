@@ -32,6 +32,9 @@ package org.sola.clients.swing.desktop;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.net.URL;
@@ -64,6 +67,7 @@ import org.sola.clients.swing.desktop.reports.SysRegManagementParamsForm;
 import org.sola.clients.swing.desktop.source.DocumentSearchForm;
 import org.sola.clients.swing.desktop.source.DocumentViewForm;
 import org.sola.clients.swing.desktop.source.PowerOfAttorneyViewForm;
+import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.common.RolesConstants;
 import org.sola.common.help.HelpUtility;
@@ -75,6 +79,94 @@ import org.sola.common.messaging.MessageUtility;
  * Main form of the application.
  */
 public class MainForm extends javax.swing.JFrame {
+
+    private ApplicationSearchPanel searchApplicationPanel;
+    private DocumentSearchForm searchDocPanel;
+    private PartySearchPanelForm searchPartyPanel;
+    private BaUnitSearchPanel searchBaUnitPanel;
+    
+    // Create a variable holding the listener
+    KeyAdapter keyAdapterAppSearch = new KeyAdapter() {
+
+        public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                launchAppSearchMethod(searchApplicationPanel);
+            };
+
+        }
+    ;
+    };
+    
+   // Create a variable holding the listener
+    KeyAdapter keyAdapterDocSearch = new KeyAdapter() {
+
+        public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                launchDocSearchMethod(searchDocPanel);
+            };
+
+        }
+    ;
+    };
+    
+    
+    // Create a variable holding the listener
+    KeyAdapter keyAdapterBaUnitSearch = new KeyAdapter() {
+
+        public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                launchBaUnitSearchMethod(searchBaUnitPanel);
+            };
+
+        }
+    ;
+    };
+    
+    
+    // Create a variable holding the listener
+    KeyAdapter keyAdapterPartySearch = new KeyAdapter() {
+
+        public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                launchPartySearchMethod(searchPartyPanel);
+            };
+
+        }
+    ;
+
+    };
+
+    public ApplicationSearchPanel getSearchApplicationPanel() {
+        return searchApplicationPanel;
+    }
+
+    public void setSearchApplicationPanel(ApplicationSearchPanel searchApplicationPanel) {
+        this.searchApplicationPanel = searchApplicationPanel;
+    }
+
+    public BaUnitSearchPanel getSearchBaUnitPanel() {
+        return searchBaUnitPanel;
+    }
+
+    public void setSearchBaUnitPanel(BaUnitSearchPanel searchBaUnitPanel) {
+        this.searchBaUnitPanel = searchBaUnitPanel;
+    }
+
+    public DocumentSearchForm getSearchDocPanel() {
+        return searchDocPanel;
+    }
+
+    public void setSearchDocPanel(DocumentSearchForm searchDocPanel) {
+        this.searchDocPanel = searchDocPanel;
+    }
+
+    public PartySearchPanelForm getSearchPartyPanel() {
+        return searchPartyPanel;
+    }
+
+    public void setSearchPartyPanel(PartySearchPanelForm searchPartyPanel) {
+        this.searchPartyPanel = searchPartyPanel;
+    }
 
     /**
      * Private class to hold singleton instance of the MainForm.
@@ -108,6 +200,7 @@ public class MainForm extends javax.swing.JFrame {
                 postInit();
             }
         });
+
     }
 
     /**
@@ -200,13 +293,23 @@ public class MainForm extends javax.swing.JFrame {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_APPSEARCH));
                 if (!pnlContent.isPanelOpened(MainContentPanel.CARD_APPSEARCH)) {
                     ApplicationSearchPanel searchApplicationPanel = new ApplicationSearchPanel();
+                    setSearchApplicationPanel(searchApplicationPanel);
                     pnlContent.addPanel(searchApplicationPanel, MainContentPanel.CARD_APPSEARCH);
+
                 }
+                
                 pnlContent.showPanel(MainContentPanel.CARD_APPSEARCH);
                 return null;
             }
+
+            @Override
+            protected void taskDone() {
+                addKeyListeners(MainContentPanel.CARD_APPSEARCH);
+            }
         };
         TaskManager.getInstance().runTask(t);
+
+
     }
 
     private void searchBaUnit() {
@@ -217,10 +320,16 @@ public class MainForm extends javax.swing.JFrame {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PROPERTYSEARCH));
                 if (!pnlContent.isPanelOpened(MainContentPanel.CARD_BAUNIT_SEARCH)) {
                     BaUnitSearchPanel baUnitSearchPanel = new BaUnitSearchPanel();
+                    setSearchBaUnitPanel(baUnitSearchPanel);
                     pnlContent.addPanel(baUnitSearchPanel, MainContentPanel.CARD_BAUNIT_SEARCH);
                 }
                 pnlContent.showPanel(MainContentPanel.CARD_BAUNIT_SEARCH);
                 return null;
+            }
+
+            @Override
+            protected void taskDone() {
+                addKeyListeners(MainContentPanel.CARD_BAUNIT_SEARCH);
             }
         };
         TaskManager.getInstance().runTask(t);
@@ -234,10 +343,16 @@ public class MainForm extends javax.swing.JFrame {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_DOCUMENTSEARCH));
                 if (!pnlContent.isPanelOpened(MainContentPanel.CARD_DOCUMENT_SEARCH)) {
                     DocumentSearchForm documentSearchPanel = new DocumentSearchForm();
+                    setSearchDocPanel(documentSearchPanel);
                     pnlContent.addPanel(documentSearchPanel, MainContentPanel.CARD_DOCUMENT_SEARCH);
                 }
                 pnlContent.showPanel(MainContentPanel.CARD_DOCUMENT_SEARCH);
                 return null;
+            }
+
+            @Override
+            protected void taskDone() {
+                addKeyListeners(MainContentPanel.CARD_DOCUMENT_SEARCH);
             }
         };
         TaskManager.getInstance().runTask(t);
@@ -252,13 +367,68 @@ public class MainForm extends javax.swing.JFrame {
                 if (!pnlContent.isPanelOpened(MainContentPanel.CARD_SEARCH_PERSONS)) {
                     PartySearchPanelForm partySearchPanelForm = new PartySearchPanelForm();
                     pnlContent.addPanel(partySearchPanelForm, MainContentPanel.CARD_SEARCH_PERSONS, true);
+                    setSearchPartyPanel(partySearchPanelForm);
                 } else {
                     pnlContent.showPanel(MainContentPanel.CARD_SEARCH_PERSONS);
                 }
                 return null;
             }
+
+            @Override
+            protected void taskDone() {
+                addKeyListeners(MainContentPanel.CARD_SEARCH_PERSONS);
+            }
         };
         TaskManager.getInstance().runTask(t);
+    }
+
+    private void addKeyListeners(final String card) {
+
+        if (card.contentEquals(MainContentPanel.CARD_APPSEARCH)) {
+            pnlContent.addKeyListener(keyAdapterAppSearch);
+            pnlContent.removeKeyListener(keyAdapterDocSearch);
+            pnlContent.removeKeyListener(keyAdapterBaUnitSearch);
+            pnlContent.removeKeyListener(keyAdapterPartySearch);
+        }
+        if (card.contentEquals(MainContentPanel.CARD_DOCUMENT_SEARCH)) {
+            pnlContent.addKeyListener(keyAdapterDocSearch);
+            pnlContent.removeKeyListener(keyAdapterAppSearch);
+            pnlContent.removeKeyListener(keyAdapterBaUnitSearch);
+            pnlContent.removeKeyListener(keyAdapterPartySearch);
+        }
+        if (card.contentEquals(MainContentPanel.CARD_BAUNIT_SEARCH)) {
+            pnlContent.addKeyListener(keyAdapterBaUnitSearch);
+            pnlContent.removeKeyListener(keyAdapterDocSearch);
+            pnlContent.removeKeyListener(keyAdapterAppSearch);
+            pnlContent.removeKeyListener(keyAdapterPartySearch);
+
+        }
+        if (card.contentEquals(MainContentPanel.CARD_SEARCH_PERSONS)) {
+            pnlContent.addKeyListener(keyAdapterPartySearch);
+            pnlContent.removeKeyListener(keyAdapterDocSearch);
+            pnlContent.removeKeyListener(keyAdapterBaUnitSearch);
+            pnlContent.removeKeyListener(keyAdapterAppSearch);
+
+        }
+        pnlContent.setFocusable(true);
+        pnlContent.requestFocusInWindow();
+
+    }
+
+    public void launchAppSearchMethod(final ApplicationSearchPanel panel) {
+        panel.clickFind();
+    }
+
+    public void launchDocSearchMethod(DocumentSearchForm panel) {
+        panel.clickFind();
+    }
+
+    public void launchBaUnitSearchMethod(BaUnitSearchPanel panel) {
+        panel.clickFind();
+    }
+
+    public void launchPartySearchMethod(PartySearchPanelForm panel) {
+        panel.clickFind();
     }
 
     private void openDashBoard() {
@@ -985,7 +1155,6 @@ public class MainForm extends javax.swing.JFrame {
 
     private void menuLodgementReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuLodgementReportActionPerformed
         openLodgementReportParamsForm();
-//        showReport(ReportManager.getLodgementReport(lodgementBean1, ));  
     }//GEN-LAST:event_menuLodgementReportActionPerformed
 
     private void menuPersonsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuPersonsActionPerformed
@@ -1021,15 +1190,14 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_menuManagementActionPerformed
 
     private void languageComboboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_languageComboboxActionPerformed
-        
-         if (!(MessageUtility.displayMessage(ClientMessage.CONFIRM_CHANGE_LANGUAGE) == MessageUtility.BUTTON_ONE)) {
-           languageCombobox.confirmedChange = false;
-         }    
-         else {
-             languageCombobox.confirmedChange = true;
-         }
-        
-        
+
+        if (!(MessageUtility.displayMessage(ClientMessage.CONFIRM_CHANGE_LANGUAGE) == MessageUtility.BUTTON_ONE)) {
+            languageCombobox.confirmedChange = false;
+        } else {
+            languageCombobox.confirmedChange = true;
+        }
+
+
         if (languageCombobox.confirmedChange) {
             final MainForm mainForm = new MainForm();
             this.dispose();
@@ -1042,7 +1210,7 @@ public class MainForm extends javax.swing.JFrame {
                 }
             });
         }
-        
+
         languageCombobox.confirmedChange = true;
     }//GEN-LAST:event_languageComboboxActionPerformed
 

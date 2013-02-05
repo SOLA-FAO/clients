@@ -30,6 +30,8 @@
 package org.sola.clients.swing.desktop.application;
 
 import java.awt.ComponentOrientation;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Locale;
@@ -65,17 +67,20 @@ public class ApplicationSearchPanel extends ContentPanel {
     public ApplicationSearchPanel() {
         initComponents();
         setHeaderPanel(headerPanel1);
-        appList.addPropertyChangeListener(new PropertyChangeListener() {
+        this.appList.addPropertyChangeListener(new PropertyChangeListener() {
 
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(ApplicationSearchResultsListBean.SELECTED_APPLICATION_PROPERTY)) {
                     customizeOpenButton((ApplicationSearchResultBean) evt.getNewValue());
                 }
+
             }
         });
         customizeOpenButton(null);
+
         btnFind.setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_VIEW_APPS));
+
     }
 
     private void customizeOpenButton(ApplicationSearchResultBean searchResult) {
@@ -701,6 +706,7 @@ public class ApplicationSearchPanel extends ContentPanel {
                 txtAppNumber.requestFocus();
             }
         };
+
         TaskManager.getInstance().runTask(t);
     }//GEN-LAST:event_btnFindActionPerformed
 
@@ -711,7 +717,7 @@ public class ApplicationSearchPanel extends ContentPanel {
         txtToDate.setValue(null);
         txtContactPerson.setText(null);
         txtDocumentReference.setText(null);
-        txtDocumentNumber.setText(null); 
+        txtDocumentNumber.setText(null);
         labResults.setText(null);
         tbAppList.setVisible(false);
         txtAppNumber.requestFocus();
@@ -724,6 +730,10 @@ public class ApplicationSearchPanel extends ContentPanel {
     private void menuOpenApplicationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpenApplicationActionPerformed
         openApplication();
     }//GEN-LAST:event_menuOpenApplicationActionPerformed
+
+    public void clickFind() {
+        this.btnFindActionPerformed(null);
+    }
 
     /**
      * Opens {@link ApplicationForm} for selected application in search results.
@@ -753,7 +763,7 @@ public class ApplicationSearchPanel extends ContentPanel {
     private org.sola.clients.beans.application.ApplicationSearchResultsListBean appList;
     private javax.swing.JScrollPane appListPanel;
     private javax.swing.JButton btnClear;
-    private javax.swing.JButton btnFind;
+    public javax.swing.JButton btnFind;
     private javax.swing.JButton btnOpenApplication;
     private javax.swing.JButton btnShowCalendarFrom;
     private javax.swing.JButton btnShowCalendarTo;

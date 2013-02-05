@@ -166,7 +166,12 @@ public class PartySearchPanel extends JPanel {
         menuEdit.setEnabled(btnEditParty.isEnabled());
         menuRemove.setEnabled(btnRemoveParty.isEnabled());
     }
-
+     
+    
+    public void clickFind() {
+        search();
+    }
+    
     /**
      * Searches parties with given criteria.
      */
