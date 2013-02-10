@@ -35,6 +35,7 @@ public class SourceBulkMoveBean extends AbstractBulkMoveBean{
         allowedExtensions.add(".tiff");
         allowedExtensions.add(".tif");
         allowedExtensions.add(".pdf");
+        allowedExtensions.add(".jpg");
     }
 
     @Override
