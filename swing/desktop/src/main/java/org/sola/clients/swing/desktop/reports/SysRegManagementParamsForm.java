@@ -216,7 +216,7 @@ public class SysRegManagementParamsForm extends javax.swing.JDialog {
     private void showReport(JasperPrint report) {
         ReportViewerForm form = new ReportViewerForm(report);
         form.setVisible(true);
-        form.setAlwaysOnTop(true);
+//        form.setAlwaysOnTop(true);
     }
     
      private SysRegManagementBean createSysRegManagementBean() {
