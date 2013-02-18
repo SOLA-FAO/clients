@@ -33,6 +33,8 @@ public class ParcelNumberListingBean extends AbstractIdBean {
     public static final String CONCATENATED_NAME_PROPERTY = "concatenatedName";
     public static final String PUBLIC_NOTIFICATION_DURATION_PROPERTY = "publicNotificationDuration";
     public static final String NAME_PROPERTY = "name";
+    public static final String OBJECTIONS_PROPERTY = "objections";
+    
     private String nameFirstpart;
     private String nameLastpart;
     private BigDecimal size;
@@ -41,6 +43,8 @@ public class ParcelNumberListingBean extends AbstractIdBean {
     private String concatenatedName;
     private String publicNotificationDuration;
     private String name;
+    private String objections;
+    
 
     public String getPublicNotificationDuration() {
         return publicNotificationDuration;
@@ -104,5 +108,13 @@ public class ParcelNumberListingBean extends AbstractIdBean {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getObjections() {
+        return objections;
+    }
+
+    public void setObjections(String objections) {
+        this.objections = objections;
     }
 }
