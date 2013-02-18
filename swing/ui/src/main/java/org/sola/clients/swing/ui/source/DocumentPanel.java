@@ -187,10 +187,12 @@ public class DocumentPanel extends javax.swing.JPanel {
 
     public boolean saveDocument() {
         if (getDocument().validate(true).size() < 1) {
+            
+           if (!(this.archiveDocument==null)){ 
             if (!this.archiveDocument.getId().equals("")) {
                 getDocument().setArchiveDocument(this.archiveDocument);
             }
-
+           } 
             getDocument().save();
             fireDocumentChangeEvent();
             return true;
