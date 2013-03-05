@@ -1,31 +1,32 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-
 package org.geotools.swing.tool.extended.ui;
 
 import java.awt.image.BufferedImage;
@@ -33,16 +34,17 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import org.geotools.swing.extended.exception.DirectImageNotValidFileException;
+import org.geotools.swing.extended.util.ImageUtility;
 import org.geotools.swing.extended.util.Messaging;
 
 /**
- * This form is used during the adding of the image in the map.
- * In this form is also calculated the left-bottom and right-top corner in the map where the 
+ * This form is used during the adding of the image in the map. In this form is
+ * also calculated the left-bottom and right-top corner in the map where the
  * image will be located.
  * <br/>
- * After an image is loaded, two orientation points in the image are defined. In the form
- * there are given as properties the orientation points in the map.
- * 
+ * After an image is loaded, two orientation points in the image are defined. In
+ * the form there are given as properties the orientation points in the map.
+ *
  * @author Elton Manoku
  */
 public class DirectImageForm extends javax.swing.JDialog {
@@ -52,9 +54,11 @@ public class DirectImageForm extends javax.swing.JDialog {
     private Double firstPointInMapY;
     private Double secondPointInMapX;
     private Double secondPointInMapY;
+    private static final int MAX_PIXEL_HEIGHT = 2000;
+    private static final int MAX_PIXEL_WIDTH = 2000;
 
-    /** 
-     * Creates new form DirectImageForm 
+    /**
+     * Creates new form DirectImageForm
      */
     public DirectImageForm() {
         initComponents();
@@ -66,13 +70,15 @@ public class DirectImageForm extends javax.swing.JDialog {
 
     /**
      * Sets the image file.
-     * 
+     *
      * @param file
      * @throws DirectImageNotValidFileException
-     * @throws IOException 
+     * @throws IOException
      */
     public void setImage(File file) throws DirectImageNotValidFileException, IOException {
-        BufferedImage image = ImageIO.read(file);
+        // #285 Subsample large images to avoid Java Heap error
+        BufferedImage image = ImageUtility.subsampleImage(
+                ImageIO.createImageInputStream(file), MAX_PIXEL_WIDTH, MAX_PIXEL_HEIGHT, null);
         if (image == null) {
             throw new DirectImageNotValidFileException();
         }
@@ -80,9 +86,10 @@ public class DirectImageForm extends javax.swing.JDialog {
     }
 
     /**
-     * Gets if the definition of the location of the image in the map is successful
-     * 
-     * @return 
+     * Gets if the definition of the location of the image in the map is
+     * successful
+     *
+     * @return
      */
     public boolean isSuccess() {
         return success;
@@ -90,8 +97,8 @@ public class DirectImageForm extends javax.swing.JDialog {
 
     /**
      * Sets the X coordinate of the first point in the map
-     * 
-     * @param firstPointInMapX 
+     *
+     * @param firstPointInMapX
      */
     public void setFirstPointInMapX(Double firstPointInMapX) {
         this.firstPointInMapX = firstPointInMapX;
@@ -99,8 +106,8 @@ public class DirectImageForm extends javax.swing.JDialog {
 
     /**
      * Sets the Y coordinate of the first point in the map
-     * 
-     * @param firstPointInMapY 
+     *
+     * @param firstPointInMapY
      */
     public void setFirstPointInMapY(Double firstPointInMapY) {
         this.firstPointInMapY = firstPointInMapY;
@@ -108,8 +115,8 @@ public class DirectImageForm extends javax.swing.JDialog {
 
     /**
      * Sets the X coordinate of the second point in the map
-     * 
-     * @param secondPointInMapX 
+     *
+     * @param secondPointInMapX
      */
     public void setSecondPointInMapX(Double secondPointInMapX) {
         this.secondPointInMapX = secondPointInMapX;
@@ -117,8 +124,8 @@ public class DirectImageForm extends javax.swing.JDialog {
 
     /**
      * Sets the Y coordinate of the second point in the map
-     * 
-     * @param secondPointInMapY 
+     *
+     * @param secondPointInMapY
      */
     public void setSecondPointInMapY(Double secondPointInMapY) {
         this.secondPointInMapY = secondPointInMapY;
@@ -126,7 +133,8 @@ public class DirectImageForm extends javax.swing.JDialog {
 
     /**
      * Gets the left bottom X map coordinate of the image
-     * @return 
+     *
+     * @return
      */
     public Double getLeftBottomImageCornerInMapX() {
         return this.firstPointInMapX - (this.getImageResolution() * this.pnlImage.getFirstPointX());
@@ -134,7 +142,8 @@ public class DirectImageForm extends javax.swing.JDialog {
 
     /**
      * Gets the left bottom Y map coordinate of the image
-     * @return 
+     *
+     * @return
      */
     public Double getLeftBottomImageCornerInMapY() {
         return this.firstPointInMapY - (this.getImageResolution()
@@ -143,7 +152,8 @@ public class DirectImageForm extends javax.swing.JDialog {
 
     /**
      * Gets the top right X map coordinate of the image
-     * @return 
+     *
+     * @return
      */
     public Double getRightTopImageCornerInTheMapX() {
         return this.secondPointInMapX
@@ -153,7 +163,8 @@ public class DirectImageForm extends javax.swing.JDialog {
 
     /**
      * Gets the top right Y map coordinate of the image
-     * @return 
+     *
+     * @return
      */
     public Double getRightTopImageCornerInTheMapY() {
         return this.secondPointInMapY
@@ -165,10 +176,10 @@ public class DirectImageForm extends javax.swing.JDialog {
                 / Math.abs(this.pnlImage.getSecondPointX() - this.pnlImage.getFirstPointX());
     }
 
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -259,7 +270,6 @@ private void cmdOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:e
                 Messaging.Ids.ADD_DIRECT_IMAGE_DEFINE_POINT_IN_IMAGE_ERROR.toString());
     }
 }//GEN-LAST:event_cmdOkActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cmdOk;
     private javax.swing.JLabel lblAction;
