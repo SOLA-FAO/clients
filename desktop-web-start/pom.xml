@@ -14,9 +14,14 @@
 
     <name>Clients Desktop Web Start</name>
 
-    <properties>
+  <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <solaVersion>Customization Release v1.2</solaVersion>
+        <webstart.codesigning.keystore>${basedir}/sola.jks</webstart.codesigning.keystore>
+        <webstart.codesigning.alias>sola</webstart.codesigning.alias>
+        <webstart.codesigning.storepass>FLOSS2011</webstart.codesigning.storepass>
+        <webstart.codesigning.keypass>FLOSS2011</webstart.codesigning.keypass>
     </properties>
 
     <dependencies>
@@ -111,11 +116,11 @@
                     <unsignAlreadySignedJars>true</unsignAlreadySignedJars>
                     <!-- Digital singing is required for Web Start deployment. To speed up the
                     build in order to test the index.jsp web page, this section can be commented out -->
-                    <sign>
-                        <keystore>${basedir}/sola.jks</keystore>
-                        <alias>sola</alias>
-                        <storepass>FLOSS2011</storepass>
-                        <keypass>FLOSS2011</keypass>
+                   <sign>
+                        <keystore>${webstart.codesigning.keystore}</keystore>
+                        <alias>${webstart.codesigning.alias}</alias>
+                        <storepass>${webstart.codesigning.storepass}</storepass>
+                        <keypass>${webstart.codesigning.keypass}</keypass>
                     </sign>
                 </configuration>
             </plugin>
