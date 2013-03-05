@@ -38,6 +38,7 @@ import javax.swing.JTextField;
 import org.sola.clients.beans.digitalarchive.DocumentBean;
 import org.sola.clients.beans.source.SourceBean;
 import org.sola.clients.swing.common.controls.BrowseControlListener;
+import org.sola.clients.swing.ui.renderers.FormattersFactory;
 import org.sola.clients.swing.ui.renderers.SimpleComboBoxRenderer;
 
 /**
@@ -308,7 +309,7 @@ public class DocumentPanel extends javax.swing.JPanel {
         jPanel2.setName("jPanel2"); // NOI18N
 
         txtDocRecordDate.setFont(new java.awt.Font("Thaoma", 0, 12));
-        txtDocRecordDate.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
+        txtDocRecordDate.setFormatterFactory(FormattersFactory.getInstance().getDateFormatterFactory());
         txtDocRecordDate.setName("txtDocRecordDate"); // NOI18N
         txtDocRecordDate.setNextFocusableComponent(txtDocRefNumber);
 
@@ -321,7 +322,7 @@ public class DocumentPanel extends javax.swing.JPanel {
         jLabel3.setText(bundle.getString("DocumentPanel.jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
 
-        txtExpiration.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
+        txtExpiration.setFormatterFactory(FormattersFactory.getInstance().getDateFormatterFactory());
         txtExpiration.setText(bundle.getString("DocumentPanel.txtExpiration.text")); // NOI18N
         txtExpiration.setName(bundle.getString("DocumentPanel.txtExpiration.name")); // NOI18N
 

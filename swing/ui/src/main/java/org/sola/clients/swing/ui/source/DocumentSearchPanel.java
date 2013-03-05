@@ -48,8 +48,8 @@ import org.sola.clients.swing.common.controls.CalendarForm;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.common.utils.InternalNumberComparator;
-import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.clients.swing.ui.renderers.AttachedDocumentCellRenderer;
+import org.sola.clients.swing.ui.renderers.FormattersFactory;
 import org.sola.common.RolesConstants;
 import org.sola.common.SOLAException;
 import org.sola.common.messaging.ClientMessage;
@@ -534,7 +534,6 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         tblSearchResults.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("DocumentSeachPanel.tblSearchResults.columnModel.title5_1_1")); // NOI18N
         tblSearchResults.getColumnModel().getColumn(1).setMaxWidth(70);
         tblSearchResults.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("DocumentSeachPanel.tblSearchResults.columnModel.title1_1_1")); // NOI18N
-        tblSearchResults.getColumnModel().getColumn(1).setCellRenderer(null);
         tblSearchResults.getColumnModel().getColumn(2).setMaxWidth(70);
         tblSearchResults.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("DocumentSearchPanel.tblSearchResults.columnModel.title2_1")); // NOI18N
         tblSearchResults.getColumnModel().getColumn(3).setMaxWidth(60);
@@ -723,7 +722,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
 
         jPanel4.setName("jPanel4"); // NOI18N
 
-        txtSubmissionDateFrom.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
+        txtSubmissionDateFrom.setFormatterFactory(FormattersFactory.getInstance().getDateFormatterFactory());
         txtSubmissionDateFrom.setText(bundle.getString("DocumentSearchPanel.txtSubmissionDateFrom.text")); // NOI18N
         txtSubmissionDateFrom.setName("txtSubmissionDateFrom"); // NOI18N
 
@@ -773,7 +772,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         jLabel5.setText(bundle.getString("DocumentSearchPanel.jLabel5.text")); // NOI18N
         jLabel5.setName("jLabel5"); // NOI18N
 
-        txtSubmissionDateTo.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
+        txtSubmissionDateTo.setFormatterFactory(FormattersFactory.getInstance().getDateFormatterFactory());
         txtSubmissionDateTo.setText(bundle.getString("DocumentSearchPanel.txtSubmissionDateTo.text")); // NOI18N
         txtSubmissionDateTo.setName("txtSubmissionDateTo"); // NOI18N
 
@@ -818,7 +817,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         jLabel7.setText(bundle.getString("DocumentSearchPanel.jLabel7.text")); // NOI18N
         jLabel7.setName("jLabel7"); // NOI18N
 
-        txtDateFrom.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
+        txtDateFrom.setFormatterFactory(FormattersFactory.getInstance().getDateFormatterFactory());
         txtDateFrom.setText(bundle.getString("DocumentSearchPanel.txtDateFrom.text")); // NOI18N
         txtDateFrom.setName("txtDateFrom"); // NOI18N
 
@@ -863,7 +862,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         jLabel6.setText(bundle.getString("DocumentSearchPanel.jLabel6.text")); // NOI18N
         jLabel6.setName("jLabel6"); // NOI18N
 
-        txtDateTo.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
+        txtDateTo.setFormatterFactory(FormattersFactory.getInstance().getDateFormatterFactory());
         txtDateTo.setText(bundle.getString("DocumentSearchPanel.txtDateTo.text")); // NOI18N
         txtDateTo.setName("txtDateTo"); // NOI18N
 
@@ -955,7 +954,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addComponent(jLabel3)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(txtLaNr)
         );
         jPanel7Layout.setVerticalGroup(
