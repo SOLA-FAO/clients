@@ -62,21 +62,37 @@
             <version>${geotools.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.geotools.xsd</groupId>
+            <artifactId>gt-xsd-kml</artifactId>
+            <version>${geotools.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-epsg-hsql</artifactId>
+            <version>${geotools.version}</version>
+        </dependency>
+        <dependency>
+            <!-- Required for the KMLEncoder class-->
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2.1</version>
+        </dependency>
+        <dependency>
             <groupId>com.lowagie</groupId>
             <artifactId>itext</artifactId>
             <version>2.1.7</version>
             <exclusions>
                 <exclusion>
-                 <!-- Duplicate of org.bouncycastle:bcmail-jdk14
-                 Excluded as Web Start tries to download both copies
-                 of the dependency to the same location and fails. -->
+                    <!-- Duplicate of org.bouncycastle:bcmail-jdk14
+                    Excluded as Web Start tries to download both copies
+                    of the dependency to the same location and fails. -->
                     <artifactId>bcmail-jdk14</artifactId>
                     <groupId>bouncycastle</groupId>
                 </exclusion>
                 <exclusion>
-                <!-- Duplicate of org.bouncycastle:bcprov-jdk14
-                 Excluded as Web Start tries to download both copies
-                 of the dependency to the same location and fails. -->
+                    <!-- Duplicate of org.bouncycastle:bcprov-jdk14
+                    Excluded as Web Start tries to download both copies
+                    of the dependency to the same location and fails. -->
                     <artifactId>bcprov-jdk14</artifactId>
                     <groupId>bouncycastle</groupId>
                 </exclusion>
