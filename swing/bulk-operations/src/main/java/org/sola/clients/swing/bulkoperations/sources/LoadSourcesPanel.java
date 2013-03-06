@@ -120,8 +120,9 @@ public class LoadSourcesPanel extends ContentPanel {
         btnValidations = new javax.swing.JButton();
 
         setHeaderPanel(headerPanel);
-
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/bulkoperations/sources/Bundle"); // NOI18N
+        setHelpTopic(bundle.getString("LoadSourcePanel.helptopic")); // NOI18N
+
         headerPanel.setTitleText(bundle.getString("LoadSourcesPanel.headerPanel.titleText")); // NOI18N
 
         folderChooser.setAcceptAllFileFilterUsed(false);
