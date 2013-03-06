@@ -32,7 +32,6 @@ import java.util.Collections;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.digitalarchive.DocumentBean;
-import org.sola.clients.swing.common.converters.DateConverter;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.swing.ui.renderers.AttachedDocumentCellRenderer;
 import org.sola.webservices.transferobjects.casemanagement.ApplicationTO;
@@ -41,6 +40,7 @@ import java.util.Locale;
 import javax.swing.JFormattedTextField;
 import javax.swing.JTextField;
 import org.sola.clients.swing.common.LafManager;
+import org.sola.clients.swing.ui.renderers.FormattersFactory;
 /** 
  * Displays application details. This panel could be used on different forms, 
  * where application details are needed to display in the read only mode.
@@ -519,7 +519,7 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
         labLodgedDate.setName("labLodgedDate"); // NOI18N
 
         txtLodgementDate.setEditable(false);
-        txtLodgementDate.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter()));
+        txtLodgementDate.setFormatterFactory(FormattersFactory.getInstance().getDateFormatterFactory());
         txtLodgementDate.setText(bundle.getString("ApplicationDetailsPanel.txtLodgementDate.text")); // NOI18N
         txtLodgementDate.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         txtLodgementDate.setName(bundle.getString("ApplicationDetailsPanel.txtLodgementDate.name")); // NOI18N
@@ -551,6 +551,7 @@ public class ApplicationDetailsPanel extends javax.swing.JPanel {
         labLodgedDate1.setName("labLodgedDate1"); // NOI18N
 
         txtCompleteDate.setEditable(false);
+        txtCompleteDate.setFormatterFactory(FormattersFactory.getInstance().getDateFormatterFactory());
         txtCompleteDate.setText(bundle.getString("ApplicationDetailsPanel.txtCompleteDate.text")); // NOI18N
         txtCompleteDate.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         txtCompleteDate.setName(bundle.getString("ApplicationDetailsPanel.txtCompleteDate.name")); // NOI18N

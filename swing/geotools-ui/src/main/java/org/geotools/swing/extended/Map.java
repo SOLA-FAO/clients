@@ -54,6 +54,7 @@ import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
+import org.geotools.data.simple.SimpleFeatureSource;
 import org.geotools.geometry.jts.Geometries;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.map.Layer;
@@ -86,6 +87,7 @@ public class Map extends JMapPane {
     private static String SRID_RESOURCE_LOCATION = "resources/srid.properties";
     private static String SELECTION_SLD_FILE = "selection.xml";
     private static String SELECTION_LAYER_NAME = "selection";
+    private static String LAYER_FIELD_GEOMETRY_TYPE = "geometryType";
     private static Properties sridResource = null;
     private boolean isRendering = false;
     private MapPaneAdapter mapPaneListener;
@@ -758,12 +760,27 @@ public class Map extends JMapPane {
                     (ExtendedLayerGraphics) getSolaLayers().get(SELECTION_LAYER_NAME);
             if (selectionLayer == null) {
                 selectionLayer = new ExtendedLayerGraphics(SELECTION_LAYER_NAME,
-                        Geometries.GEOMETRY, SELECTION_SLD_FILE);
+                        Geometries.GEOMETRY, SELECTION_SLD_FILE,
+                        LAYER_FIELD_GEOMETRY_TYPE + ":String");
                 selectionLayer.setShowInToc(false);
                 this.addLayer(selectionLayer);
             }
         } catch (InitializeLayerException ex) {
             Messaging.getInstance().show(ex.getMessage());
+        }
+    }
+    
+    /**
+     * Moves the selection layer to the top of the list of layers so that
+     * selected objects are always displayed on top of other layers.
+     */
+    public void moveSelectionLayer() {
+        ExtendedLayerGraphics selectionLayer =
+                (ExtendedLayerGraphics) getSolaLayers().get(SELECTION_LAYER_NAME);
+        if (selectionLayer != null) {
+            Layer mapLayer = selectionLayer.getMapLayers().get(0);
+            int currentPos = this.getMapContent().layers().indexOf(mapLayer);
+            this.getMapContent().moveLayer(currentPos, this.getMapContent().layers().size() - 1);
         }
     }
 
@@ -774,10 +791,14 @@ public class Map extends JMapPane {
      * @param geom The geometry of the feature.
      */
     public void selectFeature(String id, Geometry geom) {
-        ExtendedLayerGraphics selectionLayer =
-                (ExtendedLayerGraphics) getSolaLayers().get(SELECTION_LAYER_NAME);
-        if (selectionLayer != null) {
-            selectionLayer.addFeature(id, geom, null, false);
+        if (geom != null) {
+            ExtendedLayerGraphics selectionLayer =
+                    (ExtendedLayerGraphics) getSolaLayers().get(SELECTION_LAYER_NAME);
+            if (selectionLayer != null) {
+                java.util.HashMap<String, Object> fieldValues = new java.util.HashMap<String, Object>();
+                fieldValues.put(LAYER_FIELD_GEOMETRY_TYPE, geom.getGeometryType());
+                selectionLayer.addFeature(id, geom, fieldValues, false);
+            }
         }
     }
 
@@ -791,5 +812,18 @@ public class Map extends JMapPane {
                 && selectionLayer.getFeatureCollection().size() > 0) {
             selectionLayer.removeFeatures(false);
         }
+    }
+    
+    /**
+     * Retrieves the selected features from the selection layer.
+     */
+    public SimpleFeatureSource getSelectedFeatureSource() {
+        ExtendedLayerGraphics selectionLayer =
+                (ExtendedLayerGraphics) getSolaLayers().get(SELECTION_LAYER_NAME);
+        if (selectionLayer != null
+                && selectionLayer.getFeatureCollection().size() > 0) {
+            return selectionLayer.getFeatureSource();
+        }
+        return null;
     }
 }

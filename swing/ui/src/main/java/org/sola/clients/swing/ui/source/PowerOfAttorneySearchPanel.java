@@ -37,12 +37,12 @@ import org.sola.clients.beans.source.PowerOfAttorneyBean;
 import org.sola.clients.beans.source.PowerOfAttorneySearchResultBean;
 import org.sola.clients.beans.source.PowerOfAttorneySearchResultListBean;
 import org.sola.clients.beans.source.SourceBean;
-import org.sola.clients.beans.source.SourceSearchResultBean;
 import org.sola.clients.swing.common.controls.CalendarForm;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.common.utils.InternalNumberComparator;
 import org.sola.clients.swing.ui.renderers.AttachedDocumentCellRenderer;
+import org.sola.clients.swing.ui.renderers.FormattersFactory;
 import org.sola.common.SOLAException;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -440,7 +440,7 @@ public class PowerOfAttorneySearchPanel extends javax.swing.JPanel {
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
-        txtSubmissionDateFrom.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
+        txtSubmissionDateFrom.setFormatterFactory(FormattersFactory.getInstance().getDateFormatterFactory());
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, searchParams, org.jdesktop.beansbinding.ELProperty.create("${fromSubmissionDate}"), txtSubmissionDateFrom, org.jdesktop.beansbinding.BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
@@ -481,7 +481,7 @@ public class PowerOfAttorneySearchPanel extends javax.swing.JPanel {
 
         jLabel5.setText(bundle.getString("PowerOfAttorneySearchPanel.jLabel5.text")); // NOI18N
 
-        txtSubmissionDateTo.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
+        txtSubmissionDateTo.setFormatterFactory(FormattersFactory.getInstance().getDateFormatterFactory());
         txtSubmissionDateTo.setText(bundle.getString("PowerOfAttorneySearchPanel.txtSubmissionDateTo.text")); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, searchParams, org.jdesktop.beansbinding.ELProperty.create("${toSubmissionDate}"), txtSubmissionDateTo, org.jdesktop.beansbinding.BeanProperty.create("value"));

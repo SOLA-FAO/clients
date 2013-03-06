@@ -241,7 +241,9 @@ public abstract class ExtendedDrawToolWithSnapping extends ExtendedDrawTool {
         Coordinate coordinate = null;
         ReferencedEnvelope bbox = new ReferencedEnvelope(search, null);
         for (ExtendedFeatureLayer targetLayer : this.targetSnappingLayers) {
-            if (!targetLayer.isVisible()) {
+            // Only search the layer if it is displayed onscreen and a 
+            // coordinate has not been found
+            if (!targetLayer.isVisible() || coordinate != null) {
                 continue;
             }
             FeatureCollection featuresFound = targetLayer.getFeaturesInRange(

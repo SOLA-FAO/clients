@@ -33,6 +33,7 @@ import java.awt.event.MouseEvent;
 import org.sola.clients.beans.digitalarchive.DocumentBean;
 import org.sola.clients.beans.source.SourceBean;
 import org.sola.clients.swing.common.controls.BrowseControlListener;
+import org.sola.clients.swing.ui.renderers.FormattersFactory;
 
 /**
  * Used for viewing document in read only mode.
@@ -268,7 +269,7 @@ public class DocumentViewerPanel extends javax.swing.JPanel {
         jLabel5.setName("jLabel5"); // NOI18N
 
         jFormattedTextField1.setEditable(false);
-        jFormattedTextField1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.LONG))));
+        jFormattedTextField1.setFormatterFactory(FormattersFactory.getInstance().getDateFormatterFactory());
         jFormattedTextField1.setName("jFormattedTextField1"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${sourceBean.recordation}"), jFormattedTextField1, org.jdesktop.beansbinding.BeanProperty.create("value"));
@@ -300,7 +301,7 @@ public class DocumentViewerPanel extends javax.swing.JPanel {
         jLabel3.setName("jLabel3"); // NOI18N
 
         jFormattedTextField3.setEditable(false);
-        jFormattedTextField3.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.LONG))));
+        jFormattedTextField3.setFormatterFactory(FormattersFactory.getInstance().getDateFormatterFactory());
         jFormattedTextField3.setName("jFormattedTextField3"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${sourceBean.acceptance}"), jFormattedTextField3, org.jdesktop.beansbinding.BeanProperty.create("value"));
@@ -332,7 +333,7 @@ public class DocumentViewerPanel extends javax.swing.JPanel {
         jLabel6.setName("jLabel6"); // NOI18N
 
         jFormattedTextField2.setEditable(false);
-        jFormattedTextField2.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.LONG))));
+        jFormattedTextField2.setFormatterFactory(FormattersFactory.getInstance().getDateFormatterFactory());
         jFormattedTextField2.setName("jFormattedTextField2"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${sourceBean.submission}"), jFormattedTextField2, org.jdesktop.beansbinding.BeanProperty.create("value"));

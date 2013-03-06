@@ -5,7 +5,12 @@
         <sld:Name>name</sld:Name>
         <sld:FeatureTypeName>Feature</sld:FeatureTypeName>
         <sld:Rule>
-            <sld:MaxScaleDenominator>1.0E20</sld:MaxScaleDenominator>
+            <ogc:Filter>
+                <ogc:PropertyIsEqualTo>
+                    <ogc:PropertyName>geometryType</ogc:PropertyName>
+                    <ogc:Literal>Polygon</ogc:Literal>
+                </ogc:PropertyIsEqualTo>
+            </ogc:Filter>
             <sld:PolygonSymbolizer>
                 <sld:Fill>
                     <sld:CssParameter name="fill">#FFFF00</sld:CssParameter>
@@ -14,11 +19,51 @@
                     <sld:CssParameter name="stroke">#FFFF00</sld:CssParameter>
                 </sld:Stroke>
             </sld:PolygonSymbolizer>
+        </sld:Rule>
+        <sld:Rule>
+            <ogc:Filter>
+                <ogc:PropertyIsEqualTo>
+                    <ogc:PropertyName>geometryType</ogc:PropertyName>
+                    <ogc:Literal>LineString</ogc:Literal>
+                </ogc:PropertyIsEqualTo>
+            </ogc:Filter>
             <sld:LineSymbolizer>
                 <sld:Stroke>
                     <sld:CssParameter name="stroke">#FFFF00</sld:CssParameter>
+                    <sld:CssParameter name="stroke-width">2.0</sld:CssParameter>
                 </sld:Stroke>
             </sld:LineSymbolizer>
+        </sld:Rule>
+        <sld:Rule>
+            <ogc:Filter>
+                <ogc:And>
+                    <ogc:PropertyIsNotEqualTo>
+                        <ogc:PropertyName>geometryType</ogc:PropertyName>
+                        <ogc:Literal>Polygon</ogc:Literal>
+                    </ogc:PropertyIsNotEqualTo>
+                    <ogc:PropertyIsNotEqualTo>
+                        <ogc:PropertyName>geometryType</ogc:PropertyName>
+                        <ogc:Literal>LineString</ogc:Literal>
+                    </ogc:PropertyIsNotEqualTo>
+                </ogc:And>
+            </ogc:Filter>
+            <sld:PointSymbolizer>
+                <sld:Graphic>
+                    <sld:Mark>
+                        <sld:WellKnownName>circle</sld:WellKnownName>
+                        <sld:Fill>
+                            <sld:CssParameter name="fill">#FFFF00</sld:CssParameter>
+                        </sld:Fill>
+                        <sld:Stroke>
+                            <sld:CssParameter name="stroke">#FFFF00</sld:CssParameter>
+                        </sld:Stroke>
+                    </sld:Mark>
+                    <sld:Size>10.0</sld:Size>
+                </sld:Graphic>
+            </sld:PointSymbolizer>
+        </sld:Rule>
+        <sld:Rule>
+            <sld:MinScaleDenominator>30000.0</sld:MinScaleDenominator>
             <sld:PointSymbolizer>
                 <sld:Graphic>
                     <sld:Mark>
