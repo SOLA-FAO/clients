@@ -42,6 +42,7 @@ import org.sola.clients.beans.administrative.*;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationServiceBean;
 import org.sola.clients.beans.cadastre.CadastreObjectBean;
+import org.sola.clients.beans.cadastre.SpatialValueAreaBean;
 //import org.sola.clients.beans.cadastre.SpatialValueAreaBean;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.beans.referencedata.*;
@@ -69,6 +70,7 @@ import org.sola.common.messaging.MessageUtility;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.administrative.BaUnitAreaTO;
 import org.sola.webservices.transferobjects.administrative.BaUnitTO;
+import org.sola.webservices.transferobjects.cadastre.SpatialValueAreaTO;
 
 /**
  * This form is used to manage property object ({@codeBaUnit}).
@@ -81,7 +83,7 @@ public class PropertyPanel extends ContentPanel {
      * the list of rights or update existing one.
      */
     private class RightFormListener implements PropertyChangeListener {
-
+        
         @Override
         public void propertyChange(PropertyChangeEvent evt) {
             // Add new RRR
@@ -102,7 +104,8 @@ public class PropertyPanel extends ContentPanel {
     java.util.ResourceBundle resourceBundle;
     private PropertyChangeListener newPropertyWizardListener;
     public BaUnitBean whichBaUnitSelected;
-    private boolean isBtnNext = false; 
+    private boolean isBtnNext = false;
+
     /**
      * Creates {@link BaUnitBean} used to bind form components.
      */
@@ -131,8 +134,8 @@ public class PropertyPanel extends ContentPanel {
         }
         return baUnitBean1;
     }
-     
-     /**
+
+    /**
      * Creates {@link BaUnitAreaBean} used to bind form components.
      */
     private BaUnitAreaBean createBaUnitAreaBean() {
@@ -146,13 +149,9 @@ public class PropertyPanel extends ContentPanel {
         }
         
         return baUnitAreaBean1;
-     
+        
     }
 
-   
-    
-    
-    
     /**
      * Creates documents table to show paper title documents.
      */
@@ -199,7 +198,7 @@ public class PropertyPanel extends ContentPanel {
         initComponents();
         portInit();
         
-   }
+    }
 
     /**
      * Form constructor.
@@ -228,7 +227,7 @@ public class PropertyPanel extends ContentPanel {
         initComponents();
         portInit();
         
-      
+        
     }
 
     /**
@@ -236,9 +235,9 @@ public class PropertyPanel extends ContentPanel {
      */
     private void portInit() {
         customizeForm();
-
+        
         rrrTypes.addPropertyChangeListener(new PropertyChangeListener() {
-
+            
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(RrrTypeListBean.SELECTED_RRR_TYPE_PROPERTY)) {
@@ -246,9 +245,9 @@ public class PropertyPanel extends ContentPanel {
                 }
             }
         });
-
+        
         baUnitBean1.addPropertyChangeListener(new PropertyChangeListener() {
-
+            
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(BaUnitBean.SELECTED_RIGHT_PROPERTY)) {
@@ -266,12 +265,12 @@ public class PropertyPanel extends ContentPanel {
                 } else if (evt.getPropertyName().equals(BaUnitBean.SELECTED_CHILD_BA_UNIT_PROPERTY)) {
                     customizeChildPropertyButtons();
                 }
-
+                
             }
         });
-
+        
         documentsPanel1.getSourceListBean().addPropertyChangeListener(new PropertyChangeListener() {
-
+            
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(SourceListBean.SELECTED_SOURCE_PROPERTY)) {
@@ -279,26 +278,27 @@ public class PropertyPanel extends ContentPanel {
                 }
             }
         });
-
+        
         saveBaUnitState();
     }
     
-    private void formatSize (String size) {
+    private void formatSize(String size) {
         txtArea.setText(size.substring(0, size.indexOf('.')));
     }
+
     /**
      * Runs form customization, to restrict certain actions, bind listeners on
      * the {@link BaUnitBean} and other components.
      */
     private void customizeForm() {
-         
+        
         if (nameFirstPart != null && nameLastPart != null) {
             headerPanel.setTitleText(String.format(
                     resourceBundle.getString("PropertyPanel.existingProperty.Text"),
                     nameFirstPart, nameLastPart));
-            txtArea.setEditable(false); 
+            txtArea.setEditable(false);            
             
-            if (txtArea.getText().indexOf('.')!= -1){
+            if (txtArea.getText().indexOf('.') != -1) {
                 formatSize(txtArea.getText());
             }
             
@@ -308,36 +308,36 @@ public class PropertyPanel extends ContentPanel {
             areaPanel.setEnabled(true);
             areaPanel.setEnabled(true);
             txtArea.setEnabled(true);
-            txtArea.setEditable(true);              
+            txtArea.setEditable(true);            
             txtArea.setVisible(true);
             labArea.setEnabled(true);
             labArea.setVisible(true);
-             if (txtArea.getText().indexOf('.')!= -1){
+            if (txtArea.getText().indexOf('.') != -1) {
                 formatSize(txtArea.getText());
             }
         }
-         
+        
         if (baUnitBean1.isNew()) {
             areaPanel.setEnabled(true);
             areaPanel.setEnabled(true);
             txtArea.setEnabled(true);
-            txtArea.setEditable(true);              
+            txtArea.setEditable(true);            
             txtArea.setVisible(true);
             labArea.setEnabled(true);
             labArea.setVisible(true);
-             if (txtArea.getText().indexOf('.')!= -1){
+            if (txtArea.getText().indexOf('.') != -1) {
                 formatSize(txtArea.getText());
             }
-        } 
+        }        
         
-       
+        
         if (applicationBean != null && applicationService != null) {
             headerPanel.setTitleText(String.format("%s, %s",
                     headerPanel.getTitleText(),
                     String.format(resourceBundle.getString("PropertyPanel.applicationInfo.Text"),
                     applicationService.getRequestType().getDisplayValue(), applicationBean.getNr())));
         }
-
+        
         btnSave.setEnabled(!readOnly);
         txtName.setEditable(!readOnly);
         customizeRightsButtons(null);
@@ -351,10 +351,10 @@ public class PropertyPanel extends ContentPanel {
         customizeTerminationButton();
         customizeHistoricRightsViewButton();
         
-        isBtnNext = false;  
-        
+        isBtnNext = false;
+
 //        TO BE REMOVED btnNext after well tested and before pushing the code
-        btnNext.setVisible(false);  
+        btnNext.setVisible(false);        
         btnNext.setEnabled(false);
         
     }
@@ -367,31 +367,31 @@ public class PropertyPanel extends ContentPanel {
                 && !baUnitBean1.getStatusCode().equals(StatusConstants.PENDING))) {
             return;
         }
-
+        
         if (!showMessage || (showMessage && MessageUtility.displayMessage(ClientMessage.BAUNIT_SELECT_EXISTING_PROPERTY) == MessageUtility.BUTTON_ONE)) {
             // Open selection form
             if (getMainContentPanel() != null) {
                 if (newPropertyWizardListener == null) {
                     newPropertyWizardListener = new PropertyChangeListener() {
-
+                        
                         @Override
                         public void propertyChange(PropertyChangeEvent evt) {
                             if (evt.getPropertyName().equals(NewPropertyWizardPanel.SELECTED_RESULT_PROPERTY)) {
-                             if (addParentProperty((Object[]) evt.getNewValue())) {
+                                if (addParentProperty((Object[]) evt.getNewValue())) {
                                     //                               btnNext.setVisible(true);
                                     //                               btnNext.setEnabled(true);
-                               isBtnNext = true;
-                               btnNextAction();
+                                    isBtnNext = true;
+                                    btnNextAction();
 //                               tabsMain.setEnabled(false);
 //                               btnAddParent.setEnabled(false);
-                             }
+                                }
                             }
                         }
                     };
                 }
-
+                
                 SolaTask t = new SolaTask<Void, Void>() {
-
+                    
                     @Override
                     public Void doTask() {
                         setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PROPERTYLINK));
@@ -399,7 +399,7 @@ public class PropertyPanel extends ContentPanel {
                         if (applicationService != null) {
                             allowSelection = !applicationService.getRequestTypeCode().equalsIgnoreCase(RequestTypeBean.CODE_NEW_DIGITAL_TITLE);
                         }
-                     
+                        
                         NewPropertyWizardPanel newPropertyWizardPanel = new NewPropertyWizardPanel(applicationBean, allowSelection);
                         newPropertyWizardPanel.addPropertyChangeListener(newPropertyWizardListener);
                         getMainContentPanel().addPanel(newPropertyWizardPanel, MainContentPanel.CARD_NEW_PROPERTY_WIZARD, true);
@@ -409,9 +409,9 @@ public class PropertyPanel extends ContentPanel {
                 TaskManager.getInstance().runTask(t);
             }
         }
-              
+        
     }
-
+    
     public void showPriorTitileMessage() {
         if ((baUnitBean1.getNameFirstpart() == null || baUnitBean1.getNameFirstpart().length() < 1)
                 && (baUnitBean1.getNameLastpart() == null || baUnitBean1.getNameLastpart().length() < 1)) {
@@ -431,7 +431,7 @@ public class PropertyPanel extends ContentPanel {
         if (selectedResult == null) {
             return false;
         }
-
+        
         BaUnitBean selectedBaUnit = (BaUnitBean) selectedResult[0];
         BaUnitRelTypeBean baUnitRelType = (BaUnitRelTypeBean) selectedResult[1];
         this.whichBaUnitSelected = selectedBaUnit;
@@ -487,7 +487,7 @@ public class PropertyPanel extends ContentPanel {
         relatedBuUnit.setRelatedBaUnit(selectedBaUnit);
         relatedBuUnit.setRelatedBaUnitId(selectedBaUnit.getId());
         baUnitBean1.getParentBaUnits().addAsNew(relatedBuUnit);
-
+        
         tabsMain.setSelectedIndex(tabsMain.indexOfComponent(pnlPriorProperties));
         return true;
     }
@@ -502,11 +502,11 @@ public class PropertyPanel extends ContentPanel {
                 && !baUnitBean1.getStatusCode().equals(StatusConstants.PENDING))) {
             enabled = false;
         }
-
+        
         btnOpenParent.setEnabled(baUnitBean1.getSelectedParentBaUnit() != null);
         btnAddParent.setEnabled(enabled);
         btnRemoveParent.setEnabled(enabled && btnOpenParent.isEnabled());
-
+        
         menuOpenParentBaUnit.setEnabled(btnOpenParent.isEnabled());
         menuAddParentBaUnit.setEnabled(btnAddParent.isEnabled());
         menuRemoveParentBaUnit.setEnabled(btnRemoveParent.isEnabled());
@@ -577,9 +577,9 @@ public class PropertyPanel extends ContentPanel {
                 || !applicationService.getRequestTypeCode().equalsIgnoreCase(RequestTypeBean.CODE_CANCEL_PROPERTY)) {
             enabled = false;
         }
-      
+
         // Determine what should be shown on the button, terminate or cancelling of termination.
-        if (baUnitBean1.getPendingActionCode() != null && applicationService.getRequestTypeCode().equalsIgnoreCase(RequestTypeBean.CODE_CANCEL_PROPERTY)) {    
+        if (baUnitBean1.getPendingActionCode() != null && applicationService.getRequestTypeCode().equalsIgnoreCase(RequestTypeBean.CODE_CANCEL_PROPERTY)) {
             // Show cancel
             btnTerminate.setIcon(new ImageIcon(getClass().getResource("/images/common/undo.png")));
             btnTerminate.setText(resourceBundle.getString("PropertyPanel.btnTerminate.text2"));
@@ -613,13 +613,13 @@ public class PropertyPanel extends ContentPanel {
     private void customizeRightTypesList() {
         cbxRightType.setSelectedIndex(-1);
         rrrTypes.setSelectedRrrType(null);
-
+        
         if (!readOnly && isActionAllowed(RrrTypeActionConstants.NEW)) {
             cbxRightType.setEnabled(true);
 
             // Restrict selection of right type by application service
             
-       
+            
             if (applicationService != null && applicationService.getRequestType() != null
                     && applicationService.getRequestType().getRrrTypeCode() != null) {
                 rrrTypes.setSelectedRightByCode(applicationService.getRequestType().getRrrTypeCode());
@@ -656,7 +656,7 @@ public class PropertyPanel extends ContentPanel {
         btnChangeRight.setEnabled(false);
         btnExtinguish.setEnabled(false);
         btnViewRight.setEnabled(rrrBean != null);
-
+        
         if (rrrBean != null && !rrrBean.isLocked() && !readOnly) {
             boolean isPending = rrrBean.getStatusCode().equals(StatusConstants.PENDING);
 
@@ -679,7 +679,7 @@ public class PropertyPanel extends ContentPanel {
                 }
             }
         }
-
+        
         menuEditRight.setEnabled(btnEditRight.isEnabled());
         menuRemoveRight.setEnabled(btnRemoveRight.isEnabled());
         menuVaryRight.setEnabled(btnChangeRight.isEnabled());
@@ -692,11 +692,11 @@ public class PropertyPanel extends ContentPanel {
      */
     private boolean isActionAllowed(String action) {
         boolean result = true;
- 
+        
         if (RrrTypeActionConstants.CANCEL.equalsIgnoreCase(action)) {
             // Default to false if the action is cancel as cannot have cancel and vary/new actions
             // supported by the same service.
-            result = false; 
+            result = false;            
         }
         
         if (applicationService != null && applicationService.getRequestType() != null
@@ -711,7 +711,7 @@ public class PropertyPanel extends ContentPanel {
      */
     private boolean isRightTypeAllowed(String rrrTypeCode) {
         boolean result = true;
-      
+        
         if (rrrTypeCode != null && applicationService != null
                 && applicationService.getRequestType() != null
                 && applicationService.getRequestType().getRrrTypeCode() != null) {
@@ -727,26 +727,35 @@ public class PropertyPanel extends ContentPanel {
         BaUnitTO baUnitTO = WSManager.getInstance().getAdministrative().getBaUnitByCode(nameFirstPart, nameLastPart);
         return TypeConverters.TransferObjectToBean(baUnitTO, BaUnitBean.class, null);
     }
-    
-     /**
+
+    /**
      * Returns {@link BaUnitBean} by first and last name part.
      */
-    private BaUnitBean getBaUnit(String id ) {
+    private BaUnitBean getBaUnit(String id) {
         BaUnitTO baUnitTO = WSManager.getInstance().getAdministrative().getBaUnitById(id);
         return TypeConverters.TransferObjectToBean(baUnitTO, BaUnitBean.class, null);
     }
-    
-     /**
+
+    /**
      * Returns {@link BaUnitBean} by first and last name part.
      */
-    private BaUnitBean getBaUnitWithCadObject(String nameFirstPart, String nameLastPart, String colist ) {
-        BaUnitTO baUnitTO = WSManager.getInstance().getAdministrative().getBaUnitWithCadObject(nameFirstPart, nameLastPart,colist);
+    private BaUnitBean getBaUnitWithCadObject(String nameFirstPart, String nameLastPart, String colist) {
+        BaUnitTO baUnitTO = WSManager.getInstance().getAdministrative().getBaUnitWithCadObject(nameFirstPart, nameLastPart, colist);
         return TypeConverters.TransferObjectToBean(baUnitTO, BaUnitBean.class, null);
     }
-     /**
+
+    /**
+     * Returns {@link BaUnitBean} by first and last name part.
+     */
+    private SpatialValueAreaBean getSpatialValueArea(String colist) {
+        SpatialValueAreaTO spatialValueAreaTO = WSManager.getInstance().getCadastreService().getSpatialValueArea(colist);
+        return TypeConverters.TransferObjectToBean(spatialValueAreaTO, SpatialValueAreaBean.class, null);
+    }
+
+    /**
      * Returns {@link BaUnitAreaBean} by first and last name part.
      */
-    private BaUnitAreaBean getBaUnitArea(String baUnitId) {    
+    private BaUnitAreaBean getBaUnitArea(String baUnitId) {        
         BaUnitAreaTO baUnitAreaTO = WSManager.getInstance().getAdministrative().getBaUnitAreas(baUnitId);
         return TypeConverters.TransferObjectToBean(baUnitAreaTO, BaUnitAreaBean.class, null);
     }
@@ -764,9 +773,9 @@ public class PropertyPanel extends ContentPanel {
      * Open form to add new parcel.
      */
     private void addParcel() {
-
+        
         PropertyChangeListener listener = new PropertyChangeListener() {
-
+            
             @Override
             public void propertyChange(PropertyChangeEvent e) {
                 if (e.getNewValue() != null) {
@@ -774,14 +783,14 @@ public class PropertyPanel extends ContentPanel {
                 }
             }
         };
-
+        
         CreateParcelForm parcelForm = new CreateParcelForm(null, true);
-
+        
         parcelForm.setLocationRelativeTo(this);
         parcelForm.addPropertyChangeListener(CreateParcelForm.SELECTED_PARCEL, listener);
         parcelForm.setVisible(true);
         parcelForm.removePropertyChangeListener(CreateParcelForm.SELECTED_PARCEL, listener);
-
+        
     }
 
     /**
@@ -808,7 +817,7 @@ public class PropertyPanel extends ContentPanel {
      * Opens appropriate right form for editing.
      */
     private void editRight() {
-
+        
         if (baUnitBean1.getSelectedRight() != null) {
             openRightForm(baUnitBean1.getSelectedRight(), RrrBean.RRR_ACTION.EDIT);
         }
@@ -818,7 +827,7 @@ public class PropertyPanel extends ContentPanel {
      * Opens appropriate right form to extinguish selected right.
      */
     private void extinguishRight() {
-
+        
         if (baUnitBean1.getSelectedRight() != null) {
             openRightForm(baUnitBean1.getSelectedRight(), RrrBean.RRR_ACTION.CANCEL);
         }
@@ -862,7 +871,7 @@ public class PropertyPanel extends ContentPanel {
      * Opens paper title attachment.
      */
     private void viewDocument() {
-
+        
         if (documentsPanel1.getSourceListBean().getSelectedSource() != null) {
             documentsPanel1.getSourceListBean().getSelectedSource().openDocument();
         }
@@ -898,17 +907,17 @@ public class PropertyPanel extends ContentPanel {
                 && rrrTypes.getSelectedRrrType() == null) {
             return;
         }
-
+        
         if (rrrBean == null) {
             rrrBean = new RrrBean();
             rrrBean.setTypeCode(rrrTypes.getSelectedRrrType().getCode());
         }
-
+        
         RightFormListener rightFormListener = new RightFormListener();
         ContentPanel panel;
         String cardName = MainContentPanel.CARD_SIMPLE_RIGHT;
         String rrrCode = rrrBean.getRrrType().getCode();
-
+        
         if (rrrCode.equals(RrrBean.CODE_MORTGAGE)) {
             panel = new MortgagePanel(rrrBean, applicationBean, applicationService, action);
             cardName = MainContentPanel.CARD_MORTGAGE;
@@ -928,7 +937,7 @@ public class PropertyPanel extends ContentPanel {
                 || rrrCode.equalsIgnoreCase(RrrBean.CODE_ADMIN_PUBLIC_SERVITUDE)
                 || rrrCode.equalsIgnoreCase(RrrBean.CODE_MONUMENT)
                 || rrrCode.equalsIgnoreCase(RrrBean.CODE_LIFE_ESTATE)
-                || rrrCode.equalsIgnoreCase(RrrBean.CODE_CAVEAT)){
+                || rrrCode.equalsIgnoreCase(RrrBean.CODE_CAVEAT)) {
             panel = new SimpleRightholderPanel(rrrBean, applicationBean, applicationService, action);
             cardName = MainContentPanel.CARD_SIMPLE_OWNERSHIP;
         } else if (rrrCode.equalsIgnoreCase(RrrBean.CODE_OWNERSHIP)
@@ -939,50 +948,82 @@ public class PropertyPanel extends ContentPanel {
         } else {
             panel = new SimpleRightPanel(rrrBean, applicationBean, applicationService, action);
         }
-
+        
         panel.addPropertyChangeListener(SimpleRightPanel.UPDATED_RRR, rightFormListener);
         getMainContentPanel().addPanel(panel, cardName, true);
     }
+
+    private void calculateAreaSysreg() {
+//        if (btnNext.isEnabled()) { 
+
+        String cadastreObj = "";
+        for (int i = 0, n = baUnitBean1.getCadastreObjectList().getFilteredList().size(); i < n; i++) {            
+            if (cadastreObj == "") {
+                cadastreObj = baUnitBean1.getCadastreObjectList().getFilteredList().get(i).getId();
+            } else {
+                cadastreObj = cadastreObj + " " + baUnitBean1.getCadastreObjectList().getFilteredList().get(i).getId();
+            }
+        }
+        
+        SpatialValueAreaBean spatialValueAreaBean = getSpatialValueArea(cadastreObj);
+        if (spatialValueAreaBean.getCalculatedAreaSize() != null) {            
+            if (!spatialValueAreaBean.getCalculatedAreaSize().equals(new BigDecimal(0))) {
+                if (MessageUtility.displayMessage(ClientMessage.BAUNIT_CONFIRM_AREA,
+                        new Object[]{spatialValueAreaBean.getCalculatedAreaSize()}) == MessageUtility.BUTTON_ONE) {
+                    baUnitAreaBean1.setSize(spatialValueAreaBean.getCalculatedAreaSize());
+                }
+            }
+        }
+        
+        tabsMain.setEnabled(true);        
+        tabsMain.setSelectedIndex(tabsMain.indexOfComponent(jPanel7));
+        txtArea.requestFocus(true);
+//        }       
+    }    
     
-
     private void saveBaUnit(final boolean showMessage, final boolean closeOnSave) {
-
+        
         if (baUnitBean1.validate(true).size() > 0) {
             return;
         }
         
         if (!baUnitBean1.isValid()) {
-         return;   
+            return;            
         }
         
-        if (txtArea.isEditable()|| isBtnNext ) {
-
+        if (applicationService.getRequestTypeCode().contains("systematicRegn")) {            
+           calculateAreaSysreg();
+        }        
+        
+        if (txtArea.isEditable() || isBtnNext) {
+            
             if (baUnitAreaBean1 == null) {
                 return;
             } else {
                 java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle");
-                if (baUnitAreaBean1.getSize()== null)
-                {
+                
+                
+                if (baUnitAreaBean1.getSize() == null) {
                     MessageUtility.displayMessage(ClientMessage.CHECK_BAUNITAREA_VALUE,
                             new Object[]{bundle.getString("PropertyPanel.labArea.text")});
                     txtArea.setText(null);
                     txtArea.requestFocus();
                     return;
                 }
-
+                
                 
                 baUnitAreaBean1.setTypeCode("officialArea");
                 baUnitAreaBean1.setBaUnitId(baUnitBean1.getId());
             }
-        }   
-
+        }        
+        
         SolaTask<Void, Void> t = new SolaTask<Void, Void>() {
-
+            
             @Override
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_SAVING));
-               
-     
+                
+                
                 if (baUnitID != null && !baUnitID.equals("")) {
                     baUnitBean1.saveBaUnit(applicationService.getId());
                 } else {
@@ -991,34 +1032,34 @@ public class PropertyPanel extends ContentPanel {
                 if (closeOnSave) {
                     close();
                 }
-               
-               
-               if ( (!txtArea.getText().equals(null))&&txtArea.getText()!= ""&&(!txtArea.getText().isEmpty())) { 
-                   baUnitAreaBean1.createBaUnitArea(baUnitBean1.getId());
-                    if (txtArea.getText().indexOf('.')!= -1){
-                     formatSize(txtArea.getText());
+                
+                
+                if ((!txtArea.getText().equals(null)) && txtArea.getText() != "" && (!txtArea.getText().isEmpty())) {                    
+                    baUnitAreaBean1.createBaUnitArea(baUnitBean1.getId());
+                    if (txtArea.getText().indexOf('.') != -1) {
+                        formatSize(txtArea.getText());
                     }
-               } 
+                }                
                 return null;
             }
-
+            
             @Override
             public void taskDone() {
                 if (showMessage) {
                     MessageUtility.displayMessage(ClientMessage.BAUNIT_SAVED);
                 }
                 saveBaUnitState();
-            
+                
             }
         };
         TaskManager.getInstance().runTask(t);
     }
-
+    
     private void saveBaUnit() {
         if (baUnitBean1.validate(true).size() > 0) {
             return;
         }
-
+        
         if (baUnitID != null && !baUnitID.equals("")) {
             baUnitBean1.saveBaUnit(applicationService.getId());
         } else {
@@ -1026,21 +1067,20 @@ public class PropertyPanel extends ContentPanel {
         }
         saveBaUnitState();
     }
-
     
-    private String getTerminateMessage () {
-        String whichMessage = ClientMessage.BAUNIT_CONFIRM_TERMINATION;  
-         for(int i=0; i<baUnitBean1.getRrrFilteredList().size(); i++){
-           if ( baUnitBean1.getRrrFilteredList().get(i).getStatus().getCode().equals(StatusConstants.CURRENT)) { 
+    private String getTerminateMessage() {
+        String whichMessage = ClientMessage.BAUNIT_CONFIRM_TERMINATION;        
+        for (int i = 0; i < baUnitBean1.getRrrFilteredList().size(); i++) {
+            if (baUnitBean1.getRrrFilteredList().get(i).getStatus().getCode().equals(StatusConstants.CURRENT)) {                
                 whichMessage = ClientMessage.BAUNIT_CURRENT_RRR_EXIST_CONFIRM_TERMINATION;
-            return whichMessage;
-           }
-         }   
-           
-        return whichMessage;   
+                return whichMessage;
+            }
+        }        
+        
+        return whichMessage;        
     }
     
-    private void terminateBaUnit(){
+    private void terminateBaUnit() {
         if (baUnitBean1.getPendingActionCode() != null && baUnitBean1.getPendingActionCode().equals(TypeActionBean.CODE_CANCEL)) {
             saveBaUnit();
             baUnitBean1.cancelBaUnitTermination();
@@ -1048,7 +1088,7 @@ public class PropertyPanel extends ContentPanel {
             customizeForm();
             saveBaUnitState();
         } else {
-           String whichMessage = getTerminateMessage();
+            String whichMessage = getTerminateMessage();
             if (MessageUtility.displayMessage(whichMessage) == MessageUtility.BUTTON_ONE) {
                 saveBaUnit();
                 baUnitBean1.terminateBaUnit(applicationService.getId());
@@ -1058,7 +1098,7 @@ public class PropertyPanel extends ContentPanel {
             }
         }
     }
-    
+
     /**
      * Opens form to select or create document to be used as a paper title
      * document.
@@ -1067,9 +1107,9 @@ public class PropertyPanel extends ContentPanel {
         if (applicationDocumentsForm != null) {
             applicationDocumentsForm.dispose();
         }
-
+        
         PropertyChangeListener listener = new PropertyChangeListener() {
-
+            
             @Override
             public void propertyChange(PropertyChangeEvent e) {
                 SourceBean document = null;
@@ -1080,7 +1120,7 @@ public class PropertyPanel extends ContentPanel {
                 }
             }
         };
-
+        
         applicationDocumentsForm = new ApplicationDocumentsForm(applicationBean, null, true);
         applicationDocumentsForm.setLocationRelativeTo(this);
         applicationDocumentsForm.addPropertyChangeListener(
@@ -1096,7 +1136,7 @@ public class PropertyPanel extends ContentPanel {
     private void openPropertyForm(final RelatedBaUnitInfoBean relatedBaUnit) {
         if (relatedBaUnit != null && relatedBaUnit.getRelatedBaUnit() != null) {
             SolaTask t = new SolaTask<Void, Void>() {
-
+                
                 @Override
                 public Void doTask() {
                     setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PROPERTY));
@@ -1112,11 +1152,11 @@ public class PropertyPanel extends ContentPanel {
             TaskManager.getInstance().runTask(t);
         }
     }
-
+    
     private void saveBaUnitState() {
         MainForm.saveBeanState(baUnitBean1);
     }
-
+    
     @Override
     protected boolean panelClosing() {
         if (btnSave.isEnabled() && MainForm.checkSaveBeforeClose(baUnitBean1)) {
@@ -1125,7 +1165,7 @@ public class PropertyPanel extends ContentPanel {
         }
         return true;
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -2550,13 +2590,13 @@ private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     saveBaUnit(true, false);
     customizeForm();
 }//GEN-LAST:event_btnSaveActionPerformed
-
+    
     private void tableRightsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableRightsMouseClicked
         if (evt.getClickCount() > 1 && baUnitBean1.getSelectedRight() != null) {
             openRightForm(baUnitBean1.getSelectedRight(), RrrBean.RRR_ACTION.VIEW);
         }
     }//GEN-LAST:event_tableRightsMouseClicked
-
+    
 private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
     if (this.mapControl == null) {
         this.mapControl = new ControlsBundleForBaUnit();
@@ -2567,200 +2607,196 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
         this.mapPanel.add(this.mapControl, BorderLayout.CENTER);
     }
 }//GEN-LAST:event_formComponentShown
-
+    
     private void btnAddParentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddParentActionPerformed
         showNewTitleWizard(false);
     }//GEN-LAST:event_btnAddParentActionPerformed
-
+    
     private void btnRemoveParentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveParentActionPerformed
         baUnitBean1.removeSelectedParentBaUnit();
     }//GEN-LAST:event_btnRemoveParentActionPerformed
-
+    
     private void btnOpenParentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenParentActionPerformed
         openPropertyForm(baUnitBean1.getSelectedParentBaUnit());
     }//GEN-LAST:event_btnOpenParentActionPerformed
-
+    
     private void btnOpenChildActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenChildActionPerformed
         openPropertyForm(baUnitBean1.getSelectedChildBaUnit());
     }//GEN-LAST:event_btnOpenChildActionPerformed
-
+    
     private void menuOpenParentBaUnitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpenParentBaUnitActionPerformed
         btnOpenParentActionPerformed(evt);
     }//GEN-LAST:event_menuOpenParentBaUnitActionPerformed
-
+    
     private void menuAddParentBaUnitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAddParentBaUnitActionPerformed
         btnAddParentActionPerformed(evt);
     }//GEN-LAST:event_menuAddParentBaUnitActionPerformed
-
+    
     private void menuRemoveParentBaUnitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRemoveParentBaUnitActionPerformed
         btnRemoveParentActionPerformed(evt);
     }//GEN-LAST:event_menuRemoveParentBaUnitActionPerformed
-
+    
     private void menuOpenChildBaUnitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpenChildBaUnitActionPerformed
         btnOpenChildActionPerformed(evt);
     }//GEN-LAST:event_menuOpenChildBaUnitActionPerformed
-
+    
     private void btnTerminateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTerminateActionPerformed
         terminateBaUnit();
     }//GEN-LAST:event_btnTerminateActionPerformed
-
+    
     private void btnViewRightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewRightActionPerformed
         if (baUnitBean1.getSelectedRight() != null) {
             openRightForm(baUnitBean1.getSelectedRight(), RrrBean.RRR_ACTION.VIEW);
         }
     }//GEN-LAST:event_btnViewRightActionPerformed
-
+    
     private void btnPrintBaUnitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintBaUnitActionPerformed
         print();
     }//GEN-LAST:event_btnPrintBaUnitActionPerformed
-
+    
     private void btnViewPaperTitleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewPaperTitleActionPerformed
         viewDocument();
     }//GEN-LAST:event_btnViewPaperTitleActionPerformed
-
+    
     private void btnLinkPaperTitleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLinkPaperTitleActionPerformed
         linkDocument();
     }//GEN-LAST:event_btnLinkPaperTitleActionPerformed
-
+    
     private void menuAddParcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAddParcelActionPerformed
         addParcel();
     }//GEN-LAST:event_menuAddParcelActionPerformed
-
+    
     private void btnAddParcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddParcelActionPerformed
         addParcel();
     }//GEN-LAST:event_btnAddParcelActionPerformed
-
+    
     private void btnRemoveParcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveParcelActionPerformed
         removeParcel();
     }//GEN-LAST:event_btnRemoveParcelActionPerformed
-
+    
     private void menuRemoveParcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRemoveParcelActionPerformed
         removeParcel();
     }//GEN-LAST:event_menuRemoveParcelActionPerformed
-
+    
     private void menuVaryRightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuVaryRightActionPerformed
         varyRight();
     }//GEN-LAST:event_menuVaryRightActionPerformed
-
+    
     private void btnChangeRightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangeRightActionPerformed
         varyRight();
     }//GEN-LAST:event_btnChangeRightActionPerformed
-
+    
     private void menuExtinguishRightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuExtinguishRightActionPerformed
         extinguishRight();
     }//GEN-LAST:event_menuExtinguishRightActionPerformed
-
+    
     private void btnExtinguishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExtinguishActionPerformed
         extinguishRight();
     }//GEN-LAST:event_btnExtinguishActionPerformed
-
+    
     private void menuEditRightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEditRightActionPerformed
         editRight();
     }//GEN-LAST:event_menuEditRightActionPerformed
-
+    
     private void btnEditRightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditRightActionPerformed
         editRight();
     }//GEN-LAST:event_btnEditRightActionPerformed
-
+    
     private void menuRemoveRightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRemoveRightActionPerformed
         removeRight();
     }//GEN-LAST:event_menuRemoveRightActionPerformed
-
+    
     private void btnRemoveRightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveRightActionPerformed
         removeRight();
     }//GEN-LAST:event_btnRemoveRightActionPerformed
-
+    
     private void btnCreateRightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateRightActionPerformed
         createRight();
     }//GEN-LAST:event_btnCreateRightActionPerformed
-
+    
     private void menuRemoveNotationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRemoveNotationActionPerformed
         removeNotation();
     }//GEN-LAST:event_menuRemoveNotationActionPerformed
-
+    
     private void btnRemoveNotationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveNotationActionPerformed
         removeNotation();
     }//GEN-LAST:event_btnRemoveNotationActionPerformed
-
+    
     private void btnAddNotationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddNotationActionPerformed
         addNotation();
     }//GEN-LAST:event_btnAddNotationActionPerformed
-
+    
     private void mapPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_mapPanelComponentShown
         this.mapControl.setCadastreObjects(baUnitBean1.getCadastreObjectList());
     }//GEN-LAST:event_mapPanelComponentShown
-
+    
     private void btnNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextActionPerformed
 //        if (btnNext.isEnabled()) { 
 
-            String  cadastreObj="";
-              for (int i=0, n=baUnitBean1.getCadastreObjectList().getFilteredList().size(); i < n; i++) {    
-                  if (cadastreObj == "") {
-                    cadastreObj=baUnitBean1.getCadastreObjectList().getFilteredList().get(i).getId();
-                  } else {
-                   cadastreObj = cadastreObj+" "+baUnitBean1.getCadastreObjectList().getFilteredList().get(i).getId();
-                  }
-               }
-            
-              BaUnitBean baUnitBean2 = getBaUnitWithCadObject(this.whichBaUnitSelected.getNameFirstpart(),this.whichBaUnitSelected.getNameLastpart(),cadastreObj );
-              if (baUnitBean2.getCalculatedAreaSize()!= null) {   
-                   if (!baUnitBean2.getCalculatedAreaSize().equals(new BigDecimal(0)) ) {
-                     if (MessageUtility.displayMessage(ClientMessage.BAUNIT_CONFIRM_AREA,
-                            new Object[]{baUnitBean2.getCalculatedAreaSize()}) == MessageUtility.BUTTON_ONE) {
-                        baUnitAreaBean1.setSize(baUnitBean2.getCalculatedAreaSize());
-                     }
-                   }
+        String cadastreObj = "";
+        for (int i = 0, n = baUnitBean1.getCadastreObjectList().getFilteredList().size(); i < n; i++) {            
+            if (cadastreObj == "") {
+                cadastreObj = baUnitBean1.getCadastreObjectList().getFilteredList().get(i).getId();
+            } else {
+                cadastreObj = cadastreObj + " " + baUnitBean1.getCadastreObjectList().getFilteredList().get(i).getId();
+            }
+        }
+        
+        BaUnitBean baUnitBean2 = getBaUnitWithCadObject(this.whichBaUnitSelected.getNameFirstpart(), this.whichBaUnitSelected.getNameLastpart(), cadastreObj);
+        if (baUnitBean2.getCalculatedAreaSize() != null) {            
+            if (!baUnitBean2.getCalculatedAreaSize().equals(new BigDecimal(0))) {
+                if (MessageUtility.displayMessage(ClientMessage.BAUNIT_CONFIRM_AREA,
+                        new Object[]{baUnitBean2.getCalculatedAreaSize()}) == MessageUtility.BUTTON_ONE) {
+                    baUnitAreaBean1.setSize(baUnitBean2.getCalculatedAreaSize());
                 }
-              
-            tabsMain.setEnabled(true);    
-            tabsMain.setSelectedIndex(tabsMain.indexOfComponent(jPanel7));
-            txtArea.requestFocus(true);
+            }
+        }
+        
+        tabsMain.setEnabled(true);        
+        tabsMain.setSelectedIndex(tabsMain.indexOfComponent(jPanel7));
+        txtArea.requestFocus(true);
 //        }       
     }//GEN-LAST:event_btnNextActionPerformed
     
-    
-     private void btnNextAction() {                                        
+    private void btnNextAction() {
 //        if (btnNext.isEnabled()) { 
 
-            String  cadastreObj="";
-              for (int i=0, n=baUnitBean1.getCadastreObjectList().getFilteredList().size(); i < n; i++) {    
-                  if (cadastreObj == "") {
-                    cadastreObj=baUnitBean1.getCadastreObjectList().getFilteredList().get(i).getId();
-                  } else {
-                   cadastreObj = cadastreObj+" "+baUnitBean1.getCadastreObjectList().getFilteredList().get(i).getId();
-                  }
-               }
-            
-              BaUnitBean baUnitBean2 = getBaUnitWithCadObject(this.whichBaUnitSelected.getNameFirstpart(),this.whichBaUnitSelected.getNameLastpart(),cadastreObj );
-              if (baUnitBean2.getCalculatedAreaSize()!= null) {   
-                   if (!baUnitBean2.getCalculatedAreaSize().equals(new BigDecimal(0)) ) {
-                     if (MessageUtility.displayMessage(ClientMessage.BAUNIT_CONFIRM_AREA,
-                            new Object[]{baUnitBean2.getCalculatedAreaSize()}) == MessageUtility.BUTTON_ONE) {
-                        baUnitAreaBean1.setSize(baUnitBean2.getCalculatedAreaSize());
-                     }
-                   }
+        String cadastreObj = "";
+        for (int i = 0, n = baUnitBean1.getCadastreObjectList().getFilteredList().size(); i < n; i++) {            
+            if (cadastreObj == "") {
+                cadastreObj = baUnitBean1.getCadastreObjectList().getFilteredList().get(i).getId();
+            } else {
+                cadastreObj = cadastreObj + " " + baUnitBean1.getCadastreObjectList().getFilteredList().get(i).getId();
+            }
+        }
+        
+        BaUnitBean baUnitBean2 = getBaUnitWithCadObject(this.whichBaUnitSelected.getNameFirstpart(), this.whichBaUnitSelected.getNameLastpart(), cadastreObj);
+        if (baUnitBean2.getCalculatedAreaSize() != null) {            
+            if (!baUnitBean2.getCalculatedAreaSize().equals(new BigDecimal(0))) {
+                if (MessageUtility.displayMessage(ClientMessage.BAUNIT_CONFIRM_AREA,
+                        new Object[]{baUnitBean2.getCalculatedAreaSize()}) == MessageUtility.BUTTON_ONE) {
+                    baUnitAreaBean1.setSize(baUnitBean2.getCalculatedAreaSize());
                 }
-              
-            tabsMain.setEnabled(true);    
-            tabsMain.setSelectedIndex(tabsMain.indexOfComponent(jPanel7));
-            txtArea.requestFocus(true);
+            }
+        }
+        
+        tabsMain.setEnabled(true);        
+        tabsMain.setSelectedIndex(tabsMain.indexOfComponent(jPanel7));
+        txtArea.requestFocus(true);
 //        }       
-    }                                       
-    
-    
+    }    
     
     private void btnViewHistoricRightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewHistoricRightActionPerformed
         if (baUnitBean1.getSelectedHistoricRight() != null) {
             openRightForm(baUnitBean1.getSelectedHistoricRight(), RrrBean.RRR_ACTION.VIEW);
         }
     }//GEN-LAST:event_btnViewHistoricRightActionPerformed
-
+    
     private void tableRightsHistoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableRightsHistoryMouseClicked
         if (evt.getClickCount() > 1 && baUnitBean1.getSelectedHistoricRight() != null) {
             openRightForm(baUnitBean1.getSelectedHistoricRight(), RrrBean.RRR_ACTION.VIEW);
         }
     }//GEN-LAST:event_tableRightsHistoryMouseClicked
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel areaPanel;
     private org.sola.clients.beans.administrative.BaUnitAreaBean baUnitAreaBean1;
