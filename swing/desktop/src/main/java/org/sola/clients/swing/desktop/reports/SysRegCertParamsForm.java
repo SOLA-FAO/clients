@@ -138,7 +138,7 @@ public class SysRegCertParamsForm extends javax.swing.JDialog {
             }
         }
 
-        documentPanel.txtDocRefNumber.setText(reportdate);
+        documentPanel.txtDocRefNumber.setText(this.location);  
         documentPanel.txtDocRecordDate.setText(reportdate);
         documentPanel.txtDocRecordDate.setValue(this.currentDate);
         documentPanel.txtDescription.setText(this.reportTogenerate);
@@ -257,11 +257,13 @@ public class SysRegCertParamsForm extends javax.swing.JDialog {
         }
 
         String baUnitId = null;
+        String nrTmp = null;
         int i = 0;
        
         for (Iterator<SysRegCertificatesBean> it = sysRegCertificatesListBean.getSysRegCertificates().iterator(); it.hasNext();) {
             SysRegCertificatesBean appBaunit = it.next();
              baUnitId = appBaunit.getBaUnitId();
+             
             this.reportTogenerate = baUnitId + "_" + tmpLocation + "_" + this.reportdate + ".pdf";
 //            showReport(ReportManager.getBaUnitReport(getBaUnit(baUnitId)));
             showReport(ReportManager.getSysRegCertificatesReport(getBaUnit(baUnitId),tmpLocation));
