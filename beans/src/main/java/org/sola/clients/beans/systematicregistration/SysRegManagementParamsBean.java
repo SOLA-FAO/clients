@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.sola.clients.beans.administrative;
+package org.sola.clients.beans.systematicregistration;
+import org.sola.clients.beans.administrative.*;
 import java.util.Date;
 import javax.validation.constraints.NotNull;
 import org.sola.clients.beans.AbstractBindingBean;
