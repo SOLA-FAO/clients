@@ -2,12 +2,9 @@
 
 <Form version="1.5" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
   <NonVisualComponents>
-    <Component class="org.sola.clients.beans.administrative.SysRegManagementParamsBean" name="searchParams">
+    <Component class="org.sola.clients.beans.systematicregistration.SysRegManagementParamsBean" name="searchParams">
     </Component>
-    <Component class="org.sola.clients.beans.administrative.SysRegManagementBean" name="sysRegManagementBean">
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="createSysRegManagementBean()"/>
-      </AuxValues>
+    <Component class="org.sola.clients.beans.systematicregistration.SysRegManagementBean" name="sysRegManagementBean">
     </Component>
   </NonVisualComponents>
   <Properties>
@@ -15,7 +12,6 @@
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
-    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
   </SyntheticProperties>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="1"/>
