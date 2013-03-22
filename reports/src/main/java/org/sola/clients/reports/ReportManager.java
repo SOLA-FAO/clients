@@ -40,17 +40,12 @@ import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
-
 import org.sola.clients.beans.administrative.BaUnitBean;
-import org.sola.clients.beans.administrative.SysRegManagementBean;
 import org.sola.clients.beans.application.*;
 import org.sola.clients.beans.system.BrReportBean;
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.beans.system.BrListBean;
-import org.sola.clients.beans.systematicregistration.OwnerNameListingListBean;
-import org.sola.clients.beans.systematicregistration.ParcelNumberListingListBean;
-import org.sola.clients.beans.systematicregistration.StateLandListingListBean;
-import org.sola.clients.beans.systematicregistration.SysRegCertificatesListBean;
+import org.sola.clients.beans.systematicregistration.*;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
@@ -522,5 +517,37 @@ public class ReportManager {
             return null;
         }
     }
+    
+//      /**
+//     * Generates and displays <b>BA Unit</b> report.
+//     *
+//     * @param appBean Application bean containing data for the report.
+//     */
+//    public static JasperPrint getSysRegStatusReport(SysRegStatusBean statusBean, Date dateFrom, Date dateTo, String nameLastpart) {
+//        
+//        HashMap inputParameters = new HashMap();
+//        Date currentdate = new Date(System.currentTimeMillis());
+//        inputParameters.put("REPORT_LOCALE", Locale.getDefault());
+//
+//        inputParameters.put("CURRENT_DATE", currentdate);
+//
+//        inputParameters.put("USER", SecurityBean.getCurrentUser().getFullUserName());
+//        inputParameters.put("FROMDATE", dateFrom);
+//        inputParameters.put("TODATE", dateTo);
+//        inputParameters.put("AREA", nameLastpart);
+//        SysRegStatusBean[] beans = new SysRegStatusBean[1];
+//        beans[0] = statusBean;
+//        System.out.println("statusBeanQUI  "+statusBean.getSPnoApp());
+//        JRDataSource jds = new JRBeanArrayDataSource(beans);
+//        try {
+//            return JasperFillManager.fillReport(
+//                    ReportManager.class.getResourceAsStream("/reports/SysRegStatus.jasper"),
+//                    inputParameters, jds);
+//        } catch (JRException ex) {
+//            MessageUtility.displayMessage(ClientMessage.REPORT_GENERATION_FAILED,
+//                    new Object[]{ex.getLocalizedMessage()});
+//            return null;
+//        }
+//    }
 
 }
