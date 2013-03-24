@@ -452,7 +452,7 @@
                         <Property name="name" type="java.lang.String" value="txtAmount" noResource="true"/>
                       </Properties>
                       <BindingProperties>
-                        <BindingProperty name="value" source="rrrBean" sourcePath="${mortgageAmount}" target="txtAmount" targetPath="value" updateStrategy="0" immediately="false"/>
+                        <BindingProperty name="value" source="rrrBean" sourcePath="${amount}" target="txtAmount" targetPath="value" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
                     </Component>
                   </SubComponents>

@@ -55,6 +55,7 @@ import org.sola.clients.swing.common.controls.LanguageCombobox;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.desktop.administrative.BaUnitSearchPanel;
+import org.sola.clients.swing.desktop.administrative.RightsExportForm;
 import org.sola.clients.swing.desktop.application.ApplicationPanel;
 import org.sola.clients.swing.desktop.application.ApplicationSearchPanel;
 import org.sola.clients.swing.desktop.cadastre.MapPanelForm;
@@ -578,7 +579,16 @@ public class MainForm extends javax.swing.JFrame {
         };
         TaskManager.getInstance().runTask(t);
     }
-
+     
+    private void showRightsExportPanel(){
+        if(getMainContentPanel().isPanelOpened(MainContentPanel.CARD_RIGHT_EXPORT)){
+            getMainContentPanel().showPanel(MainContentPanel.CARD_RIGHT_EXPORT);
+        } else {
+            RightsExportForm form = new RightsExportForm();
+            getMainContentPanel().addPanel(form, MainContentPanel.CARD_RIGHT_EXPORT, true);
+        }
+    }
+    
     /**
      * Opens {@link PowerOfAttorneyViewForm} form and shows provided document.
      *
@@ -639,6 +649,7 @@ public class MainForm extends javax.swing.JFrame {
         menuBaUnitSearch = new javax.swing.JMenuItem();
         menuDocumentSearch = new javax.swing.JMenuItem();
         menuPersons = new javax.swing.JMenuItem();
+        menuExportRights = new javax.swing.JMenuItem();
         menuMap = new javax.swing.JMenu();
         menuShowMap = new javax.swing.JMenuItem();
         menuReportsDesktop = new javax.swing.JMenu();
@@ -658,7 +669,6 @@ public class MainForm extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/Bundle"); // NOI18N
         setTitle(bundle.getString("MainForm.title")); // NOI18N
-        setPreferredSize(new java.awt.Dimension(990, 621));
 
         applicationsMain.setFloatable(false);
         applicationsMain.setRollover(true);
@@ -925,6 +935,15 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         menuSearch.add(menuPersons);
+
+        menuExportRights.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/export.png"))); // NOI18N
+        menuExportRights.setText(bundle.getString("MainForm.menuExportRights.text")); // NOI18N
+        menuExportRights.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuExportRightsActionPerformed(evt);
+            }
+        });
+        menuSearch.add(menuExportRights);
 
         menuBar.add(menuSearch);
 
@@ -1214,6 +1233,10 @@ public class MainForm extends javax.swing.JFrame {
         languageCombobox.confirmedChange = true;
     }//GEN-LAST:event_languageComboboxActionPerformed
 
+    private void menuExportRightsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuExportRightsActionPerformed
+        showRightsExportPanel();
+    }//GEN-LAST:event_menuExportRightsActionPerformed
+
     private void editPassword() {
         showPasswordPanel();
     }
@@ -1262,6 +1285,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuCertificates;
     private javax.swing.JMenuItem menuDefaultLogLevel;
     private javax.swing.JMenuItem menuDocumentSearch;
+    private javax.swing.JMenuItem menuExportRights;
     private javax.swing.JMenuItem menuItemMapPublicDisplay;
     private javax.swing.JMenuItem menuLangEN;
     private javax.swing.JMenuItem menuLangIT;

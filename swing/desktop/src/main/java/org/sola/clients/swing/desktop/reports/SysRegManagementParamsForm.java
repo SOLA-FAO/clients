@@ -71,8 +71,8 @@ public class SysRegManagementParamsForm extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        searchParams = new org.sola.clients.beans.administrative.SysRegManagementParamsBean();
         sysRegManagementBean = createSysRegManagementBean();
+        searchParams = new org.sola.clients.beans.administrative.SysRegManagementParamsBean();
         reportViewerPanel = new org.sola.clients.swing.ui.reports.ReportViewerPanel();
         labHeader = new javax.swing.JLabel();
         txtFromDate = new javax.swing.JFormattedTextField();

@@ -40,6 +40,7 @@ import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractTransactionedBean;
+import org.sola.clients.beans.administrative.validation.LeaseValidationGroup;
 import org.sola.clients.beans.administrative.validation.MortgageValidationGroup;
 import org.sola.clients.beans.administrative.validation.OwnershipValidationGroup;
 import org.sola.clients.beans.administrative.validation.SimpleOwnershipValidationGroup;
@@ -93,7 +94,7 @@ public class RrrBean extends AbstractTransactionedBean {
     public static final String RRR_TYPE_PROPERTY = "rrrType";
     public static final String EXPIRATION_DATE_PROPERTY = "expirationDate";
     public static final String SHARE_PROPERTY = "share";
-    public static final String MORTGAGE_AMOUNT_PROPERTY = "mortgageAmount";
+    public static final String AMOUNT_PROPERTY = "amount";
     public static final String MORTGAGE_INTEREST_RATE_PROPERTY = "mortgageInterestRate";
     public static final String MORTGAGE_RANKING_PROPERTY = "mortgageRanking";
     public static final String MORTGAGE_TYPE_CODE_PROPERTY = "mortgageTypeCode";
@@ -104,17 +105,21 @@ public class RrrBean extends AbstractTransactionedBean {
     public static final String SELECTED_SHARE_PROPERTY = "selectedShare";
     public static final String SELECTED_PROPERTY = "selected";
     public static final String SELECTED_RIGHTHOLDER_PROPERTY = "selectedRightHolder";
+    public static final String DUE_DATE_PROPERTY = "dueDate";
+    
     private String baUnitId;
     private String nr;
     @Past(message = ClientMessage.CHECK_REGISTRATION_DATE, payload = Localized.class)
     private Date registrationDate;
     private String transactionId;
-    @NotNull(message = ClientMessage.CHECK_NOTNULL_EXPIRATION, payload = Localized.class, groups = {MortgageValidationGroup.class})
+    @NotNull(message = ClientMessage.CHECK_NOTNULL_EXPIRATION, payload = Localized.class, 
+            groups = {MortgageValidationGroup.class, LeaseValidationGroup.class})
     @Future(message = ClientMessage.CHECK_FUTURE_EXPIRATION, payload = Localized.class,
             groups = {MortgageValidationGroup.class})
     private Date expirationDate;
     @NotNull(message = ClientMessage.CHECK_NOTNULL_MORTGAGEAMOUNT, payload = Localized.class, groups = {MortgageValidationGroup.class})
-    private BigDecimal mortgageAmount;
+    private BigDecimal amount;
+    private Date dueDate;
     @NotNull(message = ClientMessage.CHECK_NOTNULL_MORTAGAETYPE, payload = Localized.class, groups = {MortgageValidationGroup.class})
     private MortgageTypeBean mortgageType;
     private BigDecimal mortgageInterestRate;
@@ -264,12 +269,22 @@ public class RrrBean extends AbstractTransactionedBean {
         this.expirationDate = expirationDate;
     }
 
-    public BigDecimal getMortgageAmount() {
-        return mortgageAmount;
+    public BigDecimal getAmount() {
+        return amount;
     }
 
-    public void setMortgageAmount(BigDecimal mortgageAmount) {
-        this.mortgageAmount = mortgageAmount;
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public Date getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(Date nextDueDate) {
+        Date oldValue = this.dueDate;
+        this.dueDate = nextDueDate;
+        propertySupport.firePropertyChange(DUE_DATE_PROPERTY, oldValue, this.dueDate);
     }
 
     public BigDecimal getMortgageInterestRate() {
@@ -380,7 +395,8 @@ public class RrrBean extends AbstractTransactionedBean {
         return rightHolderList.getFilteredList();
     }
 
-    @Size(min = 1, groups = {SimpleOwnershipValidationGroup.class}, message = ClientMessage.CHECK_SIZE_OWNERSLIST, payload = Localized.class)
+    @Size(min = 1, groups = {SimpleOwnershipValidationGroup.class, LeaseValidationGroup.class}, 
+            message = ClientMessage.CHECK_SIZE_OWNERSLIST, payload = Localized.class)
     private ObservableList<PartySummaryBean> getFilteredOwnersList() {
         return rightHolderList.getFilteredList();
     }

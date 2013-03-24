@@ -104,8 +104,10 @@ public class PartySummaryBean extends AbstractIdBean {
      */
     public String getFullName() {
         String fullName = getName() == null ? "" : getName();
-        fullName = getLastName() == null ? fullName : fullName + " " + getLastName();
-        return fullName.trim();
+        if(getLastName() != null){
+            fullName = fullName.isEmpty() ? getLastName() : fullName + " " + getLastName();
+        }
+        return fullName;
     }
 
     public PartyTypeBean getType() {

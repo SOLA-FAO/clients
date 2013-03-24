@@ -81,6 +81,3 @@ public class SysRegManagementParamsBean  extends AbstractBindingBean {
     }
     
 }
-
-
-

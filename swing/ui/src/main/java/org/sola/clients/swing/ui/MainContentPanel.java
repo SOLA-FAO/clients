@@ -64,6 +64,7 @@ public class MainContentPanel extends javax.swing.JPanel {
     public final static String CARD_MORTGAGE = "mortgagePanel";
     public final static String CARD_SIMPLE_RIGHT = "simpleRightPanel";
     public final static String CARD_OWNERSHIP = "ownershipPanel";
+    public final static String CARD_LEASE = "leasePanel";
     public final static String CARD_SIMPLE_OWNERSHIP = "simpleOwnershipPanel";
     public final static String CARD_OWNERSHIP_SHARE = "ownershipSharePanel";
     public final static String CARD_TRANSACTIONED_DOCUMENT = "transactionedDocumentPanel";
@@ -84,7 +85,7 @@ public class MainContentPanel extends javax.swing.JPanel {
     public final static String CARD_VIEW_SOURCE = "viewSourcePanel";
     public final static String CARD_VIEW_POWER_OF_ATTORNEY = "viewPowerOfAttorneyPanel";
     public final static String CARD_USER_PROFILE = "userProfile";
-
+    public final static String CARD_RIGHT_EXPORT = "rightsExportPanel";
     
     private HashMap<String, Component> cards;
     private ArrayList<String> cardsIndex;
