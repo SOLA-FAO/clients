@@ -35,8 +35,7 @@ import java.util.Locale;
 import javax.swing.JFormattedTextField;
 import javax.swing.JTextField;
 import net.sf.jasperreports.engine.JasperPrint;
-import org.sola.clients.beans.systematicregistration.SysRegManagementBean;
-//import org.sola.clients.beans.systematicregistration.SysRegStatusBean;
+import org.sola.clients.beans.systematicregistration.*;
 import org.sola.clients.reports.ReportManager;
 import org.sola.clients.swing.common.controls.CalendarForm;
 import org.sola.clients.swing.desktop.ReportViewerForm;
@@ -52,17 +51,17 @@ public class SysRegManagementParamsForm extends javax.swing.JDialog {
 
     private String location;
     private String tmpLocation = "";
-//    private String whichReport;
+    private String whichReport;
     /**
      * Creates new form SysRegManagementParamsForm
      */
-//    public SysRegManagementParamsForm(java.awt.Frame parent, boolean modal, String whichReport) {
-//        super(parent, modal);
-//        initComponents();
-//        this.labSearchArea.setVisible(false);
-//        this.cadastreObjectSearch.setVisible(false);
-//        this.whichReport=whichReport;
-//    }
+    public SysRegManagementParamsForm(java.awt.Frame parent, boolean modal, String whichReport) {
+        super(parent, modal);
+        initComponents();
+        this.labSearchArea.setVisible(false);
+        this.cadastreObjectSearch.setVisible(false);
+        this.whichReport=whichReport;
+    }
     
       /**
      * Creates new form SysRegManagementParamsForm
@@ -72,7 +71,7 @@ public class SysRegManagementParamsForm extends javax.swing.JDialog {
         initComponents();
         this.labSearchArea.setVisible(false);
         this.cadastreObjectSearch.setVisible(false);
-//        this.whichReport=whichReport;
+        this.whichReport=whichReport;
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -85,6 +84,7 @@ public class SysRegManagementParamsForm extends javax.swing.JDialog {
 
         searchParams = new org.sola.clients.beans.systematicregistration.SysRegManagementParamsBean();
         sysRegManagementBean = new org.sola.clients.beans.systematicregistration.SysRegManagementBean();
+        sysRegStatusBean = new org.sola.clients.beans.systematicregistration.SysRegStatusBean();
         reportViewerPanel = new org.sola.clients.swing.ui.reports.ReportViewerPanel();
         labHeader = new javax.swing.JLabel();
         txtFromDate = new javax.swing.JFormattedTextField();
@@ -253,12 +253,12 @@ public class SysRegManagementParamsForm extends javax.swing.JDialog {
         return sysRegManagementBean;
      }
      
-//     private SysRegStatusBean createSysRegStatusBean() {
-//    if (sysRegStatusBean == null) {
-//            sysRegStatusBean = new SysRegStatusBean();
-//        }
-//        return sysRegStatusBean;
-//     }
+     private SysRegStatusBean createSysRegStatusBean() {
+    if (sysRegStatusBean == null) {
+            sysRegStatusBean = new SysRegStatusBean();
+        }
+        return sysRegStatusBean;
+     }
     
     private void viewReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewReportActionPerformed
         boolean dateFilled = false;
@@ -295,14 +295,14 @@ public class SysRegManagementParamsForm extends javax.swing.JDialog {
 //        System.out.println(txtFromDate.getValue());
 //        System.out.println(txtToDate.getValue());
         if (dateFilled) {
-//            if (this.whichReport.contentEquals("sysRegManagementBean") ) {
+            if (this.whichReport.contentEquals("sysRegManagementBean") ) {
               sysRegManagementBean.passParameter(searchParams);
               showReport(ReportManager.getSysRegManagementReport(sysRegManagementBean, tmpFrom, tmpTo, tmpLocation));
-//            }
-//            if (this.whichReport.contentEquals("sysRegStatusBean")) {
-//              sysRegStatusBean.passParameter(searchParams);
-//              showReport(ReportManager.getSysRegStatusReport(sysRegStatusBean, tmpFrom, tmpTo, tmpLocation));
-//            }
+            }
+            if (this.whichReport.contentEquals("sysRegStatusBean")) {
+              sysRegStatusBean.passParameter(searchParams);
+              showReport(ReportManager.getSysRegStatusReport(sysRegStatusBean, tmpFrom, tmpTo, tmpLocation));
+            }
 //            if (this.whichReport == "sysRegWorkBean") {
 //              sysRegWorkBean.passParameter(searchParams);
 //              showReport(ReportManager.getSysRegManagementReport(sysRegManagementBean, tmpFrom, tmpTo, tmpLocation));
@@ -323,6 +323,7 @@ public class SysRegManagementParamsForm extends javax.swing.JDialog {
     private org.sola.clients.swing.ui.reports.ReportViewerPanel reportViewerPanel;
     private org.sola.clients.beans.systematicregistration.SysRegManagementParamsBean searchParams;
     private org.sola.clients.beans.systematicregistration.SysRegManagementBean sysRegManagementBean;
+    private org.sola.clients.beans.systematicregistration.SysRegStatusBean sysRegStatusBean;
     private javax.swing.JFormattedTextField txtFromDate;
     private javax.swing.JFormattedTextField txtToDate;
     private javax.swing.JButton viewReport;

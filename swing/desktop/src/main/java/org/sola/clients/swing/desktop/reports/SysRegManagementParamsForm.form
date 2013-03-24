@@ -6,6 +6,8 @@
     </Component>
     <Component class="org.sola.clients.beans.systematicregistration.SysRegManagementBean" name="sysRegManagementBean">
     </Component>
+    <Component class="org.sola.clients.beans.systematicregistration.SysRegStatusBean" name="sysRegStatusBean">
+    </Component>
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>

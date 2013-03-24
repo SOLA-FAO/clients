@@ -15,7 +15,6 @@
  */
 package org.sola.clients.beans.systematicregistration;
 
-import org.sola.clients.beans.administrative.*;
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
