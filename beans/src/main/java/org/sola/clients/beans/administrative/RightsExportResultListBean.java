@@ -199,7 +199,7 @@ public class RightsExportResultListBean extends AbstractBindingBean {
                         + "BaUnitId;"
                         + "NameFirstPart;"
                         + "NameLastPart;"
-                        + "PropCode"
+                        + "PropCode;"
                         + "Area;"
                         + "AreaFormatted;"
                         + "RightId;"
@@ -208,6 +208,7 @@ public class RightsExportResultListBean extends AbstractBindingBean {
                         + "RegistrationDate;"
                         + "ExpirationDate;"
                         + "Amount;");
+            out.newLine();
             
             for (RightsExportResultBean right : list) {
                 i = i - 1;
