@@ -32,7 +32,7 @@
         </pluginRepository>
     </pluginRepositories>
     <properties>
-        <geotools.version>8.3</geotools.version>
+        <geotools.version>8.7</geotools.version>
     </properties>
     <dependencies>
         <dependency>
