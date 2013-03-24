@@ -1252,6 +1252,10 @@ public class MainForm extends javax.swing.JFrame {
         openSysRegManagementParamsForm("sysRegManagementBean");
     }//GEN-LAST:event_menuManagementActionPerformed
 
+    private void menuExportRightsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuExportRightsActionPerformed
+        showRightsExportPanel();
+    }//GEN-LAST:event_menuExportRightsActionPerformed
+
     private void editPassword() {
         showPasswordPanel();
     }
