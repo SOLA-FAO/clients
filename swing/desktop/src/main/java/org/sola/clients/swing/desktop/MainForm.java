@@ -34,7 +34,6 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.net.URL;
@@ -68,7 +67,6 @@ import org.sola.clients.swing.desktop.reports.SysRegManagementParamsForm;
 import org.sola.clients.swing.desktop.source.DocumentSearchForm;
 import org.sola.clients.swing.desktop.source.DocumentViewForm;
 import org.sola.clients.swing.desktop.source.PowerOfAttorneyViewForm;
-import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.common.RolesConstants;
 import org.sola.common.help.HelpUtility;
@@ -89,52 +87,47 @@ public class MainForm extends javax.swing.JFrame {
     // Create a variable holding the listener
     KeyAdapter keyAdapterAppSearch = new KeyAdapter() {
 
+        @Override
         public void keyPressed(KeyEvent e) {
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                 launchAppSearchMethod(searchApplicationPanel);
-            };
-
+            }
         }
-    ;
     };
     
    // Create a variable holding the listener
     KeyAdapter keyAdapterDocSearch = new KeyAdapter() {
 
+        @Override
         public void keyPressed(KeyEvent e) {
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                 launchDocSearchMethod(searchDocPanel);
-            };
-
+            }
         }
-    ;
     };
     
     
     // Create a variable holding the listener
     KeyAdapter keyAdapterBaUnitSearch = new KeyAdapter() {
 
+        @Override
         public void keyPressed(KeyEvent e) {
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                 launchBaUnitSearchMethod(searchBaUnitPanel);
-            };
-
+            }
         }
-    ;
     };
     
     
     // Create a variable holding the listener
     KeyAdapter keyAdapterPartySearch = new KeyAdapter() {
 
+        @Override
         public void keyPressed(KeyEvent e) {
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                 launchPartySearchMethod(searchPartyPanel);
-            };
-
+            }
         }
-    ;
-
     };
 
     public ApplicationSearchPanel getSearchApplicationPanel() {
@@ -195,7 +188,6 @@ public class MainForm extends javax.swing.JFrame {
         HelpUtility.getInstance().registerHelpMenu(jmiContextHelp, "overview");
 
         this.addWindowListener(new java.awt.event.WindowAdapter() {
-
             @Override
             public void windowOpened(WindowEvent e) {
                 postInit();
@@ -233,6 +225,7 @@ public class MainForm extends javax.swing.JFrame {
 
         menuSearchApplication.setEnabled(btnSearchApplications.isEnabled());
         menuNewApplication.setEnabled(btnNewApplication.isEnabled());
+        menuExportRights.setEnabled(SecurityBean.isInRole(RolesConstants.ADMINISTRATIVE_RIGHTS_EXPORT));
 
         // Load dashboard
         openDashBoard();
@@ -633,6 +626,7 @@ public class MainForm extends javax.swing.JFrame {
         pnlContent = new org.sola.clients.swing.ui.MainContentPanel();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
+        menuExportRights = new javax.swing.JMenuItem();
         javax.swing.JMenuItem menuExitItem = new javax.swing.JMenuItem();
         menuView = new javax.swing.JMenu();
         menuLanguage = new javax.swing.JMenu();
@@ -649,7 +643,6 @@ public class MainForm extends javax.swing.JFrame {
         menuBaUnitSearch = new javax.swing.JMenuItem();
         menuDocumentSearch = new javax.swing.JMenuItem();
         menuPersons = new javax.swing.JMenuItem();
-        menuExportRights = new javax.swing.JMenuItem();
         menuMap = new javax.swing.JMenu();
         menuShowMap = new javax.swing.JMenuItem();
         menuReportsDesktop = new javax.swing.JMenu();
@@ -822,6 +815,15 @@ public class MainForm extends javax.swing.JFrame {
 
         fileMenu.setText(bundle.getString("MainForm.fileMenu.text")); // NOI18N
 
+        menuExportRights.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/export.png"))); // NOI18N
+        menuExportRights.setText(bundle.getString("MainForm.menuExportRights.text")); // NOI18N
+        menuExportRights.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuExportRightsActionPerformed(evt);
+            }
+        });
+        fileMenu.add(menuExportRights);
+
         menuExitItem.setText(bundle.getString("MainForm.menuExitItem.text")); // NOI18N
         menuExitItem.setToolTipText(bundle.getString("MainForm.menuExitItem.toolTipText")); // NOI18N
         menuExitItem.addActionListener(new java.awt.event.ActionListener() {
@@ -937,15 +939,6 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         menuSearch.add(menuPersons);
-
-        menuExportRights.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/export.png"))); // NOI18N
-        menuExportRights.setText(bundle.getString("MainForm.menuExportRights.text")); // NOI18N
-        menuExportRights.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuExportRightsActionPerformed(evt);
-            }
-        });
-        menuSearch.add(menuExportRights);
 
         menuBar.add(menuSearch);
 
