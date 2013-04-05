@@ -65,7 +65,6 @@ import org.sola.clients.swing.desktop.reports.SysRegCertParamsForm;
 import org.sola.clients.swing.desktop.reports.SysRegListingParamsForm;
 import org.sola.clients.swing.desktop.reports.SysRegManagementParamsForm;
 import org.sola.clients.swing.desktop.source.DocumentSearchForm;
-import org.sola.clients.swing.desktop.source.DocumentViewForm;
 import org.sola.clients.swing.desktop.source.PowerOfAttorneyViewForm;
 import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.common.RolesConstants;
@@ -554,25 +553,6 @@ public class MainForm extends javax.swing.JFrame {
         TaskManager.getInstance().runTask(t);
     }
 
-    /**
-     * Opens {@link DocumentViewForm} form and shows provided document.
-     *
-     * @param source Source to show on the form.
-     */
-    public void openDocumentViewForm(final SourceBean source) {
-        SolaTask t = new SolaTask<Void, Void>() {
-
-            @Override
-            public Void doTask() {
-                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_DOCUMENT_FORM_OPENING));
-                DocumentViewForm form = new DocumentViewForm(source);
-                getMainContentPanel().addPanel(form, MainContentPanel.CARD_VIEW_SOURCE, true);
-                return null;
-            }
-        };
-        TaskManager.getInstance().runTask(t);
-    }
-     
     private void showRightsExportPanel(){
         if(getMainContentPanel().isPanelOpened(MainContentPanel.CARD_RIGHT_EXPORT)){
             getMainContentPanel().showPanel(MainContentPanel.CARD_RIGHT_EXPORT);

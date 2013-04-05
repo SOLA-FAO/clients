@@ -39,7 +39,6 @@ import org.sola.clients.swing.ui.renderers.DateTimeRenderer;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 import java.util.Locale;
-import javax.swing.RowSorter;
 import org.sola.clients.swing.desktop.application.ApplicationPanel;
 import org.sola.clients.beans.application.ApplicationSearchResultBean;
 import org.sola.clients.beans.application.ApplicationSearchResultsListBean;
@@ -49,6 +48,7 @@ import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
+import org.sola.clients.swing.ui.renderers.BooleanCellRenderer;
 import org.sola.common.RolesConstants;
 
 /**
@@ -351,7 +351,6 @@ public class DashBoardPanel extends ContentPanel {
         unassignedScrollPanel.setName("unassignedScrollPanel"); // NOI18N
         unassignedScrollPanel.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
 
-        tbUnassigned.setColumnSelectionAllowed(true);
         tbUnassigned.setComponentPopupMenu(popUpUnassignedApplications);
         tbUnassigned.setGridColor(new java.awt.Color(135, 127, 115));
         tbUnassigned.setName("tbUnassigned"); // NOI18N
@@ -411,6 +410,7 @@ public class DashBoardPanel extends ContentPanel {
         tbUnassigned.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("DashBoard.tbUnassigned.columnModel.title2")); // NOI18N
         tbUnassigned.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("DashBoard.tbUnassigned.columnModel.title4")); // NOI18N
         tbUnassigned.getColumnModel().getColumn(6).setHeaderValue(bundle.getString("DashBoardPanel.tbUnassigned.columnModel.title6")); // NOI18N
+        tbUnassigned.getColumnModel().getColumn(6).setCellRenderer(new BooleanCellRenderer());
 
         tbUnassignedApplications.setFloatable(false);
         tbUnassignedApplications.setRollover(true);
@@ -539,7 +539,6 @@ public class DashBoardPanel extends ContentPanel {
         inprogressScrollPanel.setName("inprogressScrollPanel"); // NOI18N
         inprogressScrollPanel.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
 
-        tbAssigned.setColumnSelectionAllowed(true);
         tbAssigned.setComponentPopupMenu(popUpAssignedApplications);
         tbAssigned.setGridColor(new java.awt.Color(135, 127, 115));
         tbAssigned.setName("tbAssigned"); // NOI18N

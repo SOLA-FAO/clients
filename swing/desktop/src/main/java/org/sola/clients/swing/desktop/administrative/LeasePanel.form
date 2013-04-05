@@ -112,7 +112,7 @@
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="jPanel1" pref="239" max="32767" attributes="0"/>
+              <Component id="jPanel1" pref="257" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -200,7 +200,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="groupPanel1" alignment="0" max="32767" attributes="0"/>
                   <Component id="jToolBar2" alignment="0" max="32767" attributes="0"/>
-                  <Component id="jScrollPane1" alignment="0" pref="623" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" alignment="0" pref="750" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -210,7 +210,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jToolBar2" min="-2" pref="25" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane1" pref="63" max="32767" attributes="0"/>
+                      <Component id="jScrollPane1" pref="72" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -356,8 +356,8 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="groupPanel2" max="32767" attributes="0"/>
-                  <Component id="documentsManagementPanel" alignment="0" pref="623" max="32767" attributes="0"/>
+                  <Component id="groupPanel2" pref="623" max="32767" attributes="0"/>
+                  <Component id="documentsManagementPanel" alignment="0" pref="750" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -365,23 +365,23 @@
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="groupPanel2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="documentsManagementPanel" pref="94" max="32767" attributes="0"/>
+                      <Component id="documentsManagementPanel" pref="103" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="org.sola.clients.swing.ui.source.DocumentsManagementPanel" name="documentsManagementPanel">
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="createDocumentsPanel()"/>
-              </AuxValues>
-            </Component>
             <Component class="org.sola.clients.swing.ui.GroupPanel" name="groupPanel2">
               <Properties>
                 <Property name="titleText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                   <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="SimpleOwhershipPanel.groupPanel2.titleText" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                 </Property>
               </Properties>
+            </Component>
+            <Component class="org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel" name="documentsManagementPanel">
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="createDocumentsPanel()"/>
+              </AuxValues>
             </Component>
           </SubComponents>
         </Container>
@@ -443,7 +443,7 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtRegDatetime" pref="112" max="32767" attributes="0"/>
+                  <Component id="txtRegDatetime" pref="138" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -486,7 +486,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="25" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="51" max="32767" attributes="0"/>
                   </Group>
                   <Component id="txtExpirationDate" alignment="0" max="32767" attributes="0"/>
               </Group>
@@ -534,7 +534,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="56" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="82" max="32767" attributes="0"/>
                   </Group>
                   <Component id="txtRent" alignment="0" max="32767" attributes="0"/>
               </Group>
@@ -579,7 +579,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="19" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="45" max="32767" attributes="0"/>
                   </Group>
                   <Component id="txtDueDate" max="32767" attributes="0"/>
               </Group>
@@ -627,7 +627,7 @@
                           <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
                           <Component id="cbxIsPrimary" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="0" pref="39" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="65" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>

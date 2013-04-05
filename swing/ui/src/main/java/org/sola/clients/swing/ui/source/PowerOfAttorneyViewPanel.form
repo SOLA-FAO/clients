@@ -16,14 +16,14 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="documentViewerPanel" max="32767" attributes="0"/>
-          <Component id="jPanel3" alignment="0" pref="478" max="32767" attributes="0"/>
+          <Component id="jPanel3" alignment="0" max="32767" attributes="0"/>
+          <Component id="documentPanel" alignment="1" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <Component id="documentViewerPanel" min="-2" max="-2" attributes="0"/>
+              <Component id="documentPanel" min="-2" pref="253" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
           </Group>
@@ -31,8 +31,6 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="org.sola.clients.swing.ui.source.DocumentViewerPanel" name="documentViewerPanel">
-    </Component>
     <Container class="javax.swing.JPanel" name="jPanel3">
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
@@ -48,7 +46,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="158" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="163" max="32767" attributes="0"/>
                   </Group>
                   <Component id="txtAttorneyName" max="32767" attributes="0"/>
               </Group>
@@ -74,9 +72,6 @@
             </Component>
             <Component class="javax.swing.JTextField" name="txtAttorneyName">
               <Properties>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
-                </Property>
                 <Property name="editable" type="boolean" value="false"/>
               </Properties>
               <BindingProperties>
@@ -94,7 +89,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="168" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="173" max="32767" attributes="0"/>
                   </Group>
                   <Component id="txtPersonName" max="32767" attributes="0"/>
               </Group>
@@ -120,9 +115,6 @@
             </Component>
             <Component class="javax.swing.JTextField" name="txtPersonName">
               <Properties>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
-                </Property>
                 <Property name="editable" type="boolean" value="false"/>
               </Properties>
               <BindingProperties>
@@ -135,5 +127,7 @@
         </Container>
       </SubComponents>
     </Container>
+    <Component class="org.sola.clients.swing.ui.source.DocumentPanel" name="documentPanel">
+    </Component>
   </SubComponents>
 </Form>

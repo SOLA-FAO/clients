@@ -26,12 +26,10 @@
 package org.sola.clients.swing.ui.source;
 
 import java.awt.ComponentOrientation;
-import java.awt.Desktop;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import javax.swing.ImageIcon;
@@ -39,7 +37,6 @@ import javax.swing.SwingUtilities;
 import org.sola.clients.beans.digitalarchive.DocumentBean;
 import org.sola.clients.beans.digitalarchive.FileBinaryBean;
 import org.sola.clients.beans.digitalarchive.FileInfoListBean;
-import org.sola.clients.beans.source.SourceBean;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.ui.ImagePreview;
@@ -84,15 +81,6 @@ public class FileBrowserForm extends javax.swing.JDialog {
         serverFiles.addPropertyChangeListener(serverFilesListener());
         localFileChooser.setControlButtonsAreShown(false);
         localFileChooser.setAccessory(new ImagePreview(localFileChooser, 225, 300));
-        documentSearchPanel.addPropertyChangeListener(new PropertyChangeListener() {
-
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                if (evt.getPropertyName().equals(DocumentSearchPanel.ATTACH_SOURCE)) {
-                    fireAttachEvent(((SourceBean) evt.getNewValue()).getArchiveDocument());
-                }
-            }
-        });
         customizeRemoteFileButtons();
     }
 
@@ -302,8 +290,6 @@ public class FileBrowserForm extends javax.swing.JDialog {
         btnDeleteServerFile = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JToolBar.Separator();
         btnAttachFromServer = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
-        documentSearchPanel = new org.sola.clients.swing.ui.source.DocumentSearchPanel();
         taskPanel1 = new org.sola.clients.swing.common.tasks.TaskPanel();
 
         popupRemoteFiles.setName("popupRemoteFiles"); // NOI18N
@@ -554,32 +540,6 @@ public class FileBrowserForm extends javax.swing.JDialog {
 
         jTabbedPane1.addTab(bundle.getString("FileBrowserForm.jPanel2.TabConstraints.tabTitle"), jPanel2); // NOI18N
 
-        jPanel3.setName(bundle.getString("FileBrowserForm.jPanel3.name")); // NOI18N
-
-        documentSearchPanel.setName(bundle.getString("FileBrowserForm.documentSearchPanel.name")); // NOI18N
-        documentSearchPanel.setShowEditButton(false);
-        documentSearchPanel.setShowPrintButton(false);
-        documentSearchPanel.setShowSelectButton(false);
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(documentSearchPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 635, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(documentSearchPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        jTabbedPane1.addTab(bundle.getString("FileBrowserForm.jPanel3.TabConstraints.tabTitle"), jPanel3); // NOI18N
-
         taskPanel1.setName(bundle.getString("FileBrowserForm.taskPanel1.name")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -675,10 +635,8 @@ public class FileBrowserForm extends javax.swing.JDialog {
     private javax.swing.JButton btnOpenLocal;
     private javax.swing.JButton btnOpenServerFile;
     private javax.swing.JButton btnRefreshServerList;
-    private org.sola.clients.swing.ui.source.DocumentSearchPanel documentSearchPanel;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JTabbedPane jTabbedPane1;

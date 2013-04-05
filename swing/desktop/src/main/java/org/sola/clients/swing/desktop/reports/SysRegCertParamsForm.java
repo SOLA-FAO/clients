@@ -146,8 +146,6 @@ public class SysRegCertParamsForm extends javax.swing.JDialog {
         File file = new File(cachePath + fileName);
         document = DocumentBean.createDocumentFromLocalFile(file);
         documentPanel.archiveDocument = document;
-        
-        documentPanel.btnOk.doClick();
         documentPanel.saveDocument();
         
         documentPanel.getDocument().clean2();

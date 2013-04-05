@@ -58,7 +58,7 @@ import org.sola.clients.swing.desktop.ReportViewerForm;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForBaUnit;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
-import org.sola.clients.swing.ui.application.ApplicationDocumentsForm;
+import org.sola.clients.swing.ui.source.AddDocumentForm;
 import org.sola.clients.swing.ui.renderers.DateTimeRenderer;
 import org.sola.clients.swing.ui.renderers.LockCellRenderer;
 import org.sola.clients.swing.ui.renderers.SimpleComboBoxRenderer;
@@ -99,7 +99,7 @@ public class PropertyPanel extends ContentPanel {
     private String nameFirstPart;
     private String nameLastPart;
     private ControlsBundleForBaUnit mapControl = null;
-    private ApplicationDocumentsForm applicationDocumentsForm;
+    private AddDocumentForm applicationDocumentsForm;
     private boolean readOnly = false;
     java.util.ResourceBundle resourceBundle;
     private PropertyChangeListener newPropertyWizardListener;
@@ -1114,7 +1114,7 @@ public class PropertyPanel extends ContentPanel {
             @Override
             public void propertyChange(PropertyChangeEvent e) {
                 SourceBean document = null;
-                if (e.getPropertyName().equals(ApplicationDocumentsForm.SELECTED_SOURCE)
+                if (e.getPropertyName().equals(AddDocumentForm.SELECTED_SOURCE)
                         && e.getNewValue() != null) {
                     document = (SourceBean) e.getNewValue();
                     baUnitBean1.createPaperTitle(document);
@@ -1122,7 +1122,7 @@ public class PropertyPanel extends ContentPanel {
             }
         };
         
-        applicationDocumentsForm = new ApplicationDocumentsForm(applicationBean, null, true);
+        applicationDocumentsForm = new AddDocumentForm(applicationBean, null, true);
         applicationDocumentsForm.setLocationRelativeTo(this);
         applicationDocumentsForm.addPropertyChangeListener(
                 SourceListBean.SELECTED_SOURCE_PROPERTY, listener);

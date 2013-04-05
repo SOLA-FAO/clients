@@ -52,7 +52,10 @@ public class DocumentSearchPanel extends org.sola.clients.swing.ui.source.Docume
         addPropertyChangeListener(new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                if (evt.getPropertyName().equals(org.sola.clients.swing.ui.source.DocumentSearchPanel.EDIT_SOURCE)) {
+                if (evt.getPropertyName().equals(org.sola.clients.swing.ui.source.DocumentSearchPanel.EDIT_SOURCE) ||
+                        evt.getPropertyName().equals(org.sola.clients.swing.ui.source.DocumentSearchPanel.VIEW_SOURCE)) {
+                    
+                    final boolean allowEditing = !evt.getPropertyName().equals(org.sola.clients.swing.ui.source.DocumentSearchPanel.VIEW_SOURCE);
                     final SourceBean source = (SourceBean) evt.getNewValue();
 
                     SolaTask t = new SolaTask<Void, Void>() {
@@ -60,7 +63,7 @@ public class DocumentSearchPanel extends org.sola.clients.swing.ui.source.Docume
                         @Override
                         public Void doTask() {
                             setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_DOCUMENT_FORM_OPENING));
-                            DocumentForm form = new DocumentForm(source);
+                            DocumentForm form = new DocumentForm(source, allowEditing, true);
                             form.addPropertyChangeListener(new PropertyChangeListener() {
 
                                 @Override
@@ -77,9 +80,7 @@ public class DocumentSearchPanel extends org.sola.clients.swing.ui.source.Docume
                     TaskManager.getInstance().runTask(t);
                 } else if (evt.getPropertyName().equals(org.sola.clients.swing.ui.source.DocumentSearchPanel.OPEN_APPLICATION)) {
                     MainForm.getInstance().openApplicationForm((ApplicationBean)evt.getNewValue());
-                } else if (evt.getPropertyName().equals(org.sola.clients.swing.ui.source.DocumentSearchPanel.VIEW_SOURCE)) {
-                    MainForm.getInstance().openDocumentViewForm((SourceBean)evt.getNewValue());
-                }
+                } 
             }
         });
     }

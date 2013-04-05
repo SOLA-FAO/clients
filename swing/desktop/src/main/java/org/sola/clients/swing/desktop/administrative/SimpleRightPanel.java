@@ -33,6 +33,7 @@ import org.sola.clients.beans.application.ApplicationServiceBean;
 import org.sola.clients.beans.referencedata.StatusConstants;
 import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.desktop.MainForm;
+import org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.renderers.FormattersFactory;
 import org.sola.clients.swing.ui.source.DocumentsManagementPanel;
@@ -48,7 +49,7 @@ public class SimpleRightPanel extends ContentPanel {
     public static final String UPDATED_RRR = "updatedRRR";
 
     /** Creates {@link DocumentsManagementPanel} instance. */
-    private DocumentsManagementPanel createDocumentsPanel() {
+    private DocumentsManagementExtPanel createDocumentsPanel() {
         if (rrrBean == null) {
             rrrBean = new RrrBean();
         }
@@ -61,7 +62,7 @@ public class SimpleRightPanel extends ContentPanel {
             allowEdit = false;
         }
 
-        DocumentsManagementPanel panel = new DocumentsManagementPanel(
+        DocumentsManagementExtPanel panel = new DocumentsManagementExtPanel(
                 rrrBean.getSourceList(), appBean, allowEdit);
         return panel;
     }
@@ -162,7 +163,6 @@ public class SimpleRightPanel extends ContentPanel {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         rrrBean = CreateRrrBean();
-        documentsPanel = createDocumentsPanel();
         jLabel15 = new javax.swing.JLabel();
         txtNotationText = new javax.swing.JTextField();
         headerPanel = new org.sola.clients.swing.ui.HeaderPanel();
@@ -177,14 +177,13 @@ public class SimpleRightPanel extends ContentPanel {
         txtRegDatetime = new javax.swing.JFormattedTextField();
         jLabel13 = new javax.swing.JLabel();
         groupPanel1 = new org.sola.clients.swing.ui.GroupPanel();
+        documentsPanel = createDocumentsPanel();
 
         setCloseOnHide(true);
         setHeaderPanel(headerPanel);
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
         setHelpTopic(bundle.getString("SimpleRightPanel.helpTopic")); // NOI18N
         setName("Form"); // NOI18N
-
-        documentsPanel.setName("documentsPanel"); // NOI18N
 
         jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         jLabel15.setText(bundle.getString("SimpleRightPanel.jLabel15.text")); // NOI18N
@@ -275,6 +274,8 @@ public class SimpleRightPanel extends ContentPanel {
         groupPanel1.setName("groupPanel1"); // NOI18N
         groupPanel1.setTitleText(bundle.getString("SimpleRightPanel.groupPanel1.titleText")); // NOI18N
 
+        documentsPanel.setName(bundle.getString("SimpleRightPanel.documentsPanel.name")); // NOI18N
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -285,10 +286,12 @@ public class SimpleRightPanel extends ContentPanel {
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(txtNotationText, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE)
-                    .add(jLabel15)
                     .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(groupPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE)
-                    .add(documentsPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE))
+                    .add(layout.createSequentialGroup()
+                        .add(jLabel15)
+                        .add(0, 0, Short.MAX_VALUE))
+                    .add(documentsPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -319,7 +322,7 @@ public class SimpleRightPanel extends ContentPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSave;
     private javax.swing.JCheckBox cbxIsPrimary;
-    private org.sola.clients.swing.ui.source.DocumentsManagementPanel documentsPanel;
+    private org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel documentsPanel;
     private javax.swing.Box.Filler filler1;
     private org.sola.clients.swing.ui.GroupPanel groupPanel1;
     private org.sola.clients.swing.ui.HeaderPanel headerPanel;

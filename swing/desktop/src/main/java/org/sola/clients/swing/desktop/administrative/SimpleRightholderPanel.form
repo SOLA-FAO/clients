@@ -130,7 +130,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="txtNotationText" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="jPanel1" pref="271" max="32767" attributes="0"/>
+              <Component id="jPanel1" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -276,7 +276,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jToolBar2" min="-2" pref="25" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane1" pref="74" max="32767" attributes="0"/>
+                      <Component id="jScrollPane1" pref="66" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -422,8 +422,8 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="groupPanel2" max="32767" attributes="0"/>
-                  <Component id="documentsManagementPanel" alignment="0" pref="623" max="32767" attributes="0"/>
+                  <Component id="groupPanel2" pref="623" max="32767" attributes="0"/>
+                  <Component id="documentsManagementPanel" alignment="0" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -431,23 +431,23 @@
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="groupPanel2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="documentsManagementPanel" pref="105" max="32767" attributes="0"/>
+                      <Component id="documentsManagementPanel" pref="97" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="org.sola.clients.swing.ui.source.DocumentsManagementPanel" name="documentsManagementPanel">
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="createDocumentsPanel()"/>
-              </AuxValues>
-            </Component>
             <Component class="org.sola.clients.swing.ui.GroupPanel" name="groupPanel2">
               <Properties>
                 <Property name="titleText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                   <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="SimpleOwhershipPanel.groupPanel2.titleText" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                 </Property>
               </Properties>
+            </Component>
+            <Component class="org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel" name="documentsManagementPanel">
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="createDocumentsPanel()"/>
+              </AuxValues>
             </Component>
           </SubComponents>
         </Container>

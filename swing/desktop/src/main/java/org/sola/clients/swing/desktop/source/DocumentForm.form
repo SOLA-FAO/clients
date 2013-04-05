@@ -38,7 +38,7 @@
               <Component id="jToolBar1" min="-2" pref="25" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="documentPanel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="172" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -50,9 +50,6 @@
       </Properties>
     </Component>
     <Component class="org.sola.clients.swing.ui.source.DocumentPanel" name="documentPanel">
-      <Properties>
-        <Property name="showAddButton" type="boolean" value="false"/>
-      </Properties>
     </Component>
     <Container class="javax.swing.JToolBar" name="jToolBar1">
       <Properties>

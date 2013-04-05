@@ -31,8 +31,6 @@ package org.sola.clients.beans.source;
 
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.beans.digitalarchive.DocumentBean;
-import org.sola.common.messaging.ClientMessage;
-import org.sola.common.messaging.MessageUtility;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.EntityAction;
 import org.sola.webservices.transferobjects.casemanagement.SourceTO;
@@ -173,14 +171,5 @@ public class SourceBean extends SourceSummaryBean {
         return TypeConverters.TransferObjectToBean(
                 WSManager.getInstance().getCaseManagementService().getSourceById(sourceId),
                 SourceBean.class, null);
-    }
-
-    public boolean docValid() {
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/source/Bundle");
-        if (this.getReferenceNr() != null && this.getReferenceNr().toString().length() > 20) {
-            MessageUtility.displayMessage(ClientMessage.CHECK_FIELD_INVALID_LENGTH_PAR, new Object[]{bundle.getString("DocumentPanel.jLabel2.text")});
-            return false;
-        }
-        return true;
     }
 }
