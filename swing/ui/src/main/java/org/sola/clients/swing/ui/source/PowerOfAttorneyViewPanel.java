@@ -54,7 +54,8 @@ public class PowerOfAttorneyViewPanel extends javax.swing.JPanel {
             this.powerOfAttorney = powerOfAttorney;
         }
         initComponents();
-        documentViewerPanel.setSourceBean(this.powerOfAttorney.getSource());
+        documentPanel.setDocument(this.powerOfAttorney.getSource());
+        documentPanel.setAllowEditing(false);
     }
 
     public PowerOfAttorneyBean getPowerOfAttorney() {
@@ -68,7 +69,7 @@ public class PowerOfAttorneyViewPanel extends javax.swing.JPanel {
         } else {
             this.powerOfAttorney = powerOfAttorney;
         }
-        documentViewerPanel.setSourceBean(this.powerOfAttorney.getSource());
+        documentPanel.setDocument(this.powerOfAttorney.getSource());
         firePropertyChange("powerOfAttorney", oldValue, this.powerOfAttorney);
     }
 
@@ -81,7 +82,6 @@ public class PowerOfAttorneyViewPanel extends javax.swing.JPanel {
     private void initComponents() {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        documentViewerPanel = new org.sola.clients.swing.ui.source.DocumentViewerPanel();
         jPanel3 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -89,13 +89,13 @@ public class PowerOfAttorneyViewPanel extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         txtPersonName = new javax.swing.JTextField();
+        documentPanel = new org.sola.clients.swing.ui.source.DocumentPanel();
 
         jPanel3.setLayout(new java.awt.GridLayout(1, 2, 15, 0));
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/source/Bundle"); // NOI18N
         jLabel1.setText(bundle.getString("PowerOfAttorneyViewPanel.jLabel1.text")); // NOI18N
 
-        txtAttorneyName.setBackground(new java.awt.Color(255, 255, 255));
         txtAttorneyName.setEditable(false);
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${powerOfAttorney.attorneyName}"), txtAttorneyName, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -107,7 +107,7 @@ public class PowerOfAttorneyViewPanel extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addGap(0, 158, Short.MAX_VALUE))
+                .addGap(0, 163, Short.MAX_VALUE))
             .addComponent(txtAttorneyName)
         );
         jPanel1Layout.setVerticalGroup(
@@ -123,7 +123,6 @@ public class PowerOfAttorneyViewPanel extends javax.swing.JPanel {
 
         jLabel2.setText(bundle.getString("PowerOfAttorneyViewPanel.jLabel2.text")); // NOI18N
 
-        txtPersonName.setBackground(new java.awt.Color(255, 255, 255));
         txtPersonName.setEditable(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${powerOfAttorney.personName}"), txtPersonName, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -135,7 +134,7 @@ public class PowerOfAttorneyViewPanel extends javax.swing.JPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jLabel2)
-                .addGap(0, 168, Short.MAX_VALUE))
+                .addGap(0, 173, Short.MAX_VALUE))
             .addComponent(txtPersonName)
         );
         jPanel2Layout.setVerticalGroup(
@@ -153,13 +152,13 @@ public class PowerOfAttorneyViewPanel extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(documentViewerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 478, Short.MAX_VALUE)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(documentPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(documentViewerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(documentPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -167,7 +166,7 @@ public class PowerOfAttorneyViewPanel extends javax.swing.JPanel {
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private org.sola.clients.swing.ui.source.DocumentViewerPanel documentViewerPanel;
+    private org.sola.clients.swing.ui.source.DocumentPanel documentPanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;

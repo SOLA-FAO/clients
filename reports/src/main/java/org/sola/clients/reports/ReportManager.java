@@ -317,7 +317,7 @@ public class ReportManager {
     }
 
     public static JasperPrint getMapPublicDisplayReport(
-            String layoutId, String areaDescription,
+            String layoutId, String areaDescription, String notificationPeriod,
             String mapImageLocation, String scalebarImageLocation) throws IOException {
 
         // Image Location of the north-arrow image
@@ -333,6 +333,7 @@ public class ReportManager {
         inputParameters.put("INPUT_DATE",
                 DateFormat.getInstance().format(Calendar.getInstance().getTime()));
         inputParameters.put("AREA_DESCRIPTION", areaDescription);
+        inputParameters.put("PERIOD_DESCRIPTION", notificationPeriod);
 
 
         //This will be the bean containing data for the report. 
@@ -505,7 +506,6 @@ public class ReportManager {
         beans[0] = managementBean;
         JRDataSource jds = new JRBeanArrayDataSource(beans);
         try {
-//            System.out.println("QUI PAOLA");
             return JasperFillManager.fillReport(
                     ReportManager.class.getResourceAsStream("/reports/SysRegMenagement.jasper"),
                     inputParameters, jds);

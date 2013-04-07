@@ -30,11 +30,12 @@ package org.sola.clients.swing.ui.source;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
-import org.sola.clients.swing.ui.application.ApplicationDocumentsForm;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.controls.SolaList;
+import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.beans.source.SourceBean;
 import org.sola.clients.beans.source.SourceListBean;
+import org.sola.common.RolesConstants;
 
 /** 
  * Displays documents list. This panel could be used on different forms, where
@@ -43,11 +44,15 @@ import org.sola.clients.beans.source.SourceListBean;
  */
 public class DocumentsManagementPanel extends javax.swing.JPanel {
 
+    public static final String VIEW_DOCUMENT = "viewDocument";
+    public static final String EDIT_DOCUMENT = "editDocument";
+    
     private ApplicationBean applicationBean;
-    private ApplicationDocumentsForm applicationDocumentsForm;
+    private AddDocumentForm addDocumentForm;
     private SolaList<SourceBean> sourceList;
     private boolean allowEdit = true;
     private boolean allowAddingOfNewDocuments = true;
+    private boolean closeAddDocumentFormOnAdd = false;
     
     /** Creates new instance of {@link DocumentsPanel}. */
     private DocumentsPanel createDocumentsPanel() {
@@ -114,23 +119,110 @@ public class DocumentsManagementPanel extends javax.swing.JPanel {
     private void customizeButtons(SourceBean selectedSource){
         btnAdd.setEnabled(allowEdit);
         btnRemove.setEnabled(false);
+        btnViewAttachmanet.setEnabled(false);
+        btnEdit.setEnabled(false);
         btnView.setEnabled(false);
         
         if(selectedSource!=null){
             btnRemove.setEnabled(allowEdit);
+            btnEdit.setEnabled(allowEdit && SecurityBean.isInRole(RolesConstants.SOURCE_SAVE));
+            btnView.setEnabled(true);
             if(selectedSource.getArchiveDocumentId()!=null && selectedSource.getArchiveDocumentId().length()>0){
-                btnView.setEnabled(true);
+                btnViewAttachmanet.setEnabled(true);
             }
         }
+        
         menuAdd.setEnabled(btnAdd.isEnabled());
         menuRemove.setEnabled(btnRemove.isEnabled());
         menuView.setEnabled(btnView.isEnabled());
+        menuEdit.setEnabled(btnEdit.isEnabled());
+        menuViewAttachment.setEnabled(btnViewAttachmanet.isEnabled());
+    }
+
+    private void customizeSeparators(){
+        if((!menuView.isVisible() && !menuViewAttachment.isVisible()) ||
+                (!menuAdd.isVisible() && !menuEdit.isVisible() && !menuRemove.isVisible())){
+            menuSeparator.setVisible(false);
+            toolbarSeparator.setVisible(false);
+        } else {
+            menuSeparator.setVisible(true);
+            toolbarSeparator.setVisible(true);
+        }
+    }
+    
+    public boolean isAddButtonVisible(){
+        return btnAdd.isVisible();
+    }
+    
+    public void setAddButtonVisible(boolean visible){
+        btnAdd.setVisible(visible);
+        menuAdd.setVisible(visible);
+        customizeSeparators();
+    }
+    
+    public boolean isEditButtonVisible(){
+        return btnEdit.isVisible();
+    }
+    
+    public void setEditButtonVisible(boolean visible){
+        btnEdit.setVisible(visible);
+        menuEdit.setVisible(visible);
+        customizeSeparators();
+    }
+    
+    public boolean isRemoveButtonVisible(){
+        return btnRemove.isVisible();
+    }
+    
+    public void setRemoveButtonVisible(boolean visible){
+        btnRemove.setVisible(visible);
+        menuRemove.setVisible(visible);
+        customizeSeparators();
+    }
+    
+    public boolean isViewButtonVisible(){
+        return btnView.isVisible();
+    }
+    
+    public void setViewButtonVisible(boolean visible){
+        btnView.setVisible(visible);
+        menuView.setVisible(visible);
+        customizeSeparators();
+    }
+    
+    public boolean isOpenAttachmentButtonVisible(){
+        return btnViewAttachmanet.isVisible();
+    }
+    
+    public void setOpenAttachmentButtonVisible(boolean visible){
+        btnViewAttachmanet.setVisible(visible);
+        menuViewAttachment.setVisible(visible);
+        customizeSeparators();
+    }
+    
+    /** Indicates whether {@link AddDocumentForm} should be closed upon add document action. */
+    public boolean isCloseAddDocumentFormOnAdd() {
+        return closeAddDocumentFormOnAdd;
+    }
+
+    /** Returns boolean indicating whether {@link AddDocumentForm} should be closed upon add document action. */
+    public void setCloseAddDocumentFormOnAdd(boolean closeAddDocumentFormOnAdd) {
+        this.closeAddDocumentFormOnAdd = closeAddDocumentFormOnAdd;
+    }
+
+    public boolean isAllowEdit() {
+        return allowEdit;
+    }
+
+    public void setAllowEdit(boolean allowEdit) {
+        this.allowEdit = allowEdit;
+        customizeButtons(documentsPanel.getSourceListBean().getSelectedSource());
     }
     
     /** Attach file to the selected source. */
     private void attachDocument(PropertyChangeEvent e) {
         SourceBean document = null;
-        if (e.getPropertyName().equals(ApplicationDocumentsForm.SELECTED_SOURCE)
+        if (e.getPropertyName().equals(AddDocumentForm.SELECTED_SOURCE)
                 && e.getNewValue() != null) {
             document = (SourceBean) e.getNewValue();
             documentsPanel.addDocument(document);
@@ -170,18 +262,32 @@ public class DocumentsManagementPanel extends javax.swing.JPanel {
         allowAddingOfNewDocuments = allow;
     }
     
+    private void viewDocument(){
+        firePropertyChange(VIEW_DOCUMENT, null, documentsPanel.getSourceListBean().getSelectedSource());
+    }
+    
+    private void editDocument(){
+        firePropertyChange(EDIT_DOCUMENT, null, documentsPanel.getSourceListBean().getSelectedSource());
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         documentsTablePopupMenu = new javax.swing.JPopupMenu();
         menuAdd = new javax.swing.JMenuItem();
+        menuEdit = new javax.swing.JMenuItem();
         menuRemove = new javax.swing.JMenuItem();
+        menuSeparator = new javax.swing.JPopupMenu.Separator();
         menuView = new javax.swing.JMenuItem();
+        menuViewAttachment = new javax.swing.JMenuItem();
         jToolBar1 = new javax.swing.JToolBar();
         btnAdd = new javax.swing.JButton();
+        btnEdit = new javax.swing.JButton();
         btnRemove = new javax.swing.JButton();
+        toolbarSeparator = new javax.swing.JToolBar.Separator();
         btnView = new javax.swing.JButton();
+        btnViewAttachmanet = new javax.swing.JButton();
         documentsPanel = createDocumentsPanel();
 
         documentsTablePopupMenu.setName("documentsTablePopupMenu"); // NOI18N
@@ -197,6 +303,16 @@ public class DocumentsManagementPanel extends javax.swing.JPanel {
         });
         documentsTablePopupMenu.add(menuAdd);
 
+        menuEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/pencil.png"))); // NOI18N
+        menuEdit.setText(bundle.getString("DocumentsManagementPanel.menuEdit.text")); // NOI18N
+        menuEdit.setName(bundle.getString("DocumentsManagementPanel.menuEdit.name")); // NOI18N
+        menuEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuEditActionPerformed(evt);
+            }
+        });
+        documentsTablePopupMenu.add(menuEdit);
+
         menuRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
         menuRemove.setText(bundle.getString("DocumentsManagementPanel.menuRemove.text")); // NOI18N
         menuRemove.setName("menuRemove"); // NOI18N
@@ -207,15 +323,28 @@ public class DocumentsManagementPanel extends javax.swing.JPanel {
         });
         documentsTablePopupMenu.add(menuRemove);
 
+        menuSeparator.setName(bundle.getString("DocumentsManagementPanel.menuSeparator.name")); // NOI18N
+        documentsTablePopupMenu.add(menuSeparator);
+
         menuView.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/view.png"))); // NOI18N
         menuView.setText(bundle.getString("DocumentsManagementPanel.menuView.text")); // NOI18N
-        menuView.setName("menuView"); // NOI18N
+        menuView.setName(bundle.getString("DocumentsManagementPanel.menuView.name")); // NOI18N
         menuView.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuViewActionPerformed(evt);
             }
         });
         documentsTablePopupMenu.add(menuView);
+
+        menuViewAttachment.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/folder-open-document.png"))); // NOI18N
+        menuViewAttachment.setText(bundle.getString("DocumentsManagementPanel.menuViewAttachment.text")); // NOI18N
+        menuViewAttachment.setName("menuViewAttachment"); // NOI18N
+        menuViewAttachment.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuViewAttachmentActionPerformed(evt);
+            }
+        });
+        documentsTablePopupMenu.add(menuViewAttachment);
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
@@ -226,7 +355,6 @@ public class DocumentsManagementPanel extends javax.swing.JPanel {
         btnAdd.setFocusable(false);
         btnAdd.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnAdd.setName("btnAdd"); // NOI18N
-        btnAdd.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddActionPerformed(evt);
@@ -234,12 +362,22 @@ public class DocumentsManagementPanel extends javax.swing.JPanel {
         });
         jToolBar1.add(btnAdd);
 
+        btnEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/pencil.png"))); // NOI18N
+        btnEdit.setText(bundle.getString("DocumentsManagementPanel.btnEdit.text")); // NOI18N
+        btnEdit.setFocusable(false);
+        btnEdit.setName(bundle.getString("DocumentsManagementPanel.btnEdit.name")); // NOI18N
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnEdit);
+
         btnRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
         btnRemove.setText(bundle.getString("DocumentsManagementPanel.btnRemove.text")); // NOI18N
         btnRemove.setFocusable(false);
         btnRemove.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnRemove.setName("btnRemove"); // NOI18N
-        btnRemove.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnRemove.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRemoveActionPerformed(evt);
@@ -247,18 +385,31 @@ public class DocumentsManagementPanel extends javax.swing.JPanel {
         });
         jToolBar1.add(btnRemove);
 
-        btnView.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/folder-open-document.png"))); // NOI18N
+        toolbarSeparator.setName(bundle.getString("DocumentsManagementPanel.toolbarSeparator.name")); // NOI18N
+        jToolBar1.add(toolbarSeparator);
+
+        btnView.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/view.png"))); // NOI18N
         btnView.setText(bundle.getString("DocumentsManagementPanel.btnView.text")); // NOI18N
         btnView.setFocusable(false);
-        btnView.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnView.setName("btnView"); // NOI18N
-        btnView.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnView.setName(bundle.getString("DocumentsManagementPanel.btnView.name")); // NOI18N
         btnView.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnViewActionPerformed(evt);
             }
         });
         jToolBar1.add(btnView);
+
+        btnViewAttachmanet.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/folder-open-document.png"))); // NOI18N
+        btnViewAttachmanet.setText(bundle.getString("DocumentsManagementPanel.btnViewAttachmanet.text")); // NOI18N
+        btnViewAttachmanet.setFocusable(false);
+        btnViewAttachmanet.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnViewAttachmanet.setName("btnViewAttachmanet"); // NOI18N
+        btnViewAttachmanet.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewAttachmanetActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnViewAttachmanet);
 
         documentsPanel.setName("documentsPanel"); // NOI18N
         documentsPanel.setPopupMenu(documentsTablePopupMenu);
@@ -295,29 +446,51 @@ public class DocumentsManagementPanel extends javax.swing.JPanel {
         removeDocument();
     }//GEN-LAST:event_menuRemoveActionPerformed
 
-    private void btnViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewActionPerformed
+    private void btnViewAttachmanetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewAttachmanetActionPerformed
         viewAttachment();
+    }//GEN-LAST:event_btnViewAttachmanetActionPerformed
+
+    private void menuViewAttachmentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuViewAttachmentActionPerformed
+        viewAttachment();
+    }//GEN-LAST:event_menuViewAttachmentActionPerformed
+
+    private void btnViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewActionPerformed
+        viewDocument();
     }//GEN-LAST:event_btnViewActionPerformed
 
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+        editDocument();
+    }//GEN-LAST:event_btnEditActionPerformed
+
     private void menuViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuViewActionPerformed
-        viewAttachment();
+        viewDocument();
     }//GEN-LAST:event_menuViewActionPerformed
+
+    private void menuEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEditActionPerformed
+        editDocument();
+    }//GEN-LAST:event_menuEditActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnRemove;
     private javax.swing.JButton btnView;
+    private javax.swing.JButton btnViewAttachmanet;
     private org.sola.clients.swing.ui.source.DocumentsPanel documentsPanel;
     private javax.swing.JPopupMenu documentsTablePopupMenu;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JMenuItem menuAdd;
+    private javax.swing.JMenuItem menuEdit;
     private javax.swing.JMenuItem menuRemove;
+    private javax.swing.JPopupMenu.Separator menuSeparator;
     private javax.swing.JMenuItem menuView;
+    private javax.swing.JMenuItem menuViewAttachment;
+    private javax.swing.JToolBar.Separator toolbarSeparator;
     // End of variables declaration//GEN-END:variables
 
     /** Opens file attached to the selected source.*/
     private void viewAttachment() {
-        documentsPanel.openAttachment();
+        documentsPanel.viewAttachment();
     }
 
     /** Removes selected document. */
@@ -327,8 +500,8 @@ public class DocumentsManagementPanel extends javax.swing.JPanel {
 
     /** Adds new source into the list. */
     private void addDocument() {
-        if (applicationDocumentsForm != null) {
-            applicationDocumentsForm.dispose();
+        if (addDocumentForm != null) {
+            addDocumentForm.dispose();
         }
 
         PropertyChangeListener listener = new PropertyChangeListener() {
@@ -339,13 +512,11 @@ public class DocumentsManagementPanel extends javax.swing.JPanel {
             }
         };
 
-        applicationDocumentsForm = new ApplicationDocumentsForm(applicationBean, null, true);
-        applicationDocumentsForm.setLocationRelativeTo(this);
-        applicationDocumentsForm.addPropertyChangeListener(
-                SourceListBean.SELECTED_SOURCE_PROPERTY, listener);
-        applicationDocumentsForm.allowAddingOfNewDocuments(allowAddingOfNewDocuments);
-        applicationDocumentsForm.setVisible(true);
-        applicationDocumentsForm.removePropertyChangeListener(
-                SourceListBean.SELECTED_SOURCE_PROPERTY, listener);
+        addDocumentForm = new AddDocumentForm(applicationBean, null, true);
+        addDocumentForm.setLocationRelativeTo(this);
+        addDocumentForm.addPropertyChangeListener(SourceListBean.SELECTED_SOURCE_PROPERTY, listener);
+        addDocumentForm.allowAddingOfNewDocuments(allowAddingOfNewDocuments);
+        addDocumentForm.setVisible(true);
+        addDocumentForm.removePropertyChangeListener(SourceListBean.SELECTED_SOURCE_PROPERTY, listener);
     }
 }

@@ -114,6 +114,8 @@ public class MapDocumentsPanel extends javax.swing.JPanel {
             }
         });
         panel.setAllowAddingOfNewDocuments(allowAddingOfNewDocuments);
+        panel.setEditButtonVisible(false);
+        panel.setViewButtonVisible(false);
         return panel;
     }
 

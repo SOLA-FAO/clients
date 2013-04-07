@@ -1,26 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO). All rights
- * reserved.
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification, are permitted
- * provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- * 1. Redistributions of source code must retain the above copyright notice,this list of conditions
- * and the following disclaimer. 2. Redistributions in binary form must reproduce the above
- * copyright notice,this list of conditions and the following disclaimer in the documentation and/or
- * other materials provided with the distribution. 3. Neither the name of FAO nor the names of its
- * contributors may be used to endorse or promote products derived from this software without
- * specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
- * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- * WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
- * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 /*
@@ -57,6 +61,7 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.Name;
 import org.opengis.filter.Filter;
+import org.sola.clients.swing.gis.layer.PojoBaseLayer;
 import org.sola.clients.swing.gis.layer.PojoLayer;
 import org.sola.common.logging.LogUtility;
 import org.sola.common.messaging.GisMessage;
@@ -66,14 +71,14 @@ import org.sola.webservices.spatial.ResultForNavigationInfo;
 import org.sola.webservices.spatial.SpatialResult;
 
 /**
- * A FeatureSource for the Sola Feature layers. The features from this source are drawn in the map
- * control.
+ * A FeatureSource for the Sola Feature layers. The features from this source
+ * are drawn in the map control.
  *
  * @author Elton Manoku
  */
 public class PojoFeatureSource implements SimpleFeatureSource {
 
-    PojoFeatureCollection collection = null;
+    protected PojoFeatureCollection collection = null;
     protected List<FeatureListener> listeners = null;
     private QueryCapabilities capabilities;
     private Set<Key> hints;
@@ -84,7 +89,7 @@ public class PojoFeatureSource implements SimpleFeatureSource {
     private double lastSouth;
     private double lastEast;
     private double lastNorth;
-    private PojoLayer layer;
+    private PojoBaseLayer layer;
 
     /**
      * Constructor.
@@ -93,7 +98,7 @@ public class PojoFeatureSource implements SimpleFeatureSource {
      * @param layer The layer that will use the feature source
      * @throws SchemaException
      */
-    public PojoFeatureSource(PojoDataAccess dataSource, PojoLayer layer) throws SchemaException {
+    public PojoFeatureSource(PojoDataAccess dataSource, PojoBaseLayer layer) throws SchemaException {
         this.layer = layer;
         this.dataSource = dataSource;
         SimpleFeatureType type = this.getNewFeatureType(
@@ -105,7 +110,8 @@ public class PojoFeatureSource implements SimpleFeatureSource {
     }
 
     /**
-     * The WKB reader used to translate the WKB geometries into geotools geometries
+     * The WKB reader used to translate the WKB geometries into geotools
+     * geometries
      *
      * @return
      */
@@ -214,9 +220,10 @@ public class PojoFeatureSource implements SimpleFeatureSource {
     }
 
     /**
-     * It retrieves the features falling into the query condition. If the filter is not changed from
-     * the previous filter and the layer is not marked to be forcibly refreshed, it does not ask for
-     * features from the server, but it returns the former ones
+     * It retrieves the features falling into the query condition. If the filter
+     * is not changed from the previous filter and the layer is not marked to be
+     * forcibly refreshed, it does not ask for features from the server, but it
+     * returns the former ones
      *
      * @param query The query (geotools) used to filter features
      *
@@ -245,6 +252,10 @@ public class PojoFeatureSource implements SimpleFeatureSource {
         return this.collection;
     }
 
+    public final PojoDataAccess getDataSource() {
+        return dataSource;
+    }
+
     /**
      * Given the extent, modifies the feature collection
      *
@@ -253,7 +264,7 @@ public class PojoFeatureSource implements SimpleFeatureSource {
      * @param east
      * @param north
      */
-    private void ModifyFeatureCollection(double west, double south, double east, double north) {
+    protected void ModifyFeatureCollection(double west, double south, double east, double north) {
         if (!this.layer.isForceRefresh()) {
             if (this.lastWest == west && this.lastSouth == south
                     && this.lastEast == east && this.lastNorth == north) {
@@ -267,9 +278,7 @@ public class PojoFeatureSource implements SimpleFeatureSource {
         this.lastEast = east;
         this.lastNorth = north;
         try {
-            ResultForNavigationInfo resultInfo = this.dataSource.GetQueryData(
-                    this.getSchema().getTypeName(), west, south, east, north,
-                    this.getLayer().getSrid(), this.getLayer().getMapControl().getPixelResolution());
+            ResultForNavigationInfo resultInfo = getResultForNavigation(west, south, east, north);
             List<SimpleFeature> featuresToAdd = this.getFeaturesFromData(resultInfo.getToAdd());
             this.collection.clear();
             this.collection.addAll(featuresToAdd);
@@ -283,12 +292,29 @@ public class PojoFeatureSource implements SimpleFeatureSource {
     }
 
     /**
-     * It translates the result retrieved from the server to features recognized by map control
+     * It gets information from the service for the specified extent.
+     * 
+     * @param west
+     * @param south
+     * @param east
+     * @param north
+     * @return 
+     */
+    protected ResultForNavigationInfo getResultForNavigation(
+            double west, double south, double east, double north) {
+        return this.dataSource.GetQueryData(
+                this.getSchema().getTypeName(), west, south, east, north,
+                this.getLayer().getSrid(), this.getLayer().getMapControl().getPixelResolution());
+    }
+
+    /**
+     * It translates the result retrieved from the server to features recognized
+     * by map control
      *
      * @param spatialResultList
      * @return
      */
-    private List<SimpleFeature> getFeaturesFromData(List<SpatialResult> spatialResultList) {
+    protected final List<SimpleFeature> getFeaturesFromData(List<SpatialResult> spatialResultList) {
         List<SimpleFeature> features = new ArrayList<SimpleFeature>();
         for (SpatialResult spatialResult : spatialResultList) {
             try {
@@ -305,11 +331,11 @@ public class PojoFeatureSource implements SimpleFeatureSource {
         return features;
     }
 
-    public PojoLayer getLayer() {
+    public PojoBaseLayer getLayer() {
         return layer;
     }
 
-    public void setLayer(PojoLayer layer) {
+    public void setLayer(PojoBaseLayer layer) {
         this.layer = layer;
     }
 

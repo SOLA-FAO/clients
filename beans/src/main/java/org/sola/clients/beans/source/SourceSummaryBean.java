@@ -30,7 +30,6 @@ package org.sola.clients.beans.source;
 import java.util.Date;
 import java.util.UUID;
 import javax.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.sola.clients.beans.AbstractTransactionedBean;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.referencedata.SourceTypeBean;
@@ -59,6 +58,7 @@ public class SourceSummaryBean extends AbstractTransactionedBean {
     public static final String VERSION_PROPERTY = "version";
     public static final String DESCRIPTION_PROPERTY = "description";
     public static final String TRANSACTION_ID_PROPERTY = "transactionId";
+    public static final String SIGNING_DATE_PROPERTY = "signingDate";
     
     private Date acceptance;
     private Date expirationDate;
@@ -76,11 +76,10 @@ public class SourceSummaryBean extends AbstractTransactionedBean {
     private String version;
     private String description;
     private String transactionId;
-    
+    private Date signingDate;
     
     public SourceSummaryBean() {
         super();
-        sourceType = new SourceTypeBean();
     }
 
     public void clean() {
@@ -99,10 +98,14 @@ public class SourceSummaryBean extends AbstractTransactionedBean {
         this.setVersion(null);
         this.setOwnerName(null);
         this.setTransactionId(null);
+        this.setSigningDate(null);
     }
 
     public String getTypeCode() {
-        return sourceType.getCode();
+        if(getSourceType()==null){
+            return null;
+        }
+        return getSourceType().getCode();
     }
 
     /** 
@@ -111,7 +114,7 @@ public class SourceSummaryBean extends AbstractTransactionedBean {
      * @param value Source type code.
      */
     public void setTypeCode(String typeCode) {
-        String old = sourceType.getCode();
+        String old = getTypeCode();
         setSourceType(CacheManager.getBeanByCode(
                 CacheManager.getSourceTypes(), typeCode));
         propertySupport.firePropertyChange(SOURCE_TYPE_CODE_PROPERTY, old, typeCode);
@@ -196,6 +199,16 @@ public class SourceSummaryBean extends AbstractTransactionedBean {
         String old = referenceNr;
         referenceNr = value;
         propertySupport.firePropertyChange(REFERENCE_NR_PROPERTY, old, value);
+    }
+
+    public Date getSigningDate() {
+        return signingDate;
+    }
+
+    public void setSigningDate(Date signingDate) {
+        Date oldValue = this.signingDate;
+        this.signingDate = signingDate;
+        propertySupport.firePropertyChange(SIGNING_DATE_PROPERTY, oldValue, this.signingDate);
     }
 
     public Date getSubmission() {

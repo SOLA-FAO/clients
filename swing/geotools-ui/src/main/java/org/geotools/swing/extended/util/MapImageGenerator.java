@@ -1,26 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO). All rights
- * reserved.
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification, are permitted
- * provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- * 1. Redistributions of source code must retain the above copyright notice,this list of conditions
- * and the following disclaimer. 2. Redistributions in binary form must reproduce the above
- * copyright notice,this list of conditions and the following disclaimer in the documentation and/or
- * other materials provided with the distribution. 3. Neither the name of FAO nor the names of its
- * contributors may be used to endorse or promote products derived from this software without
- * specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
- * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- * WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
- * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 /*
@@ -45,8 +49,9 @@ import org.geotools.renderer.lite.StreamingRenderer;
 import org.geotools.swing.extended.Map;
 
 /**
- * It is a generator of an image from the current status of the map layers. <br/> In the sides of
- * the image generated, are added the coordinates of the extent.
+ * It is a generator of an image from the current status of the map layers.
+ * <br/> In the sides of the image generated, are added the coordinates of the
+ * extent.
  *
  * @author Elton Manoku
  */
@@ -168,27 +173,28 @@ public class MapImageGenerator {
 
     /**
      * It generates the image and it saves it in a temporary file.
-     * 
+     *
      * @param imageWidth The width in pixels/pointers of the image
      * @param imageHeight The height in pixels/pointers of the image
      * @param scale The desired scale
-     * @param dpi The dpi of the target. 
-     * If it is a pdf generation it is the dpi of the pdf generator
-     * @param imageFormat Acceptable formats for the image. Potential values can be jpg, png, bmp
+     * @param dpi The dpi of the target. If it is a pdf generation it is the dpi
+     * of the pdf generator
+     * @param imageFormat Acceptable formats for the image. Potential values can
+     * be jpg, png, bmp
      * @return The absolute path where the image is stored
-     * @throws IOException 
+     * @throws IOException
      */
     public String getImageAsFileLocation(double imageWidth, double imageHeight, double scale,
-            int dpi, String imageFormat) throws IOException{
+            int dpi, String imageFormat) throws IOException {
         File location = new File(TEMPORARY_IMAGE_FILE_LOCATION);
         if (!location.exists()) {
             location.mkdirs();
         }
-        String pathToResult = TEMPORARY_IMAGE_FILE_LOCATION + File.separator 
+        String pathToResult = TEMPORARY_IMAGE_FILE_LOCATION + File.separator
                 + TEMPORARY_IMAGE_FILE + "." + imageFormat;
         File outputFile = new File(pathToResult);
         BufferedImage bufferedImage = this.getImage(imageWidth, imageHeight, scale, dpi);
-            ImageIO.write(bufferedImage, imageFormat, outputFile);
+        ImageIO.write(bufferedImage, imageFormat, outputFile);
         return pathToResult;
     }
 

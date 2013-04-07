@@ -74,8 +74,8 @@ public class ApplicationDocumentsHelperBean extends AbstractBindingBean {
             for (Iterator<ApplicationServiceBean> it = applicationServiceList.iterator(); it.hasNext();) {
                 ApplicationServiceBean applicationServiceBean = it.next();
 
-                if(applicationServiceBean.getStatusCode() == null || (applicationServiceBean.getStatusCode()!=null &&
-                        applicationServiceBean.getStatusCode().equalsIgnoreCase(ServiceStatusTypeBean.STATUS_CODE_CANCELLED))){
+                if(applicationServiceBean.getStatusCode()!=null &&
+                        applicationServiceBean.getStatusCode().equalsIgnoreCase(ServiceStatusTypeBean.STATUS_CODE_CANCELLED)){
                     continue;
                 }
                 
