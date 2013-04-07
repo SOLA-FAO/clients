@@ -8,7 +8,7 @@
     </Component>
     <Component class="org.sola.clients.beans.systematicregistration.SysRegStatusBean" name="sysRegStatusBean">
     </Component>
-    <Component class="org.sola.clients.beans.administrative.SysRegManagementParamsBean" name="searchParams">
+    <Component class="org.sola.clients.beans.systematicregistration.SysRegProgressBean" name="sysRegProgressBean">
     </Component>
   </NonVisualComponents>
   <Properties>

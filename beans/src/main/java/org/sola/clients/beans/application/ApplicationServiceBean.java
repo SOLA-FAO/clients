@@ -276,7 +276,25 @@ public class ApplicationServiceBean extends ApplicationServiceSummaryBean {
         }
     }
     
-    
+     /**
+     * Creates and saves new Information service service in the database.
+     * If another kind of request type is supplied, it will be thrown a server side exception.
+     * @param requestTypeCode Request type code to use for creating service.
+     */
+    public static boolean saveInformationService(String requestTypeCode, String titleRequested) {
+        if (requestTypeCode == null) {
+            return false;
+        }
+        ApplicationServiceBean serviceBean = new ApplicationServiceBean();
+        RequestTypeBean requestType = CacheManager.getBeanByCode(CacheManager.getRequestTypes(), requestTypeCode);
+        if (requestType != null) {
+            serviceBean.setRequestType(requestType);
+            serviceBean.setActionNotes(titleRequested);
+            return serviceBean.saveInformationService();
+        } else {
+            return false;
+        }
+    }
     
      /**
      * Returns collection of {@link ApplicationBean} objects. This method is
