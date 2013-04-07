@@ -44,6 +44,7 @@ import org.sola.webservices.search.MapDefinitionTO;
 import org.sola.webservices.search.QueryForSelect;
 import org.sola.webservices.search.ResultForSelectionInfo;
 import org.sola.webservices.spatial.QueryForNavigation;
+import org.sola.webservices.spatial.QueryForPublicDisplayMap;
 import org.sola.webservices.spatial.ResultForNavigationInfo;
 import org.sola.webservices.transferobjects.transaction.TransactionCadastreChangeTO;
 import org.sola.webservices.transferobjects.transaction.TransactionCadastreRedefinitionTO;
@@ -141,6 +142,37 @@ public class PojoDataAccess {
         spatialQueryInfo.setSrid(srid);
         spatialQueryInfo.setPixelResolution(pixelTolerance);        
         return getSpatialService().getSpatialForNavigation(spatialQueryInfo);
+    }
+
+    /**
+     * Gets the list of features and other relevant information for the given extent
+     * for a layer of type pojo_public_display
+     *
+     * @param name Name of layer
+     * @param west West coordinate
+     * @param south South coordinate
+     * @param east East coordinate
+     * @param north North coordinate
+     * @param srid Srid of the map control
+     * @param pixelTolerance the pixel tolerance. It is not used at the moment
+     * @param nameLastPart The name last part of a cadastre object that is used
+     * in filtering the features.
+     * @return
+     */
+    public ResultForNavigationInfo GetQueryDataForPublicDisplay(String name,
+            double west, double south, double east, double north, int srid,
+            double pixelTolerance, String nameLastPart) {
+        ConfigMapLayerTO configMapLayer = this.getMapLayerInfoList().get(name);
+        QueryForPublicDisplayMap spatialQueryInfo = new QueryForPublicDisplayMap();
+        spatialQueryInfo.setQueryName(configMapLayer.getPojoQueryName());
+        spatialQueryInfo.setWest(west);
+        spatialQueryInfo.setSouth(south);
+        spatialQueryInfo.setEast(east);
+        spatialQueryInfo.setNorth(north);
+        spatialQueryInfo.setSrid(srid);
+        spatialQueryInfo.setPixelResolution(pixelTolerance);        
+        spatialQueryInfo.setNameLastPart(nameLastPart);
+        return getSpatialService().getSpatialForPublicDisplay(spatialQueryInfo);
     }
 
     /**

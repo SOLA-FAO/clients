@@ -50,6 +50,11 @@ import org.sola.clients.swing.gis.ui.control.SolaPrintViewerForm;
 public class SolaJasperPrint extends Print {
 
     private String applicationId;
+    
+    //This is the DPI. Normally the printer has a DPI, the monitor has a DPI. 
+    //Also Jasper engine should have a DPI, which is 72. With this DPI pixels and points are equal
+    private static int DPI = 72;
+
 
     /**
      * Constructor of the jasper based reporting engine print map action.
@@ -57,7 +62,7 @@ public class SolaJasperPrint extends Print {
      * @param map The map control with which the map action will interact
      */
     public SolaJasperPrint(Map map) {
-        super(map, "print");
+        this(map, "print");
     }
 
     public SolaJasperPrint(Map map, String actionName) {
@@ -96,6 +101,27 @@ public class SolaJasperPrint extends Print {
     }
 
     /**
+     * Gets the map image that will be embedded in the report
+     * @param mapImageWidth
+     * @param mapImageHeight
+     * @param scale
+     * @param dpi
+     * @return
+     * @throws IOException 
+     */
+    protected String getMapImage(Double mapImageWidth,  Double mapImageHeight, 
+            double scale, int dpi) throws IOException{
+        
+        String imageFormat = "png";
+        MapImageGenerator mapImageGenerator = new MapImageGenerator(this.getMapControl());
+        //This gives back the absolute location of the map image. 
+        String mapImageLocation = mapImageGenerator.getImageAsFileLocation(
+                mapImageWidth, mapImageHeight, scale, dpi, imageFormat);
+        
+        return mapImageLocation;
+    }
+    
+    /**
      * Additionally to the standard functionality of printing, it supplies the values of user and
      * date to the layout so it can print them as well. Also if the print succeeds it logs against
      * the application the action of printing if the application id is present.
@@ -113,29 +139,19 @@ public class SolaJasperPrint extends Print {
         //This is the image height of the map. It is given in pixels or in points.
         Double mapImageHeight = Double.valueOf(layout.getMap().getHeight());
 
-        //This is the DPI. Normally the printer has a DPI, the monitor has a DPI. 
-        //Also Jasper engine should have a DPI, which is 72. With this DPI pixels and points are equal
-        int dpi = 72;
-        //Here it is possible to change the image format for the map image
-        String imageFormat = "png";
-
         //This is the image width of the scalebar. It is given in pixels or in points.
         //The real width might change from the given size because the scalebar dynamicly looks
         //for the best width. 
         //So in Jasper the width/height of the scalebar is not restricted 
         Double scalebarImageWidth = Double.valueOf(layout.getScalebar().getWidth());
-        String mapImageLocation = null;
-        String scalebarImageLocation = null;
         try {
-            MapImageGenerator mapImageGenerator = new MapImageGenerator(this.getMapControl());
             //This gives back the absolute location of the map image. 
-            mapImageLocation = mapImageGenerator.getImageAsFileLocation(
-                    mapImageWidth, mapImageHeight, scale, dpi, imageFormat);
+            String mapImageLocation = getMapImage(mapImageWidth, mapImageHeight, scale, DPI);
 
             ScalebarGenerator scalebarGenerator = new ScalebarGenerator();
             //This gives back the absolute location of the scalebar image. 
-            scalebarImageLocation = scalebarGenerator.getImageAsFileLocation(
-                    scale, scalebarImageWidth, dpi);
+            String scalebarImageLocation = scalebarGenerator.getImageAsFileLocation(
+                    scale, scalebarImageWidth, DPI);
 
             ApplicationServiceBean serviceBean = new ApplicationServiceBean();
             serviceBean.setRequestTypeCode(RequestTypeBean.CODE_CADASTRE_PRINT);

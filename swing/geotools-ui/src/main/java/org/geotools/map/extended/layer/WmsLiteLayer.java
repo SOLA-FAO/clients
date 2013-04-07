@@ -76,7 +76,7 @@ public class WmsLiteLayer extends DirectLayer {
     private Integer srid;
     private String format = "image/png";
     private Boolean crsIsSouthOriented = null;
-    private static String PROJECTION_SOUTH_ORIENTED = 
+    private static String PROJECTION_SOUTH_ORIENTED =
             "Transverse Mercator (South Orientated)";
 
     /**
@@ -134,14 +134,6 @@ public class WmsLiteLayer extends DirectLayer {
         this.format = format;
     }
 
-    /**
-     * It draws the layer in the map. If the bounds has not changed it reuses
-     * the latest image if that is present.
-     *
-     * @param gd
-     * @param mc
-     * @param mv
-     */
     @Override
     public void draw(Graphics2D gd, MapContent mc, MapViewport mv) {
         if (this.bounds != null && this.bounds.equals(mv.getBounds()) && this.image != null) {
@@ -157,8 +149,8 @@ public class WmsLiteLayer extends DirectLayer {
                 getMapRequest.setSRS(String.format("EPSG:%s", this.srid));
                 //The transparency will not work if the format does not support transparency
                 getMapRequest.setTransparent(true);
-                this.LOGGER.log(Level.INFO,"wms:" + getMapRequest.getFinalURL());
-                
+                this.LOGGER.log(Level.INFO, "wms:" + getMapRequest.getFinalURL());
+
                 GetMapResponse response =
                         new GetMapResponse(httpClient.get(getMapRequest.getFinalURL()));
                 this.image = ImageIO.read(response.getInputStream());

@@ -27,7 +27,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-
 package org.sola.clients.swing.gis.ui.controlsbundle;
 
 import java.util.ArrayList;
@@ -120,9 +119,8 @@ public abstract class SolaControlsBundle extends ControlsBundle {
                     mapDefinition.getNorth(),
                     mapDefinition.getSouth());
 
-            for (ConfigMapLayerTO configMapLayer : mapDefinition.getLayers()) {
-                this.addLayerConfig(configMapLayer);
-            }
+            this.addLayers();
+
             this.getMap().initializeSelectionLayer();
             this.getMap().zoomToFullExtent();
         } catch (InitializeLayerException ex) {
@@ -206,6 +204,19 @@ public abstract class SolaControlsBundle extends ControlsBundle {
 
     public SolaJasperPrint getSolaPrint() {
         return solaPrint;
+    }
+
+    /**
+     * It adds the layers in the map control. It is called internally 
+     * from Setup.
+     * @throws InitializeLayerException
+     * @throws SchemaException 
+     */
+    protected void addLayers() throws InitializeLayerException, SchemaException {
+        for (ConfigMapLayerTO configMapLayer :
+                this.getPojoDataAccess().getMapDefinition().getLayers()) {
+            this.addLayerConfig(configMapLayer);
+        }
     }
 
     /**
