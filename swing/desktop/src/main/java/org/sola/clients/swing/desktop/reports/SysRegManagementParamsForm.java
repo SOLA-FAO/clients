@@ -291,10 +291,6 @@ public class SysRegManagementParamsForm extends javax.swing.JDialog {
             tmpTo = (Date) txtToDate.getValue();
             searchParams.setToDate(tmpTo);
         }
-
-//        System.out.println(dateFilled);
-//        System.out.println(txtFromDate.getValue());
-//        System.out.println(txtToDate.getValue());
         if (dateFilled) {
             if (this.whichReport.contentEquals("sysRegManagementBean") ) {
               sysRegManagementBean.passParameter(searchParams);

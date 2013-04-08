@@ -636,7 +636,7 @@ public class MainForm extends javax.swing.JFrame {
         menuCertificates = new javax.swing.JMenuItem();
         menuReports = new javax.swing.JMenu();
         menuStatus = new javax.swing.JMenuItem();
-        menuManagement = new javax.swing.JMenuItem();
+        menuProgress = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
         jmiContextHelp = new javax.swing.JMenuItem();
@@ -1004,13 +1004,13 @@ public class MainForm extends javax.swing.JFrame {
         });
         menuReports.add(menuStatus);
 
-        menuManagement.setText(bundle.getString("MainForm.menuManagement.text")); // NOI18N
-        menuManagement.addActionListener(new java.awt.event.ActionListener() {
+        menuProgress.setText(bundle.getString("MainForm.menuProgress.text")); // NOI18N
+        menuProgress.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuManagementActionPerformed(evt);
+                menuProgressActionPerformed(evt);
             }
         });
-        menuReports.add(menuManagement);
+        menuReports.add(menuProgress);
 
         menuSystematic.add(menuReports);
 
@@ -1148,7 +1148,6 @@ public class MainForm extends javax.swing.JFrame {
 
     private void openSysRegManagementParamsForm(String whichReport) {
         SysRegManagementParamsForm managementGenerator = new SysRegManagementParamsForm(this, true, whichReport);
-//        SysRegManagementParamsForm managementGenerator = new SysRegManagementParamsForm(this, true);
         managementGenerator.setVisible(true);
     }
 
@@ -1221,13 +1220,13 @@ public class MainForm extends javax.swing.JFrame {
         languageCombobox.confirmedChange = true;
     }//GEN-LAST:event_languageComboboxActionPerformed
 
-    private void menuManagementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuManagementActionPerformed
-        openSysRegManagementParamsForm("sysRegManagementBean");
-    }//GEN-LAST:event_menuManagementActionPerformed
-
     private void menuExportRightsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuExportRightsActionPerformed
         showRightsExportPanel();
     }//GEN-LAST:event_menuExportRightsActionPerformed
+
+    private void menuProgressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuProgressActionPerformed
+        openSysRegManagementParamsForm("sysRegProgressBean");
+    }//GEN-LAST:event_menuProgressActionPerformed
 
     private void editPassword() {
         showPasswordPanel();
@@ -1284,12 +1283,12 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenu menuLanguage;
     private javax.swing.JMenuItem menuLodgementReport;
     private javax.swing.JMenu menuLogLevel;
-    private javax.swing.JMenuItem menuManagement;
     private javax.swing.JMenu menuMap;
     private javax.swing.JMenuItem menuNewApplication;
     private javax.swing.JMenuItem menuOffLogLevel;
     private javax.swing.JMenuItem menuOwnerName;
     private javax.swing.JMenuItem menuPersons;
+    private javax.swing.JMenuItem menuProgress;
     private javax.swing.JMenu menuPublicDisplay;
     private javax.swing.JMenuItem menuPublicNotification;
     private javax.swing.JMenu menuReports;
