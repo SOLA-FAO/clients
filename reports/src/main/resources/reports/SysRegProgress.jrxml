@@ -85,7 +85,7 @@
 				<text><![CDATA[Requested by:]]></text>
 			</staticText>
 			<textField>
-				<reportElement stretchType="RelativeToBandHeight" x="246" y="0" width="309" height="50" forecolor="#006666"/>
+				<reportElement stretchType="RelativeToBandHeight" x="176" y="0" width="379" height="50" forecolor="#006666"/>
 				<textElement textAlignment="Center">
 					<font size="28" isBold="true" isStrikeThrough="false"/>
 				</textElement>
@@ -147,133 +147,180 @@
 				<reportElement key="table" style="table" x="2" y="0" width="553" height="125"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="progress">
-						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanArrayDataSource($F{progressList}.toArray())
-]]></dataSourceExpression>
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanArrayDataSource($F{progressList}.toArray())]]></dataSourceExpression>
 					</datasetRun>
-					<jr:column width="90">
-						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="90" height="30"/>
-								<textElement/>
-								<text><![CDATA[block]]></text>
-							</staticText>
+					<jr:column width="114">
+						<jr:columnHeader style="table_CH" height="40" rowSpan="1">
+							<textField>
+								<reportElement mode="Transparent" x="0" y="0" width="114" height="40" forecolor="#000000" backcolor="#FFFFFF"/>
+								<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+									<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$R{block}]]></textFieldExpression>
+							</textField>
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="20" rowSpan="1">
-							<textField>
-								<reportElement x="0" y="0" width="90" height="20"/>
-								<textElement/>
+							<textField pattern="" isBlankWhenNull="false">
+								<reportElement mode="Transparent" x="0" y="0" width="114" height="20" forecolor="#CC0000" backcolor="#FFFFFF"/>
+								<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+									<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
 								<textFieldExpression><![CDATA[$F{block}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="63">
-						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="63" height="30"/>
-								<textElement/>
-								<text><![CDATA[totAppLod]]></text>
-							</staticText>
+					<jr:column width="76">
+						<jr:columnHeader style="table_CH" height="40" rowSpan="1">
+							<textField pattern="" isBlankWhenNull="false">
+								<reportElement mode="Transparent" x="0" y="0" width="76" height="40" forecolor="#000000" backcolor="#FFFFFF"/>
+								<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+									<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$R{totAppLod}]]></textFieldExpression>
+							</textField>
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="20" rowSpan="1">
-							<textField>
-								<reportElement x="0" y="0" width="63" height="20"/>
-								<textElement/>
+							<textField pattern="" isBlankWhenNull="false">
+								<reportElement mode="Transparent" x="0" y="0" width="76" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+								<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+									<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
 								<textFieldExpression><![CDATA[$F{totAppLod}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="67">
-						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="67" height="30"/>
-								<textElement/>
-								<text><![CDATA[totAppPDisp]]></text>
-							</staticText>
+					<jr:column width="59">
+						<jr:columnHeader style="table_CH" height="40" rowSpan="1">
+							<textField pattern="" isBlankWhenNull="false">
+								<reportElement mode="Transparent" x="0" y="0" width="59" height="40" forecolor="#000000" backcolor="#FFFFFF"/>
+								<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+									<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$R{totAppPDisp}]]></textFieldExpression>
+							</textField>
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="20" rowSpan="1">
-							<textField>
-								<reportElement x="0" y="0" width="67" height="20"/>
-								<textElement/>
+							<textField pattern="" isBlankWhenNull="false">
+								<reportElement mode="Transparent" x="0" y="0" width="59" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+								<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+									<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
 								<textFieldExpression><![CDATA[$F{totAppPDisp}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="65">
-						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="65" height="30"/>
-								<textElement/>
-								<text><![CDATA[totParcLoaded]]></text>
-							</staticText>
+					<jr:column width="58">
+						<jr:columnHeader style="table_CH" height="40" rowSpan="1">
+							<textField pattern="" isBlankWhenNull="false">
+								<reportElement mode="Transparent" x="0" y="0" width="58" height="40" forecolor="#000000" backcolor="#FFFFFF"/>
+								<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+									<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$R{totParcLoaded}]]></textFieldExpression>
+							</textField>
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="20" rowSpan="1">
-							<textField>
-								<reportElement x="0" y="0" width="65" height="20"/>
-								<textElement/>
+							<textField pattern="" isBlankWhenNull="false">
+								<reportElement mode="Transparent" x="0" y="0" width="58" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+								<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+									<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
 								<textFieldExpression><![CDATA[$F{totParcLoaded}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="72">
-						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="72" height="30"/>
-								<textElement/>
-								<text><![CDATA[totRecObj]]></text>
-							</staticText>
+					<jr:column width="57">
+						<jr:columnHeader style="table_CH" height="40" rowSpan="1">
+							<textField pattern="" isBlankWhenNull="false">
+								<reportElement mode="Transparent" x="0" y="0" width="57" height="40" forecolor="#000000" backcolor="#FFFFFF"/>
+								<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+									<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$R{totRecObj}]]></textFieldExpression>
+							</textField>
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="20" rowSpan="1">
-							<textField>
-								<reportElement x="0" y="0" width="72" height="20"/>
-								<textElement/>
+							<textField pattern="" isBlankWhenNull="false">
+								<reportElement mode="Transparent" x="0" y="0" width="57" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+								<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+									<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
 								<textFieldExpression><![CDATA[$F{totRecObj}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="69">
-						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="69" height="30"/>
-								<textElement/>
-								<text><![CDATA[totSolvedObj]]></text>
-							</staticText>
+					<jr:column width="57">
+						<jr:columnHeader style="table_CH" height="40" rowSpan="1">
+							<textField pattern="" isBlankWhenNull="false">
+								<reportElement mode="Transparent" x="0" y="0" width="57" height="40" forecolor="#000000" backcolor="#FFFFFF"/>
+								<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+									<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$R{totSolvedObj}]]></textFieldExpression>
+							</textField>
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="20" rowSpan="1">
-							<textField>
-								<reportElement x="0" y="0" width="69" height="20"/>
-								<textElement/>
+							<textField pattern="" isBlankWhenNull="false">
+								<reportElement mode="Transparent" x="0" y="0" width="57" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+								<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+									<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
 								<textFieldExpression><![CDATA[$F{totSolvedObj}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="71">
-						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="71" height="30"/>
-								<textElement/>
-								<text><![CDATA[totPrepCertificate]]></text>
-							</staticText>
+					<jr:column width="59">
+						<jr:columnHeader style="table_CH" height="40" rowSpan="1">
+							<textField pattern="" isBlankWhenNull="false">
+								<reportElement mode="Transparent" x="0" y="0" width="59" height="40" forecolor="#000000" backcolor="#FFFFFF"/>
+								<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+									<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$R{totPrepCertificate}]]></textFieldExpression>
+							</textField>
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="20" rowSpan="1">
-							<textField>
-								<reportElement x="0" y="0" width="71" height="20"/>
-								<textElement/>
+							<textField pattern="" isBlankWhenNull="false">
+								<reportElement mode="Transparent" x="0" y="0" width="59" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+								<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+									<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
 								<textFieldExpression><![CDATA[$F{totPrepCertificate}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="74">
-						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="74" height="30"/>
-								<textElement/>
-								<text><![CDATA[totIssuedCertificate]]></text>
-							</staticText>
+					<jr:column width="60">
+						<jr:columnHeader style="table_CH" height="40" rowSpan="1">
+							<textField pattern="" isBlankWhenNull="false">
+								<reportElement mode="Transparent" x="0" y="0" width="60" height="40" forecolor="#000000" backcolor="#FFFFFF"/>
+								<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+									<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$R{totIssuedCertificate}]]></textFieldExpression>
+							</textField>
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="20" rowSpan="1">
-							<textField>
-								<reportElement x="0" y="0" width="74" height="20"/>
-								<textElement/>
+							<textField pattern="" isBlankWhenNull="false">
+								<reportElement mode="Transparent" x="0" y="0" width="60" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+								<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+									<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
 								<textFieldExpression><![CDATA[$F{totIssuedCertificate}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
@@ -285,8 +332,8 @@
 	<pageFooter>
 		<band height="54" splitType="Stretch">
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement positionType="FixRelativeToBottom" mode="Transparent" x="41" y="10" width="479" height="28" forecolor="#000000" backcolor="#FFFFFF"/>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+				<reportElement positionType="FixRelativeToBottom" mode="Transparent" x="76" y="0" width="479" height="28" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
