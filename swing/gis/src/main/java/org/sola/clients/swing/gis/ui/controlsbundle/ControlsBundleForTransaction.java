@@ -257,7 +257,9 @@ public abstract class ControlsBundleForTransaction extends SolaControlsBundle {
      */
     @Override
     public void refresh(boolean force) {
-        this.pendingLayer.setForceRefresh(force);
+        if (this.pendingLayer!= null) {
+         this.pendingLayer.setForceRefresh(force);
+        }
         super.refresh(force);
     }
 
