@@ -39,7 +39,7 @@
 		<field name="totIssuedCertificate" class="java.math.BigDecimal">
 			<fieldDescription><![CDATA[totIssuedCertificate]]></fieldDescription>
 		</field>
-		<field name="totParcLoaded" class="java.math.BigDecimal">
+		<field name="totParcLoaded" class="java.lang.String">
 			<fieldDescription><![CDATA[totParcLoaded]]></fieldDescription>
 		</field>
 		<field name="totPrepCertificate" class="java.math.BigDecimal">
@@ -234,6 +234,7 @@
 									<paragraph lineSpacing="Single"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{totParcLoaded}]]></textFieldExpression>
+								<hyperlinkTooltipExpression><![CDATA[$R{tooltipLoadedParcel}]]></hyperlinkTooltipExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>

@@ -36,7 +36,7 @@ public class SysRegProgressBean extends AbstractIdBean {
     private ObservableList<SysRegProgressBean> progressList;
     private String block;
     private BigDecimal TotAppLod;
-    private BigDecimal TotParcLoaded;
+    private String TotParcLoaded;
     private BigDecimal TotRecObj;
     private BigDecimal TotSolvedObj;
     private BigDecimal TotAppPDisp;
@@ -72,11 +72,11 @@ public class SysRegProgressBean extends AbstractIdBean {
         this.TotIssuedCertificate = TotIssuedCertificate;
     }
 
-    public BigDecimal getTotParcLoaded() {
+    public String getTotParcLoaded() {
         return TotParcLoaded;
     }
 
-    public void setTotParcLoaded(BigDecimal TotParcLoaded) {
+    public void setTotParcLoaded(String TotParcLoaded) {
         this.TotParcLoaded = TotParcLoaded;
     }
 
