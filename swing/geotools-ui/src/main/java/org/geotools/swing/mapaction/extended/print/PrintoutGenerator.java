@@ -46,6 +46,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
+import org.geotools.map.MapContent;
 import org.geotools.swing.extended.Map;
 import org.geotools.swing.extended.util.MapImageGenerator;
 import org.geotools.swing.extended.util.ScalebarGenerator;
@@ -66,10 +67,10 @@ public class PrintoutGenerator {
 
     /**
      * Constructor of the utility.
-     * @param map The map control to use for the print
+     * @param mapContent The map content to use for the print
      */
-    public PrintoutGenerator(Map map) {
-        this.mapImageGenerator = new MapImageGenerator(map);
+    public PrintoutGenerator(MapContent mapContent) {
+        this.mapImageGenerator = new MapImageGenerator(mapContent);
     }
 
     /**

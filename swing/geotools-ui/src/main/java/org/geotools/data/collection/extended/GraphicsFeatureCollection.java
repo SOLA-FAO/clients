@@ -163,7 +163,7 @@ public class GraphicsFeatureCollection extends ListFeatureCollection {
                 break;
             }
         }
-        this.close(iterator);
+         this.close(iterator);
         return feature;
     }
     

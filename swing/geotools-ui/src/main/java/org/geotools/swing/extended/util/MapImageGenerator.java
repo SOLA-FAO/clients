@@ -33,20 +33,16 @@
  */
 package org.geotools.swing.extended.util;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import org.geotools.geometry.jts.ReferencedEnvelope;
+import org.geotools.map.MapContent;
+import org.geotools.map.MapViewport;
 import org.geotools.renderer.lite.StreamingRenderer;
-import org.geotools.swing.extended.Map;
 
 /**
  * It is a generator of an image from the current status of the map layers.
@@ -60,19 +56,22 @@ public class MapImageGenerator {
     private final static String TEMPORARY_IMAGE_FILE_LOCATION =
             System.getProperty("user.home") + File.separator + "sola";
     private final static String TEMPORARY_IMAGE_FILE = "map";
-    private Map map;
+    private MapContent mapContent;
     private Color textColor = Color.RED;
     private Font textFont = new Font(Font.SANS_SERIF, Font.BOLD, 10);
 
     /**
      * Constructor of the generator.
      *
-     * @param map The map control used as a source for generating the image
+     * @param mapContent The map content used as a source for generating the image
      */
-    public MapImageGenerator(Map map) {
-        this.map = map;
+    public MapImageGenerator(MapContent mapContent) {
+        this.mapContent = mapContent;
+//        this.mapContent = new MapContent();
+//        this.mapContent.addLayers(mapContent.layers());
+//        this.mapContent.setViewport(new MapViewport(mapContent.getViewport()));
     }
-
+    
     /**
      * Gets the color of the text used in the image
      *
@@ -119,7 +118,7 @@ public class MapImageGenerator {
      * @return An buffered image
      */
     public BufferedImage getImage(double imageWidth, double imageHeight, double scale, int dpi) {
-        ReferencedEnvelope currentExtent = this.map.getDisplayArea();
+        ReferencedEnvelope currentExtent = this.mapContent.getViewport().getBounds();
         double centerX = currentExtent.getMedian(0);
         double centerY = currentExtent.getMedian(1);
         double dotPerCm = dpi / 2.54;
@@ -146,9 +145,23 @@ public class MapImageGenerator {
         graphics.setRenderingHint(
                 RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         StreamingRenderer renderer = new StreamingRenderer();
-        renderer.setMapContent(this.map.getMapContent());
+        renderer.setMapContent(this.mapContent);
         Rectangle rectangle = new Rectangle(imageWidth, imageHeight);
+        
+        //Save the current viewport
+        MapViewport mapViewportOriginal = this.mapContent.getViewport();
+        
+        //Define a new viewport 
+        MapViewport mapViewport = new MapViewport(extent, true);
+        mapViewport.setScreenArea(rectangle);
+        
+        //Set the new viewport
+        renderer.getMapContent().setViewport(mapViewport);
+        
+        //Render map according to the new viewport
         renderer.paint(graphics, rectangle, extent);
+        //Set the previous viewport back
+        this.mapContent.setViewport(mapViewportOriginal);
         graphics.setColor(Color.BLACK);
         graphics.drawRect(0, 0, imageWidth - 1, imageHeight - 1);
         graphics.setFont(this.textFont);
@@ -167,7 +180,7 @@ public class MapImageGenerator {
         this.drawText(graphics, String.format("%s E", (int) extent.getMaxX()),
                 imageWidth - 100, imageHeight / 2, false);
         graphics.setTransform(originalTransform);
-
+        
         return bi;
     }
 

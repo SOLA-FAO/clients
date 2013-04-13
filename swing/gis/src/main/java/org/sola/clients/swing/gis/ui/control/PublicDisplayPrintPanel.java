@@ -4,6 +4,7 @@
  */
 package org.sola.clients.swing.gis.ui.control;
 
+import com.vividsolutions.jts.geom.Envelope;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,7 @@ import org.geotools.swing.mapaction.extended.print.PrintLayout;
 import org.sola.clients.beans.application.ApplicationServiceBean;
 import org.sola.clients.beans.referencedata.RequestTypeBean;
 import org.sola.clients.reports.ReportManager;
+import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.data.PojoPublicDisplayFeatureSource;
 import org.sola.clients.swing.gis.layer.PojoForPublicDisplayLayer;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForPublicDisplay;
@@ -51,6 +53,13 @@ public class PublicDisplayPrintPanel extends javax.swing.JPanel {
         this.mapBundle = mapBundle;
     }
 
+    private String getFilterNameLastPart(){
+        String filter = "";
+        if (txtNameLastPart.getText() != null){
+            filter = txtNameLastPart.getText().trim();
+        }
+        return filter;
+    }
     /**
      * Sets the list of layouts.
      */
@@ -111,7 +120,7 @@ public class PublicDisplayPrintPanel extends javax.swing.JPanel {
         //Set the filter for the layers of type PojoPublicDisplay
         String imageFormat = "png";
         MapImageGenerator mapImageGenerator = new MapImageGenerator(
-                this.mapBundle.getMap());
+                this.mapBundle.getMap().getMapContent());
         //This gives back the absolute location of the map image. 
         String mapImageLocation = mapImageGenerator.getImageAsFileLocation(
                 mapImageWidth, mapImageHeight, scale, dpi, imageFormat);
@@ -194,19 +203,8 @@ public class PublicDisplayPrintPanel extends javax.swing.JPanel {
      * 
      */
     private void centerMap() {
-        ReferencedEnvelope envelope = null;
-        for (PojoForPublicDisplayLayer layer : mapBundle.getPublicDisplayLayers()) {
-            try {
-                if (envelope == null) {
-                    envelope = layer.getFeatureSource().getBounds();
-                } else {
-                    envelope.expandToInclude(layer.getFeatureSource().getBounds());
-                }
-            } catch (IOException ex) {
-                org.sola.common.logging.LogUtility.log(
-                        GisMessage.CADASTRE_CHANGE_ERROR_ADD_CO, ex);
-            }
-        }
+        ReferencedEnvelope envelope = PojoDataAccess.getInstance().getExtentOfPublicDisplay(
+                getFilterNameLastPart());        
         if (envelope != null) {
             envelope.expandBy(10);
             this.mapBundle.getMap().setDisplayArea(envelope);
@@ -220,12 +218,11 @@ public class PublicDisplayPrintPanel extends javax.swing.JPanel {
      * @return True if the filter is set.
      */
     private boolean setLayerFilter() {
-        if (this.txtNameLastPart.getText() == null
-                || this.txtNameLastPart.getText().isEmpty()) {
+        String nameLastPart = getFilterNameLastPart();
+        if ( nameLastPart.isEmpty()) {
             Messaging.getInstance().show(GisMessage.PRINT_PUBLIC_DISPLAY_FILTER_NOT_FOUND);
             return false;
         }
-        String nameLastPart = this.txtNameLastPart.getText().trim();
         boolean mapMustBeRefreshed = false;
         for (PojoForPublicDisplayLayer layer : mapBundle.getPublicDisplayLayers()) {
             String previousNameLastPart =

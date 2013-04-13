@@ -170,7 +170,7 @@ public class Print extends ExtendedAction {
             }
         }
 
-        PrintoutGenerator printoutGenerator = new PrintoutGenerator(this.getMapControl());
+        PrintoutGenerator printoutGenerator = new PrintoutGenerator(this.getMapControl().getMapContent());
         return printoutGenerator.generate(layout, scale);
     }
 

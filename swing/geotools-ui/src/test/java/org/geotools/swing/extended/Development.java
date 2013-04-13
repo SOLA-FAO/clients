@@ -78,9 +78,9 @@ public class Development {
         String wmsServerURL = "http://localhost:8085/geoserver/sola/wms";
         ArrayList<String> wmsLayerNames = new ArrayList<String>();
         wmsLayerNames.add("sola:nz_orthophoto");
-        //ExtendedWmsLiteLayer wmsLayer = new ExtendedWmsLiteLayer(
-        //        "wmsLayer", "WMS Layer", wmsServerURL, wmsLayerNames, 2193);
-        //mapCtrl.getMap().addLayer(wmsLayer);
+        ExtendedWmsLiteLayer wmsLayer = new ExtendedWmsLiteLayer(
+                "wmsLayer", "WMS Layer", wmsServerURL, wmsLayerNames, 2193, "1.1.1", "image/jpeg");
+        mapCtrl.getMap().addLayer(wmsLayer);
         File directory = new File(".");
         String shapeFile =
                 //                String.format("%s\\src\\test\\java\\org\\sola\\clients\\geotools\\ui\\sample\\data\\Samoa_Parcels.shp", 
@@ -90,11 +90,11 @@ public class Development {
                 "Shape layer", "Title of shape layer", shapeFile, "polygon.xml");
         //mapCtrl.getMap().addLayerWms("wmsLayer", "WMS Layer", 
         //        wmsServerURL, wmsLayerNames, true,  "1.1.0", "image/png");
-        ExtendedImageLayer imageLayer = new ExtendedImageLayer("image", "Image");
+        //ExtendedImageLayer imageLayer = new ExtendedImageLayer("image", "Image");
         //imageLayer.setRasterFile(new File("C:\\dev\\projects\\sola\\docs\\test\\test.jpg"));
         //imageLayer.setMinX(1785170);imageLayer.setMinY(5927351);
         //imageLayer.setMaxX(1786311);imageLayer.setMaxY(5928372);
-        mapCtrl.getMap().addLayer(imageLayer);
+        //mapCtrl.getMap().addLayer(imageLayer);
 //            mapCtrl.addLayerShapefile("Shape layer", "C:\\dev\\projects\\sola\\data\\Samoa_Parcels.shp", "parcel.sld");
 //            mapCtrl.addTool(new SolaInfoTool());
         //mapCtrl.addTool(new SolaSplitParcelTool());
@@ -110,7 +110,7 @@ public class Development {
 //                (ExtendedFeatureLayer)mapCtrl.getMap().getSolaLayers().get(solaDrawTool.getLayerName()));
 
         //  mapCtrl.getMap().addTool(snapTool, mapCtrl.getToolbar(), true);
-        mapCtrl.getMap().addTool(new AddDirectImageTool(imageLayer), mapCtrl.getToolbar(), true);
+        //mapCtrl.getMap().addTool(new AddDirectImageTool(imageLayer), mapCtrl.getToolbar(), true);
         mapCtrl.getMap().addMapAction(
                 new RemoveDirectImage(mapCtrl.getMap()), mapCtrl.getToolbar(), true);
         // mapCtrl.getToc().afterNodesAdded();

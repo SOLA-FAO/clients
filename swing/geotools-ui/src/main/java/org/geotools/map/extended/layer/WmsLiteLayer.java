@@ -133,7 +133,7 @@ public class WmsLiteLayer extends DirectLayer {
     public void setFormat(String format) {
         this.format = format;
     }
-
+    
     @Override
     public void draw(Graphics2D gd, MapContent mc, MapViewport mv) {
         if (this.bounds != null && this.bounds.equals(mv.getBounds()) && this.image != null) {
@@ -141,14 +141,14 @@ public class WmsLiteLayer extends DirectLayer {
         } else {
             this.bounds = mv.getBounds();
             SimpleHttpClient httpClient = new SimpleHttpClient();
+            getMapRequest.setBBox(this.bounds);
+            getMapRequest.setDimensions(mv.getScreenArea().getSize());
+            getMapRequest.setFormat(this.format);
+            getMapRequest.setSRS(String.format("EPSG:%s", this.srid));
+            //The transparency will not work if the format does not support transparency
+            getMapRequest.setTransparent(true);
             try {
 
-                getMapRequest.setBBox(this.bounds);
-                getMapRequest.setDimensions(mv.getScreenArea().getSize());
-                getMapRequest.setFormat(this.format);
-                getMapRequest.setSRS(String.format("EPSG:%s", this.srid));
-                //The transparency will not work if the format does not support transparency
-                getMapRequest.setTransparent(true);
                 this.LOGGER.log(Level.INFO, "wms:" + getMapRequest.getFinalURL());
 
                 GetMapResponse response =

@@ -25,19 +25,22 @@
  */
 package org.sola.clients.swing.gis.data;
 
+import com.vividsolutions.jts.geom.Envelope;
+import com.vividsolutions.jts.geom.Geometry;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.geotools.geometry.jts.JTS;
+import org.geotools.geometry.jts.ReferencedEnvelope;
+import org.geotools.swing.extended.util.GeometryUtility;
+import org.opengis.geometry.BoundingBox;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.swing.gis.beans.TransactionCadastreChangeBean;
 import org.sola.clients.swing.gis.beans.TransactionCadastreRedefinitionBean;
 import org.sola.common.logging.LogUtility;
 import org.sola.common.messaging.MessageUtility;
-import org.sola.services.boundary.wsclients.CadastreClient;
-import org.sola.services.boundary.wsclients.SearchClient;
-import org.sola.services.boundary.wsclients.SpatialClient;
-import org.sola.services.boundary.wsclients.WSManager;
+import org.sola.services.boundary.wsclients.*;
 import org.sola.services.boundary.wsclients.exception.WebServiceClientException;
 import org.sola.webservices.search.ConfigMapLayerTO;
 import org.sola.webservices.search.MapDefinitionTO;
@@ -230,6 +233,15 @@ public class PojoDataAccess {
     }
 
     /**
+     * Gets a reference to the spatial web service
+     *
+     * @return
+     */
+    public BulkOperationsClient getBulkOperationsService() {
+        return getInstance().getWSManager().getBulkOperationsService();
+    }
+
+    /**
      * Gets a cadastre change transaction
      *
      * @param serviceId The service id which initializes the transaction
@@ -286,5 +298,20 @@ public class PojoDataAccess {
                      TransactionCadastreRedefinitionBean.class, null);
         }
         return transactionBean;
+    }
+    
+    /**
+     * Gets the extent of the public display map
+     * 
+     * @param nameLastPart
+     * @return 
+     */
+    public ReferencedEnvelope getExtentOfPublicDisplay(String nameLastPart){
+        byte[] e = getBulkOperationsService().getExtentOfPublicDisplayMap(nameLastPart);
+        Geometry extent = GeometryUtility.getGeometryFromWkb(e);
+        if (extent == null){
+            return null;
+        }
+        return JTS.toEnvelope(extent);
     }
 }

@@ -113,7 +113,7 @@ public class SolaJasperPrint extends Print {
             double scale, int dpi) throws IOException{
         
         String imageFormat = "png";
-        MapImageGenerator mapImageGenerator = new MapImageGenerator(this.getMapControl());
+        MapImageGenerator mapImageGenerator = new MapImageGenerator(this.getMapControl().getMapContent());
         //This gives back the absolute location of the map image. 
         String mapImageLocation = mapImageGenerator.getImageAsFileLocation(
                 mapImageWidth, mapImageHeight, scale, dpi, imageFormat);
