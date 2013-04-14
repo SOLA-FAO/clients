@@ -179,16 +179,12 @@ public class SysRegStatusBean extends AbstractIdBean {
 
     //      /** Passes from date and to date search criteria. */
     public void passParameter(SysRegManagementParamsBean params) {
-//        applicationSearchResultsList.clear();
         SysRegManagementParamsTO paramsTO = TypeConverters.BeanToTrasferObject(params,
                 SysRegManagementParamsTO.class);
-      System.out.println("QUI BEAN STATUS==  "+paramsTO.getFromDate());
            
         List<SysRegStatusTO> statusViewTO =
                 WSManager.getInstance().getAdministrative().getSysRegStatus(paramsTO);
         TypeConverters.TransferObjectListToBeanList(statusViewTO,
                 SysRegStatusBean.class, (List) this.getStatusList());
-        System.out.println("QUI BEAN STATUS==  "+statusViewTO.get(0).getBlock());
-      
     }
 }

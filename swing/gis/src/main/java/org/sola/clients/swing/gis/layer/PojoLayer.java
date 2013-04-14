@@ -31,11 +31,9 @@ package org.sola.clients.swing.gis.layer;
 
 import org.geotools.data.simple.SimpleFeatureSource;
 import org.geotools.feature.SchemaException;
+import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.data.PojoFeatureSource;
-import org.geotools.map.extended.layer.ExtendedFeatureLayer;
-import org.geotools.swing.extended.exception.InitializeLayerException;
-import org.sola.webservices.search.ConfigMapLayerTO;
 
 /**
  * The layers of this type are used to draw the features from the server. These layers are mainly
@@ -43,25 +41,7 @@ import org.sola.webservices.search.ConfigMapLayerTO;
  *
  * @author Elton Manoku
  */
-public class PojoLayer extends ExtendedFeatureLayer {
-
-    public static final String CONFIG_PENDING_PARCELS_LAYER_NAME = "pending-parcels";
-    private PojoDataAccess dataAccess;
-    private boolean forceRefresh = false;
-
-    /**
-     * Constructor. Sets the Pojo Layer to visible by default.
-     *
-     * @param name layer name
-     * @param dataAccess the data access that is used to get the features from the server
-     * @throws InitializeLayerException
-     * @throws SchemaException
-     */
-    public PojoLayer(
-            String name,
-            PojoDataAccess dataAccess) throws InitializeLayerException, SchemaException {
-        this(name, dataAccess, true);
-    }
+public class PojoLayer extends PojoBaseLayer {
 
     /**
      * Constructor.
@@ -76,39 +56,12 @@ public class PojoLayer extends ExtendedFeatureLayer {
             String name,
             PojoDataAccess dataAccess,
             boolean visible) throws InitializeLayerException, SchemaException {
-        this.dataAccess = dataAccess;
+        this.setDataAccess(dataAccess);
         this.setLayerName(name);
         this.setTitle(this.getConfig().getTitle());
         String styleResource = this.getConfig().getStyle();
-        SimpleFeatureSource featureSource = new PojoFeatureSource(this.dataAccess, this);
+        SimpleFeatureSource featureSource = new PojoFeatureSource(this.getDataAccess(), this);
         this.initialize(name, featureSource, styleResource);
         this.setVisible(visible);
-    }
-
-    /**
-     * Gets if the layer must be refreshed even the extent of the map is not changed
-     *
-     * @return
-     */
-    public boolean isForceRefresh() {
-        return forceRefresh;
-    }
-
-    /**
-     * Sets if the layer must be refreshed even the extent of the map is not changed
-     *
-     * @param forceRefresh
-     */
-    public void setForceRefresh(boolean forceRefresh) {
-        this.forceRefresh = forceRefresh;
-    }
-
-    /**
-     * Gets the configuration of the layer
-     *
-     * @return
-     */
-    public final ConfigMapLayerTO getConfig() {
-        return this.dataAccess.getMapLayerInfoList().get(this.getLayerName());
-    }
+    }    
 }

@@ -25,25 +25,29 @@
  */
 package org.sola.clients.swing.gis.data;
 
+import com.vividsolutions.jts.geom.Envelope;
+import com.vividsolutions.jts.geom.Geometry;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.geotools.geometry.jts.JTS;
+import org.geotools.geometry.jts.ReferencedEnvelope;
+import org.geotools.swing.extended.util.GeometryUtility;
+import org.opengis.geometry.BoundingBox;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.swing.gis.beans.TransactionCadastreChangeBean;
 import org.sola.clients.swing.gis.beans.TransactionCadastreRedefinitionBean;
 import org.sola.common.logging.LogUtility;
 import org.sola.common.messaging.MessageUtility;
-import org.sola.services.boundary.wsclients.CadastreClient;
-import org.sola.services.boundary.wsclients.SearchClient;
-import org.sola.services.boundary.wsclients.SpatialClient;
-import org.sola.services.boundary.wsclients.WSManager;
+import org.sola.services.boundary.wsclients.*;
 import org.sola.services.boundary.wsclients.exception.WebServiceClientException;
 import org.sola.webservices.search.ConfigMapLayerTO;
 import org.sola.webservices.search.MapDefinitionTO;
 import org.sola.webservices.search.QueryForSelect;
 import org.sola.webservices.search.ResultForSelectionInfo;
 import org.sola.webservices.spatial.QueryForNavigation;
+import org.sola.webservices.spatial.QueryForPublicDisplayMap;
 import org.sola.webservices.spatial.ResultForNavigationInfo;
 import org.sola.webservices.transferobjects.transaction.TransactionCadastreChangeTO;
 import org.sola.webservices.transferobjects.transaction.TransactionCadastreRedefinitionTO;
@@ -144,6 +148,37 @@ public class PojoDataAccess {
     }
 
     /**
+     * Gets the list of features and other relevant information for the given extent
+     * for a layer of type pojo_public_display
+     *
+     * @param name Name of layer
+     * @param west West coordinate
+     * @param south South coordinate
+     * @param east East coordinate
+     * @param north North coordinate
+     * @param srid Srid of the map control
+     * @param pixelTolerance the pixel tolerance. It is not used at the moment
+     * @param nameLastPart The name last part of a cadastre object that is used
+     * in filtering the features.
+     * @return
+     */
+    public ResultForNavigationInfo GetQueryDataForPublicDisplay(String name,
+            double west, double south, double east, double north, int srid,
+            double pixelTolerance, String nameLastPart) {
+        ConfigMapLayerTO configMapLayer = this.getMapLayerInfoList().get(name);
+        QueryForPublicDisplayMap spatialQueryInfo = new QueryForPublicDisplayMap();
+        spatialQueryInfo.setQueryName(configMapLayer.getPojoQueryName());
+        spatialQueryInfo.setWest(west);
+        spatialQueryInfo.setSouth(south);
+        spatialQueryInfo.setEast(east);
+        spatialQueryInfo.setNorth(north);
+        spatialQueryInfo.setSrid(srid);
+        spatialQueryInfo.setPixelResolution(pixelTolerance);        
+        spatialQueryInfo.setNameLastPart(nameLastPart);
+        return getSpatialService().getSpatialForPublicDisplay(spatialQueryInfo);
+    }
+
+    /**
      * Gets a list of selected set of features for each query defined in the parameter.
      *
      * @param queries List of queries used for selecting features
@@ -195,6 +230,15 @@ public class PojoDataAccess {
      */
     public SpatialClient getSpatialService() {
         return getInstance().getWSManager().getSpatialService();
+    }
+
+    /**
+     * Gets a reference to the spatial web service
+     *
+     * @return
+     */
+    public BulkOperationsClient getBulkOperationsService() {
+        return getInstance().getWSManager().getBulkOperationsService();
     }
 
     /**
@@ -254,5 +298,20 @@ public class PojoDataAccess {
                      TransactionCadastreRedefinitionBean.class, null);
         }
         return transactionBean;
+    }
+    
+    /**
+     * Gets the extent of the public display map
+     * 
+     * @param nameLastPart
+     * @return 
+     */
+    public ReferencedEnvelope getExtentOfPublicDisplay(String nameLastPart){
+        byte[] e = getBulkOperationsService().getExtentOfPublicDisplayMap(nameLastPart);
+        Geometry extent = GeometryUtility.getGeometryFromWkb(e);
+        if (extent == null){
+            return null;
+        }
+        return JTS.toEnvelope(extent);
     }
 }

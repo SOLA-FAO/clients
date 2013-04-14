@@ -208,11 +208,16 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         return searchResultsList.getSelectedSource();
     }
 
-    private void print() {
-        if (ApplicationServiceBean.saveInformationService(RequestTypeBean.CODE_DOCUMENT_COPY)) {
-            openDocument();
-        }
-    }
+       private void print() {
+                String titleRequested = null;
+                SourceBean selectedSource = SourceBean.getSource(searchResultsList.getSelectedSource().getId());
+                if (selectedSource != null && selectedSource.getArchiveDocument() != null) {
+                 titleRequested = selectedSource.getReferenceNr();
+                } 
+        if (ApplicationServiceBean.saveInformationService(RequestTypeBean.CODE_DOCUMENT_COPY,titleRequested)) {
+             openDocument();
+         }
+      }
 
     private void openDocument() {
         if (searchResultsList.getSelectedSource().getArchiveDocumentId() == null

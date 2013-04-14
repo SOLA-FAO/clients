@@ -85,6 +85,7 @@ public class SysRegManagementParamsForm extends javax.swing.JDialog {
         searchParams = new org.sola.clients.beans.systematicregistration.SysRegManagementParamsBean();
         sysRegManagementBean = new org.sola.clients.beans.systematicregistration.SysRegManagementBean();
         sysRegStatusBean = new org.sola.clients.beans.systematicregistration.SysRegStatusBean();
+        sysRegProgressBean = new org.sola.clients.beans.systematicregistration.SysRegProgressBean();
         reportViewerPanel = new org.sola.clients.swing.ui.reports.ReportViewerPanel();
         labHeader = new javax.swing.JLabel();
         txtFromDate = new javax.swing.JFormattedTextField();
@@ -259,19 +260,19 @@ public class SysRegManagementParamsForm extends javax.swing.JDialog {
         }
         return sysRegStatusBean;
      }
+     
+      private SysRegProgressBean createSysRegProgressBean() {
+    if (sysRegProgressBean == null) {
+            sysRegProgressBean = new SysRegProgressBean();
+        }
+        return sysRegProgressBean;
+     }
     
     private void viewReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewReportActionPerformed
         boolean dateFilled = false;
         Date tmpFrom;
         Date tmpTo = (Date) txtFromDate.getValue();
-//        if (cadastreObjectSearch.getSelectedElement() != null) {
-//            this.location = cadastreObjectSearch.getSelectedElement().toString();
-//            tmpLocation = (this.location.substring(this.location.indexOf("/") + 1).trim());
-//            searchParams.setNameLastpart(tmpLocation);
-//        } else {
-//            MessageUtility.displayMessage(ClientMessage.CHECK_SELECT_LOCATION);
-//            return;
-//        }
+
 
         if (txtFromDate.getValue() == null) {
             MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_DATEFROM);
@@ -290,10 +291,6 @@ public class SysRegManagementParamsForm extends javax.swing.JDialog {
             tmpTo = (Date) txtToDate.getValue();
             searchParams.setToDate(tmpTo);
         }
-
-//        System.out.println(dateFilled);
-//        System.out.println(txtFromDate.getValue());
-//        System.out.println(txtToDate.getValue());
         if (dateFilled) {
             if (this.whichReport.contentEquals("sysRegManagementBean") ) {
               sysRegManagementBean.passParameter(searchParams);
@@ -303,10 +300,10 @@ public class SysRegManagementParamsForm extends javax.swing.JDialog {
               sysRegStatusBean.passParameter(searchParams);
               showReport(ReportManager.getSysRegStatusReport(sysRegStatusBean, tmpFrom, tmpTo, tmpLocation));
             }
-//            if (this.whichReport == "sysRegWorkBean") {
-//              sysRegWorkBean.passParameter(searchParams);
-//              showReport(ReportManager.getSysRegManagementReport(sysRegManagementBean, tmpFrom, tmpTo, tmpLocation));
-//            }
+            if (this.whichReport == "sysRegProgressBean") {
+              sysRegProgressBean.passParameter(searchParams);
+              showReport(ReportManager.getSysRegProgressReport(sysRegProgressBean, tmpFrom, tmpTo, tmpLocation));
+            }
             this.dispose();
         }
 
@@ -323,6 +320,7 @@ public class SysRegManagementParamsForm extends javax.swing.JDialog {
     private org.sola.clients.swing.ui.reports.ReportViewerPanel reportViewerPanel;
     private org.sola.clients.beans.systematicregistration.SysRegManagementParamsBean searchParams;
     private org.sola.clients.beans.systematicregistration.SysRegManagementBean sysRegManagementBean;
+    private org.sola.clients.beans.systematicregistration.SysRegProgressBean sysRegProgressBean;
     private org.sola.clients.beans.systematicregistration.SysRegStatusBean sysRegStatusBean;
     private javax.swing.JFormattedTextField txtFromDate;
     private javax.swing.JFormattedTextField txtToDate;

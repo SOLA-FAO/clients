@@ -1,26 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO). All rights
- * reserved.
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification, are permitted
- * provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- * 1. Redistributions of source code must retain the above copyright notice,this list of conditions
- * and the following disclaimer. 2. Redistributions in binary form must reproduce the above
- * copyright notice,this list of conditions and the following disclaimer in the documentation and/or
- * other materials provided with the distribution. 3. Neither the name of FAO nor the names of its
- * contributors may be used to endorse or promote products derived from this software without
- * specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
- * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- * WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
- * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 /*
@@ -29,24 +33,21 @@
  */
 package org.geotools.swing.extended.util;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import org.geotools.geometry.jts.ReferencedEnvelope;
+import org.geotools.map.MapContent;
+import org.geotools.map.MapViewport;
 import org.geotools.renderer.lite.StreamingRenderer;
-import org.geotools.swing.extended.Map;
 
 /**
- * It is a generator of an image from the current status of the map layers. <br/> In the sides of
- * the image generated, are added the coordinates of the extent.
+ * It is a generator of an image from the current status of the map layers.
+ * <br/> In the sides of the image generated, are added the coordinates of the
+ * extent.
  *
  * @author Elton Manoku
  */
@@ -55,19 +56,22 @@ public class MapImageGenerator {
     private final static String TEMPORARY_IMAGE_FILE_LOCATION =
             System.getProperty("user.home") + File.separator + "sola";
     private final static String TEMPORARY_IMAGE_FILE = "map";
-    private Map map;
+    private MapContent mapContent;
     private Color textColor = Color.RED;
     private Font textFont = new Font(Font.SANS_SERIF, Font.BOLD, 10);
 
     /**
      * Constructor of the generator.
      *
-     * @param map The map control used as a source for generating the image
+     * @param mapContent The map content used as a source for generating the image
      */
-    public MapImageGenerator(Map map) {
-        this.map = map;
+    public MapImageGenerator(MapContent mapContent) {
+        this.mapContent = mapContent;
+//        this.mapContent = new MapContent();
+//        this.mapContent.addLayers(mapContent.layers());
+//        this.mapContent.setViewport(new MapViewport(mapContent.getViewport()));
     }
-
+    
     /**
      * Gets the color of the text used in the image
      *
@@ -114,7 +118,7 @@ public class MapImageGenerator {
      * @return An buffered image
      */
     public BufferedImage getImage(double imageWidth, double imageHeight, double scale, int dpi) {
-        ReferencedEnvelope currentExtent = this.map.getDisplayArea();
+        ReferencedEnvelope currentExtent = this.mapContent.getViewport().getBounds();
         double centerX = currentExtent.getMedian(0);
         double centerY = currentExtent.getMedian(1);
         double dotPerCm = dpi / 2.54;
@@ -141,9 +145,23 @@ public class MapImageGenerator {
         graphics.setRenderingHint(
                 RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         StreamingRenderer renderer = new StreamingRenderer();
-        renderer.setMapContent(this.map.getMapContent());
+        renderer.setMapContent(this.mapContent);
         Rectangle rectangle = new Rectangle(imageWidth, imageHeight);
+        
+        //Save the current viewport
+        MapViewport mapViewportOriginal = this.mapContent.getViewport();
+        
+        //Define a new viewport 
+        MapViewport mapViewport = new MapViewport(extent, true);
+        mapViewport.setScreenArea(rectangle);
+        
+        //Set the new viewport
+        renderer.getMapContent().setViewport(mapViewport);
+        
+        //Render map according to the new viewport
         renderer.paint(graphics, rectangle, extent);
+        //Set the previous viewport back
+        this.mapContent.setViewport(mapViewportOriginal);
         graphics.setColor(Color.BLACK);
         graphics.drawRect(0, 0, imageWidth - 1, imageHeight - 1);
         graphics.setFont(this.textFont);
@@ -162,33 +180,34 @@ public class MapImageGenerator {
         this.drawText(graphics, String.format("%s E", (int) extent.getMaxX()),
                 imageWidth - 100, imageHeight / 2, false);
         graphics.setTransform(originalTransform);
-
+        
         return bi;
     }
 
     /**
      * It generates the image and it saves it in a temporary file.
-     * 
+     *
      * @param imageWidth The width in pixels/pointers of the image
      * @param imageHeight The height in pixels/pointers of the image
      * @param scale The desired scale
-     * @param dpi The dpi of the target. 
-     * If it is a pdf generation it is the dpi of the pdf generator
-     * @param imageFormat Acceptable formats for the image. Potential values can be jpg, png, bmp
+     * @param dpi The dpi of the target. If it is a pdf generation it is the dpi
+     * of the pdf generator
+     * @param imageFormat Acceptable formats for the image. Potential values can
+     * be jpg, png, bmp
      * @return The absolute path where the image is stored
-     * @throws IOException 
+     * @throws IOException
      */
     public String getImageAsFileLocation(double imageWidth, double imageHeight, double scale,
-            int dpi, String imageFormat) throws IOException{
+            int dpi, String imageFormat) throws IOException {
         File location = new File(TEMPORARY_IMAGE_FILE_LOCATION);
         if (!location.exists()) {
             location.mkdirs();
         }
-        String pathToResult = TEMPORARY_IMAGE_FILE_LOCATION + File.separator 
+        String pathToResult = TEMPORARY_IMAGE_FILE_LOCATION + File.separator
                 + TEMPORARY_IMAGE_FILE + "." + imageFormat;
         File outputFile = new File(pathToResult);
         BufferedImage bufferedImage = this.getImage(imageWidth, imageHeight, scale, dpi);
-            ImageIO.write(bufferedImage, imageFormat, outputFile);
+        ImageIO.write(bufferedImage, imageFormat, outputFile);
         return pathToResult;
     }
 
