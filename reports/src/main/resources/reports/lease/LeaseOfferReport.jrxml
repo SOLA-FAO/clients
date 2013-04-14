@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="511" leftMargin="42" rightMargin="42" topMargin="56" bottomMargin="42" uuid="39dc6402-a451-4bc1-a363-0d22d83db4e2">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="USER_NAME" class="java.lang.String"/>
+	<parameter name="IS_DRAFT" class="java.lang.Boolean"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="applicantName" class="java.lang.String">
+		<fieldDescription><![CDATA[applicantName]]></fieldDescription>
+	</field>
+	<field name="applicationDate" class="java.lang.String">
+		<fieldDescription><![CDATA[applicationDate]]></fieldDescription>
+	</field>
+	<field name="applicationNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[applicationNumber]]></fieldDescription>
+	</field>
+	<field name="firstParcelAddress" class="java.lang.String">
+		<fieldDescription><![CDATA[firstParcelAddress]]></fieldDescription>
+	</field>
+	<field name="firstParcelCode" class="java.lang.String">
+		<fieldDescription><![CDATA[firstParcelCode]]></fieldDescription>
+	</field>
+	<field name="firstParcelLandUse" class="java.lang.String">
+		<fieldDescription><![CDATA[firstParcelLandUse]]></fieldDescription>
+	</field>
+	<field name="firstParcelOfficialArea" class="java.lang.String">
+		<fieldDescription><![CDATA[firstParcelOfficialArea]]></fieldDescription>
+	</field>
+	<field name="rrrPaymentAmount" class="java.lang.String">
+		<fieldDescription><![CDATA[rrrPaymentAmount]]></fieldDescription>
+	</field>
+	<field name="rrrRegDate" class="java.lang.String">
+		<fieldDescription><![CDATA[rrrRegDate]]></fieldDescription>
+	</field>
+	<field name="rrrRegNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[rrrRegNumber]]></fieldDescription>
+	</field>
+	<field name="serviceName" class="java.lang.String">
+		<fieldDescription><![CDATA[serviceName]]></fieldDescription>
+	</field>
+	<background>
+		<band height="744" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="1b0cc664-a954-4e39-a987-0b65ced300ec" mode="Transparent" x="0" y="188" width="511" height="150" forecolor="#E7E7E7">
+					<printWhenExpression><![CDATA[$P{IS_DRAFT}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+					<font size="100" isBold="true"/>
+				</textElement>
+				<text><![CDATA[D R A F T]]></text>
+			</staticText>
+		</band>
+	</background>
+	<title>
+		<band height="72" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="6144225a-eab8-4ce0-8da4-1c9365fc44b4" x="0" y="0" width="511" height="40"/>
+				<textElement>
+					<font size="30"/>
+				</textElement>
+				<text><![CDATA[Letter of offer]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c60586e1-5e90-40b9-a940-b6a673f5e17b" x="0" y="53" width="95" height="19"/>
+				<textElement/>
+				<text><![CDATA[Ref. number:]]></text>
+			</staticText>
+			<textField pattern="HH:mm">
+				<reportElement uuid="121f175e-0ca6-42d9-b56f-a0cba26e2ba2" x="472" y="53" width="39" height="19"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd MMMMM yyyy">
+				<reportElement uuid="76282aac-0229-4765-8956-540d5eb089d9" x="362" y="53" width="105" height="19"/>
+				<textElement textAlignment="Right">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="8e97702d-4362-443b-930c-4e204771da62" x="0" y="40" width="511" height="1"/>
+			</line>
+		</band>
+	</title>
+	<detail>
+		<band height="214" splitType="Stretch">
+			<line>
+				<reportElement uuid="8e97702d-4362-443b-930c-4e204771da62" x="0" y="0" width="511" height="1"/>
+				<graphicElement>
+					<pen lineWidth="2.0"/>
+				</graphicElement>
+			</line>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="77596868-a2d4-4d2b-b9df-a742d7ba4f8c" x="23" y="30" width="463" height="182"/>
+				<textElement markup="html">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[String.format(
+"<font size='4'>" +
+"Dear %s further to your lease application (reference <b>%s</b> date lodged %s) " +
+"I am pleased to inform you that a lease (%s) for parcel <b>%s</b> " +
+"located at %s of %s squar meters is available." +
+"<p></p>" +
+"Could you please call the office to arrange for the signing of the lease. " +
+"You will also need to show that you have paid the first year's ground rent of <b>$%s</b> " +
+"prior to the signing and the uplifting of the documents." +
+"<p></p>" +
+"<p></p>" +
+"<p></p>" +
+"Regards,<br />" +
+"Land Administration office" +
+"</font>",
+$F{applicantName}, $F{applicationNumber}, $F{applicationDate}, $F{firstParcelLandUse}, 
+$F{firstParcelCode}, $F{firstParcelAddress}, $F{firstParcelOfficialArea}, $F{rrrPaymentAmount}
+)]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<lastPageFooter>
+		<band height="50">
+			<line>
+				<reportElement uuid="c60c2c84-1c84-4bcf-bedf-abc0c26b25f9" x="339" y="36" width="169" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="4b2f0300-7166-47f7-923c-5d576d677146" x="339" y="36" width="169" height="14"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Signature]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a48c9e1a-3be0-48ba-8f1b-f8491db52344" x="10" y="15" width="66" height="16"/>
+				<textElement/>
+				<text><![CDATA[Prepared by:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="7e67b1c1-38de-4b0a-bdf8-973f87c638b0" x="76" y="15" width="238" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{USER_NAME}]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+</jasperReport>

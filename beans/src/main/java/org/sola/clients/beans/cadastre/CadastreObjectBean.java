@@ -27,17 +27,23 @@
  */
 package org.sola.clients.beans.cadastre;
 
+import java.math.BigDecimal;
 import java.util.Date;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;
+import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractTransactionedBean;
+import org.sola.clients.beans.address.AddressBean;
 import org.sola.clients.beans.cache.CacheManager;
+import org.sola.clients.beans.controls.SolaList;
 import org.sola.clients.beans.referencedata.CadastreObjectTypeBean;
 import org.sola.clients.beans.referencedata.LandUseTypeBean;
 import org.sola.clients.beans.validation.Localized;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.webservices.transferobjects.cadastre.CadastreObjectTO;
+import org.sola.webservices.transferobjects.EntityAction;
 
 /** 
  * Contains properties and methods to manage <b>Cadastre</b> object of the 
@@ -57,6 +63,9 @@ public class CadastreObjectBean extends AbstractTransactionedBean {
     public static final String PENDING_STATUS = "pending";
     public static final String LAND_USE_TYPE_PROPERTY = "landUseType";
     public static final String LAND_USE_CODE_PROPERTY = "landUseCode";
+    public static final String ADDRESS_LIST_PROPERTY = "addressList";
+    public static final String SELECTED_ADDRESS_PROPERTY = "selectedAddress";
+    public static final String OFFICIAL_AREA_SIZE_PROPERTY = "officialAreaSize";
     
     private Date approvalDatetime;
     private Date historicDatetime;
@@ -73,10 +82,14 @@ public class CadastreObjectBean extends AbstractTransactionedBean {
     private byte[] geomPolygon;
     private transient boolean selected;
     private LandUseTypeBean landUseType;
-    
+    private SolaList<SpatialValueAreaBean> spatialValueAreaList;
+    private SolaList<AddressBean> addressList;
+    private transient AddressBean selectedAddress;
     
     public CadastreObjectBean() {
         super();
+        addressList = new SolaList<AddressBean>();
+        spatialValueAreaList = new SolaList<SpatialValueAreaBean>();
     }
 
     public Date getApprovalDatetime() {
@@ -208,6 +221,123 @@ public class CadastreObjectBean extends AbstractTransactionedBean {
         boolean oldValue = this.selected;
         this.selected = selected;
         propertySupport.firePropertyChange(SELECTED_PROPERTY, oldValue, this.selected);
+    }
+    
+    /** Looks for officialArea code in the list of areas. */
+    @NotNull(message=ClientMessage.CHECK_NOTNULL_AREA, payload=Localized.class)
+    public BigDecimal getOfficialAreaSize(){
+        if(getSpatialValueAreaFiletredList()==null || getSpatialValueAreaFiletredList().size() < 1){
+            return null;
+        }
+        for(SpatialValueAreaBean areaBean : getSpatialValueAreaFiletredList()){
+            if(areaBean.getTypeCode()!=null && areaBean.getTypeCode().equals(SpatialValueAreaBean.CODE_OFFICIAL_AREA)){
+                return areaBean.getSize();
+            }
+        }
+        return null;
+    }
+
+    /** Sets officialArea code. */
+    public void setOfficialAreaSize(BigDecimal area){
+        for(SpatialValueAreaBean areaBean : getSpatialValueAreaFiletredList()){
+            if(areaBean.getTypeCode()!=null && areaBean.getTypeCode().equals(SpatialValueAreaBean.CODE_OFFICIAL_AREA)){
+                // Delete area if provided value is null
+                if(area == null){
+                    areaBean.setEntityAction(EntityAction.DELETE);
+                } else {
+                    areaBean.setSize(area);
+                }
+                break;
+            }
+        }
+        
+        // Official area not found, add new if provided area not null
+        if(area!=null){
+            SpatialValueAreaBean areaBean = new SpatialValueAreaBean();
+            areaBean.setSize(area);
+            areaBean.setTypeCode(SpatialValueAreaBean.CODE_OFFICIAL_AREA);
+            areaBean.setSpatialUnitId(this.getId());
+            getSpatialValueAreaList().addAsNew(areaBean);
+        }
+        propertySupport.firePropertyChange(OFFICIAL_AREA_SIZE_PROPERTY, null, area);
+    }
+    
+    @Valid
+    public ObservableList<AddressBean> getAddressFilteredList() {
+        return addressList.getFilteredList();
+    }
+    
+    public SolaList<AddressBean> getAddressList() {
+        return addressList;
+    }
+
+    public void setAddressList(SolaList<AddressBean> addressList) {
+        this.addressList = addressList;
+    }
+
+    /** Returns merged string of addresses. */
+    public String getAddressString(){
+        String address = "";
+        if(getAddressFilteredList()!=null){
+            for (AddressBean addressBean : getAddressFilteredList()){
+                if(addressBean.getDescription()!=null && !addressBean.getDescription().isEmpty()){
+                    if(address.isEmpty()){
+                        address = addressBean.getDescription();
+                    } else {
+                        address = address + "; " + addressBean.getDescription();
+                    }
+                }
+            }
+        }
+        return address;
+    }
+    
+    public AddressBean getSelectedAddress() {
+        return selectedAddress;
+    }
+
+    public void setSelectedAddress(AddressBean selectedAddress) {
+        AddressBean oldValue = this.selectedAddress;
+        this.selectedAddress = selectedAddress;
+        propertySupport.firePropertyChange(SELECTED_ADDRESS_PROPERTY, oldValue, this.selectedAddress);
+    }
+
+    public SolaList<SpatialValueAreaBean> getSpatialValueAreaList() {
+        return spatialValueAreaList;
+    }
+
+    @Valid
+    public ObservableList<SpatialValueAreaBean> getSpatialValueAreaFiletredList() {
+        return spatialValueAreaList.getFilteredList();
+    }
+    
+    public void setSpatialValueAreaList(SolaList<SpatialValueAreaBean> spatialValueAreaList) {
+        this.spatialValueAreaList = spatialValueAreaList;
+    }
+    
+    /** Adds new cadastre object address. */
+    public void addAddress(AddressBean address){
+        if(address!=null){
+            getAddressList().addAsNew(address);
+        }
+    }
+    
+    /** Removes selected address. */
+    public void removeSelectedAddress(){
+        if(selectedAddress!=null){
+            if(selectedAddress.isNew()){
+                getAddressList().remove(selectedAddress);
+            } else {
+                getAddressList().safeRemove(selectedAddress, EntityAction.DELETE);
+            }
+        }
+    }
+    
+    /** Updates selected address. */
+    public void updateSelectedAddress(AddressBean address){
+        if(selectedAddress!=null && address!=null){
+            selectedAddress.setDescription(address.getDescription());
+        }
     }
     
     @Override

@@ -29,14 +29,13 @@
  */
 package org.sola.clients.swing.desktop.administrative;
 
+import org.sola.clients.swing.desktop.cadastre.CreateParcelDialog;
 import java.awt.BorderLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import net.sf.jasperreports.engine.JasperPrint;
 import org.sola.clients.beans.administrative.*;
 import org.sola.clients.beans.application.ApplicationBean;
@@ -55,14 +54,12 @@ import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.desktop.ReportViewerForm;
+import org.sola.clients.swing.desktop.cadastre.SearchParcelDialog;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForBaUnit;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
+import org.sola.clients.swing.ui.renderers.*;
 import org.sola.clients.swing.ui.source.AddDocumentForm;
-import org.sola.clients.swing.ui.renderers.DateTimeRenderer;
-import org.sola.clients.swing.ui.renderers.LockCellRenderer;
-import org.sola.clients.swing.ui.renderers.SimpleComboBoxRenderer;
-import org.sola.clients.swing.ui.renderers.TableCellListRenderer;
 import org.sola.clients.swing.ui.source.DocumentsPanel;
 import org.sola.common.RolesConstants;
 import org.sola.common.messaging.ClientMessage;
@@ -602,6 +599,7 @@ public class PropertyPanel extends ContentPanel {
             btnRemoveParcel.setEnabled(true);
         }
         btnAddParcel.setEnabled(!readOnly);
+        btnSearchParcel.setEnabled(!readOnly);
         menuAddParcel.setEnabled(btnAddParcel.isEnabled());
         menuRemoveParcel.setEnabled(btnRemoveParcel.isEnabled());
     }
@@ -770,9 +768,10 @@ public class PropertyPanel extends ContentPanel {
     }
 
     /**
-     * Open form to add new parcel.
+     * Open form to add new parcel or search for existing one.\
+     * @param isNew Opens {@link CreateParcelDialog} if true, otherwise opens {@link SearchParcelDialog}
      */
-    private void addParcel() {
+    private void addParcel(boolean isNew) {
         
         PropertyChangeListener listener = new PropertyChangeListener() {
             
@@ -784,13 +783,18 @@ public class PropertyPanel extends ContentPanel {
             }
         };
         
-        CreateParcelForm parcelForm = new CreateParcelForm(null, true);
+        JDialog form;
         
-        parcelForm.setLocationRelativeTo(this);
-        parcelForm.addPropertyChangeListener(CreateParcelForm.SELECTED_PARCEL, listener);
-        parcelForm.setVisible(true);
-        parcelForm.removePropertyChangeListener(CreateParcelForm.SELECTED_PARCEL, listener);
+        if(isNew){
+            form = new CreateParcelDialog(null, null, true);
+        } else {
+            form = new SearchParcelDialog(null, true);
+        }
         
+        form.setLocationRelativeTo(this);
+        form.addPropertyChangeListener(CreateParcelDialog.SELECTED_PARCEL, listener);
+        form.setVisible(true);
+        form.removePropertyChangeListener(CreateParcelDialog.SELECTED_PARCEL, listener);
     }
 
     /**
@@ -921,7 +925,7 @@ public class PropertyPanel extends ContentPanel {
             panel = new MortgagePanel(rrrBean, applicationBean, applicationService, action);
             cardName = MainContentPanel.CARD_MORTGAGE;
         } else if (rrrCode.equalsIgnoreCase(RrrBean.CODE_LEASE)){
-            panel = new LeasePanel(rrrBean, applicationBean, applicationService, action);
+            panel = new LeasePanel(baUnitBean1, rrrBean, applicationBean, applicationService, action);
             cardName = MainContentPanel.CARD_LEASE;
         } else if (rrrCode.equalsIgnoreCase(RrrBean.CODE_AGRI_ACTIVITY)
                 || rrrCode.equalsIgnoreCase(RrrBean.CODE_COMMON_OWNERSHIP)
@@ -1231,6 +1235,7 @@ public class PropertyPanel extends ContentPanel {
         tableParcels = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
         jToolBar1 = new javax.swing.JToolBar();
         btnAddParcel = new javax.swing.JButton();
+        btnSearchParcel = new javax.swing.JButton();
         btnRemoveParcel = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jPanel16 = new javax.swing.JPanel();
@@ -1293,7 +1298,7 @@ public class PropertyPanel extends ContentPanel {
 
         popupParcels.setName("popupParcels"); // NOI18N
 
-        menuAddParcel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
+        menuAddParcel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/new.png"))); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
         menuAddParcel.setText(bundle.getString("PropertyPanel.menuAddParcel.text")); // NOI18N
         menuAddParcel.setName("menuAddParcel"); // NOI18N
@@ -1760,6 +1765,14 @@ public class PropertyPanel extends ContentPanel {
         columnBinding.setColumnName("Source Reference");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${officialAreaSize}"));
+        columnBinding.setColumnName("Official Area Size");
+        columnBinding.setColumnClass(java.math.BigDecimal.class);
+        columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${addressString}"));
+        columnBinding.setColumnName("Address String");
+        columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${status.displayValue}"));
         columnBinding.setColumnName("Status.display Value");
         columnBinding.setColumnClass(String.class);
@@ -1777,17 +1790,20 @@ public class PropertyPanel extends ContentPanel {
         tableParcels.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title1")); // NOI18N
         tableParcels.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title3")); // NOI18N
         tableParcels.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title2")); // NOI18N
-        tableParcels.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title4")); // NOI18N
-        tableParcels.getColumnModel().getColumn(5).setPreferredWidth(40);
-        tableParcels.getColumnModel().getColumn(5).setMaxWidth(40);
-        tableParcels.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title5")); // NOI18N
-        tableParcels.getColumnModel().getColumn(5).setCellRenderer(new LockCellRenderer());
+        tableParcels.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title6")); // NOI18N
+        tableParcels.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title7")); // NOI18N
+        tableParcels.getColumnModel().getColumn(5).setCellRenderer(new CellDelimitedListRenderer("; ", false));
+        tableParcels.getColumnModel().getColumn(6).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title4")); // NOI18N
+        tableParcels.getColumnModel().getColumn(7).setPreferredWidth(40);
+        tableParcels.getColumnModel().getColumn(7).setMaxWidth(40);
+        tableParcels.getColumnModel().getColumn(7).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title5")); // NOI18N
+        tableParcels.getColumnModel().getColumn(7).setCellRenderer(new LockCellRenderer());
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
         jToolBar1.setName("jToolBar1"); // NOI18N
 
-        btnAddParcel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
+        btnAddParcel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/new.png"))); // NOI18N
         btnAddParcel.setText(bundle.getString("PropertyPanel.btnAddParcel.text")); // NOI18N
         btnAddParcel.setName("btnAddParcel"); // NOI18N
         btnAddParcel.addActionListener(new java.awt.event.ActionListener() {
@@ -1796,6 +1812,17 @@ public class PropertyPanel extends ContentPanel {
             }
         });
         jToolBar1.add(btnAddParcel);
+
+        btnSearchParcel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/search.png"))); // NOI18N
+        btnSearchParcel.setText(bundle.getString("PropertyPanel.btnSearchParcel.text_1")); // NOI18N
+        btnSearchParcel.setFocusable(false);
+        btnSearchParcel.setName(bundle.getString("PropertyPanel.btnSearchParcel.name_1")); // NOI18N
+        btnSearchParcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchParcelActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnSearchParcel);
 
         btnRemoveParcel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
         btnRemoveParcel.setText(bundle.getString("PropertyPanel.btnRemoveParcel.text")); // NOI18N
@@ -2643,11 +2670,11 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     }//GEN-LAST:event_btnLinkPaperTitleActionPerformed
     
     private void menuAddParcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAddParcelActionPerformed
-        addParcel();
+        addParcel(true);
     }//GEN-LAST:event_menuAddParcelActionPerformed
     
     private void btnAddParcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddParcelActionPerformed
-        addParcel();
+        addParcel(true);
     }//GEN-LAST:event_btnAddParcelActionPerformed
     
     private void btnRemoveParcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveParcelActionPerformed
@@ -2777,6 +2804,11 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
             openRightForm(baUnitBean1.getSelectedHistoricRight(), RrrBean.RRR_ACTION.VIEW);
         }
     }//GEN-LAST:event_tableRightsHistoryMouseClicked
+
+    private void btnSearchParcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchParcelActionPerformed
+        addParcel(false);
+    }//GEN-LAST:event_btnSearchParcelActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel areaPanel;
     private org.sola.clients.beans.administrative.BaUnitAreaBean baUnitAreaBean1;
@@ -2799,6 +2831,7 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private javax.swing.JButton btnRemoveParent;
     private javax.swing.JButton btnRemoveRight;
     private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnSearchParcel;
     private javax.swing.JButton btnTerminate;
     private javax.swing.JButton btnViewHistoricRight;
     private javax.swing.JButton btnViewPaperTitle;

@@ -187,6 +187,11 @@ public final class CacheManager {
      * Cache key of the {@link LandUseTypeBean} collection.
      */
     public static final String LAND_USE_TYPE_CODES_KEY = LandUseTypeBean.class.getName() + LIST_POSTFIX;
+    /**
+     * Cache key of the {@link LeaseConditionBean} collection.
+     */
+    public static final String LEASE_CONDITION_CODES_KEY = LeaseConditionBean.class.getName() + LIST_POSTFIX;
+    
     private static final String GET_APPLICATION_STATUS_TYPES = "getApplicationStatusTypes";
     private static final String GET_SOURCE_TYPES = "getSourceTypes";
     private static final String GET_COMMUNICATION_TYPES = "getCommunicationTypes";
@@ -215,7 +220,8 @@ public final class CacheManager {
     private static final String GET_BR_VALIDATION_TARGET_TYPES = "getBrValidationTargetTypes";
     private static final String GET_BA_UNIT_REL_TYPES = "getBaUnitRelTypes";
     private static final String GET_LAND_USE_TYPES = "getLandUseTypes";
-
+    private static final String GET_LEASE_CONDITIONS = "getLeaseConditions";
+            
     public static List<BrValidationTargetTypeBean> getBrValidationTargetTypes() {
         return getCachedBeanList(BrValidationTargetTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
@@ -324,6 +330,12 @@ public final class CacheManager {
                 GET_ID_TYPES, ID_TYPE_CODES_KEY);
     }
 
+    public static List<LeaseConditionBean> getLeaseConditions() {
+        return getCachedBeanList(LeaseConditionBean.class,
+                WSManager.getInstance().getReferenceDataService(),
+                GET_LEASE_CONDITIONS, LEASE_CONDITION_CODES_KEY);
+    }
+    
     public static List<PartyTypeBean> getPartyTypes() {
         return getCachedBeanList(PartyTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),

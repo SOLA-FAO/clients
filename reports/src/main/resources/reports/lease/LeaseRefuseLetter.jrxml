@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="511" leftMargin="42" rightMargin="42" topMargin="56" bottomMargin="42" uuid="e4f279a1-69b2-4c7f-8234-3e42999334a5">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="USER_NAME" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="applicantName" class="java.lang.String">
+		<fieldDescription><![CDATA[applicantName]]></fieldDescription>
+	</field>
+	<field name="applicationDate" class="java.lang.String">
+		<fieldDescription><![CDATA[applicationDate]]></fieldDescription>
+	</field>
+	<field name="applicationNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[applicationNumber]]></fieldDescription>
+	</field>
+	<field name="firstParcelAddress" class="java.lang.String">
+		<fieldDescription><![CDATA[firstParcelAddress]]></fieldDescription>
+	</field>
+	<field name="firstParcelCode" class="java.lang.String">
+		<fieldDescription><![CDATA[firstParcelCode]]></fieldDescription>
+	</field>
+	<field name="firstParcelMapRef" class="java.lang.String">
+		<fieldDescription><![CDATA[firstParcelMapRef]]></fieldDescription>
+	</field>
+	<field name="firstParcelOfficialArea" class="java.lang.String">
+		<fieldDescription><![CDATA[firstParcelOfficialArea]]></fieldDescription>
+	</field>
+	<field name="serviceName" class="java.lang.String">
+		<fieldDescription><![CDATA[serviceName]]></fieldDescription>
+	</field>
+	<field name="freeText" class="java.lang.String">
+		<fieldDescription><![CDATA[freeText]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="80" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="99d1fff7-c879-44e1-8223-fdf259273dda" x="0" y="0" width="511" height="38"/>
+				<textElement>
+					<font size="30"/>
+				</textElement>
+				<text><![CDATA[Lease rejection letter]]></text>
+			</staticText>
+			<textField pattern="dd MMMMM yyyy">
+				<reportElement uuid="76282aac-0229-4765-8956-540d5eb089d9" x="361" y="58" width="105" height="19"/>
+				<textElement textAlignment="Right">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField pattern="HH:mm">
+				<reportElement uuid="121f175e-0ca6-42d9-b56f-a0cba26e2ba2" x="472" y="58" width="39" height="19"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="8e97702d-4362-443b-930c-4e204771da62" x="0" y="77" width="511" height="1"/>
+				<graphicElement>
+					<pen lineWidth="2.0"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="8e97702d-4362-443b-930c-4e204771da62" x="0" y="47" width="511" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="c60586e1-5e90-40b9-a940-b6a673f5e17b" x="0" y="58" width="95" height="19"/>
+				<textElement/>
+				<text><![CDATA[Ref. number:]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="215" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="77596868-a2d4-4d2b-b9df-a742d7ba4f8c" x="15" y="25" width="477" height="190"/>
+				<textElement markup="html">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[String.format(
+"<font size='4'>" +
+"Dear %s," +
+"<p></p>" +
+"This is to inform you, that your request made by application <b>#%s</b> on the date of %s to <b>%s</b> " +
+"for the parcel <b>%s</b>, located at %s, was rejected with the following reason:" +
+"<p></p>" +
+"<i>%s</i>" +
+"<p></p>" +
+"<p></p>" +
+"Regards,<br />" +
+"Land Administration office" +
+"</font>",
+$F{applicantName}, $F{applicationNumber}, $F{applicationDate}, $F{serviceName}, 
+$F{firstParcelCode}, $F{firstParcelAddress}, $F{freeText}
+)]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<lastPageFooter>
+		<band height="50">
+			<staticText>
+				<reportElement uuid="a48c9e1a-3be0-48ba-8f1b-f8491db52344" x="13" y="13" width="66" height="16"/>
+				<textElement/>
+				<text><![CDATA[Prepared by:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="7e67b1c1-38de-4b0a-bdf8-973f87c638b0" x="79" y="13" width="238" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{USER_NAME}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="4b2f0300-7166-47f7-923c-5d576d677146" x="342" y="34" width="169" height="14"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Signature]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="c60c2c84-1c84-4bcf-bedf-abc0c26b25f9" x="342" y="34" width="169" height="1"/>
+			</line>
+		</band>
+	</lastPageFooter>
+</jasperReport>

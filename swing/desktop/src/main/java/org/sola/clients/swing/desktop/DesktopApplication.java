@@ -29,8 +29,6 @@
  */
 package org.sola.clients.swing.desktop;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import org.sola.clients.swing.common.LafManager;
@@ -38,6 +36,7 @@ import org.sola.clients.swing.common.LocalizationManager;
 import org.sola.clients.swing.ui.DesktopClientExceptionHandler;
 import org.sola.clients.swing.ui.security.LoginForm;
 import org.sola.clients.swing.ui.security.LoginPanel;
+import org.sola.common.WindowUtility;
 import org.sola.common.logging.LogUtility;
 
 /**
@@ -51,12 +50,8 @@ public class DesktopApplication {
      */
     public static void main(String[] args) {
         // Show splash screen
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        int x = ((dim.width) / 2);
-        int y = ((dim.height) / 2);
-
         SplashForm splash = new SplashForm();
-        splash.setLocation(x - (splash.getWidth() / 2), y - (splash.getHeight() / 2));
+        WindowUtility.centerForm(splash);
         splash.setVisible(true);
 
         try {
@@ -71,10 +66,6 @@ public class DesktopApplication {
 
             @Override
             public void run() {
-                Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-                int x = ((dim.width) / 2);
-                int y = ((dim.height) / 2);
-
                 Thread.setDefaultUncaughtExceptionHandler(new DesktopClientExceptionHandler());
                 LocalizationManager.loadLanguage(DesktopApplication.class);
                 LogUtility.initialize(DesktopApplication.class);
@@ -93,7 +84,7 @@ public class DesktopApplication {
                         }
                     }
                 });
-                loginForm.setLocation(x - (loginForm.getWidth() / 2), y - (loginForm.getHeight() / 2));
+                WindowUtility.centerForm(loginForm);
                 loginForm.setVisible(true);
             }
         });

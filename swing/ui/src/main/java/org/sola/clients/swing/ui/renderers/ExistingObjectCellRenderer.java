@@ -63,7 +63,7 @@ public class ExistingObjectCellRenderer extends DefaultTableCellRenderer {
                 }
                 if (imageFalse == null) {
                     imageFalse = new ImageIcon(AttachedDocumentCellRenderer.class.getResource(
-                            "/images/common/stop.png"));
+                            "/images/common/minus.png"));
                 }
                 
                 if(realValue){

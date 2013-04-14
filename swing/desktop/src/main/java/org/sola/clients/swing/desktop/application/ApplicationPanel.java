@@ -98,7 +98,6 @@ public class ApplicationPanel extends ContentPanel {
     public static final String APPLICATION_SAVED_PROPERTY = "applicationSaved";
     private String applicationID;
     private boolean isDashboard = false;
-    ApplicationServiceBean service;
     ApplicationPropertyBean property;
 
     /**
@@ -133,13 +132,13 @@ public class ApplicationPanel extends ContentPanel {
 
     private DocumentsManagementExtPanel createDocumentsPanel() {
         if (documentsPanel == null) {
-            if(appBean !=null){
-            documentsPanel = new DocumentsManagementExtPanel(
-                    appBean.getSourceList(), null, appBean.isEditingAllowed());
+            if (appBean != null) {
+                documentsPanel = new DocumentsManagementExtPanel(
+                        appBean.getSourceList(), null, appBean.isEditingAllowed());
             } else {
                 documentsPanel = new DocumentsManagementExtPanel();
             }
-        } 
+        }
         return documentsPanel;
     }
 
@@ -481,8 +480,7 @@ public class ApplicationPanel extends ContentPanel {
                 public Void doTask() {
                     setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PROPERTY));
                     ApplicationBean applicationBean = appBean.copy();
-                    PropertyPanel propertyPnl = new PropertyPanel(applicationBean,
-                            service, baUnitBean, readOnly);
+                    PropertyPanel propertyPnl = new PropertyPanel(applicationBean, service, baUnitBean, readOnly);
                     getMainContentPanel().addPanel(propertyPnl, MainContentPanel.CARD_PROPERTY_PANEL, true);
                     return null;
                 }
@@ -498,18 +496,27 @@ public class ApplicationPanel extends ContentPanel {
         }
     }
 
-    private void openPropertyForm(final ApplicationPropertyBean applicationProperty, final boolean readOnly) {
+    private void openPropertyForm(final ApplicationServiceBean service,
+            final ApplicationPropertyBean applicationProperty, final boolean readOnly) {
         if (applicationProperty != null) {
 
             SolaTask t = new SolaTask<Void, Void>() {
 
                 @Override
                 public Void doTask() {
-                    setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PROPERTY));
                     ApplicationBean applicationBean = appBean.copy();
-                    PropertyPanel propertyPnl = new PropertyPanel(applicationBean,
-                            service, applicationProperty.getNameFirstpart(),
-                            applicationProperty.getNameLastpart(), readOnly);
+                    PropertyPanel propertyPnl;
+
+                    if (applicationProperty.getBaUnitId() != null) {
+                        setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_BA_UNIT_GETTING));
+                        BaUnitBean baUnitBean = BaUnitBean.getBaUnitsById(applicationProperty.getBaUnitId());
+                        propertyPnl = new PropertyPanel(applicationBean, service, baUnitBean, readOnly);
+                    } else {
+                        propertyPnl = new PropertyPanel(applicationBean,
+                                service, applicationProperty.getNameFirstpart(),
+                                applicationProperty.getNameLastpart(), readOnly);
+                    }
+                    setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PROPERTY));
                     getMainContentPanel().addPanel(propertyPnl, MainContentPanel.CARD_PROPERTY_PANEL, true);
                     return null;
                 }
@@ -736,10 +743,8 @@ public class ApplicationPanel extends ContentPanel {
                     } else {
 
                         // Open property form for existing title changes
-                        this.service = service;
-
                         if (appBean.getPropertyList().getFilteredList().size() == 1) {
-                            openPropertyForm(appBean.getPropertyList().getFilteredList().get(0), readOnly);
+                            openPropertyForm(service, appBean.getPropertyList().getFilteredList().get(0), readOnly);
                         } else if (appBean.getPropertyList().getFilteredList().size() > 1) {
                             PropertiesList propertyListForm = new PropertiesList(appBean.getPropertyList());
                             propertyListForm.setLocationRelativeTo(this);
@@ -752,7 +757,7 @@ public class ApplicationPanel extends ContentPanel {
                                             && evt.getNewValue() != null) {
                                         ApplicationPropertyBean property = (ApplicationPropertyBean) evt.getNewValue();
                                         ((JDialog) evt.getSource()).dispose();
-                                        openPropertyForm(property, readOnly);
+                                        openPropertyForm(service, property, readOnly);
                                     }
                                 }
                             });
@@ -854,6 +859,7 @@ public class ApplicationPanel extends ContentPanel {
 
     }
 
+    @Override
     public void refreshDashboard() {
         PropertyChangeListener listener = new PropertyChangeListener() {
 
@@ -878,23 +884,6 @@ public class ApplicationPanel extends ContentPanel {
                 }
             }
         }
-
-    }
-
-    private void openSeachDocuments() {
-        DocumentSearchDialog form = new DocumentSearchDialog(null, true);
-        form.addPropertyChangeListener(new PropertyChangeListener() {
-
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                if (evt.getPropertyName().equals(org.sola.clients.swing.ui.source.DocumentSearchPanel.SELECT_SOURCE)) {
-                    appBean.getSourceList().addAsNew((SourceBean) evt.getNewValue());
-                    MessageUtility.displayMessage(ClientMessage.SOURCE_ADDED);
-                }
-            }
-        });
-        form.setLocationRelativeTo(this);
-        form.setVisible(true);
     }
 
     /**
@@ -2071,7 +2060,7 @@ public class ApplicationPanel extends ContentPanel {
         });
         tbPropertyDetails.add(btnRemoveProperty);
 
-        btnVerifyProperty.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/verify.png"))); // NOI18N
+        btnVerifyProperty.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/document-task.png"))); // NOI18N
         btnVerifyProperty.setText(bundle.getString("ApplicationPanel.btnVerifyProperty.text")); // NOI18N
         btnVerifyProperty.setName("btnVerifyProperty"); // NOI18N
         btnVerifyProperty.addActionListener(new java.awt.event.ActionListener() {
@@ -2102,11 +2091,11 @@ public class ApplicationPanel extends ContentPanel {
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${totalValue}"));
         columnBinding.setColumnName("Total Value");
         columnBinding.setColumnClass(java.math.BigDecimal.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${verifiedExists}"));
-        columnBinding.setColumnName("Verified Exists");
-        columnBinding.setColumnClass(Boolean.class);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${verifiedLocation}"));
         columnBinding.setColumnName("Verified Location");
+        columnBinding.setColumnClass(Boolean.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${verifiedExists}"));
+        columnBinding.setColumnName("Verified Exists");
         columnBinding.setColumnClass(Boolean.class);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${landUseType.displayValue}"));
         columnBinding.setColumnName("Land Use Type.display Value");
@@ -2120,9 +2109,9 @@ public class ApplicationPanel extends ContentPanel {
         tabPropertyDetails.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("ApplicationPanel.tabPropertyDetails.columnModel.title1")); // NOI18N
         tabPropertyDetails.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("ApplicationPanel.tabPropertyDetails.columnModel.title2")); // NOI18N
         tabPropertyDetails.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("ApplicationPanel.tabPropertyDetails.columnModel.title3")); // NOI18N
-        tabPropertyDetails.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("ApplicationPanel.tabPropertyDetails.columnModel.title4")); // NOI18N
+        tabPropertyDetails.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("ApplicationPanel.tabPropertyDetails.columnModel.title6")); // NOI18N
         tabPropertyDetails.getColumnModel().getColumn(4).setCellRenderer(new ExistingObjectCellRenderer());
-        tabPropertyDetails.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("ApplicationPanel.tabPropertyDetails.columnModel.title6")); // NOI18N
+        tabPropertyDetails.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("ApplicationPanel.tabPropertyDetails.columnModel.title4")); // NOI18N
         tabPropertyDetails.getColumnModel().getColumn(5).setCellRenderer(new ExistingObjectCellRenderer());
         tabPropertyDetails.getColumnModel().getColumn(6).setHeaderValue(bundle.getString("ApplicationPanel.tabPropertyDetails.columnModel.title6_1")); // NOI18N
 
@@ -3154,7 +3143,6 @@ public class ApplicationPanel extends ContentPanel {
     private void startService() {
         final ApplicationServiceBean selectedService = appBean.getSelectedService();
 
-
         if (selectedService != null) {
 
             SolaTask t = new SolaTask<Void, Void>() {
@@ -3333,14 +3321,6 @@ public class ApplicationPanel extends ContentPanel {
 
         if (appBean.verifyProperty()) {
             MessageUtility.displayMessage(ClientMessage.APPLICATION_PROPERTY_VERIFIED);
-        }
-    }
-
-    private void removeSelectedSource() {
-        if (appBean.getSelectedSource() != null) {
-            //if (MessageUtility.displayMessage(ClientMessage.CONFIRM_DELETE_RECORD) == MessageUtility.BUTTON_ONE) {
-            appBean.removeSelectedSource();
-            //}
         }
     }
 

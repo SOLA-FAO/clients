@@ -82,7 +82,7 @@ public class PropertiesList extends javax.swing.JDialog {
         setTitle(bundle.getString("PropertiesList.title")); // NOI18N
         setName("Form"); // NOI18N
 
-        scrollPropertyDetails.setFont(new java.awt.Font("Tahoma 12 12", 0, 12));
+        scrollPropertyDetails.setFont(new java.awt.Font("Tahoma 12 12", 0, 12)); // NOI18N
         scrollPropertyDetails.setName("scrollPropertyDetails"); // NOI18N
         scrollPropertyDetails.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
 

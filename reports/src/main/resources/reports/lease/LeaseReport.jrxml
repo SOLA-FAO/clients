@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="511" leftMargin="42" rightMargin="42" topMargin="56" bottomMargin="42" uuid="bee728ba-5052-4f3d-a9e1-f1bcfc9cb226">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="145"/>
+	<subDataset name="Lessees" uuid="7ff962bd-051e-42e2-81d4-8d0683473b83">
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+		<field name="fullName" class="java.lang.String">
+			<fieldDescription><![CDATA[fullName]]></fieldDescription>
+		</field>
+	</subDataset>
+	<subDataset name="dataset1" uuid="d473c79f-b54d-4225-abc4-d37b213a0c02"/>
+	<subDataset name="SpecialConditions" uuid="428c8988-483f-4c63-8fb5-516bc0a0ca1a">
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+		<field name="conditionText" class="java.lang.String">
+			<fieldDescription><![CDATA[conditionText]]></fieldDescription>
+		</field>
+	</subDataset>
+	<subDataset name="StandardConditions" uuid="50c54568-f7ec-4a83-84de-97533944b126">
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+		<field name="conditionText" class="java.lang.String">
+			<fieldDescription><![CDATA[conditionText]]></fieldDescription>
+		</field>
+	</subDataset>
+	<subDataset name="dataset2" uuid="f4852da3-0f0d-4667-9d9b-98c33011d1ba"/>
+	<subDataset name="dataset3" uuid="49f696fb-a1cc-4ee9-88ae-54f352a4811e"/>
+	<parameter name="USER_NAME" class="java.lang.String"/>
+	<parameter name="IS_DRAFT" class="java.lang.Boolean"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="applicantName" class="java.lang.String">
+		<fieldDescription><![CDATA[applicantName]]></fieldDescription>
+	</field>
+	<field name="application" class="org.sola.clients.beans.application.ApplicationBean">
+		<fieldDescription><![CDATA[application]]></fieldDescription>
+	</field>
+	<field name="applicationDate" class="java.lang.String">
+		<fieldDescription><![CDATA[applicationDate]]></fieldDescription>
+	</field>
+	<field name="applicationNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[applicationNumber]]></fieldDescription>
+	</field>
+	<field name="baUnit" class="org.sola.clients.beans.administrative.BaUnitBean">
+		<fieldDescription><![CDATA[baUnit]]></fieldDescription>
+	</field>
+	<field name="firstParcelAddress" class="java.lang.String">
+		<fieldDescription><![CDATA[firstParcelAddress]]></fieldDescription>
+	</field>
+	<field name="firstParcelCode" class="java.lang.String">
+		<fieldDescription><![CDATA[firstParcelCode]]></fieldDescription>
+	</field>
+	<field name="firstParcelLandUse" class="java.lang.String">
+		<fieldDescription><![CDATA[firstParcelLandUse]]></fieldDescription>
+	</field>
+	<field name="firstParcelMapRef" class="java.lang.String">
+		<fieldDescription><![CDATA[firstParcelMapRef]]></fieldDescription>
+	</field>
+	<field name="firstParcelOfficialArea" class="java.lang.String">
+		<fieldDescription><![CDATA[firstParcelOfficialArea]]></fieldDescription>
+	</field>
+	<field name="firstParcelType" class="java.lang.String">
+		<fieldDescription><![CDATA[firstParcelType]]></fieldDescription>
+	</field>
+	<field name="freeText" class="java.lang.String">
+		<fieldDescription><![CDATA[freeText]]></fieldDescription>
+	</field>
+	<field name="parcelsCodes" class="java.lang.String">
+		<fieldDescription><![CDATA[parcelsCodes]]></fieldDescription>
+	</field>
+	<field name="rrr" class="org.sola.clients.beans.administrative.RrrBean">
+		<fieldDescription><![CDATA[rrr]]></fieldDescription>
+	</field>
+	<field name="rrrDueDate" class="java.lang.String">
+		<fieldDescription><![CDATA[rrrDueDate]]></fieldDescription>
+	</field>
+	<field name="rrrExpirationDate" class="java.lang.String">
+		<fieldDescription><![CDATA[rrrExpirationDate]]></fieldDescription>
+	</field>
+	<field name="rrrPaymentAmount" class="java.lang.String">
+		<fieldDescription><![CDATA[rrrPaymentAmount]]></fieldDescription>
+	</field>
+	<field name="rrrRegDate" class="java.lang.String">
+		<fieldDescription><![CDATA[rrrRegDate]]></fieldDescription>
+	</field>
+	<field name="rrrRegNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[rrrRegNumber]]></fieldDescription>
+	</field>
+	<field name="service" class="org.sola.clients.beans.application.ApplicationServiceBean">
+		<fieldDescription><![CDATA[service]]></fieldDescription>
+	</field>
+	<field name="serviceName" class="java.lang.String">
+		<fieldDescription><![CDATA[serviceName]]></fieldDescription>
+	</field>
+	<background>
+		<band height="744" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="1b0cc664-a954-4e39-a987-0b65ced300ec" mode="Transparent" x="0" y="220" width="511" height="150" forecolor="#E7E7E7">
+					<printWhenExpression><![CDATA[$P{IS_DRAFT}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+					<font size="100" isBold="true"/>
+				</textElement>
+				<text><![CDATA[D R A F T]]></text>
+			</staticText>
+		</band>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="c60586e1-5e90-40b9-a940-b6a673f5e17b" x="0" y="59" width="67" height="19"/>
+				<textElement/>
+				<text><![CDATA[Reg. number:]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="8e97702d-4362-443b-930c-4e204771da62" x="0" y="78" width="511" height="1"/>
+				<graphicElement>
+					<pen lineWidth="2.0"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="8e97702d-4362-443b-930c-4e204771da62" x="0" y="37" width="511" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="6144225a-eab8-4ce0-8da4-1c9365fc44b4" x="0" y="0" width="511" height="38"/>
+				<textElement>
+					<font size="30"/>
+				</textElement>
+				<text><![CDATA[LEASE]]></text>
+			</staticText>
+			<textField pattern="dd MMMMM yyyy">
+				<reportElement uuid="76282aac-0229-4765-8956-540d5eb089d9" x="362" y="60" width="105" height="19"/>
+				<textElement textAlignment="Right">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField pattern="HH:mm">
+				<reportElement uuid="121f175e-0ca6-42d9-b56f-a0cba26e2ba2" x="472" y="60" width="39" height="19"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="a52aa4e7-83c7-4a11-9fad-28c9684d2b53" x="67" y="59" width="119" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{rrrRegNumber}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="397" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="be1ee666-0c69-4920-88f9-49f2fe7be2d5" x="0" y="38" width="172" height="17"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+					<paragraph lineSpacing="Double"/>
+				</textElement>
+				<text><![CDATA[TO WHOM IT MAY CONCERN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="be1ee666-0c69-4920-88f9-49f2fe7be2d5" x="0" y="66" width="49" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+					<paragraph lineSpacing="Double"/>
+				</textElement>
+				<text><![CDATA[THAT:]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement uuid="3e86722d-d58f-4354-83ab-35002396f8c6" x="49" y="66" width="462" height="20"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Lessees" uuid="9f0fb318-a1fa-4dcd-bcd3-449a595f387f">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanArrayDataSource($F{rrr}.getFilteredRightHolderList().toArray())]]></dataSourceExpression>
+					</datasetRun>
+					<jr:listContents height="20" width="462">
+						<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+							<reportElement uuid="e48b6683-3a9a-431d-ad75-86aa5de37720" x="1" y="0" width="461" height="20"/>
+							<textElement>
+								<font size="12"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{fullName}]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="81a5c43a-7644-4258-8fdd-f4c4dde1f4c6" positionType="Float" x="0" y="100" width="511" height="28"/>
+				<textElement markup="html">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[String.format(
+"Hereinafter referred to as the Lessee, has been granted, accepts and holds Lease title in land known as:" +
+"<p></p>" + 
+"Plot Number: <b>%s</b>" +
+"<p></p>" + 
+"Situated at: <b>%s</b>" +
+"<p></p>" + 
+"Approximate area: <b>%s</b>" +
+"<p></p>" + 
+"As shown on Plan Number: <b>%s</b>" +
+"<p></p>" + 
+"Subject to the statutory conditions as prescribed in the Land Regulations and any and all of the following " +
+"terms and special conditions and general provisions:" +
+"<p></p>" + 
+"<b>1. Ground rent:</b>" + 
+"<p></p>" + 
+"1.1	Annual ground rent shall mean <b>$%s</b> per year or such other amount as may be reassessed." + 
+"<p></p>" + 
+"<b>2. Duration:</b>" + 
+"<p></p>" + 
+"2.1	This lease shall come into operation on this <b>%s</b> and shall expire on the <b>%s</b>" +
+"<p></p>" + 
+"<b>3. Special conditions:</b>" +
+"<p></p>" + 
+"3.1	The permitted use in respect of which this lease is granted or issued is:<br />" +
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>%s</b>",
+$F{firstParcelCode}, $F{firstParcelAddress}, $F{firstParcelOfficialArea}, 
+$F{firstParcelMapRef}, $F{rrrPaymentAmount}, $F{rrrRegDate}, $F{rrrExpirationDate}, $F{firstParcelLandUse})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="43c110b8-111f-4bf0-8341-fd5873aed8c2" positionType="Float" x="0" y="287" width="172" height="36"/>
+				<textElement>
+					<font size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Commissioner of Lands
+Land Administration Authority]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="43c110b8-111f-4bf0-8341-fd5873aed8c2" positionType="Float" x="0" y="137" width="511" height="20"/>
+				<textElement>
+					<font size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[3.2   Other special conditions:]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement uuid="ea0b3572-f1a3-47ba-a867-549645bd5082" positionType="Float" x="0" y="159" width="511" height="22"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="SpecialConditions" uuid="5e16dd26-0177-473b-9246-22d5aa14c2f2">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanArrayDataSource($F{rrr}.getLeaseCustomConditions().toArray())]]></dataSourceExpression>
+					</datasetRun>
+					<jr:listContents height="22" width="511">
+						<textField pattern="" isBlankWhenNull="false">
+							<reportElement uuid="bc4788ed-e4fa-4948-9345-9fe65365720f" positionType="Float" mode="Transparent" x="0" y="1" width="39" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+							<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+								<font fontName="SansSerif" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+								<paragraph lineSpacing="Single"/>
+							</textElement>
+							<textFieldExpression><![CDATA["3.2." + $V{REPORT_COUNT}.toString()]]></textFieldExpression>
+						</textField>
+						<textField isStretchWithOverflow="true">
+							<reportElement uuid="2c6eaa85-36db-44ba-9b7e-bad8e19f26e5" x="39" y="1" width="472" height="20"/>
+							<textElement>
+								<font size="12"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{conditionText}]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="81a5c43a-7644-4258-8fdd-f4c4dde1f4c6" positionType="Float" x="0" y="185" width="511" height="28"/>
+				<textElement markup="html">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[String.format(
+"<b>4. General provisions</b>" +
+"<p></p>" + 
+"4.1	That this title is inheritable subject to the provisions of Section XX of the Act and any other law which may be applicable." +
+"<p></p>" + 
+"4.2	That this lease shall only be terminated by:" +
+"<pre>" +
+"      (i)   the expiry of its period; or<br/>" +
+"      (ii)  the surrender thereof under the provisions of Section XX; or<br/>" +
+"      (iii) its determination pursuant to the provisions of the Act." +
+"</pre><p></p>" + 
+"4.3	The Act shall mean the Land Act XXX and all regulations made there under." +
+"<p></p>" + 
+"4.4	This lease shall be governed by revisions of the Act and all Acts and Regulations now or hereafter applicable to the land." +
+"<hr size='1'>" +
+"Thus done, granted and executed on this <b>%s</b>.",
+$F{rrrRegDate})]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="18d84769-6dbe-4649-86af-dff49c79f150" positionType="Float" x="0" y="281" width="172" height="1"/>
+				<graphicElement>
+					<pen lineWidth="1.25" lineStyle="Dotted"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement uuid="43c110b8-111f-4bf0-8341-fd5873aed8c2" positionType="Float" x="325" y="287" width="172" height="36"/>
+				<textElement>
+					<font size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Lessee       (signature)]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="18d84769-6dbe-4649-86af-dff49c79f150" positionType="Float" x="325" y="280" width="172" height="1"/>
+				<graphicElement>
+					<pen lineWidth="1.25" lineStyle="Dotted"/>
+				</graphicElement>
+			</line>
+			<break>
+				<reportElement uuid="76e23d9a-1cff-496d-9413-591e5f7bcaa9" positionType="Float" x="0" y="328" width="511" height="1"/>
+			</break>
+			<staticText>
+				<reportElement uuid="e7216a62-6722-4a70-9e07-f9b3b223b001" x="0" y="333" width="511" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Statutory conditions]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement uuid="1ce816f4-7972-45a7-a275-05a84a4987b1" x="0" y="368" width="511" height="25"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="StandardConditions" uuid="27d78e95-ae12-403b-9b49-66ced125f5cb">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanArrayDataSource($F{rrr}.getLeaseStandardConditions().toArray())]]></dataSourceExpression>
+					</datasetRun>
+					<jr:listContents height="25" width="511">
+						<textField pattern="" isBlankWhenNull="false">
+							<reportElement uuid="bc4788ed-e4fa-4948-9345-9fe65365720f" positionType="Float" mode="Transparent" x="0" y="2" width="23" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+							<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+								<font fontName="SansSerif" size="11" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+								<paragraph lineSpacing="Single"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{REPORT_COUNT}.toString() + "."]]></textFieldExpression>
+						</textField>
+						<textField isStretchWithOverflow="true">
+							<reportElement uuid="0a8e225d-70a6-4c3b-9be6-f0642c5d9085" x="23" y="2" width="488" height="20"/>
+							<textElement>
+								<font size="11"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{conditionText}]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="62" splitType="Stretch">
+			<line>
+				<reportElement uuid="8e97702d-4362-443b-930c-4e204771da62" x="0" y="29" width="511" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="55d50704-9d91-4d65-844b-7f1fb2a61c8c" x="0" y="30" width="150" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Land Administration Authority]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="80e56e3c-1ea2-4171-b92a-9638823bb539" x="186" y="30" width="80" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="87df0dbf-3189-44a6-b9f5-037fe1f454b7" x="266" y="30" width="40" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="55d50704-9d91-4d65-844b-7f1fb2a61c8c" x="361" y="30" width="150" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Office address]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>

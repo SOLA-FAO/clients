@@ -64,6 +64,9 @@ public abstract class AbstractCodeBean extends AbstractBindingBean {
 
     @Override
     public String toString() {
+        if(displayValue==null){
+            return "";
+        }
         return displayValue;
     }
 

@@ -42,19 +42,38 @@ public class CellDelimitedListRenderer extends JTextArea implements TableCellRen
 
     private final DefaultTableCellRenderer adaptee = new DefaultTableCellRenderer();
     private String delimiter;
+    private boolean showDash;
 
+    /** 
+     * Creates new table cell renderer with text area, breaking string into items. 
+     * @param delimiter String delimiter used to break string.
+     */
     public CellDelimitedListRenderer(String delimiter) {
+        this(delimiter, true);
+    }
+    
+    /** 
+     * Creates new table cell renderer with text area, breaking string into items. 
+     * Default "," comma delimiter will be applied.
+     */
+    public CellDelimitedListRenderer() {
+        this(",");
+    }
+    
+    /** 
+     * Creates new table cell renderer with text area, breaking string into items. 
+     * @param delimiter String delimiter used to break string.
+     * @param showDash Boolean value indicating whether "-" dash symbol should be added in front of each item.
+     */
+    public CellDelimitedListRenderer(String delimiter, boolean showDash) {
         if(delimiter == null || delimiter.length() < 1){
             this.delimiter = ",";
         } else {
             this.delimiter = delimiter;
         }
+        this.showDash = showDash;
         setLineWrap(true);
         setWrapStyleWord(true);
-    }
-    
-    public CellDelimitedListRenderer() {
-        this(",");
     }
 
     @Override
@@ -72,12 +91,21 @@ public class CellDelimitedListRenderer extends JTextArea implements TableCellRen
             if (value != null) {
                 Object[] arr = value.toString().split(delimiter);
                 String out = "";
-
+                String prefix = "- ";
+                
+                if(!showDash){
+                    prefix = "";
+                }
+                
                 for (int i = 0; i < arr.length; i++) {
                     if (out.length() > 0) {
                         out += "\n";
                     }
-                    out += String.format("- %s;", arr[i]);
+                    if(arr.length == 1){
+                        out += String.format("%s%s", prefix, arr[i]);
+                    } else {
+                        out += String.format("%s%s;", prefix, arr[i]);
+                    }
                 }
 
                 setText(out);

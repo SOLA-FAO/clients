@@ -29,14 +29,9 @@ package org.sola.clients.beans.cadastre;
 
 import java.math.BigDecimal;
 import javax.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.sola.clients.beans.AbstractIdBean;
-import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.beans.validation.Localized;
 import org.sola.common.messaging.ClientMessage;
-import org.sola.common.messaging.MessageUtility;
-import org.sola.services.boundary.wsclients.WSManager;
-import org.sola.webservices.transferobjects.cadastre.SpatialValueAreaTO;
 
 /** 
  * Represents application property object. Could be populated from the
@@ -44,6 +39,11 @@ import org.sola.webservices.transferobjects.cadastre.SpatialValueAreaTO;
  * For more information see data dictionary <b>Application</b> schema.
  */
 public class SpatialValueAreaBean extends AbstractIdBean {
+    
+    public static final String CODE_CALCULATED_AREA = "calculatedArea";
+    public static final String CODE_NONOFFICIAL_AREA = "nonOfficialArea";
+    public static final String CODE_OFFICIAL_AREA = "officialArea";
+    public static final String CODE_SURVEYED_AREA = "surveyedArea";
     
     public static final String SIZE_PROPERTY = "size";
     public static final String SPATIAL_UNIT_ID_PROPERTY = "spatialUnitId";
