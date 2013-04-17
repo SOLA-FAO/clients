@@ -32,7 +32,7 @@ package org.sola.clients.swing.desktop;
 import java.awt.ComponentOrientation;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import org.sola.clients.swing.desktop.application.ApplicationAssignmentPanel;
+import java.util.List;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationSummaryBean;
 import org.sola.clients.swing.ui.renderers.DateTimeRenderer;
@@ -46,10 +46,12 @@ import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
+import org.sola.clients.swing.desktop.application.ApplicationAssignmentDialog;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.clients.swing.ui.renderers.BooleanCellRenderer;
 import org.sola.common.RolesConstants;
+import org.sola.common.WindowUtility;
 
 /**
  * This panel displays assigned and unassigned applications.<br />
@@ -61,10 +63,7 @@ public class DashBoardPanel extends ContentPanel {
 
         @Override
         public void propertyChange(PropertyChangeEvent e) {
-            if (e.getPropertyName().equals(ApplicationBean.ASSIGNEE_ID_PROPERTY)) {
-                if (getMainContentPanel() != null && getMainContentPanel().isPanelOpened(MainContentPanel.CARD_APPASSIGNMENT)) {
-                    getMainContentPanel().closePanel(MainContentPanel.CARD_APPASSIGNMENT);
-                }
+            if (e.getPropertyName().equals(ApplicationAssignmentDialog.ASSIGNMENT_CHANGED)) {
                 refreshApplications();
             }
         }
@@ -94,15 +93,16 @@ public class DashBoardPanel extends ContentPanel {
         menuRefreshUnassignApplication.setEnabled(btnRefreshUnassigned.isEnabled());
 
         refreshApplications();
-        customizeAssignedAppButtons(null);
-        customizeUnassignedAppButtons(null);
+        customizeAssignedAppButtons();
+        customizeUnassignedAppButtons();
 
         assignedAppListBean.addPropertyChangeListener(new PropertyChangeListener() {
 
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                if (evt.getPropertyName().equals(ApplicationSearchResultsListBean.SELECTED_APPLICATION_PROPERTY)) {
-                    customizeAssignedAppButtons((ApplicationSearchResultBean) evt.getNewValue());
+                if (evt.getPropertyName().equals(ApplicationSearchResultsListBean.APPLICATION_CHECKED_PROPERTY)
+                        || evt.getPropertyName().equals(ApplicationSearchResultsListBean.SELECTED_APPLICATION_PROPERTY)) {
+                    customizeAssignedAppButtons();
                 }
             }
         });
@@ -111,8 +111,9 @@ public class DashBoardPanel extends ContentPanel {
 
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                if (evt.getPropertyName().equals(ApplicationSearchResultsListBean.SELECTED_APPLICATION_PROPERTY)) {
-                    customizeUnassignedAppButtons((ApplicationSearchResultBean) evt.getNewValue());
+                if (evt.getPropertyName().equals(ApplicationSearchResultsListBean.APPLICATION_CHECKED_PROPERTY)
+                        || evt.getPropertyName().equals(ApplicationSearchResultsListBean.SELECTED_APPLICATION_PROPERTY)) {
+                    customizeUnassignedAppButtons();
                 }
             }
         });
@@ -121,20 +122,20 @@ public class DashBoardPanel extends ContentPanel {
     /**
      * Enables or disables toolbar buttons for assigned applications list, .
      */
-    private void customizeAssignedAppButtons(ApplicationSearchResultBean app) {
-        boolean isUnassignEnabled = true;
-        boolean isEditEnabled = true;
+    private void customizeAssignedAppButtons() {
+        boolean isUnassignEnabled;
+        boolean isEditEnabled = false;
 
-        if (app == null) {
-            isUnassignEnabled = false;
-            isEditEnabled = false;
+        if (assignedAppListBean.hasChecked() && 
+                (SecurityBean.isInRole(RolesConstants.APPLICATION_UNASSIGN_FROM_YOURSELF)
+                || SecurityBean.isInRole(RolesConstants.APPLICATION_UNASSIGN_FROM_OTHERS))) {
+            isUnassignEnabled = true;
         } else {
-            if (SecurityBean.getCurrentUser().getId().equals(app.getAssigneeId())) {
-                isUnassignEnabled = SecurityBean.isInRole(RolesConstants.APPLICATION_UNASSIGN_FROM_YOURSELF);
-            } else {
-                isUnassignEnabled = SecurityBean.isInRole(RolesConstants.APPLICATION_UNASSIGN_FROM_OTHERS);
-            }
-            isEditEnabled = SecurityBean.isInRole(RolesConstants.APPLICATION_EDIT_APPS, RolesConstants.APPLICATION_VIEW_APPS);
+            isUnassignEnabled = false;
+        }
+        
+        if (!isUnassignEnabled && SecurityBean.isInRole(RolesConstants.APPLICATION_EDIT_APPS, RolesConstants.APPLICATION_VIEW_APPS)) {
+            isEditEnabled = assignedAppListBean.getSelectedApplication() != null;
         }
 
         btnUnassignApplication.setEnabled(isUnassignEnabled);
@@ -146,21 +147,20 @@ public class DashBoardPanel extends ContentPanel {
     /**
      * Enables or disables toolbar buttons for unassigned applications list.
      */
-    private void customizeUnassignedAppButtons(ApplicationSearchResultBean app) {
-        boolean isAssignEnabled = true;
-        boolean isEditEnabled = true;
+    private void customizeUnassignedAppButtons() {
+        boolean isAssignEnabled;
+        boolean isEditEnabled = false;
 
-        if (app == null) {
-            isAssignEnabled = false;
-            isEditEnabled = false;
+        if (unassignedAppListBean.hasChecked() && 
+                (SecurityBean.isInRole(RolesConstants.APPLICATION_ASSIGN_TO_YOURSELF)
+                || SecurityBean.isInRole(RolesConstants.APPLICATION_ASSIGN_TO_OTHERS))) {
+            isAssignEnabled = true;
         } else {
-            if (SecurityBean.isInRole(RolesConstants.APPLICATION_ASSIGN_TO_YOURSELF)
-                    || SecurityBean.isInRole(RolesConstants.APPLICATION_ASSIGN_TO_OTHERS)) {
-                isAssignEnabled = true;
-            } else {
-                isAssignEnabled = false;
-            }
-            isEditEnabled = SecurityBean.isInRole(RolesConstants.APPLICATION_EDIT_APPS, RolesConstants.APPLICATION_VIEW_APPS);
+            isAssignEnabled = false;
+        }
+        
+        if (!isAssignEnabled && SecurityBean.isInRole(RolesConstants.APPLICATION_EDIT_APPS, RolesConstants.APPLICATION_VIEW_APPS)) {
+            isEditEnabled = unassignedAppListBean.getSelectedApplication() != null;
         }
 
         btnAssignApplication.setEnabled(isAssignEnabled);
@@ -170,33 +170,50 @@ public class DashBoardPanel extends ContentPanel {
     }
 
     /**
-     * Opens application assignment form with selected application ID.
+     * Opens application assignment form with selected applications.
      *
-     * @param appBean Selected application summary bean.
+     * @param appList Selected applications to assign or unassign.
+     * @param assign Indicates whether to assign or unassign applications
      */
-    private void openAssignmentForm(ApplicationSummaryBean appBean) {
-        if (appBean == null) {
+    private void assignUnassign(final List<ApplicationSearchResultBean> appList, final boolean assign) {
+        if (appList == null || appList.size() < 1) {
             return;
         }
 
-        if (!appBean.isFeePaid()) {
-            MessageUtility.displayMessage(ClientMessage.CHECK_FEES_NOT_PAID);
-            return;
-        }
-
-        final String appId = appBean.getId();
-        SolaTask t = new SolaTask<Void, Void>() {
-
-            @Override
-            public Void doTask() {
-                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_APPASSIGN));
-                ApplicationAssignmentPanel panel = new ApplicationAssignmentPanel(appId);
-                panel.addPropertyChangeListener(ApplicationBean.ASSIGNEE_ID_PROPERTY, assignmentPanelListener);
-                getMainContentPanel().addPanel(panel, MainContentPanel.CARD_APPASSIGNMENT, true);
-                return null;
+        for (ApplicationSearchResultBean app : appList) {
+            if (!app.isFeePaid()) {
+                MessageUtility.displayMessage(ClientMessage.CHECK_FEES_NOT_PAID, new Object[]{app.getNr()});
+                return;
             }
-        };
-        TaskManager.getInstance().runTask(t);
+        }
+
+        if (assign) {
+            ApplicationAssignmentDialog form = new ApplicationAssignmentDialog(appList, MainForm.getInstance(), true);
+            WindowUtility.centerForm(form);
+            form.addPropertyChangeListener(assignmentPanelListener);
+            form.setVisible(true);
+        } else {
+            if (MessageUtility.displayMessage(ClientMessage.APPLICATION_CONFIRM_UNASSIGN) == MessageUtility.BUTTON_ONE) {
+                for (ApplicationSearchResultBean app : appList) {
+                    String assigneeId = app.getAssigneeId();
+                    if (assigneeId != null && assigneeId.equals(SecurityBean.getCurrentUser().getId())
+                            && !SecurityBean.isInRole(RolesConstants.APPLICATION_UNASSIGN_FROM_YOURSELF)) {
+                        // Can't unassign from yourself
+                        MessageUtility.displayMessage(ClientMessage.APPLICATION_UNASSIGN_FROM_SELF_FORBIDDEN,
+                                new Object[]{app.getNr()});
+                        break;
+                    }
+                    if (assigneeId != null && assigneeId.equals(SecurityBean.getCurrentUser().getId())
+                            && !SecurityBean.isInRole(RolesConstants.APPLICATION_UNASSIGN_FROM_OTHERS)) {
+                        MessageUtility.displayMessage(ClientMessage.APPLICATION_UNASSIGN_FROM_OTHERS_FORBIDDEN,
+                                new Object[]{app.getNr()});
+                        break;
+                    }
+                    ApplicationBean.assignUser(app, null);
+                }
+                refreshApplications();
+            }
+        }
     }
 
     /**
@@ -359,9 +376,12 @@ public class DashBoardPanel extends ContentPanel {
 
         org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${applicationSearchResultsList}");
         org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, unassignedAppListBean, eLProperty, tbUnassigned);
-        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${nr}"));
+        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${checked}"));
+        columnBinding.setColumnName("Checked");
+        columnBinding.setColumnClass(Boolean.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${nr}"));
         columnBinding.setColumnName("Nr");
-        columnBinding.setColumnClass(Integer.class);
+        columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${lodgingDatetime}"));
         columnBinding.setColumnName("Lodging Datetime");
@@ -399,18 +419,22 @@ public class DashBoardPanel extends ContentPanel {
         });
         unassignedScrollPanel.setViewportView(tbUnassigned);
         tbUnassigned.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        tbUnassigned.getColumnModel().getColumn(0).setMinWidth(25);
+        tbUnassigned.getColumnModel().getColumn(0).setPreferredWidth(25);
+        tbUnassigned.getColumnModel().getColumn(0).setMaxWidth(25);
         tbUnassigned.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("DashBoardPanel.tbUnassigned.columnModel.title0")); // NOI18N
         tbUnassigned.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("DashBoardPanel.tbUnassigned.columnModel.title1")); // NOI18N
-        tbUnassigned.getColumnModel().getColumn(1).setCellRenderer(new DateTimeRenderer());
-        tbUnassigned.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("DashBoard.tbUnassigned.columnModel.title3")); // NOI18N
+        tbUnassigned.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("DashBoardPanel.tbUnassigned.columnModel.title2")); // NOI18N
         tbUnassigned.getColumnModel().getColumn(2).setCellRenderer(new DateTimeRenderer());
-        tbUnassigned.getColumnModel().getColumn(3).setMinWidth(180);
-        tbUnassigned.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("DashBoard.tbUnassigned.columnModel.title2_1")); // NOI18N
-        tbUnassigned.getColumnModel().getColumn(3).setCellRenderer(new org.sola.clients.swing.ui.renderers.CellDelimitedListRenderer());
-        tbUnassigned.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("DashBoard.tbUnassigned.columnModel.title2")); // NOI18N
-        tbUnassigned.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("DashBoard.tbUnassigned.columnModel.title4")); // NOI18N
+        tbUnassigned.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("DashBoardPanel.tbUnassigned.columnModel.title3")); // NOI18N
+        tbUnassigned.getColumnModel().getColumn(3).setCellRenderer(new DateTimeRenderer());
+        tbUnassigned.getColumnModel().getColumn(4).setMinWidth(180);
+        tbUnassigned.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("DashBoardPanel.tbUnassigned.columnModel.title4")); // NOI18N
+        tbUnassigned.getColumnModel().getColumn(4).setCellRenderer(new org.sola.clients.swing.ui.renderers.CellDelimitedListRenderer());
+        tbUnassigned.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("DashBoardPanel.tbUnassigned.columnModel.title5")); // NOI18N
         tbUnassigned.getColumnModel().getColumn(6).setHeaderValue(bundle.getString("DashBoardPanel.tbUnassigned.columnModel.title6")); // NOI18N
-        tbUnassigned.getColumnModel().getColumn(6).setCellRenderer(new BooleanCellRenderer());
+        tbUnassigned.getColumnModel().getColumn(7).setHeaderValue(bundle.getString("DashBoardPanel.tbUnassigned.columnModel.title7")); // NOI18N
+        tbUnassigned.getColumnModel().getColumn(7).setCellRenderer(new BooleanCellRenderer());
 
         tbUnassignedApplications.setFloatable(false);
         tbUnassignedApplications.setRollover(true);
@@ -547,9 +571,12 @@ public class DashBoardPanel extends ContentPanel {
 
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${applicationSearchResultsList}");
         jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, assignedAppListBean, eLProperty, tbAssigned);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${checked}"));
+        columnBinding.setColumnName("Checked");
+        columnBinding.setColumnClass(Boolean.class);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${nr}"));
         columnBinding.setColumnName("Nr");
-        columnBinding.setColumnClass(Integer.class);
+        columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${lodgingDatetime}"));
         columnBinding.setColumnName("Lodging Datetime");
@@ -585,18 +612,21 @@ public class DashBoardPanel extends ContentPanel {
             }
         });
         inprogressScrollPanel.setViewportView(tbAssigned);
-        tbAssigned.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        tbAssigned.getColumnModel().getColumn(0).setMinWidth(25);
+        tbAssigned.getColumnModel().getColumn(0).setPreferredWidth(25);
+        tbAssigned.getColumnModel().getColumn(0).setMaxWidth(25);
         tbAssigned.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("DashBoardPanel.tbAssigned.columnModel.title0")); // NOI18N
         tbAssigned.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("DashBoardPanel.tbAssigned.columnModel.title1")); // NOI18N
-        tbAssigned.getColumnModel().getColumn(1).setCellRenderer(new DateTimeRenderer());
         tbAssigned.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("DashBoardPanel.tbAssigned.columnModel.title2")); // NOI18N
         tbAssigned.getColumnModel().getColumn(2).setCellRenderer(new DateTimeRenderer());
-        tbAssigned.getColumnModel().getColumn(3).setMinWidth(180);
-        tbAssigned.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("DashBoard.tbAssigned.columnModel.title6")); // NOI18N
-        tbAssigned.getColumnModel().getColumn(3).setCellRenderer(new org.sola.clients.swing.ui.renderers.CellDelimitedListRenderer());
-        tbAssigned.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("DashBoard.tbAssigned.columnModel.title3")); // NOI18N
+        tbAssigned.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("DashBoardPanel.tbAssigned.columnModel.title3")); // NOI18N
+        tbAssigned.getColumnModel().getColumn(3).setCellRenderer(new DateTimeRenderer());
+        tbAssigned.getColumnModel().getColumn(4).setMinWidth(180);
+        tbAssigned.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("DashBoardPanel.tbAssigned.columnModel.title4")); // NOI18N
+        tbAssigned.getColumnModel().getColumn(4).setCellRenderer(new org.sola.clients.swing.ui.renderers.CellDelimitedListRenderer());
         tbAssigned.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("DashBoardPanel.tbAssigned.columnModel.title5")); // NOI18N
-        tbAssigned.getColumnModel().getColumn(6).setHeaderValue(bundle.getString("DashBoard.tbAssigned.columnModel.title4")); // NOI18N
+        tbAssigned.getColumnModel().getColumn(6).setHeaderValue(bundle.getString("DashBoardPanel.tbAssigned.columnModel.title6")); // NOI18N
+        tbAssigned.getColumnModel().getColumn(7).setHeaderValue(bundle.getString("DashBoardPanel.tbAssigned.columnModel.title7")); // NOI18N
 
         org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -731,7 +761,7 @@ public class DashBoardPanel extends ContentPanel {
      * Opens form to assign application.
      */
     private void assignApplication() {
-        openAssignmentForm(unassignedAppListBean.getSelectedApplication());
+        assignUnassign(unassignedAppListBean.getChecked(true), true);
     }
 
     /**
@@ -745,7 +775,7 @@ public class DashBoardPanel extends ContentPanel {
      * Opens form to unassign application.
      */
     private void unassignApplication() {
-        openAssignmentForm(assignedAppListBean.getSelectedApplication());
+        assignUnassign(assignedAppListBean.getChecked(true), false);
     }
 
     /**

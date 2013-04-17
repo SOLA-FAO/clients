@@ -844,20 +844,33 @@ public class ApplicationBean extends ApplicationSummaryBean {
     }
     
     /**
-     * Assigns application to the user.
+     * Assigns or unassigns application to the user. If userId is null, application will be unassigned
      *
      * @param userId ID of the user.
      */
     public boolean assignUser(String userId) {
+        if(ApplicationBean.assignUser(this, userId)){
+            this.reload();
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Assigns or unassigns application to the user. If userId is null, application will be unassigned
+     *
+     * @param userId ID of the user.
+     * @param app Application to assign/unassign
+     */
+    public static boolean assignUser(ApplicationSummaryBean app, String userId) {
         if (userId == null) {
             WSManager.getInstance().getCaseManagementService().applicationActionUnassign(
-                    this.getId(), this.getRowVersion());
+                    app.getId(), app.getRowVersion());
         } else {
             WSManager.getInstance().getCaseManagementService().applicationActionAssign(
-                    this.getId(), userId, this.getRowVersion());
+                    app.getId(), userId, app.getRowVersion());
 
         }
-        this.reload();
         return true;
     }
 

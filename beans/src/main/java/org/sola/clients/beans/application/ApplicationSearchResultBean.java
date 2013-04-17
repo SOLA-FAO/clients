@@ -35,12 +35,15 @@ import org.sola.webservices.transferobjects.search.ApplicationSearchResultTO;
  */
 public class ApplicationSearchResultBean extends ApplicationSummaryBean {
     
+    public static final String CHECKED_PROPERTY = "checked";
+    
     private String status;
     private String assigneeId;
     private String assigneeName;
     private String contactPerson;
     private String agent;
     private String serviceList; 
+    private boolean checked;
     
     public ApplicationSearchResultBean(){
         super();
@@ -92,5 +95,15 @@ public class ApplicationSearchResultBean extends ApplicationSummaryBean {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        boolean oldValue = this.checked;
+        this.checked = checked;
+        propertySupport.firePropertyChange(CHECKED_PROPERTY, oldValue, this.checked);
     }
 }

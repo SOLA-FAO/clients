@@ -104,4 +104,9 @@ public class UserSummaryBean extends AbstractIdBean {
         description = value;
         propertySupport.firePropertyChange(DESCRIPTION_PROPERTY, oldValue, value);
     }
+    
+    @Override
+    public String toString(){
+        return getFullUserName();
+    }
 }
