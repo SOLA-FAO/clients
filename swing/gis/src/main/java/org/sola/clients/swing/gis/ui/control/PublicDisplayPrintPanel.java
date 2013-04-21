@@ -22,7 +22,9 @@ import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.data.PojoPublicDisplayFeatureSource;
 import org.sola.clients.swing.gis.layer.PojoForPublicDisplayLayer;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForPublicDisplay;
+import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.GisMessage;
+import org.sola.common.messaging.MessageUtility;
 
 /**
  * This panel provides the necessary user interface to manage and start the printing
@@ -205,10 +207,12 @@ public class PublicDisplayPrintPanel extends javax.swing.JPanel {
     private void centerMap() {
         ReferencedEnvelope envelope = PojoDataAccess.getInstance().getExtentOfPublicDisplay(
                 getFilterNameLastPart());        
-        if (envelope != null) {
-            envelope.expandBy(10);
-            this.mapBundle.getMap().setDisplayArea(envelope);
+        if (envelope == null) {
+            MessageUtility.displayMessage(GisMessage.PRINT_PUBLIC_DISPLAY_CENTER_LAST_PART_CO_NOT_FOUND);
+            return;
         }
+        envelope.expandBy(10);
+        this.mapBundle.getMap().setDisplayArea(envelope);        
     }
 
     /**

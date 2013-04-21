@@ -233,15 +233,6 @@ public class PojoDataAccess {
     }
 
     /**
-     * Gets a reference to the spatial web service
-     *
-     * @return
-     */
-    public BulkOperationsClient getBulkOperationsService() {
-        return getInstance().getWSManager().getBulkOperationsService();
-    }
-
-    /**
      * Gets a cadastre change transaction
      *
      * @param serviceId The service id which initializes the transaction
@@ -307,11 +298,11 @@ public class PojoDataAccess {
      * @return 
      */
     public ReferencedEnvelope getExtentOfPublicDisplay(String nameLastPart){
-        byte[] e = getBulkOperationsService().getExtentOfPublicDisplayMap(nameLastPart);
-        Geometry extent = GeometryUtility.getGeometryFromWkb(e);
-        if (extent == null){
+        byte[] e = getSearchService().getExtentOfPublicDisplayMap(nameLastPart);
+        if (e == null){
             return null;
         }
+        Geometry extent = GeometryUtility.getGeometryFromWkb(e);
         return JTS.toEnvelope(extent);
     }
 }
