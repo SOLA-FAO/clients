@@ -190,8 +190,6 @@ public class BaUnitBean extends BaUnitSummaryBean {
     private SolaObservableList<RrrShareWithStatus> rrrSharesList;
     private SolaList<RelatedBaUnitInfoBean> childBaUnits;
     private SolaList<RelatedBaUnitInfoBean> parentBaUnits;
-    private SolaList<BaUnitAreaBean> baUnitAreaList;
-    
     
     private transient CadastreObjectBean selectedParcel;
     private transient SolaList<RrrBean> rrrHistoricList;
@@ -200,7 +198,6 @@ public class BaUnitBean extends BaUnitSummaryBean {
     private transient BaUnitNotationBean selectedBaUnitNotation;
     private transient RelatedBaUnitInfoBean selectedParentBaUnit;
     private transient RelatedBaUnitInfoBean selectedChildBaUnit;
-    private transient BaUnitAreaBean selectedBaUnitArea;
     
     private String estateType;
     private TypeActionBean pendingTypeAction;
@@ -220,7 +217,6 @@ public class BaUnitBean extends BaUnitSummaryBean {
         rrrHistoricList = new SolaList<RrrBean>();
         baUnitNotationList = new SolaList();
         cadastreObjectList = new SolaList();
-        baUnitAreaList = new SolaList();
         childBaUnits = new SolaList();
         parentBaUnits = new SolaList();
         sourceList = new SolaList();
@@ -329,8 +325,6 @@ public class BaUnitBean extends BaUnitSummaryBean {
                 cadastreObjectList.safeRemove(selectedParcel, EntityAction.DISASSOCIATE);
             }
         }
-        
-        
     }
 
     public void removeSelectedRight() {

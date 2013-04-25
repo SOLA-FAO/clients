@@ -48,6 +48,11 @@ public class RightsExportResultBean extends AbstractBindingBean {
     private String applicantEmail;
     private String applicantIdNumber;
     private String applicantIdTypeCode;
+    // private boolean isActive;
+    // private gender;
+    // private Date dateOfBirth;
+    // private previousLease number
+    // private startDate
     
     public RightsExportResultBean(){
         super();

@@ -32,8 +32,6 @@ package org.sola.clients.beans.application;
 import java.math.BigDecimal;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.sola.clients.beans.AbstractIdBean;
-import org.sola.clients.beans.cache.CacheManager;
-import org.sola.clients.beans.referencedata.LandUseTypeBean;
 import org.sola.clients.beans.validation.Localized;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.webservices.transferobjects.casemanagement.ApplicationPropertyTO;
@@ -54,8 +52,7 @@ public class ApplicationPropertyBean extends AbstractIdBean {
     public static final String IS_VERIFIED_LOCATIONS_PROPERTY = "verifiedLocation";
     public static final String IS_VERIFIED_APPLICATIONS_PROPERTY = "verifiedHasOwners";
     public static final String BA_UNIT_ID_PROPERTY = "baUnitId";
-    public static final String LAND_USE_TYPE_PROPERTY = "landUseType";
-    public static final String LAND_USE_CODE_PROPERTY = "landUseCode";
+
     private String applicationId;
     private BigDecimal area;
     @NotEmpty(message = ClientMessage.CHECK_NOTNULL_FIRSTPART, payload = Localized.class)
@@ -67,36 +64,9 @@ public class ApplicationPropertyBean extends AbstractIdBean {
     private boolean verifiedExists;
     private boolean verifiedLocation;
     private boolean verifiedApplications;
-    private LandUseTypeBean landUseType;
 
     public ApplicationPropertyBean() {
         super();
-    }
-    
-    public String getLandUseCode() {
-        if (landUseType != null) {
-            return landUseType.getCode();
-        } else {
-            return null;
-        }
-    }
-
-    public void setLandUseCode(String landUseCode) {
-        String oldValue = null;
-        if (landUseType != null) {
-            oldValue = landUseType.getCode();
-        }
-        setLandUseType(CacheManager.getBeanByCode(
-                CacheManager.getLandUseTypes(), landUseCode));
-        propertySupport.firePropertyChange(LAND_USE_CODE_PROPERTY, oldValue, landUseCode);
-    }
-    
-    public LandUseTypeBean getLandUseType() {
-        return landUseType;
-    }
-
-    public void setLandUseType(LandUseTypeBean landUseType) {
-        this.landUseType = landUseType;
     }
 
     public String getApplicationId() {

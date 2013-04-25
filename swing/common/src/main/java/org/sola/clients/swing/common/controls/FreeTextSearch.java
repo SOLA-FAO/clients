@@ -1,26 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO). All rights
- * reserved.
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification, are permitted
- * provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- * 1. Redistributions of source code must retain the above copyright notice,this list of conditions
- * and the following disclaimer. 2. Redistributions in binary form must reproduce the above
- * copyright notice,this list of conditions and the following disclaimer in the documentation and/or
- * other materials provided with the distribution. 3. Neither the name of FAO nor the names of its
- * contributors may be used to endorse or promote products derived from this software without
- * specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
- * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- * WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
- * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 /*
@@ -28,15 +32,16 @@
  */
 package org.sola.clients.swing.common.controls;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import com.ctc.wstx.util.StringUtil;
+import java.awt.Color;
+import java.awt.event.*;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import org.sola.clients.swing.common.LafManager;
+import org.sola.common.StringUtility;
 
 /**
  *
@@ -53,7 +58,12 @@ public class FreeTextSearch extends JTextField {
     private boolean listIsHosted = false;
     private boolean hideListIfNotNeeded = true;
     private boolean refreshTextInSelection = false;
-
+    private String defaultText;
+    private boolean defaultTextIsSet = false;
+    private Color originalTextColor = Color.BLACK;
+    private Color defaultTextColor = Color.gray;
+    public final static String ELEMENT_SELECTED = "elementSelected";
+    
     public FreeTextSearch() {
         this.addKeyListener(
                 new java.awt.event.KeyAdapter() {
@@ -64,6 +74,19 @@ public class FreeTextSearch extends JTextField {
                     }
                 });
 
+        this.addFocusListener(new FocusListener() {
+
+            @Override
+            public void focusGained(FocusEvent e) {
+                removeDefaultText();
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                setDefaultText();
+            }
+        });
+        
         this.list = new JList(new DefaultListModel());
         this.list.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         LafManager.getInstance().setListProperties(list);
@@ -88,8 +111,47 @@ public class FreeTextSearch extends JTextField {
                 onMouseClicked(e);
             }
         });
+        setText("");
     }
 
+    private void setDefaultText(){
+        if(StringUtility.isEmpty(getText()) && getDefaultText() != null){
+            defaultTextIsSet = true;
+            originalTextColor = getForeground();
+            setForeground(defaultTextColor);
+            setText(getDefaultText());
+        }
+    }
+    
+    private void removeDefaultText(){
+        if(defaultTextIsSet && StringUtility.empty(getText()).equals(getDefaultText())){
+            defaultTextIsSet = false;
+            setForeground(originalTextColor);
+            setText("");
+        }
+    }
+
+    /** Returns default text color. */
+    public Color getDefaultTextColor() {
+        return defaultTextColor;
+    }
+
+    /** Sets default text color. */
+    public void setDefaultTextColor(Color defaultTextColor) {
+        this.defaultTextColor = defaultTextColor;
+    }
+
+    /** Returns default text to display in the text field, when the field is empty. */
+    public String getDefaultText() {
+        return defaultText;
+    }
+
+    /** Sets default text to display in the text field, when the field is empty. */
+    public void setDefaultText(String defaultText) {
+        this.defaultText = defaultText;
+        setDefaultText();
+    }
+    
     private void processInput(java.awt.event.KeyEvent evt) {
         JTextField tmp = (JTextField) evt.getSource();
         LafManager.getInstance().setTxtProperties(tmp);
@@ -102,6 +164,7 @@ public class FreeTextSearch extends JTextField {
             if (this.hideListIfNotNeeded) {
                 this.listScroll.setVisible(false);
             }
+            firePropertyChange(ELEMENT_SELECTED, false, true);
             return;
         }
         if (!this.listIsHosted) {
@@ -184,6 +247,7 @@ public class FreeTextSearch extends JTextField {
         if (this.refreshTextInSelection) {
             this.setText(this.selectedElement.toString());
         }
+        firePropertyChange(ELEMENT_SELECTED, false, true);
     }
 
     public Integer getListHeight() {
