@@ -440,6 +440,7 @@ public class Map extends JMapPane {
                     layerName, layerTitle, Url, layerNames, this.getSrid(), version, format);
             layer.setVisible(visible);
             this.addLayer(layer);
+            layer.setFullExtent(this.getFullExtent());
             this.getSolaLayers().put(layerName, layer);
         } catch (InitializeLayerException ex) {
             Messaging.getInstance().show(ex.getMessage());
@@ -749,6 +750,11 @@ public class Map extends JMapPane {
         }, paintDelay, TimeUnit.MILLISECONDS);
     }
 
+    @Override
+    protected void afterImageMoved() {
+        super.afterImageMoved();
+    }
+    
     /**
      * Initializes the selection layer on the map control. This method should be called after all
      * map layers have been added to ensure the selection layer appears on top of the other SOLA

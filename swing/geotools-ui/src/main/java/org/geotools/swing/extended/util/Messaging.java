@@ -149,7 +149,8 @@ public class Messaging {
         } else if (messageId.equals(Messaging.Ids.WMSLAYER_NOT_INITIALIZED_ERROR.toString())) {
             msgBody = "WMS Layer is not initialized.";
         } else if (messageId.equals(Messaging.Ids.WMSLAYER_LAYER_RENDER_ERROR.toString())) {
-            msgBody = "WMS Layer is not rendered.";
+            msgBody = "WMS Layer is not rendered. Most probably the wms server is not available. Switch the layer off in order not to get weird behavior of the map.\n"
+                    + " URL: %s";
         } else if (messageId.equals(Messaging.Ids.WMSLAYER_VERSION_MISSING_ERROR.toString())) {
             msgBody = "Version of WMS Server is missing.";
         } else if (messageId.equals(Messaging.Ids.UTILITIES_SLD_DOESNOT_EXIST_ERROR.toString())) {

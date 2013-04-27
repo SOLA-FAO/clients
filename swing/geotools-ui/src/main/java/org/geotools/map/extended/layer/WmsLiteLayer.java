@@ -33,16 +33,19 @@
  */
 package org.geotools.map.extended.layer;
 
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.logging.Level;
 import javax.imageio.ImageIO;
+import org.geotools.data.ows.HTTPResponse;
 import org.geotools.data.ows.SimpleHttpClient;
 import org.geotools.data.wms.WMS1_0_0;
 import org.geotools.data.wms.WMS1_1_0;
@@ -70,10 +73,11 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
  */
 public class WmsLiteLayer extends DirectLayer {
 
-    private ReferencedEnvelope bounds;
+    private ReferencedEnvelope lastUsedBounds = null;
     private BufferedImage image;
     private org.geotools.data.wms.request.GetMapRequest getMapRequest;
     private Integer srid;
+    private String wmsServerUrl = "";
     private String format = "image/png";
     private Boolean crsIsSouthOriented = null;
     private static String PROJECTION_SOUTH_ORIENTED =
@@ -93,6 +97,7 @@ public class WmsLiteLayer extends DirectLayer {
     public WmsLiteLayer(String wmsServerUrl, List<String> layerNames, String version)
             throws InitializeLayerException {
         try {
+            this.wmsServerUrl = wmsServerUrl;
             //Based in the version, the appropriate GetMapRequest is initialized.
             if (version.equals("1.0.0")) {
                 getMapRequest = new WMS1_0_0.GetMapRequest(new URL(wmsServerUrl));
@@ -133,54 +138,64 @@ public class WmsLiteLayer extends DirectLayer {
     public void setFormat(String format) {
         this.format = format;
     }
-    
+
+    public void setBounds(ReferencedEnvelope bounds) {
+        this.lastUsedBounds = bounds;
+    }
+
     @Override
     public void draw(Graphics2D gd, MapContent mc, MapViewport mv) {
-        if (this.bounds != null && this.bounds.equals(mv.getBounds()) && this.image != null) {
+        if (this.lastUsedBounds != null && this.lastUsedBounds.equals(mv.getBounds()) && this.image != null) {
             gd.drawImage(this.image, 0, 0, null);
         } else {
-            this.bounds = mv.getBounds();
+            this.lastUsedBounds = mv.getBounds();
             SimpleHttpClient httpClient = new SimpleHttpClient();
-            getMapRequest.setBBox(this.bounds);
+            getMapRequest.setBBox(this.lastUsedBounds);
             getMapRequest.setDimensions(mv.getScreenArea().getSize());
             getMapRequest.setFormat(this.format);
             getMapRequest.setSRS(String.format("EPSG:%s", this.srid));
             //The transparency will not work if the format does not support transparency
             getMapRequest.setTransparent(true);
+            GetMapResponse response = null;
             try {
-
-                this.LOGGER.log(Level.INFO, "wms:" + getMapRequest.getFinalURL());
-
-                GetMapResponse response =
-                        new GetMapResponse(httpClient.get(getMapRequest.getFinalURL()));
+                response = new GetMapResponse(httpClient.get(getMapRequest.getFinalURL()));
                 this.image = ImageIO.read(response.getInputStream());
                 response.getInputStream().close();
-                response.dispose();
                 if (this.crsIsSouthOriented(mc.getCoordinateReferenceSystem())) {
-                    this.flipImageIfSouthOriented();
+                    this.flipImageIfSouthOriented(this.image);
                 }
                 gd.drawImage(this.image, 0, 0, null);
             } catch (IOException ex) {
-                this.LOGGER.log(Level.SEVERE,
-                        Messaging.Ids.WMSLAYER_LAYER_RENDER_ERROR.toString(), ex);
+                treatRenderingError(ex);
             } catch (ServiceException ex) {
-                this.LOGGER.log(Level.SEVERE,
-                        Messaging.Ids.WMSLAYER_LAYER_RENDER_ERROR.toString(), ex);
+                treatRenderingError(ex);
+            } finally {
+                if (response != null) {
+                    response.dispose();
+                }
             }
         }
     }
 
-    @Override
-    public ReferencedEnvelope getBounds() {
-        return this.bounds;
+    private void treatRenderingError(Exception ex) {
+        Messaging.getInstance().show(
+                Messaging.Ids.WMSLAYER_LAYER_RENDER_ERROR.toString(), this.wmsServerUrl);
+        this.LOGGER.log(Level.WARNING, Messaging.getInstance().getMessageText(
+                Messaging.Ids.WMSLAYER_LAYER_RENDER_ERROR.toString(), this.wmsServerUrl), ex);
     }
 
-    private void flipImageIfSouthOriented() {
+    @Override
+    public synchronized ReferencedEnvelope getBounds() {
+        return this.lastUsedBounds;
+    }
+
+    private BufferedImage flipImageIfSouthOriented(BufferedImage tmpImage) {
         AffineTransform tx = AffineTransform.getScaleInstance(-1, -1);
-        tx.translate(-image.getWidth(null), -image.getHeight(null));
+        tx.translate(-tmpImage.getWidth(null), -tmpImage.getHeight(null));
         AffineTransformOp op = new AffineTransformOp(
                 tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-        image = op.filter(image, null);
+        tmpImage = op.filter(tmpImage, null);
+        return tmpImage;
     }
 
     private boolean crsIsSouthOriented(CoordinateReferenceSystem crs) {

@@ -45,6 +45,7 @@ import org.geotools.data.wms.WMS1_1_0;
 import org.geotools.data.wms.response.GetMapResponse;
 import org.geotools.geometry.DirectPosition2D;
 import org.geotools.geometry.Envelope2D;
+import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.map.extended.layer.*;
 import org.geotools.map.extended.layer.ExtendedWmsLiteLayer;
 import org.junit.Ignore;
@@ -81,6 +82,7 @@ public class Development {
         ExtendedWmsLiteLayer wmsLayer = new ExtendedWmsLiteLayer(
                 "wmsLayer", "WMS Layer", wmsServerURL, wmsLayerNames, 2193, "1.1.1", "image/jpeg");
         mapCtrl.getMap().addLayer(wmsLayer);
+        wmsLayer.setFullExtent(mapCtrl.getMap().getFullExtent());
         File directory = new File(".");
         String shapeFile =
                 //                String.format("%s\\src\\test\\java\\org\\sola\\clients\\geotools\\ui\\sample\\data\\Samoa_Parcels.shp", 

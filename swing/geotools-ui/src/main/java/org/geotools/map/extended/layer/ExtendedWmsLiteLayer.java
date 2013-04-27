@@ -26,6 +26,7 @@
 package org.geotools.map.extended.layer;
 
 import java.util.List;
+import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.swing.extended.exception.InitializeLayerException;
 
 /**
@@ -64,5 +65,9 @@ public class ExtendedWmsLiteLayer extends ExtendedLayer {
         if (format != null) {
             this.layer.setFormat(format);
         }
+    }
+    
+    public void setFullExtent(ReferencedEnvelope bounds){
+        this.layer.setBounds(bounds);
     }
 }
