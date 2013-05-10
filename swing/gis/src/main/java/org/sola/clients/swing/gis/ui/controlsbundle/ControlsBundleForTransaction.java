@@ -31,6 +31,7 @@ package org.sola.clients.swing.gis.ui.controlsbundle;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.ParseException;
+import org.geotools.feature.SchemaException;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.map.extended.layer.ExtendedImageLayer;
@@ -116,7 +117,43 @@ public abstract class ControlsBundleForTransaction extends SolaControlsBundle {
         return instance;
     }
     
-    /**
+//    /**
+//     * It sets up the bundle. It calls the adding layer method and adding tools method. It also
+//     * identifies the pending layer which will be refreshed if a transaction is being saved in the
+//     * database.
+//     *
+//     * @param pojoDataAccess
+//     */
+//    @Override
+//    public void Setup(PojoDataAccess pojoDataAccess) {
+//        super.Setup(pojoDataAccess);
+//        try {
+//            
+//            //Adding layers
+//            this.addLayers();
+//
+//            //Adding tools and commands
+//            this.addToolsAndCommands();
+//
+//            this.addDocumentsPanel();
+//
+//            for (ExtendedLayer solaLayer : this.getMap().getSolaLayers().values()) {
+//                if (solaLayer.getClass().equals(PojoLayer.class)) {
+//                    if (((PojoLayer) solaLayer).getConfig().getId().equals(
+//                            PojoLayer.CONFIG_PENDING_PARCELS_LAYER_NAME)) {
+//                        this.pendingLayer = (PojoLayer) solaLayer;
+//                        break;
+//                    }
+//                }
+//            }
+//
+//        } catch (InitializeLayerException ex) {
+//            Messaging.getInstance().show(GisMessage.CADASTRE_CHANGE_ERROR_SETUP);
+//            org.sola.common.logging.LogUtility.log(GisMessage.CADASTRE_CHANGE_ERROR_SETUP, ex);
+//        }
+//    }
+    
+      /**
      * It sets up the bundle. It calls the adding layer method and adding tools method. It also
      * identifies the pending layer which will be refreshed if a transaction is being saved in the
      * database.
@@ -126,31 +163,23 @@ public abstract class ControlsBundleForTransaction extends SolaControlsBundle {
     @Override
     public void Setup(PojoDataAccess pojoDataAccess) {
         super.Setup(pojoDataAccess);
-        try {
-            
-            //Adding layers
-            this.addLayers();
 
-            //Adding tools and commands
-            this.addToolsAndCommands();
+        //Adding tools and commands
+        this.addToolsAndCommands();
 
-            this.addDocumentsPanel();
+        this.addDocumentsPanel();
 
-            for (ExtendedLayer solaLayer : this.getMap().getSolaLayers().values()) {
-                if (solaLayer.getClass().equals(PojoLayer.class)) {
-                    if (((PojoLayer) solaLayer).getConfig().getId().equals(
-                            PojoLayer.CONFIG_PENDING_PARCELS_LAYER_NAME)) {
-                        this.pendingLayer = (PojoLayer) solaLayer;
-                        break;
-                    }
+        for (ExtendedLayer solaLayer : this.getMap().getSolaLayers().values()) {
+            if (solaLayer.getClass().equals(PojoLayer.class)) {
+                if (((PojoLayer) solaLayer).getConfig().getId().equals(
+                        PojoLayer.CONFIG_PENDING_PARCELS_LAYER_NAME)) {
+                    this.pendingLayer = (PojoLayer) solaLayer;
+                    break;
                 }
             }
-
-        } catch (InitializeLayerException ex) {
-            Messaging.getInstance().show(GisMessage.CADASTRE_CHANGE_ERROR_SETUP);
-            org.sola.common.logging.LogUtility.log(GisMessage.CADASTRE_CHANGE_ERROR_SETUP, ex);
         }
     }
+
 
     @Override
     protected void setupToolbar() {
@@ -223,18 +252,22 @@ public abstract class ControlsBundleForTransaction extends SolaControlsBundle {
      */
     protected abstract boolean transactionIsStarted();
 
-    /**
+      
+     /**
      * Adds layers that are needed for the transaction
      *
      * @throws InitializeLayerException
      */
-    protected void addLayers() throws InitializeLayerException {
+    @Override
+    protected void addLayers() throws InitializeLayerException, SchemaException {
+        super.addLayers();
         this.imageLayer = new ExtendedImageLayer(IMAGE_LAYER_NAME, 
                 ((Messaging)Messaging.getInstance()).getLayerTitle(IMAGE_LAYER_NAME));
         this.getMap().addLayer(this.imageLayer);
         this.cadastreBoundaryPointLayer = new CadastreBoundaryPointLayer();
         this.getMap().addLayer(this.cadastreBoundaryPointLayer);
     }
+
 
     /**
      * Adds tools and commands that are relevant to the transaction

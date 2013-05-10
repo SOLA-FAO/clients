@@ -973,7 +973,10 @@ public class PropertyPanel extends ContentPanel {
         }
         
         SpatialValueAreaBean spatialValueAreaBean = getSpatialValueArea(cadastreObj);
-        if (spatialValueAreaBean.getCalculatedAreaSize() != null) {            
+        
+              
+        
+        if (spatialValueAreaBean != null && spatialValueAreaBean.getCalculatedAreaSize() != null) {            
             if (!spatialValueAreaBean.getCalculatedAreaSize().equals(new BigDecimal(0))) {
                 if (MessageUtility.displayMessage(ClientMessage.BAUNIT_CONFIRM_AREA,
                         new Object[]{spatialValueAreaBean.getCalculatedAreaSize()}) == MessageUtility.BUTTON_ONE) {

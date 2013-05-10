@@ -30,6 +30,7 @@
 package org.sola.clients.swing.gis.ui.controlsbundle;
 
 import java.util.List;
+import org.geotools.feature.SchemaException;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.sola.clients.beans.application.ApplicationBean;
@@ -185,8 +186,9 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
         }
     }
 
+    
     @Override
-    protected void addLayers() throws InitializeLayerException {
+    protected void addLayers() throws InitializeLayerException, SchemaException {
         super.addLayers();
         this.targetParcelsLayer = new CadastreChangeTargetCadastreObjectLayer();
         this.getMap().addLayer(targetParcelsLayer);
