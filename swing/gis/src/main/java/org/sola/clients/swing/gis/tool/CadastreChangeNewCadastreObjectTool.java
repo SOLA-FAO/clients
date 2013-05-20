@@ -66,6 +66,7 @@ public class CadastreChangeNewCadastreObjectTool
     @Override
     public void setCadastreObjectType(String cadastreObjectType) {
         this.cadastreObjectType = cadastreObjectType;
+        this.getLayer().setCadastreObjectType(cadastreObjectType);
     }
 
     /**
