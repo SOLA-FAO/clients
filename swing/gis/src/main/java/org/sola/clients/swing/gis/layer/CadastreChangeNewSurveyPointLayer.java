@@ -32,6 +32,7 @@ package org.sola.clients.swing.gis.layer;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
+import com.vividsolutions.jts.io.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import org.geotools.feature.extended.VertexInformation;
@@ -138,6 +139,24 @@ public final class CadastreChangeNewSurveyPointLayer extends AbstractSpatialObje
         return fieldsWithValues;
     }
 
+    /**
+     * If the feature is added from the bean, then it is checked if the
+     * bean has an id. If there is not id present it means that the point
+     * has been added from the user interface by using coordinates so in that
+     * case the id is set.
+     * @param bean
+     * @return
+     * @throws ParseException 
+     */
+    @Override
+    protected SimpleFeature addFeatureFromBean(SpatialBean bean) throws ParseException {
+        SurveyPointBean pointBean = (SurveyPointBean)bean;
+        if (pointBean.getId() == null){
+            pointBean.setId(getPointId());
+        }
+        return super.addFeatureFromBean(bean);
+    }
+    
     /**
      * It removes a feature of survey point type. It is first checked if the point is used in a new
      * cadastre object.
