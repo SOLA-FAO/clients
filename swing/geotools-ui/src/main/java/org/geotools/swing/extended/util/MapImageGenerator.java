@@ -158,8 +158,10 @@ public class MapImageGenerator {
         //Set the new viewport
         renderer.getMapContent().setViewport(mapViewport);
         
-        //Render map according to the new viewport
-        renderer.paint(graphics, rectangle, extent);
+        // Render map according to the new viewport. Use the viewport 
+        // worldToScreen transformation to ensure the image is rendered 
+        // with the same orientation as the map. 
+        renderer.paint(graphics, rectangle, extent, mapViewport.getWorldToScreen());
         //Set the previous viewport back
         this.mapContent.setViewport(mapViewportOriginal);
         graphics.setColor(Color.BLACK);
