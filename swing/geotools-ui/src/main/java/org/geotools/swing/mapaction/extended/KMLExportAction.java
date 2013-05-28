@@ -98,6 +98,13 @@ public class KMLExportAction extends ExtendedAction {
                 CoordinateReferenceSystem mapCRS = mapControl.getMapContent().getCoordinateReferenceSystem();
                 CoordinateReferenceSystem googleCRS = CRS.decode("EPSG:4326");
                 MathTransform transform = CRS.findMathTransform(mapCRS, googleCRS, true);
+                                    
+                // If the map coordinate system is not North oriented (such as the South Oriented coordinate
+                // system of Lesotho), it may be necessary to perform a scaling transformation to ensure
+                // the geometries are transformed to the correct Lat Long positions. The code below
+                // shows a simple scaling transform that can be used in South Oriented coordinate systems. 
+                // AffineTransform affineTransform = AffineTransform.getScaleInstance(-1, -1);
+                // MathTransform scaleTransfom = new AffineTransform2D(affineTransform);
 
                 // Loop through each selected feature and transform the coordinates to lat long
                 GraphicsFeatureCollection newFeatures = new GraphicsFeatureCollection(Geometries.GEOMETRY);
@@ -107,6 +114,8 @@ public class KMLExportAction extends ExtendedAction {
                     while (iterator.hasNext()) {
                         SimpleFeature feature = iterator.next();
                         Geometry geom = (Geometry) feature.getDefaultGeometry();
+                        // Use a scale transformation first if required. 
+                        // geom = JTS.transform(geom, scaleTransfom);
                         Geometry transformedGeom = JTS.transform(geom, transform);
                         newFeatures.addFeature(x.toString(), transformedGeom, null);
                         x++;
