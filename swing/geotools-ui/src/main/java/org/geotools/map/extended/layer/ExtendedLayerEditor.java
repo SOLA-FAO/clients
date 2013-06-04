@@ -40,7 +40,9 @@ import java.util.List;
 import org.geotools.feature.CollectionEvent;
 import org.geotools.geometry.DirectPosition2D;
 import org.geotools.geometry.jts.Geometries;
+import org.geotools.swing.extended.Map;
 import org.geotools.swing.extended.exception.InitializeLayerException;
+import org.geotools.swing.extended.util.GeometryUtility;
 import org.opengis.feature.simple.SimpleFeature;
 import org.geotools.swing.extended.util.Messaging;
 
@@ -112,10 +114,16 @@ public class ExtendedLayerEditor extends ExtendedLayerGraphics {
     }
 
     @Override
+    public void setMapControl(Map mapControl) {
+        super.setMapControl(mapControl);
+        this.verticesLayer.setMapControl(mapControl);
+    }
+
+    @Override
     public SimpleFeature addFeature(String fid, byte[] geomAsBytes,
             java.util.HashMap<String, Object> fieldsWithValues,
             boolean refreshMap) throws ParseException {
-        return this.addFeature(fid, wkbReader.read(geomAsBytes), fieldsWithValues, refreshMap);
+        return this.addFeature(fid, GeometryUtility.getGeometryFromWkb(geomAsBytes), fieldsWithValues, refreshMap);
     }
 
     /**

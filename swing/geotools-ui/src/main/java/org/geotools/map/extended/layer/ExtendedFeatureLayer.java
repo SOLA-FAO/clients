@@ -31,8 +31,6 @@
  */
 package org.geotools.map.extended.layer;
 
-import com.vividsolutions.jts.io.WKBReader;
-import com.vividsolutions.jts.io.WKBWriter;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -45,20 +43,15 @@ import org.geotools.factory.CommonFactoryFinder;
 import org.geotools.feature.FeatureCollection;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.map.FeatureLayer;
-import org.geotools.styling.FeatureTypeStyle;
-import org.geotools.styling.Rule;
-import org.geotools.styling.SLDParser;
-import org.geotools.styling.Style;
-import org.geotools.styling.StyleFactory;
-import org.geotools.styling.StyleFactoryImpl;
+import org.geotools.styling.*;
+import org.geotools.swing.control.extended.TocSymbol;
+import org.geotools.swing.extended.exception.InitializeLayerException;
+import org.geotools.swing.extended.util.Messaging;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.feature.type.FeatureType;
 import org.opengis.feature.type.GeometryType;
-import org.geotools.swing.control.extended.TocSymbol;
-import org.geotools.swing.extended.exception.InitializeLayerException;
-import org.geotools.swing.extended.util.Messaging;
 import org.opengis.filter.Filter;
 import org.opengis.filter.FilterFactory2;
 
@@ -80,15 +73,6 @@ public class ExtendedFeatureLayer extends ExtendedLayer {
     private FeatureLayer featureLayer;
     private String filterExpressionForSnapping = null;
     private String[] attributeNames = null;
-
-    /**
-     * It is used to read WKB and convert it to geometry
-     */
-    protected final static WKBReader wkbReader = new WKBReader();
-    /**
-     * It is used to convert a geometry to WKB
-     */
-    protected final static WKBWriter wkbWriter = new WKBWriter();
 
     /**
      * It initializes the layer.

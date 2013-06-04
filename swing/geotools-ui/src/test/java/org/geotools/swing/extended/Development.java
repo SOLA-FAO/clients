@@ -29,6 +29,8 @@
  */
 package org.geotools.swing.extended;
 
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.io.WKTReader;
 import org.geotools.data.wms.request.GetMapRequest;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -55,6 +57,7 @@ import org.geotools.swing.mapaction.extended.Print;
 import org.geotools.swing.mapaction.extended.RemoveDirectImage;
 import org.geotools.swing.tool.extended.AddDirectImageTool;
 import org.geotools.swing.extended.tool.ExtendedDrawPolygon;
+import org.geotools.swing.extended.util.GeometryUtility;
 import org.geotools.swing.tool.extended.ExtendedDrawToolWithSnapping;
 
 /**
@@ -80,9 +83,8 @@ public class Development {
         ArrayList<String> wmsLayerNames = new ArrayList<String>();
         wmsLayerNames.add("sola:nz_orthophoto");
         ExtendedWmsLiteLayer wmsLayer = new ExtendedWmsLiteLayer(
-                "wmsLayer", "WMS Layer", wmsServerURL, wmsLayerNames, 2193, "1.1.1", "image/jpeg");
-        mapCtrl.getMap().addLayer(wmsLayer);
-        wmsLayer.setFullExtent(mapCtrl.getMap().getFullExtent());
+                "wmsLayer", "WMS Layer", wmsServerURL, wmsLayerNames, "1.1.1", "image/jpeg");
+        //mapCtrl.getMap().addLayer(wmsLayer);
         File directory = new File(".");
         String shapeFile =
                 //                String.format("%s\\src\\test\\java\\org\\sola\\clients\\geotools\\ui\\sample\\data\\Samoa_Parcels.shp", 
@@ -127,6 +129,12 @@ public class Development {
     @Test
     public void test() throws Exception {
         System.out.println("Test");
+        WKTReader wktReader = new WKTReader();
+        Geometry geom = wktReader.read("POINT(1782978 5926627)");
+        geom.setSRID(2193);
+        byte[] geomAsBytes = GeometryUtility.getWkbFromGeometry((Geometry)geom.clone());
+        Geometry geom2 = GeometryUtility.getGeometryFromWkb(geomAsBytes.clone());
+        
         double east = 1795771, west = 1776400, north = 5932259, south = 5919888;
         SimpleHttpClient httpClient = new SimpleHttpClient();
         GetMapRequest getMapRequest = new WMS1_1_0.GetMapRequest(

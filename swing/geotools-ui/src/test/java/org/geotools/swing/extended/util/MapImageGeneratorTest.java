@@ -99,7 +99,7 @@ public class MapImageGeneratorTest {
         ArrayList<String> wmsLayerNames = new ArrayList<String>();
         wmsLayerNames.add("sola:nz_orthophoto");
         ExtendedWmsLiteLayer wmsLayer = new ExtendedWmsLiteLayer(
-                "wmsLayer", "WMS Layer", wmsServerURL, wmsLayerNames, 2193, "1.1.1", "image/jpeg");
+                "wmsLayer", "WMS Layer", wmsServerURL, wmsLayerNames, "1.1.1", "image/jpeg");
         map.addLayer(wmsLayer);
 return map;
     }

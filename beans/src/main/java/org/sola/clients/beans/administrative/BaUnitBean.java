@@ -634,7 +634,7 @@ public class BaUnitBean extends BaUnitSummaryBean {
         if(getId()!=null){
             List<SpatialSearchResultTO> searchResults = 
                     WSManager.getInstance().getSearchService()
-                    .searchSpatialObjects(BAUNIT_ID_SEARCH, getId());
+                    .searchSpatialObjects(BAUNIT_ID_SEARCH, getId(), -1);
             if(searchResults!=null && searchResults.size()>0){
                 List<String> ids = new ArrayList<String>();
                 for(SpatialSearchResultTO result : searchResults){

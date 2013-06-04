@@ -39,6 +39,7 @@ import org.geotools.geometry.DirectPosition2D;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.map.extended.layer.ExtendedLayer;
 import org.geotools.swing.event.MapMouseEvent;
+import org.geotools.swing.extended.util.GeometryUtility;
 import org.geotools.swing.tool.extended.ExtendedTool;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.ui.control.InformationResultWindow;
@@ -57,7 +58,6 @@ import org.sola.webservices.search.ConfigMapLayerTO;
 public class InformationTool extends ExtendedTool {
 
     private PojoDataAccess dataAccess;
-    private WKBWriter wkbWriter = new WKBWriter();
     private int pixelTolerance = 10;
     private InformationResultWindow resultWindow;
     private String toolTip =  MessageUtility.getLocalizedMessage(
@@ -92,7 +92,7 @@ public class InformationTool extends ExtendedTool {
         Envelope env = new Envelope(
                 pos.x - envelopeWidth, pos.x + envelopeWidth,
                 pos.y - envelopeWidth, pos.y + envelopeWidth);
-        byte[] filteringGeometry = wkbWriter.write(JTS.toGeometry(env));
+        byte[] filteringGeometry = GeometryUtility.getWkbFromGeometry(JTS.toGeometry(env));
 
         List<QueryForSelect> queriesForSelect = new ArrayList<QueryForSelect>();
         for (ExtendedLayer solaLayer : this.getMapControl().getSolaLayers().values()) {

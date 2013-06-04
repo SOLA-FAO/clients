@@ -118,7 +118,7 @@ public class Development {
         Geometry geom = wktReader.read(
                 String.format("MULTIPOINT(%s %s)", x, y));
 
-        geom.setSRID(mapDef.getSrid());
+        geom.setSRID(mapDef.getCrsList().get(0).getSrid());
         byte[] result = wkbWriter.write(geom);
 
         ControlsBundleForApplicationLocation ctrl = new ControlsBundleForApplicationLocation();

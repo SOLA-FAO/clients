@@ -1,26 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO). All rights
- * reserved.
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification, are permitted
- * provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- * 1. Redistributions of source code must retain the above copyright notice,this list of conditions
- * and the following disclaimer. 2. Redistributions in binary form must reproduce the above
- * copyright notice,this list of conditions and the following disclaimer in the documentation and/or
- * other materials provided with the distribution. 3. Neither the name of FAO nor the names of its
- * contributors may be used to endorse or promote products derived from this software without
- * specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
- * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- * WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
- * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.gis;
@@ -29,12 +33,10 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.WKBWriter;
 import com.vividsolutions.jts.io.WKTReader;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.swing.gis.beans.SurveyPointBean;
 import org.sola.clients.swing.gis.data.ExternalFileImporterSurveyPointBeans;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
@@ -70,11 +72,13 @@ public class AppTest {
     private Boolean skipTests = null;
 
     /**
-     * Checks the SOLA_OPTS environment variable to determine if the Integration Tests such as those
-     * using Embedded Glassfish should be skipped or not. <p> To set this environment variable in
-     * Ubuntu, add the following export to the ~/.gnomerc file: {@code export SOLA_OPTS=SkipIntTests}
-     * You may need to create the ~/.gnomerc file if it doesn't exist.</p><p> This variable is used
-     * by Bamboo to avoid running Integration tests during the automated build process.
+     * Checks the SOLA_OPTS environment variable to determine if the Integration
+     * Tests such as those using Embedded Glassfish should be skipped or not.
+     * <p> To set this environment variable in Ubuntu, add the following export
+     * to the ~/.gnomerc file: {@code export SOLA_OPTS=SkipIntTests} You may
+     * need to create the ~/.gnomerc file if it doesn't exist.</p><p> This
+     * variable is used by Bamboo to avoid running Integration tests during the
+     * automated build process.
      *
      * @return
      */
@@ -93,7 +97,7 @@ public class AppTest {
     /**
      * Testing the getMapDefinition
      */
-    @Ignore
+    //@Ignore
     @Test
     public void testGetMapDefinition() {
         if (skipIntegrationTest()) {
@@ -101,8 +105,10 @@ public class AppTest {
         }
         System.out.println("Test getMapDefinition");
 
+        SecurityBean.authenticate("test", "test".toCharArray(), this.getWSConfig());
+
         MapDefinitionTO result = PojoDataAccess.getInstance().getMapDefinition();
-        System.out.println("result (srid): " + result.getSrid());
+        System.out.println("result (srid): " + result.getCrsList().get(0).getSrid());
         System.out.println("result (nr of layers): " + result.getLayers().size());
     }
 
@@ -190,30 +196,42 @@ public class AppTest {
 
         String layerName = "new_cadastre_object";
         System.out.print(String.format("Get title for layer %s (found in resource): ", layerName));
-        System.out.println(String.format("Title: %s", 
-                ((Messaging)Messaging.getInstance()).getLayerTitle(layerName)));
+        System.out.println(String.format("Title: %s",
+                ((Messaging) Messaging.getInstance()).getLayerTitle(layerName)));
         layerName = "NNNNOTFOUND";
         System.out.print(
                 String.format("Get title for layer %s (not found in resource): ", layerName));
-        System.out.println(String.format("Title: %s", 
-                ((Messaging)Messaging.getInstance()).getLayerTitle(layerName)));
+        System.out.println(String.format("Title: %s",
+                ((Messaging) Messaging.getInstance()).getLayerTitle(layerName)));
     }
-    
+
     @Ignore
     @Test
     public void testExternalFileImporter() throws Exception {
         System.out.println("Test ExternalFileImporterSurveyPointBeans");
         File directory = new File(".");
-        String sampleFile = 
+        String sampleFile =
                 String.format("%s\\src\\test\\java\\org\\sola\\clients\\swing\\gis"
                 + "\\sample\\data\\survey_points.csv",
                 directory.getAbsolutePath());
-        List<SurveyPointBean> beanList = 
+        List<SurveyPointBean> beanList =
                 ExternalFileImporterSurveyPointBeans.getInstance().getBeans(sampleFile);
-        for(SurveyPointBean bean:beanList){
-            System.out.println(String.format("Bean found X:%s Y:%s Point:%s", 
+        for (SurveyPointBean bean : beanList) {
+            System.out.println(String.format("Bean found X:%s Y:%s Point:%s",
                     bean.getX(), bean.getY(), bean.getFeatureGeom().toText()));
         }
     }
-       
+
+    private HashMap<String, String> getWSConfig() {
+        HashMap<String, String> wsConfig = new HashMap<String, String>();
+        wsConfig.put("SOLA_WS_CASE_MANAGEMENT_SERVICE_URL", "http://localhost:8080/sola/webservices/casemanagement-service?wsdl");
+        wsConfig.put("SOLA_WS_REFERENCE_DATA_SERVICE_URL", "http://localhost:8080/sola/webservices/referencedata-service?wsdl");
+        wsConfig.put("SOLA_WS_ADMIN_SERVICE_URL", "http://localhost:8080/sola/webservices/admin-service?wsdl");
+        wsConfig.put("SOLA_WS_CADASTRE_SERVICE_URL", "http://localhost:8080/sola/webservices/cadastre-service?wsdl");
+        wsConfig.put("SOLA_WS_SEARCH_SERVICE_URL", "http://localhost:8080/sola/webservices/search-service?wsdl");
+        wsConfig.put("SOLA_WS_DIGITAL_ARCHIVE_URL", "http://localhost:8080/sola/webservices/digitalarchive-service?wsdl");
+        wsConfig.put("SOLA_WS_SPATIAL_SERVICE_URL", "http://localhost:8080/sola/webservices/spatial-service?wsdl");
+        wsConfig.put("SOLA_WS_ADMINISTRATIVE_SERVICE_URL", "http://localhost:8080/sola/webservices/administrative-service?wsdl");
+        return wsConfig;
+    }
 }

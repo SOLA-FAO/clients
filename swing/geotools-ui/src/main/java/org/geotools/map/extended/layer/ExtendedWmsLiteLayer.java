@@ -26,7 +26,6 @@
 package org.geotools.map.extended.layer;
 
 import java.util.List;
-import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.swing.extended.exception.InitializeLayerException;
 
 /**
@@ -49,25 +48,19 @@ public class ExtendedWmsLiteLayer extends ExtendedLayer {
      * @param url The Url of the WMS Server without the query
      * @param layerNames The list of names of the layers in the server 
      * that will be asked for rendering
-     * @param srid The Srid of the SRS
      * @param version The Version of the WMS that will be used for the requests
      * @param format The format of the output image
      * @throws InitializeLayerException
      */
     public ExtendedWmsLiteLayer(String name, String title, String url,
-            List<String> layerNames, Integer srid, String version, String format)
+            List<String> layerNames, String version, String format)
             throws InitializeLayerException {
         this.setLayerName(name);
         this.setTitle(title);
         this.layer = new WmsLiteLayer(url, layerNames, version);
         this.getMapLayers().add(this.layer);
-        this.layer.setSrid(srid);
         if (format != null) {
             this.layer.setFormat(format);
         }
-    }
-    
-    public void setFullExtent(ReferencedEnvelope bounds){
-        this.layer.setBounds(bounds);
-    }
+    }    
 }

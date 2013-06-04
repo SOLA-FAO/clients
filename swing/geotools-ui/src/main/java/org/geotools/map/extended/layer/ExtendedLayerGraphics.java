@@ -42,7 +42,9 @@ import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.opengis.feature.simple.SimpleFeature;
 import org.geotools.data.collection.extended.GraphicsFeatureCollection;
 import org.geotools.feature.CollectionEvent;
+import org.geotools.graph.util.geom.GeometryUtil;
 import org.geotools.swing.extended.exception.InitializeLayerException;
+import org.geotools.swing.extended.util.GeometryUtility;
 import org.geotools.swing.extended.util.Messaging;
 
 /**
@@ -109,6 +111,7 @@ public class ExtendedLayerGraphics extends ExtendedFeatureLayer {
             com.vividsolutions.jts.geom.Geometry geom,
             java.util.HashMap<String, Object> fieldsWithValues,
             boolean refreshMap) {
+        geom.setSRID(this.getSrid());
         SimpleFeature feature = this.getFeatureCollection().addFeature(fid, geom, fieldsWithValues);
         if (refreshMap){
             this.getMapControl().refresh();
@@ -128,7 +131,7 @@ public class ExtendedLayerGraphics extends ExtendedFeatureLayer {
             byte[] geomAsBytes,
             java.util.HashMap<String, Object> fieldsWithValues,
             boolean refreshMap) throws ParseException {
-        com.vividsolutions.jts.geom.Geometry geom = wkbReader.read(geomAsBytes);
+        com.vividsolutions.jts.geom.Geometry geom = GeometryUtility.getGeometryFromWkb(geomAsBytes);
         return this.addFeature(fid, geom, fieldsWithValues, refreshMap);
     }
 
@@ -201,6 +204,7 @@ public class ExtendedLayerGraphics extends ExtendedFeatureLayer {
         }
         newGeometry.normalize();
         ofFeature.setDefaultGeometry(newGeometry);
+        newGeometry.setSRID(this.getSrid());
         newGeometry.geometryChanged();
         if (fireEvent){
             this.getFeatureCollection().notifyListeners(

@@ -34,6 +34,7 @@ import com.vividsolutions.jts.linearref.LocationIndexedLine;
 import java.util.ArrayList;
 import java.util.List;
 import org.geotools.geometry.jts.Geometries;
+import org.geotools.geometry.jts.JTS;
 import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.geotools.swing.extended.exception.ReadGeometryException;
 
@@ -45,7 +46,7 @@ public class GeometryUtility {
 
     private static GeometryFactory geometryFactory = JTSFactoryFinder.getGeometryFactory();
     private static WKBReader wkbReader = new WKBReader();
-    private static WKBWriter wkbWriter = new WKBWriter();
+    private static WKBWriter wkbWriter = new WKBWriter(2, true);
 
     /**
      * @return A JTS Geometry Factory that can be used to build the different types of geometry.
@@ -371,5 +372,5 @@ public class GeometryUtility {
      */
     public static byte[] getWkbFromGeometry(Geometry geometry) {
         return wkbWriter.write(geometry);
-    }
+    }    
 }

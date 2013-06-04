@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.geometry.jts.ReferencedEnvelope;
+import org.geotools.swing.extended.util.CRSUtility;
 import org.geotools.swing.extended.util.GeometryUtility;
 import org.opengis.geometry.BoundingBox;
 import org.sola.clients.beans.converters.TypeConverters;
@@ -43,6 +44,7 @@ import org.sola.common.messaging.MessageUtility;
 import org.sola.services.boundary.wsclients.*;
 import org.sola.services.boundary.wsclients.exception.WebServiceClientException;
 import org.sola.webservices.search.ConfigMapLayerTO;
+import org.sola.webservices.search.CrsTO;
 import org.sola.webservices.search.MapDefinitionTO;
 import org.sola.webservices.search.QueryForSelect;
 import org.sola.webservices.search.ResultForSelectionInfo;
@@ -103,6 +105,10 @@ public class PojoDataAccess {
     public void resetMapDefinition(){
         this.mapDefinition = getSearchService().getMapDefinition();
         this.mapLayerInfoList = null;
+        CRSUtility.getInstance().clearCRSList();
+        for (CrsTO crsTO:this.mapDefinition.getCrsList()){
+            CRSUtility.getInstance().setCRS(crsTO.getSrid(), crsTO.getWkt());
+        }
     }
 
     /**

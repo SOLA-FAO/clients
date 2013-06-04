@@ -117,7 +117,7 @@ public class MapObjectSearch extends FreeTextSearch {
                     Thread.sleep(500);
                     searchResults.addAll(
                             WSManager.getInstance().getSearchService().searchSpatialObjects(
-                            queryName, searchString));
+                            queryName, searchString, map.getSrid()));
                 } catch (InterruptedException ex) {
                 }
                 return null;

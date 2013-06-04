@@ -35,9 +35,11 @@ import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
+import org.geotools.swing.control.JCRSStatusBarItem;
 import org.geotools.swing.control.JCoordsStatusBarItem;
 import org.geotools.swing.control.JMapStatusBar;
 import org.geotools.swing.control.JRendererStatusBarItem;
+import org.geotools.swing.control.extended.CRSStatusBarItem;
 import org.geotools.swing.control.extended.MapScaleStatusBarItem;
 import org.geotools.swing.control.extended.ScaleBarStatusBarItem;
 import org.geotools.swing.control.extended.Toc;
@@ -149,6 +151,7 @@ public class ControlsBundle extends javax.swing.JPanel {
         this.pnlStatusbar.setLayout(new BorderLayout());
         statusBar = new JMapStatusBar();
         statusBar.addItem(new JRendererStatusBarItem(this.getMap()), false, true);
+        statusBar.addItem(new CRSStatusBarItem(this.getMap()));
         JCoordsStatusBarItem coordStatusItem = new JCoordsStatusBarItem(this.getMap());
         statusBar.addItem(coordStatusItem);
         // Adds the Scale Bar and Map Scale to the status bar of the map. Uses MigLayout constraints
