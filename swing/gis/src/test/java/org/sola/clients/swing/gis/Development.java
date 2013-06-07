@@ -155,7 +155,7 @@ public class Development {
         values.put("nameFirstpart", "test2");
         values.put("nameLastpart", "test2-last");
         values.put("officialArea", 2.0);
-        bean.setValues(values);
+        //bean.setValues(values);
 
         WKTReader wktReader = new WKTReader();
         Geometry geom = wktReader.read("POINT(1782978 5926627)");

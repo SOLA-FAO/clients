@@ -79,9 +79,10 @@ public class Development {
         mapCtrl.Setup(2193, wktOfCrs, true);
         double east = 1795771, west = 1776400, north = 5932259, south = 5919888;
         mapCtrl.getMap().setFullExtent(east, west, north, south);
-        String wmsServerURL = "http://localhost:8085/geoserver/sola/wms";
+        //String wmsServerURL = "http://localhost:8085/geoserver/sola/wms";
+        String wmsServerURL = "http://maps.gc-al.com/gz/nz/wms";
         ArrayList<String> wmsLayerNames = new ArrayList<String>();
-        wmsLayerNames.add("sola:nz_orthophoto");
+        wmsLayerNames.add("nz:orthophoto");
         ExtendedWmsLiteLayer wmsLayer = new ExtendedWmsLiteLayer(
                 "wmsLayer", "WMS Layer", wmsServerURL, wmsLayerNames, "1.1.1", "image/jpeg");
         //mapCtrl.getMap().addLayer(wmsLayer);

@@ -64,6 +64,7 @@ import org.geotools.geometry.jts.Geometries;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.map.Layer;
+import org.geotools.map.event.MapBoundsEvent;
 import org.geotools.map.extended.layer.*;
 import org.geotools.swing.JMapPane;
 import org.geotools.swing.event.MapPaneAdapter;
@@ -71,6 +72,7 @@ import org.geotools.swing.event.MapPaneEvent;
 import org.geotools.swing.extended.util.Messaging;
 import org.geotools.renderer.lite.RendererUtilities;
 import org.geotools.resources.CRSUtilities;
+import org.geotools.swing.extended.exception.InitializeCRSException;
 import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.geotools.swing.extended.exception.InitializeMapException;
 import org.geotools.swing.extended.util.CRSUtility;
@@ -323,8 +325,15 @@ public class Map extends JMapPane {
         return isRendering;
     }
 
-    public void setCRS(CoordinateReferenceSystem crs){
-        this.getMapContent().getViewport().setCoordinateReferenceSystem(crs);
+    public void setCRS(CoordinateReferenceSystem crs) {
+        try {
+            this.fullExtent = this.getFullExtent().transform(crs, true);
+            this.getMapContent().getViewport().setCoordinateReferenceSystem(crs);
+        } catch (TransformException ex) {
+            throw new InitializeCRSException("Error while switching CRS.", ex);
+        } catch (FactoryException ex) {
+            throw new InitializeCRSException("Error while switching CRS.", ex);
+        }
     }
 
     /**
@@ -343,10 +352,10 @@ public class Map extends JMapPane {
      * @param south
      */
     public void setFullExtent(double east, double west, double north, double south) {
-        this.fullExtentEnvelope = new ReferencedEnvelope(
+        this.fullExtent = new ReferencedEnvelope(
                 west, east, south, north, this.getMapContent().getCoordinateReferenceSystem());
     }
-
+    
     /**
      * Gets the full extent. If the full extent is not yet set then the full
      * extent of all layers in the map is used.
@@ -355,11 +364,11 @@ public class Map extends JMapPane {
      * @return
      */
     public ReferencedEnvelope getFullExtent() {
-        if (this.fullExtentEnvelope == null) {
+        if (this.fullExtent == null) {
             this.reset();
-            this.fullExtentEnvelope = this.getDisplayArea();
+            this.fullExtent = this.getDisplayArea();
         }
-        return this.fullExtentEnvelope;
+        return this.fullExtent;
     }
 
     /**
@@ -724,6 +733,47 @@ public class Map extends JMapPane {
         //repaint();
     }
 
+    /**
+     * The method is overridden to prevent changing the full extent. 
+     * The full extent must always be supplied.
+     * 
+     * @return 
+     */
+    @Override
+    protected boolean setFullExtent() {
+        if (fullExtent != null){
+            return true;
+        }
+        return super.setFullExtent();
+    }    
+
+    /**
+     * This method is overridden to prevent zooming to full extent when the
+     * CRS is changed.
+     * 
+     * @param event 
+     */
+    @Override
+    public void mapBoundsChanged(MapBoundsEvent event) {
+        paramsLock.writeLock().lock();
+        try {
+            int type = event.getType();
+            if ((type & MapBoundsEvent.COORDINATE_SYSTEM_MASK) != 0) {
+                /*
+                 * The coordinate reference system has changed. Set the map
+                 * to display the full extent of layer bounds to avoid the
+                 * effect of a shrinking map
+                 */
+//                setFullExtent();
+//                reset();
+                this.setDisplayArea(event.getNewAreaOfInterest());
+            }
+            
+        } finally {
+            paramsLock.writeLock().unlock();
+        }
+    }
+        
     /**
      * Overrides the default behavior of onImageMoved. The repaint() is
      * commented so while panning the image is not reseted completely.

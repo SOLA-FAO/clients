@@ -58,7 +58,7 @@ public class ScaleBarStatusBarItem extends StatusBarItem {
      * Default width for the scale bar. This measurement is in points. There are approx 2.83 points
      * per mm. The default value of 225 is approx 80mm.
      */
-    private static final double DEFAULT_WIDTH = 225;
+    private static final double DEFAULT_WIDTH = 125;
     private static final int LRB_MARGIN = 16;
     private static final int TOP_MARGIN = 2;
     private static final int IMAGE_HEIGHT = 26;

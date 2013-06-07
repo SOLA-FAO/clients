@@ -117,41 +117,6 @@ public abstract class ControlsBundleForTransaction extends SolaControlsBundle {
         return instance;
     }
     
-//    /**
-//     * It sets up the bundle. It calls the adding layer method and adding tools method. It also
-//     * identifies the pending layer which will be refreshed if a transaction is being saved in the
-//     * database.
-//     *
-//     * @param pojoDataAccess
-//     */
-//    @Override
-//    public void Setup(PojoDataAccess pojoDataAccess) {
-//        super.Setup(pojoDataAccess);
-//        try {
-//            
-//            //Adding layers
-//            this.addLayers();
-//
-//            //Adding tools and commands
-//            this.addToolsAndCommands();
-//
-//            this.addDocumentsPanel();
-//
-//            for (ExtendedLayer solaLayer : this.getMap().getSolaLayers().values()) {
-//                if (solaLayer.getClass().equals(PojoLayer.class)) {
-//                    if (((PojoLayer) solaLayer).getConfig().getId().equals(
-//                            PojoLayer.CONFIG_PENDING_PARCELS_LAYER_NAME)) {
-//                        this.pendingLayer = (PojoLayer) solaLayer;
-//                        break;
-//                    }
-//                }
-//            }
-//
-//        } catch (InitializeLayerException ex) {
-//            Messaging.getInstance().show(GisMessage.CADASTRE_CHANGE_ERROR_SETUP);
-//            org.sola.common.logging.LogUtility.log(GisMessage.CADASTRE_CHANGE_ERROR_SETUP, ex);
-//        }
-//    }
     
       /**
      * It sets up the bundle. It calls the adding layer method and adding tools method. It also

@@ -35,7 +35,6 @@ import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
-import org.geotools.swing.control.JCRSStatusBarItem;
 import org.geotools.swing.control.JCoordsStatusBarItem;
 import org.geotools.swing.control.JMapStatusBar;
 import org.geotools.swing.control.JRendererStatusBarItem;
