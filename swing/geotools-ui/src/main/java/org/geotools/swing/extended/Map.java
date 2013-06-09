@@ -34,51 +34,40 @@
 package org.geotools.swing.extended;
 
 import com.vividsolutions.jts.geom.Geometry;
-import java.util.Enumeration;
-import java.util.concurrent.TimeUnit;
-import org.geotools.map.event.MapLayerEvent;
-import org.geotools.map.event.MapLayerListEvent;
-import org.geotools.swing.control.extended.CRSItem;
-import org.geotools.swing.control.extended.ExtendedToolItem;
-import org.geotools.swing.control.extended.Toc;
-import org.geotools.map.MapContent;
-import org.geotools.referencing.CRS;
-import org.geotools.referencing.NamedIdentifier;
-import org.geotools.swing.tool.CursorTool;
-import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import java.awt.Color;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.Point2D;
-import java.io.IOException;
+import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Properties;
-import javax.swing.AbstractAction;
-import javax.swing.AbstractButton;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JToolBar;
+import java.util.concurrent.TimeUnit;
+import javax.swing.*;
 import org.geotools.data.simple.SimpleFeatureSource;
 import org.geotools.geometry.jts.Geometries;
-import org.geotools.geometry.jts.JTS;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.map.Layer;
+import org.geotools.map.MapContent;
 import org.geotools.map.event.MapBoundsEvent;
+import org.geotools.map.event.MapLayerEvent;
+import org.geotools.map.event.MapLayerListEvent;
 import org.geotools.map.extended.layer.*;
+import org.geotools.renderer.lite.RendererUtilities;
 import org.geotools.swing.JMapPane;
+import org.geotools.swing.control.extended.CRSItem;
+import org.geotools.swing.control.extended.ExtendedToolItem;
+import org.geotools.swing.control.extended.Toc;
 import org.geotools.swing.event.MapPaneAdapter;
 import org.geotools.swing.event.MapPaneEvent;
-import org.geotools.swing.extended.util.Messaging;
-import org.geotools.renderer.lite.RendererUtilities;
-import org.geotools.resources.CRSUtilities;
 import org.geotools.swing.extended.exception.InitializeCRSException;
 import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.geotools.swing.extended.exception.InitializeMapException;
 import org.geotools.swing.extended.util.CRSUtility;
+import org.geotools.swing.extended.util.Messaging;
 import org.geotools.swing.mapaction.extended.ExtendedAction;
+import org.geotools.swing.tool.CursorTool;
 import org.geotools.swing.tool.extended.ExtendedTool;
-import org.opengis.geometry.Envelope;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.TransformException;
 
 /**
@@ -159,12 +148,7 @@ public class Map extends JMapPane {
      */
     private void initialize(int srid) throws InitializeMapException {
         MapContent content = new MapContent();
-        try {
-            content.getViewport().setCoordinateReferenceSystem(CRSUtility.getInstance().getCRS(srid));
-        } catch (FactoryException ex) {
-            throw new InitializeMapException(
-                    Messaging.Ids.MAPCONTROL_MAPCONTEXT_WITHOUT_SRID_ERROR.toString(), ex);
-        }
+        content.getViewport().setCoordinateReferenceSystem(CRSUtility.getInstance().getCRS(srid));
         if (content.getCoordinateReferenceSystem() == null) {
             throw new InitializeMapException(
                     Messaging.Ids.MAPCONTROL_MAPCONTEXT_WITHOUT_SRID_ERROR.toString(), null);
@@ -329,6 +313,11 @@ public class Map extends JMapPane {
         try {
             this.fullExtent = this.getFullExtent().transform(crs, true);
             this.getMapContent().getViewport().setCoordinateReferenceSystem(crs);
+            for (ExtendedLayer layer : extendedLayers.values()) {
+                if (layer instanceof ExtendedLayerGraphics) {
+                    ((ExtendedLayerGraphics)layer).transformFeatureGeometries();
+                }
+            }
         } catch (TransformException ex) {
             throw new InitializeCRSException("Error while switching CRS.", ex);
         } catch (FactoryException ex) {
@@ -355,7 +344,7 @@ public class Map extends JMapPane {
         this.fullExtent = new ReferencedEnvelope(
                 west, east, south, north, this.getMapContent().getCoordinateReferenceSystem());
     }
-    
+
     /**
      * Gets the full extent. If the full extent is not yet set then the full
      * extent of all layers in the map is used.
@@ -734,24 +723,24 @@ public class Map extends JMapPane {
     }
 
     /**
-     * The method is overridden to prevent changing the full extent. 
-     * The full extent must always be supplied.
-     * 
-     * @return 
+     * The method is overridden to prevent changing the full extent. The full
+     * extent must always be supplied.
+     *
+     * @return
      */
     @Override
     protected boolean setFullExtent() {
-        if (fullExtent != null){
+        if (fullExtent != null) {
             return true;
         }
         return super.setFullExtent();
-    }    
+    }
 
     /**
-     * This method is overridden to prevent zooming to full extent when the
-     * CRS is changed.
-     * 
-     * @param event 
+     * This method is overridden to prevent zooming to full extent when the CRS
+     * is changed.
+     *
+     * @param event
      */
     @Override
     public void mapBoundsChanged(MapBoundsEvent event) {
@@ -760,20 +749,20 @@ public class Map extends JMapPane {
             int type = event.getType();
             if ((type & MapBoundsEvent.COORDINATE_SYSTEM_MASK) != 0) {
                 /*
-                 * The coordinate reference system has changed. Set the map
-                 * to display the full extent of layer bounds to avoid the
-                 * effect of a shrinking map
+                 * The coordinate reference system has changed. Set the map to
+                 * display the full extent of layer bounds to avoid the effect
+                 * of a shrinking map
                  */
 //                setFullExtent();
 //                reset();
                 this.setDisplayArea(event.getNewAreaOfInterest());
             }
-            
+
         } finally {
             paramsLock.writeLock().unlock();
         }
     }
-        
+
     /**
      * Overrides the default behavior of onImageMoved. The repaint() is
      * commented so while panning the image is not reseted completely.

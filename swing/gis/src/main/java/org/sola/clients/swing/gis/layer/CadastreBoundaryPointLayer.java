@@ -31,15 +31,13 @@ package org.sola.clients.swing.gis.layer;
 
 import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.Point;
-import com.vividsolutions.jts.io.ParseException;
 import java.util.HashMap;
 import org.geotools.geometry.jts.Geometries;
 import org.geotools.map.extended.layer.ExtendedLayerGraphics;
+import org.geotools.swing.extended.Map;
 import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.geotools.swing.extended.util.GeometryUtility;
-import org.geotools.swing.extended.util.Messaging;
 import org.opengis.feature.simple.SimpleFeature;
-import org.sola.common.messaging.GisMessage;
 
 /**
  * This layer is used to represent the boundary during the operation of
@@ -75,12 +73,17 @@ public class CadastreBoundaryPointLayer extends ExtendedLayerGraphics {
         this.getMapLayers().addAll(this.boundaryLayer.getMapLayers());
     }
 
+    @Override
+    public void setMapControl(Map mapControl) {
+        super.setMapControl(mapControl);
+        this.boundaryLayer.setMapControl(mapControl);
+    }
     /**
      * Gets the end point of the boundary
      *
      * @return
      */
-    public Point getEndPoint() {
+    public final Point getEndPoint() {
         SimpleFeature pointFeature = this.getFeatureCollection().getFeature(LABEL_END_P0INT);
         if (pointFeature != null) {
             return (Point) pointFeature.getDefaultGeometry();
@@ -93,7 +96,7 @@ public class CadastreBoundaryPointLayer extends ExtendedLayerGraphics {
      *
      * @param endPoint
      */
-    public void setEndPoint(Point endPoint) {
+    public final void setEndPoint(Point endPoint) {
         this.setTargetPoint(endPoint, false);
     }
 
@@ -102,7 +105,7 @@ public class CadastreBoundaryPointLayer extends ExtendedLayerGraphics {
      *
      * @param endPoint
      */
-    public void setEndPoint(byte[] endPoint) {
+    public final void setEndPoint(byte[] endPoint) {
         this.setTargetPoint(endPoint, false);
     }
 
@@ -111,7 +114,7 @@ public class CadastreBoundaryPointLayer extends ExtendedLayerGraphics {
      *
      * @return
      */
-    public Point getStartPoint() {
+    public final Point getStartPoint() {
         SimpleFeature pointFeature = this.getFeatureCollection().getFeature(LABEL_START_P0INT);
         if (pointFeature != null) {
             return (Point) pointFeature.getDefaultGeometry();
@@ -124,7 +127,7 @@ public class CadastreBoundaryPointLayer extends ExtendedLayerGraphics {
      *
      * @param startPoint
      */
-    public void setStartPoint(Point startPoint) {
+    public final void setStartPoint(Point startPoint) {
         this.setTargetPoint(startPoint, true);
     }
 
@@ -133,7 +136,7 @@ public class CadastreBoundaryPointLayer extends ExtendedLayerGraphics {
      *
      * @param startPoint
      */
-    public void setStartPoint(byte[] startPoint) {
+    public final void setStartPoint(byte[] startPoint) {
         this.setTargetPoint(startPoint, true);
     }
 
@@ -154,7 +157,7 @@ public class CadastreBoundaryPointLayer extends ExtendedLayerGraphics {
     /**
      * Reset the selected boundary
      */
-    public void clearSelection() {
+    public final void clearSelection() {
         this.removeFeatures(false);
         this.boundaryLayer.removeFeatures(false);
     }
@@ -164,7 +167,7 @@ public class CadastreBoundaryPointLayer extends ExtendedLayerGraphics {
      *
      * @param boundaryGeometry
      */
-    public void setTargetBoundary(LineString boundaryGeometry) {
+    public final void setTargetBoundary(LineString boundaryGeometry) {
         this.boundaryLayer.removeFeatures(false);
         this.boundaryLayer.addFeature(BOUNDARY_FEATURE_ID, boundaryGeometry, null, false);
     }
@@ -174,7 +177,7 @@ public class CadastreBoundaryPointLayer extends ExtendedLayerGraphics {
      *
      * @return
      */
-    public LineString getTargetBoundary() {
+    public final LineString getTargetBoundary() {
         Object targetBoundary = this.boundaryLayer.getFeatureCollection().getFeature(
                 BOUNDARY_FEATURE_ID).getDefaultGeometry();
         if (targetBoundary == null) {

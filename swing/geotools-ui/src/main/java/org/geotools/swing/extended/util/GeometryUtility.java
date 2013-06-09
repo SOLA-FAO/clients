@@ -1,26 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO). All rights
- * reserved.
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification, are permitted
- * provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- * 1. Redistributions of source code must retain the above copyright notice,this list of conditions
- * and the following disclaimer. 2. Redistributions in binary form must reproduce the above
- * copyright notice,this list of conditions and the following disclaimer in the documentation and/or
- * other materials provided with the distribution. 3. Neither the name of FAO nor the names of its
- * contributors may be used to endorse or promote products derived from this software without
- * specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
- * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- * WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
- * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.geotools.swing.extended.util;
@@ -36,11 +40,15 @@ import java.util.List;
 import org.geotools.geometry.jts.Geometries;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.geometry.jts.JTSFactoryFinder;
+import org.geotools.swing.extended.exception.GeometryTransformException;
 import org.geotools.swing.extended.exception.ReadGeometryException;
+import org.opengis.geometry.MismatchedDimensionException;
+import org.opengis.referencing.operation.MathTransform;
+import org.opengis.referencing.operation.TransformException;
 
 /**
- * Provides geometry manipulation functions to support editing of spatial features such as adding or
- * removing coordinates.
+ * Provides geometry manipulation functions to support editing of spatial
+ * features such as adding or removing coordinates.
  */
 public class GeometryUtility {
 
@@ -49,24 +57,27 @@ public class GeometryUtility {
     private static WKBWriter wkbWriter = new WKBWriter(2, true);
 
     /**
-     * @return A JTS Geometry Factory that can be used to build the different types of geometry.
+     * @return A JTS Geometry Factory that can be used to build the different
+     * types of geometry.
      */
     public static GeometryFactory getGeometryFactory() {
         return geometryFactory;
     }
 
     /**
-     * Removes the target coordinate from the geometry. <p>This method will preserve the type of
-     * geometry. E.g. if the geometry type is multi-linestring, the geometry returned will be
-     * multi-linestring or null.</p>
+     * Removes the target coordinate from the geometry. <p>This method will
+     * preserve the type of geometry. E.g. if the geometry type is
+     * multi-linestring, the geometry returned will be multi-linestring or
+     * null.</p>
      *
      * @param geometry The geometry to remove the coordinate from.
      * @param targetCoordinate The coordinates to remove.
-     * @return The geometry with the coordinate removed or the original geometry. May also return
-     * null if the coordinate is removed and the resulting geometry is no longer valid (e.g. Point
-     * with no coordinate or LineString with only one coordinate).
-     * @see #removeCoordinates(com.vividsolutions.jts.geom.Geometry, java.util.List)
-     * removeCoordinates
+     * @return The geometry with the coordinate removed or the original
+     * geometry. May also return null if the coordinate is removed and the
+     * resulting geometry is no longer valid (e.g. Point with no coordinate or
+     * LineString with only one coordinate).
+     * @see #removeCoordinates(com.vividsolutions.jts.geom.Geometry,
+     * java.util.List) removeCoordinates
      */
     public static Geometry removeCoordinate(Geometry geometry, Coordinate targetCoordinate) {
         List targetCoordinates = new ArrayList<Coordinate>();
@@ -75,17 +86,19 @@ public class GeometryUtility {
     }
 
     /**
-     * Removes the list of target coordinates from the geometry. <p>This method will preserve the
-     * type of geometry. E.g. if the geometry type is multi-linestring, the geometry returned will
-     * be multi-linestring or null.</p>
+     * Removes the list of target coordinates from the geometry. <p>This method
+     * will preserve the type of geometry. E.g. if the geometry type is
+     * multi-linestring, the geometry returned will be multi-linestring or
+     * null.</p>
      *
      * @param geometry The geometry to remove the coordinates from.
      * @param targetCoordinates The list of coordinates to remove.
-     * @return The geometry with the coordinates removed or the original geometry. May also return
-     * null if the coordinate is removed and the resulting geometry is no longer valid (e.g. Point
-     * with no coordinate or LineString with only one coordinate).
-     * @see #removeCoordinatesFromRing(com.vividsolutions.jts.geom.LineString, java.util.List)
-     * removeCoordinatesFromRing
+     * @return The geometry with the coordinates removed or the original
+     * geometry. May also return null if the coordinate is removed and the
+     * resulting geometry is no longer valid (e.g. Point with no coordinate or
+     * LineString with only one coordinate).
+     * @see #removeCoordinatesFromRing(com.vividsolutions.jts.geom.LineString,
+     * java.util.List) removeCoordinatesFromRing
      */
     public static Geometry removeCoordinates(Geometry geometry, List<Coordinate> targetCoordinates) {
         Geometry result = geometry;
@@ -185,17 +198,21 @@ public class GeometryUtility {
     }
 
     /**
-     * Removes the list of coordinates from a LineString representing the exterior or interior ring
-     * of a polygon.
+     * Removes the list of coordinates from a LineString representing the
+     * exterior or interior ring of a polygon.
      *
-     * @param ring A LineString representing the exterior or interior ring of a polygon.
+     * @param ring A LineString representing the exterior or interior ring of a
+     * polygon.
      * @param targetCoordinates The list of coordinates to remove from the ring.
-     * @return A LinearRing that can be used to rebuild the original polygon or null if the ring
-     * becomes invalid after the list of coordinates are removed.
-     * @see #removeCoordinates(com.vividsolutions.jts.geom.Geometry, java.util.List)
-     * removeCoordinates
-     * @see com.vividsolutions.jts.geom.Polygon#getExteriorRing() Polygon.getExteriorRing
-     * @see com.vividsolutions.jts.geom.Polygon#getInteriorRingN(int) Polygon.getInteriorRingN
+     * @return A LinearRing that can be used to rebuild the original polygon or
+     * null if the ring becomes invalid after the list of coordinates are
+     * removed.
+     * @see #removeCoordinates(com.vividsolutions.jts.geom.Geometry,
+     * java.util.List) removeCoordinates
+     * @see com.vividsolutions.jts.geom.Polygon#getExteriorRing()
+     * Polygon.getExteriorRing
+     * @see com.vividsolutions.jts.geom.Polygon#getInteriorRingN(int)
+     * Polygon.getInteriorRingN
      */
     public static LinearRing removeCoordinatesFromRing(LineString ring, List<Coordinate> targetCoordinates) {
         LinearRing result = null;
@@ -228,22 +245,25 @@ public class GeometryUtility {
     }
 
     /**
-     * Inserts the new coordinate into the geometry. This method will not insert the coordinate if
-     * it already exists in the geometry. <p>The behavior of this method depends on the type of
-     * geometry as follows: <ul><li>POINT - The geometry will be replaced by the new coordinate</li>
-     * <li>MULTIPOINT - The new coordinate will be added to the Multi-point</li> <li>LINESTRING -
-     * The new coordinate will be projected onto the closest segment of the line-string and added at
-     * that location if the distance to project the new coordinate is less than
-     * maxProjectionDistance</li> <li>MULTILINESTRING - Each line-string of the geometry is treated
-     * as per LINESTRING</li> <li>POLYGON - Each ring of the Polygon is converted to line-string and
-     * treated as per LINESTRING</li> <li>MULTIPOLYGON - Each polygon of the geometry is treated as
-     * per POLYGON.</li><li>GEOMETRYCOLLECTION - Recursion is used to process each geometry in the
-     * collection. </li></ul> </p>
+     * Inserts the new coordinate into the geometry. This method will not insert
+     * the coordinate if it already exists in the geometry. <p>The behavior of
+     * this method depends on the type of geometry as follows: <ul><li>POINT -
+     * The geometry will be replaced by the new coordinate</li> <li>MULTIPOINT -
+     * The new coordinate will be added to the Multi-point</li> <li>LINESTRING -
+     * The new coordinate will be projected onto the closest segment of the
+     * line-string and added at that location if the distance to project the new
+     * coordinate is less than maxProjectionDistance</li> <li>MULTILINESTRING -
+     * Each line-string of the geometry is treated as per LINESTRING</li>
+     * <li>POLYGON - Each ring of the Polygon is converted to line-string and
+     * treated as per LINESTRING</li> <li>MULTIPOLYGON - Each polygon of the
+     * geometry is treated as per POLYGON.</li><li>GEOMETRYCOLLECTION -
+     * Recursion is used to process each geometry in the collection. </li></ul>
+     * </p>
      *
      * @param geometry The geometry to add the new coordinate into.
      * @param newCoordinate The coordinate to insert.
-     * @param maxProjectionDistance The maximum distance (in meters) to project the coordinate onto
-     * a line string. Recommended value is 2.
+     * @param maxProjectionDistance The maximum distance (in meters) to project
+     * the coordinate onto a line string. Recommended value is 2.
      * @return The geometry with the new coordinate inserted.
      */
     public static Geometry insertCoordinate(Geometry geometry, Coordinate newCoordinate,
@@ -353,8 +373,9 @@ public class GeometryUtility {
 
     /**
      * Gets a geometry from a well known binary presentation
+     *
      * @param geometry
-     * @return 
+     * @return
      * @throws ReadGeometryException
      */
     public static Geometry getGeometryFromWkb(byte[] geometry) {
@@ -367,10 +388,24 @@ public class GeometryUtility {
 
     /**
      * Gets a well known binary presentation from the geometry
+     *
      * @param geometry
-     * @return 
+     * @return
      */
     public static byte[] getWkbFromGeometry(Geometry geometry) {
         return wkbWriter.write(geometry);
-    }    
+    }
+
+    public static Geometry transform(Geometry geometry, int targetSrid) {
+        MathTransform transform = CRSUtility.getInstance().getTransform(geometry.getSRID(), targetSrid);
+        try {
+            return JTS.transform(geometry, transform);
+        } catch (MismatchedDimensionException ex) {
+            throw new GeometryTransformException(
+                    String.format("Error transforming geometry %s in srid:%s", geometry.toString(), targetSrid), ex);
+        } catch (TransformException ex) {
+            throw new GeometryTransformException(
+                    String.format("Error transforming geometry %s in srid:%s", geometry.toString(), targetSrid), ex);
+        }
+    }
 }
