@@ -258,6 +258,13 @@
                         </Column>
                         <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                           <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                            <ResourceString bundle="org/sola/clients/swing/desktop/Bundle.properties" key="DashBoardPanel.tbUnassigned.columnModel.title8" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                          </Title>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                          <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                             <ResourceString bundle="org/sola/clients/swing/desktop/Bundle.properties" key="DashBoardPanel.tbUnassigned.columnModel.title5" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                           </Title>
                           <Editor/>
@@ -281,6 +288,7 @@
                         </Column>
                       </TableColumnModel>
                     </Property>
+                    <Property name="columnSelectionAllowed" type="boolean" value="true"/>
                     <Property name="componentPopupMenu" type="javax.swing.JPopupMenu" editor="org.netbeans.modules.form.ComponentChooserEditor">
                       <ComponentRef name="popUpUnassignedApplications"/>
                     </Property>
@@ -319,6 +327,9 @@
                       <Subbinding sourcePath="${serviceList}">
                         <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
                         <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
+                      </Subbinding>
+                      <Subbinding sourcePath="${contactPerson}">
+                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
                       </Subbinding>
                       <Subbinding sourcePath="${agent}">
                         <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
@@ -590,6 +601,13 @@
                         </Column>
                         <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                           <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                            <ResourceString bundle="org/sola/clients/swing/desktop/Bundle.properties" key="DashBoardPanel.tbAssigned.columnModel.title8" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                          </Title>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                          <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                             <ResourceString bundle="org/sola/clients/swing/desktop/Bundle.properties" key="DashBoardPanel.tbAssigned.columnModel.title5" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                           </Title>
                           <Editor/>
@@ -646,6 +664,9 @@
                       <Subbinding sourcePath="${serviceList}">
                         <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
                         <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
+                      </Subbinding>
+                      <Subbinding sourcePath="${contactPerson}">
+                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
                       </Subbinding>
                       <Subbinding sourcePath="${agent}">
                         <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
