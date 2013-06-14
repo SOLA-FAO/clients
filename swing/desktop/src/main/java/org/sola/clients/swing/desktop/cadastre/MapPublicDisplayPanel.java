@@ -54,8 +54,9 @@ public class MapPublicDisplayPanel extends ContentPanel {
         mapPanel = new javax.swing.JPanel();
 
         setHeaderPanel(headerPanel);
-
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/cadastre/Bundle"); // NOI18N
+        setHelpTopic(bundle.getString("MapPublicDisplayPanel.helpTopic")); // NOI18N
+
         headerPanel.setTitleText(bundle.getString("MapPublicDisplayPanel.headerPanel.titleText")); // NOI18N
 
         javax.swing.GroupLayout mapPanelLayout = new javax.swing.GroupLayout(mapPanel);
