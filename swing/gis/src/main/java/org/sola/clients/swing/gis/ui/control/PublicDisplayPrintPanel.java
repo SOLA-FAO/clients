@@ -4,13 +4,11 @@
  */
 package org.sola.clients.swing.gis.ui.control;
 
-import com.vividsolutions.jts.geom.Envelope;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import org.geotools.geometry.jts.ReferencedEnvelope;
-import org.geotools.swing.extended.Map;
 import org.geotools.swing.extended.util.MapImageGenerator;
 import org.geotools.swing.extended.util.Messaging;
 import org.geotools.swing.extended.util.ScalebarGenerator;
@@ -22,7 +20,6 @@ import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.data.PojoPublicDisplayFeatureSource;
 import org.sola.clients.swing.gis.layer.PojoForPublicDisplayLayer;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForPublicDisplay;
-import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.MessageUtility;
 
@@ -171,7 +168,7 @@ public class PublicDisplayPrintPanel extends javax.swing.JPanel {
                 serviceBean.setApplicationId(this.applicationId);
             }
             serviceBean.saveInformationService();
-            generateAndShowReport(layout.getId(), mapImageLocation, scalebarImageLocation);
+            generateAndShowReport(layout.getFileName(), mapImageLocation, scalebarImageLocation);
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
@@ -180,20 +177,20 @@ public class PublicDisplayPrintPanel extends javax.swing.JPanel {
     /**
      * It calls the generate report functionality and displays it.
      *
-     * @param layoutId
+     * @param fileName
      * @param mapImageLocation
      * @param scalebarImageLocation
      * @throws IOException
      */
     private void generateAndShowReport(
-            String layoutId,
+            String fileName,
             String mapImageLocation,
             String scalebarImageLocation) throws IOException {
 
         //   This is to call the report generation         
         SolaPrintViewerForm form = new SolaPrintViewerForm(
                 ReportManager.getMapPublicDisplayReport(
-                layoutId, this.txtArea.getText(),
+                fileName, this.txtArea.getText(),
                 this.txtNotificationPeriod.getText(),
                 mapImageLocation, scalebarImageLocation));
         // this is to visualize the generated report            

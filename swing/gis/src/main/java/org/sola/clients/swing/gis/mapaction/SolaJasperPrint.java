@@ -159,14 +159,14 @@ public class SolaJasperPrint extends Print {
                 serviceBean.setApplicationId(this.applicationId);
             }
             serviceBean.saveInformationService();
-            generateAndShowReport(layout.getId(), mapImageLocation, scalebarImageLocation);
+            generateAndShowReport(layout.getFileName(), mapImageLocation, scalebarImageLocation);
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
     }
     
     protected void generateAndShowReport(
-            String layoutId, String mapImageLocation, String scalebarImageLocation )
+            String fileName, String mapImageLocation, String scalebarImageLocation )
     throws IOException{
         //This will be the bean containing data for the report. 
         //it is the data source for the report
@@ -176,7 +176,7 @@ public class SolaJasperPrint extends Print {
         //   This is to call the report generation         
         SolaPrintViewerForm form = new SolaPrintViewerForm(
                 ReportManager.getSolaPrintReport(
-                layoutId, dataBean, mapImageLocation, scalebarImageLocation));
+                fileName, dataBean, mapImageLocation, scalebarImageLocation));
         // this is to visualize the generated report            
         form.setVisible(true);
     }
