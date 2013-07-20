@@ -76,15 +76,21 @@ public class Development {
 
         ControlsBundle mapCtrl = new ControlsBundle();
         String wktOfCrs = "PROJCS[\"NZGD2000 / New Zealand Transverse Mercator 2000\",GEOGCS[\"NZGD2000\",DATUM[\"New_Zealand_Geodetic_Datum_2000\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],TOWGS84[0,0,0,0,0,0,0],AUTHORITY[\"EPSG\",\"6167\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.01745329251994328,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"4167\"]],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",173],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",1600000],PARAMETER[\"false_northing\",10000000],AUTHORITY[\"EPSG\",\"2193\"],AXIS[\"Easting\",EAST],AXIS[\"Northing\",NORTH]]";
+        //wktOfCrs = "PROJCS[\"Cape / Lo27\", GEOGCS[\"Cape\", DATUM[\"Cape\", SPHEROID[\"Clarke 1880 (Arc)\", 6378249.145, 293.4663077, AUTHORITY[\"EPSG\",\"7013\"]], TOWGS84[-136.0, -108.0, -292.0, 0.0, 0.0, 0.0, 0.0], AUTHORITY[\"EPSG\",\"6222\"]], PRIMEM[\"Greenwich\", 0.0, AUTHORITY[\"EPSG\",\"8901\"]], UNIT[\"degree\", 0.017453292519943295], AXIS[\"Geodetic longitude\", EAST], AXIS[\"Geodetic latitude\", NORTH], AUTHORITY[\"EPSG\",\"4222\"]], PROJECTION[\"Transverse Mercator (South Orientated)\", AUTHORITY[\"EPSG\",\"9808\"]], PARAMETER[\"central_meridian\", 27.0], PARAMETER[\"latitude_of_origin\", 0.0], PARAMETER[\"scale_factor\", 1.0], PARAMETER[\"false_easting\", 0.0], PARAMETER[\"false_northing\", 0.0], UNIT[\"m\", 1.0], AXIS[\"Westing\", WEST], AXIS[\"Southing\", SOUTH], AUTHORITY[\"EPSG\",\"22287\"]]";
+        //wktOfCrs = "PROJCS[\"Cape / Lo27\",GEOGCS[\"Cape\",DATUM[\"Cape\",SPHEROID[\"Clarke 1880 (Arc)\",6378249.145,293.4663077,AUTHORITY[\"EPSG\",\"7013\"]],AUTHORITY[\"EPSG\",\"6222\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.01745329251994328,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"4222\"]],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],PROJECTION[\"Transverse Mercator (South Orientated)\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",27],PARAMETER[\"scale_factor\",1],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],AUTHORITY[\"EPSG\",\"22287\"],AXIS[\"Y\",WEST],AXIS[\"X\",SOUTH]]";
         mapCtrl.Setup(2193, wktOfCrs, true);
         double east = 1795771, west = 1776400, north = 5932259, south = 5919888;
+        //double east = 57376, west = 50201, north = -3237147, south = -3243214;
+        //double west = 50553, south = -3242997, east= 56998,north = -3237500;
+        //mapCtrl.Setup(22287, wktOfCrs, true);
         mapCtrl.getMap().setFullExtent(east, west, north, south);
         //String wmsServerURL = "http://localhost:8085/geoserver/sola/wms";
-        String wmsServerURL = "http://maps.gc-al.com/gz/nz/wms";
-        ArrayList<String> wmsLayerNames = new ArrayList<String>();
-        wmsLayerNames.add("nz:orthophoto");
-        ExtendedWmsLiteLayer wmsLayer = new ExtendedWmsLiteLayer(
-                "wmsLayer", "WMS Layer", wmsServerURL, wmsLayerNames, "1.1.1", "image/jpeg");
+        //String wmsServerURL = "http://maps.gc-al.com/gz/nz/wms";
+        //ArrayList<String> wmsLayerNames = new ArrayList<String>();
+        //wmsLayerNames.add("nz:orthophoto");
+        //wmsLayerNames.add("sola:lesotho_photo");
+        //ExtendedWmsLiteLayer wmsLayer = new ExtendedWmsLiteLayer(
+        //        "wmsLayer", "WMS Layer", wmsServerURL, wmsLayerNames, "1.1.1", "image/jpeg");
         //mapCtrl.getMap().addLayer(wmsLayer);
         File directory = new File(".");
         String shapeFile =

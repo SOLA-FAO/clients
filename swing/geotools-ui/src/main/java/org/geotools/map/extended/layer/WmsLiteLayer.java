@@ -151,7 +151,7 @@ public class WmsLiteLayer extends DirectLayer {
                 this.image = ImageIO.read(response.getInputStream());
                 response.getInputStream().close();
                 if (CRSUtility.getInstance().crsIsSouthOriented(mv.getCoordinateReferenceSystem())){
-                    this.flipImageIfSouthOriented(this.image);
+                    this.image = this.flipImageIfSouthOriented(this.image);
                 }
                 gd.drawImage(this.image, 0, 0, null);
             } catch (IOException ex) {
