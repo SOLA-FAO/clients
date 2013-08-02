@@ -33,10 +33,6 @@ package org.sola.clients.swing.gis.ui.control;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import org.sola.clients.beans.source.SourceBean;
-import org.sola.clients.beans.source.SourceListBean;
 import org.sola.clients.swing.gis.beans.AbstractListSpatialBean;
 import org.sola.clients.swing.gis.beans.CadastreObjectListBean;
 import org.sola.clients.swing.gis.beans.SpatialBean;

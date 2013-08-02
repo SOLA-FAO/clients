@@ -192,6 +192,11 @@ public final class CacheManager {
      */
     public static final String LEASE_CONDITION_CODES_KEY = LeaseConditionBean.class.getName() + LIST_POSTFIX;
     
+    /**
+     * Cache key of the {@link HierarchyLevelBean} collection.
+     */
+    public static final String HIERARCHY_LEVEL_KEY = HierarchyLevelBean.class.getName() + LIST_POSTFIX;
+
     private static final String GET_APPLICATION_STATUS_TYPES = "getApplicationStatusTypes";
     private static final String GET_SOURCE_TYPES = "getSourceTypes";
     private static final String GET_COMMUNICATION_TYPES = "getCommunicationTypes";
@@ -221,6 +226,7 @@ public final class CacheManager {
     private static final String GET_BA_UNIT_REL_TYPES = "getBaUnitRelTypes";
     private static final String GET_LAND_USE_TYPES = "getLandUseTypes";
     private static final String GET_LEASE_CONDITIONS = "getLeaseConditions";
+    private static final String GET_HIERARCHY_LEVELS = "getHierarchyLevels";
             
     public static List<BrValidationTargetTypeBean> getBrValidationTargetTypes() {
         return getCachedBeanList(BrValidationTargetTypeBean.class,
@@ -434,6 +440,12 @@ public final class CacheManager {
                 WSManager.getInstance().getReferenceDataService(),
                 GET_REQUEST_TYPES, REQUEST_TYPES_KEY),
                 REQUEST_TYPES_MAP_KEY);
+    }
+
+    public static List<HierarchyLevelBean> getHierarchyLevels() {
+        return getCachedBeanList(HierarchyLevelBean.class,
+                WSManager.getInstance().getReferenceDataService(),
+                GET_HIERARCHY_LEVELS, HIERARCHY_LEVEL_KEY);
     }
 
     /**

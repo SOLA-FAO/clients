@@ -59,6 +59,7 @@ import org.sola.clients.swing.desktop.application.ApplicationPanel;
 import org.sola.clients.swing.desktop.application.ApplicationSearchPanel;
 import org.sola.clients.swing.desktop.cadastre.MapPanelForm;
 import org.sola.clients.swing.desktop.cadastre.MapPublicDisplayPanel;
+import org.sola.clients.swing.desktop.cadastre.MapSpatialUnitGroupEditPanel;
 import org.sola.clients.swing.desktop.party.PartySearchPanelForm;
 import org.sola.clients.swing.desktop.reports.LodgementReportParamsForm;
 import org.sola.clients.swing.desktop.reports.SysRegCertParamsForm;
@@ -272,6 +273,23 @@ public class MainForm extends javax.swing.JFrame {
                     pnlContent.addPanel(mapPanel, MapPublicDisplayPanel.PANEL_NAME);
                 }
                 pnlContent.showPanel(MapPublicDisplayPanel.PANEL_NAME);
+                return null;
+            }
+        };
+        TaskManager.getInstance().runTask(t);
+    }
+
+    private void openMapSpatialUnitGroupEditor() {
+        SolaTask t = new SolaTask<Void, Void>() {
+
+            @Override
+            public Void doTask() {
+                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_MAP));
+                if (!pnlContent.isPanelOpened(MapSpatialUnitGroupEditPanel.PANEL_NAME)) {
+                    MapSpatialUnitGroupEditPanel mapPanel = new MapSpatialUnitGroupEditPanel();
+                    pnlContent.addPanel(mapPanel, MapSpatialUnitGroupEditPanel.PANEL_NAME);
+                }
+                pnlContent.showPanel(MapSpatialUnitGroupEditPanel.PANEL_NAME);
                 return null;
             }
         };
@@ -637,6 +655,7 @@ public class MainForm extends javax.swing.JFrame {
         menuReports = new javax.swing.JMenu();
         menuStatus = new javax.swing.JMenuItem();
         menuProgress = new javax.swing.JMenuItem();
+        menuSpatialUnitGroup = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
         jmiContextHelp = new javax.swing.JMenuItem();
@@ -1014,6 +1033,14 @@ public class MainForm extends javax.swing.JFrame {
 
         menuSystematic.add(menuReports);
 
+        menuSpatialUnitGroup.setText(bundle.getString("MainForm.menuSpatialUnitGroup.text")); // NOI18N
+        menuSpatialUnitGroup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuSpatialUnitGroupActionPerformed(evt);
+            }
+        });
+        menuSystematic.add(menuSpatialUnitGroup);
+
         menuBar.add(menuSystematic);
 
         helpMenu.setText(bundle.getString("MainForm.helpMenu.text")); // NOI18N
@@ -1228,6 +1255,10 @@ public class MainForm extends javax.swing.JFrame {
         openSysRegManagementParamsForm("sysRegProgressBean");
     }//GEN-LAST:event_menuProgressActionPerformed
 
+    private void menuSpatialUnitGroupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSpatialUnitGroupActionPerformed
+        openMapSpatialUnitGroupEditor();
+    }//GEN-LAST:event_menuSpatialUnitGroupActionPerformed
+
     private void editPassword() {
         showPasswordPanel();
     }
@@ -1296,6 +1327,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenu menuSearch;
     private javax.swing.JMenuItem menuSearchApplication;
     private javax.swing.JMenuItem menuShowMap;
+    private javax.swing.JMenuItem menuSpatialUnitGroup;
     private javax.swing.JMenuItem menuStateLand;
     private javax.swing.JMenuItem menuStatus;
     private javax.swing.JMenu menuSystematic;

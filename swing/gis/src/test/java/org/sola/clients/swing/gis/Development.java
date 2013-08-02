@@ -62,13 +62,23 @@ public class Development {
     /**
      * Test the controls bundle for setting the location of an application
      */
-    //@Ignore
+    @Ignore
     @Test
     public void testUIControlsBundleViewer() throws Exception {
         System.out.println("Test ControlsBundle for Viewer");
         System.err.println("Language from user.property:" + System.getProperty("user.language"));
         SecurityBean.authenticate("test", "test".toCharArray(), this.getWSConfig());
         ControlsBundleViewer ctrl = new ControlsBundleViewer();
+        this.displayControlsBundleForm(ctrl);
+    }
+
+    //@Ignore
+    @Test
+    public void testUIControlsBundleForSpatialUnitGroupManagement() throws Exception {
+        System.out.println("Test ControlsBundle for Spatial unit group");
+        SecurityBean.authenticate("test", "test".toCharArray(), this.getWSConfig());
+        ControlsBundleForSpatialUnitGroupEditor ctrl = 
+                new ControlsBundleForSpatialUnitGroupEditor();
         this.displayControlsBundleForm(ctrl);
     }
 
