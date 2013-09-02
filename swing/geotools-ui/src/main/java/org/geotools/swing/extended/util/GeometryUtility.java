@@ -399,7 +399,10 @@ public class GeometryUtility {
     public static Geometry transform(Geometry geometry, int targetSrid) {
         MathTransform transform = CRSUtility.getInstance().getTransform(geometry.getSRID(), targetSrid);
         try {
-            return JTS.transform(geometry, transform);
+            Geometry result = JTS.transform(geometry, transform);
+            // Explicitly set the SRID on the geom as the transform does not do this
+            result.setSRID(targetSrid);
+            return result;
         } catch (MismatchedDimensionException ex) {
             throw new GeometryTransformException(
                     String.format("Error transforming geometry %s in srid:%s", geometry.toString(), targetSrid), ex);
