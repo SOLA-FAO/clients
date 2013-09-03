@@ -1,7 +1,7 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -35,9 +35,9 @@ import java.util.Date;
 import javax.swing.ImageIcon;
 import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.clients.beans.converters.TypeConverters;
+import org.sola.common.FileUtility;
 import org.sola.common.NumberUtility;
 import org.sola.services.boundary.wsclients.WSManager;
-import org.sola.webservices.transferobjects.digitalarchive.FileBinaryTO;
 import org.sola.webservices.transferobjects.digitalarchive.FileInfoTO;
 
 /**
@@ -64,9 +64,19 @@ public class FileInfoBean extends AbstractBindingBean {
      */
     public FileBinaryBean getThumbnail() {
         if (thumbnail == null && name != null) {
-            // Try to load thumbnail
-            FileBinaryTO fileBinaryTO = WSManager.getInstance().getDigitalArchive().getFileThumbnail(name);
-            thumbnail = TypeConverters.TransferObjectToBean(fileBinaryTO, FileBinaryBean.class, null);
+            String cacheFileName = this.getModificationDate().getTime() + "_"
+                    + FileUtility.getFileNameWithoutExtension(getName()) + ".jpg";
+            if (!FileUtility.isCached(cacheFileName)) {
+                // Try to load thumbnail from the server
+                FileInfoTO fileInfoTO = WSManager.getInstance().getDigitalArchive().getFileThumbnail(getName());
+                thumbnail = TypeConverters.TransferObjectToBean(fileInfoTO, FileBinaryBean.class, null);
+                thumbnail.setContent(FileUtility.getFileBinary(FileUtility.getCachePath() + fileInfoTO.getName()));
+            } else {
+                // The thumbnail is already cached on the client so load it for display
+                thumbnail = TypeConverters.TransferObjectToBean(this, FileBinaryBean.class, null);
+                thumbnail.setName(cacheFileName);
+                thumbnail.setContent(FileUtility.getFileBinary(FileUtility.getCachePath() + cacheFileName));
+            }
         }
         return thumbnail;
     }
@@ -78,7 +88,7 @@ public class FileInfoBean extends AbstractBindingBean {
         if (getThumbnail() != null && (thumbnailIcon == null
                 || thumbnailIcon.getIconWidth() != width || thumbnailIcon.getIconHeight() != height)) {
             thumbnailIcon = new ImageIcon(getThumbnail().getContent());
-            
+
             // Scale the icon to fit the display area based on its longest dimension
             Double scaledHeight = new Double(height);
             Double scaledWidth = new Double(width);

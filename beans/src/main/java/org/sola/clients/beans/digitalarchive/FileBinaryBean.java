@@ -27,7 +27,6 @@ package org.sola.clients.beans.digitalarchive;
 
 import org.sola.common.FileUtility;
 import org.sola.services.boundary.wsclients.WSManager;
-import org.sola.webservices.transferobjects.digitalarchive.FileBinaryTO;
 import org.sola.webservices.transferobjects.digitalarchive.FileInfoTO;
 
 /**
@@ -40,7 +39,6 @@ public class FileBinaryBean extends FileInfoBean {
     private byte[] content;
 
     public FileBinaryBean() {
-        org.sola.webservices.transferobjects.digitalarchive.FileBinaryTO f;
     }
 
     public byte[] getContent() {
