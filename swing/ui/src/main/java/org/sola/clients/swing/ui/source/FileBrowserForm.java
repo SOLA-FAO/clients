@@ -1,26 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO). All rights
- * reserved.
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification, are permitted
- * provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- * 1. Redistributions of source code must retain the above copyright notice,this list of conditions
- * and the following disclaimer. 2. Redistributions in binary form must reproduce the above
- * copyright notice,this list of conditions and the following disclaimer in the documentation and/or
- * other materials provided with the distribution. 3. Neither the name of FAO nor the names of its
- * contributors may be used to endorse or promote products derived from this software without
- * specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the names of FAO, the LAA nor the names of
+ * its contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
- * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- * WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
- * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.ui.source;
@@ -32,27 +36,69 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.prefs.Preferences;
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
+import javax.swing.filechooser.FileFilter;
 import org.sola.clients.beans.digitalarchive.DocumentBean;
 import org.sola.clients.beans.digitalarchive.FileBinaryBean;
 import org.sola.clients.beans.digitalarchive.FileInfoListBean;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.ui.ImagePreview;
+import org.sola.clients.swing.ui.renderers.DateTimeRenderer;
 import org.sola.clients.swing.ui.renderers.FileNameCellRenderer;
 import org.sola.common.FileUtility;
+import org.sola.common.WindowUtility;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 import org.sola.services.boundary.wsclients.WSManager;
 
 /**
- * This form provides browsing of local and remote folders for the scanned images. Could be used to
- * attach digital copies of documents.<br /> The following bean is used to bind server side files
- * list on the form -
+ * This form provides browsing of local and remote folders for the scanned
+ * images. Could be used to attach digital copies of documents.<br /> The
+ * following bean is used to bind server side files list on the form -
  * {@link FileInfoListBean}.
  */
 public class FileBrowserForm extends javax.swing.JDialog {
+
+    private SolaTask generateThumbTask = null;
+
+    // Custom file filter to do a quick search in the current local directory
+    private class FilesFilter extends FileFilter {
+
+        private String filterString = "";
+
+        //Filters files with a given filter and allows all directories.
+        @Override
+        public boolean accept(File f) {
+            if (f.isDirectory() || getFilterString() == null || getFilterString().equals("")) {
+                return true;
+            }
+            return FileUtility.getFileNameWithoutExtension(f.getName())
+                    .toLowerCase().contains(getFilterString().toLowerCase());
+        }
+
+        //The description of this filter
+        @Override
+        public String getDescription() {
+            return "Files filter";
+        }
+
+        public String getFilterString() {
+            return filterString;
+        }
+
+        public void setFilterString(String filterString) {
+            if (filterString == null) {
+                this.filterString = "";
+            } else {
+                this.filterString = filterString;
+            }
+        }
+    }
+    private FilesFilter userFilter;
+    private static String USER_PREFERRED_DIR = "userPreferredDir";
 
     /**
      * File browser action upon file attachment event.
@@ -62,8 +108,8 @@ public class FileBrowserForm extends javax.swing.JDialog {
         CLOSE_WINDOW, SHOW_MESSAGE
     }
     /**
-     * Property name, used to rise property change event upon attached document id change. This
-     * event is rised on attach button click.
+     * Property name, used to rise property change event upon attached document
+     * id change. This event is raised on attach button click.
      */
     public static final String ATTACHED_DOCUMENT = "AttachedDocumentId";
     private ResourceBundle formBundle = ResourceBundle.getBundle("org/sola/clients/swing/ui/source/Bundle");
@@ -77,55 +123,95 @@ public class FileBrowserForm extends javax.swing.JDialog {
     }
 
     private void postInit() {
+        userFilter = new FilesFilter();
         serverFiles.loadServerFileInfoList();
         serverFiles.addPropertyChangeListener(serverFilesListener());
+
+        localFileChooser.setAcceptAllFileFilterUsed(false);
+        localFileChooser.setFileFilter(userFilter);
         localFileChooser.setControlButtonsAreShown(false);
-        localFileChooser.setAccessory(new ImagePreview(localFileChooser, 225, 300));
+        localFileChooser.setAccessory(new ImagePreview(localFileChooser));
+
+        if (WindowUtility.hasUserPreferences()) {
+            // Check if the user has a preferred location to upload files from
+            Preferences prefs = WindowUtility.getUserPreferences();
+            String preferredDir = prefs.get(USER_PREFERRED_DIR, null);
+            if (preferredDir != null) {
+                localFileChooser.setCurrentDirectory(new File(preferredDir));
+            }
+        }
         customizeRemoteFileButtons();
     }
 
     /**
-     * Property change listener for the {@link FileInfoListBean} to trap selected file change in the
-     * list of scanned files in the remote folder.
+     * Property change listener for the {@link FileInfoListBean} to trap
+     * selected file change in the list of scanned files in the remote folder.
      */
     private PropertyChangeListener serverFilesListener() {
         PropertyChangeListener listener = new PropertyChangeListener() {
-
             @Override
             public void propertyChange(PropertyChangeEvent e) {
                 if (e.getPropertyName().equals(FileInfoListBean.SELECTED_FILE_INFO_BEAN_PROPERTY)) {
                     customizeRemoteFileButtons();
-                    // Bind thumbnail
-                    if (serverFiles.getSelectedFileInfoBean() != null) {
-
-                        lblServerPreview.setIcon(null);
-                        lblServerPreview.setText(formBundle.getString("FileBrowser.LoadingThumbnailMsg"));
-                        lblServerPreview.repaint();
-
-                        Runnable loadingThumbnail = new Runnable() {
-
-                            @Override
-                            public void run() {
-                                ImageIcon thumbnail = serverFiles.getSelectedFileInfoBean().getThumbnailIcon();
-                                if (thumbnail != null) {
-                                    lblServerPreview.setIcon(thumbnail);
-                                    lblServerPreview.setText(null);
-                                } else {
-                                    lblServerPreview.setIcon(null);
-                                    lblServerPreview.setText(formBundle.getString("FileBrowser.FormatForThumbnailNotSupportedMsg"));
-                                }
-                            }
-                        };
-                        SwingUtilities.invokeLater(loadingThumbnail);
-
-                    } else {
-                        lblServerPreview.setIcon(null);
-                        lblServerPreview.setText(formBundle.getString("FileBrowser.ThumbnailPreviewCaption"));
-                    }
+                    loadServerPreview();
                 }
             }
         };
         return listener;
+    }
+
+    /**
+     * Loads a thumbnail of the selected file from the Network Scan Folder
+     */
+    private void loadServerPreview() {
+        // Bind thumbnail
+        if (serverFiles.getSelectedFileInfoBean() != null) {
+
+            // Check if a thumbnail is currently being generated and if so, cancel it
+            if (generateThumbTask != null && TaskManager.getInstance().isTaskRunning(generateThumbTask.getId())) {
+                TaskManager.getInstance().removeTask(generateThumbTask);
+            }
+
+            final ImageIcon thumbnail[] = {null};
+
+            lblServerPreview.setIcon(null);
+            lblServerPreview.setText(formBundle.getString("FileBrowser.LoadingThumbnailMsg"));
+            lblServerPreview.repaint();
+
+            generateThumbTask = new SolaTask<Void, Void>() {
+                @Override
+                public Void doTask() {
+                    setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_GENERATE_THUMBNAIL));
+                    try {
+                        // Allow a small delay on the background thread so that the thread can be cancelled
+                        // before executing the generate if the user is still resizing the form. 
+                        Thread.sleep(200);
+                        thumbnail[0] = serverFiles.getSelectedFileInfoBean().getThumbnailIcon(
+                                lblServerPreview.getWidth(), lblServerPreview.getHeight());
+                    } catch (InterruptedException ex) {
+                    }
+                    return null;
+                }
+
+                @Override
+                public void taskDone() {
+                    // Display the thumbnail
+                    if (thumbnail[0] != null) {
+                        lblServerPreview.setIcon(thumbnail[0]);
+                        lblServerPreview.setText(null);
+                    } else {
+                        lblServerPreview.setIcon(null);
+                        lblServerPreview.setText(formBundle.getString("FileBrowser.FormatForThumbnailNotSupportedMsg"));
+                    }
+
+                }
+            };
+            TaskManager.getInstance().runTask(generateThumbTask);
+
+        } else {
+            lblServerPreview.setIcon(null);
+            lblServerPreview.setText(formBundle.getString("FileBrowser.ThumbnailPreviewCaption"));
+        }
     }
 
     private void customizeRemoteFileButtons() {
@@ -141,7 +227,6 @@ public class FileBrowserForm extends javax.swing.JDialog {
     private void refreshRemoteFiles() {
         if (serverFiles.getSelectedFileInfoBean() != null) {
             SolaTask t = new SolaTask<Void, Void>() {
-
                 @Override
                 public Void doTask() {
                     setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_DOCUMENT_GETTING_LIST));
@@ -156,7 +241,6 @@ public class FileBrowserForm extends javax.swing.JDialog {
     private void openRemoteFile() {
         if (serverFiles.getSelectedFileInfoBean() != null) {
             SolaTask t = new SolaTask<Void, Void>() {
-
                 @Override
                 public Void doTask() {
                     setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_DOCUMENT_OPENING));
@@ -169,11 +253,11 @@ public class FileBrowserForm extends javax.swing.JDialog {
     }
 
     /**
-     * Opens a file from the local file system using {@linkplain FileUtility#openFile(java.io.File)}
+     * Opens a file from the local file system using
+     * {@linkplain FileUtility#openFile(java.io.File)}
      */
     private void openLocalFile() {
         SolaTask t = new SolaTask<Void, Void>() {
-
             @Override
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_DOCUMENT_OPENING));
@@ -185,8 +269,8 @@ public class FileBrowserForm extends javax.swing.JDialog {
     }
 
     /**
-     * Uploads selected file into the digital archive from remote folder, gets {@link DocumentBean}
-     * of uploaded file and calls method
+     * Uploads selected file into the digital archive from remote folder, gets
+     * {@link DocumentBean} of uploaded file and calls method
      * {@link #fireAttachEvent(DocumentBean)} to rise attachment event.
      */
     private void attachRemoteFile() {
@@ -197,9 +281,9 @@ public class FileBrowserForm extends javax.swing.JDialog {
     }
 
     /**
-     * Checks uploaded document bean, rises {@link #ATTACHED_DOCUMENT} property change event. Closes
-     * the window or displays the message, depending on the {@link AttachAction} value, passed to
-     * the form constructor.
+     * Checks uploaded document bean, rises {@link #ATTACHED_DOCUMENT} property
+     * change event. Closes the window or displays the message, depending on the
+     * {@link AttachAction} value, passed to the form constructor.
      */
     private void fireAttachEvent(DocumentBean documentBean) {
         if (documentBean == null) {
@@ -243,7 +327,6 @@ public class FileBrowserForm extends javax.swing.JDialog {
         File selectedFile = localFileChooser.getSelectedFile();
         if (selectedFile != null) {
             SolaTask<Void, Void> task = new SolaTask<Void, Void>() {
-
                 DocumentBean document = null;
 
                 @Override
@@ -256,11 +339,20 @@ public class FileBrowserForm extends javax.swing.JDialog {
 
                 @Override
                 protected void taskDone() {
+                    if (WindowUtility.hasUserPreferences()) {
+                        Preferences prefs = WindowUtility.getUserPreferences();
+                        prefs.put(USER_PREFERRED_DIR, localFileChooser.getSelectedFile().getAbsolutePath());
+                    }
                     fireAttachEvent(document);
                 }
             };
             TaskManager.getInstance().runTask(task);
         }
+    }
+
+    private void filterFiles() {
+        userFilter.setFilterString(txtFilter.getText());
+        localFileChooser.getUI().rescanCurrentDirectory(localFileChooser);
     }
 
     @SuppressWarnings("unchecked")
@@ -280,6 +372,9 @@ public class FileBrowserForm extends javax.swing.JDialog {
         jToolBar2 = new javax.swing.JToolBar();
         btnOpenLocal = new javax.swing.JButton();
         btnAttachLocal = new javax.swing.JButton();
+        jSeparator2 = new javax.swing.JToolBar.Separator();
+        jLabel1 = new javax.swing.JLabel();
+        txtFilter = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbServerFiles = new javax.swing.JTable();
@@ -339,7 +434,11 @@ public class FileBrowserForm extends javax.swing.JDialog {
         setTitle(bundle.getString("FileBrowserForm.title_1")); // NOI18N
         setMinimumSize(new java.awt.Dimension(706, 432));
         setName("Form"); // NOI18N
-        setResizable(false);
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                formComponentResized(evt);
+            }
+        });
 
         jTabbedPane1.setName("jTabbedPane1"); // NOI18N
         jTabbedPane1.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
@@ -358,6 +457,7 @@ public class FileBrowserForm extends javax.swing.JDialog {
         jToolBar2.setFloatable(false);
         jToolBar2.setRollover(true);
         jToolBar2.setName("jToolBar2"); // NOI18N
+        jToolBar2.setPreferredSize(new java.awt.Dimension(213, 28));
 
         btnOpenLocal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/folder-open-document.png"))); // NOI18N
         btnOpenLocal.setText(bundle.getString("FileBrowserForm.btnOpenLocal.text")); // NOI18N
@@ -385,20 +485,42 @@ public class FileBrowserForm extends javax.swing.JDialog {
         });
         jToolBar2.add(btnAttachLocal);
 
+        jSeparator2.setName(bundle.getString("FileBrowserForm.jSeparator2.name")); // NOI18N
+        jToolBar2.add(jSeparator2);
+
+        jLabel1.setText(bundle.getString("FileBrowserForm.jLabel1.text")); // NOI18N
+        jLabel1.setName(bundle.getString("FileBrowserForm.jLabel1.name")); // NOI18N
+        jToolBar2.add(jLabel1);
+
+        txtFilter.setText(bundle.getString("FileBrowserForm.txtFilter.text")); // NOI18N
+        txtFilter.setMaximumSize(new java.awt.Dimension(170, 2147483647));
+        txtFilter.setMinimumSize(new java.awt.Dimension(170, 20));
+        txtFilter.setName(bundle.getString("FileBrowserForm.txtFilter.name")); // NOI18N
+        txtFilter.setPreferredSize(new java.awt.Dimension(170, 30));
+        txtFilter.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtFilterKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtFilterKeyReleased(evt);
+            }
+        });
+        jToolBar2.add(txtFilter);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jToolBar2, javax.swing.GroupLayout.DEFAULT_SIZE, 655, Short.MAX_VALUE)
-            .addComponent(localFileChooser, javax.swing.GroupLayout.DEFAULT_SIZE, 655, Short.MAX_VALUE)
+            .addComponent(jToolBar2, javax.swing.GroupLayout.DEFAULT_SIZE, 939, Short.MAX_VALUE)
+            .addComponent(localFileChooser, javax.swing.GroupLayout.DEFAULT_SIZE, 939, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(9, 9, 9)
+                .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(localFileChooser, javax.swing.GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE))
+                .addComponent(localFileChooser, javax.swing.GroupLayout.DEFAULT_SIZE, 519, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab(bundle.getString("FileBrowserForm.jPanel1.TabConstraints.tabTitle"), jPanel1); // NOI18N
@@ -444,6 +566,7 @@ public class FileBrowserForm extends javax.swing.JDialog {
         tbServerFiles.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("FileBrowserForm.tbServerFiles.columnModel.title0")); // NOI18N
         tbServerFiles.getColumnModel().getColumn(0).setCellRenderer(new FileNameCellRenderer());
         tbServerFiles.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("FileBrowserForm.tbServerFiles.columnModel.title1")); // NOI18N
+        tbServerFiles.getColumnModel().getColumn(1).setCellRenderer(new DateTimeRenderer());
         tbServerFiles.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("FileBrowserForm.tbServerFiles.columnModel.title2")); // NOI18N
 
         lblServerPreview.setBackground(new java.awt.Color(255, 255, 255));
@@ -519,23 +642,23 @@ public class FileBrowserForm extends javax.swing.JDialog {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
-                    .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 547, Short.MAX_VALUE)
+                    .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 547, Short.MAX_VALUE))
                 .addGap(17, 17, 17)
-                .addComponent(lblServerPreview, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblServerPreview, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(lblServerPreview, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblServerPreview, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(42, 42, 42))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 509, Short.MAX_VALUE)))
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab(bundle.getString("FileBrowserForm.jPanel2.TabConstraints.tabTitle"), jPanel2); // NOI18N
@@ -548,7 +671,7 @@ public class FileBrowserForm extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 660, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1)
                 .addContainerGap())
             .addComponent(taskPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -556,8 +679,8 @@ public class FileBrowserForm extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1)
+                .addGap(10, 10, 10)
                 .addComponent(taskPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -605,8 +728,8 @@ public class FileBrowserForm extends javax.swing.JDialog {
     }//GEN-LAST:event_btnOpenLocalActionPerformed
 
     /**
-     * Uploads selected file into the digital archive from local drive, gets {@link DocumentBean} of
-     * uploaded file and calls method
+     * Uploads selected file into the digital archive from local drive, gets
+     * {@link DocumentBean} of uploaded file and calls method
      * {@link #fireAttachEvent(DocumentBean)} to rise attachment event.
      */
     private void btnAttachLocalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAttachLocalActionPerformed
@@ -628,6 +751,17 @@ public class FileBrowserForm extends javax.swing.JDialog {
     private void menuRemoteAttachActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRemoteAttachActionPerformed
         attachRemoteFile();
     }//GEN-LAST:event_menuRemoteAttachActionPerformed
+
+    private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
+        loadServerPreview();
+    }//GEN-LAST:event_formComponentResized
+
+    private void txtFilterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFilterKeyPressed
+    }//GEN-LAST:event_txtFilterKeyPressed
+
+    private void txtFilterKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFilterKeyReleased
+        filterFiles();
+    }//GEN-LAST:event_txtFilterKeyReleased
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAttachFromServer;
     private javax.swing.JButton btnAttachLocal;
@@ -635,10 +769,12 @@ public class FileBrowserForm extends javax.swing.JDialog {
     private javax.swing.JButton btnOpenLocal;
     private javax.swing.JButton btnOpenServerFile;
     private javax.swing.JButton btnRefreshServerList;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar.Separator jSeparator1;
+    private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
@@ -652,6 +788,7 @@ public class FileBrowserForm extends javax.swing.JDialog {
     private org.sola.clients.beans.digitalarchive.FileInfoListBean serverFiles;
     private org.sola.clients.swing.common.tasks.TaskPanel taskPanel1;
     private javax.swing.JTable tbServerFiles;
+    private javax.swing.JTextField txtFilter;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }
