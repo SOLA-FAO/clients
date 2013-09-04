@@ -16,6 +16,7 @@ import org.sola.clients.swing.ui.DesktopClientExceptionHandler;
 import org.sola.clients.swing.ui.security.LoginForm;
 import org.sola.clients.swing.ui.security.LoginPanel;
 import org.sola.common.RolesConstants;
+import org.sola.common.WindowUtility;
 import org.sola.common.logging.LogUtility;
 
 /**
@@ -29,6 +30,8 @@ public class BulkOperationsApplication {
      * @param args Array of input parameters.
      */
     public static void main(String[] args) {
+        // #321 Set class to record user preferences for
+        WindowUtility.setMainAppClass(BulkOperationsApplication.class);
         // Show splash screen
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         int x = ((dim.width) / 2);

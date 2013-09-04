@@ -61,6 +61,7 @@ import java.beans.PropertyChangeListener;
 import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.common.LocalizationManager;
 import org.sola.clients.swing.ui.security.LoginPanel;
+import org.sola.common.WindowUtility;
 import org.sola.common.logging.LogUtility;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -75,6 +76,8 @@ public class AdminApplication {
      * @param args Array of input parameters.
      */
     public static void main(String[] args) {
+        // #321 Set class to record user preferences for
+        WindowUtility.setMainAppClass(AdminApplication.class);
         // Show splash screen
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         int x = ((dim.width) / 2);
