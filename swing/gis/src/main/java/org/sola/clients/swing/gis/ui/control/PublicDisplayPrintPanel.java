@@ -20,6 +20,7 @@ import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.data.PojoPublicDisplayFeatureSource;
 import org.sola.clients.swing.gis.layer.PojoForPublicDisplayLayer;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForPublicDisplay;
+import org.sola.clients.swing.ui.reports.ReportViewerForm;
 import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.MessageUtility;
 
@@ -188,7 +189,7 @@ public class PublicDisplayPrintPanel extends javax.swing.JPanel {
             String scalebarImageLocation) throws IOException {
 
         //   This is to call the report generation         
-        SolaPrintViewerForm form = new SolaPrintViewerForm(
+        ReportViewerForm form = new ReportViewerForm(
                 ReportManager.getMapPublicDisplayReport(
                 fileName, this.txtArea.getText(),
                 this.txtNotificationPeriod.getText(),

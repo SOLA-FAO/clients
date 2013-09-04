@@ -68,6 +68,7 @@ import org.sola.clients.swing.desktop.reports.SysRegManagementParamsForm;
 import org.sola.clients.swing.desktop.source.DocumentSearchForm;
 import org.sola.clients.swing.desktop.source.PowerOfAttorneyViewForm;
 import org.sola.clients.swing.ui.MainContentPanel;
+import org.sola.clients.swing.ui.reports.ReportViewerForm;
 import org.sola.common.RolesConstants;
 import org.sola.common.WindowUtility;
 import org.sola.common.help.HelpUtility;

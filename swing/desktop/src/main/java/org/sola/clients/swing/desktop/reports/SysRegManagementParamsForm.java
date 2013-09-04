@@ -38,8 +38,8 @@ import net.sf.jasperreports.engine.JasperPrint;
 import org.sola.clients.beans.systematicregistration.*;
 import org.sola.clients.reports.ReportManager;
 import org.sola.clients.swing.common.controls.CalendarForm;
-import org.sola.clients.swing.desktop.ReportViewerForm;
 import org.sola.clients.swing.ui.renderers.FormattersFactory;
+import org.sola.clients.swing.ui.reports.ReportViewerForm;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 

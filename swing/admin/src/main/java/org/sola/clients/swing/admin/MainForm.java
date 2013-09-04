@@ -48,11 +48,8 @@ import org.sola.clients.swing.admin.security.UsersManagementPanel;
 import org.sola.clients.swing.admin.system.BrManagementPanel;
 import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.common.LocalizationManager;
-import static org.sola.clients.swing.desktop.MainForm.MAIN_FORM_HEIGHT;
-import static org.sola.clients.swing.desktop.MainForm.MAIN_FORM_LEFT;
-import static org.sola.clients.swing.desktop.MainForm.MAIN_FORM_TOP;
-import static org.sola.clients.swing.desktop.MainForm.MAIN_FORM_WIDTH;
 import org.sola.clients.swing.ui.MainContentPanel;
+import org.sola.clients.swing.ui.reports.ReportViewerForm;
 import org.sola.common.RolesConstants;
 import org.sola.common.WindowUtility;
 
