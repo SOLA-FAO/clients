@@ -14,10 +14,10 @@
 
     <name>Clients Desktop Web Start</name>
 
-  <properties>
+    <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <solaVersion>Customization Release v1.2</solaVersion>
+        <solaVersion>v1.2</solaVersion>
         <webstart.codesigning.keystore>${basedir}/sola.jks</webstart.codesigning.keystore>
         <webstart.codesigning.alias>sola</webstart.codesigning.alias>
         <webstart.codesigning.storepass>FLOSS2011</webstart.codesigning.storepass>
@@ -112,11 +112,37 @@
                                 </jarResource>
                             </jarResources>
                         </jnlpFile>
+                        <jnlpFile>
+                            <!-- JNLP file for the SOLA Desktop application (Test Environment) -->
+                            <outputFilename>sola-desktop-test.jnlp</outputFilename>
+                            <templateFilename>sola-desktop-jnlp-template-test.vm</templateFilename>
+                            <jarResources>
+                                <jarResource>
+                                    <groupId>${project.groupId}.swing</groupId>
+                                    <artifactId>sola-desktop</artifactId>
+                                    <version>${project.version}</version>
+                                    <mainClass>org.sola.clients.swing.desktop.DesktopApplication</mainClass> 
+                                </jarResource>
+                            </jarResources>
+                        </jnlpFile> 
+                        <jnlpFile>
+                            <!-- JNLP file for the SOLA Admin application (Test Environment) -->
+                            <outputFilename>sola-admin-test.jnlp</outputFilename>
+                            <templateFilename>sola-admin-jnlp-template-test.vm</templateFilename>
+                            <jarResources>
+                                <jarResource>
+                                    <groupId>${project.groupId}.swing</groupId>
+                                    <artifactId>sola-desktop-admin</artifactId>
+                                    <version>${project.version}</version>
+                                    <mainClass>org.sola.clients.swing.admin.AdminApplication</mainClass> 
+                                </jarResource>
+                            </jarResources>
+                        </jnlpFile>
                     </jnlpFiles>
                     <unsignAlreadySignedJars>true</unsignAlreadySignedJars>
                     <!-- Digital singing is required for Web Start deployment. To speed up the
                     build in order to test the index.jsp web page, this section can be commented out -->
-                   <sign>
+                    <sign>
                         <keystore>${webstart.codesigning.keystore}</keystore>
                         <alias>${webstart.codesigning.alias}</alias>
                         <storepass>${webstart.codesigning.storepass}</storepass>

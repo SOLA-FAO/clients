@@ -4,9 +4,9 @@
     codebase="$$codebase"
     context="$$context"
     href="$$name"
-    version="$solaVersion">
+    version="SOLA Admin Demo $solaVersion">
   <information>
-    <title>SOLA Admin Web Start</title>
+    <title>SOLA Admin Demo</title>
 #if($project.Organization.Name)
     <vendor>$project.Organization.Name</vendor>
 #end
@@ -19,7 +19,7 @@
 <icon href="../Images/Floss.jpg" width="40" height="26"/>
     <icon kind="shortcut" href="../Images/Floss.jpg" width="40" height="26"/>
     <!--icon kind="splash" href="../Images/splash.png" width="413" height="314"/-->
-    <shortcut><desktop/></shortcut>
+    <shortcut><desktop/><menu submenu="SOLA Demo"/></shortcut>
 #if($offlineAllowed)
     <offline-allowed/>
 #end
@@ -44,6 +44,7 @@
     <property name="SOLA_WS_SPATIAL_SERVICE_URL" value="$$context/webservices/spatial-service?wsdl"/>
     <property name="SOLA_WS_ADMINISTRATIVE_SERVICE_URL" value="$$context/webservices/administrative-service?wsdl"/>
     <property name="SOLA_WS_FILE_STREAMING_SERVICE_URL" value="$$context/webservices/filestreaming-service?wsdl"/>
+	<property name="SOLA_WEB_START_HOST" value="$$hostname"/>
      $dependencies
   </resources>
   <application-desc main-class="$mainClass"/>
