@@ -115,9 +115,7 @@ public class LanguageCombobox extends JComboBox {
     private String[] languageStrings = {"English", "Italian", "नेपाली"};
     private String[] languageIconNames = {"en.jpg", "it.jpg", "np.png"};
     private ImageIcon[] languageIcons;
-    private Class<?> applicationMainClass;
     private static final Map<String, Integer> languagesMap = Collections.unmodifiableMap(new HashMap(2, 1.0f) {
-
         {
             put("en", 0);
             put("it", 1);
@@ -126,29 +124,20 @@ public class LanguageCombobox extends JComboBox {
     });
 
     /**
-     * Default class constructor.
-     */
-    public LanguageCombobox() {
-        super();
-    }
-
-    /**
      * Class constructor.
      *
      * @param applicationMainClass The main class of application, where this
      * control is used. Application class needed to pick up and save preferred
      * setting of the language.
      */
-    public LanguageCombobox(Class<?> applicationMainClass) {
+    public LanguageCombobox() {
         super();
-        if (applicationMainClass != null) {
-            setModel(new javax.swing.DefaultComboBoxModel(new Integer[]{0, 1, 2}));
-            this.applicationMainClass = applicationMainClass;
-            addLanguageIcons();
-            setRenderer(new ComboBoxRenderer());
-            setMaximumRowCount(4);
-            revalidate();
-        }
+        setModel(new javax.swing.DefaultComboBoxModel(new Integer[]{0, 1, 2}));
+        addLanguageIcons();
+        setRenderer(new ComboBoxRenderer());
+        setMaximumRowCount(4);
+        revalidate();
+
     }
 
     private void addLanguageIcons() {
@@ -164,7 +153,7 @@ public class LanguageCombobox extends JComboBox {
             }
         }
 
-        String selectedLanguage = LocalizationManager.getLanguage(applicationMainClass);
+        String selectedLanguage = LocalizationManager.getLanguage();
 
         if (selectedLanguage != null && !selectedLanguage.equals("")
                 && languagesMap != null && languagesMap.containsKey(selectedLanguage)) {
@@ -182,17 +171,17 @@ public class LanguageCombobox extends JComboBox {
             int language = (Integer) getSelectedItem();
 
             if ("italian".equalsIgnoreCase(languageStrings[language])) {
-                LocalizationManager.setLanguage(applicationMainClass, "it", "IT");
+                LocalizationManager.setLanguage("it", "IT");
             } else if ("english".equalsIgnoreCase(languageStrings[language])) {
-                LocalizationManager.setLanguage(applicationMainClass, "en", "US");
+                LocalizationManager.setLanguage("en", "US");
             } else if ("नेपाली".equalsIgnoreCase(languageStrings[language])) {
-                LocalizationManager.setLanguage(applicationMainClass, "np", "NP");
+                LocalizationManager.setLanguage("np", "NP");
             }
             if (showMessage) {
-                LocalizationManager.loadLanguage(applicationMainClass);
-                if (! this.confirmedChange){
-                  MessageUtility.displayMessage(ClientMessage.GENERAL_UPDATE_LANG);
-                  LocalizationManager.restartApplication(applicationMainClass);
+                LocalizationManager.loadLanguage();
+                if (!this.confirmedChange) {
+                    MessageUtility.displayMessage(ClientMessage.GENERAL_UPDATE_LANG);
+                    LocalizationManager.restartApplication();
                 }
             }
         }

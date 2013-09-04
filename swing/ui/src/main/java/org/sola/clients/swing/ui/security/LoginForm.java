@@ -39,17 +39,15 @@ import javax.swing.ImageIcon;
  */
 public class LoginForm extends javax.swing.JFrame {
 
-    private Class<?> mainClass;
     private KeyEventDispatcher escKeyListener;
     
     /** Creates {@link LoginPanel} instance.*/
     private LoginPanel createLoginPanel() {
-        return new LoginPanel(mainClass);
+        return new LoginPanel();
     }
 
     /** Creates new form LoginForm */
-    public LoginForm(Class<?> mainClass) {
-        this.mainClass = mainClass;
+    public LoginForm() {
         initComponents();
         this.setIconImage(new ImageIcon(LoginForm.class.getResource("/images/common/key.png")).getImage());
         loginPanel.addPropertyChangeListener(new PropertyChangeListener() {

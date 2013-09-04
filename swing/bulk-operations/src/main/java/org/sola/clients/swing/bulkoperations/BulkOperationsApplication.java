@@ -21,12 +21,14 @@ import org.sola.common.logging.LogUtility;
 
 /**
  * This is the singletone starting class of the bulk operations application.
- * 
+ *
  * @author Elton Manoku
  */
 public class BulkOperationsApplication {
-    
-    /** Main method to run the application. 
+
+    /**
+     * Main method to run the application.
+     *
      * @param args Array of input parameters.
      */
     public static void main(String[] args) {
@@ -50,7 +52,6 @@ public class BulkOperationsApplication {
         splash.dispose();
 
         java.awt.EventQueue.invokeLater(new Runnable() {
-
             @Override
             public void run() {
                 Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -58,20 +59,26 @@ public class BulkOperationsApplication {
                 int y = ((dim.height) / 2);
 
                 Thread.setDefaultUncaughtExceptionHandler(new DesktopClientExceptionHandler());
-                LocalizationManager.loadLanguage(BulkOperationsApplication.class);
+                LocalizationManager.loadLanguage();
                 LogUtility.initialize(BulkOperationsApplication.class);
-                LafManager.getInstance().setProperties("green");
 
-                final LoginForm loginForm = new LoginForm(BulkOperationsApplication.class);
+                // Select the Look and Feel Theme based on whether this is 
+                // the production version or the test version of SOLA. 
+                if (LocalizationManager.isProductionHost()) {
+                    LafManager.getInstance().setProperties("green");
+                } else {
+                    LafManager.getInstance().setProperties("autumn");
+                }
+
+                final LoginForm loginForm = new LoginForm();
                 loginForm.addPropertyChangeListener(new PropertyChangeListener() {
-
                     @Override
                     public void propertyChange(PropertyChangeEvent evt) {
                         if (evt.getPropertyName().equals(LoginPanel.LOGIN_RESULT)) {
                             if (((Boolean) evt.getNewValue())) {
                                 // Check user to have external access roles
                                 if (!SecurityBean.isInRole(RolesConstants.BULK_APPLICATION)) {
-                                    JOptionPane.showMessageDialog(loginForm, 
+                                    JOptionPane.showMessageDialog(loginForm,
                                             "You don't have rights to use this application.");
                                     loginForm.enableLoginPanel(true);
                                 } else {

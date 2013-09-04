@@ -181,6 +181,7 @@ public class MainForm extends javax.swing.JFrame {
 
         initComponents();
         HelpUtility.getInstance().registerHelpMenu(jmiContextHelp, "overview");
+        this.setTitle("SOLA Desktop - " + LocalizationManager.getVersionNumber());
 
         this.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
@@ -199,7 +200,7 @@ public class MainForm extends javax.swing.JFrame {
      * Create combobox with languages
      */
     private LanguageCombobox createLanguageCombobox() {
-        return new LanguageCombobox(MainForm.class);
+        return new LanguageCombobox();
     }
 
     /**
@@ -502,7 +503,7 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     private void setLanguage(String code, String country) {
-        LocalizationManager.setLanguage(DesktopApplication.class, code, country);
+        LocalizationManager.setLanguage(code, country);
         MessageUtility.displayMessage(ClientMessage.GENERAL_UPDATE_LANG);
     }
 

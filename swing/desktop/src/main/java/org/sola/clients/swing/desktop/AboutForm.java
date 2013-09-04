@@ -27,6 +27,8 @@
  */
 package org.sola.clients.swing.desktop;
 
+import org.sola.clients.swing.common.LocalizationManager;
+
 /** Simple dialog form to display product information */
 public class AboutForm extends javax.swing.JDialog {
 
@@ -34,6 +36,7 @@ public class AboutForm extends javax.swing.JDialog {
         super(parent);
         initComponents();
         getRootPane().setDefaultButton(closeButton);
+        appVersionLabel.setText(LocalizationManager.getVersionNumber());
     }
     
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

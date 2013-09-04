@@ -47,6 +47,7 @@ import org.sola.clients.swing.admin.security.RolesManagementPanel;
 import org.sola.clients.swing.admin.security.UsersManagementPanel;
 import org.sola.clients.swing.admin.system.BrManagementPanel;
 import org.sola.clients.swing.common.LafManager;
+import org.sola.clients.swing.common.LocalizationManager;
 import static org.sola.clients.swing.desktop.MainForm.MAIN_FORM_HEIGHT;
 import static org.sola.clients.swing.desktop.MainForm.MAIN_FORM_LEFT;
 import static org.sola.clients.swing.desktop.MainForm.MAIN_FORM_TOP;
@@ -71,10 +72,12 @@ public class MainForm extends javax.swing.JFrame {
     public MainForm() {
         initComponents();
 
+        this.setTitle("SOLA Admin - " + LocalizationManager.getVersionNumber());
+
         URL imgURL = this.getClass().getResource("/images/common/admin.png");
         this.setIconImage(new ImageIcon(imgURL).getImage());
         lblUserName.setText(SecurityBean.getCurrentUser().getUserName());
-        
+
         this.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowOpened(WindowEvent e) {
@@ -93,8 +96,8 @@ public class MainForm extends javax.swing.JFrame {
      */
     private void customizeForm() {
         // #321 Set size and location of form
-        configureForm(); 
-        
+        configureForm();
+
         boolean hasSecurityRole = SecurityBean.isInRole(RolesConstants.ADMIN_MANAGE_SECURITY);
         boolean hasRefdataRole = SecurityBean.isInRole(RolesConstants.ADMIN_MANAGE_REFDATA);
         boolean hasSettingsRole = SecurityBean.isInRole(RolesConstants.ADMIN_MANAGE_SETTINGS);
