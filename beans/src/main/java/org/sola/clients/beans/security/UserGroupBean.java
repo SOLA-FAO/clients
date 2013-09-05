@@ -27,7 +27,7 @@
  */
 package org.sola.clients.beans.security;
 
-import org.sola.clients.beans.AbstractBindingBean;
+import org.sola.clients.beans.AbstractVersionedBean;
 import org.sola.webservices.transferobjects.security.UserGroupTO;
 
 /** 
@@ -36,7 +36,7 @@ import org.sola.webservices.transferobjects.security.UserGroupTO;
  * For more information on the groups, related to user 
  * see in the data dictionary <b>System</b> schema.
  */
-public class UserGroupBean extends AbstractBindingBean {
+public class UserGroupBean extends AbstractVersionedBean {
     public static final String GROUP_ID_PROPERTY = "groupId";
     public static final String USER_ID_PROPERTY = "userId";
 

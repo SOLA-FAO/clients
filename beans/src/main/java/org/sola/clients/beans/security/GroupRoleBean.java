@@ -27,7 +27,7 @@
  */
 package org.sola.clients.beans.security;
 
-import org.sola.clients.beans.AbstractBindingBean;
+import org.sola.clients.beans.AbstractVersionedBean;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.webservices.transferobjects.security.GroupRoleTO;
 
@@ -37,7 +37,7 @@ import org.sola.webservices.transferobjects.security.GroupRoleTO;
  * For more information on the roles, related to group 
  * see in the data dictionary <b>System</b> schema.
  */
-public class GroupRoleBean extends AbstractBindingBean {
+public class GroupRoleBean extends AbstractVersionedBean {
     public static final String ROLE_CODE_PROPERTY = "roleCode";
     public static final String GROUP_ID_PROPERTY = "groupId";
     public static final String ROLE_PROPERTY = "role";
