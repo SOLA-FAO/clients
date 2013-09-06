@@ -224,8 +224,13 @@ public class MainForm extends javax.swing.JFrame {
         menuNewApplication.setEnabled(btnNewApplication.isEnabled());
         menuExportRights.setEnabled(SecurityBean.isInRole(RolesConstants.ADMINISTRATIVE_RIGHTS_EXPORT));
 
-        // Load dashboard
-        openDashBoard();
+        if (SecurityBean.isPasswordChangeReqd(false)) {
+            // Load the user profile page
+            showPasswordPanel(); 
+        } else {
+            // Load dashboard
+            openDashBoard();
+        }
 
         txtUserName.setText(SecurityBean.getCurrentUser().getUserName());
     }

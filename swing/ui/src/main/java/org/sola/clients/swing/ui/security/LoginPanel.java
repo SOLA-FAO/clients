@@ -34,12 +34,14 @@ import java.awt.event.KeyEvent;
 import java.util.Locale;
 import java.util.prefs.Preferences;
 import javax.swing.JRadioButton;
+import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.swing.common.LocalizationManager;
 import org.sola.clients.swing.common.config.ConfigurationManager;
 import org.sola.clients.swing.common.controls.LanguageCombobox;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.common.WindowUtility;
+import org.sola.common.logging.LogUtility;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
@@ -102,6 +104,7 @@ public class LoginPanel extends javax.swing.JPanel {
                         Preferences prefs = WindowUtility.getUserPreferences();
                         prefs.put(USER_NAME, txtUsername.getText());
                     }
+                    SecurityBean.isPasswordChangeReqd(true);
                     fireLoginEvent(true);
                 } else {
                     enablePanel(true);
