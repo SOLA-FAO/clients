@@ -1,28 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.desktop.reports;
@@ -36,6 +38,8 @@ import net.sf.jasperreports.engine.JasperPrint;
 import org.sola.clients.beans.application.LodgementBean;
 import org.sola.clients.reports.ReportManager;
 import org.sola.clients.swing.common.controls.CalendarForm;
+import org.sola.clients.swing.common.tasks.SolaTask;
+import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.ui.renderers.FormattersFactory;
 import org.sola.clients.swing.ui.reports.ReportViewerForm;
 import org.sola.common.messaging.ClientMessage;
@@ -53,18 +57,24 @@ public class LodgementReportParamsForm extends javax.swing.JDialog {
     public LodgementReportParamsForm(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        txtFromDate.setFormatterFactory(FormattersFactory.getInstance().getDateFormatterFactory());
+        txtToDate.setFormatterFactory(FormattersFactory.getInstance().getDateFormatterFactory());
+
     }
 
-      private void showCalendar(JFormattedTextField dateField) {
+    private void showCalendar(JFormattedTextField dateField) {
         CalendarForm calendar = new CalendarForm(null, true, dateField);
+        //calendar.setMinSelectableDate(DateUtility.createDate(2013, 1, 1));
         calendar.setVisible(true);
     }
-     private LodgementBean createLodgementBean() {
-    if (lodgementBean1 == null) {
+
+    private LodgementBean createLodgementBean() {
+        if (lodgementBean1 == null) {
             lodgementBean1 = new LodgementBean();
         }
         return lodgementBean1;
-     }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -101,8 +111,9 @@ public class LodgementReportParamsForm extends javax.swing.JDialog {
         java.util.ResourceBundle bundle1 = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/application/Bundle"); // NOI18N
         labFrom.setText(bundle1.getString("ApplicationSearchPanel.labFrom.text")); // NOI18N
 
+        btnShowCalendarFrom.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/calendar.png"))); // NOI18N
         btnShowCalendarFrom.setText(bundle1.getString("ApplicationSearchPanel.btnShowCalendarFrom.text")); // NOI18N
-        btnShowCalendarFrom.setBorder(null);
+        btnShowCalendarFrom.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         btnShowCalendarFrom.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnShowCalendarFromActionPerformed(evt);
@@ -110,7 +121,7 @@ public class LodgementReportParamsForm extends javax.swing.JDialog {
         });
 
         txtFromDate.setFont(new java.awt.Font("Tahoma", 0, 12));
-        txtFromDate.setFormatterFactory(FormattersFactory.getInstance().getDateFormatterFactory());
+        txtFromDate.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
         txtFromDate.setToolTipText(bundle.getString("LodgementReportParamsForm.txtFromDate.toolTipText")); // NOI18N
         txtFromDate.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
         txtFromDate.setHorizontalAlignment(JTextField.LEADING);
@@ -123,17 +134,18 @@ public class LodgementReportParamsForm extends javax.swing.JDialog {
                 .addComponent(txtFromDate, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnShowCalendarFrom)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                 .addComponent(txtFromDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(btnShowCalendarFrom))
+                .addComponent(btnShowCalendarFrom, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
+        btnShowCalendarTo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/calendar.png"))); // NOI18N
         btnShowCalendarTo.setText(bundle1.getString("ApplicationSearchPanel.btnShowCalendarTo.text")); // NOI18N
-        btnShowCalendarTo.setBorder(null);
+        btnShowCalendarTo.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         btnShowCalendarTo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnShowCalendarToActionPerformed(evt);
@@ -141,7 +153,7 @@ public class LodgementReportParamsForm extends javax.swing.JDialog {
         });
 
         txtToDate.setFont(new java.awt.Font("Tahoma", 0, 12));
-        txtToDate.setFormatterFactory(FormattersFactory.getInstance().getDateFormatterFactory());
+        txtToDate.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
         txtToDate.setToolTipText(bundle.getString("LodgementReportParamsForm.txtToDate.toolTipText")); // NOI18N
         txtToDate.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
         txtToDate.setHorizontalAlignment(JTextField.LEADING);
@@ -154,7 +166,7 @@ public class LodgementReportParamsForm extends javax.swing.JDialog {
                 .addComponent(txtToDate, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnShowCalendarTo)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -214,8 +226,7 @@ public class LodgementReportParamsForm extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(viewReport)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(viewReport))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -236,7 +247,7 @@ public class LodgementReportParamsForm extends javax.swing.JDialog {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(40, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         pack();
@@ -249,46 +260,57 @@ public class LodgementReportParamsForm extends javax.swing.JDialog {
     private void btnShowCalendarToActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowCalendarToActionPerformed
         showCalendar(txtToDate);
     }//GEN-LAST:event_btnShowCalendarToActionPerformed
-       /** Opens {@link ReportViewerForm} to display report.*/
+    /**
+     * Opens {@link ReportViewerForm} to display report.
+     */
     private void showReport(JasperPrint report) {
         ReportViewerForm form = new ReportViewerForm(report);
         form.setVisible(true);
         form.setAlwaysOnTop(true);
     }
     private void viewReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewReportActionPerformed
-         boolean dateFilled= false;
-         Date tmpFrom;
-         Date tmpTo;
-         if (txtFromDate.getValue()== null) {
-            MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_DATEFROM );
-            dateFilled= false;
-            return;      
-          }else {        
-            tmpFrom = (Date)txtFromDate.getValue();
-            dateFilled= true;
+        boolean dateFilled = false;
+        Date tmpFrom;
+        Date tmpTo;
+        if (txtFromDate.getValue() == null) {
+            MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_DATEFROM);
+            dateFilled = false;
+            return;
+        } else {
+            tmpFrom = (Date) txtFromDate.getValue();
+            dateFilled = true;
             searchParams.setFromDate(tmpFrom);
-          }
-          if (txtToDate.getValue() == null) {
-              MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_DATETO);
-              dateFilled= true;
-              return;    
-          }else {   
-            tmpTo = (Date)txtToDate.getValue();
+        }
+        if (txtToDate.getValue() == null) {
+            MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_DATETO);
+            dateFilled = true;
+            return;
+        } else {
+            tmpTo = (Date) txtToDate.getValue();
             searchParams.setToDate(tmpTo);
-          }  
-          
-          System.out.println(dateFilled);
-          System.out.println(txtFromDate.getValue());
-          System.out.println(txtToDate.getValue());
-           if (dateFilled) { 
-            lodgementBean1.passParameter(searchParams);
-            showReport(ReportManager.getLodgementReport(lodgementBean1,tmpFrom,tmpTo));  
-            this.dispose();
-           } 
-    }//GEN-LAST:event_viewReportActionPerformed
+        }
 
-  
-   
+        if (dateFilled) {
+            final Date tmpFromFinal = tmpFrom;
+            final Date tmpToFinal = tmpTo;
+            SolaTask<Void, Void> t = new SolaTask<Void, Void>() {
+                @Override
+                public Void doTask() {
+                    setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_GENERATING_REPORT));
+                    // Refresh the details of the baUnit to make sure the latest details are used
+                    lodgementBean1.loadWorkSummary(searchParams);
+                    return null;
+                }
+
+                @Override
+                protected void taskDone() {
+                    showReport(ReportManager.getLodgementReport(lodgementBean1, tmpFromFinal, tmpToFinal));
+                }
+            };
+            TaskManager.getInstance().runTask(t);
+        }
+        this.dispose();
+    }//GEN-LAST:event_viewReportActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnShowCalendarFrom;
     private javax.swing.JButton btnShowCalendarTo;
