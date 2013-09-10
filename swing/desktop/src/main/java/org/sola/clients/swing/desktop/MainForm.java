@@ -217,19 +217,30 @@ public class MainForm extends javax.swing.JFrame {
         btnNewApplication.setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_CREATE_APPS));
         btnOpenMap.setEnabled(SecurityBean.isInRole(RolesConstants.GIS_VIEW_MAP));
         btnSearchApplications.setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_VIEW_APPS));
-        btnShowDashboard.setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_VIEW_APPS));
-        btnManageParties.setEnabled(SecurityBean.isInRole(RolesConstants.PARTY_SAVE));
+        btnShowDashboard.setEnabled(SecurityBean.isInRole(RolesConstants.DASHBOARD_VIEW_ASSIGNED_APPS,
+                RolesConstants.DASHBOARD_VIEW_UNASSIGNED_APPS));
+        btnManageParties.setEnabled(SecurityBean.isInRole(RolesConstants.PARTY_SEARCH));
+        btnOpenBaUnitSearch.setEnabled(SecurityBean.isInRole(RolesConstants.ADMINISTRATIVE_BA_UNIT_SEARCH));
+        btnDocumentSearch.setEnabled(SecurityBean.isInRole(RolesConstants.SOURCE_SEARCH));
+        btnSetPassword.setEnabled(SecurityBean.isInRole(RolesConstants.ADMIN_CHANGE_PASSWORD));
 
         menuSearchApplication.setEnabled(btnSearchApplications.isEnabled());
         menuNewApplication.setEnabled(btnNewApplication.isEnabled());
         menuExportRights.setEnabled(SecurityBean.isInRole(RolesConstants.ADMINISTRATIVE_RIGHTS_EXPORT));
+        menuBaUnitSearch.setEnabled(btnOpenBaUnitSearch.isEnabled());
+        menuPersons.setEnabled(btnManageParties.isEnabled());
+        menuShowMap.setEnabled(btnOpenMap.isEnabled());
+        menuLodgementReport.setEnabled(SecurityBean.isInRole(RolesConstants.REPORTS_VIEW));
+        menuDocumentSearch.setEnabled(btnDocumentSearch.isEnabled());
 
         if (SecurityBean.isPasswordChangeReqd(false)) {
             // Load the user profile page
-            showPasswordPanel(); 
+            showPasswordPanel();
         } else {
-            // Load dashboard
-            openDashBoard();
+            if (btnShowDashboard.isEnabled()) {
+                // Load dashboard
+                openDashBoard();
+            }
         }
 
         txtUserName.setText(SecurityBean.getCurrentUser().getUserName());

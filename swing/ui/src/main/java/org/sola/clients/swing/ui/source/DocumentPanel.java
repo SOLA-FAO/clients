@@ -37,10 +37,12 @@ import java.util.Locale;
 import javax.swing.JTextField;
 import org.sola.clients.beans.digitalarchive.DocumentBean;
 import org.sola.clients.beans.referencedata.SourceTypeListBean;
+import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.beans.source.SourceBean;
 import org.sola.clients.swing.common.controls.BrowseControlListener;
 import org.sola.clients.swing.ui.renderers.FormattersFactory;
 import org.sola.clients.swing.ui.renderers.SimpleComboBoxRenderer;
+import org.sola.common.RolesConstants;
 
 /**
  * Document panel, used to create or update document. {@link SourceBean} is used
@@ -108,8 +110,10 @@ public class DocumentPanel extends javax.swing.JPanel {
         txtDocRecordDate.setEnabled(allowEditing);
         txtDocRefNumber.setEnabled(allowEditing);
         txtExpiration.setEnabled(allowEditing);
-        browseAttachment.setDisplayBrowseButton(allowEditing);
-        browseAttachment.setDisplayDeleteButton(allowEditing);
+        browseAttachment.setDisplayBrowseButton(allowEditing &&
+                SecurityBean.isInRole(RolesConstants.SOURCE_SAVE));
+        browseAttachment.setDisplayDeleteButton(allowEditing
+                && SecurityBean.isInRole(RolesConstants.SOURCE_SAVE));
         txtOwnerName.setEnabled(allowEditing);
         txtDocAcceptanceDate.setEnabled(allowEditing);
         txtSigningDate.setEnabled(allowEditing);

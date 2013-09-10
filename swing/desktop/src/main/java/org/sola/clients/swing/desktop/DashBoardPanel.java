@@ -87,8 +87,8 @@ public class DashBoardPanel extends ContentPanel {
     private void postInit() {
 
         setHeaderPanel(headerPanel);
-        btnRefreshAssigned.setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_VIEW_APPS));
-        btnRefreshUnassigned.setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_VIEW_APPS));
+        btnRefreshAssigned.setEnabled(SecurityBean.isInRole(RolesConstants.DASHBOARD_VIEW_ASSIGNED_APPS));
+        btnRefreshUnassigned.setEnabled(SecurityBean.isInRole(RolesConstants.DASHBOARD_VIEW_UNASSIGNED_APPS));
         menuRefreshAssignApplication.setEnabled(btnRefreshAssigned.isEnabled());
         menuRefreshUnassignApplication.setEnabled(btnRefreshUnassigned.isEnabled());
 
@@ -97,7 +97,6 @@ public class DashBoardPanel extends ContentPanel {
         customizeUnassignedAppButtons();
 
         assignedAppListBean.addPropertyChangeListener(new PropertyChangeListener() {
-
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(ApplicationSearchResultsListBean.APPLICATION_CHECKED_PROPERTY)
@@ -108,7 +107,6 @@ public class DashBoardPanel extends ContentPanel {
         });
 
         unassignedAppListBean.addPropertyChangeListener(new PropertyChangeListener() {
-
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(ApplicationSearchResultsListBean.APPLICATION_CHECKED_PROPERTY)
@@ -126,14 +124,14 @@ public class DashBoardPanel extends ContentPanel {
         boolean isUnassignEnabled;
         boolean isEditEnabled = false;
 
-        if (assignedAppListBean.hasChecked() && 
-                (SecurityBean.isInRole(RolesConstants.APPLICATION_UNASSIGN_FROM_YOURSELF)
+        if (assignedAppListBean.hasChecked()
+                && (SecurityBean.isInRole(RolesConstants.APPLICATION_UNASSIGN_FROM_YOURSELF)
                 || SecurityBean.isInRole(RolesConstants.APPLICATION_UNASSIGN_FROM_OTHERS))) {
             isUnassignEnabled = true;
         } else {
             isUnassignEnabled = false;
         }
-        
+
         if (!isUnassignEnabled && SecurityBean.isInRole(RolesConstants.APPLICATION_EDIT_APPS, RolesConstants.APPLICATION_VIEW_APPS)) {
             isEditEnabled = assignedAppListBean.getSelectedApplication() != null;
         }
@@ -151,14 +149,14 @@ public class DashBoardPanel extends ContentPanel {
         boolean isAssignEnabled;
         boolean isEditEnabled = false;
 
-        if (unassignedAppListBean.hasChecked() && 
-                (SecurityBean.isInRole(RolesConstants.APPLICATION_ASSIGN_TO_YOURSELF)
+        if (unassignedAppListBean.hasChecked()
+                && (SecurityBean.isInRole(RolesConstants.APPLICATION_ASSIGN_TO_YOURSELF)
                 || SecurityBean.isInRole(RolesConstants.APPLICATION_ASSIGN_TO_OTHERS))) {
             isAssignEnabled = true;
         } else {
             isAssignEnabled = false;
         }
-        
+
         if (!isAssignEnabled && SecurityBean.isInRole(RolesConstants.APPLICATION_EDIT_APPS, RolesConstants.APPLICATION_VIEW_APPS)) {
             isEditEnabled = unassignedAppListBean.getSelectedApplication() != null;
         }
@@ -197,7 +195,8 @@ public class DashBoardPanel extends ContentPanel {
                 for (ApplicationSearchResultBean app : appList) {
                     String assigneeId = app.getAssigneeId();
                     if (assigneeId != null && assigneeId.equals(SecurityBean.getCurrentUser().getId())
-                            && !SecurityBean.isInRole(RolesConstants.APPLICATION_UNASSIGN_FROM_YOURSELF)) {
+                            && !SecurityBean.isInRole(RolesConstants.APPLICATION_UNASSIGN_FROM_YOURSELF,
+                            RolesConstants.APPLICATION_UNASSIGN_FROM_OTHERS)) {
                         // Can't unassign from yourself
                         MessageUtility.displayMessage(ClientMessage.APPLICATION_UNASSIGN_FROM_SELF_FORBIDDEN,
                                 new Object[]{app.getNr()});
@@ -227,12 +226,10 @@ public class DashBoardPanel extends ContentPanel {
         }
 
         SolaTask t = new SolaTask<Void, Void>() {
-
             @Override
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_APP));
                 PropertyChangeListener listener = new PropertyChangeListener() {
-
                     @Override
                     public void propertyChange(PropertyChangeEvent e) {
                         if (e.getPropertyName().equals(ApplicationPanel.APPLICATION_SAVED_PROPERTY)) {
@@ -744,15 +741,18 @@ public class DashBoardPanel extends ContentPanel {
      */
     private void refreshApplications() {
         SolaTask t = new SolaTask<Void, Void>() {
-
             @Override
             public Void doTask() {
-                setMessage(MessageUtility.getLocalizedMessageText(
-                        ClientMessage.APPLICATION_LOADING_UNASSIGNED));
-                unassignedAppListBean.FillUnassigned();
-                setMessage(MessageUtility.getLocalizedMessageText(
-                        ClientMessage.APPLICATION_LOADING_ASSIGNED));
-                assignedAppListBean.FillAssigned();
+                if (btnRefreshUnassigned.isEnabled()) {
+                    setMessage(MessageUtility.getLocalizedMessageText(
+                            ClientMessage.APPLICATION_LOADING_UNASSIGNED));
+                    unassignedAppListBean.FillUnassigned();
+                }
+                if (btnRefreshAssigned.isEnabled()) {
+                    setMessage(MessageUtility.getLocalizedMessageText(
+                            ClientMessage.APPLICATION_LOADING_ASSIGNED));
+                    assignedAppListBean.FillAssigned();
+                }
                 return null;
             }
         };
