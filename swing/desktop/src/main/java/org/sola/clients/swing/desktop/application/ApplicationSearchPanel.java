@@ -738,7 +738,7 @@ public class ApplicationSearchPanel extends ContentPanel {
      * Opens {@link ApplicationForm} for selected application in search results.
      */
     private void openApplication() {
-        if (!SecurityBean.isInRole(RolesConstants.APPLICATION_EDIT_APPS)
+        if (!SecurityBean.isInRole(RolesConstants.APPLICATION_VIEW_APPS)
                 || appList.getSelectedApplication() == null) {
             return;
         }

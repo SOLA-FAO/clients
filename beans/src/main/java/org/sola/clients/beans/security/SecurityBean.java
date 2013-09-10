@@ -46,7 +46,7 @@ public class SecurityBean extends AbstractBindingBean {
 
     public static final String USER_NAME_PROPERTY = "userName";
     public static final String USER_PASSWORD_PROPERTY = "userPassword";
-    public static final Integer WARN_OF_PWORD_EXPIRY = 14;
+    public static final Integer WARN_OF_PWORD_EXPIRY = 10;
     private String userName;
     private char[] userPassword;
     private static UserBean currentUser;

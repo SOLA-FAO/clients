@@ -93,7 +93,7 @@ import org.sola.webservices.transferobjects.casemanagement.ApplicationTO;
  * {@link SourceTypeListBean}, <br />{@link ApplicationDocumentsHelperBean}</p>
  */
 public class ApplicationPanel extends ContentPanel {
-
+    
     private ControlsBundleForApplicationLocation mapControl = null;
     public static final String APPLICATION_SAVED_PROPERTY = "applicationSaved";
     private String applicationID;
@@ -101,8 +101,8 @@ public class ApplicationPanel extends ContentPanel {
     ApplicationPropertyBean property;
 
     /**
-     * This method is used by the form designer to create {@link ApplicationBean}.
-     * It uses
+     * This method is used by the form designer to create
+     * {@link ApplicationBean}. It uses
      * <code>applicationId</code> parameter passed to the form constructor.<br
      * />
      * <code>applicationId</code> should be initialized before
@@ -117,9 +117,8 @@ public class ApplicationPanel extends ContentPanel {
                 appBean = new ApplicationBean();
             }
         }
-
+        
         appBean.addPropertyChangeListener(new PropertyChangeListener() {
-
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(ApplicationBean.APPLICATION_PROPERTY)) {
@@ -129,7 +128,7 @@ public class ApplicationPanel extends ContentPanel {
         });
         return appBean;
     }
-
+    
     private DocumentsManagementExtPanel createDocumentsPanel() {
         if (documentsPanel == null) {
             if (appBean != null) {
@@ -141,14 +140,14 @@ public class ApplicationPanel extends ContentPanel {
         }
         return documentsPanel;
     }
-
+    
     private CommunicationTypeListBean createCommunicationTypes() {
         if (communicationTypes == null) {
             String communicationCode = null;
             if (appBean != null && appBean.getContactPerson() != null
                     && appBean.getContactPerson().getPreferredCommunicationCode() != null) {
                 communicationCode = appBean.getContactPerson().getPreferredCommunicationCode();
-
+                
             }
             communicationTypes = new CommunicationTypeListBean(true, communicationCode);
         }
@@ -195,7 +194,7 @@ public class ApplicationPanel extends ContentPanel {
         initComponents();
         postInit();
     }
-
+    
     public ApplicationPropertyBean getProperty() {
         if (property == null) {
             property = new ApplicationPropertyBean();
@@ -208,51 +207,48 @@ public class ApplicationPanel extends ContentPanel {
      */
     private void postInit() {
         appBean.getSourceFilteredList().addObservableListListener(new ObservableListListener() {
-
             @Override
             public void listElementsAdded(ObservableList ol, int i, int i1) {
                 applicationDocumentsHelper.verifyCheckList(appBean.getSourceList().getFilteredList());
             }
-
+            
             @Override
             public void listElementsRemoved(ObservableList ol, int i, List list) {
                 applicationDocumentsHelper.verifyCheckList(appBean.getSourceList().getFilteredList());
             }
-
+            
             @Override
             public void listElementReplaced(ObservableList ol, int i, Object o) {
             }
-
+            
             @Override
             public void listElementPropertyChanged(ObservableList ol, int i) {
             }
         });
-
+        
         appBean.getServiceList().addObservableListListener(new ObservableListListener() {
-
             @Override
             public void listElementsAdded(ObservableList ol, int i, int i1) {
                 applicationDocumentsHelper.updateCheckList(appBean.getServiceList(), appBean.getSourceList());
             }
-
+            
             @Override
             public void listElementsRemoved(ObservableList ol, int i, List list) {
                 applicationDocumentsHelper.updateCheckList(appBean.getServiceList(), appBean.getSourceList());
             }
-
+            
             @Override
             public void listElementReplaced(ObservableList ol, int i, Object o) {
                 customizeServicesButtons();
             }
-
+            
             @Override
             public void listElementPropertyChanged(ObservableList ol, int i) {
                 customizeServicesButtons();
             }
         });
-
+        
         appBean.addPropertyChangeListener(new PropertyChangeListener() {
-
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(ApplicationBean.SELECTED_SERVICE_PROPERTY)) {
@@ -263,7 +259,7 @@ public class ApplicationPanel extends ContentPanel {
                     customizePropertyButtons();
                 } else if (evt.getPropertyName().equals(ApplicationBean.SELECTED_PROPPERTY_PROPERTY)) {
                     customizePropertyButtons();
-                } else if(evt.getPropertyName().equals(ApplicationBean.SELECTED_CADASTRE_OBJECT)){
+                } else if (evt.getPropertyName().equals(ApplicationBean.SELECTED_CADASTRE_OBJECT)) {
                     customizeParcelsButtons();
                 } else if (evt.getPropertyName().equals(ApplicationBean.FEE_PAID_PROPERTY)) {
                     setDefaultFeePaidAmount();
@@ -272,10 +268,9 @@ public class ApplicationPanel extends ContentPanel {
         });
         
         txtParcelSearch.addPropertyChangeListener(new PropertyChangeListener() {
-
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                if(evt.getPropertyName().equals(FreeTextSearch.ELEMENT_SELECTED)){
+                if (evt.getPropertyName().equals(FreeTextSearch.ELEMENT_SELECTED)) {
                     customizeAddParcelButton();
                 }
             }
@@ -319,7 +314,12 @@ public class ApplicationPanel extends ContentPanel {
             tabbedControlMain.removeTabAt(tabbedControlMain.indexOfComponent(validationPanel));
             btnValidate.setEnabled(false);
         }
-
+        
+        if (!SecurityBean.isInRole(RolesConstants.GIS_VIEW_MAP)) {
+            // User does not have rights to view the map
+            tabbedControlMain.removeTabAt(tabbedControlMain.indexOfComponent(mapPanel));            
+        }
+        
         menuApprove.setEnabled(appBean.canApprove()
                 && SecurityBean.isInRole(RolesConstants.APPLICATION_APPROVE));
         menuCancel.setEnabled(appBean.canCancel()
@@ -336,13 +336,14 @@ public class ApplicationPanel extends ContentPanel {
                 && SecurityBean.isInRole(RolesConstants.APPLICATION_WITHDRAW));
         menuWithdraw.setEnabled(appBean.canWithdraw()
                 && SecurityBean.isInRole(RolesConstants.APPLICATION_WITHDRAW));
-        btnPrintStatusReport.setEnabled(appBean.getRowVersion() > 0);
-
+        btnPrintStatusReport.setEnabled(appBean.getRowVersion() > 0
+                && SecurityBean.isInRole(RolesConstants.APPLICATION_PRINT_STATUS_REPORT));
+        
         if (btnValidate.isEnabled()) {
             btnValidate.setEnabled(appBean.canValidate()
                     && SecurityBean.isInRole(RolesConstants.APPLICATION_VALIDATE));
         }
-
+        
         if (appBean.getStatusCode() != null) {
             boolean editAllowed = appBean.isEditingAllowed()
                     && SecurityBean.isInRole(RolesConstants.APPLICATION_EDIT_APPS);
@@ -381,19 +382,23 @@ public class ApplicationPanel extends ContentPanel {
         saveAppState();
     }
 
-    /** Disables or enables parcel remove button. */
-    private void customizeParcelsButtons(){
+    /**
+     * Disables or enables parcel remove button.
+     */
+    private void customizeParcelsButtons() {
         boolean enabled = appBean.getSelectedCadastreObject() != null && appBean.isEditingAllowed();
         btnRemoveParcel.setEnabled(enabled);
         menuRemoveParcel.setEnabled(btnRemoveParcel.isEnabled());
     }
-    
-    /** Disables or enables add parcel button. */
-    private void customizeAddParcelButton(){
+
+    /**
+     * Disables or enables add parcel button.
+     */
+    private void customizeAddParcelButton() {
         boolean enabled = txtParcelSearch.getSelectedElement() != null && appBean.isEditingAllowed();
         btnAddParcel.setEnabled(enabled);
     }
-    
+
     /**
      * Disables or enables buttons, related to the services list management.
      */
@@ -401,7 +406,7 @@ public class ApplicationPanel extends ContentPanel {
         ApplicationServiceBean selectedService = appBean.getSelectedService();
         boolean servicesManagementAllowed = appBean.isManagementAllowed();
         boolean enableServicesButtons = appBean.isEditingAllowed();
-
+        
         if (enableServicesButtons) {
             if (applicationID != null && applicationID.length() > 0) {
                 enableServicesButtons = SecurityBean.isInRole(RolesConstants.APPLICATION_EDIT_APPS);
@@ -415,7 +420,7 @@ public class ApplicationPanel extends ContentPanel {
         btnRemoveService.setEnabled(false);
         btnUPService.setEnabled(false);
         btnDownService.setEnabled(false);
-
+        
         if (enableServicesButtons) {
             if (selectedService != null) {
                 if (selectedService.isNew()) {
@@ -427,7 +432,7 @@ public class ApplicationPanel extends ContentPanel {
                     btnUPService.setEnabled(selectedService.isManagementAllowed());
                     btnDownService.setEnabled(selectedService.isManagementAllowed());
                 }
-
+                
                 if (btnUPService.isEnabled()
                         && appBean.getServiceList().indexOf(selectedService) == 0) {
                     btnUPService.setEnabled(false);
@@ -445,7 +450,7 @@ public class ApplicationPanel extends ContentPanel {
         btnStartService.setEnabled(false);
         btnViewService.setEnabled(false);
         btnRevertService.setEnabled(false);
-
+        
         if (servicesManagementAllowed) {
             if (selectedService != null) {
                 btnViewService.setEnabled(!selectedService.isNew());
@@ -453,9 +458,9 @@ public class ApplicationPanel extends ContentPanel {
                         && SecurityBean.isInRole(RolesConstants.APPLICATION_SERVICE_CANCEL));
                 btnStartService.setEnabled(selectedService.isManagementAllowed()
                         && SecurityBean.isInRole(RolesConstants.APPLICATION_SERVICE_START));
-
+                
                 String serviceStatus = selectedService.getStatusCode();
-
+                
                 if (serviceStatus != null && serviceStatus.equals(StatusConstants.COMPLETED)) {
                     btnCompleteService.setEnabled(false);
                     btnRevertService.setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_SERVICE_REVERT));
@@ -466,7 +471,7 @@ public class ApplicationPanel extends ContentPanel {
                 }
             }
         }
-
+        
         menuAddService.setEnabled(btnAddService.isEnabled());
         menuRemoveService.setEnabled(btnRemoveService.isEnabled());
         menuMoveServiceUp.setEnabled(btnUPService.isEnabled());
@@ -498,12 +503,11 @@ public class ApplicationPanel extends ContentPanel {
         agentsList.FillAgents(true);
         return agentsList;
     }
-
+    
     private void openPropertyForm(final ApplicationServiceBean service,
             final BaUnitBean baUnitBean, final boolean readOnly) {
         if (baUnitBean != null) {
             SolaTask t = new SolaTask<Void, Void>() {
-
                 @Override
                 public Void doTask() {
                     setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PROPERTY));
@@ -512,7 +516,7 @@ public class ApplicationPanel extends ContentPanel {
                     getMainContentPanel().addPanel(propertyPnl, MainContentPanel.CARD_PROPERTY_PANEL, true);
                     return null;
                 }
-
+                
                 @Override
                 protected void taskDone() {
                     if (!service.getRequestTypeCode().equalsIgnoreCase(RequestTypeBean.CODE_NEW_DIGITAL_TITLE)) {
@@ -523,18 +527,17 @@ public class ApplicationPanel extends ContentPanel {
             TaskManager.getInstance().runTask(t);
         }
     }
-
+    
     private void openPropertyForm(final ApplicationServiceBean service,
             final ApplicationPropertyBean applicationProperty, final boolean readOnly) {
         if (applicationProperty != null) {
-
+            
             SolaTask t = new SolaTask<Void, Void>() {
-
                 @Override
                 public Void doTask() {
                     ApplicationBean applicationBean = appBean.copy();
                     PropertyPanel propertyPnl;
-
+                    
                     if (applicationProperty.getBaUnitId() != null) {
                         setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_BA_UNIT_GETTING));
                         BaUnitBean baUnitBean = BaUnitBean.getBaUnitsById(applicationProperty.getBaUnitId());
@@ -592,10 +595,9 @@ public class ApplicationPanel extends ContentPanel {
         if (!checkSaveBeforeAction()) {
             return;
         }
-
+        
         if (appBean.getId() != null) {
             SolaTask t = new SolaTask() {
-
                 @Override
                 public Boolean doTask() {
                     setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_APP_VALIDATING));
@@ -607,10 +609,10 @@ public class ApplicationPanel extends ContentPanel {
             TaskManager.getInstance().runTask(t);
         }
     }
-
+    
     private void launchService(final ApplicationServiceBean service, final boolean readOnly) {
         if (service != null) {
-
+            
             String requestType = service.getRequestTypeCode();
 
             // Determine what form to start for selected service
@@ -621,7 +623,6 @@ public class ApplicationPanel extends ContentPanel {
                     || requestType.equalsIgnoreCase(RequestTypeBean.CODE_CANCEL_POWER_OF_ATTORNEY)) {
                 // Run registration/cancelation Power of attorney
                 SolaTask t = new SolaTask<Void, Void>() {
-
                     @Override
                     public Void doTask() {
                         setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_DOCREGISTRATION));
@@ -634,7 +635,6 @@ public class ApplicationPanel extends ContentPanel {
             } // Document copy request
             else if (requestType.equalsIgnoreCase(RequestTypeBean.CODE_DOCUMENT_COPY)) {
                 SolaTask t = new SolaTask<Void, Void>() {
-
                     @Override
                     public Void doTask() {
                         setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_DOCUMENTSEARCH));
@@ -650,7 +650,6 @@ public class ApplicationPanel extends ContentPanel {
             } // Cadastre print
             else if (requestType.equalsIgnoreCase(RequestTypeBean.CODE_CADASTRE_PRINT)) {
                 SolaTask t = new SolaTask<Void, Void>() {
-
                     @Override
                     public Void doTask() {
                         setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_MAP));
@@ -666,7 +665,6 @@ public class ApplicationPanel extends ContentPanel {
             } // Service enquiry (application status report)
             else if (requestType.equalsIgnoreCase(RequestTypeBean.CODE_SERVICE_ENQUIRY)) {
                 SolaTask t = new SolaTask<Void, Void>() {
-
                     @Override
                     public Void doTask() {
                         setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_APPSEARCH));
@@ -682,10 +680,9 @@ public class ApplicationPanel extends ContentPanel {
             } // Cadastre change services
             else if (requestType.equalsIgnoreCase(RequestTypeBean.CODE_CADASTRE_CHANGE)
                     || requestType.equalsIgnoreCase(RequestTypeBean.CODE_CADASTRE_REDEFINITION)) {
-
+                
                 if (appBean.getPropertyList().getFilteredList().size() == 1) {
                     SolaTask t = new SolaTask<Void, Void>() {
-
                         @Override
                         public Void doTask() {
                             setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_CADASTRE_CHANGE));
@@ -696,13 +693,12 @@ public class ApplicationPanel extends ContentPanel {
                         }
                     };
                     TaskManager.getInstance().runTask(t);
-
+                    
                 } else if (appBean.getPropertyList().getFilteredList().size() > 1) {
                     PropertiesList propertyListForm = new PropertiesList(appBean.getPropertyList());
                     propertyListForm.setLocationRelativeTo(this);
-
+                    
                     propertyListForm.addPropertyChangeListener(new PropertyChangeListener() {
-
                         @Override
                         public void propertyChange(PropertyChangeEvent evt) {
                             if (evt.getPropertyName().equals(PropertiesList.SELECTED_PROPERTY)
@@ -710,9 +706,8 @@ public class ApplicationPanel extends ContentPanel {
                                 final ApplicationPropertyBean property =
                                         (ApplicationPropertyBean) evt.getNewValue();
                                 ((JDialog) evt.getSource()).dispose();
-
+                                
                                 SolaTask t = new SolaTask<Void, Void>() {
-
                                     @Override
                                     public Void doTask() {
                                         setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_DOCREGISTRATION));
@@ -727,23 +722,22 @@ public class ApplicationPanel extends ContentPanel {
                         }
                     });
                     propertyListForm.setVisible(true);
-
+                    
                 } else {
                     CadastreTransactionMapPanel form = new CadastreTransactionMapPanel(appBean, service, null);
                     getMainContentPanel().addPanel(form, MainContentPanel.CARD_CADASTRECHANGE, true);
                 }
-
+                
             } else {
 
                 // Try to get BA Units, created through the service
                 List<BaUnitBean> baUnitsList = BaUnitBean.getBaUnitsByServiceId(service.getId());
-
+                
                 if (baUnitsList != null && baUnitsList.size() > 0) {
                     if (baUnitsList.size() > 1) {
                         // Show BA Unit Selection Form
                         BaUnitsListPanel baUnitListPanel = new BaUnitsListPanel(baUnitsList);
                         baUnitListPanel.addPropertyChangeListener(new PropertyChangeListener() {
-
                             @Override
                             public void propertyChange(PropertyChangeEvent evt) {
                                 if (evt.getPropertyName().equals(BaUnitsListPanel.SELECTED_BAUNIT_PROPERTY)
@@ -776,9 +770,8 @@ public class ApplicationPanel extends ContentPanel {
                         } else if (appBean.getPropertyList().getFilteredList().size() > 1) {
                             PropertiesList propertyListForm = new PropertiesList(appBean.getPropertyList());
                             propertyListForm.setLocationRelativeTo(this);
-
+                            
                             propertyListForm.addPropertyChangeListener(new PropertyChangeListener() {
-
                                 @Override
                                 public void propertyChange(PropertyChangeEvent evt) {
                                     if (evt.getPropertyName().equals(PropertiesList.SELECTED_PROPERTY)
@@ -789,7 +782,7 @@ public class ApplicationPanel extends ContentPanel {
                                     }
                                 }
                             });
-
+                            
                             propertyListForm.setVisible(true);
                         } else {
                             MessageUtility.displayMessage(ClientMessage.APPLICATION_PROPERTY_LIST_EMPTY);
@@ -797,12 +790,12 @@ public class ApplicationPanel extends ContentPanel {
                     }
                 }
             }
-
+            
         } else {
             MessageUtility.displayMessage(ClientMessage.APPLICATION_SELECT_SERVICE);
         }
     }
-
+    
     private boolean saveApplication() {
         appBean.setLocation(this.mapControl.getApplicationLocation());
         if (applicationID != null && !applicationID.equals("")) {
@@ -811,12 +804,12 @@ public class ApplicationPanel extends ContentPanel {
             return appBean.lodgeApplication();
         }
     }
-
+    
     private boolean checkApplication() {
         if (appBean.validate(true).size() > 0) {
             return false;
         }
-
+        
         if (applicationDocumentsHelper.isAllItemsChecked() == false) {
             if (MessageUtility.displayMessage(ClientMessage.APPLICATION_NOTALL_DOCUMENT_REQUIRED) == MessageUtility.BUTTON_TWO) {
                 return false;
@@ -825,7 +818,7 @@ public class ApplicationPanel extends ContentPanel {
 
         // Check how many properties needed 
         int nrPropRequired = 0;
-
+        
         for (Iterator<ApplicationServiceBean> it = appBean.getServiceList().iterator(); it.hasNext();) {
             ApplicationServiceBean appService = it.next();
             for (Iterator<RequestTypeBean> it1 = CacheManager.getRequestTypes().iterator(); it1.hasNext();) {
@@ -838,7 +831,7 @@ public class ApplicationPanel extends ContentPanel {
                 }
             }
         }
-
+        
         String[] params = {"" + nrPropRequired};
         if (appBean.getPropertyList().size() < nrPropRequired) {
             if (MessageUtility.displayMessage(ClientMessage.APPLICATION_ATLEAST_PROPERTY_REQUIRED, params) == MessageUtility.BUTTON_TWO) {
@@ -847,15 +840,14 @@ public class ApplicationPanel extends ContentPanel {
         }
         return true;
     }
-
+    
     private void saveApplication(final boolean closeOnSave) {
-
+        
         if (!checkApplication()) {
             return;
         }
-
+        
         SolaTask<Void, Void> t = new SolaTask<Void, Void>() {
-
             @Override
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_SAVING));
@@ -865,32 +857,31 @@ public class ApplicationPanel extends ContentPanel {
                 }
                 return null;
             }
-
+            
             @Override
             public void taskDone() {
 //                MessageUtility.displayMessage(ClientMessage.APPLICATION_SUCCESSFULLY_SAVED);
                 customizeApplicationForm();
                 saveAppState();
-
+                
                 if (applicationID == null || applicationID.equals("")) {
                     showReport(ReportManager.getLodgementNoticeReport(appBean));
                     applicationID = appBean.getId();
                 }
                 firePropertyChange(APPLICATION_SAVED_PROPERTY, false, true);
-
+                
                 refreshDashboard();
-
+                
             }
         };
-
+        
         TaskManager.getInstance().runTask(t);
-
+        
     }
-
+    
     @Override
     public void refreshDashboard() {
         PropertyChangeListener listener = new PropertyChangeListener() {
-
             @Override
             public void propertyChange(PropertyChangeEvent e) {
                 if (e.getPropertyName().equals(ApplicationPanel.APPLICATION_SAVED_PROPERTY)) {
@@ -898,11 +889,11 @@ public class ApplicationPanel extends ContentPanel {
                 }
             }
         };
-
+        
         if (getMainContentPanel() != null && this.isDashboard) {
             DashBoardPanel dashBoardPanel = new DashBoardPanel();
             dashBoardPanel.addPropertyChangeListener(ApplicationBean.ASSIGNEE_ID_PROPERTY, listener);
-
+            
             if (whichChangeEvent == HeaderPanel.CLOSE_BUTTON_CLICKED) {
                 getMainContentPanel().addPanel(dashBoardPanel, MainContentPanel.CARD_DASHBOARD, true);
             } else {
@@ -914,13 +905,13 @@ public class ApplicationPanel extends ContentPanel {
         }
     }
     
-    private void addParcel(){
-        if(txtParcelSearch.getSelectedElement()!=null){
-            appBean.addCadastreObject((CadastreObjectBean)((CadastreObjectBean)txtParcelSearch.getSelectedElement()).copy());
+    private void addParcel() {
+        if (txtParcelSearch.getSelectedElement() != null) {
+            appBean.addCadastreObject((CadastreObjectBean) ((CadastreObjectBean) txtParcelSearch.getSelectedElement()).copy());
         }
     }
     
-    private void removeSelectedParcel(){
+    private void removeSelectedParcel() {
         appBean.removeSelectedCadastreObject();
     }
 
@@ -2939,27 +2930,28 @@ public class ApplicationPanel extends ContentPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     /**
-     * Validates user's data input and calls save operation on the {@link ApplicationBean}.
+     * Validates user's data input and calls save operation on the
+     * {@link ApplicationBean}.
      */
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         saveApplication(false);
 }//GEN-LAST:event_btnSaveActionPerformed
-
+    
     private void btnAddPropertyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddPropertyActionPerformed
         if (txtFirstPart.getText() == null || txtFirstPart.getText().equals("")
                 || txtLastPart.getText() == null || txtLastPart.getText().equals("")) {
             MessageUtility.displayMessage(ClientMessage.CHECK_FIRST_LAST_PROPERTY);
             return;
         }
-
+        
         BigDecimal area = null;
         BigDecimal value = null;
-
+        
         try {
             area = new BigDecimal(txtArea.getText());
         } catch (Exception e) {
         }
-
+        
         try {
             value = new BigDecimal(txtValue.getText());
         } catch (Exception e) {
@@ -2980,7 +2972,7 @@ public class ApplicationPanel extends ContentPanel {
             txtEmail.setText(appBean.getContactPerson().getEmail());
         }
     }//GEN-LAST:event_txtEmailFocusLost
-
+    
     private void txtPhoneFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPhoneFocusLost
         // Verify the phone number is valid
         if (appBean.getContactPerson().getPhone() == null
@@ -2988,7 +2980,7 @@ public class ApplicationPanel extends ContentPanel {
             txtPhone.setText(appBean.getContactPerson().getPhone());
         }
     }//GEN-LAST:event_txtPhoneFocusLost
-
+    
     private void txtFaxFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtFaxFocusLost
         // Verify the fax number is valid
         if (appBean.getContactPerson().getFax() == null
@@ -2996,174 +2988,174 @@ public class ApplicationPanel extends ContentPanel {
             txtFax.setText(appBean.getContactPerson().getFax());
         }
     }//GEN-LAST:event_txtFaxFocusLost
-
+    
     private void contactPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_contactPanelMouseClicked
         cbxAgents.requestFocus(false);
         txtFirstName.requestFocus();
     }//GEN-LAST:event_contactPanelMouseClicked
-
+    
     private void propertyPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_propertyPanelMouseClicked
         cbxAgents.requestFocus(false);
         txtFirstPart.requestFocus();
     }//GEN-LAST:event_propertyPanelMouseClicked
-
+    
     private void documentPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_documentPanelMouseClicked
         cbxAgents.requestFocus(false);
     }//GEN-LAST:event_documentPanelMouseClicked
-
+    
     private void feesPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_feesPanelMouseClicked
         cbxAgents.requestFocus(false);
         formTxtServiceFee.requestFocus(true);
     }//GEN-LAST:event_feesPanelMouseClicked
-
+    
     private void historyPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_historyPanelMouseClicked
         cbxAgents.requestFocus(false);
     }//GEN-LAST:event_historyPanelMouseClicked
-
+    
     private void btnCalculateFeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalculateFeeActionPerformed
         calculateFee();
     }//GEN-LAST:event_btnCalculateFeeActionPerformed
-
+    
     private void btnValidateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnValidateActionPerformed
         validateApplication();
     }//GEN-LAST:event_btnValidateActionPerformed
-
+    
     private void btnPrintFeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintFeeActionPerformed
         printReceipt();
     }//GEN-LAST:event_btnPrintFeeActionPerformed
-
+    
     private void btnPrintStatusReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintStatusReportActionPerformed
         printStatusReport();
     }//GEN-LAST:event_btnPrintStatusReportActionPerformed
-
+    
     private void menuApproveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuApproveActionPerformed
         approveApplication();
     }//GEN-LAST:event_menuApproveActionPerformed
-
+    
     private void menuCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCancelActionPerformed
         rejectApplication();
     }//GEN-LAST:event_menuCancelActionPerformed
-
+    
     private void menuWithdrawActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuWithdrawActionPerformed
         withdrawApplication();
     }//GEN-LAST:event_menuWithdrawActionPerformed
-
+    
     private void menuLapseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuLapseActionPerformed
         lapseApplication();
     }//GEN-LAST:event_menuLapseActionPerformed
-
+    
     private void menuRequisitionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRequisitionActionPerformed
         requisitionApplication();
     }//GEN-LAST:event_menuRequisitionActionPerformed
-
+    
     private void menuResubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuResubmitActionPerformed
         resubmitApplication();
     }//GEN-LAST:event_menuResubmitActionPerformed
-
+    
     private void menuDispatchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuDispatchActionPerformed
         dispatchApplication();
     }//GEN-LAST:event_menuDispatchActionPerformed
-
+    
     private void menuArchiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuArchiveActionPerformed
         archiveApplication();
     }//GEN-LAST:event_menuArchiveActionPerformed
-
+    
     private void btnAddServiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddServiceActionPerformed
         addService();
     }//GEN-LAST:event_btnAddServiceActionPerformed
-
+    
     private void btnRemoveServiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveServiceActionPerformed
         removeService();
     }//GEN-LAST:event_btnRemoveServiceActionPerformed
-
+    
     private void btnUPServiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUPServiceActionPerformed
         moveServiceUp();
     }//GEN-LAST:event_btnUPServiceActionPerformed
-
+    
     private void btnDownServiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownServiceActionPerformed
         moveServiceDown();
     }//GEN-LAST:event_btnDownServiceActionPerformed
-
+    
     private void btnViewServiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewServiceActionPerformed
         viewService();
     }//GEN-LAST:event_btnViewServiceActionPerformed
-
+    
     private void btnStartServiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartServiceActionPerformed
         startService();
     }//GEN-LAST:event_btnStartServiceActionPerformed
-
+    
     private void btnCancelServiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelServiceActionPerformed
         cancelService();
     }//GEN-LAST:event_btnCancelServiceActionPerformed
-
+    
     private void btnCompleteServiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCompleteServiceActionPerformed
         completeService();
     }//GEN-LAST:event_btnCompleteServiceActionPerformed
-
+    
     private void menuAddServiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAddServiceActionPerformed
         addService();
     }//GEN-LAST:event_menuAddServiceActionPerformed
-
+    
     private void menuRemoveServiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRemoveServiceActionPerformed
         removeService();
     }//GEN-LAST:event_menuRemoveServiceActionPerformed
-
+    
     private void menuMoveServiceUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuMoveServiceUpActionPerformed
         moveServiceUp();
     }//GEN-LAST:event_menuMoveServiceUpActionPerformed
-
+    
     private void menuMoveServiceDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuMoveServiceDownActionPerformed
         moveServiceDown();
     }//GEN-LAST:event_menuMoveServiceDownActionPerformed
-
+    
     private void menuViewServiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuViewServiceActionPerformed
         viewService();
     }//GEN-LAST:event_menuViewServiceActionPerformed
-
+    
     private void menuStartServiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuStartServiceActionPerformed
         startService();
     }//GEN-LAST:event_menuStartServiceActionPerformed
-
+    
     private void menuCompleteServiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCompleteServiceActionPerformed
         completeService();
     }//GEN-LAST:event_menuCompleteServiceActionPerformed
-
+    
     private void menuCancelServiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCancelServiceActionPerformed
         cancelService();
     }//GEN-LAST:event_menuCancelServiceActionPerformed
-
+    
     private void btnRevertServiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRevertServiceActionPerformed
         revertService();
     }//GEN-LAST:event_btnRevertServiceActionPerformed
-
+    
     private void menuRevertServiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRevertServiceActionPerformed
         revertService();
     }//GEN-LAST:event_menuRevertServiceActionPerformed
-
+    
     private void btnRemovePropertyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemovePropertyActionPerformed
         removeSelectedProperty();
     }//GEN-LAST:event_btnRemovePropertyActionPerformed
-
+    
     private void btnVerifyPropertyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerifyPropertyActionPerformed
         verifySelectedProperty();
     }//GEN-LAST:event_btnVerifyPropertyActionPerformed
-
+    
     private void btnCertificateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCertificateActionPerformed
         openSysRegCertParamsForm(appBean.getNr());
     }//GEN-LAST:event_btnCertificateActionPerformed
-
+    
     private void btnAddParcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddParcelActionPerformed
         addParcel();
     }//GEN-LAST:event_btnAddParcelActionPerformed
-
+    
     private void btnRemoveParcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveParcelActionPerformed
         removeSelectedParcel();
     }//GEN-LAST:event_btnRemoveParcelActionPerformed
-
+    
     private void menuRemoveParcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRemoveParcelActionPerformed
         removeSelectedParcel();
     }//GEN-LAST:event_menuRemoveParcelActionPerformed
-
+    
     private void openSysRegCertParamsForm(String nr) {
         SysRegCertParamsForm certificateGenerator = new SysRegCertParamsForm(null, true, nr, null);
         certificateGenerator.setVisible(true);
@@ -3176,7 +3168,6 @@ public class ApplicationPanel extends ContentPanel {
         if (appBean.getSelectedSource() != null
                 && appBean.getSelectedSource().getArchiveDocument() != null) {
             SolaTask t = new SolaTask<Void, Void>() {
-
                 @Override
                 public Void doTask() {
                     setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_DOCUMENT_OPENING));
@@ -3193,7 +3184,7 @@ public class ApplicationPanel extends ContentPanel {
      * Initializes map control to display application location.
      */
     private void formComponentShown(java.awt.event.ComponentEvent evt) {
-        if (this.mapControl == null) {
+        if (this.mapControl == null && SecurityBean.isInRole(RolesConstants.GIS_VIEW_MAP)) {
             this.mapControl = new ControlsBundleForApplicationLocation();
             this.mapControl.setApplicationLocation(appBean.getLocation());
             this.mapControl.setApplicationId(appBean.getId());
@@ -3221,7 +3212,7 @@ public class ApplicationPanel extends ContentPanel {
         form.setLocationRelativeTo(this);
         form.setVisible(true);
     }
-
+    
     private void takeActionAgainstApplication(final String actionType) {
         String msgCode = ClientMessage.APPLICATION_ACTION_WARNING_SOFT;
         if (ApplicationActionTypeBean.WITHDRAW.equals(actionType)
@@ -3234,64 +3225,63 @@ public class ApplicationPanel extends ContentPanel {
         String localizedActionName = CacheManager.getBeanByCode(
                 CacheManager.getApplicationActionTypes(), actionType).getDisplayValue();
         if (MessageUtility.displayMessage(msgCode, new String[]{localizedActionName}) == MessageUtility.BUTTON_ONE) {
-
+            
             if (!checkSaveBeforeAction()) {
                 return;
             }
-
+            
             SolaTask<List<ValidationResultBean>, List<ValidationResultBean>> t =
                     new SolaTask<List<ValidationResultBean>, List<ValidationResultBean>>() {
-
-                        @Override
-                        public List<ValidationResultBean> doTask() {
-                            setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_APP_TAKE_ACTION));
-                            boolean displayValidationResultFormInSuccess = true;
-                            List<ValidationResultBean> result = null;
-                            if (ApplicationActionTypeBean.VALIDATE.equals(actionType)) {
-                                displayValidationResultFormInSuccess = false;
-                                validationResultListBean.setValidationResultList(appBean.validate());
-                            } else if (ApplicationActionTypeBean.WITHDRAW.equals(actionType)) {
-                                result = appBean.withdraw();
-                            } else if (ApplicationActionTypeBean.CANCEL.equals(actionType)) {
-                                result = appBean.reject();
-                            } else if (ApplicationActionTypeBean.ARCHIVE.equals(actionType)) {
-                                result = appBean.archive();
-                            } else if (ApplicationActionTypeBean.DISPATCH.equals(actionType)) {
-                                result = appBean.despatch();
-                            } else if (ApplicationActionTypeBean.LAPSE.equals(actionType)) {
-                                result = appBean.lapse();
-                            } else if (ApplicationActionTypeBean.REQUISITION.equals(actionType)) {
-                                result = appBean.requisition();
-                            } else if (ApplicationActionTypeBean.RESUBMIT.equals(actionType)) {
-                                result = appBean.resubmit();
-                            } else if (ApplicationActionTypeBean.APPROVE.equals(actionType)) {
-                                result = appBean.approve();
-                            }
-
-                            if (displayValidationResultFormInSuccess) {
-                                return result;
-                            }
-                            return null;
-                        }
-
-                        @Override
-                        public void taskDone() {
-                            List<ValidationResultBean> result = get();
-
-                            if (result != null) {
-                                String message = MessageUtility.getLocalizedMessage(
-                                        ClientMessage.APPLICATION_ACTION_SUCCESS,
-                                        new String[]{appBean.getNr()}).getMessage();
-                                openValidationResultForm(result, true, message);
-                            }
-                            saveAppState();
-                            refreshDashboard();
-                        }
-                    };
+                @Override
+                public List<ValidationResultBean> doTask() {
+                    setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_APP_TAKE_ACTION));
+                    boolean displayValidationResultFormInSuccess = true;
+                    List<ValidationResultBean> result = null;
+                    if (ApplicationActionTypeBean.VALIDATE.equals(actionType)) {
+                        displayValidationResultFormInSuccess = false;
+                        validationResultListBean.setValidationResultList(appBean.validate());
+                    } else if (ApplicationActionTypeBean.WITHDRAW.equals(actionType)) {
+                        result = appBean.withdraw();
+                    } else if (ApplicationActionTypeBean.CANCEL.equals(actionType)) {
+                        result = appBean.reject();
+                    } else if (ApplicationActionTypeBean.ARCHIVE.equals(actionType)) {
+                        result = appBean.archive();
+                    } else if (ApplicationActionTypeBean.DISPATCH.equals(actionType)) {
+                        result = appBean.despatch();
+                    } else if (ApplicationActionTypeBean.LAPSE.equals(actionType)) {
+                        result = appBean.lapse();
+                    } else if (ApplicationActionTypeBean.REQUISITION.equals(actionType)) {
+                        result = appBean.requisition();
+                    } else if (ApplicationActionTypeBean.RESUBMIT.equals(actionType)) {
+                        result = appBean.resubmit();
+                    } else if (ApplicationActionTypeBean.APPROVE.equals(actionType)) {
+                        result = appBean.approve();
+                    }
+                    
+                    if (displayValidationResultFormInSuccess) {
+                        return result;
+                    }
+                    return null;
+                }
+                
+                @Override
+                public void taskDone() {
+                    List<ValidationResultBean> result = get();
+                    
+                    if (result != null) {
+                        String message = MessageUtility.getLocalizedMessage(
+                                ClientMessage.APPLICATION_ACTION_SUCCESS,
+                                new String[]{appBean.getNr()}).getMessage();
+                        openValidationResultForm(result, true, message);
+                    }
+                    saveAppState();
+                    refreshDashboard();
+                }
+            };
             TaskManager.getInstance().runTask(t);
         }
     }
-
+    
     private void addService() {
         ServiceListForm serviceListForm = new ServiceListForm(appBean);
         serviceListForm.setLocationRelativeTo(this);
@@ -3323,12 +3313,13 @@ public class ApplicationPanel extends ContentPanel {
             }
         } else {
             MessageUtility.displayMessage(ClientMessage.APPLICATION_SELECT_SERVICE);
-
+            
         }
     }
 
     /**
-     * Moves selected application service down in the services list. Calls {@link ApplicationBean#moveServiceDown()}
+     * Moves selected application service down in the services list. Calls
+     * {@link ApplicationBean#moveServiceDown()}
      */
     private void moveServiceDown() {
         ApplicationServiceBean asb = appBean.getSelectedService();
@@ -3350,20 +3341,19 @@ public class ApplicationPanel extends ContentPanel {
      */
     private void startService() {
         final ApplicationServiceBean selectedService = appBean.getSelectedService();
-
+        
         if (selectedService != null) {
-
+            
             SolaTask t = new SolaTask<Void, Void>() {
-
                 List<ValidationResultBean> result;
-
+                
                 @Override
                 protected Void doTask() {
                     setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_SERVICE_STARTING));
                     result = selectedService.start();
                     return null;
                 }
-
+                
                 @Override
                 protected void taskDone() {
                     appBean.reload();
@@ -3381,35 +3371,34 @@ public class ApplicationPanel extends ContentPanel {
      */
     private void completeService() {
         final ApplicationServiceBean selectedService = appBean.getSelectedService();
-
+        
         if (selectedService != null) {
-
+            
             final String serviceName = selectedService.getRequestType().getDisplayValue();
-
+            
             if (MessageUtility.displayMessage(ClientMessage.APPLICATION_SERVICE_COMPLETE_WARNING,
                     new String[]{serviceName}) == MessageUtility.BUTTON_ONE) {
-
+                
                 if (!checkSaveBeforeAction()) {
                     return;
                 }
-
+                
                 SolaTask t = new SolaTask<Void, Void>() {
-
                     List<ValidationResultBean> result;
-
+                    
                     @Override
                     protected Void doTask() {
                         setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_SERVICE_COMPLETING));
                         result = selectedService.complete();
                         return null;
                     }
-
+                    
                     @Override
                     protected void taskDone() {
                         String message = MessageUtility.getLocalizedMessage(
                                 ClientMessage.APPLICATION_SERVICE_COMPLETE_SUCCESS,
                                 new String[]{serviceName}).getMessage();
-
+                        
                         appBean.reload();
                         customizeApplicationForm();
                         saveAppState();
@@ -3422,38 +3411,37 @@ public class ApplicationPanel extends ContentPanel {
             }
         }
     }
-
+    
     private void revertService() {
         final ApplicationServiceBean selectedService = appBean.getSelectedService();
-
+        
         if (selectedService != null) {
-
+            
             final String serviceName = selectedService.getRequestType().getDisplayValue();
-
+            
             if (MessageUtility.displayMessage(ClientMessage.APPLICATION_SERVICE_REVERT_WARNING,
                     new String[]{serviceName}) == MessageUtility.BUTTON_ONE) {
-
+                
                 if (!checkSaveBeforeAction()) {
                     return;
                 }
-
+                
                 SolaTask t = new SolaTask<Void, Void>() {
-
                     List<ValidationResultBean> result;
-
+                    
                     @Override
                     protected Void doTask() {
                         setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_SERVICE_REVERTING));
                         result = selectedService.revert();
                         return null;
                     }
-
+                    
                     @Override
                     protected void taskDone() {
                         String message = MessageUtility.getLocalizedMessage(
                                 ClientMessage.APPLICATION_SERVICE_REVERT_SUCCESS,
                                 new String[]{serviceName}).getMessage();
-
+                        
                         appBean.reload();
                         customizeApplicationForm();
                         saveAppState();
@@ -3466,35 +3454,34 @@ public class ApplicationPanel extends ContentPanel {
             }
         }
     }
-
+    
     private void cancelService() {
         final ApplicationServiceBean selectedService = appBean.getSelectedService();
-
+        
         if (selectedService != null) {
-
+            
             final String serviceName = selectedService.getRequestType().getDisplayValue();
             if (MessageUtility.displayMessage(ClientMessage.APPLICATION_SERVICE_CANCEL_WARNING,
                     new String[]{serviceName}) == MessageUtility.BUTTON_ONE) {
-
+                
                 if (!checkSaveBeforeAction()) {
                     return;
                 }
-
+                
                 SolaTask t = new SolaTask<Void, Void>() {
-
                     List<ValidationResultBean> result;
-
+                    
                     @Override
                     protected Void doTask() {
                         setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_SERVICE_CANCELING));
                         result = selectedService.cancel();
                         return null;
                     }
-
+                    
                     @Override
                     protected void taskDone() {
                         String message;
-
+                        
                         message = MessageUtility.getLocalizedMessage(
                                 ClientMessage.APPLICATION_SERVICE_CANCEL_SUCCESS,
                                 new String[]{serviceName}).getMessage();
@@ -3512,68 +3499,70 @@ public class ApplicationPanel extends ContentPanel {
     }
 
     /**
-     * Removes selected property object from the properties list. Calls {@link ApplicationBean#removeSelectedProperty()}
+     * Removes selected property object from the properties list. Calls
+     * {@link ApplicationBean#removeSelectedProperty()}
      */
     private void removeSelectedProperty() {
         appBean.removeSelectedProperty();
     }
 
     /**
-     * Verifies selected property object to check existence. Calls {@link ApplicationBean#verifyProperty()}
+     * Verifies selected property object to check existence. Calls
+     * {@link ApplicationBean#verifyProperty()}
      */
     private void verifySelectedProperty() {
         if (appBean.getSelectedProperty() == null) {
             MessageUtility.displayMessage(ClientMessage.APPLICATION_SELECT_PROPERTY_TOVERIFY);
             return;
         }
-
+        
         if (appBean.verifyProperty()) {
             MessageUtility.displayMessage(ClientMessage.APPLICATION_PROPERTY_VERIFIED);
         }
     }
-
+    
     private void approveApplication() {
         takeActionAgainstApplication(ApplicationActionTypeBean.APPROVE);
     }
-
+    
     private void rejectApplication() {
         takeActionAgainstApplication(ApplicationActionTypeBean.CANCEL);
     }
-
+    
     private void withdrawApplication() {
         takeActionAgainstApplication(ApplicationActionTypeBean.WITHDRAW);
     }
-
+    
     private void requisitionApplication() {
         takeActionAgainstApplication(ApplicationActionTypeBean.REQUISITION);
     }
-
+    
     private void archiveApplication() {
         takeActionAgainstApplication(ApplicationActionTypeBean.ARCHIVE);
     }
-
+    
     private void dispatchApplication() {
         takeActionAgainstApplication(ApplicationActionTypeBean.DISPATCH);
     }
-
+    
     private void lapseApplication() {
         takeActionAgainstApplication(ApplicationActionTypeBean.LAPSE);
     }
-
+    
     private void resubmitApplication() {
         takeActionAgainstApplication(ApplicationActionTypeBean.RESUBMIT);
     }
-
+    
     private void saveAppState() {
         MainForm.saveBeanState(appBean);
     }
 
     /**
-     * Calculates fee for the application. Calls {@link ApplicationBean#calculateFee()}
+     * Calculates fee for the application. Calls
+     * {@link ApplicationBean#calculateFee()}
      */
     private void calculateFee() {
         SolaTask t = new SolaTask<Void, Void>() {
-
             @Override
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_APP_CALCULATINGFEE));
@@ -3603,14 +3592,13 @@ public class ApplicationPanel extends ContentPanel {
     private void viewService() {
         launchService(appBean.getSelectedService(), true);
     }
-
+    
     private void printStatusReport() {
-        if (appBean.getRowVersion() > 0
-                && ApplicationServiceBean.saveInformationService(RequestTypeBean.CODE_SERVICE_ENQUIRY)) {
+        if (appBean.getRowVersion() > 0) {
             showReport(ReportManager.getApplicationStatusReport(appBean));
         }
     }
-
+    
     @Override
     protected boolean panelClosing() {
         if (btnSave.isEnabled() && MainForm.checkSaveBeforeClose(appBean)) {

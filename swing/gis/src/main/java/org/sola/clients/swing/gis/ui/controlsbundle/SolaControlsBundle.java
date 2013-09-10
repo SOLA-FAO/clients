@@ -111,7 +111,9 @@ public abstract class SolaControlsBundle extends ControlsBundle {
             //this is used for creating a jasper report map print
             this.solaPrint = new SolaJasperPrint(this.getMap());
 
-            this.getMap().addMapAction(this.solaPrint, this.getToolbar(), true);
+            if (SecurityBean.isInRole(RolesConstants.GIS_PRINT)) {
+                this.getMap().addMapAction(this.solaPrint, this.getToolbar(), true);
+            }
             if (SecurityBean.isInRole(RolesConstants.GIS_EXPORT_MAP)) {
                 this.getMap().addMapAction(new KMLExportAction(this.getMap()), this.getToolbar(), true);
             }
@@ -210,14 +212,15 @@ public abstract class SolaControlsBundle extends ControlsBundle {
     }
 
     /**
-     * It adds the layers in the map control. It is called internally 
-     * from Setup.
+     * It adds the layers in the map control. It is called internally from
+     * Setup.
+     *
      * @throws InitializeLayerException
-     * @throws SchemaException 
+     * @throws SchemaException
      */
     protected void addLayers() throws InitializeLayerException, SchemaException {
-        for (ConfigMapLayerTO configMapLayer :
-                this.getPojoDataAccess().getMapDefinition().getLayers()) {
+        for (ConfigMapLayerTO configMapLayer
+                : this.getPojoDataAccess().getMapDefinition().getLayers()) {
             this.addLayerConfig(configMapLayer);
         }
     }
