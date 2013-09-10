@@ -21,16 +21,16 @@ import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.controls.SolaCodeList;
 
 /**
- * Holds the list of {@link LeaseConditionBean} objects and used to bound the
+ * Holds the list of {@link ConditionTypeBean} objects and used to bound the
  * data in the combobox on the forms.
  */
-public class LeaseConditionListBean extends AbstractBindingListBean {
+public class ConditionTypeListBean extends AbstractBindingListBean {
     
-    public static final String SELECTED_LEASE_CONDITION_PROPERTY = "selectedLeaseCondition";
-    private SolaCodeList<LeaseConditionBean> leaseConditionList;
-    private LeaseConditionBean selectedLeaseCondition;
+    public static final String SELECTED_CONDITION_TYPE_PROPERTY = "selectedConditionType";
+    private SolaCodeList<ConditionTypeBean> leaseConditionList;
+    private ConditionTypeBean selectedConditionType;
     
-    public LeaseConditionListBean(){
+    public ConditionTypeListBean(){
         this(false);
     }
 
@@ -38,7 +38,7 @@ public class LeaseConditionListBean extends AbstractBindingListBean {
      * Creates object instance.
      * @param createDummy Indicates whether to add empty object on the list.
      */
-    public LeaseConditionListBean(boolean createDummy) {
+    public ConditionTypeListBean(boolean createDummy) {
         this(createDummy, (String) null);
     }
     
@@ -47,9 +47,9 @@ public class LeaseConditionListBean extends AbstractBindingListBean {
      * @param createDummy Indicates whether to add empty object on the list.
      * @param excludedCodes Codes, which should be skipped while filtering.
      */
-    public LeaseConditionListBean(boolean createDummy, String ... excludedCodes) {
+    public ConditionTypeListBean(boolean createDummy, String ... excludedCodes) {
         super();
-        leaseConditionList = new SolaCodeList<LeaseConditionBean>(excludedCodes);
+        leaseConditionList = new SolaCodeList<ConditionTypeBean>(excludedCodes);
         loadList(createDummy);
     }
     
@@ -58,11 +58,11 @@ public class LeaseConditionListBean extends AbstractBindingListBean {
      * @param createDummy Indicates whether to add empty object on the list.
      */
     public final void loadList(boolean createDummy) {
-        loadCodeList(LeaseConditionBean.class, leaseConditionList, 
-                CacheManager.getLeaseConditions(), createDummy);
+        loadCodeList(ConditionTypeBean.class, leaseConditionList, 
+                CacheManager.getConditionTypes(), createDummy);
     }
     
-    public ObservableList<LeaseConditionBean> getLeaseConditionList() {
+    public ObservableList<ConditionTypeBean> getLeaseConditionList() {
         return leaseConditionList.getFilteredList();
     }
 
@@ -70,11 +70,12 @@ public class LeaseConditionListBean extends AbstractBindingListBean {
         leaseConditionList.setExcludedCodes(codes);
     }
     
-    public LeaseConditionBean getSelectedLeaseCondition() {
-        return selectedLeaseCondition;
+    public ConditionTypeBean getSelectedConditionType() {
+        return selectedConditionType;
     }
 
-    public void setSelectedLeaseCondition(LeaseConditionBean selectedLeaseCondition) {
-        this.selectedLeaseCondition = selectedLeaseCondition;
+    public void setSelectedConditionType(ConditionTypeBean selectedConditionType) {
+        this.selectedConditionType = selectedConditionType;
+        propertySupport.firePropertyChange(SELECTED_CONDITION_TYPE_PROPERTY, null, this.selectedConditionType);
     }
 }

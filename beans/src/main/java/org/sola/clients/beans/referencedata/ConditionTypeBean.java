@@ -18,12 +18,12 @@ package org.sola.clients.beans.referencedata;
 import org.sola.clients.beans.AbstractCodeBean;
 
 /**
- * Represents reference data object of the <b>lease_condition</b> table.
- * Could be populated from the {@link LeaseConditionTO} object.<br /> For more
+ * Represents reference data object of the <b>condition_type</b> table.
+ * Could be populated from the {@link ConditionTypeTO} object.<br /> For more
  * information see data dictionary <b>Administrative</b> schema.
  */
-public class LeaseConditionBean extends AbstractCodeBean {
-    public LeaseConditionBean(){
+public class ConditionTypeBean extends AbstractCodeBean {
+    public ConditionTypeBean(){
         super();
     }
 }

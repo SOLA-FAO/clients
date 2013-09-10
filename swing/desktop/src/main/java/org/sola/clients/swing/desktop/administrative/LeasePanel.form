@@ -67,7 +67,7 @@
         </MenuItem>
       </SubComponents>
     </Container>
-    <Component class="org.sola.clients.beans.referencedata.LeaseConditionListBean" name="leaseConditions">
+    <Component class="org.sola.clients.beans.referencedata.ConditionTypeListBean" name="conditionTypes">
     </Component>
     <Container class="javax.swing.JPopupMenu" name="leaseConditionsPopUp">
 
@@ -138,7 +138,7 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Component id="headerPanel" max="32767" attributes="0"/>
-          <Component id="jToolBar1" alignment="0" pref="737" max="32767" attributes="0"/>
+          <Component id="jToolBar1" alignment="0" max="32767" attributes="0"/>
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jTabbedPane1" pref="0" max="32767" attributes="0"/>
@@ -295,10 +295,10 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="LafManager.getInstance().getLabFontBold()" type="code"/>
             </Property>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="SimpleOwhershipPanel.lblStatus.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-            </Property>
           </Properties>
+          <BindingProperties>
+            <BindingProperty name="text" source="rrrBean" sourcePath="${status.displayValue}" target="lblStatus" targetPath="text" updateStrategy="0" immediately="false"/>
+          </BindingProperties>
         </Component>
       </SubComponents>
     </Container>
@@ -323,7 +323,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jPanel9" pref="692" max="32767" attributes="0"/>
+                          <Component id="jPanel9" max="32767" attributes="0"/>
                           <Component id="jPanel4" max="32767" attributes="0"/>
                           <Component id="jPanel1" alignment="0" pref="0" max="32767" attributes="0"/>
                       </Group>
@@ -360,7 +360,7 @@
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtRegDatetime" pref="102" max="32767" attributes="0"/>
+                          <Component id="txtRegDatetime" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
@@ -403,7 +403,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
                               <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="0" pref="4" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                           <Component id="txtRegistrationNumber" max="32767" attributes="0"/>
                       </Group>
@@ -446,7 +446,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="0" pref="14" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="10" max="32767" attributes="0"/>
                           </Group>
                           <Component id="txtExpirationDate" alignment="0" max="32767" attributes="0"/>
                       </Group>
@@ -494,7 +494,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="0" pref="43" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="39" max="32767" attributes="0"/>
                           </Group>
                           <Component id="txtRent" alignment="0" max="32767" attributes="0"/>
                       </Group>
@@ -539,7 +539,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
                               <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="0" pref="8" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="4" max="32767" attributes="0"/>
                           </Group>
                           <Component id="txtDueDate" max="32767" attributes="0"/>
                       </Group>
@@ -587,7 +587,7 @@
                                   <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
                                   <Component id="cbxIsPrimary" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="0" pref="26" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="22" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -684,7 +684,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="groupPanel1" alignment="0" pref="0" max="32767" attributes="0"/>
                           <Component id="jToolBar2" alignment="0" max="32767" attributes="0"/>
-                          <Component id="jScrollPane1" alignment="0" pref="692" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" alignment="0" pref="663" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
@@ -805,7 +805,7 @@
                               <TableColumnModel selectionModel="0">
                                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                                   <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                                    <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="SimpleOwhershipPanel.tableOwners.columnModel.title0_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                                    <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="LeasePanel.tableOwners.columnModel.title0" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                                   </Title>
                                   <Editor/>
                                   <Renderer/>
@@ -826,9 +826,6 @@
                                 <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
                               </Subbinding>
                             </BindingProperty>
-                            <BindingProperty name="selectedElement" source="rrrBean" sourcePath="${selectedRightHolder}" target="tableOwners" targetPath="selectedElement" updateStrategy="0" immediately="false">
-                              <BindingParameter name="IGNORE_ADJUSTING" value="N"/>
-                            </BindingProperty>
                           </BindingProperties>
                         </Component>
                       </SubComponents>
@@ -840,8 +837,8 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="groupPanel2" pref="692" max="32767" attributes="0"/>
-                          <Component id="documentsManagementPanel" alignment="0" pref="692" max="32767" attributes="0"/>
+                          <Component id="groupPanel2" pref="667" max="32767" attributes="0"/>
+                          <Component id="documentsManagementPanel" alignment="0" pref="663" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
@@ -893,8 +890,8 @@
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jScrollPane2" pref="692" max="32767" attributes="0"/>
-                          <Component id="jToolBar3" pref="692" max="32767" attributes="0"/>
+                          <Component id="jScrollPane2" pref="626" max="32767" attributes="0"/>
+                          <Component id="jToolBar3" pref="667" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -924,18 +921,25 @@
                   <Properties>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                       <TableColumnModel selectionModel="0">
+                        <Column maxWidth="200" minWidth="-1" prefWidth="100" resizable="true">
+                          <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                            <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="LeasePanel.tableLeaseConditions.columnModel.title2_2" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                          </Title>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
                         <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                           <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                            <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="LeasePanel.tableLeaseConditions.columnModel.title0_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                            <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="LeasePanel.tableLeaseConditions.columnModel.title0_2" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                           </Title>
                           <Editor/>
                           <Renderer editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                            <Connection code="new org.sola.clients.swing.ui.renderers.TableCellTextAreaRenderer()" type="code"/>
+                            <Connection code="new TableCellTextAreaRenderer()" type="code"/>
                           </Renderer>
                         </Column>
-                        <Column maxWidth="55" minWidth="-1" prefWidth="55" resizable="true">
+                        <Column maxWidth="100" minWidth="-1" prefWidth="100" resizable="true">
                           <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                            <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="LeasePanel.tableLeaseConditions.columnModel.title1_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                            <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="LeasePanel.tableLeaseConditions.columnModel.title1_2" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                           </Title>
                           <Editor/>
                           <Renderer editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -952,7 +956,11 @@
                     </Property>
                   </Properties>
                   <BindingProperties>
-                    <BindingProperty name="elements" source="rrrBean" sourcePath="${leaseConditionFilteredList}" target="tableLeaseConditions" targetPath="elements" updateStrategy="0" immediately="true">
+                    <BindingProperty name="elements" source="rrrBean" sourcePath="${conditionsFilteredList}" target="tableLeaseConditions" targetPath="elements" updateStrategy="0" immediately="true">
+                      <Subbinding sourcePath="${conditionType.displayValue}">
+                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
+                        <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
+                      </Subbinding>
                       <Subbinding sourcePath="${conditionText}">
                         <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
                         <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
@@ -962,7 +970,7 @@
                         <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
                       </Subbinding>
                     </BindingProperty>
-                    <BindingProperty name="selectedElement" source="rrrBean" sourcePath="${selectedLeaseCondition}" target="tableLeaseConditions" targetPath="selectedElement" updateStrategy="0" immediately="false">
+                    <BindingProperty name="selectedElement" source="rrrBean" sourcePath="${selectedCondition}" target="tableLeaseConditions" targetPath="selectedElement" updateStrategy="0" immediately="false">
                       <BindingParameter name="IGNORE_ADJUSTING" value="N"/>
                     </BindingProperty>
                   </BindingProperties>
@@ -1039,8 +1047,8 @@
                 </Component>
                 <Component class="javax.swing.JComboBox" name="cbxStandardConditions">
                   <BindingProperties>
-                    <BindingProperty name="elements" source="leaseConditions" sourcePath="${leaseConditionList}" target="cbxStandardConditions" targetPath="elements" updateStrategy="0" immediately="false"/>
-                    <BindingProperty name="selectedItem" source="leaseConditions" sourcePath="${selectedLeaseCondition}" target="cbxStandardConditions" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+                    <BindingProperty name="elements" source="conditionTypes" sourcePath="${leaseConditionList}" target="cbxStandardConditions" targetPath="elements" updateStrategy="0" immediately="false"/>
+                    <BindingProperty name="selectedItem" source="conditionTypes" sourcePath="${selectedConditionType}" target="cbxStandardConditions" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                   </BindingProperties>
                 </Component>
                 <Component class="javax.swing.Box$Filler" name="filler2">

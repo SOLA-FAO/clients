@@ -15,39 +15,38 @@
  */
 package org.sola.clients.swing.desktop.administrative;
 
-import org.sola.clients.beans.administrative.LeaseConditionForRrrBean;
+import org.sola.clients.beans.administrative.ConditionForRrrBean;
 import org.sola.clients.beans.administrative.validation.LeaseCustomConditionValidationGroup;
 
 /**
  * Allows to create and edit custom lease condition.
  */
-public class CustomLeaseConditionDialog extends javax.swing.JDialog {
+public class CustomConditionDialog extends javax.swing.JDialog {
     
-    public static final String LEASE_CONDITION_SAVED = "leaseConditionSaved";
+    public static final String CONDITION_SAVED = "conditionSaved";
     
-    private LeaseConditionForRrrBean leaseCondition;
+    private ConditionForRrrBean condition;
     
     /**
      * Default constructor
      */
-    public CustomLeaseConditionDialog(LeaseConditionForRrrBean leaseCondition, 
-            java.awt.Frame parent, boolean modal) {
+    public CustomConditionDialog(ConditionForRrrBean condition, java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        if(leaseCondition==null){
-            this.leaseCondition = new LeaseConditionForRrrBean();
+        if(condition==null){
+            this.condition = new ConditionForRrrBean();
         } else {
-            this.leaseCondition = leaseCondition;
+            this.condition = condition;
         }
         initComponents();
     }
     
-    public LeaseConditionForRrrBean getLeaseCondition() {
-        return leaseCondition;
+    public ConditionForRrrBean getCondition() {
+        return condition;
     }
     
     private void save(){
-        if(leaseCondition.validate(true, LeaseCustomConditionValidationGroup.class).size()<1){
-            firePropertyChange(LEASE_CONDITION_SAVED, null, leaseCondition);
+        if(condition.validate(true, LeaseCustomConditionValidationGroup.class).size()<1){
+            firePropertyChange(CONDITION_SAVED, null, condition);
             this.setVisible(false);
         }
     }
@@ -63,13 +62,13 @@ public class CustomLeaseConditionDialog extends javax.swing.JDialog {
         jTextArea1 = new javax.swing.JTextArea();
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
-        setTitle(bundle.getString("CustomLeaseConditionDialog.title")); // NOI18N
+        setTitle(bundle.getString("CustomConditionDialog.title")); // NOI18N
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
         btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/save.png"))); // NOI18N
-        btnSave.setText(bundle.getString("CustomLeaseConditionDialog.btnSave.text")); // NOI18N
+        btnSave.setText(bundle.getString("CustomConditionDialog.btnSave.text")); // NOI18N
         btnSave.setFocusable(false);
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -81,7 +80,7 @@ public class CustomLeaseConditionDialog extends javax.swing.JDialog {
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${leaseCondition.customConditionText}"), jTextArea1, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${condition.customConditionText}"), jTextArea1, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         jScrollPane2.setViewportView(jTextArea1);
