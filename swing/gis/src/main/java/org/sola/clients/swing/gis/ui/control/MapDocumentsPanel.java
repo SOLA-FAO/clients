@@ -127,6 +127,7 @@ public class MapDocumentsPanel extends javax.swing.JPanel {
      */
     private void customizeButtons(SourceBean selectedSource) {
         cmdAddInMap.setEnabled(false);
+        pnlImportPointAvailable.setEnabled(false);
         if (selectedSource == null || selectedSource.getArchiveDocument() == null) {
             return; 
         }
@@ -143,6 +144,7 @@ public class MapDocumentsPanel extends javax.swing.JPanel {
         this.selectedDocumentId = documentBean.getId();
         this.selectedDocumentFileName = documentBean.getFileName();
         cmdAddInMap.setEnabled(true);
+        pnlImportPointAvailable.setEnabled(true);
     }
 
     /**
@@ -174,6 +176,10 @@ public class MapDocumentsPanel extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         documentsPanel = createDocumentsPanel();
         cmdAddInMap = new javax.swing.JButton();
+        pnlImportPointAvailable = new javax.swing.JPanel();
+        lblFormatFileExplaination = new javax.swing.JLabel();
+        txtLineIndexWherePointsStart = new javax.swing.JTextField();
+        lblLineNumberOfFirstPoint = new javax.swing.JLabel();
 
         jScrollPane1.setViewportView(documentsPanel);
 
@@ -186,24 +192,59 @@ public class MapDocumentsPanel extends javax.swing.JPanel {
             }
         });
 
+        lblFormatFileExplaination.setText("<html>The file is expected to be of the format:<br>\nFirst column: Point id <br>\nSecond column: X coordinate <br>\nThird column: Y coordinate.\n</html>");
+
+        txtLineIndexWherePointsStart.setText("1");
+
+        lblLineNumberOfFirstPoint.setText("The line number of the first point:");
+
+        javax.swing.GroupLayout pnlImportPointAvailableLayout = new javax.swing.GroupLayout(pnlImportPointAvailable);
+        pnlImportPointAvailable.setLayout(pnlImportPointAvailableLayout);
+        pnlImportPointAvailableLayout.setHorizontalGroup(
+            pnlImportPointAvailableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlImportPointAvailableLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlImportPointAvailableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblFormatFileExplaination)
+                    .addGroup(pnlImportPointAvailableLayout.createSequentialGroup()
+                        .addGap(0, 23, Short.MAX_VALUE)
+                        .addComponent(lblLineNumberOfFirstPoint, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtLineIndexWherePointsStart, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        pnlImportPointAvailableLayout.setVerticalGroup(
+            pnlImportPointAvailableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlImportPointAvailableLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblFormatFileExplaination, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(pnlImportPointAvailableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtLineIndexWherePointsStart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblLineNumberOfFirstPoint)))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 159, Short.MAX_VALUE)
-                        .addComponent(cmdAddInMap)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(cmdAddInMap))
+                    .addComponent(pnlImportPointAvailable, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(pnlImportPointAvailable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(cmdAddInMap)
                 .addContainerGap())
@@ -220,6 +261,8 @@ public class MapDocumentsPanel extends javax.swing.JPanel {
 
         final String documentId = selectedDocumentId;
         final String documentFileName = selectedDocumentFileName;
+        final int lineIndexToStartFrom =
+                Integer.parseInt(this.txtLineIndexWherePointsStart.getText());
         SolaTask t = new SolaTask<Void, Void>() {
 
             @Override
@@ -231,6 +274,8 @@ public class MapDocumentsPanel extends javax.swing.JPanel {
                 }
                 String fileName = FileUtility.sanitizeFileName(documentFileName, true);
                 String absoluteFilePath = FileUtility.getCachePath() + File.separator + fileName;
+                ExternalFileImporterSurveyPointBeans.getInstance().setLineIndexToStartFrom(
+                        lineIndexToStartFrom);
                 List pointBeans = ExternalFileImporterSurveyPointBeans.getInstance().getBeans(
                         absoluteFilePath);
                 pointLayer.getBeanList().addAll(pointBeans);
@@ -244,5 +289,9 @@ public class MapDocumentsPanel extends javax.swing.JPanel {
     private javax.swing.JButton cmdAddInMap;
     private org.sola.clients.swing.ui.source.DocumentsManagementPanel documentsPanel;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblFormatFileExplaination;
+    private javax.swing.JLabel lblLineNumberOfFirstPoint;
+    private javax.swing.JPanel pnlImportPointAvailable;
+    private javax.swing.JTextField txtLineIndexWherePointsStart;
     // End of variables declaration//GEN-END:variables
 }

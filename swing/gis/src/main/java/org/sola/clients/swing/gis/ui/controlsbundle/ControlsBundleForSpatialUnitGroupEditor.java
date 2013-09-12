@@ -35,8 +35,12 @@ package org.sola.clients.swing.gis.ui.controlsbundle;
 
 import javax.swing.JLabel;
 import org.geotools.feature.SchemaException;
+import org.geotools.map.extended.layer.ExtendedImageLayer;
 import org.geotools.swing.extended.exception.InitializeLayerException;
+import org.geotools.swing.mapaction.extended.RemoveDirectImage;
+import org.geotools.swing.tool.extended.AddDirectImageTool;
 import org.sola.clients.beans.referencedata.HierarchyLevelBean;
+import org.sola.clients.swing.gis.Messaging;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.layer.SpatialUnitGroupLayer;
 import org.sola.clients.swing.gis.mapaction.SaveSpatialUnitGroup;
@@ -53,6 +57,8 @@ import org.sola.clients.swing.gis.ui.control.SpatialUnitGroupOptionControl;
 public final class ControlsBundleForSpatialUnitGroupEditor extends SolaControlsBundle {
 
     private SpatialUnitGroupLayer layer = null;
+    private ExtendedImageLayer imageLayer = null;
+    private static final String IMAGE_LAYER_NAME = "temporary_image";
     private SaveSpatialUnitGroup saveAction;
     private static java.util.ResourceBundle resource =
             java.util.ResourceBundle.getBundle("org/sola/clients/swing/gis/ui/controlsbundle/Bundle");
@@ -68,6 +74,10 @@ public final class ControlsBundleForSpatialUnitGroupEditor extends SolaControlsB
     @Override
     public void Setup(PojoDataAccess pojoDataAccess) {
         super.Setup(pojoDataAccess);
+
+        this.getMap().addTool(new AddDirectImageTool(this.imageLayer), this.getToolbar(), true);
+        this.getMap().addMapAction(new RemoveDirectImage(this.getMap()), this.getToolbar(), true);
+
         JLabel label = new JLabel();
         label.setText(String.format(" %s ", resource.getString(
                 "ControlsBundleForSpatialUnitGroupEditor.selectUnitType.text")));
@@ -90,7 +100,7 @@ public final class ControlsBundleForSpatialUnitGroupEditor extends SolaControlsB
                 this.getToolbar(),
                 true);
         //Sets the first item in the list as selected
-        if (optionControl.getItemCount()>0){
+        if (optionControl.getItemCount() > 0) {
             optionControl.setSelectedIndex(0);
         }
     }
@@ -111,9 +121,13 @@ public final class ControlsBundleForSpatialUnitGroupEditor extends SolaControlsB
     @Override
     protected void addLayers() throws InitializeLayerException, SchemaException {
         super.addLayers();
+        this.imageLayer = new ExtendedImageLayer(IMAGE_LAYER_NAME,
+                ((Messaging) Messaging.getInstance()).getLayerTitle(IMAGE_LAYER_NAME));
+        this.getMap().addLayer(this.imageLayer);
         layer = new SpatialUnitGroupLayer();
         this.getMap().addLayer(layer);
         this.saveAction.setTargetLayer(layer);
+
     }
 
     @Override
