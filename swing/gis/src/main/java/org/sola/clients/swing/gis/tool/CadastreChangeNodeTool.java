@@ -29,6 +29,7 @@ package org.sola.clients.swing.gis.tool;
 
 import org.geotools.geometry.DirectPosition2D;
 import org.geotools.geometry.jts.Geometries;
+import org.geotools.swing.extended.Map;
 import org.opengis.feature.simple.SimpleFeature;
 import org.sola.clients.swing.gis.beans.SurveyPointBean;
 import org.sola.clients.swing.gis.layer.CadastreChangeNewSurveyPointLayer;
@@ -57,6 +58,12 @@ public class CadastreChangeNodeTool extends CadastreChangeEditAbstractTool {
         this.setToolTip(toolTip);
         this.layer = targetLayer;
     }
+
+    @Override
+    public void setMapControl(Map mapControl) {
+        super.setMapControl(mapControl); 
+    }
+    
     
     /**
      * If the survey point is snapped to an existing node, it will be marked as linked.

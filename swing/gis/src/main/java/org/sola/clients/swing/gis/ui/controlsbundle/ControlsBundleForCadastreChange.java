@@ -1,26 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO). All rights
- * reserved.
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification, are permitted
- * provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- * 1. Redistributions of source code must retain the above copyright notice,this list of conditions
- * and the following disclaimer. 2. Redistributions in binary form must reproduce the above
- * copyright notice,this list of conditions and the following disclaimer in the documentation and/or
- * other materials provided with the distribution. 3. Neither the name of FAO nor the names of its
- * contributors may be used to endorse or promote products derived from this software without
- * specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
- * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- * WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
- * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 /*
@@ -32,6 +36,8 @@ package org.sola.clients.swing.gis.ui.controlsbundle;
 import java.util.List;
 import org.geotools.feature.SchemaException;
 import org.geotools.geometry.jts.ReferencedEnvelope;
+import org.geotools.map.extended.layer.ExtendedFeatureLayer;
+import org.geotools.map.extended.layer.ExtendedLayer;
 import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.swing.gis.beans.CadastreObjectTargetBean;
@@ -40,6 +46,7 @@ import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.layer.CadastreChangeNewCadastreObjectLayer;
 import org.sola.clients.swing.gis.layer.CadastreChangeNewSurveyPointLayer;
 import org.sola.clients.swing.gis.layer.CadastreChangeTargetCadastreObjectLayer;
+import org.sola.clients.swing.gis.layer.PojoLayer;
 import org.sola.clients.swing.gis.mapaction.CadastreChangeNewCadastreObjectListFormShow;
 import org.sola.clients.swing.gis.mapaction.CadastreChangePointSurveyListFormShow;
 import org.sola.clients.swing.gis.tool.CadastreBoundarySelectTool;
@@ -49,13 +56,14 @@ import org.sola.clients.swing.gis.tool.CadastreChangeSelectCadastreObjectTool;
 import org.sola.webservices.transferobjects.cadastre.CadastreObjectTO;
 
 /**
- * A control bundle that is used for cadastre change process. The necessary tools and layers are
- * added in the bundle.
+ * A control bundle that is used for cadastre change process. The necessary
+ * tools and layers are added in the bundle.
  *
  * @author Elton Manoku
  */
 public final class ControlsBundleForCadastreChange extends ControlsBundleForTransaction {
 
+    private static final String PARCEL_LAYER_NAME = "parcels";
     private TransactionCadastreChangeBean transactionBean;
     private CadastreChangeTargetCadastreObjectLayer targetParcelsLayer = null;
     private CadastreChangeNewCadastreObjectLayer newCadastreObjectLayer = null;
@@ -66,16 +74,18 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
     private String lastPartTemplate = "SP %s";
 
     /**
-     * Constructor. It sets up the bundle by adding layers and tools that are relevant. Finally, it
-     * zooms in the interested zone. The interested zone is defined in the following order: <br/> If
-     * bean has survey points it is zoomed there, otherwise if baUnitId is present it is zoomed
-     * there else it is zoomed in the application location.
+     * Constructor. It sets up the bundle by adding layers and tools that are
+     * relevant. Finally, it zooms in the interested zone. The interested zone
+     * is defined in the following order: <br/> If bean has survey points it is
+     * zoomed there, otherwise if baUnitId is present it is zoomed there else it
+     * is zoomed in the application location.
      *
-     * @param applicationBean The application where the transaction is started identifiers
-     * @param transactionStarterId The id of the starter of the application. This will be the
-     * service id.
-     * @param baUnitId Id of the property that is defined in the application as a target for this
-     * cadastre change.
+     * @param applicationBean The application where the transaction is started
+     * identifiers
+     * @param transactionStarterId The id of the starter of the application.
+     * This will be the service id.
+     * @param baUnitId Id of the property that is defined in the application as
+     * a target for this cadastre change.
      */
     public ControlsBundleForCadastreChange(
             ApplicationBean applicationBean,
@@ -95,16 +105,18 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
     }
 
     /**
-     * Constructor. It sets up the bundle by adding layers and tools that are relevant. Finally, it
-     * zooms in the interested zone. The interested zone is defined in the following order: <br/> If
-     * bean has survey points it is zoomed there, otherwise if baUnitId is present it is zoomed
-     * there else it is zoomed in the application location.
+     * Constructor. It sets up the bundle by adding layers and tools that are
+     * relevant. Finally, it zooms in the interested zone. The interested zone
+     * is defined in the following order: <br/> If bean has survey points it is
+     * zoomed there, otherwise if baUnitId is present it is zoomed there else it
+     * is zoomed in the application location.
      *
-     * @param applicationBean The application where the transaction is started identifiers
-     * @param transactionStarterId The id of the starter of the application. This will be the
-     * service id.
-     * @param baUnitId Id of the property that is defined in the application as a target for this
-     * cadastre change.
+     * @param applicationBean The application where the transaction is started
+     * identifiers
+     * @param transactionStarterId The id of the starter of the application.
+     * This will be the service id.
+     * @param baUnitId Id of the property that is defined in the application as
+     * a target for this cadastre change.
      */
     public ControlsBundleForCadastreChange(
             TransactionCadastreChangeBean transactionBean,
@@ -127,7 +139,8 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
     }
 
     /**
-     * It zooms to the interesting area which is the area where the cadastre changes is happening
+     * It zooms to the interesting area which is the area where the cadastre
+     * changes is happening
      *
      * @param interestingArea
      * @param applicationLocation
@@ -151,7 +164,7 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
         transactionBean.setSurveyPointList(this.newPointsLayer.getBeanListForTransaction());
         transactionBean.setCadastreObjectTargetList(
                 this.targetParcelsLayer.getBeanListForTransaction());
-        if (this.getDocumentsPanel() != null){
+        if (this.getDocumentsPanel() != null) {
             transactionBean.setSourceIdList(this.getDocumentsPanel().getSourceIds());
         }
         return transactionBean;
@@ -159,17 +172,17 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
 
     @Override
     public void refreshTransactionFromServer() {
-        if (this.getTransactionStarterId() != null){
+        if (this.getTransactionStarterId() != null) {
             this.transactionBean = PojoDataAccess.getInstance().getTransactionCadastreChange(
                     this.getTransactionStarterId());
-        }else if (this.transactionBean != null){
+        } else if (this.transactionBean != null) {
             this.transactionBean = PojoDataAccess.getInstance().getTransactionCadastreChangeById(
                     this.transactionBean.getId());
-        }else{
+        } else {
             this.transactionBean = new TransactionCadastreChangeBean();
         }
     }
-    
+
     @Override
     public final void setTransaction() {
         //Reset the lists of beans in the layers
@@ -181,12 +194,11 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
         this.newCadastreObjectLayer.setBeanList(
                 this.transactionBean.getCadastreObjectList());
         this.newPointsLayer.setBeanList(this.transactionBean.getSurveyPointList());
-        if (this.getDocumentsPanel() != null){
+        if (this.getDocumentsPanel() != null) {
             this.getDocumentsPanel().setSourceIds(this.transactionBean.getSourceIdList());
         }
     }
 
-    
     @Override
     protected void addLayers() throws InitializeLayerException, SchemaException {
         super.addLayers();
@@ -223,6 +235,13 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
 
         CadastreChangeNodeTool nodelinkingTool = new CadastreChangeNodeTool(newPointsLayer);
         nodelinkingTool.getTargetSnappingLayers().add(this.targetParcelsLayer);
+        if (this.getMap().getSolaLayers().containsKey(PARCEL_LAYER_NAME)) {
+            ExtendedLayer snappingTargetLayer = 
+                    this.getMap().getSolaLayers().get(PARCEL_LAYER_NAME);
+            if (snappingTargetLayer.getClass() == PojoLayer.class) {
+                nodelinkingTool.getTargetSnappingLayers().add((ExtendedFeatureLayer) snappingTargetLayer);
+            }
+        }
         this.getMap().addTool(nodelinkingTool, this.getToolbar(), true);
 
         this.newCadastreObjectTool =
@@ -284,8 +303,8 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
             this.targetParcelsLayer.getBeanList().add(bean);
         }
     }
-    
-    private String getLastPart(String lastPartEntry){
+
+    private String getLastPart(String lastPartEntry) {
         return String.format(lastPartTemplate, lastPartEntry);
     }
 }
