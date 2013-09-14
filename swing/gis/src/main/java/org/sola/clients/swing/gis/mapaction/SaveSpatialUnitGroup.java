@@ -39,6 +39,7 @@ import org.geotools.swing.mapaction.extended.ExtendedAction;
 import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.swing.common.DefaultExceptionHandler;
+import org.sola.clients.swing.gis.Messaging;
 import org.sola.clients.swing.gis.beans.SpatialUnitGroupBean;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.layer.SpatialUnitGroupLayer;
@@ -113,6 +114,9 @@ public class SaveSpatialUnitGroup extends ExtendedAction {
                 toList, SpatialUnitGroupTO.class);
 
         PojoDataAccess.getInstance().getCadastreService().saveSpatialUnitGroups(toList);
+        
+        Messaging.getInstance().show(GisMessage.SPATIAL_UNIT_GROUP_SAVED_SUCCESS);
+        
         getTargetLayer().setBeanList(new ArrayList<SpatialUnitGroupBean>());
     }
 }
