@@ -34,6 +34,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Action;
+import org.geotools.map.extended.layer.ExtendedLayer;
 import org.geotools.swing.extended.Map;
 import org.geotools.swing.mapaction.extended.ExtendedAction;
 import org.sola.clients.beans.AbstractBindingBean;
@@ -42,6 +43,7 @@ import org.sola.clients.swing.common.DefaultExceptionHandler;
 import org.sola.clients.swing.gis.Messaging;
 import org.sola.clients.swing.gis.beans.SpatialUnitGroupBean;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
+import org.sola.clients.swing.gis.layer.PojoBaseLayer;
 import org.sola.clients.swing.gis.layer.SpatialUnitGroupLayer;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.GisMessage;
@@ -49,15 +51,17 @@ import org.sola.common.messaging.MessageUtility;
 import org.sola.webservices.transferobjects.cadastre.SpatialUnitGroupTO;
 
 /**
- * Map action that commits the Cadastre changes during GIS related transactions.
+ * Map action that commits the spatial unit group changes.
  *
  * @author Elton Manoku
  */
 public class SaveSpatialUnitGroup extends ExtendedAction {
 
     public final static String MAPACTION_NAME = "save-spatial-unit-group";
+    private final static String SPATIAL_UNIT_GROUP_LAYER_PREFIX = "sug_";
     private final static String ICON_RESOURCE = String.format("resources/%s.png", MAPACTION_NAME);
     private SpatialUnitGroupLayer targetLayer;
+    private List<PojoBaseLayer> spatialUnitGroupLayers = null;
 
     /**
      * Constructor of the map action that will initialize the saving process of the transaction.
@@ -117,6 +121,18 @@ public class SaveSpatialUnitGroup extends ExtendedAction {
         
         Messaging.getInstance().show(GisMessage.SPATIAL_UNIT_GROUP_SAVED_SUCCESS);
         
+        if (spatialUnitGroupLayers == null){
+            spatialUnitGroupLayers = new ArrayList<PojoBaseLayer>();
+            for(String layerName:this.getMapControl().getSolaLayers().keySet()){
+                if (layerName.startsWith(SPATIAL_UNIT_GROUP_LAYER_PREFIX)){
+                    spatialUnitGroupLayers.add( (PojoBaseLayer)
+                            this.getMapControl().getSolaLayers().get(layerName));
+                }
+            }
+        }
+        for(PojoBaseLayer layer: spatialUnitGroupLayers){
+            layer.setForceRefresh(true);
+        }
         getTargetLayer().setBeanList(new ArrayList<SpatialUnitGroupBean>());
     }
 }
