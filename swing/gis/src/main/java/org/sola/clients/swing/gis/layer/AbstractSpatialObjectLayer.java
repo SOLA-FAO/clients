@@ -221,6 +221,13 @@ public abstract class AbstractSpatialObjectLayer extends ExtendedLayerEditor {
                 continue;
             }
             try {
+                if (bean.getFeatureGeom() != null){
+                    if (bean.getFeatureGeom().getSRID() == 0){
+                        Geometry newGeom = (Geometry)bean.getFeatureGeom().clone();
+                        newGeom.setSRID(this.getSrid());
+                        bean.setFeatureGeom(newGeom);
+                    }
+                }
                 this.addFeatureFromBean(bean);
                 featureIsAdded = true;
             } catch (ParseException ex) {

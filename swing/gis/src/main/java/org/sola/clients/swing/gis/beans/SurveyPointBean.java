@@ -51,6 +51,7 @@ public class SurveyPointBean extends SpatialBean{
     private Double x;
     private Double y;
     private Double shiftDistance;
+    private Integer srid = null;
     
     private Point originalGeometryForFeature;
 
@@ -110,6 +111,14 @@ public class SurveyPointBean extends SpatialBean{
         this.makeGeom();
     }
 
+    public int getSrid() {
+        return srid;
+    }
+
+    public void setSrid(Integer srid) {
+        this.srid = srid;
+    }
+    
     /*
      * Gets if the point is marked as boundary
      */
@@ -202,7 +211,8 @@ public class SurveyPointBean extends SpatialBean{
     /**
      * Sets the geometry that is used from the corresponding feature. This updates also the 
      * geometry of the point itself.
-     * If the original geometry is not present it means the bean is new and created in the map
+     * If the original geometry is not present or its srid is 0 (not set)
+     * it means the bean is new and created in the map
      * so the original geometry gets the same value. <br/>
      * It also calculates the shift distance between the original and current position of the point.
      * @param geometryValue 
@@ -211,7 +221,7 @@ public class SurveyPointBean extends SpatialBean{
     public void setFeatureGeom(Geometry geometryValue){
         super.setFeatureGeom(geometryValue);
         this.setGeom(GeometryUtility.getWkbFromGeometry(geometryValue));
-        if (originalGeom == null){
+        if (originalGeom == null || this.originalGeometryForFeature.getSRID() == 0){
             this.originalGeometryForFeature = (Point) geometryValue.clone();
             setOriginalGeom(getGeom());
         }
@@ -301,6 +311,9 @@ public class SurveyPointBean extends SpatialBean{
         if (this.x != null && this.y != null && getGeom() == null){
             Geometry pointGeom = GeometryUtility.getGeometryFactory().createPoint(
                     new Coordinate(this.x, this.y));
+            if (srid != null){
+                pointGeom.setSRID(srid);
+            }
             this.setFeatureGeom(pointGeom);
         } 
     }
@@ -315,6 +328,7 @@ public class SurveyPointBean extends SpatialBean{
         if (x == null){
             x = ((Point)getFeatureGeom()).getX();
             y = ((Point)getFeatureGeom()).getY();
+            srid = getFeatureGeom().getSRID();
         }
     }
 }

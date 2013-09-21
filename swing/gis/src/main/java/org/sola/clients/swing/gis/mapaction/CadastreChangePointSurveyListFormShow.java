@@ -29,6 +29,7 @@ package org.sola.clients.swing.gis.mapaction;
 
 import java.awt.Component;
 import org.geotools.swing.extended.Map;
+import org.sola.clients.swing.gis.ui.control.SurveyPointListPanel;
 import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.MessageUtility;
 

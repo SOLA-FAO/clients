@@ -38,6 +38,7 @@ import java.util.List;
 import org.geotools.feature.extended.VertexInformation;
 import org.geotools.geometry.DirectPosition2D;
 import org.geotools.geometry.jts.Geometries;
+import org.geotools.swing.extended.Map;
 import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.opengis.feature.simple.SimpleFeature;
 import org.sola.clients.swing.gis.Messaging;
@@ -90,8 +91,7 @@ public final class CadastreChangeNewSurveyPointLayer extends AbstractSpatialObje
         this.listBean = new SurveyPointListBean();
         //This is called after the listBean is initialized
         initializeListBeanEvents();
-        SurveyPointListPanel uiComponent =
-                new SurveyPointListPanel((SurveyPointListBean) this.listBean);
+        SurveyPointListPanel uiComponent = new SurveyPointListPanel((SurveyPointListBean) this.listBean);
         initializeFormHosting(
                 MessageUtility.getLocalizedMessageText(
                 GisMessage.CADASTRE_CHANGE_FORM_SURVEYPOINT_TITLE), 

@@ -33,8 +33,7 @@ package org.sola.clients.swing.gis.ui.control;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import org.geotools.swing.extended.Map;
 import org.sola.clients.swing.gis.Messaging;
 import org.sola.clients.swing.gis.beans.AbstractListSpatialBean;
 import org.sola.clients.swing.gis.beans.SpatialBean;
@@ -321,6 +320,7 @@ public class SurveyPointListPanel extends javax.swing.JPanel {
             Double x = Double.valueOf(this.txtX.getText());
             Double y = Double.valueOf(this.txtY.getText());
             SurveyPointBean bean = new SurveyPointBean();
+            //bean.setSrid(this.getMapControl().getSrid());
             bean.setX(x);
             bean.setY(y);
             this.theBean.getBeanList().add(bean);

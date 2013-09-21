@@ -75,10 +75,9 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="lblFormatFileExplaination" max="32767" attributes="0"/>
+                      <Component id="lblFormatFileExplaination" pref="219" max="32767" attributes="0"/>
                       <Group type="102" attributes="0">
-                          <EmptySpace min="0" pref="23" max="32767" attributes="0"/>
-                          <Component id="lblLineNumberOfFirstPoint" min="-2" pref="169" max="-2" attributes="0"/>
+                          <Component id="lblLineNumberOfFirstPoint" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="txtLineIndexWherePointsStart" min="-2" pref="23" max="-2" attributes="0"/>
                       </Group>
