@@ -63,7 +63,51 @@ public class CadastreObjectListPanel extends javax.swing.JPanel {
             }
         });
     }
-
+    
+      /**
+     * This constructor must be used to initialize the bean.
+     */
+    public CadastreObjectListPanel(CadastreObjectListBean bean, Boolean lastPartEditable) {
+        this.theBean = bean;
+        final  Boolean lastEditable = lastPartEditable;
+        initComponents();
+        // Add a listner to the bean property of selected bean
+        theBean.addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals(AbstractListSpatialBean.SELECTED_BEAN_PROPERTY)) {
+                    customizePanel((SpatialBean) evt.getNewValue());
+                }
+            }
+        });
+    }
+    
+    
+        
+     /**
+     * It changes the availability of buttons based in the selected bean
+     * @param selectedSource 
+     */
+    private void customizePanel(SpatialBean selectedSource) {
+        cmdRemove.setEnabled(selectedSource != null);
+        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${beanList}");
+        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, cadastreObjectListBean, eLProperty, tableCadastreObject);
+        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${nameFirstpart}"));
+        columnBinding.setColumnName("Name Firstpart");
+        columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${nameLastpart}"));
+        columnBinding.setColumnName("Name Lastpart");
+        columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(true);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${officialArea}"));
+        columnBinding.setColumnName("Official Area");
+        columnBinding.setColumnClass(Double.class);
+        bindingGroup.addBinding(jTableBinding);
+        jTableBinding.bind();org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, cadastreObjectListBean, org.jdesktop.beansbinding.ELProperty.create("${selectedBean}"), tableCadastreObject, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
+        bindingGroup.addBinding(binding);
+        
+    }
+   
     /**
      * It changes the availability of buttons based in the selected bean
      * @param selectedSource 

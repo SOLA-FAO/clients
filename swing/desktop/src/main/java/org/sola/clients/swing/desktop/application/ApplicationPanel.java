@@ -679,6 +679,7 @@ public class ApplicationPanel extends ContentPanel {
                 TaskManager.getInstance().runTask(t);
             } // Cadastre change services
             else if (requestType.equalsIgnoreCase(RequestTypeBean.CODE_CADASTRE_CHANGE)
+                    ||requestType.equalsIgnoreCase(RequestTypeBean.CODE_MAP_EXISTINGPARCEL)
                     || requestType.equalsIgnoreCase(RequestTypeBean.CODE_CADASTRE_REDEFINITION)) {
                 
                 if (appBean.getPropertyList().getFilteredList().size() == 1) {

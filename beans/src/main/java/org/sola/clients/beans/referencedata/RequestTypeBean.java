@@ -75,6 +75,7 @@ public class RequestTypeBean extends AbstractCodeBean {
     public static final String BASE_FEE_PROPERTY = "baseFee";
     public static final String AREA_BASE_FEE_PROPERTY = "areaBaseFee";
     public static final String VALUE_BASE_FEE_PROPERTY = "valueBaseFee";
+    public static final String CODE_MAP_EXISTINGPARCEL = "mapExistingParcel";
     
     private int nrDaysToComplete;
     private int nrPropertiesRequired;

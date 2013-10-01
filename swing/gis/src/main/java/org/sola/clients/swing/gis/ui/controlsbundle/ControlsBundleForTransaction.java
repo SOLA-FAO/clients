@@ -113,6 +113,9 @@ public abstract class ControlsBundleForTransaction extends SolaControlsBundle {
         } else if (requestTypeCode.equals(RequestTypeBean.CODE_CADASTRE_REDEFINITION)) {
             instance = new ControlsBundleForCadastreRedefinition(
                     applicationBean, transactionStarterId, baUnitId, targetCadastreObjectType);
+        } else if (requestTypeCode.equals(RequestTypeBean.CODE_MAP_EXISTINGPARCEL)) {
+              instance = new ControlsBundleForMapExistingParcel(        
+                    applicationBean, transactionStarterId, baUnitId, targetCadastreObjectType);
         }
         return instance;
     }

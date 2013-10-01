@@ -102,7 +102,33 @@ public class CadastreChangeNewCadastreObjectLayer
                 GisMessage.CADASTRE_CHANGE_FORM_NEW_OBJECTS_TITLE),
                 this.spatialObjectDisplayPanel);
     }
-
+     
+    
+       /**
+     * Constructor for the layer.
+     *
+     * @param applicationNumber The application number of the service that
+     * starts the transaction where the layer is used. This number is used in
+     * the definition of new parcel number
+     * @throws InitializeLayerException
+     */
+    public CadastreChangeNewCadastreObjectLayer(String applicationNumber, Boolean lastPartEditable)
+            throws InitializeLayerException {
+        super(LAYER_NAME, Geometries.POLYGON,
+                LAYER_STYLE_RESOURCE, LAYER_ATTRIBUTE_DEFINITION, CadastreObjectBean.class);
+        this.lastPart = applicationNumber;
+        this.listBean = new CadastreObjectListBean();
+        //This is called after the listBean is initialized
+        initializeListBeanEvents();
+        this.spatialObjectDisplayPanel =
+                new CadastreObjectListPanel((CadastreObjectListBean) this.listBean,lastPartEditable );
+        initializeFormHosting(
+                MessageUtility.getLocalizedMessageText(
+                GisMessage.CADASTRE_CHANGE_FORM_NEW_OBJECTS_TITLE),
+                this.spatialObjectDisplayPanel);
+    }
+    
+    
     /**
      * Gets the panel where the data about the cadastre objects are displayed
      *
