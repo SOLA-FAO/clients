@@ -69,18 +69,28 @@ public class DashBoardPanel extends ContentPanel {
         }
     }
     private AssignmentPanelListener assignmentPanelListener;
+    private boolean forceRefresh;
+    private boolean autoRefresh = false;
+    
+    /**
+     * Panel constructor.
+     */
+    public DashBoardPanel() {
+        this(true);
+    }
 
     /**
      * Panel constructor.
      *
-     * @param mainForm Parent form.
+     * @param forceRefresh Indicates whether to fetch applications upon opening.
      */
-    public DashBoardPanel() {
+    public DashBoardPanel(boolean forceRefresh) {
+        this.forceRefresh = forceRefresh;
         assignmentPanelListener = new AssignmentPanelListener();
         initComponents();
         postInit();
     }
-
+    
     /**
      * Runs post initialization tasks to add listeners.
      */
@@ -92,7 +102,10 @@ public class DashBoardPanel extends ContentPanel {
         menuRefreshAssignApplication.setEnabled(btnRefreshAssigned.isEnabled());
         menuRefreshUnassignApplication.setEnabled(btnRefreshUnassigned.isEnabled());
 
-        refreshApplications();
+        if(forceRefresh){
+            refreshApplications();
+        }
+        
         customizeAssignedAppButtons();
         customizeUnassignedAppButtons();
 
@@ -229,18 +242,8 @@ public class DashBoardPanel extends ContentPanel {
             @Override
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_APP));
-                PropertyChangeListener listener = new PropertyChangeListener() {
-                    @Override
-                    public void propertyChange(PropertyChangeEvent e) {
-                        if (e.getPropertyName().equals(ApplicationPanel.APPLICATION_SAVED_PROPERTY)) {
-                            refreshApplications();
-                        }
-                    }
-                };
-
                 if (getMainContentPanel() != null) {
-                    ApplicationPanel applicationPanel = new ApplicationPanel(appBean.getId(), true);
-                    applicationPanel.addPropertyChangeListener(ApplicationBean.APPLICATION_PROPERTY, listener);
+                    ApplicationPanel applicationPanel = new ApplicationPanel(appBean.getId());
                     getMainContentPanel().addPanel(applicationPanel, MainContentPanel.CARD_APPLICATION, true);
                 }
                 return null;
@@ -249,6 +252,26 @@ public class DashBoardPanel extends ContentPanel {
         TaskManager.getInstance().runTask(t);
     }
 
+    private void autoRefresh(){
+        if(autoRefresh){
+            setAutoRefresh(false);
+            refreshApplications();
+        }
+    }
+
+    /** Returns autorefresh value. */
+    public boolean isAutoRefresh() {
+        return autoRefresh;
+    }
+
+    /** 
+     * Sets autorefresh value. If <code>true</code> is assigned Dashboard will 
+     * be refreshed automatically at the time of component shown event. 
+     */
+    public void setAutoRefresh(boolean autoRefresh) {
+        this.autoRefresh = autoRefresh;
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -356,6 +379,11 @@ public class DashBoardPanel extends ContentPanel {
         setHelpTopic(bundle.getString("DashBoardPanel.helpTopic")); // NOI18N
         setMinimumSize(new java.awt.Dimension(354, 249));
         setName("Form"); // NOI18N
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                formComponentShown(evt);
+            }
+        });
 
         jPanel3.setName("jPanel3"); // NOI18N
         jPanel3.setLayout(new java.awt.GridLayout(2, 1, 0, 20));
@@ -365,7 +393,6 @@ public class DashBoardPanel extends ContentPanel {
         unassignedScrollPanel.setName("unassignedScrollPanel"); // NOI18N
         unassignedScrollPanel.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
 
-        tbUnassigned.setColumnSelectionAllowed(true);
         tbUnassigned.setComponentPopupMenu(popUpUnassignedApplications);
         tbUnassigned.setGridColor(new java.awt.Color(135, 127, 115));
         tbUnassigned.setName("tbUnassigned"); // NOI18N
@@ -396,6 +423,7 @@ public class DashBoardPanel extends ContentPanel {
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${contactPerson}"));
         columnBinding.setColumnName("Contact Person");
         columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${agent}"));
         columnBinding.setColumnName("Agent");
         columnBinding.setColumnClass(String.class);
@@ -735,6 +763,10 @@ public class DashBoardPanel extends ContentPanel {
     private void menuRefreshAssignApplicationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRefreshAssignApplicationActionPerformed
         refreshAssignedApplications();
     }//GEN-LAST:event_menuRefreshAssignApplicationActionPerformed
+
+    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+        autoRefresh();
+    }//GEN-LAST:event_formComponentShown
 
     /**
      * Refreshes assigned and unassigned application lists.

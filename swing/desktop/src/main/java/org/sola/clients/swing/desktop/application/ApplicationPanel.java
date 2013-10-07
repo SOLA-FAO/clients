@@ -97,7 +97,6 @@ public class ApplicationPanel extends ContentPanel {
     private ControlsBundleForApplicationLocation mapControl = null;
     public static final String APPLICATION_SAVED_PROPERTY = "applicationSaved";
     private String applicationID;
-    private boolean isDashboard = false;
     ApplicationPropertyBean property;
 
     /**
@@ -168,18 +167,6 @@ public class ApplicationPanel extends ContentPanel {
      */
     public ApplicationPanel(String applicationId) {
         this.applicationID = applicationId;
-        initComponents();
-        postInit();
-    }
-
-    /**
-     * This constructor is used to open existing application for editing.
-     *
-     * @param applicationId ID of application to open.
-     */
-    public ApplicationPanel(String applicationId, boolean dashBoard) {
-        this.applicationID = applicationId;
-        this.isDashboard = dashBoard;
         initComponents();
         postInit();
     }
@@ -799,11 +786,17 @@ public class ApplicationPanel extends ContentPanel {
     
     private boolean saveApplication() {
         appBean.setLocation(this.mapControl.getApplicationLocation());
+        boolean isSuccess = false;
+        //appBean.getAgent().setTypeCode(PartyTypeBean.CODE_NATURAL_PERSON);
         if (applicationID != null && !applicationID.equals("")) {
-            return appBean.saveApplication();
+            isSuccess = appBean.saveApplication();
         } else {
-            return appBean.lodgeApplication();
+            isSuccess = appBean.lodgeApplication();
         }
+        if (isSuccess) {
+            markDashboardForRefresh();
+        }
+        return isSuccess;
     }
     
     private boolean checkApplication() {
@@ -870,9 +863,6 @@ public class ApplicationPanel extends ContentPanel {
                     applicationID = appBean.getId();
                 }
                 firePropertyChange(APPLICATION_SAVED_PROPERTY, false, true);
-                
-                refreshDashboard();
-                
             }
         };
         
@@ -880,28 +870,11 @@ public class ApplicationPanel extends ContentPanel {
         
     }
     
-    @Override
-    public void refreshDashboard() {
-        PropertyChangeListener listener = new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent e) {
-                if (e.getPropertyName().equals(ApplicationPanel.APPLICATION_SAVED_PROPERTY)) {
-                    System.out.println("public void propertyChange");
-                }
-            }
-        };
-        
-        if (getMainContentPanel() != null && this.isDashboard) {
-            DashBoardPanel dashBoardPanel = new DashBoardPanel();
-            dashBoardPanel.addPropertyChangeListener(ApplicationBean.ASSIGNEE_ID_PROPERTY, listener);
-            
-            if (whichChangeEvent == HeaderPanel.CLOSE_BUTTON_CLICKED) {
-                getMainContentPanel().addPanel(dashBoardPanel, MainContentPanel.CARD_DASHBOARD, true);
-            } else {
-                if (MessageUtility.displayMessage(ClientMessage.GENERAL_BACK_TO_DASHBOARD)
-                        == MessageUtility.BUTTON_ONE) {
-                    getMainContentPanel().addPanel(dashBoardPanel, MainContentPanel.CARD_DASHBOARD, true);
-                }
+    private void markDashboardForRefresh() {
+        if (getMainContentPanel().isPanelOpened(MainContentPanel.CARD_DASHBOARD)) {
+            DashBoardPanel dashBoard = (DashBoardPanel) getMainContentPanel().getPanel(MainContentPanel.CARD_DASHBOARD);
+            if (dashBoard != null) {
+                dashBoard.setAutoRefresh(true);
             }
         }
     }
@@ -916,9 +889,6 @@ public class ApplicationPanel extends ContentPanel {
         appBean.removeSelectedCadastreObject();
     }
 
-    /**
-     * Designer generated code
-     */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
@@ -3276,7 +3246,7 @@ public class ApplicationPanel extends ContentPanel {
                         openValidationResultForm(result, true, message);
                     }
                     saveAppState();
-                    refreshDashboard();
+                    markDashboardForRefresh();
                 }
             };
             TaskManager.getInstance().runTask(t);
@@ -3360,6 +3330,7 @@ public class ApplicationPanel extends ContentPanel {
                     appBean.reload();
                     customizeApplicationForm();
                     saveAppState();
+                    markDashboardForRefresh();
                     launchService(appBean.getServiceById(selectedService.getId()), false);
                 }
             };
@@ -3403,6 +3374,7 @@ public class ApplicationPanel extends ContentPanel {
                         appBean.reload();
                         customizeApplicationForm();
                         saveAppState();
+                        markDashboardForRefresh();
                         if (result != null) {
                             openValidationResultForm(result, true, message);
                         }
@@ -3446,6 +3418,7 @@ public class ApplicationPanel extends ContentPanel {
                         appBean.reload();
                         customizeApplicationForm();
                         saveAppState();
+                        markDashboardForRefresh();
                         if (result != null) {
                             openValidationResultForm(result, true, message);
                         }
@@ -3489,6 +3462,7 @@ public class ApplicationPanel extends ContentPanel {
                         appBean.reload();
                         customizeApplicationForm();
                         saveAppState();
+                        markDashboardForRefresh();
                         if (result != null) {
                             openValidationResultForm(result, true, message);
                         }

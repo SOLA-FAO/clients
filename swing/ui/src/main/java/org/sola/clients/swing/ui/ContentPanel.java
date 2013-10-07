@@ -113,7 +113,6 @@ public class ContentPanel extends JPanel {
             if (panelClosing()) {
                 close();
             }
-            refreshDashboard();
         }
         if (evt.getPropertyName().equals(HeaderPanel.HELP_BUTTON_CLICKED)) {
             showHelp();
@@ -137,13 +136,6 @@ public class ContentPanel extends JPanel {
             firePropertyChange(HeaderPanel.CLOSE_BUTTON_CLICKED, false, true);
         }
     }
-    
-    
-    public void refreshDashboard() {
-        this.repaint();    
-    }
-    
-
 
     /**
      * This method is called each time when panel is added to the main content
