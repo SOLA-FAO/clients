@@ -31,17 +31,19 @@ package org.sola.clients.swing.ui.security;
 
 import java.awt.ComponentOrientation;
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 import javax.swing.JRadioButton;
 import org.sola.clients.beans.security.SecurityBean;
-import org.sola.clients.swing.common.LocalizationManager;
+import org.sola.clients.swing.ui.localization.LocalizationManager;
 import org.sola.clients.swing.common.config.ConfigurationManager;
-import org.sola.clients.swing.common.controls.LanguageCombobox;
+import org.sola.clients.swing.ui.localization.LanguageCombobox;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.common.WindowUtility;
-import org.sola.common.logging.LogUtility;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
@@ -66,6 +68,20 @@ public class LoginPanel extends javax.swing.JPanel {
      */
     public LoginPanel() {
         initComponents();
+        postInit();
+    }
+
+    private void postInit() {
+        languageCombobox.addPropertyChangeListener(new PropertyChangeListener() {
+
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if(evt.getPropertyName().equals(LanguageCombobox.LANGUAGE_CHANGED)){
+                    reloadResources();
+                }
+            }
+        });
+        
         txtUsername.requestFocus();
         lblVersion.setText(LocalizationManager.getVersionNumber());
 
@@ -85,6 +101,7 @@ public class LoginPanel extends javax.swing.JPanel {
      */
     private void login() {
         SolaTask t = new SolaTask<Boolean, Object>() {
+
             private boolean result = false;
 
             @Override
@@ -147,6 +164,16 @@ public class LoginPanel extends javax.swing.JPanel {
             txtUsername.requestFocus();
         }
         this.getRootPane().setDefaultButton(btnLogin);
+    }
+
+    private void reloadResources() {
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/security/Bundle"); // NOI18N
+        labPassword.setText(bundle.getString("LoginPanel.labPassword.text"));
+        labUser.setText(bundle.getString("LoginPanel.labUser.text"));
+        btnLogin.setText(bundle.getString("LoginPanel.btnLogin.text"));
+        jLabel2.setText(bundle.getString("LoginPanel.jLabel2.text"));
+        labDescUp.setText(bundle.getString("LoginPanel.labDescUp.text"));
+        labDescDown.setText(bundle.getString("LoginPanel.labDescDown.text"));
     }
 
     @SuppressWarnings("unchecked")
@@ -450,7 +477,7 @@ public class LoginPanel extends javax.swing.JPanel {
     private javax.swing.JLabel labDescUp;
     private javax.swing.JLabel labPassword;
     private javax.swing.JLabel labUser;
-    private org.sola.clients.swing.common.controls.LanguageCombobox languageCombobox;
+    private org.sola.clients.swing.ui.localization.LanguageCombobox languageCombobox;
     private javax.swing.JLabel lblVersion;
     private javax.swing.JPanel mainPanel;
     private org.sola.clients.beans.security.SecurityBean securityBean;

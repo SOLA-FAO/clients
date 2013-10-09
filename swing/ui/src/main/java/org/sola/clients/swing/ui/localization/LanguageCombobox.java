@@ -27,7 +27,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-package org.sola.clients.swing.common.controls;
+package org.sola.clients.swing.ui.localization;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -36,20 +36,15 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import javax.swing.ImageIcon;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.ListCellRenderer;
-import org.sola.clients.swing.common.LocalizationManager;
-import org.sola.common.messaging.ClientMessage;
-import org.sola.common.messaging.MessageUtility;
+import javax.swing.*;
 
 /**
  * Allows to select different languages to change language of the application.
  */
 public class LanguageCombobox extends JComboBox {
 
+    public static final String LANGUAGE_CHANGED = "languageChanged";
+    
     /**
      * ComboBox renderer class. Displays flags for each language.
      */
@@ -110,8 +105,6 @@ public class LanguageCombobox extends JComboBox {
             setText(uhOhText);
         }
     }
-    private boolean showMessage = true;
-    public boolean confirmedChange = false;
     private String[] languageStrings = {"English", "Italian", "नेपाली"};
     private String[] languageIconNames = {"en.jpg", "it.jpg", "np.png"};
     private ImageIcon[] languageIcons;
@@ -157,9 +150,7 @@ public class LanguageCombobox extends JComboBox {
 
         if (selectedLanguage != null && !selectedLanguage.equals("")
                 && languagesMap != null && languagesMap.containsKey(selectedLanguage)) {
-            showMessage = false;
             setSelectedIndex(languagesMap.get(selectedLanguage));
-            showMessage = true;
         }
     }
 
@@ -177,13 +168,8 @@ public class LanguageCombobox extends JComboBox {
             } else if ("नेपाली".equalsIgnoreCase(languageStrings[language])) {
                 LocalizationManager.setLanguage("np", "NP");
             }
-            if (showMessage) {
-                LocalizationManager.loadLanguage();
-                if (!this.confirmedChange) {
-                    MessageUtility.displayMessage(ClientMessage.GENERAL_UPDATE_LANG);
-                    LocalizationManager.restartApplication();
-                }
-            }
+            
+            firePropertyChange(LANGUAGE_CHANGED, false, true);
         }
     }
 

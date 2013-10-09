@@ -27,7 +27,7 @@
  */
 package org.sola.clients.swing.desktop;
 
-import org.sola.clients.swing.common.LocalizationManager;
+import org.sola.clients.swing.ui.localization.LocalizationManager;
 
 /** Simple dialog form to display product information */
 public class AboutForm extends javax.swing.JDialog {

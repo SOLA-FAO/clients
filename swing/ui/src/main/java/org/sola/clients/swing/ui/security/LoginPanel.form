@@ -238,7 +238,7 @@
                 <Property name="name" type="java.lang.String" value="jLabel1" noResource="true"/>
               </Properties>
             </Component>
-            <Component class="org.sola.clients.swing.common.controls.LanguageCombobox" name="languageCombobox">
+            <Component class="org.sola.clients.swing.ui.localization.LanguageCombobox" name="languageCombobox">
               <Properties>
                 <Property name="name" type="java.lang.String" value="languageCombobox" noResource="true"/>
               </Properties>

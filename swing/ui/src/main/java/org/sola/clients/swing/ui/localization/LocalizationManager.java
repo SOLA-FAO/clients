@@ -27,12 +27,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-package org.sola.clients.swing.common;
+package org.sola.clients.swing.ui.localization;
 
 import java.io.File;
 import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
+import org.sola.clients.beans.cache.CacheManager;
 import org.sola.common.WindowUtility;
 import org.sola.common.logging.LogUtility;
 
@@ -100,6 +102,9 @@ public class LocalizationManager {
         prefs.put(COUNTRY, country);
         try {
             prefs.flush();
+            CacheManager.clear();
+            ResourceBundle.clearCache();
+            loadLanguage();
         } catch (BackingStoreException ex) {
             ex.printStackTrace();
         }
@@ -167,5 +172,35 @@ public class LocalizationManager {
 
         System.exit(0);
         return true;
+    }
+    
+        
+    /** 
+     * Returns language code from provided string. String format must be language-County (e.g. en-US)
+     * @param localeString String with language code and country code
+     */
+    public static String getLangCode(String localeString){
+        if(localeString == null || localeString.equals(""))
+        {
+            return "";
+        }
+        String[] codes = localeString.split("-");
+        return codes[0];
+    }
+    
+    /** 
+     * Returns country code from provided string. String format must be language-County (e.g. en-US)
+     * @param localeString String with language code and country code
+     */
+    public static String getCountryCode(String localeString){
+        if(localeString == null || localeString.equals(""))
+        {
+            return "";
+        }
+        String[] codes = localeString.split("-");
+        if(codes.length>1)
+            return codes[1];
+        else
+            return "";
     }
 }

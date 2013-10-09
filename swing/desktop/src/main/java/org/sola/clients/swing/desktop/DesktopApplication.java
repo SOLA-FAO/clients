@@ -32,7 +32,7 @@ package org.sola.clients.swing.desktop;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import org.sola.clients.swing.common.LafManager;
-import org.sola.clients.swing.common.LocalizationManager;
+import org.sola.clients.swing.ui.localization.LocalizationManager;
 import org.sola.clients.swing.ui.DesktopClientExceptionHandler;
 import org.sola.clients.swing.ui.security.LoginForm;
 import org.sola.clients.swing.ui.security.LoginPanel;
@@ -43,7 +43,6 @@ import org.sola.common.logging.LogUtility;
  * The main class of the application.
  */
 public class DesktopApplication {
-
     /**
      * Main method to run the application.
      *
