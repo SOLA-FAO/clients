@@ -61,7 +61,7 @@ import java.awt.Toolkit;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import org.sola.clients.swing.common.LafManager;
-import org.sola.clients.swing.common.LocalizationManager;
+import org.sola.clients.swing.ui.localization.LocalizationManager;
 import org.sola.clients.swing.ui.security.LoginPanel;
 import org.sola.common.WindowUtility;
 import org.sola.common.logging.LogUtility;
