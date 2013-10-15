@@ -28,6 +28,7 @@ public class LocationSearch extends FreeTextSearch {
     public LocationSearch() {
         super();
         this.setMinimalSearchStringLength(3);
+        setRefreshTextInSelection(true);
     }
 
     @Override
