@@ -34,12 +34,14 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Locale;
+import javax.swing.JFormattedTextField;
 import javax.swing.JTextField;
 import org.sola.clients.beans.digitalarchive.DocumentBean;
 import org.sola.clients.beans.referencedata.SourceTypeListBean;
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.beans.source.SourceBean;
 import org.sola.clients.swing.common.controls.BrowseControlListener;
+import org.sola.clients.swing.common.controls.CalendarForm;
 import org.sola.clients.swing.ui.renderers.FormattersFactory;
 import org.sola.clients.swing.ui.renderers.SimpleComboBoxRenderer;
 import org.sola.common.RolesConstants;
@@ -55,9 +57,9 @@ public class DocumentPanel extends javax.swing.JPanel {
     private SourceBean document;
     public DocumentBean archiveDocument;
 
-    private SourceTypeListBean createSourceTypeList(){
-        if(sourceTypeListBean==null){
-            if(document!=null && document.getSourceType()!=null && document.getSourceType().getCode()!=null){
+    private SourceTypeListBean createSourceTypeList() {
+        if (sourceTypeListBean == null) {
+            if (document != null && document.getSourceType() != null && document.getSourceType().getCode() != null) {
                 sourceTypeListBean = new SourceTypeListBean(false, document.getSourceType().getCode());
             } else {
                 sourceTypeListBean = new SourceTypeListBean(false);
@@ -65,7 +67,7 @@ public class DocumentPanel extends javax.swing.JPanel {
         }
         return sourceTypeListBean;
     }
-    
+
     public DocumentPanel(SourceBean document, boolean allowEditing) {
         this.document = document;
         this.allowEditing = allowEditing;
@@ -110,8 +112,8 @@ public class DocumentPanel extends javax.swing.JPanel {
         txtDocRecordDate.setEnabled(allowEditing);
         txtDocRefNumber.setEnabled(allowEditing);
         txtExpiration.setEnabled(allowEditing);
-        browseAttachment.setDisplayBrowseButton(allowEditing &&
-                SecurityBean.isInRole(RolesConstants.SOURCE_SAVE));
+        browseAttachment.setDisplayBrowseButton(allowEditing
+                && SecurityBean.isInRole(RolesConstants.SOURCE_SAVE));
         browseAttachment.setDisplayDeleteButton(allowEditing
                 && SecurityBean.isInRole(RolesConstants.SOURCE_SAVE));
         txtOwnerName.setEnabled(allowEditing);
@@ -119,6 +121,10 @@ public class DocumentPanel extends javax.swing.JPanel {
         txtSigningDate.setEnabled(allowEditing);
         txtVersion.setEnabled(allowEditing);
         txtDescription.setEnabled(allowEditing);
+        btnAcceptanceDate.setEnabled(allowEditing);
+        btnDate.setEnabled(allowEditing);
+        btnExpirationDate.setEnabled(allowEditing);
+        btnSigningDate.setEnabled(allowEditing);
     }
 
     /**
@@ -190,24 +196,48 @@ public class DocumentPanel extends javax.swing.JPanel {
         firePropertyChange(UPDATED_SOURCE, null, updatedSource);
     }
 
-    public boolean validateDocument(boolean showMessage){
+    public boolean validateDocument(boolean showMessage) {
         return getDocument().validate(showMessage).size() < 1;
     }
-    
+
     public boolean saveDocument() {
+        commitChanges();
         if (validateDocument(true)) {
-            
-           if (!(this.archiveDocument==null)){ 
-            if (!this.archiveDocument.getId().equals("")) {
-                getDocument().setArchiveDocument(this.archiveDocument);
+
+            if (!(this.archiveDocument == null)) {
+                if (!this.archiveDocument.getId().equals("")) {
+                    getDocument().setArchiveDocument(this.archiveDocument);
+                }
             }
-           } 
             getDocument().save();
             fireDocumentChangeEvent();
             return true;
         } else {
             return false;
         }
+    }
+
+    private void commitChanges() {
+        try {
+            if (txtDocRecordDate.isEnabled()) {
+                txtDocRecordDate.commitEdit();
+            }
+            if (txtSigningDate.isEnabled()) {
+                txtSigningDate.commitEdit();
+            }
+            if (txtDocAcceptanceDate.isEnabled()) {
+                txtDocAcceptanceDate.commitEdit();
+            }
+            if (txtExpiration.isEnabled()) {
+                txtExpiration.commitEdit();
+            }
+        } catch (Exception e) {
+        }
+    }
+
+    private void showCalendar(JFormattedTextField dateField) {
+        CalendarForm calendar = new CalendarForm(null, true, dateField);
+        calendar.setVisible(true);
     }
 
     @SuppressWarnings("unchecked")
@@ -223,6 +253,7 @@ public class DocumentPanel extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
         txtDocRecordDate = new javax.swing.JFormattedTextField();
         jLabel3 = new javax.swing.JLabel();
+        btnDate = new javax.swing.JButton();
         jPanel7 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         txtDocRefNumber = new javax.swing.JTextField();
@@ -241,15 +272,18 @@ public class DocumentPanel extends javax.swing.JPanel {
         jPanel10 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         txtDocAcceptanceDate = new javax.swing.JFormattedTextField();
+        btnAcceptanceDate = new javax.swing.JButton();
         jPanel12 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         txtExpiration = new javax.swing.JFormattedTextField();
+        btnExpirationDate = new javax.swing.JButton();
         jPanel13 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         txtStatus = new javax.swing.JTextField();
         jPanel14 = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
         txtSigningDate = new javax.swing.JFormattedTextField();
+        btnSigningDate = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
         txtVersion = new javax.swing.JTextField();
@@ -265,6 +299,7 @@ public class DocumentPanel extends javax.swing.JPanel {
 
         jPanel1.setName("jPanel1"); // NOI18N
 
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         jLabel4.setText(bundle.getString("DocumentPanel.jLabel4.text")); // NOI18N
         jLabel4.setName("jLabel4"); // NOI18N
 
@@ -288,7 +323,7 @@ public class DocumentPanel extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel4)
-                .addContainerGap(121, Short.MAX_VALUE))
+                .addContainerGap(92, Short.MAX_VALUE))
             .addComponent(cbxDocType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
@@ -314,8 +349,19 @@ public class DocumentPanel extends javax.swing.JPanel {
         txtDocRecordDate.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
         txtDocRecordDate.setHorizontalAlignment(JTextField.LEADING);
 
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         jLabel3.setText(bundle.getString("DocumentPanel.jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
+
+        btnDate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/calendar.png"))); // NOI18N
+        btnDate.setText(bundle.getString("DocumentPanel.btnDate.text")); // NOI18N
+        btnDate.setBorder(null);
+        btnDate.setName(bundle.getString("DocumentPanel.btnDate.name")); // NOI18N
+        btnDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDateActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -323,15 +369,20 @@ public class DocumentPanel extends javax.swing.JPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jLabel3)
-                .addGap(0, 122, Short.MAX_VALUE))
-            .addComponent(txtDocRecordDate)
+                .addGap(0, 93, Short.MAX_VALUE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(txtDocRecordDate)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnDate))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtDocRecordDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnDate)
+                    .addComponent(txtDocRecordDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         jPanel8.add(jPanel2);
@@ -356,7 +407,7 @@ public class DocumentPanel extends javax.swing.JPanel {
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addComponent(jLabel2)
-                .addGap(0, 95, Short.MAX_VALUE))
+                .addGap(0, 80, Short.MAX_VALUE))
             .addComponent(txtDocRefNumber)
         );
         jPanel7Layout.setVerticalGroup(
@@ -386,7 +437,7 @@ public class DocumentPanel extends javax.swing.JPanel {
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addComponent(jLabel7)
-                .addGap(0, 76, Short.MAX_VALUE))
+                .addGap(0, 61, Short.MAX_VALUE))
             .addComponent(txtLaNumber)
         );
         jPanel6Layout.setVerticalGroup(
@@ -417,7 +468,7 @@ public class DocumentPanel extends javax.swing.JPanel {
             .addComponent(txtOwnerName)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(jLabel5)
-                .addGap(0, 73, Short.MAX_VALUE))
+                .addGap(0, 58, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -446,7 +497,7 @@ public class DocumentPanel extends javax.swing.JPanel {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addContainerGap(85, Short.MAX_VALUE))
+                .addContainerGap(70, Short.MAX_VALUE))
             .addComponent(browseAttachment, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
@@ -482,7 +533,7 @@ public class DocumentPanel extends javax.swing.JPanel {
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel11Layout.createSequentialGroup()
                 .addComponent(jLabel9)
-                .addGap(0, 67, Short.MAX_VALUE))
+                .addGap(0, 52, Short.MAX_VALUE))
             .addComponent(txtSubmissionDate)
         );
         jPanel11Layout.setVerticalGroup(
@@ -511,21 +562,37 @@ public class DocumentPanel extends javax.swing.JPanel {
         txtDocRecordDate.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
         txtDocRecordDate.setHorizontalAlignment(JTextField.LEADING);
 
+        btnAcceptanceDate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/calendar.png"))); // NOI18N
+        btnAcceptanceDate.setText(bundle.getString("DocumentPanel.btnAcceptanceDate.text")); // NOI18N
+        btnAcceptanceDate.setBorder(null);
+        btnAcceptanceDate.setName(bundle.getString("DocumentPanel.btnAcceptanceDate.name")); // NOI18N
+        btnAcceptanceDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAcceptanceDateActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel10Layout.createSequentialGroup()
-                .addComponent(jLabel8)
-                .addGap(0, 63, Short.MAX_VALUE))
-            .addComponent(txtDocAcceptanceDate)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel10Layout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addGap(0, 25, Short.MAX_VALUE))
+                    .addComponent(txtDocAcceptanceDate))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnAcceptanceDate))
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel10Layout.createSequentialGroup()
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtDocAcceptanceDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnAcceptanceDate)
+                    .addComponent(txtDocAcceptanceDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         jPanel8.add(jPanel10);
@@ -546,21 +613,36 @@ public class DocumentPanel extends javax.swing.JPanel {
         txtDocRecordDate.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
         txtDocRecordDate.setHorizontalAlignment(JTextField.LEADING);
 
+        btnExpirationDate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/calendar.png"))); // NOI18N
+        btnExpirationDate.setText(bundle.getString("DocumentPanel.btnExpirationDate.text")); // NOI18N
+        btnExpirationDate.setBorder(null);
+        btnExpirationDate.setName(bundle.getString("DocumentPanel.btnExpirationDate.name")); // NOI18N
+        btnExpirationDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExpirationDateActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
         jPanel12.setLayout(jPanel12Layout);
         jPanel12Layout.setHorizontalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel12Layout.createSequentialGroup()
                 .addComponent(jLabel10)
-                .addGap(0, 71, Short.MAX_VALUE))
-            .addComponent(txtExpiration)
+                .addGap(0, 56, Short.MAX_VALUE))
+            .addGroup(jPanel12Layout.createSequentialGroup()
+                .addComponent(txtExpiration)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnExpirationDate))
         );
         jPanel12Layout.setVerticalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel12Layout.createSequentialGroup()
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtExpiration, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnExpirationDate)
+                    .addComponent(txtExpiration, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         jPanel8.add(jPanel12);
@@ -582,7 +664,7 @@ public class DocumentPanel extends javax.swing.JPanel {
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel13Layout.createSequentialGroup()
                 .addComponent(jLabel11)
-                .addGap(0, 114, Short.MAX_VALUE))
+                .addGap(0, 99, Short.MAX_VALUE))
             .addComponent(txtStatus)
         );
         jPanel13Layout.setVerticalGroup(
@@ -611,21 +693,36 @@ public class DocumentPanel extends javax.swing.JPanel {
         txtDocRecordDate.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
         txtDocRecordDate.setHorizontalAlignment(JTextField.LEADING);
 
+        btnSigningDate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/calendar.png"))); // NOI18N
+        btnSigningDate.setText(bundle.getString("DocumentPanel.btnSigningDate.text")); // NOI18N
+        btnSigningDate.setBorder(null);
+        btnSigningDate.setName(bundle.getString("DocumentPanel.btnSigningDate.name")); // NOI18N
+        btnSigningDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSigningDateActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
         jPanel14.setLayout(jPanel14Layout);
         jPanel14Layout.setHorizontalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel14Layout.createSequentialGroup()
                 .addComponent(jLabel12)
-                .addGap(0, 85, Short.MAX_VALUE))
-            .addComponent(txtSigningDate)
+                .addGap(0, 70, Short.MAX_VALUE))
+            .addGroup(jPanel14Layout.createSequentialGroup()
+                .addComponent(txtSigningDate)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnSigningDate))
         );
         jPanel14Layout.setVerticalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel14Layout.createSequentialGroup()
                 .addComponent(jLabel12)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtSigningDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnSigningDate)
+                    .addComponent(txtSigningDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         jPanel8.add(jPanel14);
@@ -647,7 +744,7 @@ public class DocumentPanel extends javax.swing.JPanel {
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addComponent(jLabel13)
-                .addGap(0, 110, Short.MAX_VALUE))
+                .addGap(0, 95, Short.MAX_VALUE))
             .addComponent(txtVersion)
         );
         jPanel9Layout.setVerticalGroup(
@@ -691,7 +788,7 @@ public class DocumentPanel extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE)
+            .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
             .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
@@ -705,8 +802,27 @@ public class DocumentPanel extends javax.swing.JPanel {
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDateActionPerformed
+        showCalendar(txtDocRecordDate);
+    }//GEN-LAST:event_btnDateActionPerformed
+
+    private void btnAcceptanceDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcceptanceDateActionPerformed
+        showCalendar(txtDocAcceptanceDate);
+    }//GEN-LAST:event_btnAcceptanceDateActionPerformed
+
+    private void btnExpirationDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExpirationDateActionPerformed
+        showCalendar(txtExpiration);
+    }//GEN-LAST:event_btnExpirationDateActionPerformed
+
+    private void btnSigningDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSigningDateActionPerformed
+        showCalendar(txtSigningDate);
+    }//GEN-LAST:event_btnSigningDateActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public org.sola.clients.swing.common.controls.BrowseControl browseAttachment;
+    private javax.swing.JButton btnAcceptanceDate;
+    private javax.swing.JButton btnDate;
+    private javax.swing.JButton btnExpirationDate;
+    private javax.swing.JButton btnSigningDate;
     public javax.swing.JComboBox cbxDocType;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
