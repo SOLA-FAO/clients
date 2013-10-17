@@ -27,7 +27,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-package org.sola.clients.swing.ui.renderers;
+package org.sola.clients.swing.common.utils;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;

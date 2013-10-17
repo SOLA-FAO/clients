@@ -53,7 +53,7 @@ import org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.clients.swing.ui.renderers.BooleanCellRenderer2;
-import org.sola.clients.swing.ui.renderers.FormattersFactory;
+import org.sola.clients.swing.common.utils.FormattersFactory;
 import org.sola.clients.swing.ui.renderers.TableCellTextAreaRenderer;
 import org.sola.clients.swing.ui.reports.FreeTextDialog;
 import org.sola.clients.swing.ui.reports.ReportViewerForm;

@@ -42,7 +42,7 @@ import org.sola.clients.swing.common.controls.CalendarForm;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.ui.reports.ReportViewerForm;
-import org.sola.clients.swing.ui.renderers.FormattersFactory;
+import org.sola.clients.swing.common.utils.FormattersFactory;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 

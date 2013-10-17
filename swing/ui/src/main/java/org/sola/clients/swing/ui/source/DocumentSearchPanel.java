@@ -49,7 +49,7 @@ import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.common.utils.InternalNumberComparator;
 import org.sola.clients.swing.ui.renderers.AttachedDocumentCellRenderer;
-import org.sola.clients.swing.ui.renderers.FormattersFactory;
+import org.sola.clients.swing.common.utils.FormattersFactory;
 import org.sola.common.RolesConstants;
 import org.sola.common.SOLAException;
 import org.sola.common.messaging.ClientMessage;

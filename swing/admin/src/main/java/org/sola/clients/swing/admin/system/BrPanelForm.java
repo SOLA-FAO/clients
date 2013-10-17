@@ -50,7 +50,7 @@ import org.sola.clients.swing.common.controls.CalendarForm;
 import org.sola.clients.swing.common.utils.BindingTools;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.HeaderPanel;
-import org.sola.clients.swing.ui.renderers.FormattersFactory;
+import org.sola.clients.swing.common.utils.FormattersFactory;
 import org.sola.clients.swing.ui.renderers.TableCellTextAreaRenderer;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;

@@ -32,7 +32,7 @@ import java.beans.PropertyChangeListener;
 import org.sola.clients.beans.address.AddressBean;
 import org.sola.clients.beans.cadastre.CadastreObjectBean;
 import org.sola.clients.swing.ui.address.AddressDialog;
-import org.sola.clients.swing.ui.renderers.FormattersFactory;
+import org.sola.clients.swing.common.utils.FormattersFactory;
 import org.sola.clients.swing.ui.renderers.SimpleComboBoxRenderer;
 import org.sola.common.WindowUtility;
 

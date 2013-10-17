@@ -46,7 +46,7 @@ import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.desktop.party.QuickSearchPartyForm;
 import org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel;
 import org.sola.clients.swing.ui.ContentPanel;
-import org.sola.clients.swing.ui.renderers.FormattersFactory;
+import org.sola.clients.swing.common.utils.FormattersFactory;
 import org.sola.clients.swing.ui.renderers.SimpleComboBoxRenderer;
 import org.sola.clients.swing.ui.source.DocumentsManagementPanel;
 import org.sola.common.messaging.ClientMessage;

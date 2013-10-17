@@ -42,7 +42,7 @@ import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.beans.source.SourceBean;
 import org.sola.clients.swing.common.controls.BrowseControlListener;
 import org.sola.clients.swing.common.controls.CalendarForm;
-import org.sola.clients.swing.ui.renderers.FormattersFactory;
+import org.sola.clients.swing.common.utils.FormattersFactory;
 import org.sola.clients.swing.ui.renderers.SimpleComboBoxRenderer;
 import org.sola.common.RolesConstants;
 
@@ -251,9 +251,9 @@ public class DocumentPanel extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         cbxDocType = new javax.swing.JComboBox();
         jPanel2 = new javax.swing.JPanel();
-        txtDocRecordDate = new javax.swing.JFormattedTextField();
         jLabel3 = new javax.swing.JLabel();
         btnDate = new javax.swing.JButton();
+        txtDocRecordDate = new org.sola.clients.swing.common.controls.WatermarkDate();
         jPanel7 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         txtDocRefNumber = new javax.swing.JTextField();
@@ -271,19 +271,19 @@ public class DocumentPanel extends javax.swing.JPanel {
         txtSubmissionDate = new javax.swing.JFormattedTextField();
         jPanel10 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
-        txtDocAcceptanceDate = new javax.swing.JFormattedTextField();
         btnAcceptanceDate = new javax.swing.JButton();
+        txtDocAcceptanceDate = new org.sola.clients.swing.common.controls.WatermarkDate();
         jPanel12 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
-        txtExpiration = new javax.swing.JFormattedTextField();
         btnExpirationDate = new javax.swing.JButton();
+        txtExpiration = new org.sola.clients.swing.common.controls.WatermarkDate();
         jPanel13 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         txtStatus = new javax.swing.JTextField();
         jPanel14 = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
-        txtSigningDate = new javax.swing.JFormattedTextField();
         btnSigningDate = new javax.swing.JButton();
+        txtSigningDate = new org.sola.clients.swing.common.controls.WatermarkDate();
         jPanel9 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
         txtVersion = new javax.swing.JTextField();
@@ -323,7 +323,7 @@ public class DocumentPanel extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel4)
-                .addContainerGap(92, Short.MAX_VALUE))
+                .addContainerGap(86, Short.MAX_VALUE))
             .addComponent(cbxDocType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
@@ -337,17 +337,6 @@ public class DocumentPanel extends javax.swing.JPanel {
         jPanel8.add(jPanel1);
 
         jPanel2.setName("jPanel2"); // NOI18N
-
-        txtDocRecordDate.setFont(new java.awt.Font("Thaoma", 0, 12));
-        txtDocRecordDate.setFormatterFactory(FormattersFactory.getInstance().getDateFormatterFactory());
-        txtDocRecordDate.setName("txtDocRecordDate"); // NOI18N
-        txtDocRecordDate.setNextFocusableComponent(txtDocRefNumber);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${document.recordation}"), txtDocRecordDate, org.jdesktop.beansbinding.BeanProperty.create("value"));
-        bindingGroup.addBinding(binding);
-
-        txtDocRecordDate.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-        txtDocRecordDate.setHorizontalAlignment(JTextField.LEADING);
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         jLabel3.setText(bundle.getString("DocumentPanel.jLabel3.text")); // NOI18N
@@ -363,15 +352,21 @@ public class DocumentPanel extends javax.swing.JPanel {
             }
         });
 
+        txtDocRecordDate.setText(bundle.getString("DocumentPanel.txtDocRecordDate.text")); // NOI18N
+        txtDocRecordDate.setName(bundle.getString("DocumentPanel.txtDocRecordDate.name")); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${document.recordation}"), txtDocRecordDate, org.jdesktop.beansbinding.BeanProperty.create("value"));
+        bindingGroup.addBinding(binding);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jLabel3)
-                .addGap(0, 93, Short.MAX_VALUE))
+                .addGap(0, 87, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(txtDocRecordDate)
+                .addComponent(txtDocRecordDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnDate))
         );
@@ -381,8 +376,9 @@ public class DocumentPanel extends javax.swing.JPanel {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnDate)
-                    .addComponent(txtDocRecordDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(txtDocRecordDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDate))
+                .addGap(3, 3, 3))
         );
 
         jPanel8.add(jPanel2);
@@ -407,7 +403,7 @@ public class DocumentPanel extends javax.swing.JPanel {
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addComponent(jLabel2)
-                .addGap(0, 80, Short.MAX_VALUE))
+                .addGap(0, 74, Short.MAX_VALUE))
             .addComponent(txtDocRefNumber)
         );
         jPanel7Layout.setVerticalGroup(
@@ -437,7 +433,7 @@ public class DocumentPanel extends javax.swing.JPanel {
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addComponent(jLabel7)
-                .addGap(0, 61, Short.MAX_VALUE))
+                .addGap(0, 55, Short.MAX_VALUE))
             .addComponent(txtLaNumber)
         );
         jPanel6Layout.setVerticalGroup(
@@ -468,7 +464,7 @@ public class DocumentPanel extends javax.swing.JPanel {
             .addComponent(txtOwnerName)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(jLabel5)
-                .addGap(0, 58, Short.MAX_VALUE))
+                .addGap(0, 52, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -497,7 +493,7 @@ public class DocumentPanel extends javax.swing.JPanel {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addContainerGap(70, Short.MAX_VALUE))
+                .addContainerGap(64, Short.MAX_VALUE))
             .addComponent(browseAttachment, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
@@ -533,7 +529,7 @@ public class DocumentPanel extends javax.swing.JPanel {
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel11Layout.createSequentialGroup()
                 .addComponent(jLabel9)
-                .addGap(0, 52, Short.MAX_VALUE))
+                .addGap(0, 46, Short.MAX_VALUE))
             .addComponent(txtSubmissionDate)
         );
         jPanel11Layout.setVerticalGroup(
@@ -551,17 +547,6 @@ public class DocumentPanel extends javax.swing.JPanel {
         jLabel8.setText(bundle.getString("DocumentPanel.jLabel8.text")); // NOI18N
         jLabel8.setName(bundle.getString("DocumentPanel.jLabel8.name")); // NOI18N
 
-        txtDocRecordDate.setFont(new java.awt.Font("Thaoma", 0, 12));
-        txtDocAcceptanceDate.setFormatterFactory(FormattersFactory.getInstance().getDateFormatterFactory());
-        txtDocAcceptanceDate.setName(bundle.getString("DocumentPanel.txtDocAcceptanceDate.name")); // NOI18N
-        txtDocAcceptanceDate.setNextFocusableComponent(txtExpiration);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${document.acceptance}"), txtDocAcceptanceDate, org.jdesktop.beansbinding.BeanProperty.create("value"));
-        bindingGroup.addBinding(binding);
-
-        txtDocRecordDate.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-        txtDocRecordDate.setHorizontalAlignment(JTextField.LEADING);
-
         btnAcceptanceDate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/calendar.png"))); // NOI18N
         btnAcceptanceDate.setText(bundle.getString("DocumentPanel.btnAcceptanceDate.text")); // NOI18N
         btnAcceptanceDate.setBorder(null);
@@ -572,6 +557,12 @@ public class DocumentPanel extends javax.swing.JPanel {
             }
         });
 
+        txtDocAcceptanceDate.setText(bundle.getString("DocumentPanel.txtDocAcceptanceDate.text")); // NOI18N
+        txtDocAcceptanceDate.setName(bundle.getString("DocumentPanel.txtDocAcceptanceDate.name")); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${document.acceptance}"), txtDocAcceptanceDate, org.jdesktop.beansbinding.BeanProperty.create("value"));
+        bindingGroup.addBinding(binding);
+
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
@@ -580,8 +571,8 @@ public class DocumentPanel extends javax.swing.JPanel {
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel10Layout.createSequentialGroup()
                         .addComponent(jLabel8)
-                        .addGap(0, 25, Short.MAX_VALUE))
-                    .addComponent(txtDocAcceptanceDate))
+                        .addGap(0, 19, Short.MAX_VALUE))
+                    .addComponent(txtDocAcceptanceDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnAcceptanceDate))
         );
@@ -591,8 +582,9 @@ public class DocumentPanel extends javax.swing.JPanel {
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnAcceptanceDate)
-                    .addComponent(txtDocAcceptanceDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(txtDocAcceptanceDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAcceptanceDate))
+                .addGap(3, 3, 3))
         );
 
         jPanel8.add(jPanel10);
@@ -601,17 +593,6 @@ public class DocumentPanel extends javax.swing.JPanel {
 
         jLabel10.setText(bundle.getString("DocumentPanel.jLabel10.text")); // NOI18N
         jLabel10.setName(bundle.getString("DocumentPanel.jLabel10.name")); // NOI18N
-
-        txtDocRecordDate.setFont(new java.awt.Font("Thaoma", 0, 12));
-        txtExpiration.setFormatterFactory(FormattersFactory.getInstance().getDateFormatterFactory());
-        txtExpiration.setName(bundle.getString("DocumentPanel.txtExpiration.name")); // NOI18N
-        txtExpiration.setNextFocusableComponent(txtSigningDate);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${document.expirationDate}"), txtExpiration, org.jdesktop.beansbinding.BeanProperty.create("value"));
-        bindingGroup.addBinding(binding);
-
-        txtDocRecordDate.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-        txtDocRecordDate.setHorizontalAlignment(JTextField.LEADING);
 
         btnExpirationDate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/calendar.png"))); // NOI18N
         btnExpirationDate.setText(bundle.getString("DocumentPanel.btnExpirationDate.text")); // NOI18N
@@ -623,15 +604,21 @@ public class DocumentPanel extends javax.swing.JPanel {
             }
         });
 
+        txtExpiration.setText(bundle.getString("DocumentPanel.txtExpiration.text")); // NOI18N
+        txtExpiration.setName(bundle.getString("DocumentPanel.txtExpiration.name")); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${document.expirationDate}"), txtExpiration, org.jdesktop.beansbinding.BeanProperty.create("value"));
+        bindingGroup.addBinding(binding);
+
         javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
         jPanel12.setLayout(jPanel12Layout);
         jPanel12Layout.setHorizontalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel12Layout.createSequentialGroup()
                 .addComponent(jLabel10)
-                .addGap(0, 56, Short.MAX_VALUE))
+                .addGap(0, 50, Short.MAX_VALUE))
             .addGroup(jPanel12Layout.createSequentialGroup()
-                .addComponent(txtExpiration)
+                .addComponent(txtExpiration, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnExpirationDate))
         );
@@ -641,8 +628,9 @@ public class DocumentPanel extends javax.swing.JPanel {
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnExpirationDate)
-                    .addComponent(txtExpiration, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(txtExpiration, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnExpirationDate))
+                .addGap(3, 3, 3))
         );
 
         jPanel8.add(jPanel12);
@@ -664,7 +652,7 @@ public class DocumentPanel extends javax.swing.JPanel {
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel13Layout.createSequentialGroup()
                 .addComponent(jLabel11)
-                .addGap(0, 99, Short.MAX_VALUE))
+                .addGap(0, 93, Short.MAX_VALUE))
             .addComponent(txtStatus)
         );
         jPanel13Layout.setVerticalGroup(
@@ -682,17 +670,6 @@ public class DocumentPanel extends javax.swing.JPanel {
         jLabel12.setText(bundle.getString("DocumentPanel.jLabel12.text")); // NOI18N
         jLabel12.setName(bundle.getString("DocumentPanel.jLabel12.name")); // NOI18N
 
-        txtDocRecordDate.setFont(new java.awt.Font("Thaoma", 0, 12));
-        txtSigningDate.setFormatterFactory(FormattersFactory.getInstance().getDateFormatterFactory());
-        txtSigningDate.setName(bundle.getString("DocumentPanel.txtSigningDate.name")); // NOI18N
-        txtSigningDate.setNextFocusableComponent(txtVersion);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${document.signingDate}"), txtSigningDate, org.jdesktop.beansbinding.BeanProperty.create("value"));
-        bindingGroup.addBinding(binding);
-
-        txtDocRecordDate.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-        txtDocRecordDate.setHorizontalAlignment(JTextField.LEADING);
-
         btnSigningDate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/calendar.png"))); // NOI18N
         btnSigningDate.setText(bundle.getString("DocumentPanel.btnSigningDate.text")); // NOI18N
         btnSigningDate.setBorder(null);
@@ -703,15 +680,21 @@ public class DocumentPanel extends javax.swing.JPanel {
             }
         });
 
+        txtSigningDate.setText(bundle.getString("DocumentPanel.txtSigningDate.text")); // NOI18N
+        txtSigningDate.setName(bundle.getString("DocumentPanel.txtSigningDate.name")); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${document.signingDate}"), txtSigningDate, org.jdesktop.beansbinding.BeanProperty.create("value"));
+        bindingGroup.addBinding(binding);
+
         javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
         jPanel14.setLayout(jPanel14Layout);
         jPanel14Layout.setHorizontalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel14Layout.createSequentialGroup()
                 .addComponent(jLabel12)
-                .addGap(0, 70, Short.MAX_VALUE))
+                .addGap(0, 64, Short.MAX_VALUE))
             .addGroup(jPanel14Layout.createSequentialGroup()
-                .addComponent(txtSigningDate)
+                .addComponent(txtSigningDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnSigningDate))
         );
@@ -721,8 +704,9 @@ public class DocumentPanel extends javax.swing.JPanel {
                 .addComponent(jLabel12)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnSigningDate)
-                    .addComponent(txtSigningDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(txtSigningDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSigningDate))
+                .addGap(3, 3, 3))
         );
 
         jPanel8.add(jPanel14);
@@ -744,7 +728,7 @@ public class DocumentPanel extends javax.swing.JPanel {
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addComponent(jLabel13)
-                .addGap(0, 95, Short.MAX_VALUE))
+                .addGap(0, 89, Short.MAX_VALUE))
             .addComponent(txtVersion)
         );
         jPanel9Layout.setVerticalGroup(
@@ -788,7 +772,7 @@ public class DocumentPanel extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
+            .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, 403, Short.MAX_VALUE)
             .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
@@ -853,13 +837,13 @@ public class DocumentPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel9;
     private org.sola.clients.beans.referencedata.SourceTypeListBean sourceTypeListBean;
     public javax.swing.JTextField txtDescription;
-    public javax.swing.JFormattedTextField txtDocAcceptanceDate;
-    public javax.swing.JFormattedTextField txtDocRecordDate;
+    private org.sola.clients.swing.common.controls.WatermarkDate txtDocAcceptanceDate;
+    public org.sola.clients.swing.common.controls.WatermarkDate txtDocRecordDate;
     public javax.swing.JTextField txtDocRefNumber;
-    public javax.swing.JFormattedTextField txtExpiration;
+    public org.sola.clients.swing.common.controls.WatermarkDate txtExpiration;
     private javax.swing.JTextField txtLaNumber;
     private javax.swing.JTextField txtOwnerName;
-    public javax.swing.JFormattedTextField txtSigningDate;
+    private org.sola.clients.swing.common.controls.WatermarkDate txtSigningDate;
     private javax.swing.JTextField txtStatus;
     public javax.swing.JFormattedTextField txtSubmissionDate;
     private javax.swing.JTextField txtVersion;

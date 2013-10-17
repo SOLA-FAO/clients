@@ -32,7 +32,7 @@ import org.sola.clients.beans.referencedata.RequestCategoryTypeListBean;
 import org.sola.clients.beans.referencedata.RequestTypeBean;
 import org.sola.clients.beans.referencedata.TypeActionListBean;
 import org.sola.clients.beans.referencedata.RrrTypeListBean;
-import org.sola.clients.swing.ui.renderers.FormattersFactory;
+import org.sola.clients.swing.common.utils.FormattersFactory;
 import org.sola.clients.swing.ui.renderers.TableCellTextAreaRenderer;
 import org.sola.webservices.transferobjects.referencedata.RequestTypeTO;
 
