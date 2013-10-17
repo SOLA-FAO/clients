@@ -949,6 +949,10 @@ public class ApplicationBean extends ApplicationSummaryBean {
      */
     public boolean lodgeApplication() {
         setApplicantRole();
+        if (getContactPerson().getGenderCode()==null&&getContactPerson().getTypeCode().contentEquals("naturalPerson")){
+            MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_GENDER);
+            return false;
+        }
         ApplicationTO app = TypeConverters.BeanToTrasferObject(this, ApplicationTO.class);
         app = WSManager.getInstance().getCaseManagementService().createApplication(app);
         TypeConverters.TransferObjectToBean(app, ApplicationBean.class, this);
@@ -963,6 +967,10 @@ public class ApplicationBean extends ApplicationSummaryBean {
      */
     public boolean saveApplication() {
         setApplicantRole();
+        if (getContactPerson().getGenderCode()==null && getContactPerson().getTypeCode().contentEquals("naturalPerson")){
+            MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_GENDER);
+            return false;
+        }
         ApplicationTO app = TypeConverters.BeanToTrasferObject(this, ApplicationTO.class);
         app = WSManager.getInstance().getCaseManagementService().saveApplication(app);
         TypeConverters.TransferObjectToBean(app, ApplicationBean.class, this);

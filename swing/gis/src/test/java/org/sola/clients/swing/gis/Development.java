@@ -72,7 +72,7 @@ public class Development {
         this.displayControlsBundleForm(ctrl);
     }
 
-    //@Ignore
+    @Ignore
     @Test
     public void testUIControlsBundleForSpatialUnitGroupManagement() throws Exception {
         System.out.println("Test ControlsBundle for Spatial unit group");
@@ -149,7 +149,7 @@ public class Development {
     /**
      * Test the controls bundle for cadastre change
      */
-    @Ignore
+    //@Ignore
     @Test
     public void testUIControlsBundleForCadastreChange() throws Exception {
         System.out.println("Test ControlsBundle for cadastre change");

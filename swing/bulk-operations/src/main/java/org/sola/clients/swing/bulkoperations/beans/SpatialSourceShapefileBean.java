@@ -77,6 +77,7 @@ public class SpatialSourceShapefileBean extends SpatialSourceBean {
                         && isIfMultiUseFirstGeometry()){
                     geometry = geometry.getGeometryN(0);
                 }
+                geometry.setSRID(getSrid());
                 spatialObject.setTheGeom(GeometryUtility.getWkbFromGeometry(geometry));
                 for(SpatialAttributeBean attribute: onlyAttributes){
                     spatialObject.getFieldsWithValues().put(

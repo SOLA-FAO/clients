@@ -306,15 +306,15 @@ public class PartyPanel extends javax.swing.JPanel {
         jPanel9 = new javax.swing.JPanel();
         labAddress = new javax.swing.JLabel();
         txtAddress = new javax.swing.JTextField();
+        jPanel8 = new javax.swing.JPanel();
+        lblGender = new javax.swing.JLabel();
+        cbxGender = new javax.swing.JComboBox();
         jPanel6 = new javax.swing.JPanel();
         labIdType = new javax.swing.JLabel();
         cbxIdType = new javax.swing.JComboBox();
         jPanel7 = new javax.swing.JPanel();
         labIdref = new javax.swing.JLabel();
         txtIdref = new javax.swing.JTextField();
-        jPanel8 = new javax.swing.JPanel();
-        lblGender = new javax.swing.JLabel();
-        cbxGender = new javax.swing.JComboBox();
         groupPanel1 = new org.sola.clients.swing.ui.GroupPanel();
         fullPanel = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
@@ -545,6 +545,41 @@ public class PartyPanel extends javax.swing.JPanel {
 
         jPanel10.add(jPanel9);
 
+        jPanel8.setName("jPanel8"); // NOI18N
+
+        lblGender.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
+        lblGender.setText(bundle.getString("PartyPanel.labGender.text")); // NOI18N
+        lblGender.setToolTipText(bundle.getString("PartyPanel.labGender.toolTipText")); // NOI18N
+        lblGender.setName("labGender"); // NOI18N
+
+        cbxGender.setBackground(new java.awt.Color(226, 244, 224));
+        cbxGender.setName("cbxGender"); // NOI18N
+        cbxGender.setRenderer(new SimpleComboBoxRenderer("getDisplayValue"));
+
+        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${genderTypeList}");
+        jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, genderTypes, eLProperty, cbxGender);
+        bindingGroup.addBinding(jComboBoxBinding);
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${partyBean.genderType}"), cbxGender, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(lblGender, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE)
+            .addComponent(cbxGender, 0, 148, Short.MAX_VALUE)
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addComponent(lblGender, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbxGender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(14, Short.MAX_VALUE))
+        );
+
+        jPanel10.add(jPanel8);
+
         jPanel6.setName("jPanel6"); // NOI18N
 
         labIdType.setText(bundle.getString("PartyPanel.labIdType.text")); // NOI18N
@@ -605,40 +640,6 @@ public class PartyPanel extends javax.swing.JPanel {
         );
 
         jPanel10.add(jPanel7);
-
-        jPanel8.setName("jPanel8"); // NOI18N
-
-        lblGender.setText(bundle.getString("PartyPanel.labGender.text")); // NOI18N
-        lblGender.setToolTipText(bundle.getString("PartyPanel.labGender.toolTipText")); // NOI18N
-        lblGender.setName("labGender"); // NOI18N
-
-        cbxGender.setBackground(new java.awt.Color(226, 244, 224));
-        cbxGender.setName("cbxGender"); // NOI18N
-        cbxGender.setRenderer(new SimpleComboBoxRenderer("getDisplayValue"));
-
-        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${genderTypeList}");
-        jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, genderTypes, eLProperty, cbxGender);
-        bindingGroup.addBinding(jComboBoxBinding);
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${partyBean.genderType}"), cbxGender, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
-
-        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
-        jPanel8.setLayout(jPanel8Layout);
-        jPanel8Layout.setHorizontalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(lblGender, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE)
-            .addComponent(cbxGender, 0, 148, Short.MAX_VALUE)
-        );
-        jPanel8Layout.setVerticalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel8Layout.createSequentialGroup()
-                .addComponent(lblGender, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbxGender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(14, Short.MAX_VALUE))
-        );
-
-        jPanel10.add(jPanel8);
 
         groupPanel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         groupPanel1.setName("groupPanel1"); // NOI18N

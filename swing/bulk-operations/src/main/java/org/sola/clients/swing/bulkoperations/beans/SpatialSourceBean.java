@@ -6,6 +6,7 @@ package org.sola.clients.swing.bulkoperations.beans;
 
 import java.io.File;
 import java.util.List;
+import javax.validation.constraints.NotNull;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.sola.clients.beans.AbstractCodeBean;
 import org.sola.clients.beans.controls.SolaObservableList;
@@ -24,6 +25,9 @@ public abstract class  SpatialSourceBean extends AbstractCodeBean {
     private SolaObservableList<SpatialAttributeBean> attributes =
             new SolaObservableList<SpatialAttributeBean>();
     private boolean ifMultiUseFirstGeometry = true;
+
+    @NotNull(message = "Srid is missing")
+    private Integer srid = null;
     
     private File sourceFile;
     
@@ -68,6 +72,15 @@ public abstract class  SpatialSourceBean extends AbstractCodeBean {
         this.sourceFile = sourceFile;
         //The list of attributes will be populated
         loadAttributes();
+    }
+
+    public Integer getSrid() {
+        return srid;
+    }
+
+    public void setSrid(Integer srid) {
+        this.srid = srid;
+        System.out.println(srid);
     }
     
     /**

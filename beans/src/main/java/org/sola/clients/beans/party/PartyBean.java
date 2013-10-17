@@ -30,6 +30,7 @@ package org.sola.clients.beans.party;
 import java.util.UUID;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.address.AddressBean;
 import org.sola.clients.beans.application.ApplicationBean;
@@ -41,6 +42,7 @@ import org.sola.clients.beans.party.validation.PartyIdTypeCheck;
 import org.sola.clients.beans.referencedata.*;
 import org.sola.clients.beans.validation.Localized;
 import org.sola.common.messaging.ClientMessage;
+import org.sola.common.messaging.MessageUtility;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.EntityAction;
 import org.sola.webservices.transferobjects.casemanagement.PartyTO;
@@ -342,7 +344,12 @@ public class PartyBean extends PartySummaryBean {
      */
     public boolean saveParty() {
         PartyTO party = TypeConverters.BeanToTrasferObject(this, PartyTO.class);
-
+          
+          if (getGenderCode()==null && getTypeCode().contentEquals("naturalPerson")){
+            MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_GENDER);
+            return false;
+          }
+       
         if (getAddress() != null && getAddress().isNew() && (getAddress().getDescription() == null
                 || getAddress().getDescription().length() < 1)) {
             party.setAddress(null);
