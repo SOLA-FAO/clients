@@ -131,8 +131,8 @@
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="java.util.Date.class"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
               </Subbinding>
-              <Subbinding sourcePath="${archiveDocumentId}">
-                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
+              <Subbinding sourcePath="${archiveDocument}">
+                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="org.sola.clients.beans.digitalarchive.DocumentBean.class"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
               </Subbinding>
             </BindingProperty>

@@ -245,9 +245,9 @@ public class DocumentsPanel extends javax.swing.JPanel {
         columnBinding.setColumnName("Submission");
         columnBinding.setColumnClass(java.util.Date.class);
         columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${archiveDocumentId}"));
-        columnBinding.setColumnName("Archive Document Id");
-        columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${archiveDocument}"));
+        columnBinding.setColumnName("Archive Document");
+        columnBinding.setColumnClass(org.sola.clients.beans.digitalarchive.DocumentBean.class);
         columnBinding.setEditable(false);
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, sourceListBean, org.jdesktop.beansbinding.ELProperty.create("${selectedSource}"), tableDocuments, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));

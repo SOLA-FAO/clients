@@ -161,7 +161,6 @@ public class SourceBean extends SourceSummaryBean {
     }
 
     public void save() {
-
         TypeConverters.TransferObjectToBean(
                 WSManager.getInstance().getCaseManagementService().saveSource(TypeConverters.BeanToTrasferObject(this, SourceTO.class)),
                 SourceBean.class, this);
