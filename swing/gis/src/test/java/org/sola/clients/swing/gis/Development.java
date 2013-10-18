@@ -85,7 +85,7 @@ public class Development {
     /**
      * Test the controls bundle for setting the location of an application
      */
-    @Ignore
+    //@Ignore
     @Test
     public void testUIControlsBundleForPublicDisplay() throws Exception {
         System.out.println("Test ControlsBundle for public display");
@@ -149,7 +149,7 @@ public class Development {
     /**
      * Test the controls bundle for cadastre change
      */
-    //@Ignore
+    @Ignore
     @Test
     public void testUIControlsBundleForCadastreChange() throws Exception {
         System.out.println("Test ControlsBundle for cadastre change");
