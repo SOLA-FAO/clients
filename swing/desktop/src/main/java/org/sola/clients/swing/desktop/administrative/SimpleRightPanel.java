@@ -27,11 +27,13 @@
  */
 package org.sola.clients.swing.desktop.administrative;
 
+import javax.swing.JFormattedTextField;
 import org.sola.clients.beans.administrative.RrrBean;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationServiceBean;
 import org.sola.clients.beans.referencedata.StatusConstants;
 import org.sola.clients.swing.common.LafManager;
+import org.sola.clients.swing.common.controls.CalendarForm;
 import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel;
 import org.sola.clients.swing.ui.ContentPanel;
@@ -132,6 +134,7 @@ public class SimpleRightPanel extends ContentPanel {
             txtNotationText.setEditable(false);
             cbxIsPrimary.setEnabled(false);
             txtRegDatetime.setEditable(false);
+            btnRegDate.setEnabled(false);
             cbxIsPrimary.setEnabled(false);
         }
     }
@@ -157,6 +160,11 @@ public class SimpleRightPanel extends ContentPanel {
         return true;
     }
     
+    private void showCalendar(JFormattedTextField dateField) {
+        CalendarForm calendar = new CalendarForm(null, true, dateField);
+        calendar.setVisible(true);
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -174,8 +182,9 @@ public class SimpleRightPanel extends ContentPanel {
         jLabel2 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         cbxIsPrimary = new javax.swing.JCheckBox();
-        txtRegDatetime = new javax.swing.JFormattedTextField();
         jLabel13 = new javax.swing.JLabel();
+        txtRegDatetime = new org.sola.clients.swing.common.controls.WatermarkDate();
+        btnRegDate = new javax.swing.JButton();
         groupPanel1 = new org.sola.clients.swing.ui.GroupPanel();
         documentsPanel = createDocumentsPanel();
 
@@ -239,15 +248,24 @@ public class SimpleRightPanel extends ContentPanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${primary}"), cbxIsPrimary, org.jdesktop.beansbinding.BeanProperty.create("selected"));
         bindingGroup.addBinding(binding);
 
-        txtRegDatetime.setFormatterFactory(FormattersFactory.getInstance().getDateFormatterFactory());
-        txtRegDatetime.setName("txtRegDatetime"); // NOI18N
+        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
+        jLabel13.setText(bundle.getString("SimpleRightPanel.jLabel13.text")); // NOI18N
+        jLabel13.setName("jLabel13"); // NOI18N
+
+        txtRegDatetime.setName(bundle.getString("SimpleRightPanel.txtRegDatetime.name")); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${registrationDate}"), txtRegDatetime, org.jdesktop.beansbinding.BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
 
-        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
-        jLabel13.setText(bundle.getString("SimpleRightPanel.jLabel13.text")); // NOI18N
-        jLabel13.setName("jLabel13"); // NOI18N
+        btnRegDate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/calendar.png"))); // NOI18N
+        btnRegDate.setText(bundle.getString("SimpleRightPanel.btnRegDate.text")); // NOI18N
+        btnRegDate.setBorder(null);
+        btnRegDate.setName(bundle.getString("SimpleRightPanel.btnRegDate.name")); // NOI18N
+        btnRegDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegDateActionPerformed(evt);
+            }
+        });
 
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -256,19 +274,23 @@ public class SimpleRightPanel extends ContentPanel {
             .add(jPanel1Layout.createSequentialGroup()
                 .add(jLabel13)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(txtRegDatetime, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 67, Short.MAX_VALUE)
-                .add(18, 18, 18)
+                .add(txtRegDatetime, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 93, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(btnRegDate)
+                .add(29, 29, 29)
                 .add(cbxIsPrimary, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 117, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(308, 308, 308))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
-                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel13)
-                    .add(txtRegDatetime, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                        .add(jLabel13)
+                        .add(txtRegDatetime, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(btnRegDate)
                     .add(cbxIsPrimary))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         groupPanel1.setName("groupPanel1"); // NOI18N
@@ -309,7 +331,7 @@ public class SimpleRightPanel extends ContentPanel {
                 .add(18, 18, 18)
                 .add(groupPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(documentsPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
+                .add(documentsPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -319,7 +341,13 @@ public class SimpleRightPanel extends ContentPanel {
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         saveRrr();
     }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void btnRegDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegDateActionPerformed
+        showCalendar(txtRegDatetime);
+    }//GEN-LAST:event_btnRegDateActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnRegDate;
     private javax.swing.JButton btnSave;
     private javax.swing.JCheckBox cbxIsPrimary;
     private org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel documentsPanel;
@@ -335,7 +363,7 @@ public class SimpleRightPanel extends ContentPanel {
     private javax.swing.JToolBar jToolBar1;
     private org.sola.clients.beans.administrative.RrrBean rrrBean;
     private javax.swing.JTextField txtNotationText;
-    private javax.swing.JFormattedTextField txtRegDatetime;
+    private org.sola.clients.swing.common.controls.WatermarkDate txtRegDatetime;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }

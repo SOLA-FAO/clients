@@ -237,6 +237,7 @@ public class PropertyPanel extends ContentPanel {
         customizeForm();
 
         rrrTypes.addPropertyChangeListener(new PropertyChangeListener() {
+
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(RrrTypeListBean.SELECTED_RRR_TYPE_PROPERTY)) {
@@ -246,6 +247,7 @@ public class PropertyPanel extends ContentPanel {
         });
 
         baUnitBean1.addPropertyChangeListener(new PropertyChangeListener() {
+
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(BaUnitBean.SELECTED_RIGHT_PROPERTY)) {
@@ -268,6 +270,7 @@ public class PropertyPanel extends ContentPanel {
         });
 
         documentsPanel1.getSourceListBean().addPropertyChangeListener(new PropertyChangeListener() {
+
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(SourceListBean.SELECTED_SOURCE_PROPERTY)) {
@@ -293,7 +296,7 @@ public class PropertyPanel extends ContentPanel {
             headerPanel.setTitleText(String.format(
                     resourceBundle.getString("PropertyPanel.existingProperty.Text"),
                     nameFirstPart, nameLastPart));
-            txtArea.setEditable(false);
+            txtArea.setEditable(baUnitBean1.getStatusCode().equalsIgnoreCase(StatusConstants.PENDING));
 
             if (txtArea.getText().indexOf('.') != -1) {
                 formatSize(txtArea.getText());
@@ -375,6 +378,7 @@ public class PropertyPanel extends ContentPanel {
             if (getMainContentPanel() != null) {
                 if (newPropertyWizardListener == null) {
                     newPropertyWizardListener = new PropertyChangeListener() {
+
                         @Override
                         public void propertyChange(PropertyChangeEvent evt) {
                             if (evt.getPropertyName().equals(NewPropertyWizardPanel.SELECTED_RESULT_PROPERTY)) {
@@ -392,6 +396,7 @@ public class PropertyPanel extends ContentPanel {
                 }
 
                 SolaTask t = new SolaTask<Void, Void>() {
+
                     @Override
                     public Void doTask() {
                         setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PROPERTYLINK));
@@ -779,6 +784,7 @@ public class PropertyPanel extends ContentPanel {
     private void addParcel(boolean isNew) {
 
         PropertyChangeListener listener = new PropertyChangeListener() {
+
             @Override
             public void propertyChange(PropertyChangeEvent e) {
                 if (e.getNewValue() != null) {
@@ -963,8 +969,6 @@ public class PropertyPanel extends ContentPanel {
     }
 
     private void calculateAreaSysreg() {
-//        if (btnNext.isEnabled()) { 
-
         String cadastreObj = "";
         for (int i = 0, n = baUnitBean1.getCadastreObjectList().getFilteredList().size(); i < n; i++) {
             if (cadastreObj == "") {
@@ -976,13 +980,14 @@ public class PropertyPanel extends ContentPanel {
 
         SpatialValueAreaBean spatialValueAreaBean = getSpatialValueArea(cadastreObj);
 
-
-
         if (spatialValueAreaBean != null && spatialValueAreaBean.getCalculatedAreaSize() != null) {
-            if (!spatialValueAreaBean.getCalculatedAreaSize().equals(new BigDecimal(0))) {
-                if (MessageUtility.displayMessage(ClientMessage.BAUNIT_CONFIRM_AREA,
-                        new Object[]{spatialValueAreaBean.getCalculatedAreaSize()}) == MessageUtility.BUTTON_ONE) {
-                    baUnitAreaBean1.setSize(spatialValueAreaBean.getCalculatedAreaSize());
+            if (!spatialValueAreaBean.getCalculatedAreaSize().equals(BigDecimal.ZERO)) {
+                if (baUnitAreaBean1.getSize() != null
+                        && baUnitAreaBean1.getSize().compareTo(spatialValueAreaBean.getCalculatedAreaSize()) != 0) {
+                    if (MessageUtility.displayMessage(ClientMessage.BAUNIT_CONFIRM_AREA,
+                            new Object[]{spatialValueAreaBean.getCalculatedAreaSize()}) == MessageUtility.BUTTON_ONE) {
+                        baUnitAreaBean1.setSize(spatialValueAreaBean.getCalculatedAreaSize());
+                    }
                 }
             }
         }
@@ -990,7 +995,6 @@ public class PropertyPanel extends ContentPanel {
         tabsMain.setEnabled(true);
         tabsMain.setSelectedIndex(tabsMain.indexOfComponent(jPanel7));
         txtArea.requestFocus(true);
-//        }       
     }
 
     private void saveBaUnit(final boolean showMessage, final boolean closeOnSave) {
@@ -1030,6 +1034,7 @@ public class PropertyPanel extends ContentPanel {
         }
 
         SolaTask<Void, Void> t = new SolaTask<Void, Void>() {
+
             @Override
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_SAVING));
@@ -1120,6 +1125,7 @@ public class PropertyPanel extends ContentPanel {
         }
 
         PropertyChangeListener listener = new PropertyChangeListener() {
+
             @Override
             public void propertyChange(PropertyChangeEvent e) {
                 SourceBean document = null;
@@ -1146,6 +1152,7 @@ public class PropertyPanel extends ContentPanel {
     private void openPropertyForm(final RelatedBaUnitInfoBean relatedBaUnit) {
         if (relatedBaUnit != null && relatedBaUnit.getRelatedBaUnit() != null) {
             SolaTask t = new SolaTask<Void, Void>() {
+
                 @Override
                 public Void doTask() {
                     setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PROPERTY));
@@ -1171,6 +1178,7 @@ public class PropertyPanel extends ContentPanel {
                 applicationBean.getCadastreObjectFilteredList(), MainForm.getInstance(), true);
         WindowUtility.centerForm(form);
         form.addPropertyChangeListener(new PropertyChangeListener() {
+
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(CadastreObjectsDialog.SELECT_CADASTRE_OBJECT)) {

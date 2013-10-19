@@ -100,9 +100,11 @@
                           <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="txtRegDatetime" min="-2" pref="97" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="txtRegDatetime" min="-2" pref="91" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="btnRegDate" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
                               <Component id="cbxIsPrimary" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -119,14 +121,19 @@
               <Component id="headerPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jToolBar1" min="-2" pref="25" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtRegDatetime" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="cbxIsPrimary" alignment="3" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbxIsPrimary" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtRegDatetime" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Component id="btnRegDate" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="txtNotationText" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -213,22 +220,11 @@
         </Property>
       </Properties>
     </Component>
-    <Component class="javax.swing.JFormattedTextField" name="txtRegDatetime">
-      <Properties>
-        <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="FormattersFactory.getInstance().getDateFormatterFactory()" type="code"/>
-        </Property>
-      </Properties>
-      <BindingProperties>
-        <BindingProperty name="value" source="rrrBean" sourcePath="${registrationDate}" target="txtRegDatetime" targetPath="value" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
-    </Component>
     <Component class="javax.swing.JCheckBox" name="cbxIsPrimary">
       <Properties>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
           <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="SimpleOwhershipPanel.cbxIsPrimary.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
         </Property>
-        <Property name="horizontalTextPosition" type="int" value="10"/>
       </Properties>
       <BindingProperties>
         <BindingProperty name="selected" source="rrrBean" sourcePath="${primary}" target="cbxIsPrimary" targetPath="selected" updateStrategy="0" immediately="false"/>
@@ -276,7 +272,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jToolBar2" min="-2" pref="25" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane1" pref="66" max="32767" attributes="0"/>
+                      <Component id="jScrollPane1" pref="67" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -431,7 +427,7 @@
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="groupPanel2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="documentsManagementPanel" pref="97" max="32767" attributes="0"/>
+                      <Component id="documentsManagementPanel" pref="98" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -453,5 +449,29 @@
         </Container>
       </SubComponents>
     </Container>
+    <Component class="org.sola.clients.swing.common.controls.WatermarkDate" name="txtRegDatetime">
+      <BindingProperties>
+        <BindingProperty name="value" source="rrrBean" sourcePath="${registrationDate}" target="txtRegDatetime" targetPath="value" updateStrategy="0" immediately="false"/>
+      </BindingProperties>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnRegDate">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/images/common/calendar.png"/>
+        </Property>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+          <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="SimpleRightholderPanel.btnRegDate.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+        </Property>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="null"/>
+        </Property>
+        <Property name="focusable" type="boolean" value="false"/>
+        <Property name="horizontalTextPosition" type="int" value="0"/>
+        <Property name="verticalTextPosition" type="int" value="3"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRegDateActionPerformed"/>
+      </Events>
+    </Component>
   </SubComponents>
 </Form>

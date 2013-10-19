@@ -103,7 +103,7 @@
               <Component id="jPanel9" min="-2" max="-2" attributes="0"/>
           </Group>
           <Component id="jToolBar1" alignment="0" max="32767" attributes="0"/>
-          <Component id="jScrollPane1" alignment="0" pref="483" max="32767" attributes="0"/>
+          <Component id="jScrollPane1" alignment="0" pref="555" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -134,7 +134,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jToolBar1" min="-2" pref="25" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jScrollPane1" pref="111" max="32767" attributes="0"/>
+              <Component id="jScrollPane1" pref="110" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -303,13 +303,13 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <Component id="txtSubmissionDateFrom" pref="100" max="32767" attributes="2"/>
-                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Component id="txtSubmissionDateFrom" max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="btnSubmissionDateFrom" min="-2" max="-2" attributes="0"/>
               </Group>
               <Group type="102" alignment="0" attributes="0">
                   <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace pref="46" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -317,10 +317,10 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="2" attributes="0">
-                      <Component id="btnSubmissionDateFrom" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="txtSubmissionDateFrom" alignment="2" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="btnSubmissionDateFrom" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtSubmissionDateFrom" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -328,16 +328,6 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JFormattedTextField" name="txtSubmissionDateFrom">
-          <Properties>
-            <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="FormattersFactory.getInstance().getDateFormatterFactory()" type="code"/>
-            </Property>
-          </Properties>
-          <BindingProperties>
-            <BindingProperty name="value" source="searchParams" sourcePath="${fromSubmissionDate}" target="txtSubmissionDateFrom" targetPath="value" updateStrategy="0" immediately="false"/>
-          </BindingProperties>
-        </Component>
         <Component class="javax.swing.JButton" name="btnSubmissionDateFrom">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
@@ -361,6 +351,11 @@
             </Property>
           </Properties>
         </Component>
+        <Component class="org.sola.clients.swing.common.controls.WatermarkDate" name="txtSubmissionDateFrom">
+          <BindingProperties>
+            <BindingProperty name="value" source="searchParams" sourcePath="${fromSubmissionDate}" target="txtSubmissionDateFrom" targetPath="value" updateStrategy="0" immediately="false"/>
+          </BindingProperties>
+        </Component>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="jPanel7">
@@ -368,9 +363,12 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
+              <Group type="102" alignment="0" attributes="0">
+                  <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="0" pref="50" max="32767" attributes="0"/>
+              </Group>
               <Group type="102" alignment="1" attributes="0">
-                  <Component id="txtSubmissionDateTo" pref="90" max="32767" attributes="1"/>
+                  <Component id="txtSubmissionDateTo" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="btnSubmissionDateTo" min="-2" max="-2" attributes="0"/>
               </Group>
@@ -381,9 +379,9 @@
               <Group type="102" alignment="0" attributes="0">
                   <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="2" attributes="0">
-                      <Component id="btnSubmissionDateTo" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="txtSubmissionDateTo" alignment="2" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="btnSubmissionDateTo" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtSubmissionDateTo" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -397,19 +395,6 @@
               <ResourceString bundle="org/sola/clients/swing/ui/source/Bundle.properties" key="PowerOfAttorneySearchPanel.jLabel5.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
             </Property>
           </Properties>
-        </Component>
-        <Component class="javax.swing.JFormattedTextField" name="txtSubmissionDateTo">
-          <Properties>
-            <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="FormattersFactory.getInstance().getDateFormatterFactory()" type="code"/>
-            </Property>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="org/sola/clients/swing/ui/source/Bundle.properties" key="PowerOfAttorneySearchPanel.txtSubmissionDateTo.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-            </Property>
-          </Properties>
-          <BindingProperties>
-            <BindingProperty name="value" source="searchParams" sourcePath="${toSubmissionDate}" target="txtSubmissionDateTo" targetPath="value" updateStrategy="0" immediately="false"/>
-          </BindingProperties>
         </Component>
         <Component class="javax.swing.JButton" name="btnSubmissionDateTo">
           <Properties>
@@ -426,6 +411,11 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSubmissionDateToActionPerformed"/>
           </Events>
+        </Component>
+        <Component class="org.sola.clients.swing.common.controls.WatermarkDate" name="txtSubmissionDateTo">
+          <BindingProperties>
+            <BindingProperty name="value" source="searchParams" sourcePath="${toSubmissionDate}" target="txtSubmissionDateTo" targetPath="value" updateStrategy="0" immediately="false"/>
+          </BindingProperties>
         </Component>
       </SubComponents>
     </Container>

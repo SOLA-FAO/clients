@@ -32,6 +32,7 @@ package org.sola.clients.swing.desktop.administrative;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import javax.swing.JFormattedTextField;
 import javax.validation.groups.Default;
 import org.sola.clients.beans.administrative.RrrBean;
 import org.sola.clients.beans.administrative.validation.MortgageValidationGroup;
@@ -41,6 +42,7 @@ import org.sola.clients.beans.party.PartySummaryBean;
 import org.sola.clients.beans.referencedata.StatusConstants;
 import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.common.controls.BrowseControlListener;
+import org.sola.clients.swing.common.controls.CalendarForm;
 import org.sola.clients.swing.common.utils.BindingTools;
 import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.desktop.party.QuickSearchPartyForm;
@@ -48,7 +50,6 @@ import org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.common.utils.FormattersFactory;
 import org.sola.clients.swing.ui.renderers.SimpleComboBoxRenderer;
-import org.sola.clients.swing.ui.source.DocumentsManagementPanel;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
@@ -131,9 +132,11 @@ public class MortgagePanel extends ContentPanel {
             btnSave.setVisible(false);
             txtNotationText.setEnabled(false);
             txtRegDatetime.setEditable(false);
+            btnRegDate.setEnabled(false);
             txtNotationText.setEditable(false);
             txtAmount.setEditable(false);
             txtExpiryDate.setEditable(false);
+            btnExpDate.setEnabled(false);
             txtInterestRate.setEditable(false);
             txtRanking.setEditable(false);
             cbxType.setEditable(false);
@@ -202,6 +205,11 @@ public class MortgagePanel extends ContentPanel {
         return true;
     }
 
+    private void showCalendar(JFormattedTextField dateField) {
+        CalendarForm calendar = new CalendarForm(null, true, dateField);
+        calendar.setVisible(true);
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -221,10 +229,12 @@ public class MortgagePanel extends ContentPanel {
         jPanel8 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
-        txtRegDatetime = new javax.swing.JFormattedTextField();
+        txtRegDatetime = new org.sola.clients.swing.common.controls.WatermarkDate();
+        btnRegDate = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        txtExpiryDate = new javax.swing.JFormattedTextField();
+        txtExpiryDate = new org.sola.clients.swing.common.controls.WatermarkDate();
+        btnExpDate = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         cbxType = new javax.swing.JComboBox();
@@ -302,27 +312,42 @@ public class MortgagePanel extends ContentPanel {
         jLabel13.setText(bundle.getString("MortgagePanel.jLabel13.text")); // NOI18N
         jLabel13.setName("jLabel13"); // NOI18N
 
-        txtRegDatetime.setFormatterFactory(FormattersFactory.getInstance().getDateFormatterFactory());
-        txtRegDatetime.setName("txtRegDatetime"); // NOI18N
+        txtRegDatetime.setName(bundle.getString("MortgagePanel.txtRegDatetime.name")); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${registrationDate}"), txtRegDatetime, org.jdesktop.beansbinding.BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
+
+        btnRegDate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/calendar.png"))); // NOI18N
+        btnRegDate.setText(bundle.getString("MortgagePanel.btnRegDate.text")); // NOI18N
+        btnRegDate.setBorder(null);
+        btnRegDate.setName(bundle.getString("MortgagePanel.btnRegDate.name")); // NOI18N
+        btnRegDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegDateActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jLabel13)
-                .addContainerGap(112, Short.MAX_VALUE))
-            .addComponent(txtRegDatetime, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel13)
+                        .addGap(0, 90, Short.MAX_VALUE))
+                    .addComponent(txtRegDatetime, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnRegDate))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jLabel13)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtRegDatetime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnRegDate)
+                    .addComponent(txtRegDatetime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(14, Short.MAX_VALUE))
         );
 
@@ -334,27 +359,42 @@ public class MortgagePanel extends ContentPanel {
         jLabel3.setText(bundle.getString("MortgagePanel.jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
 
-        txtExpiryDate.setFormatterFactory(FormattersFactory.getInstance().getDateFormatterFactory());
-        txtExpiryDate.setName("txtExpiryDate"); // NOI18N
+        txtExpiryDate.setName(bundle.getString("MortgagePanel.txtExpiryDate.name")); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${expirationDate}"), txtExpiryDate, org.jdesktop.beansbinding.BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
+
+        btnExpDate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/calendar.png"))); // NOI18N
+        btnExpDate.setText(bundle.getString("MortgagePanel.btnExpDate.text")); // NOI18N
+        btnExpDate.setBorder(null);
+        btnExpDate.setName(bundle.getString("MortgagePanel.btnExpDate.name")); // NOI18N
+        btnExpDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExpDateActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addComponent(jLabel3)
-                .addContainerGap(122, Short.MAX_VALUE))
-            .addComponent(txtExpiryDate, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(0, 100, Short.MAX_VALUE))
+                    .addComponent(txtExpiryDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnExpDate))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtExpiryDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnExpDate)
+                    .addComponent(txtExpiryDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(14, Short.MAX_VALUE))
         );
 
@@ -603,8 +643,19 @@ public class MortgagePanel extends ContentPanel {
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         saveRrr();
     }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void btnRegDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegDateActionPerformed
+        showCalendar(txtRegDatetime);
+    }//GEN-LAST:event_btnRegDateActionPerformed
+
+    private void btnExpDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExpDateActionPerformed
+        showCalendar(txtExpiryDate);
+    }//GEN-LAST:event_btnExpDateActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.sola.clients.swing.common.controls.BrowseControl browseLender;
+    private javax.swing.JButton btnExpDate;
+    private javax.swing.JButton btnRegDate;
     private javax.swing.JButton btnSave;
     private javax.swing.JComboBox cbxType;
     private org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel documentsManagementPanel1;
@@ -637,11 +688,11 @@ public class MortgagePanel extends ContentPanel {
     private org.sola.clients.beans.referencedata.MortgageTypeListBean mortgageTypeListBean;
     private org.sola.clients.beans.administrative.RrrBean rrrBean;
     private javax.swing.JFormattedTextField txtAmount;
-    private javax.swing.JFormattedTextField txtExpiryDate;
+    private org.sola.clients.swing.common.controls.WatermarkDate txtExpiryDate;
     private javax.swing.JFormattedTextField txtInterestRate;
     public javax.swing.JTextField txtNotationText;
     private javax.swing.JFormattedTextField txtRanking;
-    private javax.swing.JFormattedTextField txtRegDatetime;
+    private org.sola.clients.swing.common.controls.WatermarkDate txtRegDatetime;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }

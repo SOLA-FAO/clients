@@ -5,10 +5,12 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.List;
 import javax.swing.JFileChooser;
+import javax.swing.JFormattedTextField;
 import javax.swing.filechooser.FileFilter;
 import org.sola.clients.beans.administrative.RightsExportResultBean;
 import org.sola.clients.beans.administrative.RightsExportResultListBean;
 import org.sola.clients.beans.referencedata.RrrTypeListBean;
+import org.sola.clients.swing.common.controls.CalendarForm;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.common.utils.FormattersFactory;
@@ -166,6 +168,11 @@ public class RightsExportPanel extends javax.swing.JPanel {
         TaskManager.getInstance().runTask(t);
     }
 
+    private void showCalendar(JFormattedTextField dateField) {
+        CalendarForm calendar = new CalendarForm(null, true, dateField);
+        calendar.setVisible(true);
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -189,10 +196,12 @@ public class RightsExportPanel extends javax.swing.JPanel {
         jPanel10 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        txtDateFrom = new javax.swing.JFormattedTextField();
+        txtDateFrom = new org.sola.clients.swing.common.controls.WatermarkDate();
+        btnDateFrom = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        txtDateTo = new javax.swing.JFormattedTextField();
+        txtDateTo = new org.sola.clients.swing.common.controls.WatermarkDate();
+        btnDateTo = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tableRightResults = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
         jToolBar1 = new javax.swing.JToolBar();
@@ -303,11 +312,19 @@ public class RightsExportPanel extends javax.swing.JPanel {
 
         jLabel2.setText(bundle.getString("RightsExportPanel.jLabel2.text")); // NOI18N
 
-        txtDateFrom.setFormatterFactory(FormattersFactory.getInstance().getDateFormatterFactory());
         txtDateFrom.setText(bundle.getString("RightsExportPanel.txtDateFrom.text")); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rightsExportParams, org.jdesktop.beansbinding.ELProperty.create("${dateFrom}"), txtDateFrom, org.jdesktop.beansbinding.BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
+
+        btnDateFrom.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/calendar.png"))); // NOI18N
+        btnDateFrom.setText(bundle.getString("RightsExportPanel.btnDateFrom.text")); // NOI18N
+        btnDateFrom.setBorder(null);
+        btnDateFrom.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDateFromActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -315,42 +332,59 @@ public class RightsExportPanel extends javax.swing.JPanel {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(jLabel2)
-                .addGap(0, 15, Short.MAX_VALUE))
-            .addComponent(txtDateFrom)
+                .addGap(0, 33, Short.MAX_VALUE))
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addComponent(txtDateFrom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnDateFrom))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtDateFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnDateFrom)
+                    .addComponent(txtDateFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         jPanel10.add(jPanel4);
 
         jLabel3.setText(bundle.getString("RightsExportPanel.jLabel3.text")); // NOI18N
 
-        txtDateTo.setFormatterFactory(FormattersFactory.getInstance().getDateFormatterFactory());
-        txtDateTo.setText(bundle.getString("RightsExportPanel.txtDateTo.text")); // NOI18N
-
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rightsExportParams, org.jdesktop.beansbinding.ELProperty.create("${dateTo}"), txtDateTo, org.jdesktop.beansbinding.BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
+
+        btnDateTo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/calendar.png"))); // NOI18N
+        btnDateTo.setText(bundle.getString("RightsExportPanel.btnDateTo.text")); // NOI18N
+        btnDateTo.setBorder(null);
+        btnDateTo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDateToActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addComponent(jLabel3)
-                .addGap(0, 27, Short.MAX_VALUE))
-            .addComponent(txtDateTo)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(0, 22, Short.MAX_VALUE))
+                    .addComponent(txtDateTo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnDateTo))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtDateTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnDateTo)
+                    .addComponent(txtDateTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         jPanel10.add(jPanel5);
@@ -362,10 +396,10 @@ public class RightsExportPanel extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -496,8 +530,19 @@ public class RightsExportPanel extends javax.swing.JPanel {
     private void btnExportAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportAllActionPerformed
         export(rightsExportResults.getRightsList());
     }//GEN-LAST:event_btnExportAllActionPerformed
+
+    private void btnDateFromActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDateFromActionPerformed
+        showCalendar(txtDateFrom);
+    }//GEN-LAST:event_btnDateFromActionPerformed
+
+    private void btnDateToActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDateToActionPerformed
+        showCalendar(txtDateTo);
+    }//GEN-LAST:event_btnDateToActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClean;
+    private javax.swing.JButton btnDateFrom;
+    private javax.swing.JButton btnDateTo;
     private javax.swing.JButton btnExportAll;
     private javax.swing.JButton btnExportSelected;
     private javax.swing.JButton btnSearch;
@@ -526,8 +571,8 @@ public class RightsExportPanel extends javax.swing.JPanel {
     private org.sola.clients.beans.administrative.RightsExportResultListBean rightsExportResults;
     private org.sola.clients.beans.referencedata.RrrTypeListBean rrrTypes;
     private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tableRightResults;
-    private javax.swing.JFormattedTextField txtDateFrom;
-    private javax.swing.JFormattedTextField txtDateTo;
+    private org.sola.clients.swing.common.controls.WatermarkDate txtDateFrom;
+    private org.sola.clients.swing.common.controls.WatermarkDate txtDateTo;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }
