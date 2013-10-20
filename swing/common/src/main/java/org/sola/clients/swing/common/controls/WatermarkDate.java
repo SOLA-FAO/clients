@@ -42,7 +42,7 @@ public class WatermarkDate extends WatermarkFormattedTextField {
 
     private void setDateWatermarkText() {
         DateFormat formatter = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
-        String dateTemplate = ((SimpleDateFormat) formatter).toLocalizedPattern();
+        String dateTemplate = ((SimpleDateFormat) formatter).toPattern();
         dateTemplate = dateTemplate.toUpperCase();
 
         // Normalize date template
