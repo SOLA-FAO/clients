@@ -54,7 +54,7 @@ public class TextSearch extends JComboBox {
         private void processInput(final java.awt.event.KeyEvent evt) {
             if (!searchText.equals(getText())) {
                 searchText = getText();
-
+                
                 //TODO: skip search if item can be found in the current model
 
                 if (searchText.length() >= getMinSearchStringLength()) {
@@ -88,14 +88,9 @@ public class TextSearch extends JComboBox {
                                     // before executing the search if the user is still typing. 
                                     Thread.sleep(500);
                                     search(searchText);
-                                    if (isAutoSelect()) {
-                                        if (!selectFirstMatch(searchText, evt)) {
-                                            isFiredBySearch = false;
-                                            setText(searchText);
-                                        }
-                                    } else {
-                                        isFiredBySearch = false;
+                                    if (!selectFirstMatch(searchText, !isAutoSelect(), evt)) {
                                         setText(searchText);
+                                        setCaretToTheEnd();
                                     }
                                 } catch (InterruptedException ex) {
                                 }
@@ -106,6 +101,8 @@ public class TextSearch extends JComboBox {
                             public void taskDone() {
                                 if (isAutoSelect()) {
                                     selectText();
+                                } else {
+                                    setCaretToTheEnd();
                                 }
                                 searchText = getText();
                                 textSearch.setPopupVisible(getModel().getSize() > 0);
@@ -118,16 +115,11 @@ public class TextSearch extends JComboBox {
                         search(searchText);
                         textSearch.setPopupVisible(getModel().getSize() > 0);
 
-                        if (isAutoSelect()) {
-                            if (!selectFirstMatch(searchText, evt)) {
-                                setText(searchText);
-                            } else {
-                                selectText();
-                                searchText = getText();
-                            }
-                        } else {
-                            isFiredBySearch = false;
+                        if (!selectFirstMatch(searchText, !isAutoSelect(), evt)) {
                             setText(searchText);
+                        } else {
+                            selectText();
+                            searchText = getText();
                         }
                     }
                 } else {
@@ -138,8 +130,11 @@ public class TextSearch extends JComboBox {
             }
         }
 
-        private boolean selectFirstMatch(String searchText, java.awt.event.KeyEvent evt) {
-            boolean isStrict = false;
+        private void setCaretToTheEnd(){
+            setCaretPosition(getText().length());
+        }
+        
+        private boolean selectFirstMatch(String searchText, boolean isStrict, java.awt.event.KeyEvent evt) {
             if (evt.getKeyCode() == KeyEvent.VK_DELETE || evt.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
                 // In case of delete auto select only if full match
                 isStrict = true;
@@ -421,6 +416,13 @@ public class TextSearch extends JComboBox {
         autoTextFieldEditor.getEditorComponent().repaint();
     }
 
+    @Override
+    public void setPopupVisible(boolean v) {
+        if (getModel().getSize() > 0) {
+            super.setPopupVisible(v);
+        }
+    }
+    
     @Override
     protected void fireActionEvent() {
         if (!isFired) {

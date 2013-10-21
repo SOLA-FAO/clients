@@ -23,7 +23,6 @@ public class CadastreObjectSearch2 extends TextSearch {
 
     @Override
     public void search(String searchText) {
-        super.search(searchText);
         List<CadastreObjectBean> searchResult = new LinkedList<CadastreObjectBean>();
         
         TypeConverters.TransferObjectListToBeanList(
