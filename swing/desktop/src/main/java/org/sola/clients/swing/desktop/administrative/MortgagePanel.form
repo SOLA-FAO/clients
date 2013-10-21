@@ -156,7 +156,7 @@
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="1" attributes="0">
                                   <Component id="documentsManagementPanel1" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="jPanel8" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="jPanel8" alignment="0" pref="673" max="32767" attributes="0"/>
                                   <Component id="txtNotationText" alignment="0" max="32767" attributes="0"/>
                                   <Component id="groupPanel1" alignment="0" max="32767" attributes="0"/>
                               </Group>
@@ -207,7 +207,7 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
                                       <Component id="jLabel13" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="0" pref="90" max="32767" attributes="0"/>
+                                      <EmptySpace min="0" pref="94" max="32767" attributes="0"/>
                                   </Group>
                                   <Component id="txtRegDatetime" max="32767" attributes="0"/>
                               </Group>
@@ -285,7 +285,7 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
                                       <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="0" pref="100" max="32767" attributes="0"/>
+                                      <EmptySpace min="0" pref="104" max="32767" attributes="0"/>
                                   </Group>
                                   <Component id="txtExpiryDate" max="32767" attributes="0"/>
                               </Group>
@@ -361,7 +361,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
                               <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="172" max="32767" attributes="0"/>
+                              <EmptySpace pref="176" max="32767" attributes="0"/>
                           </Group>
                           <Component id="cbxType" alignment="0" pref="214" max="32767" attributes="1"/>
                       </Group>
@@ -413,7 +413,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
                               <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="163" max="32767" attributes="0"/>
+                              <EmptySpace pref="167" max="32767" attributes="0"/>
                           </Group>
                           <Component id="browseLender" alignment="0" pref="214" max="32767" attributes="0"/>
                       </Group>
@@ -446,6 +446,9 @@
                         <Property name="browseButtonTooltip" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="MortgagePanel.browseLender.browseButtonTooltip" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                         </Property>
+                        <Property name="color" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                          <Color blue="0" green="0" red="0" type="rgb"/>
+                        </Property>
                         <Property name="deleteButtonIcon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                           <Image iconType="0" name="null"/>
                         </Property>
@@ -454,6 +457,7 @@
                         </Property>
                         <Property name="displayDeleteButton" type="boolean" value="false"/>
                         <Property name="name" type="java.lang.String" value="browseLender" noResource="true"/>
+                        <Property name="underline" type="boolean" value="false"/>
                       </Properties>
                       <BindingProperties>
                         <BindingProperty name="text" source="rrrBean" sourcePath="${firstRightHolder.name}" target="browseLender" targetPath="text" updateStrategy="0" immediately="false">
@@ -536,7 +540,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
                                   <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="57" max="32767" attributes="0"/>
+                                  <EmptySpace pref="61" max="32767" attributes="0"/>
                               </Group>
                               <Component id="txtRanking" alignment="0" pref="99" max="32767" attributes="1"/>
                           </Group>
@@ -584,7 +588,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
                                   <Component id="jLabel5" min="-2" max="-2" attributes="1"/>
-                                  <EmptySpace pref="33" max="32767" attributes="0"/>
+                                  <EmptySpace pref="37" max="32767" attributes="0"/>
                               </Group>
                               <Component id="txtInterestRate" alignment="0" pref="99" max="32767" attributes="1"/>
                           </Group>

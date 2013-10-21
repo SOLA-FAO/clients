@@ -335,7 +335,7 @@ public class MortgagePanel extends ContentPanel {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel13)
-                        .addGap(0, 90, Short.MAX_VALUE))
+                        .addGap(0, 94, Short.MAX_VALUE))
                     .addComponent(txtRegDatetime, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnRegDate))
@@ -382,7 +382,7 @@ public class MortgagePanel extends ContentPanel {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jLabel3)
-                        .addGap(0, 100, Short.MAX_VALUE))
+                        .addGap(0, 104, Short.MAX_VALUE))
                     .addComponent(txtExpiryDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnExpDate))
@@ -421,7 +421,7 @@ public class MortgagePanel extends ContentPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel2)
-                .addContainerGap(172, Short.MAX_VALUE))
+                .addContainerGap(176, Short.MAX_VALUE))
             .addComponent(cbxType, 0, 214, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
@@ -442,10 +442,12 @@ public class MortgagePanel extends ContentPanel {
         jLabel6.setName("jLabel6"); // NOI18N
 
         browseLender.setBrowseButtonTooltip(bundle.getString("MortgagePanel.browseLender.browseButtonTooltip")); // NOI18N
+        browseLender.setColor(new java.awt.Color(0, 0, 0));
         browseLender.setDeleteButtonIcon(null);
         browseLender.setDeleteButtonTooltip(bundle.getString("MortgagePanel.browseLender.deleteButtonTooltip")); // NOI18N
         browseLender.setDisplayDeleteButton(false);
         browseLender.setName("browseLender"); // NOI18N
+        browseLender.setUnderline(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${firstRightHolder.name}"), browseLender, org.jdesktop.beansbinding.BeanProperty.create("text"), "lenderGoup");
         bindingGroup.addBinding(binding);
@@ -456,7 +458,7 @@ public class MortgagePanel extends ContentPanel {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jLabel6)
-                .addContainerGap(163, Short.MAX_VALUE))
+                .addContainerGap(167, Short.MAX_VALUE))
             .addComponent(browseLender, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
@@ -522,7 +524,7 @@ public class MortgagePanel extends ContentPanel {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addContainerGap(57, Short.MAX_VALUE))
+                .addContainerGap(61, Short.MAX_VALUE))
             .addComponent(txtRanking, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
@@ -553,7 +555,7 @@ public class MortgagePanel extends ContentPanel {
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addComponent(jLabel5)
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(37, Short.MAX_VALUE))
             .addComponent(txtInterestRate, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE)
         );
         jPanel7Layout.setVerticalGroup(
@@ -597,7 +599,7 @@ public class MortgagePanel extends ContentPanel {
                     .addGroup(jPanel10Layout.createSequentialGroup()
                         .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(documentsManagementPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 673, Short.MAX_VALUE)
                             .addComponent(txtNotationText, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(groupPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addContainerGap())))

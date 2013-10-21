@@ -26,12 +26,12 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+          <Group type="102" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="partyQuickSearchControl" pref="307" max="32767" attributes="0"/>
-              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="btnSelect" min="-2" pref="84" max="-2" attributes="0"/>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -40,20 +40,15 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="partyQuickSearchControl" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnSelect" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="partyQuickSearchControl" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="161" max="32767" attributes="0"/>
+              <EmptySpace pref="157" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="org.sola.clients.swing.ui.party.PartyQuickSearch" name="partyQuickSearchControl">
-      <Properties>
-        <Property name="name" type="java.lang.String" value="partyQuickSearchControl" noResource="true"/>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JButton" name="btnSelect">
       <Properties>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
@@ -64,6 +59,14 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSelectActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="org.sola.clients.swing.ui.party.PartyQuickSearch" name="partyQuickSearchControl">
+      <Properties>
+        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[120, 20]"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="partyQuickSearchControl" noResource="true"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>
