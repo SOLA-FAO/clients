@@ -172,7 +172,7 @@ public class RolesManagementPanel extends ContentPanel {
 
         jScrollPane1.setViewportView(tableRoles);
         tableRoles.getColumnModel().getColumn(0).setPreferredWidth(160);
-        tableRoles.getColumnModel().getColumn(0).setMaxWidth(160);
+        tableRoles.getColumnModel().getColumn(0).setMaxWidth(500);
         tableRoles.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("RolesManagementPanel.tableRoles.columnModel.title0")); // NOI18N
         tableRoles.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("RolesManagementPanel.tableRoles.columnModel.title1")); // NOI18N
         tableRoles.getColumnModel().getColumn(1).setCellRenderer(new TableCellTextAreaRenderer());

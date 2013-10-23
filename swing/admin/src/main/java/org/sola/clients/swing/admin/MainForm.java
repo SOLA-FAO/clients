@@ -32,11 +32,14 @@ package org.sola.clients.swing.admin;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.net.URL;
+import java.security.NoSuchAlgorithmException;
 import java.util.prefs.Preferences;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JasperPrint;
+import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.clients.beans.AbstractCodeBean;
 import org.sola.clients.beans.referencedata.*;
 import org.sola.clients.beans.security.SecurityBean;
@@ -46,12 +49,15 @@ import org.sola.clients.swing.admin.security.GroupsManagementPanel;
 import org.sola.clients.swing.admin.security.RolesManagementPanel;
 import org.sola.clients.swing.admin.security.UsersManagementPanel;
 import org.sola.clients.swing.admin.system.BrManagementPanel;
+import org.sola.clients.swing.common.DefaultExceptionHandler;
 import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.clients.swing.ui.localization.LocalizationManager;
 import org.sola.clients.swing.ui.reports.ReportViewerForm;
 import org.sola.common.RolesConstants;
 import org.sola.common.WindowUtility;
+import org.sola.common.messaging.ClientMessage;
+import org.sola.common.messaging.MessageUtility;
 
 /**
  * Main form of the Admin application.
@@ -87,7 +93,47 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
     }
-
+     
+    
+    /**
+     * Calls
+     * {@link MainForm#checkBeanState(org.sola.clients.beans.AbstractBindingBean)}
+     * method to detect if there are any changes on the provided bean. If it
+     * returns true, warning message is shown and the result of user selection
+     * is returned. If user clicks <b>Yes</b> button to confirm saving changes,
+     * true is returned.
+     */
+    public static boolean checkSaveBeforeClose(AbstractBindingBean bean) {
+        boolean hasChanges = false;
+        if (checkBeanState(bean)) {
+            if (MessageUtility.displayMessage(ClientMessage.GENERAL_FORM_CHANGES_WARNING) == MessageUtility.BUTTON_ONE) {
+                hasChanges = true;
+            } else {
+                hasChanges = false;
+            }
+        }
+        return hasChanges;
+    }
+    
+     /**
+     * Calls {@link AbstractBindingBean#hasChanges()} method to detect if there
+     * are any changes on the provided bean. <br /> Note, to check for the
+     * changes, you should call {@link AbstractBindingBean#saveStateHash()}
+     * before calling this method.
+     */
+    public static boolean checkBeanState(AbstractBindingBean bean) {
+        try {
+            return bean.hasChanges();
+        } catch (IOException ex) {
+            DefaultExceptionHandler.handleException(ex);
+            return true;
+        } catch (NoSuchAlgorithmException ex) {
+            DefaultExceptionHandler.handleException(ex);
+            return true;
+        }
+    }
+    
+    
     /**
      * Customizes main form regarding user access rights.
      */

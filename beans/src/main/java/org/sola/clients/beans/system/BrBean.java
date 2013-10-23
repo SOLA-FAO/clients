@@ -30,6 +30,7 @@ package org.sola.clients.beans.system;
 import java.util.UUID;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingBean;
@@ -64,13 +65,17 @@ public class BrBean extends AbstractBindingBean {
     
     private String id;
     @NotEmpty(message=ClientMessage.CHECK_NOTNULL_DISPLAYNAME, payload=Localized.class)
+    @Length(max = 255, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH_PAR, payload = Localized.class)
     private String displayName;
     @CodeBeanNotEmpty(message=ClientMessage.CHECK_BEANNOTEMPTY_BRTECHTYPE, payload=Localized.class)
     private BrTechnicalTypeBean brTechnicalType;
+    @Length(max = 2000, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH_PAR, payload = Localized.class)
     private String feedback;
+    @Length(max = 1000, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH_PAR, payload = Localized.class)
     private String description;
     private SolaList<BrDefinitionBean> brDefinitionList;
     private SolaList<BrValidationBean> brValidationList;
+    @Length(max = 1000, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH_PAR, payload = Localized.class)
     private String technicalDescription;
     private transient BrDefinitionBean selectedBrDefinition;
     private transient BrValidationBean selectedBrValidation;
