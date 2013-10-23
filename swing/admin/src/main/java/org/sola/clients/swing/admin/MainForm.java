@@ -479,6 +479,11 @@ public class MainForm extends javax.swing.JFrame {
         menuUsers.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/user.png"))); // NOI18N
         menuUsers.setText(bundle.getString("MainForm.menuUsers.text")); // NOI18N
         menuUsers.setName("menuUsers"); // NOI18N
+        menuUsers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuUsersActionPerformed(evt);
+            }
+        });
         menuSecurity.add(menuUsers);
 
         mainMenu.add(menuSecurity);
@@ -906,6 +911,10 @@ public class MainForm extends javax.swing.JFrame {
     private void menuRegistrationStatusTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRegistrationStatusTypeActionPerformed
         manageRegistrationStatusTypes();
     }//GEN-LAST:event_menuRegistrationStatusTypeActionPerformed
+
+    private void menuUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuUsersActionPerformed
+        manageUsers();
+    }//GEN-LAST:event_menuUsersActionPerformed
 
     /**
      * Opens roles management panel.

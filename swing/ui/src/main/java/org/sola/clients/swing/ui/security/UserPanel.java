@@ -38,7 +38,7 @@ import org.sola.common.messaging.MessageUtility;
  */
 public class UserPanel extends javax.swing.JPanel {
 
-    private UserBean user;
+    public UserBean user;
 
     /** Default constructor. */
     public UserPanel() {
@@ -96,6 +96,11 @@ public class UserPanel extends javax.swing.JPanel {
     
     /** Validates user. */
     public boolean validateUser(boolean showMessage) {
+        if (user.getUserName()!=null && user.getUserName().contains(SecurityBean.getCurrentUser().getUserName())&& user.getUserGroups().size()==1 && !userGroupHelperList.getUserGroupHelpers().get(0).isInUserGroups()) 
+        {
+                MessageUtility.displayMessage(ClientMessage.ADMIN_CURRENT_USER_DISABLE_ERROR);
+                return false;
+        }
         if (user.validate(showMessage).size() < 1 && (!pnlPassword.isVisible()
                 || (pnlPassword.isVisible() && passwordBean.validate(showMessage).size() < 1))) {
             if (user.getUserName().equals(SecurityBean.getCurrentUser().getUserName())
@@ -112,6 +117,7 @@ public class UserPanel extends javax.swing.JPanel {
 
     /** Saves user. */
     public boolean saveUser(boolean showMessage) {
+        
         if (validateUser(showMessage)) {
             user.save();
             if (pnlPassword.isVisible()) {
@@ -441,8 +447,8 @@ public class UserPanel extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 455, Short.MAX_VALUE)
-            .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 455, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -450,7 +456,7 @@ public class UserPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(7, 7, 7)
-                .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE))
+                .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         bindingGroup.bind();
@@ -477,7 +483,7 @@ public class UserPanel extends javax.swing.JPanel {
     private org.sola.clients.beans.security.PasswordBean passwordBean;
     private javax.swing.JPanel pnlGroups;
     private javax.swing.JPanel pnlPassword;
-    private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tableGroups;
+    public org.sola.clients.swing.common.controls.JTableWithDefaultStyles tableGroups;
     private javax.swing.JTextArea txtDescription;
     private javax.swing.JTextField txtFirstName;
     private javax.swing.JTextField txtLastName;

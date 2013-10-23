@@ -32,6 +32,7 @@ package org.sola.clients.beans.security;
 import java.util.Date;
 import java.util.List;
 import javax.validation.constraints.Size;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.sola.clients.beans.controls.SolaList;
 import org.sola.clients.beans.converters.TypeConverters;
@@ -53,11 +54,13 @@ public class UserBean extends UserSummaryBean {
     public static final String USERNAME_PROPERTY = "userName";
     public static final String ACTIVE_PROPERTY = "active";
     @NotEmpty(message = ClientMessage.CHECK_NOTNULL_USERNAME, payload = Localized.class)
+    @Length(max = 40, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH+" User Name", payload = Localized.class)
     private String userName;
     private boolean active;
     @Size(min = 1, message = ClientMessage.CHECK_MIN_USERGROUP, payload = Localized.class)
     private SolaList<UserGroupBean> userGroups;
     private SolaList<RoleBean> roles;
+    @Length(max = 100, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH_PAR, payload = Localized.class)
     private String password;
     private String lastPwordChangeUser;
     private Integer pwordExpiryDays;

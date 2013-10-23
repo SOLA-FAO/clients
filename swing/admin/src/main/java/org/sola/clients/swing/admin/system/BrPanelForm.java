@@ -77,7 +77,7 @@ public class BrPanelForm extends ContentPanel {
     public BrPanelForm() {
         initComponents();
     }
-     @Override
+   @Override
     protected boolean panelClosing() {
        if (cardDisplayed == CARD_BR)  { 
         if (MainForm.checkSaveBeforeClose(br)) {

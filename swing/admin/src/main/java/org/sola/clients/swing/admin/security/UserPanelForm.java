@@ -27,9 +27,13 @@
  */
 package org.sola.clients.swing.admin.security;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ResourceBundle;
 import org.sola.clients.beans.security.UserBean;
+import org.sola.clients.swing.admin.MainForm;
 import org.sola.clients.swing.ui.ContentPanel;
+import org.sola.clients.swing.ui.HeaderPanel;
 import org.sola.clients.swing.ui.security.UserPanel;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -67,11 +71,32 @@ public class UserPanelForm extends ContentPanel {
         this.readOnly = readOnly;
         this.closeOnSave = closeOnSave;
         resourceBundle = ResourceBundle.getBundle("org/sola/clients/swing/admin/security/Bundle"); 
-        
         initComponents();
         setUserBean(this.userBean);
-    }
+        
+        PropertyChangeListener headerPanelListener = new PropertyChangeListener() {
 
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals(HeaderPanel.CLOSE_BUTTON_CLICKED)) {
+                    if (panelClosing()) {
+                        close();
+                    }
+                }
+            }
+        };
+        
+    }
+    
+    @Override
+    protected boolean panelClosing() {
+        if (MainForm.checkSaveBeforeClose(userPanel.user)) {
+            userPanel.saveUser(true);
+            return false;
+        }
+        return true;
+    }
+    
     public boolean isReadOnly() {
         return readOnly;
     }
