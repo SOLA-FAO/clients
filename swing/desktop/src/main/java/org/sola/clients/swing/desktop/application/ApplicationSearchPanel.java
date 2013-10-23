@@ -185,6 +185,10 @@ public class ApplicationSearchPanel extends ContentPanel {
         columnBinding.setColumnName("Service List");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${contactPerson}"));
+        columnBinding.setColumnName("Contact Person");
+        columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${agent}"));
         columnBinding.setColumnName("Agent");
         columnBinding.setColumnClass(String.class);
@@ -207,15 +211,25 @@ public class ApplicationSearchPanel extends ContentPanel {
             }
         });
         appListPanel.setViewportView(tbAppList);
+        tbAppList.getColumnModel().getColumn(0).setPreferredWidth(120);
+        tbAppList.getColumnModel().getColumn(0).setMaxWidth(120);
         tbAppList.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("ApplicationSearchPanel.tbAppList.columnModel.title0_1")); // NOI18N
+        tbAppList.getColumnModel().getColumn(1).setPreferredWidth(100);
+        tbAppList.getColumnModel().getColumn(1).setMaxWidth(110);
         tbAppList.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("ApplicationSearchPanel.tbAppList.columnModel.title1_1")); // NOI18N
+        tbAppList.getColumnModel().getColumn(2).setPreferredWidth(100);
+        tbAppList.getColumnModel().getColumn(2).setMaxWidth(110);
         tbAppList.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("ApplicationSearchPanel.tbAppList.columnModel.title2_1")); // NOI18N
+        tbAppList.getColumnModel().getColumn(3).setMinWidth(200);
         tbAppList.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("ApplicationSearchPanel.tbAppList.columnModel.title3_1")); // NOI18N
         tbAppList.getColumnModel().getColumn(3).setCellRenderer(new org.sola.clients.swing.ui.renderers.CellDelimitedListRenderer());
         tbAppList.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("ApplicationSearchPanel.tbAppList.columnModel.title4_1")); // NOI18N
-        tbAppList.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("ApplicationSearchPanel.tbAppList.columnModel.title5_1")); // NOI18N
-        tbAppList.getColumnModel().getColumn(6).setHeaderValue(bundle.getString("ApplicationSearchPanel.tbAppList.columnModel.title6_1")); // NOI18N
-        tbAppList.getColumnModel().getColumn(6).setCellRenderer(new BooleanCellRenderer());
+        tbAppList.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("ApplicationSearchPanel.tbAppList.columnModel.title7")); // NOI18N
+        tbAppList.getColumnModel().getColumn(6).setMaxWidth(80);
+        tbAppList.getColumnModel().getColumn(6).setHeaderValue(bundle.getString("ApplicationSearchPanel.tbAppList.columnModel.title5_1")); // NOI18N
+        tbAppList.getColumnModel().getColumn(7).setMaxWidth(50);
+        tbAppList.getColumnModel().getColumn(7).setHeaderValue(bundle.getString("ApplicationSearchPanel.tbAppList.columnModel.title6_1")); // NOI18N
+        tbAppList.getColumnModel().getColumn(7).setCellRenderer(new BooleanCellRenderer());
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
