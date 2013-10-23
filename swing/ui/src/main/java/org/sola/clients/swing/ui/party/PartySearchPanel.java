@@ -41,6 +41,8 @@ import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
+import org.sola.clients.swing.ui.renderers.BooleanCellRenderer2;
+import org.sola.clients.swing.ui.renderers.TableCellTextAreaRenderer;
 import org.sola.common.RolesConstants;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -335,6 +337,10 @@ public class PartySearchPanel extends JPanel {
         columnBinding.setColumnName("Type.display Value");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${roles}"));
+        columnBinding.setColumnName("Roles");
+        columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${rightHolder}"));
         columnBinding.setColumnName("Right Holder");
         columnBinding.setColumnClass(Boolean.class);
@@ -351,9 +357,12 @@ public class PartySearchPanel extends JPanel {
         jScrollPane1.setViewportView(tableSearchResults);
         tableSearchResults.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("PartySearchPanel.tableSearchResults.columnModel.title0_1")); // NOI18N
         tableSearchResults.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("PartySearchPanel.tableSearchResults.columnModel.title1_1")); // NOI18N
-        tableSearchResults.getColumnModel().getColumn(2).setPreferredWidth(120);
-        tableSearchResults.getColumnModel().getColumn(2).setMaxWidth(150);
-        tableSearchResults.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PartySearchPanel.tableSearchResults.columnModel.title2_1")); // NOI18N
+        tableSearchResults.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PartySearchPanel.tableSearchResults.columnModel.title3_1")); // NOI18N
+        tableSearchResults.getColumnModel().getColumn(2).setCellRenderer(new TableCellTextAreaRenderer());
+        tableSearchResults.getColumnModel().getColumn(3).setPreferredWidth(120);
+        tableSearchResults.getColumnModel().getColumn(3).setMaxWidth(150);
+        tableSearchResults.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("PartySearchPanel.tableSearchResults.columnModel.title2_1")); // NOI18N
+        tableSearchResults.getColumnModel().getColumn(3).setCellRenderer(new BooleanCellRenderer2());
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);

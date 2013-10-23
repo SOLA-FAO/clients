@@ -32,7 +32,17 @@ package org.sola.clients.beans.party;
  * from the {@link PartySearchResultTO} object.<br /> 
  */
 public class PartySearchResultBean extends PartySummaryBean {
+    private String roles;
+    
     public PartySearchResultBean(){
         super();
+    }
+
+    public String getRoles() {
+        return roles;
+    }
+
+    public void setRoles(String roles) {
+        this.roles = roles;
     }
 }
