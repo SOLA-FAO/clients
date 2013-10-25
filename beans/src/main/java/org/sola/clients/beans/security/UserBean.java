@@ -54,13 +54,13 @@ public class UserBean extends UserSummaryBean {
     public static final String USERNAME_PROPERTY = "userName";
     public static final String ACTIVE_PROPERTY = "active";
     @NotEmpty(message = ClientMessage.CHECK_NOTNULL_USERNAME, payload = Localized.class)
-    @Length(max = 40, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH+" User Name", payload = Localized.class)
+    @Length(max = 40, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH_USERNAME, payload = Localized.class)
     private String userName;
     private boolean active;
     @Size(min = 1, message = ClientMessage.CHECK_MIN_USERGROUP, payload = Localized.class)
     private SolaList<UserGroupBean> userGroups;
     private SolaList<RoleBean> roles;
-    @Length(max = 100, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH_PAR, payload = Localized.class)
+    @Length(max = 100, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH_PASSWORD, payload = Localized.class)
     private String password;
     private String lastPwordChangeUser;
     private Integer pwordExpiryDays;

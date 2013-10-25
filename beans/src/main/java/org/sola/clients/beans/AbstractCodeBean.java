@@ -28,6 +28,7 @@
 package org.sola.clients.beans;
 
 import javax.validation.constraints.Size;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.beans.system.LanguageBean;
@@ -48,12 +49,15 @@ public abstract class AbstractCodeBean extends AbstractBindingBean {
     public static final String DESCRIPTION_PROPERTY = "description";
     public static final String DISPLAY_VALUE_PROPERTY = "displayValue";
     @NotEmpty(message = ClientMessage.CHECK_NOTNULL_CODE, payload=Localized.class)
+    @Length(max = 20, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH_CODE, payload = Localized.class)
     private String code;
     @NotEmpty(message = ClientMessage.CHECK_NOTNULL_STATUS, payload=Localized.class)
     @Size(max = 1, message = ClientMessage.CHECK_SIZE_STATUS, payload=Localized.class)
     private String status;
+    @Length(max = 555, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH_DESCRIPTION, payload = Localized.class)
     private String description;
     @NotEmpty(message = ClientMessage.CHECK_NOTNULL_DISPLAYVALUE, payload=Localized.class)
+    @Length(max = 255, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH_DISPLAY, payload = Localized.class)
     private String displayValue;
     private String translatedDisplayValue;
     private String translatedDescription;

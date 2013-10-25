@@ -30,6 +30,8 @@ package org.sola.clients.swing.ui.security;
 import org.sola.clients.beans.security.GroupBean;
 import org.sola.clients.beans.security.GroupRoleHelperListBean;
 import org.sola.clients.swing.ui.renderers.TableCellTextAreaRenderer;
+import org.sola.common.messaging.ClientMessage;
+import org.sola.common.messaging.MessageUtility;
 
 /**
  * Displays {@link GroupBean} information and allows to edit it.
@@ -93,6 +95,16 @@ public class GroupPanel extends javax.swing.JPanel {
     
     /** Validates group */
     public boolean validateGroup(boolean showMessage){
+            boolean roleGroup = false;
+            for (int i = 0; i < groupRoleHelperList.getGroupRoleHelpers().size(); i++) {
+              if (groupRoleHelperList.getGroupRoleHelpers().get(i).isInGroup()) {
+                roleGroup = true;
+              }
+            }
+            if (!roleGroup) {
+                MessageUtility.displayMessage(ClientMessage.CHECK_MIN_GROUPROLES);
+                return false;  
+            }
         return group.validate(showMessage).size() < 1;
     }
     
