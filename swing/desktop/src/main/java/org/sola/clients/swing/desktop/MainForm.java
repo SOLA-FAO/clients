@@ -778,7 +778,6 @@ public class MainForm extends javax.swing.JFrame {
         btnSearchApplications = new javax.swing.JButton();
         btnOpenBaUnitSearch = new javax.swing.JButton();
         btnDocumentSearch = new javax.swing.JButton();
-        jSeparator3 = new javax.swing.JToolBar.Separator();
         btnManageParties = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JToolBar.Separator();
         btnOpenMap = new javax.swing.JButton();
@@ -897,9 +896,8 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         applicationsMain.add(btnDocumentSearch);
-        applicationsMain.add(jSeparator3);
 
-        btnManageParties.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/users.png"))); // NOI18N
+        btnManageParties.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/search.png"))); // NOI18N
         btnManageParties.setText(bundle.getString("MainForm.btnManageParties.text")); // NOI18N
         btnManageParties.setFocusable(false);
         btnManageParties.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -1066,7 +1064,7 @@ public class MainForm extends javax.swing.JFrame {
         });
         menuSearch.add(menuDocumentSearch);
 
-        menuPersons.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/users.png"))); // NOI18N
+        menuPersons.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/search.png"))); // NOI18N
         menuPersons.setText(bundle.getString("MainForm.menuPersons.text")); // NOI18N
         menuPersons.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1346,7 +1344,6 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenu fileMenu;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
-    private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JToolBar.Separator jSeparator4;
     private javax.swing.JMenuItem jmiContextHelp;
     private javax.swing.JLabel labStatus;

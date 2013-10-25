@@ -223,12 +223,23 @@
                               <Editor/>
                               <Renderer/>
                             </Column>
+                            <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                              <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                                <ResourceString bundle="org/sola/clients/swing/ui/party/Bundle.properties" key="PartySearchPanel.tableSearchResults.columnModel.title3_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                              </Title>
+                              <Editor/>
+                              <Renderer editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                <Connection code="new TableCellTextAreaRenderer()" type="code"/>
+                              </Renderer>
+                            </Column>
                             <Column maxWidth="150" minWidth="-1" prefWidth="120" resizable="true">
                               <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                                 <ResourceString bundle="org/sola/clients/swing/ui/party/Bundle.properties" key="PartySearchPanel.tableSearchResults.columnModel.title2_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                               </Title>
                               <Editor/>
-                              <Renderer/>
+                              <Renderer editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                <Connection code="new BooleanCellRenderer2()" type="code"/>
+                              </Renderer>
                             </Column>
                           </TableColumnModel>
                         </Property>
@@ -247,6 +258,10 @@
                             <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
                           </Subbinding>
                           <Subbinding sourcePath="${type.displayValue}">
+                            <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
+                            <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
+                          </Subbinding>
+                          <Subbinding sourcePath="${roles}">
                             <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
                             <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
                           </Subbinding>
