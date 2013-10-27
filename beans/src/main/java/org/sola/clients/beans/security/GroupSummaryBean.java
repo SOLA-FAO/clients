@@ -27,6 +27,7 @@
  */
 package org.sola.clients.beans.security;
 
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.sola.clients.beans.AbstractIdBean;
 import org.sola.clients.beans.validation.Localized;
@@ -44,7 +45,9 @@ public class GroupSummaryBean extends AbstractIdBean {
     public static final String DESCRIPTION_PROPERTY = "description";
     
     @NotEmpty(message= ClientMessage.CHECK_NOTNULL_GROUPNAME, payload=Localized.class)
+    @Length(max = 300, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH_NAME, payload = Localized.class)
     private String name;
+    @Length(max = 500, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH_DESCRIPTION, payload = Localized.class)
     private String description;
     
     public GroupSummaryBean(){

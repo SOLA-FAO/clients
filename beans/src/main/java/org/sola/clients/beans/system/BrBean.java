@@ -65,17 +65,17 @@ public class BrBean extends AbstractBindingBean {
     
     private String id;
     @NotEmpty(message=ClientMessage.CHECK_NOTNULL_DISPLAYNAME, payload=Localized.class)
-    @Length(max = 255, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH+" display name", payload = Localized.class)
+    @Length(max = 255, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH, payload = Localized.class)
     private String displayName;
     @CodeBeanNotEmpty(message=ClientMessage.CHECK_BEANNOTEMPTY_BRTECHTYPE, payload=Localized.class)
     private BrTechnicalTypeBean brTechnicalType;
-    @Length(max = 2000, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH+" feedback", payload = Localized.class)
+    @Length(max = 2000, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH, payload = Localized.class)
     private String feedback;
-    @Length(max = 1000, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH+" description", payload = Localized.class)
+    @Length(max = 1000, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH, payload = Localized.class)
     private String description;
     private SolaList<BrDefinitionBean> brDefinitionList;
     private SolaList<BrValidationBean> brValidationList;
-    @Length(max = 1000, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH+" technical description", payload = Localized.class)
+    @Length(max = 1000, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH, payload = Localized.class)
     private String technicalDescription;
     private transient BrDefinitionBean selectedBrDefinition;
     private transient BrValidationBean selectedBrValidation;
