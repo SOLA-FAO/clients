@@ -105,27 +105,24 @@ public class LanguageCombobox extends JComboBox {
             setText(uhOhText);
         }
     }
-    private String[] languageStrings = {"English", "Italian", "नेपाली"};
-    private String[] languageIconNames = {"en.jpg", "it.jpg", "np.png"};
+    
+    private final String[] languageStrings = {"English", "Italian"};
+    private final String[] languageIconNames = {"en.png", "it.png"};
     private ImageIcon[] languageIcons;
     private static final Map<String, Integer> languagesMap = Collections.unmodifiableMap(new HashMap(2, 1.0f) {
         {
             put("en", 0);
             put("it", 1);
-            put("np", 2);
         }
     });
 
     /**
      * Class constructor.
      *
-     * @param applicationMainClass The main class of application, where this
-     * control is used. Application class needed to pick up and save preferred
-     * setting of the language.
      */
     public LanguageCombobox() {
         super();
-        setModel(new javax.swing.DefaultComboBoxModel(new Integer[]{0, 1, 2}));
+        setModel(new javax.swing.DefaultComboBoxModel(new Integer[]{0, 1}));
         addLanguageIcons();
         setRenderer(new ComboBoxRenderer());
         setMaximumRowCount(4);
@@ -134,12 +131,8 @@ public class LanguageCombobox extends JComboBox {
     }
 
     private void addLanguageIcons() {
-
         languageIcons = new ImageIcon[languageStrings.length];
-        Integer[] intArray = new Integer[languageStrings.length];
-
         for (int i = 0; i < languageStrings.length; i++) {
-            intArray[i] = new Integer(i);
             languageIcons[i] = createImageIcon(languageIconNames[i]);
             if (languageIcons[i] != null) {
                 languageIcons[i].setDescription(languageStrings[i]);
@@ -165,9 +158,7 @@ public class LanguageCombobox extends JComboBox {
                 LocalizationManager.setLanguage("it", "IT");
             } else if ("english".equalsIgnoreCase(languageStrings[language])) {
                 LocalizationManager.setLanguage("en", "US");
-            } else if ("नेपाली".equalsIgnoreCase(languageStrings[language])) {
-                LocalizationManager.setLanguage("np", "NP");
-            }
+            } 
             
             firePropertyChange(LANGUAGE_CHANGED, false, true);
         }

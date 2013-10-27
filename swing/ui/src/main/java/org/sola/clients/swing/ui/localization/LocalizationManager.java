@@ -29,7 +29,6 @@
  */
 package org.sola.clients.swing.ui.localization;
 
-import java.io.File;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.prefs.BackingStoreException;
@@ -59,18 +58,19 @@ public class LocalizationManager {
     public static void loadLanguage() {
         Locale defaultLocale = Locale.getDefault(Locale.Category.FORMAT);
 
-        String language = "en";
-        String country = "US";
+        String language = defaultLocale.getLanguage();
+        String country = defaultLocale.getCountry();
+
         if (WindowUtility.hasUserPreferences()) {
             Preferences prefs = WindowUtility.getUserPreferences();
             language = prefs.get(LANGUAGE, language);
-            country = prefs.get(COUNTRY, country);
+            
+            if (!defaultLocale.getLanguage().equalsIgnoreCase(language)) {
+                // Set country code from the preferred settings
+                country = prefs.get(COUNTRY, country);
+            }
         }
 
-        if (defaultLocale.getLanguage().equalsIgnoreCase(language)) {
-            // Override country code from local settings
-            country = defaultLocale.getCountry();
-        }
         Locale loc = new Locale(language, country);
         Locale.setDefault(loc);
     }
@@ -106,7 +106,6 @@ public class LocalizationManager {
             ResourceBundle.clearCache();
             loadLanguage();
         } catch (BackingStoreException ex) {
-            ex.printStackTrace();
         }
     }
 
@@ -118,6 +117,7 @@ public class LocalizationManager {
      * property is not set, the method assumes this is a development version and
      * returns true to indicate a production implementation.
      *
+     * @return 
      */
     public static boolean isProductionHost() {
         boolean result = false;
@@ -145,62 +145,38 @@ public class LocalizationManager {
         return result;
     }
 
+
     /**
-     * Restarts application.
-     */
-    public static boolean restartApplication() {
-        String javaBin = System.getProperty("java.home") + "/bin/java";
-        File jarFile;
-        try {
-            jarFile = new File(WindowUtility.getMainAppClass().getProtectionDomain()
-                    .getCodeSource().getLocation().toURI());
-        } catch (Exception e) {
-            return false;
-        }
-
-        /* is it a jar file? */
-        if (!jarFile.getName().endsWith(".jar")) {
-            return false;   //no, it's a .class probably  
-        }
-        String toExec[] = new String[]{javaBin, "-jar", jarFile.getPath()};
-        try {
-            Process p = Runtime.getRuntime().exec(toExec);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        System.exit(0);
-        return true;
-    }
-    
-        
-    /** 
-     * Returns language code from provided string. String format must be language-County (e.g. en-US)
+     * Returns language code from provided string. String format must be
+     * language-County (e.g. en-US)
+     *
      * @param localeString String with language code and country code
+     * @return 
      */
-    public static String getLangCode(String localeString){
-        if(localeString == null || localeString.equals(""))
-        {
+    public static String getLangCode(String localeString) {
+        if (localeString == null || localeString.equals("")) {
             return "";
         }
         String[] codes = localeString.split("-");
         return codes[0];
     }
-    
-    /** 
-     * Returns country code from provided string. String format must be language-County (e.g. en-US)
+
+    /**
+     * Returns country code from provided string. String format must be
+     * language-County (e.g. en-US)
+     *
      * @param localeString String with language code and country code
+     * @return 
      */
-    public static String getCountryCode(String localeString){
-        if(localeString == null || localeString.equals(""))
-        {
+    public static String getCountryCode(String localeString) {
+        if (localeString == null || localeString.equals("")) {
             return "";
         }
         String[] codes = localeString.split("-");
-        if(codes.length>1)
+        if (codes.length > 1) {
             return codes[1];
-        else
+        } else {
             return "";
+        }
     }
 }

@@ -201,13 +201,6 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     /**
-     * Create combobox with languages
-     */
-    private LanguageCombobox createLanguageCombobox() {
-        return new LanguageCombobox();
-    }
-
-    /**
      * Runs post initialization tasks. Enables or disables toolbar buttons and
      * menu items depending on user rights. Loads various data after the form
      * has been opened. It helps to display form with no significant delays.
@@ -740,10 +733,10 @@ public class MainForm extends javax.swing.JFrame {
         menuLanguage.removeAll();
 
         for (LanguageBean lang : langs.getLanguages()) {
-            final String langCode = lang.getCode();
+            final String langCode = lang.getLanguageCode();
             
             JCheckBoxMenuItem menuLang = new JCheckBoxMenuItem();
-            menuLang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/flags/" + langCode + ".jpg")));
+            menuLang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/flags/" + langCode + ".png")));
             menuLang.setText(lang.getDisplayValue());
             if(LocalizationManager.getLanguage().equalsIgnoreCase(langCode))
                 menuLang.setSelected(true);
