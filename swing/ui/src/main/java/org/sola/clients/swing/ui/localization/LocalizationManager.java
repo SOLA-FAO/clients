@@ -64,7 +64,7 @@ public class LocalizationManager {
         if (WindowUtility.hasUserPreferences()) {
             Preferences prefs = WindowUtility.getUserPreferences();
             language = prefs.get(LANGUAGE, language);
-            
+
             if (!defaultLocale.getLanguage().equalsIgnoreCase(language)) {
                 // Set country code from the preferred settings
                 country = prefs.get(COUNTRY, country);
@@ -76,18 +76,23 @@ public class LocalizationManager {
     }
 
     /**
-     * Returns preference language code. If language is not set, <b>en</b> is
-     * returned by default.
+     * Returns language code from default locale.
      *
      * @return Two letters language code.
      */
     public static String getLanguage() {
-        String language = "en";
-        if (WindowUtility.hasUserPreferences()) {
-            Preferences prefs = WindowUtility.getUserPreferences();
-            language = prefs.get(LANGUAGE, language);
-        }
-        return language;
+        Locale defaultLocale = Locale.getDefault(Locale.Category.FORMAT);
+        return defaultLocale.getLanguage();
+    }
+    
+    /**
+     * Returns locale code from default locale.
+     *
+     * @return nn-NN pattern.
+     */
+    public static String getLocaleCode() {
+        Locale defaultLocale = Locale.getDefault(Locale.Category.FORMAT);
+        return defaultLocale.getLanguage() + "-" + defaultLocale.getCountry();
     }
 
     /**
@@ -117,7 +122,7 @@ public class LocalizationManager {
      * property is not set, the method assumes this is a development version and
      * returns true to indicate a production implementation.
      *
-     * @return 
+     * @return
      */
     public static boolean isProductionHost() {
         boolean result = false;
@@ -145,13 +150,12 @@ public class LocalizationManager {
         return result;
     }
 
-
     /**
      * Returns language code from provided string. String format must be
      * language-County (e.g. en-US)
      *
      * @param localeString String with language code and country code
-     * @return 
+     * @return
      */
     public static String getLangCode(String localeString) {
         if (localeString == null || localeString.equals("")) {
@@ -166,7 +170,7 @@ public class LocalizationManager {
      * language-County (e.g. en-US)
      *
      * @param localeString String with language code and country code
-     * @return 
+     * @return
      */
     public static String getCountryCode(String localeString) {
         if (localeString == null || localeString.equals("")) {

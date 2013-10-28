@@ -43,7 +43,6 @@ import java.util.logging.Level;
 import java.util.prefs.Preferences;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JMenuItem;
 import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.security.SecurityBean;
@@ -53,7 +52,6 @@ import org.sola.clients.beans.system.LanguageListBean;
 import org.sola.clients.swing.common.DefaultExceptionHandler;
 import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.ui.localization.LocalizationManager;
-import org.sola.clients.swing.ui.localization.LanguageCombobox;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.desktop.administrative.BaUnitSearchPanel;
@@ -209,7 +207,7 @@ public class MainForm extends javax.swing.JFrame {
         // Set screen size and location 
         configureForm();
         loadLanguages();
-        
+
         // Customize buttons
         btnNewApplication.setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_CREATE_APPS));
         btnOpenMap.setEnabled(SecurityBean.isInRole(RolesConstants.GIS_VIEW_MAP));
@@ -382,7 +380,6 @@ public class MainForm extends javax.swing.JFrame {
             }
         };
         TaskManager.getInstance().runTask(t);
-
 
     }
 
@@ -734,26 +731,33 @@ public class MainForm extends javax.swing.JFrame {
 
         for (LanguageBean lang : langs.getLanguages()) {
             final String langCode = lang.getLanguageCode();
-            
+            final String localeCode = lang.getCode();
+
             JCheckBoxMenuItem menuLang = new JCheckBoxMenuItem();
             menuLang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/flags/" + langCode + ".png")));
             menuLang.setText(lang.getDisplayValue());
-            if(LocalizationManager.getLanguage().equalsIgnoreCase(langCode))
+            if (LocalizationManager.getLanguage().equalsIgnoreCase(langCode)) {
                 menuLang.setSelected(true);
+            }
             //menuLang.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/confirm.png")));
             menuLang.addActionListener(new java.awt.event.ActionListener() {
 
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    selectLanguage(langCode);
+                    ((JCheckBoxMenuItem)evt.getSource()).setSelected(true);
+                    selectLanguage(localeCode);
                 }
             });
             menuLanguage.add(menuLang);
         }
     }
-    
-    private void selectLanguage(String locale){
+
+    private void selectLanguage(String locale) {
+        if(LocalizationManager.getLocaleCode().equals(locale)){
+            return;
+        }
+        
         if (MessageUtility.displayMessage(ClientMessage.CONFIRM_CHANGE_LANGUAGE) == MessageUtility.BUTTON_ONE) {
-            LocalizationManager.setLanguage(LocalizationManager.getLangCode(locale), 
+            LocalizationManager.setLanguage(LocalizationManager.getLangCode(locale),
                     LocalizationManager.getCountryCode(locale));
             reloadMainForm();
         }
