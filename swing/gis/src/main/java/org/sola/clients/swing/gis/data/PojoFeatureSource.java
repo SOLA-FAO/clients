@@ -322,6 +322,9 @@ public class PojoFeatureSource implements SimpleFeatureSource {
                 String fid = spatialResult.getId();
                 this.builder.set("theGeom", geomValue);
                 this.builder.set("label", spatialResult.getLabel());
+                if (spatialResult.getFilterCategory() != null) {
+                    this.builder.set("filter_category", spatialResult.getFilterCategory());
+                }
                 features.add(this.builder.buildFeature(fid));
             } catch (ParseException ex) {
                 org.sola.common.logging.LogUtility.log(
