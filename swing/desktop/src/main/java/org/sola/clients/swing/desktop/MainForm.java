@@ -181,9 +181,7 @@ public class MainForm extends javax.swing.JFrame {
         this.setIconImage(new ImageIcon(imgURL).getImage());
 
         initComponents();
-        HelpUtility.getInstance().registerHelpMenu(jmiContextHelp, "overview");
         this.setTitle("SOLA Desktop - " + LocalizationManager.getVersionNumber());
-
         this.addWindowListener(new java.awt.event.WindowAdapter() {
 
             @Override
@@ -1186,6 +1184,11 @@ public class MainForm extends javax.swing.JFrame {
 
         jmiContextHelp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/help.png"))); // NOI18N
         jmiContextHelp.setText(bundle.getString("MainForm.jmiContextHelp.text")); // NOI18N
+        jmiContextHelp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiContextHelpActionPerformed(evt);
+            }
+        });
         helpMenu.add(jmiContextHelp);
 
         menuBar.add(helpMenu);
@@ -1328,6 +1331,11 @@ public class MainForm extends javax.swing.JFrame {
     private void menuSpatialUnitGroupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSpatialUnitGroupActionPerformed
         openMapSpatialUnitGroupEditor();
     }//GEN-LAST:event_menuSpatialUnitGroupActionPerformed
+
+    private void jmiContextHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiContextHelpActionPerformed
+        HelpUtility.getInstance().showTopic("overview");
+    }//GEN-LAST:event_jmiContextHelpActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToolBar applicationsMain;
     private javax.swing.JButton btnDocumentSearch;

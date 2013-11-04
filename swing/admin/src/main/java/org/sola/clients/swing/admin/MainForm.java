@@ -748,6 +748,11 @@ public class MainForm extends javax.swing.JFrame {
 
         menuHelp.setText(bundle.getString("MainForm.menuHelp.text")); // NOI18N
         menuHelp.setName("menuHelp"); // NOI18N
+        menuHelp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuHelpActionPerformed(evt);
+            }
+        });
         mainMenu.add(menuHelp);
 
         setJMenuBar(mainMenu);
@@ -915,6 +920,10 @@ public class MainForm extends javax.swing.JFrame {
     private void menuUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuUsersActionPerformed
         manageUsers();
     }//GEN-LAST:event_menuUsersActionPerformed
+
+    private void menuHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuHelpActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_menuHelpActionPerformed
 
     /**
      * Opens roles management panel.

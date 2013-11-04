@@ -26,10 +26,7 @@ public class MainForm extends javax.swing.JFrame {
      */
     public MainForm() {
         initComponents();
-        HelpUtility.getInstance().registerHelpMenu(jmiContextHelp, "1_blk_overview");
-
         this.setExtendedState(MAXIMIZED_BOTH);
-
     }
 
     /**
@@ -199,6 +196,11 @@ public class MainForm extends javax.swing.JFrame {
 
         jmiContextHelp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/help.png"))); // NOI18N
         jmiContextHelp.setText(bundle.getString("MainForm.jmiContextHelp.text")); // NOI18N
+        jmiContextHelp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiContextHelpActionPerformed(evt);
+            }
+        });
         menuHelp.add(jmiContextHelp);
 
         menuAbout.setText(bundle.getString("MainForm.menuAbout.text")); // NOI18N
@@ -248,6 +250,10 @@ public class MainForm extends javax.swing.JFrame {
     private void btnLoadSourcesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadSourcesActionPerformed
         loadSourcesPanel();
     }//GEN-LAST:event_btnLoadSourcesActionPerformed
+
+    private void jmiContextHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiContextHelpActionPerformed
+        HelpUtility.getInstance().showTopic("1_blk_overview");
+    }//GEN-LAST:event_jmiContextHelpActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLoadSources;

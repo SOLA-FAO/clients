@@ -48,6 +48,17 @@ import javax.swing.JPanel;
  */
 public class MainContentPanel extends javax.swing.JPanel {
 
+    private class F1KeyHandler implements KeyEventDispatcher {
+        public F1KeyHandler(){
+        }
+        
+        @Override
+        public boolean dispatchKeyEvent(KeyEvent e) {
+            handleKeyPress(e);
+            return false;
+        }
+    }
+
     public final static String CARD_DASHBOARD = "dashboard";
     public final static String CARD_SEARCH_PERSONS = "searchPersons";
     public final static String CARD_PERSON = "person";
@@ -87,11 +98,12 @@ public class MainContentPanel extends javax.swing.JPanel {
     public final static String CARD_USER_PROFILE = "userProfile";
     public final static String CARD_RIGHT_EXPORT = "rightsExportPanel";
     public final static String CARD_MAPEXISTINGPARCEL = "mapExistingParcel";
-    
+
     private HashMap<String, Component> cards;
     private ArrayList<String> cardsIndex;
     private PropertyChangeListener panelListener;
-
+    private F1KeyHandler f1Handler = new F1KeyHandler();
+    
     /**
      * Default constructor.
      */
@@ -107,22 +119,16 @@ public class MainContentPanel extends javax.swing.JPanel {
         };
         initComponents();
 
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
-
-            @Override
-            public boolean dispatchKeyEvent(KeyEvent e) {
-                handleKeyPress(e);
-                return false;
-            }
-        });
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(f1Handler);
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(f1Handler);
     }
 
     private void handleKeyPress(KeyEvent e) {
         // Catch F1 key press
         if (e.getID() == KeyEvent.KEY_RELEASED && e.getKeyCode() == KeyEvent.VK_F1) {
             Component panel = getTopCard();
-            if(panel!=null && ContentPanel.class.isAssignableFrom(panel.getClass())){
-                ((ContentPanel)panel).showHelp();
+            if (panel != null && ContentPanel.class.isAssignableFrom(panel.getClass())) {
+                ((ContentPanel) panel).showHelp();
             }
         }
         getTopCard();

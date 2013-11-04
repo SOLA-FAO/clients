@@ -141,6 +141,7 @@ public class BrManagementPanel extends ContentPanel {
         jPanel6 = new javax.swing.JPanel();
         btnSearch = new javax.swing.JButton();
         btnClear = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
         jToolBar1 = new javax.swing.JToolBar();
         btnAdd = new javax.swing.JButton();
         btnEdit = new javax.swing.JButton();
@@ -211,14 +212,16 @@ public class BrManagementPanel extends ContentPanel {
         bindingGroup.addBinding(binding);
 
         jScrollPane1.setViewportView(tableSearchResults);
-        tableSearchResults.getColumnModel().getColumn(0).setPreferredWidth(200);
-        tableSearchResults.getColumnModel().getColumn(0).setMaxWidth(250);
-        tableSearchResults.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("BrManagementPanel.tableSearchResults.columnModel.title0")); // NOI18N
-        tableSearchResults.getColumnModel().getColumn(1).setPreferredWidth(110);
-        tableSearchResults.getColumnModel().getColumn(1).setMaxWidth(110);
-        tableSearchResults.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("BrManagementPanel.tableSearchResults.columnModel.title1")); // NOI18N
-        tableSearchResults.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("BrManagementPanel.tableSearchResults.columnModel.title2")); // NOI18N
-        tableSearchResults.getColumnModel().getColumn(2).setCellRenderer(new TableCellTextAreaRenderer());
+        if (tableSearchResults.getColumnModel().getColumnCount() > 0) {
+            tableSearchResults.getColumnModel().getColumn(0).setPreferredWidth(200);
+            tableSearchResults.getColumnModel().getColumn(0).setMaxWidth(250);
+            tableSearchResults.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("BrManagementPanel.tableSearchResults.columnModel.title0")); // NOI18N
+            tableSearchResults.getColumnModel().getColumn(1).setPreferredWidth(110);
+            tableSearchResults.getColumnModel().getColumn(1).setMaxWidth(110);
+            tableSearchResults.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("BrManagementPanel.tableSearchResults.columnModel.title1")); // NOI18N
+            tableSearchResults.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("BrManagementPanel.tableSearchResults.columnModel.title2")); // NOI18N
+            tableSearchResults.getColumnModel().getColumn(2).setCellRenderer(new TableCellTextAreaRenderer());
+        }
 
         jPanel7.setName("jPanel7"); // NOI18N
 
@@ -241,8 +244,8 @@ public class BrManagementPanel extends ContentPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addContainerGap(54, Short.MAX_VALUE))
-            .addComponent(txtDisplayName, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
+                .addContainerGap(69, Short.MAX_VALUE))
+            .addComponent(txtDisplayName, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -250,7 +253,7 @@ public class BrManagementPanel extends ContentPanel {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtDisplayName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel5.add(jPanel2);
@@ -274,8 +277,8 @@ public class BrManagementPanel extends ContentPanel {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jLabel2)
-                .addContainerGap(48, Short.MAX_VALUE))
-            .addComponent(cbxTechnicalTypes, 0, 121, Short.MAX_VALUE)
+                .addContainerGap(63, Short.MAX_VALUE))
+            .addComponent(cbxTechnicalTypes, 0, 136, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -283,7 +286,7 @@ public class BrManagementPanel extends ContentPanel {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbxTechnicalTypes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel5.add(jPanel3);
@@ -307,8 +310,8 @@ public class BrManagementPanel extends ContentPanel {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(jLabel3)
-                .addContainerGap(38, Short.MAX_VALUE))
-            .addComponent(cbxValidationTargets, 0, 121, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(cbxValidationTargets, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -316,7 +319,7 @@ public class BrManagementPanel extends ContentPanel {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbxValidationTargets, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel5.add(jPanel4);
@@ -340,25 +343,31 @@ public class BrManagementPanel extends ContentPanel {
             }
         });
 
+        jLabel4.setText(bundle.getString("BrManagementPanel.jLabel4.text")); // NOI18N
+        jLabel4.setName("jLabel4"); // NOI18N
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel4))
+                .addGap(4, 4, 4))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addComponent(btnSearch)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnClear)
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnClear)
+                    .addComponent(btnSearch))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
@@ -366,17 +375,14 @@ public class BrManagementPanel extends ContentPanel {
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
-                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(51, Short.MAX_VALUE))
+            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
 
         jToolBar1.setFloatable(false);
@@ -437,7 +443,7 @@ public class BrManagementPanel extends ContentPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE))
         );
 
         pnlMain.add(pnlSearch, "card2");
@@ -452,7 +458,7 @@ public class BrManagementPanel extends ContentPanel {
             .addComponent(pnlHeader, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addGap(10, 10, 10)
-                .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
+                .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(10, 10, 10))
         );
         layout.setVerticalGroup(
@@ -541,6 +547,7 @@ public class BrManagementPanel extends ContentPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
