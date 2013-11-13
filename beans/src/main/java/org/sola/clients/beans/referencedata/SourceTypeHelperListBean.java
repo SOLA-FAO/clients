@@ -92,7 +92,7 @@ public class SourceTypeHelperListBean extends AbstractBindingListBean {
         String[] excludedCodes = null;
 
         if (sourceTypeCodes != null && sourceTypeCodes.size() > 0) {
-            excludedCodes = new String[sourceTypeCodes.size() - 1];
+            excludedCodes = new String[sourceTypeCodes.size()];
             int i = 0;
             for (RequestTypeSourceTypeBean requestType : sourceTypeCodes) {
                 excludedCodes[i] = requestType.getSourceTypeCode();
