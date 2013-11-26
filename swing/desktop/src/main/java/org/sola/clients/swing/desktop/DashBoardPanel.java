@@ -215,7 +215,7 @@ public class DashBoardPanel extends ContentPanel {
                                 new Object[]{app.getNr()});
                         break;
                     }
-                    if (assigneeId != null && assigneeId.equals(SecurityBean.getCurrentUser().getId())
+                    if (assigneeId != null && !assigneeId.equals(SecurityBean.getCurrentUser().getId())
                             && !SecurityBean.isInRole(RolesConstants.APPLICATION_UNASSIGN_FROM_OTHERS)) {
                         MessageUtility.displayMessage(ClientMessage.APPLICATION_UNASSIGN_FROM_OTHERS_FORBIDDEN,
                                 new Object[]{app.getNr()});
