@@ -605,11 +605,11 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="labStatus" min="-2" pref="35" max="-2" attributes="0"/>
+                  <Component id="labStatus" min="-2" pref="101" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="txtUserName" min="-2" pref="193" max="-2" attributes="0"/>
+                  <Component id="txtUserName" min="-2" pref="252" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="taskPanel1" pref="738" max="32767" attributes="0"/>
+                  <Component id="taskPanel1" pref="613" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>

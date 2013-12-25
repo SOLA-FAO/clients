@@ -296,7 +296,7 @@ public class PropertyPanel extends ContentPanel {
             headerPanel.setTitleText(String.format(
                     resourceBundle.getString("PropertyPanel.existingProperty.Text"),
                     nameFirstPart, nameLastPart));
-            txtArea.setEditable(baUnitBean1.getStatusCode().equalsIgnoreCase(StatusConstants.PENDING));
+            txtArea.setEditable(baUnitBean1.getStatusCode() == null || baUnitBean1.getStatusCode().equalsIgnoreCase(StatusConstants.PENDING));
 
             if (txtArea.getText().indexOf('.') != -1) {
                 formatSize(txtArea.getText());
@@ -1532,7 +1532,7 @@ public class PropertyPanel extends ContentPanel {
             jPanel12Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel12Layout.createSequentialGroup()
                 .add(jLabel5)
-                .addContainerGap())
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .add(txtName)
         );
         jPanel12Layout.setVerticalGroup(
@@ -1723,7 +1723,7 @@ public class PropertyPanel extends ContentPanel {
             .add(areaPanelLayout.createSequentialGroup()
                 .add(1, 1, 1)
                 .add(labArea)
-                .addContainerGap())
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         areaPanelLayout.setVerticalGroup(
             areaPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -1818,19 +1818,21 @@ public class PropertyPanel extends ContentPanel {
         bindingGroup.addBinding(binding);
 
         jScrollPane1.setViewportView(tableParcels);
-        tableParcels.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title0")); // NOI18N
-        tableParcels.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title1")); // NOI18N
-        tableParcels.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title3")); // NOI18N
-        tableParcels.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title2")); // NOI18N
-        tableParcels.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title6")); // NOI18N
-        tableParcels.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title8")); // NOI18N
-        tableParcels.getColumnModel().getColumn(6).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title7")); // NOI18N
-        tableParcels.getColumnModel().getColumn(6).setCellRenderer(new CellDelimitedListRenderer("; ", false));
-        tableParcels.getColumnModel().getColumn(7).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title4")); // NOI18N
-        tableParcels.getColumnModel().getColumn(8).setPreferredWidth(40);
-        tableParcels.getColumnModel().getColumn(8).setMaxWidth(40);
-        tableParcels.getColumnModel().getColumn(8).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title5")); // NOI18N
-        tableParcels.getColumnModel().getColumn(8).setCellRenderer(new LockCellRenderer());
+        if (tableParcels.getColumnModel().getColumnCount() > 0) {
+            tableParcels.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title0")); // NOI18N
+            tableParcels.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title1")); // NOI18N
+            tableParcels.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title3")); // NOI18N
+            tableParcels.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title2")); // NOI18N
+            tableParcels.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title6")); // NOI18N
+            tableParcels.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title8")); // NOI18N
+            tableParcels.getColumnModel().getColumn(6).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title7")); // NOI18N
+            tableParcels.getColumnModel().getColumn(6).setCellRenderer(new CellDelimitedListRenderer("; ", false));
+            tableParcels.getColumnModel().getColumn(7).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title4")); // NOI18N
+            tableParcels.getColumnModel().getColumn(8).setPreferredWidth(40);
+            tableParcels.getColumnModel().getColumn(8).setMaxWidth(40);
+            tableParcels.getColumnModel().getColumn(8).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title5")); // NOI18N
+            tableParcels.getColumnModel().getColumn(8).setCellRenderer(new LockCellRenderer());
+        }
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
@@ -1950,20 +1952,22 @@ public class PropertyPanel extends ContentPanel {
             }
         });
         jScrollPane2.setViewportView(tableRights);
-        tableRights.getColumnModel().getColumn(0).setPreferredWidth(100);
-        tableRights.getColumnModel().getColumn(0).setMaxWidth(100);
-        tableRights.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("PropertyPanel.tableRights.columnModel.title0")); // NOI18N
-        tableRights.getColumnModel().getColumn(1).setPreferredWidth(100);
-        tableRights.getColumnModel().getColumn(1).setMaxWidth(100);
-        tableRights.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("PropertyPanel.tableRights.columnModel.title3")); // NOI18N
-        tableRights.getColumnModel().getColumn(2).setPreferredWidth(120);
-        tableRights.getColumnModel().getColumn(2).setMaxWidth(120);
-        tableRights.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PropertyPanel.tableRights.columnModel.title1")); // NOI18N
-        tableRights.getColumnModel().getColumn(2).setCellRenderer(new DateTimeRenderer());
-        tableRights.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("PropertyPanel.tableRights.columnModel.title4_1")); // NOI18N
-        tableRights.getColumnModel().getColumn(4).setPreferredWidth(100);
-        tableRights.getColumnModel().getColumn(4).setMaxWidth(100);
-        tableRights.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("PropertyPanel.tableRights.columnModel.title2")); // NOI18N
+        if (tableRights.getColumnModel().getColumnCount() > 0) {
+            tableRights.getColumnModel().getColumn(0).setPreferredWidth(100);
+            tableRights.getColumnModel().getColumn(0).setMaxWidth(100);
+            tableRights.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("PropertyPanel.tableRights.columnModel.title0")); // NOI18N
+            tableRights.getColumnModel().getColumn(1).setPreferredWidth(100);
+            tableRights.getColumnModel().getColumn(1).setMaxWidth(100);
+            tableRights.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("PropertyPanel.tableRights.columnModel.title3")); // NOI18N
+            tableRights.getColumnModel().getColumn(2).setPreferredWidth(120);
+            tableRights.getColumnModel().getColumn(2).setMaxWidth(120);
+            tableRights.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PropertyPanel.tableRights.columnModel.title1")); // NOI18N
+            tableRights.getColumnModel().getColumn(2).setCellRenderer(new DateTimeRenderer());
+            tableRights.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("PropertyPanel.tableRights.columnModel.title4_1")); // NOI18N
+            tableRights.getColumnModel().getColumn(4).setPreferredWidth(100);
+            tableRights.getColumnModel().getColumn(4).setMaxWidth(100);
+            tableRights.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("PropertyPanel.tableRights.columnModel.title2")); // NOI18N
+        }
 
         jToolBar2.setFloatable(false);
         jToolBar2.setRollover(true);
@@ -2136,20 +2140,22 @@ public class PropertyPanel extends ContentPanel {
             }
         });
         jScrollPane8.setViewportView(tableRightsHistory);
-        tableRightsHistory.getColumnModel().getColumn(0).setPreferredWidth(100);
-        tableRightsHistory.getColumnModel().getColumn(0).setMaxWidth(100);
-        tableRightsHistory.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("PropertyPanel.tableRightsHistory.columnModel.title0")); // NOI18N
-        tableRightsHistory.getColumnModel().getColumn(1).setPreferredWidth(100);
-        tableRightsHistory.getColumnModel().getColumn(1).setMaxWidth(100);
-        tableRightsHistory.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("PropertyPanel.tableRightsHistory.columnModel.title3")); // NOI18N
-        tableRightsHistory.getColumnModel().getColumn(2).setPreferredWidth(120);
-        tableRightsHistory.getColumnModel().getColumn(2).setMaxWidth(120);
-        tableRightsHistory.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PropertyPanel.tableRightsHistory.columnModel.title1")); // NOI18N
-        tableRightsHistory.getColumnModel().getColumn(2).setCellRenderer(new DateTimeRenderer());
-        tableRightsHistory.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("PropertyPanel.tableRightsHistory.columnModel.title4")); // NOI18N
-        tableRightsHistory.getColumnModel().getColumn(4).setPreferredWidth(100);
-        tableRightsHistory.getColumnModel().getColumn(4).setMaxWidth(100);
-        tableRightsHistory.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("PropertyPanel.tableRightsHistory.columnModel.title2")); // NOI18N
+        if (tableRightsHistory.getColumnModel().getColumnCount() > 0) {
+            tableRightsHistory.getColumnModel().getColumn(0).setPreferredWidth(100);
+            tableRightsHistory.getColumnModel().getColumn(0).setMaxWidth(100);
+            tableRightsHistory.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("PropertyPanel.tableRightsHistory.columnModel.title0")); // NOI18N
+            tableRightsHistory.getColumnModel().getColumn(1).setPreferredWidth(100);
+            tableRightsHistory.getColumnModel().getColumn(1).setMaxWidth(100);
+            tableRightsHistory.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("PropertyPanel.tableRightsHistory.columnModel.title3")); // NOI18N
+            tableRightsHistory.getColumnModel().getColumn(2).setPreferredWidth(120);
+            tableRightsHistory.getColumnModel().getColumn(2).setMaxWidth(120);
+            tableRightsHistory.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PropertyPanel.tableRightsHistory.columnModel.title1")); // NOI18N
+            tableRightsHistory.getColumnModel().getColumn(2).setCellRenderer(new DateTimeRenderer());
+            tableRightsHistory.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("PropertyPanel.tableRightsHistory.columnModel.title4")); // NOI18N
+            tableRightsHistory.getColumnModel().getColumn(4).setPreferredWidth(100);
+            tableRightsHistory.getColumnModel().getColumn(4).setMaxWidth(100);
+            tableRightsHistory.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("PropertyPanel.tableRightsHistory.columnModel.title2")); // NOI18N
+        }
 
         org.jdesktop.layout.GroupLayout jPanel17Layout = new org.jdesktop.layout.GroupLayout(jPanel17);
         jPanel17.setLayout(jPanel17Layout);
@@ -2210,14 +2216,16 @@ public class PropertyPanel extends ContentPanel {
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();
         jScrollPane5.setViewportView(tableOwnership);
-        tableOwnership.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("PropertyPanel.tableOwnership.columnModel.title0")); // NOI18N
-        tableOwnership.getColumnModel().getColumn(0).setCellRenderer(new TableCellListRenderer("getName", "getLastName"));
-        tableOwnership.getColumnModel().getColumn(1).setPreferredWidth(70);
-        tableOwnership.getColumnModel().getColumn(1).setMaxWidth(70);
-        tableOwnership.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("PropertyPanel.tableOwnership.columnModel.title1")); // NOI18N
-        tableOwnership.getColumnModel().getColumn(2).setPreferredWidth(130);
-        tableOwnership.getColumnModel().getColumn(2).setMaxWidth(130);
-        tableOwnership.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PropertyPanel.tableOwnership.columnModel.title2")); // NOI18N
+        if (tableOwnership.getColumnModel().getColumnCount() > 0) {
+            tableOwnership.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("PropertyPanel.tableOwnership.columnModel.title0")); // NOI18N
+            tableOwnership.getColumnModel().getColumn(0).setCellRenderer(new TableCellListRenderer("getName", "getLastName"));
+            tableOwnership.getColumnModel().getColumn(1).setPreferredWidth(70);
+            tableOwnership.getColumnModel().getColumn(1).setMaxWidth(70);
+            tableOwnership.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("PropertyPanel.tableOwnership.columnModel.title1")); // NOI18N
+            tableOwnership.getColumnModel().getColumn(2).setPreferredWidth(130);
+            tableOwnership.getColumnModel().getColumn(2).setMaxWidth(130);
+            tableOwnership.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PropertyPanel.tableOwnership.columnModel.title2")); // NOI18N
+        }
 
         org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -2268,17 +2276,19 @@ public class PropertyPanel extends ContentPanel {
         bindingGroup.addBinding(binding);
 
         jScrollPane4.setViewportView(tableNotations);
-        tableNotations.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("PropertyPanel.tableNotations.columnModel.title1")); // NOI18N
-        tableNotations.getColumnModel().getColumn(1).setPreferredWidth(100);
-        tableNotations.getColumnModel().getColumn(1).setMaxWidth(100);
-        tableNotations.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("PropertyPanel.tableNotations.columnModel.title0")); // NOI18N
-        tableNotations.getColumnModel().getColumn(2).setPreferredWidth(120);
-        tableNotations.getColumnModel().getColumn(2).setMaxWidth(120);
-        tableNotations.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PropertyPanel.tableNotations.columnModel.title3")); // NOI18N
-        tableNotations.getColumnModel().getColumn(2).setCellRenderer(new DateTimeRenderer());
-        tableNotations.getColumnModel().getColumn(3).setPreferredWidth(100);
-        tableNotations.getColumnModel().getColumn(3).setMaxWidth(100);
-        tableNotations.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("PropertyPanel.tableNotations.columnModel.title2")); // NOI18N
+        if (tableNotations.getColumnModel().getColumnCount() > 0) {
+            tableNotations.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("PropertyPanel.tableNotations.columnModel.title1")); // NOI18N
+            tableNotations.getColumnModel().getColumn(1).setPreferredWidth(100);
+            tableNotations.getColumnModel().getColumn(1).setMaxWidth(100);
+            tableNotations.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("PropertyPanel.tableNotations.columnModel.title0")); // NOI18N
+            tableNotations.getColumnModel().getColumn(2).setPreferredWidth(120);
+            tableNotations.getColumnModel().getColumn(2).setMaxWidth(120);
+            tableNotations.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PropertyPanel.tableNotations.columnModel.title3")); // NOI18N
+            tableNotations.getColumnModel().getColumn(2).setCellRenderer(new DateTimeRenderer());
+            tableNotations.getColumnModel().getColumn(3).setPreferredWidth(100);
+            tableNotations.getColumnModel().getColumn(3).setMaxWidth(100);
+            tableNotations.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("PropertyPanel.tableNotations.columnModel.title2")); // NOI18N
+        }
 
         jToolBar3.setFloatable(false);
         jToolBar3.setRollover(true);
@@ -2436,11 +2446,13 @@ public class PropertyPanel extends ContentPanel {
         bindingGroup.addBinding(binding);
 
         jScrollPane3.setViewportView(tableParentBaUnits);
-        tableParentBaUnits.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("PropertyPanel.tableParentBaUnits.columnModel.title0_1")); // NOI18N
-        tableParentBaUnits.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("PropertyPanel.tableParentBaUnits.columnModel.title1_1")); // NOI18N
-        tableParentBaUnits.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PropertyPanel.tableParentBaUnits.columnModel.title2_1")); // NOI18N
-        tableParentBaUnits.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("PropertyPanel.jTable1.columnModel.title4")); // NOI18N
-        tableParentBaUnits.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("PropertyPanel.jTable1.columnModel.title3_1")); // NOI18N
+        if (tableParentBaUnits.getColumnModel().getColumnCount() > 0) {
+            tableParentBaUnits.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("PropertyPanel.tableParentBaUnits.columnModel.title0_1")); // NOI18N
+            tableParentBaUnits.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("PropertyPanel.tableParentBaUnits.columnModel.title1_1")); // NOI18N
+            tableParentBaUnits.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PropertyPanel.tableParentBaUnits.columnModel.title2_1")); // NOI18N
+            tableParentBaUnits.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("PropertyPanel.jTable1.columnModel.title4")); // NOI18N
+            tableParentBaUnits.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("PropertyPanel.jTable1.columnModel.title3_1")); // NOI18N
+        }
 
         org.jdesktop.layout.GroupLayout jPanel8Layout = new org.jdesktop.layout.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -2518,11 +2530,13 @@ public class PropertyPanel extends ContentPanel {
         bindingGroup.addBinding(binding);
 
         jScrollPane7.setViewportView(tableChildBaUnits);
-        tableChildBaUnits.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("PropertyPanel.tableChildBaUnits.columnModel.title0_1")); // NOI18N
-        tableChildBaUnits.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("PropertyPanel.tableChildBaUnits.columnModel.title1_1")); // NOI18N
-        tableChildBaUnits.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PropertyPanel.tableChildBaUnits.columnModel.title2_1")); // NOI18N
-        tableChildBaUnits.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("PropertyPanel.tableChildBaUnits.columnModel.title3_1")); // NOI18N
-        tableChildBaUnits.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("PropertyPanel.tableChildBaUnits.columnModel.title4")); // NOI18N
+        if (tableChildBaUnits.getColumnModel().getColumnCount() > 0) {
+            tableChildBaUnits.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("PropertyPanel.tableChildBaUnits.columnModel.title0_1")); // NOI18N
+            tableChildBaUnits.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("PropertyPanel.tableChildBaUnits.columnModel.title1_1")); // NOI18N
+            tableChildBaUnits.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PropertyPanel.tableChildBaUnits.columnModel.title2_1")); // NOI18N
+            tableChildBaUnits.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("PropertyPanel.tableChildBaUnits.columnModel.title3_1")); // NOI18N
+            tableChildBaUnits.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("PropertyPanel.tableChildBaUnits.columnModel.title4")); // NOI18N
+        }
 
         org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
