@@ -100,7 +100,8 @@ public final class ControlsBundleForPublicDisplay extends SolaControlsBundle {
                 String layerName = configMapLayer.getId();
                 ExtendedLayer layer = this.getMap().getSolaLayers().get(layerName);
                 if (layer != null){
-                    if (!(layer.isVisible() && configMapLayer.isUseInPublicDisplay())){
+                    if ((configMapLayer.isUseInPublicDisplay() && !layer.isVisible())
+                            || (!configMapLayer.isUseInPublicDisplay() && layer.isVisible())){
                         this.getMap().getToc().changeNodeSwitch(layerName);                        
                     }
                 }
