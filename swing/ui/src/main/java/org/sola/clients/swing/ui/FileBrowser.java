@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.sola.clients.swing.bulkoperations;
+package org.sola.clients.swing.ui;
 
 import java.awt.Component;
 import java.io.File;

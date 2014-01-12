@@ -49,6 +49,8 @@ import org.sola.clients.swing.admin.security.GroupsManagementPanel;
 import org.sola.clients.swing.admin.security.RolesManagementPanel;
 import org.sola.clients.swing.admin.security.UsersManagementPanel;
 import org.sola.clients.swing.admin.system.BrManagementPanel;
+import org.sola.clients.swing.admin.system.ConsolidationConsolidatePanel;
+import org.sola.clients.swing.admin.system.ConsolidationExtractPanel;
 import org.sola.clients.swing.common.DefaultExceptionHandler;
 import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.ui.MainContentPanel;
@@ -238,6 +240,9 @@ public class MainForm extends javax.swing.JFrame {
         btnGISSettings = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JToolBar.Separator();
         btnBr = new javax.swing.JButton();
+        jSeparator4 = new javax.swing.JToolBar.Separator();
+        btnConsolidationExtract = new javax.swing.JButton();
+        btnConsolidate = new javax.swing.JButton();
         statusPanel = new javax.swing.JPanel();
         taskPanel1 = new org.sola.clients.swing.common.tasks.TaskPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -390,6 +395,33 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         mainToolbar.add(btnBr);
+        mainToolbar.add(jSeparator4);
+
+        btnConsolidationExtract.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/consolidation-extract.png"))); // NOI18N
+        btnConsolidationExtract.setText(bundle.getString("MainForm.btnConsolidationExtract.text")); // NOI18N
+        btnConsolidationExtract.setFocusable(false);
+        btnConsolidationExtract.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnConsolidationExtract.setName("btnConsolidationExtract"); // NOI18N
+        btnConsolidationExtract.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnConsolidationExtract.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConsolidationExtractActionPerformed(evt);
+            }
+        });
+        mainToolbar.add(btnConsolidationExtract);
+
+        btnConsolidate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/consolidation-consolidate.png"))); // NOI18N
+        btnConsolidate.setText(bundle.getString("MainForm.btnConsolidate.text")); // NOI18N
+        btnConsolidate.setFocusable(false);
+        btnConsolidate.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnConsolidate.setName("btnConsolidate"); // NOI18N
+        btnConsolidate.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnConsolidate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConsolidateActionPerformed(evt);
+            }
+        });
+        mainToolbar.add(btnConsolidate);
 
         statusPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         statusPanel.setName("statusPanel"); // NOI18N
@@ -925,6 +957,14 @@ public class MainForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_menuHelpActionPerformed
 
+    private void btnConsolidationExtractActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsolidationExtractActionPerformed
+        manageConsolidationExtract();
+    }//GEN-LAST:event_btnConsolidationExtractActionPerformed
+
+    private void btnConsolidateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsolidateActionPerformed
+        manageConsolidationConsolidate();
+    }//GEN-LAST:event_btnConsolidateActionPerformed
+
     /**
      * Opens roles management panel.
      */
@@ -1058,8 +1098,29 @@ public class MainForm extends javax.swing.JFrame {
             mainContentPanel.addPanel(panel, MainContentPanel.CARD_ADMIN_BR_MANAGE, true);
         }
     }
+    
+    private void manageConsolidationExtract() {
+        if (mainContentPanel.isPanelOpened(ConsolidationExtractPanel.PANEL_NAME)) {
+            mainContentPanel.showPanel(ConsolidationExtractPanel.PANEL_NAME);
+        } else {
+            ConsolidationExtractPanel panel = new ConsolidationExtractPanel();
+            mainContentPanel.addPanel(panel, ConsolidationExtractPanel.PANEL_NAME, true);
+        }
+    }
+
+    private void manageConsolidationConsolidate() {
+        if (mainContentPanel.isPanelOpened(ConsolidationConsolidatePanel.PANEL_NAME)) {
+            mainContentPanel.showPanel(ConsolidationConsolidatePanel.PANEL_NAME);
+        } else {
+            ConsolidationConsolidatePanel panel = new ConsolidationConsolidatePanel();
+            mainContentPanel.addPanel(panel, ConsolidationConsolidatePanel.PANEL_NAME, true);
+        }
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBr;
+    private javax.swing.JButton btnConsolidate;
+    private javax.swing.JButton btnConsolidationExtract;
     private javax.swing.JButton btnGISSettings;
     private javax.swing.JButton btnGroups;
     private javax.swing.JButton btnLanguage;
@@ -1071,6 +1132,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
+    private javax.swing.JSeparator jSeparator4;
     private javax.swing.JLabel lblUserName;
     private org.sola.clients.swing.ui.MainContentPanel mainContentPanel;
     private javax.swing.JMenuBar mainMenu;
