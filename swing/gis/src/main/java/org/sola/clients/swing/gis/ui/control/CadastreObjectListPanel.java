@@ -176,7 +176,6 @@ public class CadastreObjectListPanel extends javax.swing.JPanel {
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${nameLastpart}"));
         columnBinding.setColumnName("Name Lastpart");
         columnBinding.setColumnClass(String.class);
-        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${officialArea}"));
         columnBinding.setColumnName("Official Area");
         columnBinding.setColumnClass(Double.class);

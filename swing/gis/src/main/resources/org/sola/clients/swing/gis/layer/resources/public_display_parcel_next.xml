@@ -14,9 +14,6 @@
          </Stroke>
        </PolygonSymbolizer>
        <TextSymbolizer>
-         <Label>
-           <ogc:PropertyName>label</ogc:PropertyName>
-         </Label>
          <Font>
            <CssParameter name="font-family">Arial</CssParameter>
            <CssParameter name="font-size">13</CssParameter>

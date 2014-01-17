@@ -120,9 +120,10 @@ public class AddDocumentForm extends javax.swing.JDialog {
         this.firePropertyChange(SELECTED_SOURCE, null, source);
         if(closeFormOnAdd){
             this.dispose();
-        } else {
-            MessageUtility.displayMessage(ClientMessage.SOURCE_ADDED);
-        }
+        } 
+//        else {
+//            MessageUtility.displayMessage(ClientMessage.SOURCE_ADDED);
+//        }
     }
 
     private void addNewDocument(){
