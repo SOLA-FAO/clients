@@ -198,7 +198,7 @@
 								<reportElement mode="Transparent" x="0" y="0" width="95" height="20" backcolor="#FFFFFF"/>
 								<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 									<font fontName="Calibri" size="13" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-									<paragraph lineSpacing="Single"/>
+									<paragraph lineSpacing="Single" leftIndent="5" rightIndent="5"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
 							</textField>
@@ -222,11 +222,11 @@
 							</textField>
 						</jr:columnHeader>
 						<jr:detailCell style="table 3_TD" height="20" rowSpan="1">
-							<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+							<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
 								<reportElement mode="Transparent" x="0" y="0" width="170" height="20" forecolor="#CC0000" backcolor="#FFFFFF"/>
 								<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 									<font fontName="Calibri" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-									<paragraph lineSpacing="Single"/>
+									<paragraph lineSpacing="Single" leftIndent="5" rightIndent="5"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{nameFirstpart}+"/"+$F{nameLastpart}]]></textFieldExpression>
 							</textField>
@@ -254,7 +254,7 @@
 								<reportElement mode="Transparent" x="0" y="0" width="64" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
 								<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 									<font fontName="SansSerif" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-									<paragraph lineSpacing="Single"/>
+									<paragraph lineSpacing="Single" leftIndent="5" rightIndent="5"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{size}]]></textFieldExpression>
 							</textField>
@@ -278,11 +278,11 @@
 							</textField>
 						</jr:columnHeader>
 						<jr:detailCell style="table 3_TD" height="20" rowSpan="1">
-							<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+							<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
 								<reportElement mode="Transparent" x="0" y="0" width="128" height="20" backcolor="#FFFFFF"/>
 								<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 									<font fontName="Calibri" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-									<paragraph lineSpacing="Single"/>
+									<paragraph lineSpacing="Single" leftIndent="5" rightIndent="5"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{concatenatedName}]]></textFieldExpression>
 							</textField>
@@ -306,9 +306,11 @@
 							</textField>
 						</jr:columnHeader>
 						<jr:detailCell style="table 3_TD" height="20" rowSpan="1">
-							<textField>
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="90" height="20"/>
-								<textElement textAlignment="Left"/>
+								<textElement textAlignment="Left">
+									<paragraph leftIndent="5" rightIndent="5"/>
+								</textElement>
 								<textFieldExpression><![CDATA[$F{objections}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>

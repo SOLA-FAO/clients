@@ -170,11 +170,11 @@
 							</textField>
 						</jr:columnHeader>
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
-							<textField pattern="" isBlankWhenNull="false">
+							<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
 								<reportElement mode="Transparent" x="0" y="0" width="140" height="20" backcolor="#FFFFFF"/>
 								<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 									<font fontName="Calibri" size="13" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-									<paragraph lineSpacing="Single"/>
+									<paragraph lineSpacing="Single" leftIndent="5" rightIndent="5"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{value}]]></textFieldExpression>
 							</textField>
@@ -193,11 +193,11 @@
 							</textField>
 						</jr:columnHeader>
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
-							<textField pattern="" isBlankWhenNull="false">
+							<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
 								<reportElement mode="Transparent" x="0" y="0" width="160" height="20" forecolor="#CC0000" backcolor="#FFFFFF"/>
 								<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 									<font fontName="Calibri" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-									<paragraph lineSpacing="Single"/>
+									<paragraph lineSpacing="Single" leftIndent="5" rightIndent="5"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{nameFirstpart}+"/"+$F{nameLastpart}]]></textFieldExpression>
 							</textField>
@@ -216,9 +216,11 @@
 							</textField>
 						</jr:columnHeader>
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
-							<textField>
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="90" height="20"/>
-								<textElement textAlignment="Left"/>
+								<textElement textAlignment="Left">
+									<paragraph leftIndent="5" rightIndent="5"/>
+								</textElement>
 								<textFieldExpression><![CDATA[$F{size}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
@@ -236,9 +238,11 @@
 							</textField>
 						</jr:columnHeader>
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
-							<textField>
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="122" height="20"/>
-								<textElement textAlignment="Justified"/>
+								<textElement textAlignment="Justified">
+									<paragraph leftIndent="5" rightIndent="5"/>
+								</textElement>
 								<textFieldExpression><![CDATA[$F{objections}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
