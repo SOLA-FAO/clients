@@ -111,7 +111,7 @@
 	</title>
 	<pageHeader>
 		<band height="35" splitType="Stretch">
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="460" y="10" width="95" height="20"/>
 				<textElement>
 					<font size="12"/>
@@ -132,7 +132,7 @@
 				</textElement>
 				<text><![CDATA[From:]]></text>
 			</staticText>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="292" y="10" width="105" height="20"/>
 				<textElement>
 					<font size="12"/>

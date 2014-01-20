@@ -129,12 +129,12 @@
 				<text><![CDATA[Requested by:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="6" y="20" width="39" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement mode="Transparent" x="6" y="20" width="80" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Tahoma" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<text><![CDATA[On:]]></text>
+				<text><![CDATA[Generated On:]]></text>
 			</staticText>
 			<textField>
 				<reportElement stretchType="RelativeToBandHeight" x="250" y="0" width="371" height="50" forecolor="#006666"/>
@@ -144,7 +144,7 @@
 				<textFieldExpression><![CDATA[$R{titleStatus}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="45" y="20" width="102" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement mode="Transparent" x="86" y="20" width="102" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Tahoma" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -162,36 +162,7 @@
 		</band>
 	</title>
 	<pageHeader>
-		<band height="35" splitType="Stretch">
-			<textField>
-				<reportElement x="705" y="10" width="90" height="20"/>
-				<textElement>
-					<font size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{TODATE}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="675" y="10" width="30" height="20"/>
-				<textElement>
-					<font fontName="Tahoma" size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[To:]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="537" y="10" width="100" height="20"/>
-				<textElement>
-					<font size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{FROMDATE}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="495" y="10" width="42" height="20"/>
-				<textElement>
-					<font fontName="Tahoma" size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[From:]]></text>
-			</staticText>
-		</band>
+		<band height="35" splitType="Stretch"/>
 	</pageHeader>
 	<detail>
 		<band height="125" splitType="Stretch">
