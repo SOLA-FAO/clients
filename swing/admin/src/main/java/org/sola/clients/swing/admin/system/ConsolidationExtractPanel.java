@@ -47,18 +47,25 @@ public class ConsolidationExtractPanel extends ContentPanel {
 
             @Override
             public Void doTask() {
-                lblLabelInformation.setText("");
-                setMessage(MessageUtility.getLocalizedMessageText(
-                        ClientMessage.ADMIN_CONSOLIDATION_EXTRACT));
+                txtLog.setText("");
+                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.ADMIN_CONSOLIDATION_EXTRACT));
+                txtLog.setText(txtLog.getText() + MessageUtility.getLocalizedMessageText(
+                            ClientMessage.ADMIN_CONSOLIDATION_EXTRACT));                
                 fileOfExtract = WSManager.getInstance().getAdminService().consolidationExtract();
+                txtLog.setText(txtLog.getText() + MessageUtility.getLocalizedMessageText(
+                            ClientMessage.ADMIN_CONSOLIDATION_DONE) + "\r\n");                
+                txtLog.setText(txtLog.getText() + MessageUtility.getLocalizedMessageText(
+                            ClientMessage.ADMIN_CONSOLIDATION_EXTRACT_DOWNLOAD));                
                 WSManager.getInstance().getFileStreamingService().download(fileOfExtract, fileOfExtract);
+                txtLog.setText(txtLog.getText() + MessageUtility.getLocalizedMessageText(
+                            ClientMessage.ADMIN_CONSOLIDATION_DONE) + "\r\n");                
                 return null;
             }
 
             @Override
             protected void taskDone() {
                 super.taskDone();
-                lblLabelInformation.setText(MessageUtility.getLocalizedMessage(
+                txtLog.setText(txtLog.getText() + MessageUtility.getLocalizedMessage(
                         ClientMessage.ADMIN_CONSOLIDATION_EXTRACT_OUTPUT_FILE, 
                         new String[]{ FileUtility.getCachePath() + fileOfExtract}).getMessage());
             }
@@ -77,7 +84,9 @@ public class ConsolidationExtractPanel extends ContentPanel {
 
         pnlHeader = new org.sola.clients.swing.ui.HeaderPanel();
         btnStart = new javax.swing.JButton();
-        lblLabelInformation = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtLog = new javax.swing.JTextArea();
+        jLabel1 = new javax.swing.JLabel();
 
         setHeaderPanel(pnlHeader);
 
@@ -91,20 +100,27 @@ public class ConsolidationExtractPanel extends ContentPanel {
             }
         });
 
-        lblLabelInformation.setText(bundle.getString("ConsolidationExtractPanel.lblLabelInformation.text")); // NOI18N
+        txtLog.setEditable(false);
+        txtLog.setColumns(20);
+        txtLog.setRows(5);
+        jScrollPane1.setViewportView(txtLog);
+
+        jLabel1.setText(bundle.getString("ConsolidationExtractPanel.jLabel1.text")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlHeader, javax.swing.GroupLayout.DEFAULT_SIZE, 423, Short.MAX_VALUE)
+            .addComponent(pnlHeader, javax.swing.GroupLayout.DEFAULT_SIZE, 479, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnStart)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(lblLabelInformation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnStart)
+                            .addComponent(jLabel1))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -114,8 +130,10 @@ public class ConsolidationExtractPanel extends ContentPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnStart)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblLabelInformation, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 214, Short.MAX_VALUE))
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -125,7 +143,9 @@ public class ConsolidationExtractPanel extends ContentPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnStart;
-    private javax.swing.JLabel lblLabelInformation;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private org.sola.clients.swing.ui.HeaderPanel pnlHeader;
+    private javax.swing.JTextArea txtLog;
     // End of variables declaration//GEN-END:variables
 }

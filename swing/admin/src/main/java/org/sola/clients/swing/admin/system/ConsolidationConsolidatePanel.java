@@ -23,6 +23,7 @@ import org.sola.clients.swing.ui.FileBrowser;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 import org.sola.services.boundary.wsclients.WSManager;
+import org.sola.services.boundary.wsclients.exception.WebServiceClientException;
 
 /**
  *
@@ -31,6 +32,7 @@ import org.sola.services.boundary.wsclients.WSManager;
 public class ConsolidationConsolidatePanel extends ContentPanel {
 
     public static final String PANEL_NAME = "ConsolidationConsolidatePanel";
+
     /**
      * Creates new form ConsolidationExtractPanel
      */
@@ -38,34 +40,43 @@ public class ConsolidationConsolidatePanel extends ContentPanel {
         initComponents();
     }
 
-    private void run(){
-        
-        final String fileToUpload = txtExtractionFilePath.getText();
-        
-        SolaTask t = new SolaTask<Void, Void>() {
+    private void run() {
 
+        final String fileToUpload = txtExtractionFilePath.getText();
+
+        SolaTask t = new SolaTask<Void, Void>() {
             @Override
             public Void doTask() {
+                txtLog.setText("");
                 setMessage(MessageUtility.getLocalizedMessageText(
                         ClientMessage.ADMIN_CONSOLIDATION_CONSOLIDATE));
-                String uploadedFile = WSManager.getInstance().getFileStreamingService().upload(fileToUpload);
-                WSManager.getInstance().getAdminService().consolidationConsolidate(uploadedFile);
-                //Here must be called the extraction method from the server.
+                txtLog.setText(txtLog.getText() + MessageUtility.getLocalizedMessageText(
+                        ClientMessage.ADMIN_CONSOLIDATION_CONSOLIDATE_UPLOADING_FILE));
+                try {
+                    String uploadedFile = WSManager.getInstance().getFileStreamingService().upload(fileToUpload);
+                    txtLog.setText(txtLog.getText() + MessageUtility.getLocalizedMessageText(
+                            ClientMessage.ADMIN_CONSOLIDATION_DONE) + "\r\n");
+                    txtLog.setText(txtLog.getText() + MessageUtility.getLocalizedMessageText(
+                            ClientMessage.ADMIN_CONSOLIDATION_CONSOLIDATE_CONSOLIDATING_IN_SERVER) + "\r\n");
+                    String logFromServer = WSManager.getInstance().getAdminService().consolidationConsolidate(uploadedFile);
+                    txtLog.setText(txtLog.getText() + logFromServer);
+                } catch (WebServiceClientException ex) {
+                    txtLog.setText(txtLog.getText() + ex.getMessage());
+                }
                 return null;
             }
 
             @Override
             protected void taskDone() {
                 super.taskDone();
-                //If done, show the file to download from the server.
             }
         };
         TaskManager.getInstance().runTask(t);
-        
+
     }
-    
+
     private void findAndSetExtractionFile() {
-        File sourceFile = FileBrowser.showFileChooser(this, "sql");
+        File sourceFile = FileBrowser.showFileChooser(this, "zip");
         if (sourceFile == null) {
             return;
         }
@@ -87,6 +98,9 @@ public class ConsolidationConsolidatePanel extends ContentPanel {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         btnBrowse = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtLog = new javax.swing.JTextArea();
+        jLabel3 = new javax.swing.JLabel();
 
         setHeaderPanel(pnlHeader);
 
@@ -114,11 +128,19 @@ public class ConsolidationConsolidatePanel extends ContentPanel {
             }
         });
 
+        txtLog.setEditable(false);
+        txtLog.setColumns(20);
+        txtLog.setRows(5);
+        txtLog.setText(bundle.getString("ConsolidationConsolidatePanel.txtLog.text")); // NOI18N
+        jScrollPane1.setViewportView(txtLog);
+
+        jLabel3.setText(bundle.getString("ConsolidationConsolidatePanel.jLabel3.text")); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlHeader, javax.swing.GroupLayout.DEFAULT_SIZE, 611, Short.MAX_VALUE)
+            .addComponent(pnlHeader, javax.swing.GroupLayout.DEFAULT_SIZE, 635, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -126,12 +148,17 @@ public class ConsolidationConsolidatePanel extends ContentPanel {
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnStart)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(txtExtractionFilePath, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnBrowse)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(btnStart)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txtExtractionFilePath, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnBrowse)))
+                        .addGap(0, 191, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -146,12 +173,16 @@ public class ConsolidationConsolidatePanel extends ContentPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnStart)
                     .addComponent(jLabel2))
-                .addGap(0, 183, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
-        if (txtExtractionFilePath.getText().isEmpty()){
+        if (txtExtractionFilePath.getText().isEmpty()) {
             MessageUtility.displayMessage(ClientMessage.ADMIN_CONSOLIDATION_CONSOLIDATE_FILE_MISSING);
             return;
         }
@@ -161,13 +192,15 @@ public class ConsolidationConsolidatePanel extends ContentPanel {
     private void btnBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseActionPerformed
         findAndSetExtractionFile();
     }//GEN-LAST:event_btnBrowseActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBrowse;
     private javax.swing.JButton btnStart;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JScrollPane jScrollPane1;
     private org.sola.clients.swing.ui.HeaderPanel pnlHeader;
     private javax.swing.JTextField txtExtractionFilePath;
+    private javax.swing.JTextArea txtLog;
     // End of variables declaration//GEN-END:variables
 }
