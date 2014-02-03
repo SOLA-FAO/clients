@@ -225,17 +225,15 @@ public class FileBrowserForm extends javax.swing.JDialog {
     }
 
     private void refreshRemoteFiles() {
-        if (serverFiles.getSelectedFileInfoBean() != null) {
-            SolaTask t = new SolaTask<Void, Void>() {
-                @Override
-                public Void doTask() {
-                    setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_DOCUMENT_GETTING_LIST));
-                    serverFiles.loadServerFileInfoList();
-                    return null;
-                }
-            };
-            TaskManager.getInstance().runTask(t);
-        }
+        SolaTask t = new SolaTask<Void, Void>() {
+            @Override
+            public Void doTask() {
+                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_DOCUMENT_GETTING_LIST));
+                serverFiles.loadServerFileInfoList();
+                return null;
+            }
+        };
+        TaskManager.getInstance().runTask(t);
     }
 
     private void openRemoteFile() {

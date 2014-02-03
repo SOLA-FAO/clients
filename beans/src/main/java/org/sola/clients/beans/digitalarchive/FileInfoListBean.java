@@ -59,6 +59,7 @@ public class FileInfoListBean extends AbstractBindingBean {
      * reflecting remote folder content.
      */
     public void loadServerFileInfoList(){
+        lstFileInfo.clear();
         TypeConverters.TransferObjectListToBeanList(
                 WSManager.getInstance().getDigitalArchive().getAllFiles(), 
                 FileInfoBean.class, (List)lstFileInfo);
