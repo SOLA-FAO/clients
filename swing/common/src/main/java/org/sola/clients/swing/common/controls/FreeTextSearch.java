@@ -32,7 +32,6 @@
  */
 package org.sola.clients.swing.common.controls;
 
-import com.ctc.wstx.util.StringUtil;
 import java.awt.Color;
 import java.awt.event.*;
 import javax.swing.DefaultListModel;

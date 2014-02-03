@@ -74,7 +74,8 @@
             <artifactId>clients-swing-ui</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
+        <!--dependency>
+            3 Feb 2014 Verify this dependency is not required
             <groupId>org.hibernate.jsr303.tck</groupId>
             <artifactId>jsr303-tck</artifactId>
             <version>1.0.6.GA</version>
@@ -84,7 +85,7 @@
                     <groupId>javax.validation</groupId>
                 </exclusion>
             </exclusions>
-        </dependency>
+        </dependency-->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>

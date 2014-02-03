@@ -82,8 +82,8 @@ public class ConfigurationManager {
                 // Load from system properties
                 for (Enumeration it = System.getProperties().keys(); it.hasMoreElements();) {
                     Object systemProp = it.nextElement();
-                    if (systemProp != null && systemProp.toString().startsWith("SOLA_WS")) {
-                        wsConfig.setProperty(systemProp.toString(), System.getProperty(systemProp.toString()));
+                    if (systemProp != null && systemProp.toString().startsWith("jnlp.SOLA_WS")) {
+                        wsConfig.setProperty(systemProp.toString().replaceAll("jnlp.", ""), System.getProperty(systemProp.toString()));
                     }
                 }
 

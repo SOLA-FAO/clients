@@ -44,7 +44,7 @@ public class LocalizationManager {
 
     private static final String LANGUAGE = "language";
     private static final String COUNTRY = "country";
-    private static final String WEB_START_HOST_PROP = "SOLA_WEB_START_HOST";
+    private static final String WEB_START_HOST_PROP = "jnlp.SOLA_WEB_START_HOST";
     // Update to indicate the production host name and IP address. Also
     // update the version number for each production release of SOLA. 
     private static final String PRODUCTION_HOST_NAME = "localhost";

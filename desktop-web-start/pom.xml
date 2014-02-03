@@ -34,9 +34,9 @@
         <dependency>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>webstart-jnlp-servlet</artifactId>
-            <version>1.0-beta-3</version>
+            <version>1.0-beta-4</version>
             <scope>runtime</scope>
-        </dependency>
+        </dependency>   
 
         <dependency>
             <groupId>junit</groupId>
@@ -66,7 +66,7 @@
                 together for easy deployment. These could be packaged separately if necessary. --> 
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>webstart-maven-plugin</artifactId>
-                <version>1.0-beta-3</version>
+                <version>1.0-beta-4</version>
                 <executions>
                     <execution>
                         <phase>process-resources</phase>
@@ -78,13 +78,22 @@
                 <configuration>
                     <outputDirectoryName>webstart</outputDirectoryName>  
                     <templateDirectory>${project.basedir}/template</templateDirectory>
+                    <updateManifestEntries>
+                        <Permissions>all-permissions</Permissions>
+                        <Codebase>*</Codebase>
+                        <Application-Name>SOLA FAO</Application-Name>
+                    </updateManifestEntries>
                     <libPath>lib</libPath>
-                    <!-- pack200 has some bugs that should have been fixed. 
-                    See jira.codehaus.org/browse/MWEBSTART-159 for details.
-                    The jnlp-download-servlet supports both pack200 and gzip, 
-                    however as SOLA targets JRE 7, there is no need to use
-                    the gzip format. -->
-                    <pack200>true</pack200>
+                    <!-- 1 Feb 2014 - The pack200 option was updated in version 1.0-beta-4 of the
+                         webstart-maven-plugin however this update appears to break the pack200
+                         download. The miglayout-3.7-swing JAR fails to download as the pack200
+                         post processing incorrectly renames the jar miglayout-swing-3.7. Some 
+                         JARs also fail to pass jar signing verification with pack200 is enabled.
+                         These bugs also exist in beta-5 and beta-6 of the plugin. Also note
+                         that jnlp.packEnabled should be correctly set on the JNLP files as well.
+                    <pack200>
+                        <enabled>true</enabled>
+                    </pack200-->
                     <jnlpFiles>
                         <jnlpFile>
                             <!-- JNLP file for the SOLA Desktop application -->
@@ -148,6 +157,8 @@
                         <storepass>${webstart.codesigning.storepass}</storepass>
                         <keypass>${webstart.codesigning.keypass}</keypass>
                     </sign>
+                    <!-- Use verbose setting to monitor progress during build -->
+                    <verbose>true</verbose>
                 </configuration>
             </plugin>
             <plugin>

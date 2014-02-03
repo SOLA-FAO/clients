@@ -1,3 +1,4 @@
+$explicitTimestampUTC
 <?xml version="1.0" encoding="utf-8"?>
 <jnlp
     spec="$jnlpspec"
@@ -5,48 +6,53 @@
     context="$$context"
     href="$$name"
     version="SOLA Demo $solaVersion">
-  <information>
-    <title>SOLA Desktop Demo</title>
-#if($project.Organization.Name)
-    <vendor>$project.Organization.Name</vendor>
-#end
-#if($project.Url)
-    <homepage href="$project.Url"/>
-#end
-#if($project.Description)
-    <description>$project.Description</description>
-#end
+    <information>
+        <title>SOLA Desktop Demo</title>
+        #if($project.Organization.Name)
+        <vendor>$project.Organization.Name</vendor>
+        #end
+        #if($project.Url)
+        <homepage href="$project.Url"/>
+        #end
+        #if($project.Description)
+        <description>$project.Description</description>
+        #end
 <icon href="../Images/Floss.jpg" width="40" height="26"/>
-    <icon kind="shortcut" href="../Images/Floss.jpg" width="40" height="26"/>
-    <!--icon kind="splash" href="../Images/splash.png" width="413" height="314"/-->
-    <shortcut><desktop/><menu submenu="SOLA Demo"/></shortcut>
-#if($offlineAllowed)
-    <offline-allowed/>
-#end
-  </information>
-#if($allPermissions)
-  <security>
-     <all-permissions/>
-  </security>
-#end
-  <resources>
-    <j2se version="1.7+" initial-heap-size="256m" max-heap-size="512m"/>
-    ## The following properties identify the location of the SOLA Web Services and are used by the SOLA Desktop
-    ## in preference to the properties file compiled into the jar. Note the $$context is replaced by the 
-    ## webstart-jnlp-servlet with the context root of the SOLA Web Start web site. 
-    ## Any new web services added to SOLA will also need an appropriate property added here. 
-    <property name="SOLA_WS_CASE_MANAGEMENT_SERVICE_URL" value="$$context/webservices/casemanagement-service?wsdl"/>
-    <property name="SOLA_WS_REFERENCE_DATA_SERVICE_URL" value="$$context/webservices/referencedata-service?wsdl"/>
-    <property name="SOLA_WS_ADMIN_SERVICE_URL" value="$$context/webservices/admin-service?wsdl"/>
-    <property name="SOLA_WS_CADASTRE_SERVICE_URL" value="$$context/webservices/cadastre-service?wsdl"/>
-    <property name="SOLA_WS_SEARCH_SERVICE_URL" value="$$context/webservices/search-service?wsdl"/>
-    <property name="SOLA_WS_DIGITAL_ARCHIVE_URL" value="$$context/webservices/digitalarchive-service?wsdl"/>
-    <property name="SOLA_WS_SPATIAL_SERVICE_URL" value="$$context/webservices/spatial-service?wsdl"/>
-    <property name="SOLA_WS_ADMINISTRATIVE_SERVICE_URL" value="$$context/webservices/administrative-service?wsdl"/>
-	<property name="SOLA_WS_FILE_STREAMING_SERVICE_URL" value="$$context/webservices/filestreaming-service?wsdl"/>
-    <property name="SOLA_WEB_START_HOST" value="$$hostname"/>
-     $dependencies
-  </resources>
-  <application-desc main-class="$mainClass"/>
+        <icon kind="shortcut" href="../Images/Floss.jpg" width="40" height="26"/>
+        <!--icon kind="splash" href="../Images/splash.png" width="413" height="314"/-->
+        <shortcut>
+            <desktop/>
+            <menu submenu="SOLA Demo"/>
+        </shortcut>
+        #if($offlineAllowed)
+        <offline-allowed/>
+        #end
+    </information>
+    #if($allPermissions)
+    <security>
+        <all-permissions/>
+    </security>
+    #end
+    <resources>
+        <j2se version="1.7+" initial-heap-size="256m" max-heap-size="512m"/>
+        <property name="jnlp.versionEnabled" value="true"/>
+        <property name="jnlp.packEnabled" value="false"/>
+        ## The following properties identify the location of the SOLA Web Services and are used by the SOLA Desktop
+        ## in preference to the properties file compiled into the jar. Note the $$context is replaced by the 
+        ## webstart-jnlp-servlet with the context root of the SOLA Web Start web site. 
+        ## Any new web services added to SOLA will also need an appropriate property added here. 
+        <property name="jnlp.SOLA_WS_CASE_MANAGEMENT_SERVICE_URL" value="$$context/webservices/casemanagement-service?wsdl"/>
+        <property name="jnlp.SOLA_WS_REFERENCE_DATA_SERVICE_URL" value="$$context/webservices/referencedata-service?wsdl"/>
+        <property name="jnlp.SOLA_WS_ADMIN_SERVICE_URL" value="$$context/webservices/admin-service?wsdl"/>
+        <property name="jnlp.SOLA_WS_CADASTRE_SERVICE_URL" value="$$context/webservices/cadastre-service?wsdl"/>
+        <property name="jnlp.SOLA_WS_SEARCH_SERVICE_URL" value="$$context/webservices/search-service?wsdl"/>
+        <property name="jnlp.SOLA_WS_DIGITAL_ARCHIVE_URL" value="$$context/webservices/digitalarchive-service?wsdl"/>
+        <property name="jnlp.SOLA_WS_SPATIAL_SERVICE_URL" value="$$context/webservices/spatial-service?wsdl"/>
+        <property name="jnlp.SOLA_WS_ADMINISTRATIVE_SERVICE_URL" value="$$context/webservices/administrative-service?wsdl"/>
+        <property name="jnlp.SOLA_WS_FILE_STREAMING_SERVICE_URL" value="$$context/webservices/filestreaming-service?wsdl"/>
+        <property name="jnlp.SOLA_WEB_START_HOST" value="$$hostname"/>
+        $dependencies
+    </resources>
+    <application-desc main-class="$mainClass"/>
 </jnlp>
 
