@@ -15,7 +15,7 @@
  *    Lesser General Public License for more details.
  */
 
-package org.geotools.swing.control;
+package org.geotools.swing.control.extended;
 
 import java.awt.Dimension;
 import java.awt.FontMetrics;
@@ -27,6 +27,7 @@ import org.geotools.geometry.DirectPosition2D;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.referencing.CRS;
 import org.geotools.swing.MapPane;
+import org.geotools.swing.control.StatusBarItem;
 import org.geotools.swing.event.MapMouseAdapter;
 import org.geotools.swing.event.MapMouseEvent;
 import org.geotools.swing.event.MapPaneAdapter;

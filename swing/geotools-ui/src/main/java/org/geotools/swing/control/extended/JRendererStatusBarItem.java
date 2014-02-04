@@ -15,13 +15,14 @@
  *    Lesser General Public License for more details.
  */
 
-package org.geotools.swing.control;
+package org.geotools.swing.control.extended;
 
 import java.awt.Dimension;
 import java.awt.Insets;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import org.geotools.swing.MapPane;
+import org.geotools.swing.control.StatusBarItem;
 import org.geotools.swing.event.MapPaneAdapter;
 import org.geotools.swing.event.MapPaneEvent;
 
@@ -56,8 +57,8 @@ public class JRendererStatusBarItem extends StatusBarItem {
     public JRendererStatusBarItem(MapPane mapPane) {
         super("Busy", false);
 
-        busyIcon = new ImageIcon(JRendererStatusBarItem.class.getResource(BUSY_IMAGE));
-        idleIcon = new ImageIcon(JRendererStatusBarItem.class.getResource(IDLE_IMAGE));
+        busyIcon = new ImageIcon(org.geotools.swing.control.JRendererStatusBarItem.class.getResource(BUSY_IMAGE));
+        idleIcon = new ImageIcon(org.geotools.swing.control.JRendererStatusBarItem.class.getResource(IDLE_IMAGE));
 
         final JLabel renderLabel = new JLabel();
         renderLabel.setIcon(idleIcon);
