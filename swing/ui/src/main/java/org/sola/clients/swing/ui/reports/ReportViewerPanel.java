@@ -29,16 +29,24 @@
  */
 package org.sola.clients.swing.ui.reports;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.view.JRSaveContributor;
 import net.sf.jasperreports.view.JasperViewer;
 import net.sf.jasperreports.view.save.JRCsvSaveContributor;
 import net.sf.jasperreports.view.save.JRDocxSaveContributor;
+import net.sf.jasperreports.view.save.JRHtmlSaveContributor;
 import net.sf.jasperreports.view.save.JROdtSaveContributor;
 import net.sf.jasperreports.view.save.JRPdfSaveContributor;
 import net.sf.jasperreports.view.save.JRRtfSaveContributor;
 import net.sf.jasperreports.view.save.JRSingleSheetXlsSaveContributor;
+import net.sf.jasperreports.view.save.JRXmlSaveContributor;
+import static org.sola.clients.swing.ui.reports.SaveFormat.Docx;
+import static org.sola.clients.swing.ui.reports.SaveFormat.Odt;
+import static org.sola.clients.swing.ui.reports.SaveFormat.Pdf;
+import static org.sola.clients.swing.ui.reports.SaveFormat.Xls;
 
 /**
  * Extends the JasperViewer panel to allow customization of the JRViewer
@@ -59,13 +67,49 @@ public class ReportViewerPanel extends JasperViewer {
 
         // Set the save contributors to make available from the report with 
         // PDF the default selection. 
-        this.viewer.setSaveContributors(
-                new JRSaveContributor[]{
-            new JRPdfSaveContributor(Locale.getDefault(), null),
-            new JRCsvSaveContributor(Locale.getDefault(), null),
-            new JRDocxSaveContributor(Locale.getDefault(), null),
-            new JROdtSaveContributor(Locale.getDefault(), null),
-            new JRRtfSaveContributor(Locale.getDefault(), null),
-            new JRSingleSheetXlsSaveContributor(Locale.getDefault(), null)});
+        setSaveFormats(SaveFormat.Pdf, SaveFormat.Csv, 
+                SaveFormat.Docx, SaveFormat.Odt, SaveFormat.Rtf, SaveFormat.Xls);
+    }
+
+    /**
+     * Sets the output formats that can be used when saving the report to disk.
+     * @param formats 
+     */
+    public final void setSaveFormats(SaveFormat... formats) {
+        if (formats != null) {
+            List<JRSaveContributor> saveContributors = new ArrayList<JRSaveContributor>();
+            for (SaveFormat format : formats) {
+                switch (format) {
+                    case Pdf:
+                        saveContributors.add(new JRPdfSaveContributor(Locale.getDefault(), null));
+                        break;
+                    case Docx:
+                        saveContributors.add(new JRDocxSaveContributor(Locale.getDefault(), null));
+                        break;
+                    case Odt:
+                        saveContributors.add(new JROdtSaveContributor(Locale.getDefault(), null));
+                        break;
+                    case Xls:
+                        saveContributors.add(new JRSingleSheetXlsSaveContributor(Locale.getDefault(), null));
+                        break;
+                    case Csv:
+                        saveContributors.add(new JRCsvSaveContributor(Locale.getDefault(), null));
+                        break;
+                    case Html:
+                        saveContributors.add(new JRHtmlSaveContributor(Locale.getDefault(), null));
+                        break;
+                    case Xml:
+                        saveContributors.add(new JRXmlSaveContributor(Locale.getDefault(), null));
+                        break;
+                    case Rtf:
+                        saveContributors.add(new JRRtfSaveContributor(Locale.getDefault(), null));
+                        break;
+                    default:
+                        break;
+                }
+            }
+            this.viewer.setSaveContributors(saveContributors.toArray(
+                    new JRSaveContributor[saveContributors.size()]));
+        }
     }
 }
