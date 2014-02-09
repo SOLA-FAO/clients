@@ -58,7 +58,7 @@ public class ConsolidationConsolidatePanel extends ContentPanel {
                             ClientMessage.ADMIN_CONSOLIDATION_DONE) + "\r\n");
                     txtLog.setText(txtLog.getText() + MessageUtility.getLocalizedMessageText(
                             ClientMessage.ADMIN_CONSOLIDATION_CONSOLIDATE_CONSOLIDATING_IN_SERVER) + "\r\n");
-                    String logFromServer = WSManager.getInstance().getAdminService().consolidationConsolidate(uploadedFile);
+                    String logFromServer = WSManager.getInstance().getAdminService().consolidationConsolidate(uploadedFile, txtPassword.getText());
                     txtLog.setText(txtLog.getText() + logFromServer);
                 } catch (WebServiceClientException ex) {
                     txtLog.setText(txtLog.getText() + ex.getMessage());
@@ -101,6 +101,9 @@ public class ConsolidationConsolidatePanel extends ContentPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         txtLog = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        txtPassword = new javax.swing.JTextField();
 
         setHeaderPanel(pnlHeader);
 
@@ -136,28 +139,45 @@ public class ConsolidationConsolidatePanel extends ContentPanel {
 
         jLabel3.setText(bundle.getString("ConsolidationConsolidatePanel.jLabel3.text")); // NOI18N
 
+        jLabel4.setText(bundle.getString("ConsolidationConsolidatePanel.jLabel4.text")); // NOI18N
+
+        jLabel5.setText(bundle.getString("ConsolidationConsolidatePanel.jLabel5.text")); // NOI18N
+
+        txtPassword.setText(bundle.getString("ConsolidationConsolidatePanel.txtPassword.text")); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlHeader, javax.swing.GroupLayout.DEFAULT_SIZE, 635, Short.MAX_VALUE)
+            .addComponent(pnlHeader, javax.swing.GroupLayout.DEFAULT_SIZE, 702, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(btnStart)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(txtExtractionFilePath, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnBrowse)))
-                        .addGap(0, 191, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1))
+                                .addComponent(btnBrowse)
+                                .addGap(0, 260, Short.MAX_VALUE))
+                            .addComponent(jScrollPane1)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(btnStart)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -169,14 +189,19 @@ public class ConsolidationConsolidatePanel extends ContentPanel {
                     .addComponent(txtExtractionFilePath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
                     .addComponent(btnBrowse))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel5)
+                    .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnStart)
                     .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -198,9 +223,12 @@ public class ConsolidationConsolidatePanel extends ContentPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private org.sola.clients.swing.ui.HeaderPanel pnlHeader;
     private javax.swing.JTextField txtExtractionFilePath;
     private javax.swing.JTextArea txtLog;
+    private javax.swing.JTextField txtPassword;
     // End of variables declaration//GEN-END:variables
 }
