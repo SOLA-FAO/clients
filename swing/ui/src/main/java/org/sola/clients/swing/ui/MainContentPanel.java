@@ -42,6 +42,7 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Set;
 import javax.swing.JPanel;
+import org.sola.clients.swing.common.utils.LocalizationTools;
 
 /**
  * Displays different panels on the Main form.
@@ -165,6 +166,9 @@ public class MainContentPanel extends javax.swing.JPanel {
             closePanel(cardName);
         }
 
+        // Set components orienation
+        LocalizationTools.setOrientation(panel);
+        
         addCard(panel, cardName);
 
         panel.addPropertyChangeListener(panelListener);

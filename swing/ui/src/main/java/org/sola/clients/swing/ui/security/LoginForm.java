@@ -33,6 +33,7 @@ import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.ImageIcon;
+import org.sola.clients.swing.common.utils.LocalizationTools;
 
 /**
  * Login form. Allows to authenticate user.
@@ -49,6 +50,7 @@ public class LoginForm extends javax.swing.JFrame {
     /** Creates new form LoginForm */
     public LoginForm() {
         initComponents();
+        LocalizationTools.setOrientation(loginPanel);
         this.setIconImage(new ImageIcon(LoginForm.class.getResource("/images/common/key.png")).getImage());
         loginPanel.addPropertyChangeListener(new PropertyChangeListener() {
 
