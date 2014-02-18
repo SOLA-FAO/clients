@@ -32,6 +32,8 @@
 package org.geotools.swing.extended;
 
 import java.awt.BorderLayout;
+import java.awt.ComponentOrientation;
+import java.util.Locale;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
@@ -208,9 +210,9 @@ public class ControlsBundle extends javax.swing.JPanel {
         mapToolbar = new javax.swing.JToolBar();
 
         setBackground(new java.awt.Color(255, 255, 255));
-        setName("Form");
+        setName("Form"); // NOI18N
 
-        pnlMap.setName("pnlMap");
+        pnlMap.setName("pnlMap"); // NOI18N
 
         javax.swing.GroupLayout pnlMapLayout = new javax.swing.GroupLayout(pnlMap);
         pnlMap.setLayout(pnlMapLayout);
@@ -223,7 +225,8 @@ public class ControlsBundle extends javax.swing.JPanel {
             .addGap(0, 492, Short.MAX_VALUE)
         );
 
-        pnlStatusbar.setName("pnlStatusbar");
+        pnlStatusbar.setName("pnlStatusbar"); // NOI18N
+        pnlStatusbar.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
 
         javax.swing.GroupLayout pnlStatusbarLayout = new javax.swing.GroupLayout(pnlStatusbar);
         pnlStatusbar.setLayout(pnlStatusbarLayout);
@@ -238,7 +241,8 @@ public class ControlsBundle extends javax.swing.JPanel {
 
         mapToolbar.setFloatable(false);
         mapToolbar.setRollover(true);
-        mapToolbar.setName("mapToolbar");
+        mapToolbar.setName("mapToolbar"); // NOI18N
+        mapToolbar.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);

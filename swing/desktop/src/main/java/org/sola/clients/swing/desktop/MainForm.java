@@ -29,7 +29,6 @@
  */
 package org.sola.clients.swing.desktop;
 
-import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
@@ -38,7 +37,6 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
-import java.util.Locale;
 import java.util.logging.Level;
 import java.util.prefs.Preferences;
 import javax.swing.ImageIcon;
@@ -54,6 +52,7 @@ import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.ui.localization.LocalizationManager;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
+import org.sola.clients.swing.common.utils.LocalizationTools;
 import org.sola.clients.swing.desktop.administrative.BaUnitSearchPanel;
 import org.sola.clients.swing.desktop.administrative.RightsExportForm;
 import org.sola.clients.swing.desktop.application.ApplicationPanel;
@@ -181,6 +180,7 @@ public class MainForm extends javax.swing.JFrame {
         this.setIconImage(new ImageIcon(imgURL).getImage());
 
         initComponents();
+        LocalizationTools.setOrientation(this);
         this.setTitle("SOLA Desktop - " + LocalizationManager.getVersionNumber());
         this.addWindowListener(new java.awt.event.WindowAdapter() {
 
@@ -828,7 +828,6 @@ public class MainForm extends javax.swing.JFrame {
         applicationsMain.setMaximumSize(new java.awt.Dimension(32769, 32769));
         applicationsMain.setMinimumSize(new java.awt.Dimension(90, 45));
         applicationsMain.setPreferredSize(new java.awt.Dimension(980, 45));
-        applicationsMain.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
 
         btnShowDashboard.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/home.png"))); // NOI18N
         btnShowDashboard.setText(bundle.getString("MainForm.btnShowDashboard.text")); // NOI18N
@@ -933,7 +932,6 @@ public class MainForm extends javax.swing.JFrame {
         statusPanel.setPreferredSize(new java.awt.Dimension(1024, 24));
 
         labStatus.setFont(LafManager.getInstance().getLabFontBold());
-        labStatus.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         labStatus.setText(bundle.getString("MainForm.labStatus.text")); // NOI18N
 
         txtUserName.setText(bundle.getString("MainForm.txtUserName.text")); // NOI18N
@@ -958,7 +956,6 @@ public class MainForm extends javax.swing.JFrame {
         );
 
         menuBar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        menuBar.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
 
         fileMenu.setText(bundle.getString("MainForm.fileMenu.text")); // NOI18N
 

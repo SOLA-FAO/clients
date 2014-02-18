@@ -230,7 +230,6 @@ public class PartySearchPanel extends JPanel {
         partyRoleTyps = createPartyRoleTypes();
         partySearchParams = new org.sola.clients.beans.party.PartySearchParamsBean();
         partySearchResuls = new org.sola.clients.beans.party.PartySearchResultListBean();
-        scrlSearchPanel = new javax.swing.JScrollPane();
         pnlSearch = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -313,9 +312,6 @@ public class PartySearchPanel extends JPanel {
         });
         popupParties.add(menuRemove);
 
-        scrlSearchPanel.setBorder(null);
-        scrlSearchPanel.setName("scrlSearchPanel"); // NOI18N
-
         pnlSearch.setMinimumSize(new java.awt.Dimension(300, 300));
         pnlSearch.setName("pnlSearch"); // NOI18N
         pnlSearch.setPreferredSize(new java.awt.Dimension(300, 300));
@@ -355,14 +351,16 @@ public class PartySearchPanel extends JPanel {
             }
         });
         jScrollPane1.setViewportView(tableSearchResults);
-        tableSearchResults.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("PartySearchPanel.tableSearchResults.columnModel.title0_1")); // NOI18N
-        tableSearchResults.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("PartySearchPanel.tableSearchResults.columnModel.title1_1")); // NOI18N
-        tableSearchResults.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PartySearchPanel.tableSearchResults.columnModel.title3_1")); // NOI18N
-        tableSearchResults.getColumnModel().getColumn(2).setCellRenderer(new TableCellTextAreaRenderer());
-        tableSearchResults.getColumnModel().getColumn(3).setPreferredWidth(120);
-        tableSearchResults.getColumnModel().getColumn(3).setMaxWidth(150);
-        tableSearchResults.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("PartySearchPanel.tableSearchResults.columnModel.title2_1")); // NOI18N
-        tableSearchResults.getColumnModel().getColumn(3).setCellRenderer(new BooleanCellRenderer2());
+        if (tableSearchResults.getColumnModel().getColumnCount() > 0) {
+            tableSearchResults.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("PartySearchPanel.tableSearchResults.columnModel.title0_1")); // NOI18N
+            tableSearchResults.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("PartySearchPanel.tableSearchResults.columnModel.title1_1")); // NOI18N
+            tableSearchResults.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PartySearchPanel.tableSearchResults.columnModel.title3_1")); // NOI18N
+            tableSearchResults.getColumnModel().getColumn(2).setCellRenderer(new TableCellTextAreaRenderer());
+            tableSearchResults.getColumnModel().getColumn(3).setPreferredWidth(120);
+            tableSearchResults.getColumnModel().getColumn(3).setMaxWidth(150);
+            tableSearchResults.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("PartySearchPanel.tableSearchResults.columnModel.title2_1")); // NOI18N
+            tableSearchResults.getColumnModel().getColumn(3).setCellRenderer(new BooleanCellRenderer2());
+        }
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
@@ -453,7 +451,7 @@ public class PartySearchPanel extends JPanel {
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jToolBar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 639, Short.MAX_VALUE)
+            .addComponent(jScrollPane1)
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -614,7 +612,7 @@ public class PartySearchPanel extends JPanel {
             pnlSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(pnlSearchLayout.createSequentialGroup()
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 466, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -628,17 +626,15 @@ public class PartySearchPanel extends JPanel {
                 .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        scrlSearchPanel.setViewportView(pnlSearch);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrlSearchPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 639, Short.MAX_VALUE)
+            .addComponent(pnlSearch, javax.swing.GroupLayout.DEFAULT_SIZE, 639, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrlSearchPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE)
+            .addComponent(pnlSearch, javax.swing.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE)
         );
 
         bindingGroup.bind();
@@ -757,7 +753,6 @@ public class PartySearchPanel extends JPanel {
     private org.sola.clients.beans.referencedata.PartyTypeListBean partyTypes;
     private javax.swing.JPanel pnlSearch;
     private javax.swing.JPopupMenu popupParties;
-    private javax.swing.JScrollPane scrlSearchPanel;
     private javax.swing.JToolBar.Separator separator1;
     private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tableSearchResults;
     private javax.swing.JTextField txtName;

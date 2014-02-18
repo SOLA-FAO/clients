@@ -142,13 +142,13 @@ public class TaskPanel extends javax.swing.JPanel {
         );
         pnlProgressBarLayout.setVerticalGroup(
             pnlProgressBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(statusAnimationLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 14, Short.MAX_VALUE)
+            .addComponent(statusAnimationLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         jPanel1.setName("jPanel1"); // NOI18N
 
-        statusMessageLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        statusMessageLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/common/tasks/Bundle"); // NOI18N
         statusMessageLabel.setText(bundle.getString("TaskPanel.statusMessageLabel.text")); // NOI18N
         statusMessageLabel.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
@@ -162,7 +162,7 @@ public class TaskPanel extends javax.swing.JPanel {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(statusMessageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 14, Short.MAX_VALUE)
+            .addComponent(statusMessageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
