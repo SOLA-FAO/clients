@@ -45,9 +45,9 @@ public class LocalizationManager {
     private static final String WEB_START_HOST_PROP = "jnlp.SOLA_WEB_START_HOST";
     // Update to indicate the production host name and IP address. Also
     // update the version number for each production release of SOLA. 
-    private static final String PRODUCTION_HOST_NAME = "localhost";
-    private static final String PRODUCTION_HOST_IP = "127.0.0.1";
-    private static final String SOLA_VERSION = "1.2";
+    private static final String PRODUCTION_HOST_NAME = "demo.flossola.org";
+    private static final String PRODUCTION_HOST_IP = "46.149.21.37";
+    private static final String SOLA_VERSION = "1402a";
 
     /**
      * Loads default language and country codes and sets {@link Locale} settings
@@ -141,9 +141,9 @@ public class LocalizationManager {
      * @return
      */
     public static String getVersionNumber() {
-        String result = "Test v" + SOLA_VERSION;
+        String result = "Test " + SOLA_VERSION;
         if (isProductionHost()) {
-            result = "Demo v" + SOLA_VERSION;
+            result = "Release " + SOLA_VERSION;
         }
         return result;
     }
