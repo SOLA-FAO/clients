@@ -7,7 +7,7 @@ $explicitTimestampUTC
     href="$$name"
     version="SOLA Test $solaVersion">
   <information>
-    <title>SOLA Desktop Test</title>
+    <title>SOLA Desktop Test $solaVersion</title>
 #if($project.Organization.Name)
     <vendor>$project.Organization.Name</vendor>
 #end

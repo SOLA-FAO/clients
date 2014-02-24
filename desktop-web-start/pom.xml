@@ -4,12 +4,12 @@
     <parent>
         <artifactId>sola-clients</artifactId>
         <groupId>org.sola</groupId>
-        <version>1.2-SNAPSHOT</version>
+        <version>1402a</version>
     </parent>
 
     <groupId>org.sola.clients</groupId>
     <artifactId>sola-desktop-web-start</artifactId>
-    <version>1.2-SNAPSHOT</version>
+    <version>1402a</version>
     <packaging>war</packaging>
 
     <name>Clients Desktop Web Start</name>
@@ -17,7 +17,7 @@
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <solaVersion>v1.2</solaVersion>
+        <solaVersion>1402a</solaVersion>
         <webstart.codesigning.keystore>${basedir}/sola.jks</webstart.codesigning.keystore>
         <webstart.codesigning.alias>sola</webstart.codesigning.alias>
         <webstart.codesigning.storepass>FLOSS2011</webstart.codesigning.storepass>
@@ -80,8 +80,9 @@
                     <templateDirectory>${project.basedir}/template</templateDirectory>
                     <updateManifestEntries>
                         <Permissions>all-permissions</Permissions>
-                        <Codebase>*</Codebase>
+                        <Codebase>*.localhost:8080 *.demo.flossola.org</Codebase>
                         <Application-Name>SOLA FAO</Application-Name>
+                        <Application-Library-Allowable-Codebase>*.localhost:8080 *.demo.flossola.org</Application-Library-Allowable-Codebase>
                     </updateManifestEntries>
                     <libPath>lib</libPath>
                     <!-- 1 Feb 2014 - The pack200 option was updated in version 1.0-beta-4 of the
