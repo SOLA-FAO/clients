@@ -4,12 +4,12 @@
     <parent>
         <artifactId>sola-clients</artifactId>
         <groupId>org.sola</groupId>
-        <version>1.2-SNAPSHOT</version>
+        <version>1402a</version>
     </parent>
 
     <groupId>org.sola.clients</groupId>
     <artifactId>sola-desktop-web-start</artifactId>
-    <version>1.2-SNAPSHOT</version>
+    <version>1402a</version>
     <packaging>war</packaging>
 
     <name>Clients Desktop Web Start</name>
