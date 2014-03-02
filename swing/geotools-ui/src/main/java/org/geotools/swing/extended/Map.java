@@ -865,4 +865,11 @@ public class Map extends JMapPane {
         }
         return null;
     }
+    
+    /**
+     * It disposes the map control.
+     */
+    protected void dispose(){
+        this.mapContent.dispose();
+    }
 }
