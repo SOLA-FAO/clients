@@ -36,11 +36,13 @@ import com.vividsolutions.jts.io.ParseException;
 import org.geotools.feature.SchemaException;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.geometry.jts.ReferencedEnvelope;
+import org.geotools.map.extended.layer.ExtendedFeatureLayer;
 import org.geotools.map.extended.layer.ExtendedImageLayer;
 import org.geotools.map.extended.layer.ExtendedLayer;
 import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.geotools.swing.mapaction.extended.RemoveDirectImage;
 import org.geotools.swing.tool.extended.AddDirectImageTool;
+import org.geotools.swing.tool.extended.ExtendedDrawToolWithSnapping;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.referencedata.RequestTypeBean;
 import org.sola.clients.swing.gis.Messaging;
@@ -298,4 +300,22 @@ public abstract class ControlsBundleForTransaction extends SolaControlsBundle {
                 GisMessage.LEFT_PANEL_TAB_DOCUMENTS_TITLE), this.documentsPanel);
     }
 
+    /**
+     * It adds a layer in the list of snapping layers for a given tool.
+     * It expects that all layers are already added to the map control.
+     * The layer will be added in the snapping layers of the tools if it exist and if it is 
+     * a navigation layer of type ExtendedFeatureLayer.
+     * @param forTool The tool that will target features of the given layer for snapping
+     * @param targetLayerName The layer name
+     */
+    protected final void addSnappingLayerToTool(
+            ExtendedDrawToolWithSnapping forTool, String targetLayerName){
+        if (this.getMap().getSolaLayers().containsKey(targetLayerName)) {
+            ExtendedLayer snappingTargetLayer = 
+                    this.getMap().getSolaLayers().get(targetLayerName);
+            if (snappingTargetLayer instanceof ExtendedFeatureLayer) {
+                forTool.getTargetSnappingLayers().add((ExtendedFeatureLayer) snappingTargetLayer);
+            }
+        }
+    }
 }

@@ -85,7 +85,7 @@ public class Development {
     /**
      * Test the controls bundle for setting the location of an application
      */
-    //@Ignore
+    @Ignore
     @Test
     public void testUIControlsBundleForPublicDisplay() throws Exception {
         System.out.println("Test ControlsBundle for public display");
@@ -175,7 +175,7 @@ public class Development {
         SecurityBean.authenticate("test", "test".toCharArray(), this.getWSConfig());
         
         ControlsBundleForCadastreChange ctrl = new ControlsBundleForCadastreChange(
-                this.getApplicationBean("3000"), "4000", "3078053", "parcel");
+                this.getApplicationBean("3001"), "4000", "3078053", "parcel");
         
         //ctrl.setReadOnly(true);
 
@@ -203,7 +203,7 @@ public class Development {
         this.displayControlsBundleForm(ctrl);
     }
 
-    @Ignore
+    //@Ignore
     @Test
     public void testUIControlsBundleForCadastreRedefinition() throws Exception {
         System.out.println("Test ControlsBundle for cadastre redefinition");

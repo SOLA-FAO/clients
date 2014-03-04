@@ -62,6 +62,7 @@ import org.sola.webservices.transferobjects.cadastre.CadastreObjectTO;
 public final class ControlsBundleForCadastreChange extends ControlsBundleForTransaction {
 
     private static final String PARCEL_LAYER_NAME = "parcels";
+    private static final String PARCEL_PENDING_LAYER_NAME = "pending-parcels";
     private TransactionCadastreChangeBean transactionBean;
     private CadastreChangeTargetCadastreObjectLayer targetParcelsLayer = null;
     private CadastreChangeNewCadastreObjectLayer newCadastreObjectLayer = null;
@@ -232,14 +233,9 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
                 true);
 
         CadastreChangeNodeTool nodelinkingTool = new CadastreChangeNodeTool(newPointsLayer);
-        nodelinkingTool.getTargetSnappingLayers().add(this.targetParcelsLayer);
-        if (this.getMap().getSolaLayers().containsKey(PARCEL_LAYER_NAME)) {
-            ExtendedLayer snappingTargetLayer = 
-                    this.getMap().getSolaLayers().get(PARCEL_LAYER_NAME);
-            if (snappingTargetLayer.getClass() == PojoLayer.class) {
-                nodelinkingTool.getTargetSnappingLayers().add((ExtendedFeatureLayer) snappingTargetLayer);
-            }
-        }
+        //nodelinkingTool.getTargetSnappingLayers().add(this.targetParcelsLayer);
+        this.addSnappingLayerToTool(nodelinkingTool, PARCEL_LAYER_NAME);
+        this.addSnappingLayerToTool(nodelinkingTool, PARCEL_PENDING_LAYER_NAME);
         this.getMap().addTool(nodelinkingTool, this.getToolbar(), true);
 
         this.newCadastreObjectTool =

@@ -107,7 +107,7 @@ public class CadastreRedefinitionNodeModifyForm extends javax.swing.JDialog {
      * @return 
      */
     public Double getCoordinateX() {
-        return Double.valueOf(this.txtX.getText());
+        return Double.valueOf(getCoordinateAsString(this.txtX.getText()));
     }
 
     /**
@@ -115,7 +115,7 @@ public class CadastreRedefinitionNodeModifyForm extends javax.swing.JDialog {
      * @return 
      */
     public Double getCoordinateY() {
-        return Double.valueOf(this.txtY.getText());
+        return Double.valueOf(getCoordinateAsString(this.txtY.getText()));
     }
 
     /**
@@ -126,6 +126,10 @@ public class CadastreRedefinitionNodeModifyForm extends javax.swing.JDialog {
      */
     public void setRemoveButtonVisibility(boolean visible){
         this.cmdRemove.setVisible(visible);
+    }
+    
+    private String getCoordinateAsString(String inputedCoordinate){
+        return inputedCoordinate.replace(',', '.');
     }
     
     /** This method is called from within the constructor to
@@ -219,8 +223,8 @@ public class CadastreRedefinitionNodeModifyForm extends javax.swing.JDialog {
 private void cmdModifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdModifyActionPerformed
 
     try {
-        Double.parseDouble(this.txtX.getText());
-        Double.parseDouble(this.txtY.getText());
+        Double.parseDouble(getCoordinateAsString(this.txtX.getText()));
+        Double.parseDouble(getCoordinateAsString(this.txtY.getText()));
         this.status = Status.ModifyNode;
         this.setVisible(false);
     } catch (NumberFormatException ex) {
