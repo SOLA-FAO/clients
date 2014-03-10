@@ -48,6 +48,7 @@ import org.sola.clients.swing.gis.mapaction.CadastreRedefinitionReset;
 import org.sola.clients.swing.gis.tool.CadastreBoundarySelectTool;
 import org.sola.clients.swing.gis.tool.CadastreRedefinitionAddNodeTool;
 import org.sola.clients.swing.gis.tool.CadastreRedefinitionBoundarySelectTool;
+import org.sola.clients.swing.gis.tool.CadastreRedefinitionChangeNodeTool;
 import org.sola.clients.swing.gis.tool.CadastreRedefinitionModifyNodeTool;
 import org.sola.webservices.transferobjects.cadastre.CadastreObjectTO;
 
@@ -139,6 +140,7 @@ public final class ControlsBundleForCadastreRedefinition extends ControlsBundleF
         this.getMap().addLayer(this.cadastreObjectModifiedLayer);
 
         this.cadastreObjectNodeModifiedLayer = new CadastreRedefinitionNodeLayer();
+        this.cadastreObjectNodeModifiedLayer.setCadastreObjectModifiedLayer(cadastreObjectModifiedLayer);
         this.getMap().addLayer(this.cadastreObjectNodeModifiedLayer);
     }
     private CadastreRedefinitionAddNodeTool addNodeTool;
@@ -160,6 +162,13 @@ public final class ControlsBundleForCadastreRedefinition extends ControlsBundleF
                 this.cadastreObjectNodeModifiedLayer,
                 this.cadastreObjectModifiedLayer);
         this.getMap().addTool(this.modifyNodeTool, this.getToolbar(), true);
+        
+        CadastreRedefinitionChangeNodeTool changeNodeTool = 
+                new CadastreRedefinitionChangeNodeTool(this.cadastreObjectNodeModifiedLayer);
+        this.addSnappingLayerToTool(changeNodeTool, PARCEL_LAYER_NAME);
+        this.addSnappingLayerToTool(changeNodeTool, PARCEL_PENDING_LAYER_NAME);
+                        
+        this.getMap().addTool(changeNodeTool, this.getToolbar(), true);
 
         this.getMap().addMapAction(new CadastreRedefinitionReset(this), this.getToolbar(), true);
         this.boundarySelectTool =
