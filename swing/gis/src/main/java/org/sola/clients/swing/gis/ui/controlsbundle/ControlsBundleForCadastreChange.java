@@ -61,8 +61,6 @@ import org.sola.webservices.transferobjects.cadastre.CadastreObjectTO;
  */
 public final class ControlsBundleForCadastreChange extends ControlsBundleForTransaction {
 
-    private static final String PARCEL_LAYER_NAME = "parcels";
-    private static final String PARCEL_PENDING_LAYER_NAME = "pending-parcels";
     private TransactionCadastreChangeBean transactionBean;
     private CadastreChangeTargetCadastreObjectLayer targetParcelsLayer = null;
     private CadastreChangeNewCadastreObjectLayer newCadastreObjectLayer = null;

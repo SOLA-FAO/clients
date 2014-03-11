@@ -66,6 +66,9 @@ import org.sola.common.messaging.GisMessage;
  */
 public abstract class ControlsBundleForTransaction extends SolaControlsBundle {
 
+    protected static final String PARCEL_LAYER_NAME = "parcels";
+    protected static final String PARCEL_PENDING_LAYER_NAME = "pending-parcels";
+
     private PojoLayer pendingLayer = null;
     private ExtendedImageLayer imageLayer = null;
     private static final String IMAGE_LAYER_NAME = "temporary_image";
