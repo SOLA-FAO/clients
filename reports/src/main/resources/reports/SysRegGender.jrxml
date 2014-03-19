@@ -177,7 +177,7 @@
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="52">
+		<band height="62">
 			<staticText>
 				<reportElement mode="Transparent" x="350" y="0" width="43" height="20" forecolor="#000000"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
@@ -195,7 +195,7 @@
 				<text><![CDATA[Female:   number of parcels by female claimant]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="393" y="20" width="171" height="18" forecolor="#000000"/>
+				<reportElement mode="Transparent" x="393" y="20" width="170" height="20" forecolor="#000000"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -211,12 +211,28 @@
 				<text><![CDATA[Joint:     number of parcels by joint 1male-1female claimant]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="565" y="20" width="216" height="18" forecolor="#000000"/>
+				<reportElement mode="Transparent" x="565" y="20" width="216" height="20" forecolor="#000000"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<text><![CDATA[Mixed:   number of parcels by mixed males-females claimant]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="394" y="38" width="170" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Times New Roman" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Entity:  number of parcels by entity claimant]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="565" y="38" width="216" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Times New Roman" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Not Recorded:  not yet recorded gender of claimants]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
