@@ -108,6 +108,7 @@ public class SysRegManagementParamsForm extends javax.swing.JDialog {
         sysRegManagementBean = new org.sola.clients.beans.systematicregistration.SysRegManagementBean();
         sysRegStatusBean = new org.sola.clients.beans.systematicregistration.SysRegStatusBean();
         sysRegProgressBean = new org.sola.clients.beans.systematicregistration.SysRegProgressBean();
+        sysRegGenderBean = new org.sola.clients.beans.systematicregistration.SysRegGenderBean();
         labHeader = new javax.swing.JLabel();
         txtFromDate = new javax.swing.JFormattedTextField();
         btnShowCalendarFrom = new javax.swing.JButton();
@@ -118,6 +119,8 @@ public class SysRegManagementParamsForm extends javax.swing.JDialog {
         cadastreObjectSearch = new org.sola.clients.swing.ui.cadastre.LocationSearch();
         labSearchArea = new javax.swing.JLabel();
         viewReport = new javax.swing.JButton();
+        statusPanel = new javax.swing.JPanel();
+        taskPanel1 = new org.sola.clients.swing.common.tasks.TaskPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -178,6 +181,22 @@ public class SysRegManagementParamsForm extends javax.swing.JDialog {
             }
         });
 
+        statusPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        statusPanel.setPreferredSize(new java.awt.Dimension(1024, 24));
+
+        javax.swing.GroupLayout statusPanelLayout = new javax.swing.GroupLayout(statusPanel);
+        statusPanel.setLayout(statusPanelLayout);
+        statusPanelLayout.setHorizontalGroup(
+            statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(statusPanelLayout.createSequentialGroup()
+                .addGap(248, 248, 248)
+                .addComponent(taskPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE))
+        );
+        statusPanelLayout.setVerticalGroup(
+            statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(taskPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 20, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -200,6 +219,7 @@ public class SysRegManagementParamsForm extends javax.swing.JDialog {
                 .addComponent(cadastreObjectSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(viewReport))
+            .addComponent(statusPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -223,7 +243,8 @@ public class SysRegManagementParamsForm extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cadastreObjectSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(viewReport))
-                .addGap(0, 167, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 143, Short.MAX_VALUE)
+                .addComponent(statusPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -287,7 +308,10 @@ public class SysRegManagementParamsForm extends javax.swing.JDialog {
             @Override
             public Void doTask() {
 //                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_REPORT));
-
+                if (finalReport.contentEquals("sysRegGenderBean")) {
+                    sysRegGenderBean.passParameter("sysRegGenderBean");
+                    showReport(ReportManager.getSysRegGenderReport(sysRegGenderBean));
+                } 
                 if (finalReport.contentEquals("sysRegManagementBean")) {
                     sysRegManagementBean.passParameter(searchParams);
                     showReport(ReportManager.getSysRegManagementReport(sysRegManagementBean, finalFrom, finalTo, tmpLocation));
@@ -310,7 +334,9 @@ public class SysRegManagementParamsForm extends javax.swing.JDialog {
 
         this.dispose();
     }//GEN-LAST:event_viewReportActionPerformed
-
+    public void clickView(java.awt.event.ActionEvent evt) {                                           
+        viewReportActionPerformed (evt);
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnShowCalendarFrom;
@@ -321,9 +347,12 @@ public class SysRegManagementParamsForm extends javax.swing.JDialog {
     private javax.swing.JLabel labSearchArea;
     private javax.swing.JLabel labToDate;
     private org.sola.clients.beans.systematicregistration.SysRegManagementParamsBean searchParams;
+    private javax.swing.JPanel statusPanel;
+    private org.sola.clients.beans.systematicregistration.SysRegGenderBean sysRegGenderBean;
     private org.sola.clients.beans.systematicregistration.SysRegManagementBean sysRegManagementBean;
     private org.sola.clients.beans.systematicregistration.SysRegProgressBean sysRegProgressBean;
     private org.sola.clients.beans.systematicregistration.SysRegStatusBean sysRegStatusBean;
+    private org.sola.clients.swing.common.tasks.TaskPanel taskPanel1;
     private javax.swing.JFormattedTextField txtFromDate;
     private javax.swing.JFormattedTextField txtToDate;
     private javax.swing.JButton viewReport;

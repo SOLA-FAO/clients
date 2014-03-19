@@ -1,0 +1,587 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Gender Report" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" resourceBundle="org.sola.clients.reports.locale.SysRegMenagement">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<style name="Row" mode="Transparent">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style backcolor="#E6DAC3"/>
+		</conditionalStyle>
+	</style>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#006400">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#E6FFE6">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Gender">
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+		<field name="parcel" class="java.lang.String">
+			<fieldDescription><![CDATA[parcel]]></fieldDescription>
+		</field>
+		<field name="totEntity" class="java.math.BigDecimal">
+			<fieldDescription><![CDATA[totEntity]]></fieldDescription>
+		</field>
+		<field name="totFem" class="java.math.BigDecimal">
+			<fieldDescription><![CDATA[totFem]]></fieldDescription>
+		</field>
+		<field name="totJoint" class="java.math.BigDecimal">
+			<fieldDescription><![CDATA[totJoint]]></fieldDescription>
+		</field>
+		<field name="totMale" class="java.math.BigDecimal">
+			<fieldDescription><![CDATA[totMale]]></fieldDescription>
+		</field>
+		<field name="totMixed" class="java.math.BigDecimal">
+			<fieldDescription><![CDATA[totMixed]]></fieldDescription>
+		</field>
+		<field name="totNull" class="java.math.BigDecimal">
+			<fieldDescription><![CDATA[totNull]]></fieldDescription>
+		</field>
+		<field name="total" class="java.math.BigDecimal">
+			<fieldDescription><![CDATA[total]]></fieldDescription>
+		</field>
+		<variable name="TotalEstimated" class="java.math.BigDecimal" calculation="Sum">
+			<variableExpression><![CDATA[$F{totFem}]]></variableExpression>
+			<initialValueExpression><![CDATA[]]></initialValueExpression>
+		</variable>
+		<variable name="TotalrecordedParcel" class="java.math.BigDecimal" calculation="Sum">
+			<variableExpression><![CDATA[$F{totMale}]]></variableExpression>
+		</variable>
+		<variable name="TotalrecordedClaims" class="java.math.BigDecimal" calculation="Sum">
+			<variableExpression><![CDATA[$F{totJoint}]]></variableExpression>
+		</variable>
+		<variable name="TotalScannedDemarcation" class="java.math.BigDecimal" calculation="Sum">
+			<variableExpression><![CDATA[$F{totMixed}]]></variableExpression>
+		</variable>
+		<variable name="TotalScannedClaims" class="java.math.BigDecimal" calculation="Sum">
+			<variableExpression><![CDATA[$F{totEntity}]]></variableExpression>
+		</variable>
+		<variable name="TotalDigitizedParcels" class="java.math.BigDecimal" calculation="Sum">
+			<variableExpression><![CDATA[$F{totNull}]]></variableExpression>
+		</variable>
+		<variable name="TotalClaimsEntered" class="java.math.BigDecimal" calculation="Sum">
+			<variableExpression><![CDATA[$F{total}]]></variableExpression>
+		</variable>
+	</subDataset>
+	<parameter name="USER" class="java.lang.String"/>
+	<parameter name="FROMDATE" class="java.util.Date"/>
+	<parameter name="STATE" class="java.lang.String"/>
+	<parameter name="LGA" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="genderList" class="org.jdesktop.observablecollections.ObservableList">
+		<fieldDescription><![CDATA[genderList]]></fieldDescription>
+	</field>
+	<pageHeader>
+		<band height="80">
+			<staticText>
+				<reportElement style="Title" x="11" y="10" width="263" height="24"/>
+				<textElement verticalAlignment="Middle">
+					<font size="20" pdfFontName="Times-Roman"/>
+				</textElement>
+				<text><![CDATA[SOLA
+                ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="SubTitle" x="11" y="34" width="196" height="22"/>
+				<textElement>
+					<font fontName="Times New Roman" size="16" isBold="true" pdfFontName="Times-Roman"/>
+				</textElement>
+				<text><![CDATA[Ownership Gender Report
+                ]]></text>
+			</staticText>
+			<image>
+				<reportElement x="715" y="10" width="87" height="67"/>
+				<imageExpression><![CDATA["images/sola/logoMinistry.png"]]></imageExpression>
+			</image>
+			<frame>
+				<reportElement x="252" y="56" width="291" height="21"/>
+				<staticText>
+					<reportElement mode="Transparent" x="0" y="1" width="62" height="20" forecolor="#736343" backcolor="#FFFFFF"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="Times New Roman" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<text><![CDATA[Report at 
+                    ]]></text>
+				</staticText>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement style="Column header" mode="Transparent" x="62" y="1" width="228" height="20" forecolor="#736343" backcolor="#FFFFFF"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="Times New Roman" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+			<staticText>
+				<reportElement mode="Transparent" x="10" y="57" width="62" height="20" forecolor="#736343" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="Times New Roman" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Country:
+                    ]]></text>
+			</staticText>
+			<textField>
+				<reportElement mode="Transparent" x="72" y="57" width="181" height="20" forecolor="#736343" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="Times New Roman" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{STATE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="52">
+			<staticText>
+				<reportElement mode="Transparent" x="350" y="0" width="43" height="20" forecolor="#000000"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Times New Roman" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Legenda]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="394" y="0" width="170" height="20" forecolor="#000000"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Times New Roman" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Female:   number of parcels by female claimant]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="393" y="20" width="171" height="18" forecolor="#000000"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Times New Roman" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Male:      number of parcels by male claimant]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="564" y="0" width="217" height="20" forecolor="#000000"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Times New Roman" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Joint:     number of parcels by joint 1male-1female claimant]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="565" y="20" width="216" height="18" forecolor="#000000"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Times New Roman" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Mixed:   number of parcels by mixed males-females claimant]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="108" splitType="Stretch">
+			<frame>
+				<reportElement style="Row" mode="Opaque" x="0" y="0" width="802" height="108"/>
+				<componentElement>
+					<reportElement key="table" style="table" x="22" y="0" width="759" height="108"/>
+					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="AllSectionsNoDetail">
+						<datasetRun subDataset="Gender">
+							<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanArrayDataSource($F{genderList}.toArray())]]></dataSourceExpression>
+						</datasetRun>
+						<jr:column width="178">
+							<jr:tableFooter style="table_TH" height="30" rowSpan="1">
+								<textField pattern="" isBlankWhenNull="false">
+									<reportElement mode="Transparent" x="0" y="0" width="178" height="30" forecolor="#000000" backcolor="#FFFFFF"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+										<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+										<paragraph lineSpacing="Single" leftIndent="10"/>
+									</textElement>
+									<textFieldExpression><![CDATA["Grand Total"]]></textFieldExpression>
+								</textField>
+							</jr:tableFooter>
+							<jr:columnHeader style="table 1_CH" height="34" rowSpan="1">
+								<textField pattern="" isBlankWhenNull="false">
+									<reportElement mode="Transparent" x="0" y="0" width="178" height="34" forecolor="#000000" backcolor="#FFFFFF"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+										<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+										<paragraph lineSpacing="Single" leftIndent="5"/>
+									</textElement>
+									<textFieldExpression><![CDATA["Zone"]]></textFieldExpression>
+								</textField>
+							</jr:columnHeader>
+							<jr:detailCell style="table_TD" height="30" rowSpan="1">
+								<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+									<reportElement mode="Transparent" x="0" y="0" width="178" height="30" forecolor="#FF0033" backcolor="#FFFFFF"/>
+									<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+										<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+										<paragraph lineSpacing="Single" leftIndent="10"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{parcel}.substring( ($F{parcel}.indexOf( "/" ))+1)]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="83">
+							<jr:tableFooter style="table_TH" height="30" rowSpan="1">
+								<textField pattern="#,##0" isBlankWhenNull="false">
+									<reportElement mode="Transparent" x="0" y="0" width="83" height="30" forecolor="#000000" backcolor="#FFFFFF"/>
+									<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+										<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+										<paragraph lineSpacing="Single" leftIndent="5" rightIndent="3"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$V{TotalEstimated}]]></textFieldExpression>
+								</textField>
+							</jr:tableFooter>
+							<jr:columnHeader style="table 1_CH" height="34" rowSpan="1">
+								<textField pattern="" isBlankWhenNull="false">
+									<reportElement style="table 1_CH" mode="Transparent" x="0" y="0" width="83" height="34" forecolor="#000000" backcolor="#FFFFFF"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+										<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+										<paragraph lineSpacing="Single" leftIndent="5"/>
+									</textElement>
+									<textFieldExpression><![CDATA["Female"]]></textFieldExpression>
+								</textField>
+							</jr:columnHeader>
+							<jr:detailCell style="table_TD" height="30" rowSpan="1">
+								<textField pattern="#,##0" isBlankWhenNull="true">
+									<reportElement mode="Transparent" x="0" y="0" width="83" height="30" forecolor="#736343" backcolor="#FFFFFF"/>
+									<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+										<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+										<paragraph lineSpacing="Single" leftIndent="5" rightIndent="3"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{totFem}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="85">
+							<jr:tableFooter style="table_TH" height="30" rowSpan="1">
+								<textField pattern="#,##0" isBlankWhenNull="false">
+									<reportElement mode="Transparent" x="0" y="0" width="85" height="30" forecolor="#000000" backcolor="#FFFFFF"/>
+									<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+										<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+										<paragraph lineSpacing="Single" leftIndent="5" rightIndent="3"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$V{TotalrecordedParcel}]]></textFieldExpression>
+								</textField>
+							</jr:tableFooter>
+							<jr:columnHeader style="table 1_CH" height="34" rowSpan="1">
+								<textField pattern="" isBlankWhenNull="false">
+									<reportElement style="table 1_CH" mode="Transparent" x="0" y="0" width="85" height="34" forecolor="#000000" backcolor="#FFFFFF"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+										<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+										<paragraph lineSpacing="Single" leftIndent="5"/>
+									</textElement>
+									<textFieldExpression><![CDATA["Male"]]></textFieldExpression>
+								</textField>
+							</jr:columnHeader>
+							<jr:detailCell style="table_TD" height="30" rowSpan="1">
+								<textField pattern="#,##0" isBlankWhenNull="true">
+									<reportElement mode="Transparent" x="0" y="0" width="85" height="30" forecolor="#736343" backcolor="#FFFFFF"/>
+									<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+										<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+										<paragraph lineSpacing="Single" leftIndent="5" rightIndent="3"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{totMale}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="86">
+							<jr:tableFooter style="table_TH" height="30" rowSpan="1">
+								<textField pattern="#,##0" isBlankWhenNull="false">
+									<reportElement mode="Transparent" x="0" y="0" width="86" height="30" forecolor="#000000" backcolor="#FFFFFF"/>
+									<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+										<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+										<paragraph lineSpacing="Single" leftIndent="5" rightIndent="3"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$V{TotalrecordedClaims}]]></textFieldExpression>
+								</textField>
+							</jr:tableFooter>
+							<jr:columnHeader style="table 1_CH" height="34" rowSpan="1">
+								<textField pattern="" isBlankWhenNull="false">
+									<reportElement style="table 1_CH" mode="Transparent" x="0" y="0" width="86" height="34" forecolor="#000000" backcolor="#FFFFFF"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+										<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+										<paragraph lineSpacing="Single" leftIndent="5"/>
+									</textElement>
+									<textFieldExpression><![CDATA["Joint"]]></textFieldExpression>
+								</textField>
+							</jr:columnHeader>
+							<jr:detailCell style="table_TD" height="30" rowSpan="1">
+								<textField pattern="#,##0" isBlankWhenNull="true">
+									<reportElement mode="Transparent" x="0" y="0" width="86" height="30" forecolor="#736343" backcolor="#FFFFFF"/>
+									<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+										<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+										<paragraph lineSpacing="Single" leftIndent="5" rightIndent="3"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{totJoint}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="87">
+							<jr:tableFooter style="table_TH" height="30" rowSpan="1">
+								<textField pattern="#,##0" isBlankWhenNull="false">
+									<reportElement mode="Transparent" x="0" y="0" width="87" height="30" forecolor="#000000" backcolor="#FFFFFF"/>
+									<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+										<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+										<paragraph lineSpacing="Single" leftIndent="5" rightIndent="3"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$V{TotalScannedDemarcation}]]></textFieldExpression>
+								</textField>
+							</jr:tableFooter>
+							<jr:columnHeader style="table 1_CH" height="34" rowSpan="1">
+								<textField pattern="" isBlankWhenNull="false">
+									<reportElement style="table 1_CH" mode="Transparent" x="0" y="0" width="87" height="34" forecolor="#000000" backcolor="#FFFFFF"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+										<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+										<paragraph lineSpacing="Single" leftIndent="5"/>
+									</textElement>
+									<textFieldExpression><![CDATA["Mixed"]]></textFieldExpression>
+								</textField>
+							</jr:columnHeader>
+							<jr:detailCell style="table_TD" height="30" rowSpan="1">
+								<textField pattern="#,##0" isBlankWhenNull="true">
+									<reportElement mode="Transparent" x="0" y="0" width="87" height="30" forecolor="#736343" backcolor="#FFFFFF"/>
+									<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+										<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+										<paragraph lineSpacing="Single" leftIndent="5" rightIndent="3"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{totMixed}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="86">
+							<jr:tableFooter style="table_TH" height="30" rowSpan="1">
+								<textField pattern="#,##0" isBlankWhenNull="false">
+									<reportElement mode="Transparent" x="0" y="0" width="86" height="30" forecolor="#000000" backcolor="#FFFFFF"/>
+									<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+										<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+										<paragraph lineSpacing="Single" leftIndent="5" rightIndent="3"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$V{TotalScannedClaims}]]></textFieldExpression>
+								</textField>
+							</jr:tableFooter>
+							<jr:columnHeader style="table 1_CH" height="34" rowSpan="1">
+								<textField pattern="" isBlankWhenNull="false">
+									<reportElement style="table 1_CH" mode="Transparent" x="0" y="0" width="86" height="34" forecolor="#000000" backcolor="#FFFFFF"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+										<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+										<paragraph lineSpacing="Single" leftIndent="5"/>
+									</textElement>
+									<textFieldExpression><![CDATA["Entity"]]></textFieldExpression>
+								</textField>
+							</jr:columnHeader>
+							<jr:detailCell style="table_TD" height="30" rowSpan="1">
+								<textField pattern="#,##0" isBlankWhenNull="true">
+									<reportElement mode="Transparent" x="0" y="0" width="86" height="30" forecolor="#736343" backcolor="#FFFFFF"/>
+									<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+										<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+										<paragraph lineSpacing="Single" leftIndent="5" rightIndent="3"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{totEntity}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="96">
+							<jr:tableFooter style="table_TH" height="30" rowSpan="1">
+								<textField pattern="#,##0" isBlankWhenNull="false">
+									<reportElement mode="Transparent" x="0" y="0" width="96" height="30" forecolor="#000000" backcolor="#FFFFFF"/>
+									<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+										<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+										<paragraph lineSpacing="Single" leftIndent="5" rightIndent="3"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$V{TotalDigitizedParcels}]]></textFieldExpression>
+								</textField>
+							</jr:tableFooter>
+							<jr:columnHeader style="table 1_CH" height="34" rowSpan="1">
+								<textField pattern="" isBlankWhenNull="false">
+									<reportElement style="table 1_CH" mode="Transparent" x="0" y="0" width="96" height="34" forecolor="#000000" backcolor="#FFFFFF"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+										<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+										<paragraph lineSpacing="Single" leftIndent="5"/>
+									</textElement>
+									<textFieldExpression><![CDATA["Not Recorded"]]></textFieldExpression>
+								</textField>
+							</jr:columnHeader>
+							<jr:detailCell style="table_TD" height="30" rowSpan="1">
+								<textField pattern="#,##0" isBlankWhenNull="true">
+									<reportElement mode="Transparent" x="0" y="0" width="96" height="30" forecolor="#736343" backcolor="#FFFFFF"/>
+									<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+										<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+										<paragraph lineSpacing="Single" leftIndent="5" rightIndent="3"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{totNull}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="100">
+							<jr:tableFooter style="table_TH" height="30" rowSpan="1">
+								<textField pattern="#,##0" isBlankWhenNull="false">
+									<reportElement mode="Transparent" x="0" y="0" width="100" height="30" forecolor="#000000" backcolor="#FFFFFF"/>
+									<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+										<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+										<paragraph lineSpacing="Single" leftIndent="5" rightIndent="5"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$V{TotalClaimsEntered}]]></textFieldExpression>
+								</textField>
+							</jr:tableFooter>
+							<jr:columnHeader style="table 1_CH" height="34" rowSpan="1">
+								<textField pattern="" isBlankWhenNull="false">
+									<reportElement style="table 1_CH" mode="Transparent" x="0" y="0" width="100" height="34" forecolor="#000000" backcolor="#FFFFFF"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+										<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+										<paragraph lineSpacing="Single" leftIndent="5"/>
+									</textElement>
+									<textFieldExpression><![CDATA["Total"]]></textFieldExpression>
+								</textField>
+							</jr:columnHeader>
+							<jr:detailCell style="table_TD" height="30" rowSpan="1">
+								<textField pattern="#,##0" isBlankWhenNull="true">
+									<reportElement mode="Transparent" x="0" y="0" width="100" height="30" forecolor="#736343" backcolor="#FFFFFF"/>
+									<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+										<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+										<paragraph lineSpacing="Single" leftIndent="5" rightIndent="5"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+					</jr:table>
+				</componentElement>
+			</frame>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="183">
+			<bar3DChart>
+				<chart>
+					<reportElement x="155" y="0" width="493" height="183"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<dataset>
+						<datasetRun subDataset="Gender">
+							<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanArrayDataSource($F{genderList}.toArray())]]></dataSourceExpression>
+						</datasetRun>
+					</dataset>
+					<categorySeries>
+						<seriesExpression><![CDATA["Female"]]></seriesExpression>
+						<categoryExpression><![CDATA[""]]></categoryExpression>
+						<valueExpression><![CDATA[$V{TotalEstimated}]]></valueExpression>
+						<itemHyperlink>
+							<hyperlinkTooltipExpression><![CDATA["Female: "+$V{TotalEstimated}]]></hyperlinkTooltipExpression>
+						</itemHyperlink>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["Male"]]></seriesExpression>
+						<categoryExpression><![CDATA[""]]></categoryExpression>
+						<valueExpression><![CDATA[$V{TotalrecordedParcel}]]></valueExpression>
+						<itemHyperlink>
+							<hyperlinkTooltipExpression><![CDATA["Male: "+$V{TotalrecordedParcel}]]></hyperlinkTooltipExpression>
+						</itemHyperlink>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["Joint"]]></seriesExpression>
+						<categoryExpression><![CDATA[""]]></categoryExpression>
+						<valueExpression><![CDATA[$V{TotalrecordedClaims}]]></valueExpression>
+						<itemHyperlink>
+							<hyperlinkTooltipExpression><![CDATA["Joint: "+$V{TotalrecordedClaims}]]></hyperlinkTooltipExpression>
+						</itemHyperlink>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["Mixed"]]></seriesExpression>
+						<categoryExpression><![CDATA[""]]></categoryExpression>
+						<valueExpression><![CDATA[$V{TotalScannedDemarcation}]]></valueExpression>
+						<itemHyperlink>
+							<hyperlinkTooltipExpression><![CDATA["Mixed: "+$V{TotalScannedDemarcation}]]></hyperlinkTooltipExpression>
+						</itemHyperlink>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["Entity"]]></seriesExpression>
+						<categoryExpression><![CDATA[""]]></categoryExpression>
+						<valueExpression><![CDATA[$V{TotalScannedClaims}]]></valueExpression>
+						<itemHyperlink>
+							<hyperlinkTooltipExpression><![CDATA["Entity: "+$V{TotalScannedClaims}]]></hyperlinkTooltipExpression>
+						</itemHyperlink>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["Not recorded"]]></seriesExpression>
+						<categoryExpression><![CDATA[""]]></categoryExpression>
+						<valueExpression><![CDATA[$V{TotalDigitizedParcels}]]></valueExpression>
+						<itemHyperlink>
+							<hyperlinkTooltipExpression><![CDATA["Not recorded: "+$V{TotalDigitizedParcels}]]></hyperlinkTooltipExpression>
+						</itemHyperlink>
+					</categorySeries>
+				</categoryDataset>
+				<bar3DPlot>
+					<plot/>
+					<itemLabel/>
+					<valueAxisLabelExpression><![CDATA["Ownerships"]]></valueAxisLabelExpression>
+				</bar3DPlot>
+			</bar3DChart>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="22">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="802" height="22" backcolor="#FFFFFF"/>
+				<textField evaluationTime="Report">
+					<reportElement style="Column header" x="753" y="0" width="40" height="22" forecolor="#736343"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Column header" x="673" y="0" width="80" height="22" forecolor="#736343"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageFooter>
+</jasperReport>

@@ -424,7 +424,7 @@ public class MainForm extends javax.swing.JFrame {
         };
         TaskManager.getInstance().runTask(t);
     }
-
+    
     private void openSearchParties() {
         SolaTask t = new SolaTask<Void, Void>() {
 
@@ -812,6 +812,7 @@ public class MainForm extends javax.swing.JFrame {
         menuStatus = new javax.swing.JMenuItem();
         menuProgress = new javax.swing.JMenuItem();
         menuSpatialUnitGroup = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
         jmiContextHelp = new javax.swing.JMenuItem();
@@ -1165,6 +1166,14 @@ public class MainForm extends javax.swing.JFrame {
         });
         menuSystematic.add(menuSpatialUnitGroup);
 
+        jMenuItem1.setText(bundle.getString("MainForm.jMenuItem1.text")); // NOI18N
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        menuSystematic.add(jMenuItem1);
+
         menuBar.add(menuSystematic);
 
         helpMenu.setText(bundle.getString("MainForm.helpMenu.text")); // NOI18N
@@ -1270,7 +1279,12 @@ public class MainForm extends javax.swing.JFrame {
     private void btnManagePartiesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManagePartiesActionPerformed
         openSearchParties();
     }//GEN-LAST:event_btnManagePartiesActionPerformed
-
+    
+    private void openSysRegGenderReport(java.awt.event.ActionEvent evt) {
+       SysRegManagementParamsForm managementGenerator = new SysRegManagementParamsForm(this, true, "sysRegGenderBean");
+        managementGenerator.clickView(evt);
+    }
+    
     private void btnOpenMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenMapActionPerformed
         openMap();
     }//GEN-LAST:event_btnOpenMapActionPerformed
@@ -1331,6 +1345,10 @@ public class MainForm extends javax.swing.JFrame {
         HelpUtility.getInstance().showTopic("overview");
     }//GEN-LAST:event_jmiContextHelpActionPerformed
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+                openSysRegGenderReport (evt);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToolBar applicationsMain;
     private javax.swing.JButton btnDocumentSearch;
@@ -1342,6 +1360,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JButton btnSetPassword;
     private javax.swing.JButton btnShowDashboard;
     private javax.swing.JMenu fileMenu;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator4;

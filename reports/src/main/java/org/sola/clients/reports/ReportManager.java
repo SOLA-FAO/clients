@@ -616,7 +616,37 @@ public class ReportManager {
             return null;
         }
     }
-    
+      
+//      /**
+//     * Generates and displays <b>Sys Reg Status</b> report.
+//     *
+//     * @param appBean Application bean containing data for the report.
+//     */
+    public static JasperPrint getSysRegGenderReport(SysRegGenderBean genderBean) {
+        
+        HashMap inputParameters = new HashMap();
+        Date currentdate = new Date(System.currentTimeMillis());
+        inputParameters.put("REPORT_LOCALE", Locale.getDefault());
+
+        inputParameters.put("CURRENT_DATE", currentdate);
+
+        inputParameters.put("STATE", "NZ");
+        inputParameters.put("LGA", "");
+        inputParameters.put("USER", SecurityBean.getCurrentUser().getFullUserName());
+        SysRegGenderBean[] beans = new SysRegGenderBean[1];
+        beans[0] = genderBean;
+        JRDataSource jds = new JRBeanArrayDataSource(beans);
+        try {
+            return JasperFillManager.fillReport(
+                    ReportManager.class.getResourceAsStream("/reports/SysRegGender.jasper"),
+                    inputParameters, jds);
+        } catch (JRException ex) {
+            MessageUtility.displayMessage(ClientMessage.REPORT_GENERATION_FAILED,
+                    new Object[]{ex.getLocalizedMessage()});
+            return null;
+        }
+    }
+  
     //      /**
 //     * Generates and displays <b>Sys Reg Progress</b> report.
 //     *
