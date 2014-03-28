@@ -51,6 +51,8 @@ public class UserBean extends UserSummaryBean {
     public final static String USER_GROUPS_PROPERTY = "groups";
     public static final String USERNAME_PROPERTY = "userName";
     public static final String ACTIVE_PROPERTY = "active";
+    public static final String EMAIL_PROPERTY = "email";
+    public static final String ACTIVATION_CODE_PROPERTY = "activationCode";
     @NotEmpty(message = ClientMessage.CHECK_NOTNULL_USERNAME, payload = Localized.class)
     @Length(max = 40, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH_USERNAME, payload = Localized.class)
     private String userName;
@@ -60,6 +62,8 @@ public class UserBean extends UserSummaryBean {
     private SolaList<RoleBean> roles;
     @Length(max = 100, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH_PASSWORD, payload = Localized.class)
     private String password;
+    private String activationCode;
+    private String email;
     private String lastPwordChangeUser;
     private Integer pwordExpiryDays;
 
@@ -85,6 +89,26 @@ public class UserBean extends UserSummaryBean {
         String oldValue = userName;
         userName = value;
         propertySupport.firePropertyChange(USERNAME_PROPERTY, oldValue, value);
+    }
+
+    public String getActivationCode() {
+        return activationCode;
+    }
+
+    public void setActivationCode(String activationCode) {
+        String oldValue = activationCode;
+        this.activationCode = activationCode;
+        propertySupport.firePropertyChange(ACTIVATION_CODE_PROPERTY, oldValue, activationCode);
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        String oldValue = email;
+        this.email = email;
+        propertySupport.firePropertyChange(EMAIL_PROPERTY, oldValue, email);
     }
 
     public String getLastPwordChangeUser() {
