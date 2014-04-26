@@ -29,30 +29,59 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.sola.clients.swing.gis.ui.control;
+package org.sola.clients.swing.gis.tool;
 
-import java.awt.Dimension;
-import javax.swing.JComboBox;
-import org.sola.clients.beans.referencedata.HierarchyLevelListBean;
+import com.vividsolutions.jts.geom.Envelope;
+import java.util.List;
+import org.geotools.geometry.Envelope2D;
+import org.geotools.geometry.jts.JTS;
+import org.geotools.swing.extended.util.GeometryUtility;
+import org.geotools.swing.tool.extended.ExtendedDrawRectangle;
+import org.sola.clients.swing.gis.beans.SpatialBean;
+import org.sola.clients.swing.gis.layer.AbstractSpatialObjectLayer;
+import static org.sola.clients.swing.gis.tool.CadastreChangeSelectCadastreObjectTool.NAME;
 
 /**
- * It displays the list of potential hierarchy levels in the system.
+ * It is used to select a set of spatial units.
+ * 
  * @author Elton Manoku
  */
-public class SpatialUnitGroupOptionControl extends JComboBox {
-    
-    private HierarchyLevelListBean beanList = new HierarchyLevelListBean();
-    public SpatialUnitGroupOptionControl(){
-        super();
-        this.setMinimumSize(new Dimension(100, 20));
-        this.setMaximumSize(new Dimension(100, 20));
-        initializeOptions();
+public abstract class SpatialUnitGenericSelect extends ExtendedDrawRectangle {
+
+    private static java.util.ResourceBundle resource =
+            java.util.ResourceBundle.getBundle("org/sola/clients/swing/gis/tool/resources/strings");
+
+    private AbstractSpatialObjectLayer targetLayer;
+
+    /**
+     */
+    public SpatialUnitGenericSelect(AbstractSpatialObjectLayer targetLayer, String actionName) {
+        this.setToolName(actionName);
+        this.setIconImage("resources/select.png");
+        this.setToolTip(resource.getString("SpatialUnitGenericSelect.tooltip"));
+        this.targetLayer = targetLayer;
     }
 
-    private void initializeOptions() {
-        for(Object bean: beanList.getSpatialUnitGroupHierarchyList()){
-            this.addItem(bean);
-        }
+    protected AbstractSpatialObjectLayer getTargetLayer() {
+        return targetLayer;
     }
     
+    /**
+     * Gets the spatial units from the operation of selection.
+     * This has to be overridden by the implementation class.
+     * @param filteringGeometry
+     * @return 
+     */
+    protected abstract List<SpatialBean> getSelectedSpatialBeans(byte[] filteringGeometry);
+    
+    /**
+     * @param env The rectangle to filter
+     */
+    @Override
+    protected void onRectangleFinished(Envelope2D env) {
+        byte[] filteringGeometry = GeometryUtility.getWkbFromGeometry(
+                JTS.toGeometry(new Envelope(env.getMinX(), env.getMaxX(), env.getMinY(), env.getMaxY())));
+        this.targetLayer.setBeanList(getSelectedSpatialBeans(filteringGeometry));
+    }
+
 }

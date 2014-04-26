@@ -29,57 +29,65 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.sola.clients.swing.gis.mapaction;
+package org.sola.clients.swing.gis.tool;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.geotools.geometry.jts.Geometries;
 import org.geotools.swing.extended.Map;
-import org.sola.clients.beans.converters.TypeConverters;
-import org.sola.clients.swing.gis.Messaging;
-import org.sola.clients.swing.gis.beans.SpatialUnitGroupBean;
-import org.sola.clients.swing.gis.data.PojoDataAccess;
+import org.geotools.swing.tool.extended.ExtendedEditGeometryTool;
+import org.sola.clients.swing.gis.layer.AbstractSpatialObjectLayer;
 import org.sola.clients.swing.gis.layer.PojoBaseLayer;
-import org.sola.common.messaging.GisMessage;
-import org.sola.webservices.transferobjects.cadastre.SpatialUnitGroupTO;
 
 /**
- * Map action that commits the spatial unit group changes.
+ * Tool that is used for adding or editing a spatial unit group.
  *
  * @author Elton Manoku
  */
-public class SaveSpatialUnitGroup extends SaveSpatialUnitGeneric {
+public class SpatialUnitGenericEdit extends ExtendedEditGeometryTool {
 
-    public final static String MAPACTION_NAME = "save-spatial-unit-group";
+    private String toolName = "SpatialUnitGenericEdit";
+    private static java.util.ResourceBundle resource =
+            java.util.ResourceBundle.getBundle("org/sola/clients/swing/gis/tool/resources/strings");
+    private List<PojoBaseLayer> extraTargetSnappingLayers = new ArrayList<PojoBaseLayer>();
 
-    /**
-     * Constructor of the map action that will initialize the saving process of the transaction.
-     * 
-     * @param transactionControlsBundle The controls bundle that encapsulates all map related
-     * controls used during the transaction.
-     */
-    public SaveSpatialUnitGroup(Map map) {
-        super(map, MAPACTION_NAME);
+    public SpatialUnitGenericEdit(AbstractSpatialObjectLayer layer) {
+        this.setToolName(toolName);
+        this.setToolTip(resource.getString("SpatialUnitGenericEdit.tooltip"));
+        this.layer = layer;
     }
 
     /**
-     * After it saves the transaction, if there is no critical violation, it reads it from database
-     * and refreshes the gui.
-     *
+     * It sets the geometry type that is used for editing. Call this after the tool has been initialized
+     * to have effect also the change of the icon.
+     * @param geometryType 
      */
     @Override
-    public void onClick() {
-        List<SpatialUnitGroupTO> toList = new ArrayList<SpatialUnitGroupTO>();
-                
-        TypeConverters.BeanListToTransferObjectList(
-                getTargetLayer().getBeanListForTransaction(),
-                toList, SpatialUnitGroupTO.class);
+    public void setGeometryType(Geometries geometryType) {
+        super.setGeometryType(geometryType);
+        String iconResource = String.format("resources/edit-%s.png", geometryType.toString().toLowerCase());
+        this.setIconImage(iconResource);
+        if (this.getActionContainer() != null){
+        this.getActionContainer().setIcon(this.getClass(), iconResource);                    
+        }
+    }
 
-        PojoDataAccess.getInstance().getCadastreService().saveSpatialUnitGroups(toList);
-        
-        Messaging.getInstance().show(GisMessage.SPATIAL_UNIT_GENERIC_SAVED_SUCCESS);
-        
-        refreshAffectedLayers();
-        
-        getTargetLayer().setBeanList(new ArrayList<SpatialUnitGroupBean>());
+    /**
+     * It is overridden to define the target snapped layers during editing.
+     * @param mapControl 
+     */
+    @Override
+    public void setMapControl(Map mapControl) {
+        super.setMapControl(mapControl);
+        this.getTargetSnappingLayers().add(layer);
+        this.getTargetSnappingLayers().addAll(this.extraTargetSnappingLayers);
+    }
+    
+    /**
+     * It sets the list of layers that will be used as snapping target.
+     * @param layerNames 
+     */
+    public void setExtraTargetSnappingLayers(List<PojoBaseLayer> layers){
+        this.extraTargetSnappingLayers.addAll(layers);
     }
 }

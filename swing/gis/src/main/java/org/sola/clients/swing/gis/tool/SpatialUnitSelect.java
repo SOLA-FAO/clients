@@ -29,30 +29,37 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.sola.clients.swing.gis.ui.control;
+package org.sola.clients.swing.gis.tool;
 
-import java.awt.Dimension;
-import javax.swing.JComboBox;
-import org.sola.clients.beans.referencedata.HierarchyLevelListBean;
+import java.util.List;
+import org.sola.clients.beans.converters.TypeConverters;
+import org.sola.clients.swing.gis.beans.SpatialUnitBean;
+import org.sola.clients.swing.gis.data.PojoDataAccess;
+import org.sola.clients.swing.gis.layer.SpatialUnitLayer;
+import org.sola.webservices.transferobjects.cadastre.SpatialUnitTO;
 
 /**
- * It displays the list of potential hierarchy levels in the system.
+ * It is used to select a set of spatial units.
+ * 
  * @author Elton Manoku
  */
-public class SpatialUnitGroupOptionControl extends JComboBox {
-    
-    private HierarchyLevelListBean beanList = new HierarchyLevelListBean();
-    public SpatialUnitGroupOptionControl(){
-        super();
-        this.setMinimumSize(new Dimension(100, 20));
-        this.setMaximumSize(new Dimension(100, 20));
-        initializeOptions();
+public class SpatialUnitSelect extends SpatialUnitGenericSelect {
+
+    private final static String MAP_ACTION_NAME = "spatial-unit-select";
+
+    /**
+     */
+    public SpatialUnitSelect(SpatialUnitLayer targetLayer) {
+        super(targetLayer, MAP_ACTION_NAME);
     }
 
-    private void initializeOptions() {
-        for(Object bean: beanList.getSpatialUnitGroupHierarchyList()){
-            this.addItem(bean);
-        }
+    @Override
+    protected List getSelectedSpatialBeans(byte[] filteringGeometry) {
+        List<SpatialUnitTO> toList =
+                PojoDataAccess.getInstance().getCadastreService().getSpatialUnits(
+                filteringGeometry, ((SpatialUnitLayer)this.getTargetLayer()).getLevel().getId(), 
+                this.getMapControl().getSrid());
+        return TypeConverters.TransferObjectListToBeanList(toList, SpatialUnitBean.class, null);
     }
-    
+
 }

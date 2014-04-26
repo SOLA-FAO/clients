@@ -29,30 +29,71 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.sola.clients.swing.gis.ui.control;
+package org.sola.clients.swing.gis.beans;
 
-import java.awt.Dimension;
-import javax.swing.JComboBox;
-import org.sola.clients.beans.referencedata.HierarchyLevelListBean;
+import java.util.List;
+import org.jdesktop.observablecollections.ObservableList;
+import org.jdesktop.observablecollections.ObservableListListener;
+import org.sola.clients.beans.controls.SolaObservableList;
 
 /**
- * It displays the list of potential hierarchy levels in the system.
+ * Bean list that maintains the list of spatial unit beans.
+ * 
  * @author Elton Manoku
  */
-public class SpatialUnitGroupOptionControl extends JComboBox {
+public class SpatialUnitListBean extends AbstractListSpatialBean{
+
+    private LevelBean level;
     
-    private HierarchyLevelListBean beanList = new HierarchyLevelListBean();
-    public SpatialUnitGroupOptionControl(){
+    public SpatialUnitListBean() {
         super();
-        this.setMinimumSize(new Dimension(100, 20));
-        this.setMaximumSize(new Dimension(100, 20));
-        initializeOptions();
+        initializeListBeanEvents();
     }
 
-    private void initializeOptions() {
-        for(Object bean: beanList.getSpatialUnitGroupHierarchyList()){
-            this.addItem(bean);
-        }
+    public LevelBean getLevel() {
+        return level;
+    }
+
+    public void setLevel(LevelBean level) {
+        this.level = level;
+    }
+
+
+    @Override
+    protected SolaObservableList initializeBeanList() {
+        return new SolaObservableList<SpatialUnitBean>();
     }
     
+    private void initializeListBeanEvents() {
+        ObservableListListener listListener = new ObservableListListener() {
+
+            @Override
+            public void listElementsAdded(ObservableList ol, int i, int i1) {
+                newBeansAdded(ol, i, i1);
+            }
+
+            @Override
+            public void listElementsRemoved(ObservableList ol, int i, List list) {
+            }
+
+            @Override
+            public void listElementReplaced(ObservableList ol, int i, Object o) {
+            }
+
+            @Override
+            public void listElementPropertyChanged(ObservableList ol, int i) {
+            }
+        };
+        ((SolaObservableList) this.getBeanList()).addObservableListListener(listListener);
+    }
+
+    private void newBeansAdded(ObservableList fromList, int startIndex, int total) {
+        int endIndex = startIndex + total;
+        for (int elementIndex = startIndex; elementIndex < endIndex; elementIndex++) {
+            SpatialUnitBean bean = (SpatialUnitBean) fromList.get(elementIndex);
+            if (bean.getLevelId()== null){
+                bean.setLevelId(level.getId());
+            }
+        }
+    }
 }

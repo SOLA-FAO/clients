@@ -31,12 +31,7 @@
  */
 package org.sola.clients.swing.gis.tool;
 
-import com.vividsolutions.jts.geom.Envelope;
 import java.util.List;
-import org.geotools.geometry.Envelope2D;
-import org.geotools.geometry.jts.JTS;
-import org.geotools.swing.extended.util.GeometryUtility;
-import org.geotools.swing.tool.extended.ExtendedDrawRectangle;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.swing.gis.beans.SpatialUnitGroupBean;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
@@ -48,38 +43,23 @@ import org.sola.webservices.transferobjects.cadastre.SpatialUnitGroupTO;
  * 
  * @author Elton Manoku
  */
-public class SpatialUnitGroupSelect extends ExtendedDrawRectangle {
+public class SpatialUnitGroupSelect extends SpatialUnitGenericSelect {
 
-    public final static String MAP_ACTION_NAME = "spatial-unit-group-select";
-    private static java.util.ResourceBundle resource =
-            java.util.ResourceBundle.getBundle("org/sola/clients/swing/gis/tool/resources/strings");
-
-    private SpatialUnitGroupLayer targetLayer;
+    private final static String MAP_ACTION_NAME = "spatial-unit-group-select";
 
     /**
      */
     public SpatialUnitGroupSelect(SpatialUnitGroupLayer targetLayer) {
-        this.setToolName(MAP_ACTION_NAME);
-        this.setToolTip(resource.getString(
-                String.format("%s.tooltip",this.getClass().getSimpleName())));
-        this.targetLayer = targetLayer;
+        super(targetLayer, MAP_ACTION_NAME);
     }
 
-    /**
-     * @param env The rectangle to filter
-     */
     @Override
-    protected void onRectangleFinished(Envelope2D env) {
-        byte[] filteringGeometry = GeometryUtility.getWkbFromGeometry(
-                JTS.toGeometry(new Envelope(env.getMinX(), env.getMaxX(), env.getMinY(), env.getMaxY())));
-        List<SpatialUnitGroupTO> spatialUnitGroupTOList =
+    protected List getSelectedSpatialBeans(byte[] filteringGeometry) {
+        List<SpatialUnitGroupTO> toList =
                 PojoDataAccess.getInstance().getCadastreService().getSpatialUnitGroups(
-                filteringGeometry, this.targetLayer.getHierarchyLevel(), this.getMapControl().getSrid());
-        
-        List<SpatialUnitGroupBean> spatialUnitGroupBeanList =
-            TypeConverters.TransferObjectListToBeanList(spatialUnitGroupTOList, 
-                SpatialUnitGroupBean.class, null);
-        this.targetLayer.setBeanList(spatialUnitGroupBeanList);
+                filteringGeometry, ((SpatialUnitGroupLayer)this.getTargetLayer()).getHierarchyLevel(), 
+                this.getMapControl().getSrid());
+        return TypeConverters.TransferObjectListToBeanList(toList, SpatialUnitGroupBean.class, null);
     }
-
+    
 }

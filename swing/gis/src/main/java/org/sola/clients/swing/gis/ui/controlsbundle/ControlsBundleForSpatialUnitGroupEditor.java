@@ -31,19 +31,18 @@
  */
 package org.sola.clients.swing.gis.ui.controlsbundle;
 
-import javax.swing.JLabel;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JComboBox;
 import org.geotools.feature.SchemaException;
-import org.geotools.map.extended.layer.ExtendedImageLayer;
+import org.geotools.geometry.jts.Geometries;
 import org.geotools.swing.extended.exception.InitializeLayerException;
-import org.geotools.swing.mapaction.extended.RemoveDirectImage;
-import org.geotools.swing.tool.extended.AddDirectImageTool;
 import org.sola.clients.beans.referencedata.HierarchyLevelBean;
-import org.sola.clients.swing.gis.Messaging;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
+import org.sola.clients.swing.gis.layer.PojoBaseLayer;
 import org.sola.clients.swing.gis.layer.SpatialUnitGroupLayer;
+import org.sola.clients.swing.gis.mapaction.SaveSpatialUnitGeneric;
 import org.sola.clients.swing.gis.mapaction.SaveSpatialUnitGroup;
-import org.sola.clients.swing.gis.mapaction.SpatialUnitGroupListShow;
-import org.sola.clients.swing.gis.tool.SpatialUnitGroupEdit;
 import org.sola.clients.swing.gis.tool.SpatialUnitGroupSelect;
 import org.sola.clients.swing.gis.ui.control.SpatialUnitGroupOptionControl;
 
@@ -52,57 +51,51 @@ import org.sola.clients.swing.gis.ui.control.SpatialUnitGroupOptionControl;
  *
  * @author Elton Manoku
  */
-public final class ControlsBundleForSpatialUnitGroupEditor extends SolaControlsBundle {
+public final class ControlsBundleForSpatialUnitGroupEditor extends ControlsBundleForSpatialUnitGenericEditor {
 
-    private SpatialUnitGroupLayer layer = null;
-    private ExtendedImageLayer imageLayer = null;
-    private static final String IMAGE_LAYER_NAME = "temporary_image";
-    private SaveSpatialUnitGroup saveAction;
-    private static java.util.ResourceBundle resource =
-            java.util.ResourceBundle.getBundle("org/sola/clients/swing/gis/ui/controlsbundle/Bundle");
-
-    /**
-     * Constructor.
-     */
-    public ControlsBundleForSpatialUnitGroupEditor() {
-        super();
-        this.Setup(PojoDataAccess.getInstance());
-    }
+    private final static String LAYER_AFFECTED_PREFIX = "su_";
 
     @Override
-    public void Setup(PojoDataAccess pojoDataAccess) {
-        super.Setup(pojoDataAccess);
-
-        this.getMap().addTool(new AddDirectImageTool(this.imageLayer), this.getToolbar(), true);
-        this.getMap().addMapAction(new RemoveDirectImage(this.getMap()), this.getToolbar(), true);
-
-        JLabel label = new JLabel();
-        label.setText(String.format(" %s ", resource.getString(
-                "ControlsBundleForSpatialUnitGroupEditor.selectUnitType.text")));
-        this.getToolbar().add(label);
+    protected JComboBox getOptionControl() {
         SpatialUnitGroupOptionControl optionControl = new SpatialUnitGroupOptionControl();
-
         optionControl.addActionListener(new java.awt.event.ActionListener() {
 
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 hierarchyLevelChanged(evt);
             }
-        });
-
-        this.getToolbar().add(optionControl);
-        this.getMap().addTool(new SpatialUnitGroupSelect(layer), this.getToolbar(), true);
-        this.getMap().addTool(new SpatialUnitGroupEdit(layer), this.getToolbar(), true);
-        this.getMap().addMapAction(new SpatialUnitGroupListShow(
-                this.getMap(), this.layer.getHostForm()),
-                this.getToolbar(),
-                true);
-        //Sets the first item in the list as selected
-        if (optionControl.getItemCount() > 0) {
-            optionControl.setSelectedIndex(0);
-        }
+        });        
+        return optionControl;
     }
 
+    @Override
+    public void Setup(PojoDataAccess pojoDataAccess) {
+        super.Setup(pojoDataAccess); 
+        getEditTool().setGeometryType(Geometries.POLYGON);
+
+        ArrayList<PojoBaseLayer> list = new ArrayList<PojoBaseLayer>();
+        for(String layerName:this.getMap().getSolaLayers().keySet()){
+            if (layerName.startsWith(LAYER_AFFECTED_PREFIX)){
+                list.add( (PojoBaseLayer)
+                        this.getMap().getSolaLayers().get(layerName));
+            }
+        }
+        
+        getEditTool().setExtraTargetSnappingLayers(list);
+        getSaveAction().getLayersToRefresh().addAll(list);
+    }
+    
+    @Override
+    protected void addSelectTool() {
+        this.getMap().addTool(new SpatialUnitGroupSelect(
+                (SpatialUnitGroupLayer)getLayer()), this.getToolbar(), true);        
+    }
+
+    @Override
+    protected SaveSpatialUnitGeneric getNewSaveAction() {
+        return new SaveSpatialUnitGroup(getMap());
+    }
+    
     private void hierarchyLevelChanged(java.awt.event.ActionEvent evt) {
         Integer newValue = getSelectedValue((SpatialUnitGroupOptionControl) evt.getSource());
         setHierarchyLevel(newValue);
@@ -113,25 +106,12 @@ public final class ControlsBundleForSpatialUnitGroupEditor extends SolaControlsB
     }
 
     public void setHierarchyLevel(Integer hierarchyLevel) {
-        this.layer.setHierarchyLevel(hierarchyLevel);
+        ((SpatialUnitGroupLayer)this.getLayer()).setHierarchyLevel(hierarchyLevel);
     }
 
     @Override
     protected void addLayers() throws InitializeLayerException, SchemaException {
+        setLayer(new SpatialUnitGroupLayer());
         super.addLayers();
-        this.imageLayer = new ExtendedImageLayer(IMAGE_LAYER_NAME,
-                ((Messaging) Messaging.getInstance()).getLayerTitle(IMAGE_LAYER_NAME));
-        this.getMap().addLayer(this.imageLayer);
-        layer = new SpatialUnitGroupLayer();
-        this.getMap().addLayer(layer);
-        this.saveAction.setTargetLayer(layer);
-
-    }
-
-    @Override
-    protected void setupToolbar() {
-        saveAction = new SaveSpatialUnitGroup(this.getMap());
-        this.getMap().addMapAction(saveAction, this.getToolbar(), true);
-        super.setupToolbar();
     }
 }

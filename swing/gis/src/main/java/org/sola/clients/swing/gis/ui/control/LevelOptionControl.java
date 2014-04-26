@@ -34,15 +34,17 @@ package org.sola.clients.swing.gis.ui.control;
 import java.awt.Dimension;
 import javax.swing.JComboBox;
 import org.sola.clients.beans.referencedata.HierarchyLevelListBean;
+import org.sola.clients.swing.gis.beans.LevelListBean;
 
 /**
- * It displays the list of potential hierarchy levels in the system.
+ * It displays the list of potential levels in the system.
+ * 
  * @author Elton Manoku
  */
-public class SpatialUnitGroupOptionControl extends JComboBox {
+public class LevelOptionControl extends JComboBox {
     
-    private HierarchyLevelListBean beanList = new HierarchyLevelListBean();
-    public SpatialUnitGroupOptionControl(){
+    private LevelListBean beanList = new LevelListBean();
+    public LevelOptionControl(){
         super();
         this.setMinimumSize(new Dimension(100, 20));
         this.setMaximumSize(new Dimension(100, 20));
@@ -50,7 +52,7 @@ public class SpatialUnitGroupOptionControl extends JComboBox {
     }
 
     private void initializeOptions() {
-        for(Object bean: beanList.getSpatialUnitGroupHierarchyList()){
+        for(Object bean: beanList.getLevelBeanList()){
             this.addItem(bean);
         }
     }

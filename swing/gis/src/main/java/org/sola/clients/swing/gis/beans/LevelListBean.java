@@ -25,34 +25,49 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package org.sola.clients.swing.gis.ui.control;
+package org.sola.clients.swing.gis.beans;
 
-import java.awt.Dimension;
-import javax.swing.JComboBox;
-import org.sola.clients.beans.referencedata.HierarchyLevelListBean;
+import java.util.List;
+import org.jdesktop.observablecollections.ObservableList;
+import org.sola.clients.beans.AbstractBindingBean;
+import org.sola.clients.beans.controls.SolaObservableList;
+import org.sola.clients.beans.converters.TypeConverters;
+import org.sola.services.boundary.wsclients.WSManager;
+import org.sola.webservices.transferobjects.cadastre.LevelTO;
 
 /**
- * It displays the list of potential hierarchy levels in the system.
- * @author Elton Manoku
+ * Holds the list of {@link PartyBean} objects.
  */
-public class SpatialUnitGroupOptionControl extends JComboBox {
+public class LevelListBean extends AbstractBindingBean {
     
-    private HierarchyLevelListBean beanList = new HierarchyLevelListBean();
-    public SpatialUnitGroupOptionControl(){
-        super();
-        this.setMinimumSize(new Dimension(100, 20));
-        this.setMaximumSize(new Dimension(100, 20));
-        initializeOptions();
+    public static final String SELECTED_LEVEL_PROPERTY = "selectedLevel";
+    public static final String LEVEL_LIST_PROPERTY = "levelBeanList";
+    private SolaObservableList<LevelBean> list;
+    private LevelBean selectedLevel;
+    
+    /** Creates new instance of object and initializes {@link PartyBean} list.*/
+    public LevelListBean() {
+        fillLevelList();
+    }
+    
+    private void fillLevelList(){
+        list = new SolaObservableList<LevelBean>();
+        List<LevelTO> lst = WSManager.getInstance().getCadastreService().getLevels();
+        TypeConverters.TransferObjectListToBeanList(lst, LevelBean.class, (List)list);
     }
 
-    private void initializeOptions() {
-        for(Object bean: beanList.getSpatialUnitGroupHierarchyList()){
-            this.addItem(bean);
-        }
+    public ObservableList<LevelBean> getLevelBeanList()
+    {
+        return list;
     }
-    
+
+    public LevelBean getSelectedLevel() {
+        return selectedLevel;
+    }
+
+    public void setSelectedParty(LevelBean value) {
+        selectedLevel = value;
+        propertySupport.firePropertyChange(SELECTED_LEVEL_PROPERTY, null, value);
+    }
+
 }
