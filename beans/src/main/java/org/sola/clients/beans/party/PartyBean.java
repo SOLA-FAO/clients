@@ -27,10 +27,10 @@
  */
 package org.sola.clients.beans.party;
 
+import java.util.Date;
 import java.util.UUID;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.address.AddressBean;
 import org.sola.clients.beans.application.ApplicationBean;
@@ -72,6 +72,7 @@ public class PartyBean extends PartySummaryBean {
     public static final String FATHERSNAME_PROPERTY = "fathersName";
     public static final String GRANDFATHERSNAME_PROPERTY = "fathersLastName";
     public static final String ALIAS_PROPERTY = "alias";
+    public static final String BIRTHDATE_PROPERTY = "birthDate";
     
     @Length(max = 50, message =  ClientMessage.CHECK_FIELD_INVALID_LENGTH_MAIL, payload=Localized.class)
     @Email(message = ClientMessage.CHECK_INVALID_EMAIL, payload=Localized.class)
@@ -92,6 +93,7 @@ public class PartyBean extends PartySummaryBean {
     private AddressBean addressBean;
     private GenderTypeBean genderTypeBean;
     private IdTypeBean idTypeBean;
+    private Date birthDate;
     private CommunicationTypeBean communicationTypeBean;
     private SolaList<PartyRoleBean> roleList;
     private transient PartyRoleBean selectedRole;
@@ -135,6 +137,16 @@ public class PartyBean extends PartySummaryBean {
 
     public void setAddress(AddressBean addressBean) {
         this.addressBean = addressBean;
+    }
+
+    public Date getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(Date birthDate) {
+        Date oldValue = birthDate;
+        this.birthDate = birthDate;
+        propertySupport.firePropertyChange(BIRTHDATE_PROPERTY, oldValue, this.birthDate);
     }
 
     public String getEmail() {

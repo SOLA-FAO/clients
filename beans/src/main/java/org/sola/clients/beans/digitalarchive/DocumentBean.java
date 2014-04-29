@@ -51,8 +51,11 @@ public class DocumentBean extends AbstractIdBean {
     public static final String EXTENSION_PROPERTY = "extension";
     public static final String NR_PROPERTY = "nr";
     public static final String NAME_PROPERTY = "name";
+    public static final String MIMETYPE_PROPERTY = "mimeType";
+    
     private String description;
     private String extension;
+    private String mimeType;
     private String nr;
 
     public DocumentBean() {
@@ -74,6 +77,16 @@ public class DocumentBean extends AbstractIdBean {
         } else {
             propertySupport.firePropertyChange(NAME_PROPERTY, description, null);
         }
+    }
+
+    public String getMimeType() {
+        return mimeType;
+    }
+
+    public void setMimeType(String mimeType) {
+        String old = mimeType;
+        this.mimeType = mimeType;
+        propertySupport.firePropertyChange(MIMETYPE_PROPERTY, old, mimeType);
     }
 
     public String getDescription() {
@@ -199,3 +212,4 @@ public class DocumentBean extends AbstractIdBean {
         }
     }
 }
+
