@@ -37,51 +37,56 @@ import java.util.HashMap;
 import java.util.List;
 import org.geotools.geometry.jts.Geometries;
 import org.geotools.swing.extended.exception.InitializeLayerException;
+import org.sola.clients.swing.gis.beans.LevelBean;
 import org.sola.clients.swing.gis.beans.SpatialBean;
+import org.sola.clients.swing.gis.beans.SpatialUnitBean;
 import org.sola.clients.swing.gis.beans.SpatialUnitGroupBean;
 import org.sola.clients.swing.gis.beans.SpatialUnitGroupListBean;
+import org.sola.clients.swing.gis.beans.SpatialUnitListBean;
 import org.sola.clients.swing.gis.ui.control.SpatialUnitGroupListPanel;
+import org.sola.clients.swing.gis.ui.control.SpatialUnitListPanel;
 
 /**
- *
+ * Editing Layer that is used for the transactions around the spatial unit editor.
+ * 
  * @author Elton Manoku
  */
-public class SpatialUnitGroupLayer extends AbstractSpatialObjectLayer {
+public class SpatialUnitLayer extends AbstractSpatialObjectLayer {
 
-    private static String LAYER_NAME = "spatial_unit_group";
-    private static String LAYER_STYLE_RESOURCE = "spatial_unit_group.xml";
+    private static String LAYER_NAME = "spatial_unit";
+    private static String LAYER_STYLE_RESOURCE = "spatial_unit.xml";
     private static final String LAYER_FIELD_LABEL = "label";
     private static final String LAYER_ATTRIBUTE_DEFINITION =
             String.format("%s:\"\"", LAYER_FIELD_LABEL);
-    private Integer hierarchyLevel = null;
-    private SpatialUnitGroupListPanel spatialObjectDisplayPanel;
+    private SpatialUnitListPanel spatialObjectDisplayPanel;
+    private LevelBean level;
     private Integer idGenerator = null;
 
-    public SpatialUnitGroupLayer()
+    public SpatialUnitLayer()
             throws InitializeLayerException {
-        super(LAYER_NAME, Geometries.POLYGON,
-                LAYER_STYLE_RESOURCE, LAYER_ATTRIBUTE_DEFINITION, SpatialUnitGroupBean.class);
-        this.listBean = new SpatialUnitGroupListBean();
+        super(LAYER_NAME, Geometries.GEOMETRY,
+                LAYER_STYLE_RESOURCE, LAYER_ATTRIBUTE_DEFINITION, SpatialUnitBean.class);
+        this.listBean = new SpatialUnitListBean();
         //This is called after the listBean is initialized
         initializeListBeanEvents();
         this.spatialObjectDisplayPanel =
-                new SpatialUnitGroupListPanel((SpatialUnitGroupListBean) this.listBean);
+                new SpatialUnitListPanel((SpatialUnitListBean) this.listBean);
         initializeFormHosting(this.spatialObjectDisplayPanel.getTitle(), this.spatialObjectDisplayPanel);
     }
 
-    public Integer getHierarchyLevel() {
-        return hierarchyLevel;
+    public LevelBean getLevel() {
+        return level;
     }
 
-    public final void setHierarchyLevel(Integer hierarchyLevel) {
-        this.hierarchyLevel = hierarchyLevel;
-        ((SpatialUnitGroupListBean) this.listBean).setHierarchyLevel(hierarchyLevel);
-        this.setBeanList(new ArrayList<SpatialUnitGroupBean>());
+    public final void setLevel(LevelBean level) {
+        this.level = level;
+        ((SpatialUnitListBean) this.listBean).setLevel(this.level);
+        this.setBeanList(new ArrayList<SpatialUnitBean>());
     }
 
     @Override
-    public List<SpatialUnitGroupBean> getBeanList() {
-        return (List<SpatialUnitGroupBean>) super.getBeanList();
+    public List<SpatialUnitBean> getBeanList() {
+        return (List<SpatialUnitBean>) super.getBeanList();
     }
 
     @Override
@@ -100,7 +105,7 @@ public class SpatialUnitGroupLayer extends AbstractSpatialObjectLayer {
     private String getLabelForNewFeature() {
         if (idGenerator == null) {
             idGenerator = 0;
-            for (SpatialUnitGroupBean bean : getBeanList()) {
+            for (SpatialUnitBean bean : getBeanList()) {
                 try {
                     Integer beanId = Integer.parseInt(bean.getLabel());
                     if (idGenerator < beanId) {

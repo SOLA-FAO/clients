@@ -29,30 +29,82 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.sola.clients.swing.gis.ui.control;
+package org.sola.clients.swing.gis.beans;
 
-import java.awt.Dimension;
-import javax.swing.JComboBox;
-import org.sola.clients.beans.referencedata.HierarchyLevelListBean;
+import com.vividsolutions.jts.geom.Geometry;
+import java.util.UUID;
+import org.geotools.swing.extended.util.GeometryUtility;
 
 /**
- * It displays the list of potential hierarchy levels in the system.
+ * Spatial Bean representing the generic spatial units.
+ * 
  * @author Elton Manoku
  */
-public class SpatialUnitGroupOptionControl extends JComboBox {
-    
-    private HierarchyLevelListBean beanList = new HierarchyLevelListBean();
-    public SpatialUnitGroupOptionControl(){
+public class SpatialUnitBean extends SpatialBean {
+
+    public static String LABEL_PROPERTY = "label";
+    private String id;
+    private String levelId;
+    private String label;
+    private byte[] geom;
+
+    public SpatialUnitBean(){
         super();
-        this.setMinimumSize(new Dimension(100, 20));
-        this.setMaximumSize(new Dimension(100, 20));
-        initializeOptions();
+        generateId();
+    }
+    
+    
+    /** 
+     * Generates new ID for the cadastre object 
+     */
+    public final void generateId(){
+        setId(UUID.randomUUID().toString());
     }
 
-    private void initializeOptions() {
-        for(Object bean: beanList.getSpatialUnitGroupHierarchyList()){
-            this.addItem(bean);
-        }
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getLevelId() {
+        return levelId;
+    }
+
+    public void setLevelId(String levelId) {
+        this.levelId = levelId;
     }
     
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        String oldValue = this.label;
+        this.label = label;
+        propertySupport.firePropertyChange(LABEL_PROPERTY, oldValue, label);        
+    }
+
+    public byte[] getGeom() {
+        return geom;
+    }
+
+    public void setGeom(byte[] geom) {
+        this.geom = geom.clone();
+        super.setFeatureGeom(GeometryUtility.getGeometryFromWkb(geom));
+    }
+
+    @Override
+    public void setFeatureGeom(Geometry geometryValue) {
+        super.setFeatureGeom(geometryValue);
+        this.geom = GeometryUtility.getWkbFromGeometry(geometryValue);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s - %s", getLevelId(), getLabel());
+    }
+
 }

@@ -203,7 +203,7 @@ public class Development {
         this.displayControlsBundleForm(ctrl);
     }
 
-    //@Ignore
+    @Ignore
     @Test
     public void testUIControlsBundleForCadastreRedefinition() throws Exception {
         System.out.println("Test ControlsBundle for cadastre redefinition");
@@ -216,7 +216,17 @@ public class Development {
         this.displayControlsBundleForm(ctrl);
     }
 
-//    //@Ignore
+    //@Ignore
+    @Test
+    public void testUIControlsBundleForSpatialUnitManagement() throws Exception {
+        System.out.println("Test ControlsBundle for Spatial unit");
+        SecurityBean.authenticate("test", "test".toCharArray(), this.getWSConfig());
+        ControlsBundleForSpatialUnitEditor ctrl = 
+                new ControlsBundleForSpatialUnitEditor();
+        this.displayControlsBundleForm(ctrl);
+    }
+
+    //    //@Ignore
 //    @Test
 //    public void testImportPanel() throws Exception {
 //        System.out.println("Test import panel");

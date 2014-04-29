@@ -35,6 +35,7 @@ package org.geotools.swing.tool.extended;
 
 import org.geotools.swing.tool.CursorTool;
 import org.geotools.swing.extended.Map;
+import org.geotools.swing.mapaction.extended.ExtendedAction;
 
 /**
  * Basic tool that implements common functionality for all tools that can be used 
@@ -47,6 +48,7 @@ public abstract class ExtendedTool extends CursorTool {
     private String toolName = null;
     private String toolTip = "";
     private String iconImage = "resources/blank.png";
+    private ExtendedAction actionContainer;
     
     /**
      * Set the map pane that this cursor tool is associated with
@@ -113,6 +115,15 @@ public abstract class ExtendedTool extends CursorTool {
     public void setIconImage(String iconImage) {
         this.iconImage = iconImage;
     }
+
+    public ExtendedAction getActionContainer() {
+        return actionContainer;
+    }
+
+    public void setActionContainer(ExtendedAction actionContainer) {
+        this.actionContainer = actionContainer;
+    }
+    
     
     /**
      * This is called if a tool is made active or not active. It can be overridden by

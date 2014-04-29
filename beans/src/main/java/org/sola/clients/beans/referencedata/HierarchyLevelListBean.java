@@ -71,12 +71,6 @@ public class HierarchyLevelListBean extends AbstractBindingListBean {
      * @param createDummy Indicates whether to add empty object on the list.
      */
     public final void loadList(boolean createDummy) {
-//        List<SpatialUnitGroupHierarchyBean> listToLoad = 
-//                new ArrayList<SpatialUnitGroupHierarchyBean>();
-//        HierarchyLevelBean bean = new HierarchyLevelBean();
-//        bean.setCode("0"); bean.setDisplayValue("Hierarchy 0"); listToLoad.add(bean);
-//        bean = new HierarchyLevelBean();
-//        bean.setCode("1"); bean.setDisplayValue("Hierarchy 1"); listToLoad.add(bean);
         loadCodeList(HierarchyLevelBean.class, listBean, 
                 CacheManager.getHierarchyLevels(), createDummy);
     }

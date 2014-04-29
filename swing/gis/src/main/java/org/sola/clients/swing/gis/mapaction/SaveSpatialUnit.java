@@ -29,30 +29,57 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.sola.clients.swing.gis.ui.control;
+package org.sola.clients.swing.gis.mapaction;
 
-import java.awt.Dimension;
-import javax.swing.JComboBox;
-import org.sola.clients.beans.referencedata.HierarchyLevelListBean;
+import java.util.ArrayList;
+import java.util.List;
+import org.geotools.swing.extended.Map;
+import org.sola.clients.beans.converters.TypeConverters;
+import org.sola.clients.swing.gis.Messaging;
+import org.sola.clients.swing.gis.beans.SpatialUnitGroupBean;
+import org.sola.clients.swing.gis.data.PojoDataAccess;
+import org.sola.clients.swing.gis.layer.PojoBaseLayer;
+import org.sola.common.messaging.GisMessage;
+import org.sola.webservices.transferobjects.cadastre.SpatialUnitTO;
 
 /**
- * It displays the list of potential hierarchy levels in the system.
+ * Map action that commits the spatial unit group changes.
+ *
  * @author Elton Manoku
  */
-public class SpatialUnitGroupOptionControl extends JComboBox {
-    
-    private HierarchyLevelListBean beanList = new HierarchyLevelListBean();
-    public SpatialUnitGroupOptionControl(){
-        super();
-        this.setMinimumSize(new Dimension(100, 20));
-        this.setMaximumSize(new Dimension(100, 20));
-        initializeOptions();
-    }
+public class SaveSpatialUnit extends SaveSpatialUnitGeneric {
 
-    private void initializeOptions() {
-        for(Object bean: beanList.getSpatialUnitGroupHierarchyList()){
-            this.addItem(bean);
-        }
-    }
+    public final static String MAPACTION_NAME = "save-spatial-unit";
+
+    /**
+     * Constructor of the map action that will initialize the saving process of the transaction.
+     * 
+     * @param transactionControlsBundle The controls bundle that encapsulates all map related
+     * controls used during the transaction.
+     */
+    public SaveSpatialUnit(Map map) {
+        super(map, MAPACTION_NAME);
+    }    
     
+    /**
+     * After it saves the transaction, if there is no critical violation, it reads it from database
+     * and refreshes the gui.
+     *
+     */
+    @Override
+    public void onClick() {
+        List<SpatialUnitTO> toList = new ArrayList<SpatialUnitTO>();
+                
+        TypeConverters.BeanListToTransferObjectList(
+                getTargetLayer().getBeanListForTransaction(),
+                toList, SpatialUnitTO.class);
+
+        PojoDataAccess.getInstance().getCadastreService().saveSpatialUnits(toList);
+        
+        Messaging.getInstance().show(GisMessage.SPATIAL_UNIT_GENERIC_SAVED_SUCCESS);
+        
+        refreshAffectedLayers();
+        
+        getTargetLayer().setBeanList(new ArrayList<SpatialUnitGroupBean>());
+    }
 }

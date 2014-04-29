@@ -25,34 +25,58 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package org.sola.clients.swing.gis.ui.control;
+package org.sola.clients.swing.gis.beans;
 
-import java.awt.Dimension;
-import javax.swing.JComboBox;
-import org.sola.clients.beans.referencedata.HierarchyLevelListBean;
 
-/**
- * It displays the list of potential hierarchy levels in the system.
- * @author Elton Manoku
+import org.sola.clients.beans.AbstractIdBean;
+
+/** 
+ * The bean for the hierarchy level.
+ * 
  */
-public class SpatialUnitGroupOptionControl extends JComboBox {
+public class LevelBean extends AbstractIdBean {
     
-    private HierarchyLevelListBean beanList = new HierarchyLevelListBean();
-    public SpatialUnitGroupOptionControl(){
+    private String name;
+    private String structureCode;
+    private String visualizationLayers;
+
+    public LevelBean() {
         super();
-        this.setMinimumSize(new Dimension(100, 20));
-        this.setMaximumSize(new Dimension(100, 20));
-        initializeOptions();
     }
 
-    private void initializeOptions() {
-        for(Object bean: beanList.getSpatialUnitGroupHierarchyList()){
-            this.addItem(bean);
-        }
+    public String getName() {
+        return name;
     }
-    
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getStructureCode() {
+        String valueToReturn = structureCode;
+        if (!(structureCode.equalsIgnoreCase("point")
+                || structureCode.equalsIgnoreCase("polygon")
+                || structureCode.equalsIgnoreCase("linestring"))){
+            valueToReturn = "linestring";
+        }
+        return valueToReturn;
+    }
+
+    public void setStructureCode(String structureCode) {
+        this.structureCode = structureCode;
+    }
+
+    public String getVisualizationLayers() {
+        return visualizationLayers;
+    }
+
+    public void setVisualizationLayers(String visualizationLayers) {
+        this.visualizationLayers = visualizationLayers;
+    }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
+
 }

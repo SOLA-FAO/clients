@@ -85,7 +85,20 @@ public class ExtendedAction extends AbstractAction{
             Class<?> resourceClass, String iconImage) {
         this.mapControl = mapControl;
         this.putValue(Action.SHORT_DESCRIPTION, toolTip);
-
+        this.name = name;
+        this.setIcon(resourceClass, iconImage);
+    }
+    
+    /**
+     * Sets the icon of the map action.
+     * 
+     * @param resourceClass The class that will be used to resolve the path
+     * to the resource of the image. 
+     * Normally is the class of the map action itself or the tool that is using the action.
+     * 
+     * @param iconImage The resource name of the image
+     */
+    public void setIcon(Class<?> resourceClass, String iconImage){
         java.net.URL imageURL = null;
         if (name != null && iconImage.equals("resources/blank.png")) {
             iconImage = String.format("resources/%s.png", name);
@@ -102,8 +115,9 @@ public class ExtendedAction extends AbstractAction{
 
         if (imageURL == null && name != null) {
             this.putValue(Action.NAME, name);
-        }
-        this.name = name;
+        } else {
+            this.putValue(Action.NAME, null);
+        }       
     }
 
     /**
@@ -157,9 +171,10 @@ public class ExtendedAction extends AbstractAction{
         //This can be overriden. It is called when the actionPerformed is called.
     }
 
-    private void attachTool(ExtendedTool solaTool){
+    private void attachTool(ExtendedTool tool){
         if (this.getAttachedTool() == null){
-            this.attachedTool = solaTool;
+            this.attachedTool = tool;
+            tool.setActionContainer(this);
            this.attachedTool.setMapControl(this.getMapControl());
         }
     }
