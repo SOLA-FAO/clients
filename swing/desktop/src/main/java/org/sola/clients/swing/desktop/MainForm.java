@@ -819,6 +819,7 @@ public class MainForm extends javax.swing.JFrame {
         menuShowMap = new javax.swing.JMenuItem();
         menuReportsDesktop = new javax.swing.JMenu();
         menuLodgementReport = new javax.swing.JMenuItem();
+        manuGenderReport = new javax.swing.JMenuItem();
         menuSystematic = new javax.swing.JMenu();
         menuPublicDisplay = new javax.swing.JMenu();
         menuPublicNotification = new javax.swing.JMenuItem();
@@ -830,7 +831,6 @@ public class MainForm extends javax.swing.JFrame {
         menuStatus = new javax.swing.JMenuItem();
         menuProgress = new javax.swing.JMenuItem();
         menuSpatialUnitGroup = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
         mnuSpatialUnitEditor = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
@@ -1109,6 +1109,14 @@ public class MainForm extends javax.swing.JFrame {
         menuReportsDesktop.add(menuLodgementReport);
         menuLodgementReport.getAccessibleContext().setAccessibleName(bundle.getString("MainForm.menuLodgementReport.AccessibleContext.accessibleName")); // NOI18N
 
+        manuGenderReport.setText(bundle.getString("MainForm.manuGenderReport.text")); // NOI18N
+        manuGenderReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                manuGenderReportActionPerformed(evt);
+            }
+        });
+        menuReportsDesktop.add(manuGenderReport);
+
         menuBar.add(menuReportsDesktop);
 
         menuSystematic.setText(bundle.getString("MainForm.menuSystematic.text")); // NOI18N
@@ -1184,14 +1192,6 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         menuSystematic.add(menuSpatialUnitGroup);
-
-        jMenuItem1.setText(bundle.getString("MainForm.jMenuItem1.text")); // NOI18N
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
-            }
-        });
-        menuSystematic.add(jMenuItem1);
 
         mnuSpatialUnitEditor.setText(bundle.getString("MainForm.mnuSpatialUnitEditor.text")); // NOI18N
         mnuSpatialUnitEditor.addActionListener(new java.awt.event.ActionListener() {
@@ -1372,13 +1372,13 @@ public class MainForm extends javax.swing.JFrame {
         HelpUtility.getInstance().showTopic("overview");
     }//GEN-LAST:event_jmiContextHelpActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-                openSysRegGenderReport (evt);
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
-
     private void mnuSpatialUnitEditorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSpatialUnitEditorActionPerformed
         openMapSpatialUnitEditor();
     }//GEN-LAST:event_mnuSpatialUnitEditorActionPerformed
+
+    private void manuGenderReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manuGenderReportActionPerformed
+        openSysRegGenderReport (evt);
+    }//GEN-LAST:event_manuGenderReportActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToolBar applicationsMain;
@@ -1391,12 +1391,12 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JButton btnSetPassword;
     private javax.swing.JButton btnShowDashboard;
     private javax.swing.JMenu fileMenu;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator4;
     private javax.swing.JMenuItem jmiContextHelp;
     private javax.swing.JLabel labStatus;
+    private javax.swing.JMenuItem manuGenderReport;
     private javax.swing.JMenuItem menuAllLogLevel;
     private javax.swing.JMenu menuApplications;
     private javax.swing.JMenuItem menuBaUnitSearch;
