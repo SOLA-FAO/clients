@@ -9,7 +9,7 @@
                 <Rule>
                 </Rule>
             </FeatureTypeStyle>
-			<FeatureTypeStyle>
+            <FeatureTypeStyle>
                 <Rule>
                     <Name>Hierarchy 0</Name>
                     <ogc:Filter>
@@ -21,39 +21,39 @@
                     <PolygonSymbolizer>
                         <Stroke>
                             <CssParameter name="stroke">#000000</CssParameter>                                                       
-							<CssParameter name="stroke-width">2.5</CssParameter>
+                            <CssParameter name="stroke-width">2.5</CssParameter>
                         </Stroke>
                         <fill>
                             <CssParameter name="fill">#FFFFFF</CssParameter>
                             <CssParameter name="fill-opacity">0.8</CssParameter>
                         </fill>
                     </PolygonSymbolizer>
-				   <Name>Scale &lt; 100000</Name>
-				   <MinScaleDenominator>100000</MinScaleDenominator>				
-					<TextSymbolizer>
-						<Label>
-							<PropertyName>label</PropertyName>
-						</Label>
-						<Font>
-							<CssParameter name="font-family">Arial</CssParameter>
-							<CssParameter name="font-size">36</CssParameter>
-							<CssParameter name="font-style">normal</CssParameter>
-							<CssParameter name="font-weight">bold</CssParameter>
-							<CssParameter name="color">#000000</CssParameter>
-						</Font>
-						<LabelPlacement>
-							<PointPlacement>
-								<AnchorPoint>
-									<AnchorPointX>0.5</AnchorPointX>
-									<AnchorPointY>0.5</AnchorPointY>
-								</AnchorPoint>
-							</PointPlacement>
-						</LabelPlacement>
-						<Fill>
-							<CssParameter name="fill">#000000</CssParameter>
-						</Fill>
-					</TextSymbolizer>
-				</Rule>	
+                    <Name>Scale &lt; 100000</Name>
+                    <MinScaleDenominator>100000</MinScaleDenominator>				
+                    <TextSymbolizer>
+                        <Label>
+                            <PropertyName>label</PropertyName>
+                        </Label>
+                        <Font>
+                            <CssParameter name="font-family">Arial</CssParameter>
+                            <CssParameter name="font-size">36</CssParameter>
+                            <CssParameter name="font-style">normal</CssParameter>
+                            <CssParameter name="font-weight">bold</CssParameter>
+                            <CssParameter name="color">#000000</CssParameter>
+                        </Font>
+                        <LabelPlacement>
+                            <PointPlacement>
+                                <AnchorPoint>
+                                    <AnchorPointX>0.5</AnchorPointX>
+                                    <AnchorPointY>0.5</AnchorPointY>
+                                </AnchorPoint>
+                            </PointPlacement>
+                        </LabelPlacement>
+                        <Fill>
+                            <CssParameter name="fill">#000000</CssParameter>
+                        </Fill>
+                    </TextSymbolizer>
+                </Rule>	
             </FeatureTypeStyle>
             
             <FeatureTypeStyle>
@@ -75,33 +75,33 @@
                             <CssParameter name="fill-opacity">0.8</CssParameter>
                         </fill>
                     </PolygonSymbolizer>
-				   <Name>Scale 50000 - 100000</Name>
-				   <MinScaleDenominator>50000</MinScaleDenominator>				
-				   <MaxScaleDenominator>100000</MaxScaleDenominator>				
-					<TextSymbolizer>
-						<Label>
-							<PropertyName>label</PropertyName>
-						</Label>
-						<Font>
-							<CssParameter name="font-family">Arial</CssParameter>
-							<CssParameter name="font-size">36</CssParameter>
-							<CssParameter name="font-style">normal</CssParameter>
-							<CssParameter name="font-weight">bold</CssParameter>
-							<CssParameter name="color">#8B4500</CssParameter>
-						</Font>
-						<LabelPlacement>
-							<PointPlacement>
-								<AnchorPoint>
-									<AnchorPointX>0.5</AnchorPointX>
-									<AnchorPointY>0.5</AnchorPointY>
-								</AnchorPoint>
-							</PointPlacement>
-						</LabelPlacement>
-						<Fill>
-							<CssParameter name="fill">#8B4500</CssParameter>
-						</Fill>
-					</TextSymbolizer>
-				</Rule>
+                    <Name>Scale 50000 - 100000</Name>
+                    <MinScaleDenominator>50000</MinScaleDenominator>				
+                    <MaxScaleDenominator>100000</MaxScaleDenominator>				
+                    <TextSymbolizer>
+                        <Label>
+                            <PropertyName>label</PropertyName>
+                        </Label>
+                        <Font>
+                            <CssParameter name="font-family">Arial</CssParameter>
+                            <CssParameter name="font-size">36</CssParameter>
+                            <CssParameter name="font-style">normal</CssParameter>
+                            <CssParameter name="font-weight">bold</CssParameter>
+                            <CssParameter name="color">#8B4500</CssParameter>
+                        </Font>
+                        <LabelPlacement>
+                            <PointPlacement>
+                                <AnchorPoint>
+                                    <AnchorPointX>0.5</AnchorPointX>
+                                    <AnchorPointY>0.5</AnchorPointY>
+                                </AnchorPoint>
+                            </PointPlacement>
+                        </LabelPlacement>
+                        <Fill>
+                            <CssParameter name="fill">#8B4500</CssParameter>
+                        </Fill>
+                    </TextSymbolizer>
+                </Rule>
             </FeatureTypeStyle>
             
             <FeatureTypeStyle>
@@ -116,40 +116,40 @@
                     <PolygonSymbolizer>
                         <Stroke>
                             <CssParameter name="stroke">#FF4500</CssParameter>                                                      
-							<CssParameter name="stroke-width">2.5</CssParameter>
+                            <CssParameter name="stroke-width">2.5</CssParameter>
                         </Stroke>
                         <fill>
                             <CssParameter name="fill">#FFFFFF</CssParameter>
                             <CssParameter name="fill-opacity">0.8</CssParameter>
                         </fill>
                     </PolygonSymbolizer>
-				   <Name>Scale 25000 - 50000</Name>
-				   <MinScaleDenominator>25000</MinScaleDenominator>				
-				   <MaxScaleDenominator>50000</MaxScaleDenominator>				
-					<TextSymbolizer>
-						<Label>
-							<PropertyName>label</PropertyName>
-						</Label>
-						<Font>
-							<CssParameter name="font-family">Arial</CssParameter>
-							<CssParameter name="font-size">36</CssParameter>
-							<CssParameter name="font-style">normal</CssParameter>
-							<CssParameter name="font-weight">bold</CssParameter>
-							<CssParameter name="color">#FF4500</CssParameter>
-						</Font>
-						<LabelPlacement>
-							<PointPlacement>
-								<AnchorPoint>
-									<AnchorPointX>0.5</AnchorPointX>
-									<AnchorPointY>0.5</AnchorPointY>
-								</AnchorPoint>
-							</PointPlacement>
-						</LabelPlacement>
-						<Fill>
-							<CssParameter name="fill">#FF4500</CssParameter>
-						</Fill>
-					</TextSymbolizer>
-				</Rule>
+                    <Name>Scale 25000 - 50000</Name>
+                    <MinScaleDenominator>25000</MinScaleDenominator>				
+                    <MaxScaleDenominator>50000</MaxScaleDenominator>				
+                    <TextSymbolizer>
+                        <Label>
+                            <PropertyName>label</PropertyName>
+                        </Label>
+                        <Font>
+                            <CssParameter name="font-family">Arial</CssParameter>
+                            <CssParameter name="font-size">36</CssParameter>
+                            <CssParameter name="font-style">normal</CssParameter>
+                            <CssParameter name="font-weight">bold</CssParameter>
+                            <CssParameter name="color">#FF4500</CssParameter>
+                        </Font>
+                        <LabelPlacement>
+                            <PointPlacement>
+                                <AnchorPoint>
+                                    <AnchorPointX>0.5</AnchorPointX>
+                                    <AnchorPointY>0.5</AnchorPointY>
+                                </AnchorPoint>
+                            </PointPlacement>
+                        </LabelPlacement>
+                        <Fill>
+                            <CssParameter name="fill">#FF4500</CssParameter>
+                        </Fill>
+                    </TextSymbolizer>
+                </Rule>
             </FeatureTypeStyle>
             
             <FeatureTypeStyle>
@@ -164,40 +164,40 @@
                     <PolygonSymbolizer>
                         <Stroke>
                             <CssParameter name="stroke">#FF0000</CssParameter>                                                        
-							<CssParameter name="stroke-width">2.5</CssParameter>
+                            <CssParameter name="stroke-width">2.5</CssParameter>
                         </Stroke>
                         <fill>
                             <CssParameter name="fill">#FFFFFF</CssParameter>
                             <CssParameter name="fill-opacity">0.8</CssParameter>
                         </fill>
                     </PolygonSymbolizer>
-				   <Name>Scale 10000 - 25000</Name>
-				   <MinScaleDenominator>10000</MinScaleDenominator>				
-				   <MaxScaleDenominator>25000</MaxScaleDenominator>				
-					<TextSymbolizer>
-						<Label>
-							<PropertyName>label</PropertyName>
-						</Label>
-						<Font>
-							<CssParameter name="font-family">Arial</CssParameter>
-							<CssParameter name="font-size">36</CssParameter>
-							<CssParameter name="font-style">normal</CssParameter>
-							<CssParameter name="font-weight">bold</CssParameter>
-							<CssParameter name="color">#FF0000</CssParameter>
-						</Font>
-						<LabelPlacement>
-							<PointPlacement>
-								<AnchorPoint>
-									<AnchorPointX>0.5</AnchorPointX>
-									<AnchorPointY>0.5</AnchorPointY>
-								</AnchorPoint>
-							</PointPlacement>
-						</LabelPlacement>
-						<Fill>
-							<CssParameter name="fill">#FF0000</CssParameter>
-						</Fill>
-					</TextSymbolizer>
-				</Rule>
+                    <Name>Scale 10000 - 25000</Name>
+                    <MinScaleDenominator>10000</MinScaleDenominator>				
+                    <MaxScaleDenominator>25000</MaxScaleDenominator>				
+                    <TextSymbolizer>
+                        <Label>
+                            <PropertyName>label</PropertyName>
+                        </Label>
+                        <Font>
+                            <CssParameter name="font-family">Arial</CssParameter>
+                            <CssParameter name="font-size">36</CssParameter>
+                            <CssParameter name="font-style">normal</CssParameter>
+                            <CssParameter name="font-weight">bold</CssParameter>
+                            <CssParameter name="color">#FF0000</CssParameter>
+                        </Font>
+                        <LabelPlacement>
+                            <PointPlacement>
+                                <AnchorPoint>
+                                    <AnchorPointX>0.5</AnchorPointX>
+                                    <AnchorPointY>0.5</AnchorPointY>
+                                </AnchorPoint>
+                            </PointPlacement>
+                        </LabelPlacement>
+                        <Fill>
+                            <CssParameter name="fill">#FF0000</CssParameter>
+                        </Fill>
+                    </TextSymbolizer>
+                </Rule>
             </FeatureTypeStyle>
             
             <FeatureTypeStyle>
@@ -212,39 +212,39 @@
                     <PolygonSymbolizer>
                         <Stroke>
                             <CssParameter name="stroke">#FFFF00</CssParameter>                                                       
-							<CssParameter name="stroke-width">2.5</CssParameter>
+                            <CssParameter name="stroke-width">2.5</CssParameter>
                         </Stroke>
                         <fill>
                             <CssParameter name="fill">#FFFFFF</CssParameter>
                             <CssParameter name="fill-opacity">0.8</CssParameter>
                         </fill>
                     </PolygonSymbolizer>
-				   <Name>Scale &gt; 10000</Name>
-				   <MaxScaleDenominator>10000</MaxScaleDenominator>				
-					<TextSymbolizer>
-						<Label>
-							<PropertyName>label</PropertyName>
-						</Label>
-						<Font>
-							<CssParameter name="font-family">Arial</CssParameter>
-							<CssParameter name="font-size">36</CssParameter>
-							<CssParameter name="font-style">normal</CssParameter>
-							<CssParameter name="font-weight">bold</CssParameter>
-							<CssParameter name="color">#FFFF00</CssParameter>
-						</Font>
-						<LabelPlacement>
-							<PointPlacement>
-								<AnchorPoint>
-									<AnchorPointX>0.5</AnchorPointX>
-									<AnchorPointY>0.5</AnchorPointY>
-								</AnchorPoint>
-							</PointPlacement>
-						</LabelPlacement>
-						<Fill>
-							<CssParameter name="fill">#FFFF00</CssParameter>
-						</Fill>
-					</TextSymbolizer>
-				</Rule>
+                    <Name>Scale &gt; 10000</Name>
+                    <MaxScaleDenominator>10000</MaxScaleDenominator>				
+                    <TextSymbolizer>
+                        <Label>
+                            <PropertyName>label</PropertyName>
+                        </Label>
+                        <Font>
+                            <CssParameter name="font-family">Arial</CssParameter>
+                            <CssParameter name="font-size">36</CssParameter>
+                            <CssParameter name="font-style">normal</CssParameter>
+                            <CssParameter name="font-weight">bold</CssParameter>
+                            <CssParameter name="color">#FFFF00</CssParameter>
+                        </Font>
+                        <LabelPlacement>
+                            <PointPlacement>
+                                <AnchorPoint>
+                                    <AnchorPointX>0.5</AnchorPointX>
+                                    <AnchorPointY>0.5</AnchorPointY>
+                                </AnchorPoint>
+                            </PointPlacement>
+                        </LabelPlacement>
+                        <Fill>
+                            <CssParameter name="fill">#FFFF00</CssParameter>
+                        </Fill>
+                    </TextSymbolizer>
+                </Rule>
             </FeatureTypeStyle>
         </UserStyle>
     </NamedLayer>

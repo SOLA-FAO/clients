@@ -289,16 +289,22 @@ public class ScalebarGenerator {
      */
     public String getImageAsFileLocation(
             Double scale, double width, double dpi) throws IOException {
+        return getImageAsFileLocation(scale, width, dpi, TEMPORARY_IMAGE_FILE);
+    }
+    
+    public String getImageAsFileLocation(
+            Double scale, double width, double dpi, String fileNameWithoutExtension) throws IOException{
         File location = new File(TEMPORARY_IMAGE_FILE_LOCATION);
         if (!location.exists()) {
             location.mkdirs();
         }
         String pathToResult = TEMPORARY_IMAGE_FILE_LOCATION + File.separator
-                + TEMPORARY_IMAGE_FILE + "." + IMAGE_FORMAT;
+                + fileNameWithoutExtension + "." + IMAGE_FORMAT;
         File outputFile = new File(pathToResult);
         BufferedImage bufferedImage = this.getImage(scale, width, dpi);
         ImageIO.write(bufferedImage, IMAGE_FORMAT, outputFile);
         return pathToResult;
+        
     }
 
     private void drawText(Graphics2D g2D, String txt, int x, int y) {

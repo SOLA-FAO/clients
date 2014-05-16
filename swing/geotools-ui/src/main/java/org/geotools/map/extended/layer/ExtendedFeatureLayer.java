@@ -111,6 +111,9 @@ public class ExtendedFeatureLayer extends ExtendedLayer {
      * It adds extra sld resources to the existing one. The last one added gets priority.
      */
     public static void setExtraSldResources(String sldExtraResources){
+        if (sldResources.contains(sldExtraResources)){
+            return;
+        }
         sldResources = String.format("%s,%s",sldExtraResources, sldResources); 
     }
     /**

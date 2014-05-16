@@ -55,7 +55,7 @@ public class ScalebarGeneratorTest {
 
 
     @Test
-    @Ignore
+    //@Ignore
     public void testGetImageAsFileLocation() throws Exception {
         System.out.println("getImageAsFileLocation");
         double imageWidth = 200.0;

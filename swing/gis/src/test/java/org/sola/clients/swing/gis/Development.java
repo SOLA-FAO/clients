@@ -42,12 +42,17 @@ import com.vividsolutions.jts.io.WKTReader;
 import java.awt.Dimension;
 import javax.swing.JDialog;
 import org.geotools.swing.extended.util.GeometryUtility;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.swing.gis.beans.CadastreObjectBean;
 import org.sola.clients.swing.gis.beans.TransactionCadastreChangeBean;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForBaUnit;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForCadastreChange;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
+import org.sola.clients.swing.gis.imagegenerator.MapImageGeneratorForSelectedParcel;
+import org.sola.clients.swing.gis.imagegenerator.MapImageInformation;
+import org.sola.clients.swing.gis.mapaction.TestAction;
 import org.sola.clients.swing.gis.ui.controlsbundle.*;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.search.MapDefinitionTO;
@@ -216,7 +221,7 @@ public class Development {
         this.displayControlsBundleForm(ctrl);
     }
 
-    //@Ignore
+    @Ignore
     @Test
     public void testUIControlsBundleForSpatialUnitManagement() throws Exception {
         System.out.println("Test ControlsBundle for Spatial unit");
@@ -225,7 +230,29 @@ public class Development {
                 new ControlsBundleForSpatialUnitEditor();
         this.displayControlsBundleForm(ctrl);
     }
+    
+    @Ignore
+    @Test
+    public void TestThroughAction() throws Exception {
+        System.out.println("Test through action");
+        SecurityBean.authenticate("test", "test".toCharArray(), this.getWSConfig());
+        ControlsBundleViewer ctrl = new ControlsBundleViewer();
+        ctrl.getMap().addMapAction(new TestAction(ctrl.getMap()), ctrl.getToolbar(), true);
+        this.displayControlsBundleForm(ctrl);
+    }
 
+    @Test
+    public void TestTitlePlan() throws Exception {
+        System.out.println("Test title plan");
+        SecurityBean.authenticate("test", "test".toCharArray(), this.getWSConfig());
+        MapImageGeneratorForSelectedParcel gen = 
+                new MapImageGeneratorForSelectedParcel(400, 500, 200, 40);
+        MapImageInformation info = gen.getMapAndScalebarImage("5050170");
+        System.out.println(info);
+        info = gen.getMapAndScalebarImage("4821936");
+        System.out.println(info);
+    }
+    
     //    //@Ignore
 //    @Test
 //    public void testImportPanel() throws Exception {
