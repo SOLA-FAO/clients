@@ -95,6 +95,7 @@ public class RequestTypePanel extends javax.swing.JPanel {
 
         descriptionValues.loadLocalizedValues(this.requestTypeBean.getDescription());
         displayValues.loadLocalizedValues(this.requestTypeBean.getDisplayValue());
+        displayGroupNameValues.loadLocalizedValues(this.requestTypeBean.getCategoryDisplayValue());
         sourceTypeHelpers.setSourceTypeCodes(this.requestTypeBean.getSourceTypeCodes());
         firePropertyChange("requestTypeBean", null, this.requestTypeBean);
     }
@@ -108,6 +109,7 @@ public class RequestTypePanel extends javax.swing.JPanel {
     public boolean save(boolean showMessage){
         requestTypeBean.setDisplayValue(displayValues.buildMultilingualString());
         requestTypeBean.setDescription(descriptionValues.buildMultilingualString());
+        requestTypeBean.setDisplayGroupName(displayGroupNameValues.buildMultilingualString());
         if(validateRequestType(showMessage)){
             AbstractCodeBean.saveRefData(requestTypeBean, RequestTypeTO.class);
             return true;
@@ -127,6 +129,7 @@ public class RequestTypePanel extends javax.swing.JPanel {
         rrrTypes = createRrrTypes();
         typeActions = createTypeActions();
         sourceTypeHelpers = new org.sola.clients.beans.referencedata.SourceTypeHelperListBean();
+        displayGroupNameValues = new org.sola.clients.beans.system.LocalizedValuesListBean();
         tabsPanel = new javax.swing.JTabbedPane();
         jPanel19 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
@@ -155,9 +158,14 @@ public class RequestTypePanel extends javax.swing.JPanel {
         jLabel10 = new javax.swing.JLabel();
         txtRequiredPropObjects = new javax.swing.JFormattedTextField();
         jPanel1 = new javax.swing.JPanel();
+        jPanel18 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableDisplayValue = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
+        jPanel21 = new javax.swing.JPanel();
+        jLabel15 = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTableWithDefaultStyles1 = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
         jPanel20 = new javax.swing.JPanel();
         jPanel14 = new javax.swing.JPanel();
         txtNotation = new javax.swing.JTextField();
@@ -454,6 +462,9 @@ public class RequestTypePanel extends javax.swing.JPanel {
         jPanel5.add(jPanel15);
 
         jPanel1.setName("jPanel1"); // NOI18N
+        jPanel1.setLayout(new java.awt.GridLayout(1, 2, 15, 0));
+
+        jPanel18.setName("jPanel18"); // NOI18N
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         jLabel3.setText(bundle.getString("RequestTypePanel.jLabel3.text")); // NOI18N
@@ -463,6 +474,7 @@ public class RequestTypePanel extends javax.swing.JPanel {
 
         tableDisplayValue.setName("tableDisplayValue"); // NOI18N
         tableDisplayValue.setNextFocusableComponent(tableSources);
+        tableDisplayValue.getTableHeader().setReorderingAllowed(false);
 
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${localizedValues}");
         org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, displayValues, eLProperty, tableDisplayValue);
@@ -476,37 +488,84 @@ public class RequestTypePanel extends javax.swing.JPanel {
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();
         jScrollPane1.setViewportView(tableDisplayValue);
-        tableDisplayValue.getColumnModel().getColumn(0).setPreferredWidth(150);
-        tableDisplayValue.getColumnModel().getColumn(0).setMaxWidth(200);
-        tableDisplayValue.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("RequestTypePanel.tableDisplayValue.columnModel.title0_1")); // NOI18N
-        tableDisplayValue.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("RequestTypePanel.tableDisplayValue.columnModel.title1_1")); // NOI18N
+        if (tableDisplayValue.getColumnModel().getColumnCount() > 0) {
+            tableDisplayValue.getColumnModel().getColumn(0).setPreferredWidth(150);
+            tableDisplayValue.getColumnModel().getColumn(0).setMaxWidth(200);
+            tableDisplayValue.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("RequestTypePanel.tableDisplayValue.columnModel.title0_1")); // NOI18N
+            tableDisplayValue.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("RequestTypePanel.tableDisplayValue.columnModel.title1_1")); // NOI18N
+        }
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel3)
-                .addContainerGap(493, Short.MAX_VALUE))
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 579, Short.MAX_VALUE)
+        javax.swing.GroupLayout jPanel18Layout = new javax.swing.GroupLayout(jPanel18);
+        jPanel18.setLayout(jPanel18Layout);
+        jPanel18Layout.setHorizontalGroup(
+            jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        jPanel18Layout.setVerticalGroup(
+            jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel18Layout.createSequentialGroup()
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE))
         );
 
+        jPanel1.add(jPanel18);
+
+        jPanel21.setName("jPanel21"); // NOI18N
+
+        jLabel15.setText(bundle.getString("RequestTypePanel.jLabel15.text")); // NOI18N
+        jLabel15.setName("jLabel15"); // NOI18N
+
+        jScrollPane4.setName("jScrollPane4"); // NOI18N
+
+        jTableWithDefaultStyles1.setName("jTableWithDefaultStyles1"); // NOI18N
+        jTableWithDefaultStyles1.getTableHeader().setReorderingAllowed(false);
+
+        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${localizedValues}");
+        jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, displayGroupNameValues, eLProperty, jTableWithDefaultStyles1);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${language.displayValue}"));
+        columnBinding.setColumnName("Language.display Value");
+        columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${localizedValue}"));
+        columnBinding.setColumnName("Localized Value");
+        columnBinding.setColumnClass(String.class);
+        bindingGroup.addBinding(jTableBinding);
+        jTableBinding.bind();
+        jScrollPane4.setViewportView(jTableWithDefaultStyles1);
+        if (jTableWithDefaultStyles1.getColumnModel().getColumnCount() > 0) {
+            jTableWithDefaultStyles1.getColumnModel().getColumn(0).setPreferredWidth(50);
+            jTableWithDefaultStyles1.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("RequestTypePanel.jTableWithDefaultStyles1.columnModel.title0_1")); // NOI18N
+            jTableWithDefaultStyles1.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("RequestTypePanel.jTableWithDefaultStyles1.columnModel.title1_1")); // NOI18N
+        }
+
+        javax.swing.GroupLayout jPanel21Layout = new javax.swing.GroupLayout(jPanel21);
+        jPanel21.setLayout(jPanel21Layout);
+        jPanel21Layout.setHorizontalGroup(
+            jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+        );
+        jPanel21Layout.setVerticalGroup(
+            jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel21Layout.createSequentialGroup()
+                .addComponent(jLabel15)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE))
+        );
+
+        jPanel1.add(jPanel21);
+
         javax.swing.GroupLayout jPanel19Layout = new javax.swing.GroupLayout(jPanel19);
         jPanel19.setLayout(jPanel19Layout);
         jPanel19Layout.setHorizontalGroup(
             jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel19Layout.createSequentialGroup()
+            .addGroup(jPanel19Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 579, Short.MAX_VALUE))
+                .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel19Layout.setVerticalGroup(
@@ -540,8 +599,8 @@ public class RequestTypePanel extends javax.swing.JPanel {
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel14Layout.createSequentialGroup()
                 .addComponent(jLabel11)
-                .addContainerGap(489, Short.MAX_VALUE))
-            .addComponent(txtNotation, javax.swing.GroupLayout.DEFAULT_SIZE, 579, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(txtNotation)
         );
         jPanel14Layout.setVerticalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -648,10 +707,12 @@ public class RequestTypePanel extends javax.swing.JPanel {
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();
         jScrollPane3.setViewportView(tableSources);
-        tableSources.getColumnModel().getColumn(0).setPreferredWidth(30);
-        tableSources.getColumnModel().getColumn(0).setMaxWidth(30);
-        tableSources.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("RequestTypePanel.tableSources.columnModel.title0_1")); // NOI18N
-        tableSources.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("RequestTypePanel.tableSources.columnModel.title1_1")); // NOI18N
+        if (tableSources.getColumnModel().getColumnCount() > 0) {
+            tableSources.getColumnModel().getColumn(0).setPreferredWidth(30);
+            tableSources.getColumnModel().getColumn(0).setMaxWidth(30);
+            tableSources.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("RequestTypePanel.tableSources.columnModel.title0_1")); // NOI18N
+            tableSources.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("RequestTypePanel.tableSources.columnModel.title1_1")); // NOI18N
+        }
 
         javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
         jPanel16.setLayout(jPanel16Layout);
@@ -690,11 +751,13 @@ public class RequestTypePanel extends javax.swing.JPanel {
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();
         jScrollPane2.setViewportView(tableDescriptions);
-        tableDescriptions.getColumnModel().getColumn(0).setPreferredWidth(120);
-        tableDescriptions.getColumnModel().getColumn(0).setMaxWidth(120);
-        tableDescriptions.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("RequestTypePanel.tableDescriptions.columnModel.title0_1")); // NOI18N
-        tableDescriptions.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("RequestTypePanel.tableDescriptions.columnModel.title1_1")); // NOI18N
-        tableDescriptions.getColumnModel().getColumn(1).setCellRenderer(new TableCellTextAreaRenderer());
+        if (tableDescriptions.getColumnModel().getColumnCount() > 0) {
+            tableDescriptions.getColumnModel().getColumn(0).setPreferredWidth(120);
+            tableDescriptions.getColumnModel().getColumn(0).setMaxWidth(120);
+            tableDescriptions.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("RequestTypePanel.tableDescriptions.columnModel.title0_1")); // NOI18N
+            tableDescriptions.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("RequestTypePanel.tableDescriptions.columnModel.title1_1")); // NOI18N
+            tableDescriptions.getColumnModel().getColumn(1).setCellRenderer(new TableCellTextAreaRenderer());
+        }
 
         jLabel4.setText(bundle.getString("RequestTypePanel.jLabel4.text")); // NOI18N
         jLabel4.setName("jLabel4"); // NOI18N
@@ -725,8 +788,8 @@ public class RequestTypePanel extends javax.swing.JPanel {
             .addGroup(jPanel20Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, 579, Short.MAX_VALUE)
-                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 579, Short.MAX_VALUE)
+                    .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -738,7 +801,7 @@ public class RequestTypePanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
+                .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -748,11 +811,11 @@ public class RequestTypePanel extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tabsPanel)
+            .addComponent(tabsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 604, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tabsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 405, Short.MAX_VALUE)
+            .addComponent(tabsPanel)
         );
 
         bindingGroup.bind();
@@ -763,6 +826,7 @@ public class RequestTypePanel extends javax.swing.JPanel {
     private javax.swing.JComboBox cbxRrrType;
     private javax.swing.JComboBox cbxTypeAction;
     private org.sola.clients.beans.system.LocalizedValuesListBean descriptionValues;
+    private org.sola.clients.beans.system.LocalizedValuesListBean displayGroupNameValues;
     private org.sola.clients.beans.system.LocalizedValuesListBean displayValues;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -770,6 +834,7 @@ public class RequestTypePanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -787,9 +852,11 @@ public class RequestTypePanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel17;
+    private javax.swing.JPanel jPanel18;
     private javax.swing.JPanel jPanel19;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel20;
+    private javax.swing.JPanel jPanel21;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
@@ -800,6 +867,8 @@ public class RequestTypePanel extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private org.sola.clients.swing.common.controls.JTableWithDefaultStyles jTableWithDefaultStyles1;
     private org.sola.clients.beans.referencedata.RequestCategoryTypeListBean requestCategoryTypes;
     private org.sola.clients.beans.referencedata.RrrTypeListBean rrrTypes;
     private org.sola.clients.beans.referencedata.SourceTypeHelperListBean sourceTypeHelpers;

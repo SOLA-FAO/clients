@@ -293,7 +293,7 @@ if (theme=="green") {
         UIManager.put("nimbusOrange", new Color(191,120,4));	  /*(191,98,4)*/
         UIManager.put("nimbusRed", new Color(140,60,34));	 /*(169,46,34)*/
         UIManager.put("nimbusSelectedText", new Color(255,255,255));  /*(255,255,255)*/ 	 
-        UIManager.put("nimbusSelectionBackground", new Color(57,105,138)); /*SELECTED ELEMENT (57,105,138)*/	 
+        UIManager.put("nimbusSelectionBackground", new Color(57,105,138)); /*SELECTED ELEMENT (57,105,138)*/
 //        UIManager.put("text", new Color(0,0,0));  /*(0,0,0)*/
 //      ####  Secondary Colors   #####
          UIManager.put("activeCaption", new Color(186,190,198)); 	/*(186,190,198)*/ 
@@ -325,7 +325,7 @@ if (theme=="green") {
          UIManager.put("List.background", new Color(185, 227, 185));  
          UIManager.put("Table.dropLineColor", new Color(166, 212, 150)); 
          UIManager.put("List.foreground", new Color(0, 102, 51)); 
-        
+         
 //      ####  Foreround Colors   #####  
 //         UIManager.put("Button[Disabled].textForeground", new Color(255,255,255)); 
 //         UIManager.put("Button[Pressed].textForeground", new Color(255,255,255)); 
@@ -406,7 +406,7 @@ if (theme=="green") {
          UIManager.put("List.background", new Color(210,190,120)); 
          UIManager.put("Table.dropLineColor", new Color(212, 166, 150)); 
          UIManager.put("List.foreground", new Color(102, 0, 51)); 
-
+         
 //      ####  Foreround Colors   #####  
          UIManager.put("Button[Disabled].textForeground", new Color(255,255,255)); 
          UIManager.put("Button[Pressed].textForeground", new Color(255,255,255));

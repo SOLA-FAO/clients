@@ -1,4 +1,4 @@
-<?xml version="1.1" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <NonVisualComponents>
@@ -23,6 +23,8 @@
     </Component>
     <Component class="org.sola.clients.beans.referencedata.SourceTypeHelperListBean" name="sourceTypeHelpers">
     </Component>
+    <Component class="org.sola.clients.beans.system.LocalizedValuesListBean" name="displayGroupNameValues">
+    </Component>
   </NonVisualComponents>
   <Properties>
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -44,12 +46,12 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="tabsPanel" alignment="0" max="32767" attributes="0"/>
+          <Component id="tabsPanel" alignment="0" pref="604" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="tabsPanel" alignment="0" pref="405" max="32767" attributes="0"/>
+          <Component id="tabsPanel" alignment="0" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -78,13 +80,13 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="jPanel1" alignment="0" max="32767" attributes="2"/>
-                          <Component id="jPanel5" alignment="0" pref="579" max="32767" attributes="2"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jPanel5" max="32767" attributes="2"/>
+                          <Component id="jPanel1" max="32767" attributes="2"/>
                       </Group>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -558,88 +560,180 @@
                 <Property name="name" type="java.lang.String" value="jPanel1" noResource="true"/>
               </Properties>
 
-              <Layout>
-                <DimensionLayout dim="0">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="493" max="32767" attributes="0"/>
-                      </Group>
-                      <Component id="jScrollPane1" alignment="0" pref="579" max="32767" attributes="0"/>
-                  </Group>
-                </DimensionLayout>
-                <DimensionLayout dim="1">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jScrollPane1" pref="173" max="32767" attributes="0"/>
-                      </Group>
-                  </Group>
-                </DimensionLayout>
+              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                <Property name="columns" type="int" value="2"/>
+                <Property name="horizontalGap" type="int" value="15"/>
+                <Property name="rows" type="int" value="1"/>
               </Layout>
               <SubComponents>
-                <Component class="javax.swing.JLabel" name="jLabel3">
+                <Container class="javax.swing.JPanel" name="jPanel18">
                   <Properties>
-                    <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/images/common/red_asterisk.gif"/>
-                    </Property>
-                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="org/sola/clients/swing/ui/referencedata/Bundle.properties" key="RequestTypePanel.jLabel3.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                    </Property>
-                    <Property name="name" type="java.lang.String" value="jLabel3" noResource="true"/>
+                    <Property name="name" type="java.lang.String" value="jPanel18" noResource="true"/>
                   </Properties>
-                </Component>
-                <Container class="javax.swing.JScrollPane" name="jScrollPane1">
-                  <Properties>
-                    <Property name="name" type="java.lang.String" value="jScrollPane1" noResource="true"/>
-                  </Properties>
-                  <AuxValues>
-                    <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-                  </AuxValues>
 
-                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+                  <Layout>
+                    <DimensionLayout dim="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jScrollPane1" alignment="0" pref="0" max="32767" attributes="0"/>
+                          <Component id="jLabel3" alignment="0" pref="282" max="32767" attributes="0"/>
+                      </Group>
+                    </DimensionLayout>
+                    <DimensionLayout dim="1">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jScrollPane1" pref="173" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                    </DimensionLayout>
+                  </Layout>
                   <SubComponents>
-                    <Component class="org.sola.clients.swing.common.controls.JTableWithDefaultStyles" name="tableDisplayValue">
+                    <Component class="javax.swing.JLabel" name="jLabel3">
                       <Properties>
-                        <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
-                          <TableColumnModel selectionModel="0">
-                            <Column maxWidth="200" minWidth="-1" prefWidth="150" resizable="true">
-                              <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                                <ResourceString bundle="org/sola/clients/swing/ui/referencedata/Bundle.properties" key="RequestTypePanel.tableDisplayValue.columnModel.title0_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                              </Title>
-                              <Editor/>
-                              <Renderer/>
-                            </Column>
-                            <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                              <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                                <ResourceString bundle="org/sola/clients/swing/ui/referencedata/Bundle.properties" key="RequestTypePanel.tableDisplayValue.columnModel.title1_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                              </Title>
-                              <Editor/>
-                              <Renderer/>
-                            </Column>
-                          </TableColumnModel>
+                        <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
+                          <Image iconType="3" name="/images/common/red_asterisk.gif"/>
                         </Property>
-                        <Property name="name" type="java.lang.String" value="tableDisplayValue" noResource="true"/>
-                        <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-                          <ComponentRef name="tableSources"/>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/sola/clients/swing/ui/referencedata/Bundle.properties" key="RequestTypePanel.jLabel3.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                         </Property>
-                        <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
-                          <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
-                        </Property>
+                        <Property name="name" type="java.lang.String" value="jLabel3" noResource="true"/>
                       </Properties>
-                      <BindingProperties>
-                        <BindingProperty name="elements" source="displayValues" sourcePath="${localizedValues}" target="tableDisplayValue" targetPath="elements" updateStrategy="0" immediately="true">
-                          <Subbinding sourcePath="${language.displayValue}">
-                            <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
-                            <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
-                          </Subbinding>
-                          <Subbinding sourcePath="${localizedValue}">
-                            <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
-                          </Subbinding>
-                        </BindingProperty>
-                      </BindingProperties>
                     </Component>
+                    <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+                      <Properties>
+                        <Property name="name" type="java.lang.String" value="jScrollPane1" noResource="true"/>
+                      </Properties>
+                      <AuxValues>
+                        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+                      </AuxValues>
+
+                      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+                      <SubComponents>
+                        <Component class="org.sola.clients.swing.common.controls.JTableWithDefaultStyles" name="tableDisplayValue">
+                          <Properties>
+                            <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
+                              <TableColumnModel selectionModel="0">
+                                <Column maxWidth="200" minWidth="-1" prefWidth="150" resizable="true">
+                                  <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                                    <ResourceString bundle="org/sola/clients/swing/ui/referencedata/Bundle.properties" key="RequestTypePanel.tableDisplayValue.columnModel.title0_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                                  </Title>
+                                  <Editor/>
+                                  <Renderer/>
+                                </Column>
+                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                  <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                                    <ResourceString bundle="org/sola/clients/swing/ui/referencedata/Bundle.properties" key="RequestTypePanel.tableDisplayValue.columnModel.title1_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                                  </Title>
+                                  <Editor/>
+                                  <Renderer/>
+                                </Column>
+                              </TableColumnModel>
+                            </Property>
+                            <Property name="name" type="java.lang.String" value="tableDisplayValue" noResource="true"/>
+                            <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                              <ComponentRef name="tableSources"/>
+                            </Property>
+                            <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
+                              <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
+                            </Property>
+                          </Properties>
+                          <BindingProperties>
+                            <BindingProperty name="elements" source="displayValues" sourcePath="${localizedValues}" target="tableDisplayValue" targetPath="elements" updateStrategy="0" immediately="true">
+                              <Subbinding sourcePath="${language.displayValue}">
+                                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
+                                <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
+                              </Subbinding>
+                              <Subbinding sourcePath="${localizedValue}">
+                                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
+                              </Subbinding>
+                            </BindingProperty>
+                          </BindingProperties>
+                        </Component>
+                      </SubComponents>
+                    </Container>
+                  </SubComponents>
+                </Container>
+                <Container class="javax.swing.JPanel" name="jPanel21">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="jPanel21" noResource="true"/>
+                  </Properties>
+
+                  <Layout>
+                    <DimensionLayout dim="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jLabel15" alignment="1" pref="282" max="32767" attributes="0"/>
+                          <Component id="jScrollPane4" alignment="0" pref="0" max="32767" attributes="0"/>
+                      </Group>
+                    </DimensionLayout>
+                    <DimensionLayout dim="1">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="jLabel15" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jScrollPane4" pref="173" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                    </DimensionLayout>
+                  </Layout>
+                  <SubComponents>
+                    <Component class="javax.swing.JLabel" name="jLabel15">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/sola/clients/swing/ui/referencedata/Bundle.properties" key="RequestTypePanel.jLabel15.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
+                        <Property name="name" type="java.lang.String" value="jLabel15" noResource="true"/>
+                      </Properties>
+                    </Component>
+                    <Container class="javax.swing.JScrollPane" name="jScrollPane4">
+                      <Properties>
+                        <Property name="name" type="java.lang.String" value="jScrollPane4" noResource="true"/>
+                      </Properties>
+                      <AuxValues>
+                        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+                      </AuxValues>
+
+                      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+                      <SubComponents>
+                        <Component class="org.sola.clients.swing.common.controls.JTableWithDefaultStyles" name="jTableWithDefaultStyles1">
+                          <Properties>
+                            <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
+                              <TableColumnModel selectionModel="0">
+                                <Column maxWidth="-1" minWidth="-1" prefWidth="50" resizable="true">
+                                  <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                                    <ResourceString bundle="org/sola/clients/swing/ui/referencedata/Bundle.properties" key="RequestTypePanel.jTableWithDefaultStyles1.columnModel.title0_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                                  </Title>
+                                  <Editor/>
+                                  <Renderer/>
+                                </Column>
+                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                  <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                                    <ResourceString bundle="org/sola/clients/swing/ui/referencedata/Bundle.properties" key="RequestTypePanel.jTableWithDefaultStyles1.columnModel.title1_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                                  </Title>
+                                  <Editor/>
+                                  <Renderer/>
+                                </Column>
+                              </TableColumnModel>
+                            </Property>
+                            <Property name="name" type="java.lang.String" value="jTableWithDefaultStyles1" noResource="true"/>
+                            <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
+                              <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
+                            </Property>
+                          </Properties>
+                          <BindingProperties>
+                            <BindingProperty name="elements" source="displayGroupNameValues" sourcePath="${localizedValues}" target="jTableWithDefaultStyles1" targetPath="elements" updateStrategy="0" immediately="true">
+                              <Subbinding sourcePath="${language.displayValue}">
+                                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
+                                <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
+                              </Subbinding>
+                              <Subbinding sourcePath="${localizedValue}">
+                                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
+                              </Subbinding>
+                            </BindingProperty>
+                          </BindingProperties>
+                        </Component>
+                      </SubComponents>
+                    </Container>
                   </SubComponents>
                 </Container>
               </SubComponents>
@@ -666,8 +760,8 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jPanel17" alignment="0" pref="579" max="32767" attributes="0"/>
-                          <Component id="jPanel6" alignment="0" pref="579" max="32767" attributes="0"/>
+                          <Component id="jPanel17" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jPanel6" alignment="0" max="32767" attributes="0"/>
                           <Component id="jPanel14" alignment="0" max="32767" attributes="2"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -682,7 +776,7 @@
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Component id="jPanel14" min="-2" max="-2" attributes="1"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jPanel17" pref="240" max="32767" attributes="0"/>
+                      <Component id="jPanel17" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -699,9 +793,9 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="489" max="32767" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                       </Group>
-                      <Component id="txtNotation" alignment="0" pref="579" max="32767" attributes="0"/>
+                      <Component id="txtNotation" alignment="0" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">

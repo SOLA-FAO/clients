@@ -17,6 +17,7 @@
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
   </SyntheticProperties>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="1"/>
@@ -33,78 +34,22 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="scrollFeeDetails1" pref="421" max="32767" attributes="0"/>
-          <Component id="jToolBar1" alignment="0" max="32767" attributes="0"/>
+          <Component id="jToolBar1" alignment="0" pref="421" max="32767" attributes="0"/>
+          <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
               <Component id="jToolBar1" min="-2" pref="25" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="scrollFeeDetails1" pref="320" max="32767" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Component id="jScrollPane1" pref="326" max="32767" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Container class="javax.swing.JScrollPane" name="scrollFeeDetails1">
-      <Properties>
-        <Property name="name" type="java.lang.String" value="scrollFeeDetails1" noResource="true"/>
-      </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="scrollFeeDetails1.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));"/>
-        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-      </AuxValues>
-
-      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-      <SubComponents>
-        <Component class="org.sola.clients.swing.common.controls.JTableWithDefaultStyles" name="tabFeeDetails1">
-          <Properties>
-            <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
-              <TableColumnModel selectionModel="0">
-                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                  <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                    <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="ServiceListForm.tabFeeDetails1.columnModel.title0" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                  </Title>
-                  <Editor/>
-                  <Renderer/>
-                </Column>
-                <Column maxWidth="150" minWidth="-1" prefWidth="150" resizable="true">
-                  <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                    <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="ServiceListForm.tabFeeDetails1.columnModel.title1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                  </Title>
-                  <Editor/>
-                  <Renderer/>
-                </Column>
-              </TableColumnModel>
-            </Property>
-            <Property name="name" type="java.lang.String" value="tabFeeDetails1" noResource="true"/>
-            <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
-              <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
-            </Property>
-          </Properties>
-          <BindingProperties>
-            <BindingProperty name="elements" source="requestTypeList" sourcePath="${requestTypeList}" target="tabFeeDetails1" targetPath="elements" updateStrategy="0" immediately="true">
-              <Subbinding sourcePath="${displayValue}">
-                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
-                <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
-              </Subbinding>
-              <Subbinding sourcePath="${nrPropertiesRequired}">
-                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Integer.class"/>
-                <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
-              </Subbinding>
-            </BindingProperty>
-            <BindingProperty name="selectedElement" source="requestTypeList" sourcePath="${selectedRequestType}" target="tabFeeDetails1" targetPath="selectedElement" updateStrategy="0" immediately="false">
-              <BindingParameter name="IGNORE_ADJUSTING" value="N"/>
-            </BindingProperty>
-          </BindingProperties>
-          <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tabFeeDetails1MouseClicked"/>
-          </Events>
-        </Component>
-      </SubComponents>
-    </Container>
     <Container class="javax.swing.JToolBar" name="jToolBar1">
       <Properties>
         <Property name="floatable" type="boolean" value="false"/>
@@ -132,6 +77,32 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddServiceActionPerformed"/>
+          </Events>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="jScrollPane1" noResource="true"/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+      </AuxValues>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+      <SubComponents>
+        <Component class="org.sola.clients.swing.common.controls.JTreeTableWithDefaultStyles" name="treeTable">
+          <Properties>
+            <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
+              <TableColumnModel selectionModel="0"/>
+            </Property>
+            <Property name="name" type="java.lang.String" value="treeTable" noResource="true"/>
+            <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
+              <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
+            </Property>
+          </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="treeTableMouseClicked"/>
           </Events>
         </Component>
       </SubComponents>
