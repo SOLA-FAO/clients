@@ -36,6 +36,7 @@ import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.referencedata.RequestTypeBean;
 import org.sola.clients.beans.referencedata.RequestTypeListBean;
 import org.sola.clients.swing.common.controls.TreeTableRowData;
+import org.sola.common.WindowUtility;
 
 /**
  * Pop-up form with the list of request types. {@link RequestTypeListBean} is
@@ -48,20 +49,16 @@ public class ServiceListForm extends javax.swing.JDialog {
     public ServiceListForm(ApplicationBean application) {
         super((JFrame) null, true);
         this.application = application;
-
         initComponents();
-        this.setIconImage(new ImageIcon(ServiceListForm.class.getResource("/images/sola/logo_icon.jpg")).getImage());
-        btnAddService.setEnabled(true);
-        configureTreeTable();
+        postInit();
     }
 
-    private void addService() {
-        List<TreeTableRowData> selected = treeTable.getSelectedDataRows();
-        for (TreeTableRowData row : selected) {
-            if (!row.isParent()) {
-                application.addService((RequestTypeBean) row.getSource());
-            }
-        }
+    private void postInit() {
+        this.setIconImage(new ImageIcon(ServiceListForm.class.getResource("/images/sola/logo_icon.jpg")).getImage());
+        btnAddService.setEnabled(true);
+        this.getRootPane().setDefaultButton(btnAddService);
+        WindowUtility.addEscapeListener(this, false);
+        configureTreeTable();
     }
 
     private void configureTreeTable() {
@@ -73,9 +70,20 @@ public class ServiceListForm extends javax.swing.JDialog {
         model.setColumnLabels(serviceColLbl, propColLbl);
         treeTable.setTreeTableModel(model);
         treeTable.setRootVisible(false);
+        // Allow user to resize the columns, but not reorder them. 
+        treeTable.getTableHeader().setReorderingAllowed(false);
+        treeTable.getTableHeader().setResizingAllowed(true);
         // Resize the columns based on thier contents using packAll
         treeTable.packAll();
+    }
 
+    private void addService() {
+        List<TreeTableRowData> selected = treeTable.getSelectedDataRows();
+        for (TreeTableRowData row : selected) {
+            if (!row.isParent()) {
+                application.addService((RequestTypeBean) row.getSource());
+            }
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -99,7 +107,6 @@ public class ServiceListForm extends javax.swing.JDialog {
 
         btnAddService.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
         btnAddService.setText(bundle.getString("ServiceListForm.btnAddService.text")); // NOI18N
-        btnAddService.setFocusable(false);
         btnAddService.setName(bundle.getString("ServiceListForm.btnAddService.name")); // NOI18N
         btnAddService.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnAddService.addActionListener(new java.awt.event.ActionListener() {
@@ -124,8 +131,8 @@ public class ServiceListForm extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE)
-            .addComponent(jScrollPane1)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE)
+            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

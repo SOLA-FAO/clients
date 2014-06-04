@@ -32,16 +32,20 @@ package org.sola.clients.swing.common.controls;
 import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.Font;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 import org.jdesktop.swingx.JXTree;
+import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.decorator.CompoundHighlighter;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 import org.jdesktop.swingx.treetable.TreeTableModel;
@@ -52,13 +56,14 @@ import org.jdesktop.swingx.treetable.TreeTableModel;
  *
  * @author solaDev
  */
-public class JTreeTableWithDefaultStyles extends org.jdesktop.swingx.JXTreeTable {
+public class JTreeTableWithDefaultStyles extends JXTreeTable {
 
     private Color scrollPaneBackgroundColor;
     private Color defaultBackground;
     private Color oddRowColor;
     private Color selectBackground;
     private Color selectForeground;
+    private KeyListener keyboardNavigation;
 
     /**
      * Class constructor. Initializes default values
@@ -106,6 +111,64 @@ public class JTreeTableWithDefaultStyles extends org.jdesktop.swingx.JXTreeTable
         // Create the alternating strip pattern using the HighligtherFactory
         CompoundHighlighter compHigh = (CompoundHighlighter) HighlighterFactory.createAlternateStriping(defaultBackground, oddRowColor);
         this.addHighlighter(compHigh);
+
+        configureKeyboardNavigation();
+    }
+
+    /**
+     * Sets up a key listener that allows the user expand and collapse the tree
+     * using the LEFT and RIGHT keys. Can also be used to expand or collapse all
+     * nodes in the tree if the CTRL key is pressed as well. The key strokes
+     * have no effect unless the selected cell is a parent node with the
+     * appropriate expanded or collapsed state. This ensures the LEFT and RIGHT
+     * keys can also be used to navigate around the TreeTable.
+     *
+     * To navigate out of the TreeTable, use CTRL + TAB or CTRL + SHIFT + TAB
+     */
+    private void configureKeyboardNavigation() {
+        final JXTreeTable treeTable = this;
+        if (keyboardNavigation == null) {
+            keyboardNavigation = new KeyAdapter() {
+                @Override
+                public void keyPressed(KeyEvent evt) {
+                    if (evt.getKeyCode() == KeyEvent.VK_LEFT) {
+                        if (treeTable.getSelectedRow() >= 0
+                                && treeTable.isExpanded(treeTable.getSelectedRow())
+                                && treeTable.getSelectedColumn() == treeTable.getHierarchicalColumn()
+                                && getRowData(treeTable.getSelectedRow()).isParent()) {
+                            // This row contains a parent node, so proceed to collapse the 
+                            // row and then consume the event so no other actions occur
+                            if (evt.isControlDown()) {
+                                treeTable.collapseAll();
+                            } else {
+                                treeTable.collapseRow(treeTable.getSelectedRow());
+                            }
+                            evt.consume();
+                        }
+                    } else if (evt.getKeyCode() == KeyEvent.VK_RIGHT) {
+                        if (treeTable.getSelectedRow() >= 0
+                                && !treeTable.isExpanded(treeTable.getSelectedRow())
+                                && treeTable.getSelectedColumn() == treeTable.getHierarchicalColumn()
+                                && getRowData(treeTable.getSelectedRow()).isParent()) {
+                            // This row contains a parent node, so proceed to collapse the 
+                            // row and then consume the event so no other actions occur
+                            if (evt.isControlDown()) {
+                                treeTable.expandAll();
+                            } else {
+                                treeTable.expandRow(treeTable.getSelectedRow());
+                                evt.consume();
+                            }
+                        }
+                    }
+                }
+            };
+        } else {
+            this.removeKeyListener(keyboardNavigation);
+        }
+        this.addKeyListener(keyboardNavigation);
+
+        // Remove the input mapping for the Enter key so that it can be used to fire the default button on the form instead. 
+        this.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "none");
     }
 
     /**
@@ -122,6 +185,22 @@ public class JTreeTableWithDefaultStyles extends org.jdesktop.swingx.JXTreeTable
             }
         }
         return result;
+    }
+
+    /**
+     * Retrieves the TreeTableRowData record at the specified row number. 
+     * @param rowNum
+     * @return 
+     */
+    public TreeTableRowData getRowData(int rowNum) {
+        TreeTableRowData result = null;
+        TreePath tp = this.getPathForRow(rowNum);
+        if (tp != null) {
+            Object row = ((DefaultMutableTreeNode) tp.getLastPathComponent()).getUserObject();
+            result = ((TreeTableRowData) row);
+        }
+        return result;
+
     }
 
     @Override
