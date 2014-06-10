@@ -61,6 +61,7 @@ import org.sola.clients.swing.common.controls.TextSearch;
 import org.sola.clients.swing.common.converters.BigDecimalMoneyConverter;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
+import org.sola.clients.swing.common.utils.FormattersFactory;
 import org.sola.clients.swing.desktop.DashBoardPanel;
 import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.desktop.administrative.PropertyPanel;
@@ -2626,15 +2627,19 @@ public class ApplicationPanel extends ContentPanel {
         if (tabFeeDetails.getColumnModel().getColumnCount() > 0) {
             tabFeeDetails.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("ApplicationPanel.tabFeeDetails.columnModel.title0")); // NOI18N
             tabFeeDetails.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("ApplicationPanel.tabFeeDetails.columnModel.title1_1")); // NOI18N
+            tabFeeDetails.getColumnModel().getColumn(1).setCellRenderer(new MoneyCellRenderer());
             tabFeeDetails.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("ApplicationPanel.tabFeeDetails.columnModel.title2_2")); // NOI18N
+            tabFeeDetails.getColumnModel().getColumn(2).setCellRenderer(new MoneyCellRenderer());
             tabFeeDetails.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("ApplicationPanel.tabFeeDetails.columnModel.title3")); // NOI18N
+            tabFeeDetails.getColumnModel().getColumn(3).setCellRenderer(new MoneyCellRenderer());
             tabFeeDetails.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("ApplicationPanel.tabFeeDetails.columnModel.title4")); // NOI18N
+            tabFeeDetails.getColumnModel().getColumn(4).setCellRenderer(new DateTimeRenderer(false));
         }
 
         jPanel2.setName("jPanel2"); // NOI18N
 
         formTxtServiceFee.setEditable(false);
-        formTxtServiceFee.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getCurrencyInstance())));
+        formTxtServiceFee.setFormatterFactory(FormattersFactory.getInstance().getMoneyFormatterFactory());
         formTxtServiceFee.setInheritsPopupMenu(true);
         formTxtServiceFee.setName("formTxtServiceFee"); // NOI18N
 
@@ -2645,7 +2650,7 @@ public class ApplicationPanel extends ContentPanel {
         formTxtServiceFee.setHorizontalAlignment(JFormattedTextField.LEADING);
 
         formTxtTaxes.setEditable(false);
-        formTxtTaxes.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getCurrencyInstance())));
+        formTxtTaxes.setFormatterFactory(FormattersFactory.getInstance().getMoneyFormatterFactory());
         formTxtTaxes.setInheritsPopupMenu(true);
         formTxtTaxes.setName("formTxtTaxes"); // NOI18N
 
@@ -2656,7 +2661,7 @@ public class ApplicationPanel extends ContentPanel {
         formTxtTaxes.setHorizontalAlignment(JFormattedTextField.LEADING);
 
         formTxtFee.setEditable(false);
-        formTxtFee.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getCurrencyInstance())));
+        formTxtFee.setFormatterFactory(FormattersFactory.getInstance().getMoneyFormatterFactory());
         formTxtFee.setName("formTxtFee"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, appBean, org.jdesktop.beansbinding.ELProperty.create("${totalFee}"), formTxtFee, org.jdesktop.beansbinding.BeanProperty.create("value"));
@@ -2701,7 +2706,7 @@ public class ApplicationPanel extends ContentPanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, appBean, org.jdesktop.beansbinding.ELProperty.create("${feePaid}"), cbxPaid, org.jdesktop.beansbinding.BeanProperty.create("selected"));
         bindingGroup.addBinding(binding);
 
-        formTxtPaid.setFormatterFactory(BigDecimalMoneyConverter.getEditFormatterFactory());
+        formTxtPaid.setFormatterFactory(FormattersFactory.getInstance().getMoneyFormatterFactory());
         formTxtPaid.setText(bundle.getString("ApplicationPanel.formTxtPaid.text")); // NOI18N
         formTxtPaid.setName(bundle.getString("ApplicationPanel.formTxtPaid.name")); // NOI18N
 
