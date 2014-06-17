@@ -34,6 +34,7 @@ import javax.validation.constraints.NotNull;
 import org.sola.clients.beans.AbstractCodeBean;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.controls.SolaList;
+import org.sola.clients.beans.system.ConfigPanelLauncherBean;
 import org.sola.clients.beans.validation.CodeBeanNotEmpty;
 
 /**
@@ -78,6 +79,8 @@ public class RequestTypeBean extends AbstractCodeBean {
     public static final String VALUE_BASE_FEE_PROPERTY = "valueBaseFee";
     public static final String CODE_MAP_EXISTINGPARCEL = "mapExistingParcel";
     public static final String DISPLAY_GROUP_NAME_PROPERTY = "displayGroupName";
+    public static final String SERVICE_PANEL_PROPERTY = "servicePanel";
+    public static final String SERVICE_PANEL_CODE_PROPERTY = "servicePanelCode";
 
     private int nrDaysToComplete;
     private int nrPropertiesRequired;
@@ -95,6 +98,7 @@ public class RequestTypeBean extends AbstractCodeBean {
     @NotNull(message = "Enter value base fee.")
     private BigDecimal valueBaseFee;
     private String displayGroupName;
+    private ConfigPanelLauncherBean servicePanel;
 
     public RequestTypeBean() {
         super();
@@ -272,4 +276,34 @@ public class RequestTypeBean extends AbstractCodeBean {
                 ? getRequestCategory().getDisplayValue() : getDisplayGroupName();
     }
 
+    public String getServicePanelCode() {
+        if (servicePanel != null) {
+            return servicePanel.getCode();
+        } else {
+            return null;
+        }
+    }
+
+    public void setServicePanelCode(String panelCode) {
+        String oldValue = null;
+        if (servicePanel != null) {
+            oldValue = servicePanel.getCode();
+        }
+        setServicePanel(CacheManager.getBeanByCode(CacheManager.getPanelLauncherConfiguration(), panelCode));
+        propertySupport.firePropertyChange(SERVICE_PANEL_CODE_PROPERTY, oldValue, panelCode);
+    }
+
+    public ConfigPanelLauncherBean getServicePanel() {
+        if (servicePanel == null) {
+            servicePanel = new ConfigPanelLauncherBean();
+        }
+        return servicePanel;
+    }
+
+    public void setServicePanel(ConfigPanelLauncherBean panelType) {
+        if (this.servicePanel == null) {
+            this.servicePanel = new ConfigPanelLauncherBean();
+        }
+        this.setJointRefDataBean(this.servicePanel, panelType, SERVICE_PANEL_PROPERTY);
+    }
 }

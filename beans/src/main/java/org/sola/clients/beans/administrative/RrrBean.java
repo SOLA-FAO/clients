@@ -1,28 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.beans.administrative;
@@ -104,13 +106,13 @@ public class RrrBean extends AbstractTransactionedBean {
     public static final String SELECTED_RIGHTHOLDER_PROPERTY = "selectedRightHolder";
     public static final String DUE_DATE_PROPERTY = "dueDate";
     public static final String SELECTED_CONDITION_PROPERTY = "selectedCondition";
-    
+
     private String baUnitId;
     private String nr;
     @Past(message = ClientMessage.CHECK_REGISTRATION_DATE, payload = Localized.class)
     private Date registrationDate;
     private String transactionId;
-    @NotNull(message = ClientMessage.CHECK_NOTNULL_EXPIRATION, payload = Localized.class, 
+    @NotNull(message = ClientMessage.CHECK_NOTNULL_EXPIRATION, payload = Localized.class,
             groups = {MortgageValidationGroup.class, LeaseValidationGroup.class})
     @Future(message = ClientMessage.CHECK_FUTURE_EXPIRATION, payload = Localized.class,
             groups = {MortgageValidationGroup.class})
@@ -405,7 +407,7 @@ public class RrrBean extends AbstractTransactionedBean {
         return rightHolderList.getFilteredList();
     }
 
-    @Size(min = 1, groups = {SimpleOwnershipValidationGroup.class, LeaseValidationGroup.class}, 
+    @Size(min = 1, groups = {SimpleOwnershipValidationGroup.class, LeaseValidationGroup.class},
             message = ClientMessage.CHECK_SIZE_OWNERSLIST, payload = Localized.class)
     private ObservableList<PartySummaryBean> getFilteredOwnersList() {
         return rightHolderList.getFilteredList();
@@ -415,36 +417,36 @@ public class RrrBean extends AbstractTransactionedBean {
         return conditionsList;
     }
 
-    @Size(min = 1, groups = {SimpleOwnershipValidationGroup.class, LeaseValidationGroup.class}, 
+    @Size(min = 1, groups = {SimpleOwnershipValidationGroup.class, LeaseValidationGroup.class},
             message = ClientMessage.CHECK_SIZE_CONDITIONS_LIST, payload = Localized.class)
     public ObservableList<ConditionForRrrBean> getConditionsFilteredList() {
         return conditionsList.getFilteredList();
     }
-    
+
     public void setConditionsList(SolaList<ConditionForRrrBean> conditionsList) {
         this.conditionsList = conditionsList;
     }
-    
-    public ArrayList<ConditionForRrrBean> getCustomConditions(){
+
+    public ArrayList<ConditionForRrrBean> getCustomConditions() {
         ArrayList<ConditionForRrrBean> conditions = new ArrayList<ConditionForRrrBean>();
-        for(ConditionForRrrBean cond : getConditionsFilteredList()){
-            if(cond.isCustomCondition()){
+        for (ConditionForRrrBean cond : getConditionsFilteredList()) {
+            if (cond.isCustomCondition()) {
                 conditions.add(cond);
             }
         }
         return conditions;
     }
-    
-    public ArrayList<ConditionForRrrBean> getStandardConditions(){
+
+    public ArrayList<ConditionForRrrBean> getStandardConditions() {
         ArrayList<ConditionForRrrBean> conditions = new ArrayList<ConditionForRrrBean>();
-        for(ConditionForRrrBean cond : getConditionsFilteredList()){
-            if(!cond.isCustomCondition()){
+        for (ConditionForRrrBean cond : getConditionsFilteredList()) {
+            if (!cond.isCustomCondition()) {
                 conditions.add(cond);
             }
         }
         return conditions;
     }
-    
+
     public void setRightHolderList(SolaList<PartySummaryBean> rightHolderList) {
         this.rightHolderList = rightHolderList;
     }
@@ -474,54 +476,62 @@ public class RrrBean extends AbstractTransactionedBean {
             getRightHolderList().safeRemove(selectedRightholder, EntityAction.DISASSOCIATE);
         }
     }
-    
-    /** Removes selected condition. */
+
+    /**
+     * Removes selected condition.
+     */
     public void removeSelectedRrrCondition() {
         if (selectedCondition != null) {
             getConditionsList().safeRemove(selectedCondition, EntityAction.DISASSOCIATE);
         }
     }
 
-    /** 
-     * Adds conditions to the list 
-     * @param conditions List of {@link ConditionTypeBean} that needs to be added in the list
+    /**
+     * Adds conditions to the list
+     *
+     * @param conditions List of {@link ConditionTypeBean} that needs to be
+     * added in the list
      */
-    public void addConditions(List<ConditionTypeBean> conditions){
-        if(conditions == null || getConditionsList() == null){
+    public void addConditions(List<ConditionTypeBean> conditions) {
+        if (conditions == null || getConditionsList() == null) {
             return;
         }
-        for(ConditionTypeBean cond : conditions){
+        for (ConditionTypeBean cond : conditions) {
             addCondition(cond);
         }
     }
-    
-    /** 
-     * Adds condition to the list 
-     * @param condition {@link LeaseConditionForRrrBean} that needs to be added in the list
+
+    /**
+     * Adds condition to the list
+     *
+     * @param condition {@link LeaseConditionForRrrBean} that needs to be added
+     * in the list
      */
-    public void addRrrCondition(ConditionForRrrBean condition){
-        if(condition == null || getConditionsList() == null){
+    public void addRrrCondition(ConditionForRrrBean condition) {
+        if (condition == null || getConditionsList() == null) {
             return;
         }
-        if(condition.isCustomCondition()){
+        if (condition.isCustomCondition()) {
             condition.setConditionType(null);
         }
         getConditionsList().addAsNew(condition);
     }
-    
-    /** 
-     * Adds lease condition in the list 
-     * @param condition {@link ConditionTypeBean} that needs to be added in the list.
-     * New {@link ConditionForRrrBean} will be created and added in the list.
+
+    /**
+     * Adds lease condition in the list
+     *
+     * @param condition {@link ConditionTypeBean} that needs to be added in the
+     * list. New {@link ConditionForRrrBean} will be created and added in the
+     * list.
      */
-    public void addCondition(ConditionTypeBean condition){
-        if(condition == null || getConditionsList() == null){
+    public void addCondition(ConditionTypeBean condition) {
+        if (condition == null || getConditionsList() == null) {
             return;
         }
-        for(ConditionForRrrBean conditionForRrr : getConditionsList()){
-            if(conditionForRrr.getConditionCode()!=null && 
-                    conditionForRrr.getConditionCode().equals(condition.getCode())){
-                if(conditionForRrr.getEntityAction() == EntityAction.DELETE || conditionForRrr.getEntityAction() == EntityAction.DISASSOCIATE){
+        for (ConditionForRrrBean conditionForRrr : getConditionsList()) {
+            if (conditionForRrr.getConditionCode() != null
+                    && conditionForRrr.getConditionCode().equals(condition.getCode())) {
+                if (conditionForRrr.getEntityAction() == EntityAction.DELETE || conditionForRrr.getEntityAction() == EntityAction.DISASSOCIATE) {
                     conditionForRrr.setEntityAction(null);
                 }
                 return;
@@ -531,7 +541,7 @@ public class RrrBean extends AbstractTransactionedBean {
         newLeaseForRrr.setConditionType(condition);
         getConditionsList().addAsNew(newLeaseForRrr);
     }
-    
+
     public void addOrUpdateRightholder(PartySummaryBean rightholder) {
         if (rightholder != null && rightHolderList != null) {
             if (rightHolderList.contains(rightholder)) {
@@ -583,7 +593,7 @@ public class RrrBean extends AbstractTransactionedBean {
                 shareBean.resetVersion();
                 shareBean.setRrrId(getId());
             }
-            for(ConditionForRrrBean leaseCondition: getConditionsList()){
+            for (ConditionForRrrBean leaseCondition : getConditionsList()) {
                 leaseCondition.resetVersion();
             }
             getNotation().generateId();

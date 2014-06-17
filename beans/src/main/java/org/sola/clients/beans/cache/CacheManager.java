@@ -1,28 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.beans.cache;
@@ -37,7 +39,9 @@ import org.sola.clients.beans.AbstractIdBean;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.beans.referencedata.*;
 import org.sola.clients.beans.security.RoleBean;
+import org.sola.clients.beans.system.ConfigPanelLauncherBean;
 import org.sola.clients.beans.system.LanguageBean;
+import org.sola.clients.beans.system.PanelLauncherGroupBean;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 import org.sola.services.boundary.wsclients.AbstractWSClient;
@@ -54,7 +58,8 @@ public final class CacheManager {
      */
     public static final String REQUEST_TYPES_KEY = RequestTypeBean.class.getName() + LIST_POSTFIX;
     /**
-     * Cache key of the code/displayValue map based on {@link RequestTypeBean} collection.
+     * Cache key of the code/displayValue map based on {@link RequestTypeBean}
+     * collection.
      */
     public static final String REQUEST_TYPES_MAP_KEY = RequestTypeBean.class.getName() + MAP_POSTFIX;
     /**
@@ -62,7 +67,8 @@ public final class CacheManager {
      */
     public static final String COMMUNICATION_TYPES_KEY = CommunicationTypeBean.class.getName() + LIST_POSTFIX;
     /**
-     * Cache key of the code/displayValue map based on {@link CommunicationTypeBean} collection.
+     * Cache key of the code/displayValue map based on
+     * {@link CommunicationTypeBean} collection.
      */
     public static final String COMMUNICATION_TYPES_MAP_KEY = CommunicationTypeBean.class.getName() + MAP_POSTFIX;
     /**
@@ -70,7 +76,8 @@ public final class CacheManager {
      */
     public static final String GENDER_TYPES_KEY = GenderTypeBean.class.getName() + LIST_POSTFIX;
     /**
-     * Cache key of the code/displayValue map based on {@link GenderTypeBean} collection.
+     * Cache key of the code/displayValue map based on {@link GenderTypeBean}
+     * collection.
      */
     public static final String GENDER_TYPES_MAP_KEY = GenderTypeBean.class.getName() + MAP_POSTFIX;
     /**
@@ -78,7 +85,8 @@ public final class CacheManager {
      */
     public static final String SOURCE_TYPES_KEY = SourceTypeBean.class.getName() + LIST_POSTFIX;
     /**
-     * Cache key of the code/displayValue map based on {@link SourceTypeBean} collection.
+     * Cache key of the code/displayValue map based on {@link SourceTypeBean}
+     * collection.
      */
     public static final String SOURCE_TYPES_MAP_KEY = SourceTypeBean.class.getName() + MAP_POSTFIX;
     /**
@@ -86,7 +94,8 @@ public final class CacheManager {
      */
     public static final String APP_STATUS_TYPE_CODES_KEY = ApplicationStatusTypeBean.class.getName() + LIST_POSTFIX;
     /**
-     * Cache key of the code/displayValue map based on {@link ApplicationStatusTypeBean} collection.
+     * Cache key of the code/displayValue map based on
+     * {@link ApplicationStatusTypeBean} collection.
      */
     public static final String APP_STATUS_TYPE_CODES_MAP_KEY = ApplicationStatusTypeBean.class.getName() + MAP_POSTFIX;
     /**
@@ -189,11 +198,24 @@ public final class CacheManager {
      * Cache key of the {@link LeaseConditionBean} collection.
      */
     public static final String CONDITION_TYPE_CODES_KEY = ConditionTypeBean.class.getName() + LIST_POSTFIX;
-    
+
     /**
      * Cache key of the {@link HierarchyLevelBean} collection.
      */
     public static final String HIERARCHY_LEVEL_KEY = HierarchyLevelBean.class.getName() + LIST_POSTFIX;
+
+    /**
+     * Cache key of the
+     * {@link org.sola.clients.beans.system.ConfigPanelLauncherBean} collection.
+     */
+    public static final String CONFIG_PANEL_LAUNCHER_KEY = ConfigPanelLauncherBean.class.getName() + LIST_POSTFIX;
+    
+        /**
+     * Cache key of the
+     * {@link org.sola.clients.beans.system.PanelLauncherGroupBean} collection.
+     */
+    public static final String CONFIG_PANEL_LAUNCHER_GROUP_KEY = PanelLauncherGroupBean.class.getName() + LIST_POSTFIX;
+    
 
     private static final String GET_APPLICATION_STATUS_TYPES = "getApplicationStatusTypes";
     private static final String GET_SOURCE_TYPES = "getSourceTypes";
@@ -225,7 +247,9 @@ public final class CacheManager {
     private static final String GET_LAND_USE_TYPES = "getLandUseTypes";
     private static final String GET_CONDITION_TYPES = "getConditionTypes";
     private static final String GET_HIERARCHY_LEVELS = "getHierarchyLevels";
-            
+    private static final String GET_PANEL_LAUNCHER_CONFIG = "getPanelLauncherConfiguration";
+    private static final String GET_PANEL_LAUNCHER_GROUPS = "getPanelLauncherGroups";
+
     public static List<BrValidationTargetTypeBean> getBrValidationTargetTypes() {
         return getCachedBeanList(BrValidationTargetTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
@@ -339,7 +363,7 @@ public final class CacheManager {
                 WSManager.getInstance().getReferenceDataService(),
                 GET_CONDITION_TYPES, CONDITION_TYPE_CODES_KEY);
     }
-    
+
     public static List<PartyTypeBean> getPartyTypes() {
         return getCachedBeanList(PartyTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
@@ -379,8 +403,8 @@ public final class CacheManager {
     public static Map getApplicationStatusTypesMap() {
         return getCachedMap(
                 getCachedBeanList(ApplicationStatusTypeBean.class,
-                WSManager.getInstance().getReferenceDataService(),
-                GET_APPLICATION_STATUS_TYPES, APP_STATUS_TYPE_CODES_KEY),
+                        WSManager.getInstance().getReferenceDataService(),
+                        GET_APPLICATION_STATUS_TYPES, APP_STATUS_TYPE_CODES_KEY),
                 APP_STATUS_TYPE_CODES_MAP_KEY);
     }
 
@@ -393,8 +417,8 @@ public final class CacheManager {
     public static Map getSourceTypesMap() {
         return getCachedMap(
                 getCachedBeanList(SourceTypeBean.class,
-                WSManager.getInstance().getReferenceDataService(),
-                GET_SOURCE_TYPES, SOURCE_TYPES_KEY),
+                        WSManager.getInstance().getReferenceDataService(),
+                        GET_SOURCE_TYPES, SOURCE_TYPES_KEY),
                 SOURCE_TYPES_MAP_KEY);
     }
 
@@ -407,8 +431,8 @@ public final class CacheManager {
     public static Map getCommunicationTypesMap() {
         return getCachedMap(
                 getCachedBeanList(CommunicationTypeBean.class,
-                WSManager.getInstance().getReferenceDataService(),
-                GET_COMMUNICATION_TYPES, COMMUNICATION_TYPES_KEY),
+                        WSManager.getInstance().getReferenceDataService(),
+                        GET_COMMUNICATION_TYPES, COMMUNICATION_TYPES_KEY),
                 COMMUNICATION_TYPES_MAP_KEY);
     }
 
@@ -421,8 +445,8 @@ public final class CacheManager {
     public static Map getGenderTypesMap() {
         return getCachedMap(
                 getCachedBeanList(GenderTypeBean.class,
-                WSManager.getInstance().getReferenceDataService(),
-                GET_GENDER_TYPES, GENDER_TYPES_KEY),
+                        WSManager.getInstance().getReferenceDataService(),
+                        GET_GENDER_TYPES, GENDER_TYPES_KEY),
                 GENDER_TYPES_MAP_KEY);
     }
 
@@ -435,8 +459,8 @@ public final class CacheManager {
     public static Map getRequestTypesMap() {
         return getCachedMap(
                 getCachedBeanList(RequestTypeBean.class,
-                WSManager.getInstance().getReferenceDataService(),
-                GET_REQUEST_TYPES, REQUEST_TYPES_KEY),
+                        WSManager.getInstance().getReferenceDataService(),
+                        GET_REQUEST_TYPES, REQUEST_TYPES_KEY),
                 REQUEST_TYPES_MAP_KEY);
     }
 
@@ -444,6 +468,18 @@ public final class CacheManager {
         return getCachedBeanList(HierarchyLevelBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_HIERARCHY_LEVELS, HIERARCHY_LEVEL_KEY);
+    }
+
+    public static List<ConfigPanelLauncherBean> getPanelLauncherConfiguration() {
+        return getCachedBeanList(ConfigPanelLauncherBean.class,
+                WSManager.getInstance().getAdminService(),
+                GET_PANEL_LAUNCHER_CONFIG, CONFIG_PANEL_LAUNCHER_KEY);
+    }
+    
+        public static List<PanelLauncherGroupBean> getPanelLauncherGroups() {
+        return getCachedBeanList(PanelLauncherGroupBean.class,
+                WSManager.getInstance().getAdminService(),
+                GET_PANEL_LAUNCHER_GROUPS, CONFIG_PANEL_LAUNCHER_GROUP_KEY);
     }
 
     /**

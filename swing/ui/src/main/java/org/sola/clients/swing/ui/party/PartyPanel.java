@@ -1,28 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.ui.party;
@@ -45,7 +47,8 @@ import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
 /**
- * Used to create or edit party object. {@link PartyBean} is used to bind data on the form.
+ * Used to create or edit party object. {@link PartyBean} is used to bind data
+ * on the form.
  */
 public class PartyPanel extends javax.swing.JPanel {
 
@@ -53,20 +56,23 @@ public class PartyPanel extends javax.swing.JPanel {
     static String individualString = "naturalPerson";
     static String entityString = "nonNaturalPerson";
     private static final String individualLabel = MessageUtility.getLocalizedMessage(
-                            ClientMessage.GENERAL_LABELS_INDIVIDUAL).getMessage();
+            ClientMessage.GENERAL_LABELS_INDIVIDUAL).getMessage();
     private static final String entityLabel = MessageUtility.getLocalizedMessage(
-                            ClientMessage.GENERAL_LABELS_ENTITY).getMessage();
+            ClientMessage.GENERAL_LABELS_ENTITY).getMessage();
     private boolean readOnly = false;
 
-    /** Default form constructor. */
+    /**
+     * Default form constructor.
+     */
     public PartyPanel() {
         readOnly = false;
         initComponents();
     }
 
-    /** 
-     * Form constructor. 
-     * @param savePartyOnAction Boolean flag to indicate whether to save party 
+    /**
+     * Form constructor.
+     *
+     * @param savePartyOnAction Boolean flag to indicate whether to save party
      * when Save button is clicked.
      * @param partyBean {@link PartyBean} instance to display.
      * @param readOnly Indicates whether to allow any changes on the form.
@@ -90,13 +96,13 @@ public class PartyPanel extends javax.swing.JPanel {
         customizeRoleButtons(null);
     }
 
-    private PartyRoleTypeListBean createPartyRolesList(){
-        if(partyRoleTypes == null){
+    private PartyRoleTypeListBean createPartyRolesList() {
+        if (partyRoleTypes == null) {
             partyRoleTypes = new PartyRoleTypeListBean(true);
         }
         return partyRoleTypes;
     }
-    
+
     public boolean isReadOnly() {
         return readOnly;
     }
@@ -139,17 +145,19 @@ public class PartyPanel extends javax.swing.JPanel {
         return communicationTypes;
     }
 
-    /** Setup reference data bean object, used to bind data on the form. */
+    /**
+     * Setup reference data bean object, used to bind data on the form.
+     */
     private void setupPartyBean(PartyBean partyBean) {
         detailsPanel.setSelectedIndex(0);
         cbxPartyRoleTypes.setSelectedIndex(0);
-        
+
         if (partyBean != null) {
             this.partyBean = partyBean;
         } else {
             this.partyBean = new PartyBean();
         }
-        
+
         communicationTypes.setExcludedCodes(this.partyBean.getPreferredCommunicationCode());
         idTypes.setExcludedCodes(this.partyBean.getIdTypeCode());
         genderTypes.setExcludedCodes(this.partyBean.getGenderCode());
@@ -169,24 +177,26 @@ public class PartyPanel extends javax.swing.JPanel {
         BindingTools.refreshBinding(bindingGroup, "rolesGroup");
     }
 
-    /** 
-     * Enables or disables "add", depending on selection in the list of role 
-     * types and user rights. 
+    /**
+     * Enables or disables "add", depending on selection in the list of role
+     * types and user rights.
      */
     private void customizeAddRoleButton(PartyRoleTypeBean partyRoleType) {
-        btnAddRole.setEnabled(partyRoleType != null && !readOnly && partyRoleType.getCode()!=null);
+        btnAddRole.setEnabled(partyRoleType != null && !readOnly && partyRoleType.getCode() != null);
     }
 
-    /** 
-     * Enables or disables "remove" and "view" buttons for roles, depending on 
-     * selection in the roles list and user rights. 
+    /**
+     * Enables or disables "remove" and "view" buttons for roles, depending on
+     * selection in the roles list and user rights.
      */
     private void customizeRoleButtons(PartyRoleBean partyRole) {
         btnRemoveRole.setEnabled(partyRole != null && !readOnly);
         menuRemoveRole.setEnabled(btnRemoveRole.isEnabled());
     }
 
-    /** Applies post initialization settings. */
+    /**
+     * Applies post initialization settings.
+     */
     private void customizePanel() {
         if (partyBean.isNew()) {
             switchPartyType(true);
@@ -228,7 +238,9 @@ public class PartyPanel extends javax.swing.JPanel {
         }
     }
 
-    /** Switch individual and entity type */
+    /**
+     * Switch individual and entity type
+     */
     private void switchPartyType(boolean isIndividual) {
         if (isIndividual) {
             partyBean.setTypeCode(individualString);
@@ -261,19 +273,19 @@ public class PartyPanel extends javax.swing.JPanel {
         cbxIdType.setEnabled(enable);
         txtIdref.setEnabled(enable);
     }
-    
-    public boolean validateParty(boolean showMessage){
+
+    public boolean validateParty(boolean showMessage) {
         return partyBean.validate(showMessage).size() < 1;
     }
-    
-    public boolean saveParty(){
+
+    public boolean saveParty() {
         if (validateParty(true)) {
             return partyBean.saveParty();
         } else {
             return false;
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

@@ -1,34 +1,37 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.desktop.application;
 
 import java.awt.ComponentOrientation;
 import java.awt.Frame;
+import java.awt.event.KeyEvent;
 import java.util.Locale;
 import javax.swing.ImageIcon;
 import org.jdesktop.observablecollections.ObservableList;
@@ -41,22 +44,24 @@ import org.sola.clients.beans.controls.SolaList;
 public class PropertiesList extends javax.swing.JDialog {
 
     public static final String SELECTED_PROPERTY = "selectedProperty";
-    
+
     private SolaList propertyList;
     private ApplicationPropertyBean selectedProperty;
-    
-    /** Creates new form PropertiesList */
+
+    /**
+     * Creates new form PropertiesList
+     */
     public PropertiesList() {
         this(new SolaList());
     }
 
     public PropertiesList(SolaList<ApplicationPropertyBean> propertyList) {
-        super((Frame)null, true);
+        super((Frame) null, true);
         this.propertyList = propertyList;
         initComponents();
         this.setIconImage(new ImageIcon(PropertiesList.class.getResource("/images/sola/logo_icon.jpg")).getImage());
     }
-    
+
     public ObservableList<ApplicationPropertyBean> getPropertyList() {
         return propertyList.getFilteredList();
     }
@@ -117,11 +122,18 @@ public class PropertiesList extends javax.swing.JDialog {
                 tablePropertiesMouseCliecked(evt);
             }
         });
+        tabPropertyDetails.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tabPropertyDetailsKeyPressed(evt);
+            }
+        });
         scrollPropertyDetails.setViewportView(tabPropertyDetails);
-        tabPropertyDetails.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("PropertiesList.tabPropertyDetails.columnModel.title0")); // NOI18N
-        tabPropertyDetails.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("PropertiesList.tabPropertyDetails.columnModel.title1")); // NOI18N
-        tabPropertyDetails.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PropertiesList.tabPropertyDetails.columnModel.title2")); // NOI18N
-        tabPropertyDetails.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("PropertiesList.tabPropertyDetails.columnModel.title3")); // NOI18N
+        if (tabPropertyDetails.getColumnModel().getColumnCount() > 0) {
+            tabPropertyDetails.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("PropertiesList.tabPropertyDetails.columnModel.title0")); // NOI18N
+            tabPropertyDetails.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("PropertiesList.tabPropertyDetails.columnModel.title1")); // NOI18N
+            tabPropertyDetails.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PropertiesList.tabPropertyDetails.columnModel.title2")); // NOI18N
+            tabPropertyDetails.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("PropertiesList.tabPropertyDetails.columnModel.title3")); // NOI18N
+        }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -140,10 +152,16 @@ public class PropertiesList extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tablePropertiesMouseCliecked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablePropertiesMouseCliecked
-        if(selectedProperty!=null){
+        if (selectedProperty != null) {
             firePropertyChange(SELECTED_PROPERTY, null, selectedProperty);
         }
     }//GEN-LAST:event_tablePropertiesMouseCliecked
+
+    private void tabPropertyDetailsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabPropertyDetailsKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER && selectedProperty != null) {
+            firePropertyChange(SELECTED_PROPERTY, null, selectedProperty);
+        }
+    }//GEN-LAST:event_tabPropertyDetailsKeyPressed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane scrollPropertyDetails;

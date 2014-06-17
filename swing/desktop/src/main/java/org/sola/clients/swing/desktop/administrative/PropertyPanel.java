@@ -1,28 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.desktop.administrative;
@@ -46,6 +48,7 @@ import org.sola.clients.beans.referencedata.*;
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.beans.source.SourceBean;
 import org.sola.clients.beans.source.SourceListBean;
+import org.sola.clients.beans.system.PanelLauncherGroupBean;
 import org.sola.clients.reports.ReportManager;
 import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.common.tasks.SolaTask;
@@ -55,6 +58,7 @@ import org.sola.clients.swing.desktop.cadastre.SearchParcelDialog;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForBaUnit;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
+import org.sola.clients.swing.ui.PanelLauncher;
 import org.sola.clients.swing.ui.cadastre.CadastreObjectsDialog;
 import org.sola.clients.swing.ui.renderers.*;
 import org.sola.clients.swing.ui.reports.ReportViewerForm;
@@ -84,8 +88,9 @@ public class PropertyPanel extends ContentPanel {
 
         @Override
         public void propertyChange(PropertyChangeEvent evt) {
-            // Add new RRR
-            if (evt.getNewValue() != null) {
+            if (evt.getPropertyName().equals(SimpleRightPanel.UPDATED_RRR)
+                    && evt.getNewValue() != null) {
+                // Add new RRR
                 baUnitBean1.addRrr((RrrBean) evt.getNewValue());
                 tableRights.clearSelection();
             }
@@ -186,7 +191,7 @@ public class PropertyPanel extends ContentPanel {
      */
     public PropertyPanel(ApplicationBean applicationBean,
             ApplicationServiceBean applicationService,
-            String nameFirstPart, String nameLastPart, boolean readOnly) {
+            String nameFirstPart, String nameLastPart, Boolean readOnly) {
         this.readOnly = readOnly || !SecurityBean.isInRole(RolesConstants.ADMINISTRATIVE_BA_UNIT_SAVE);
         this.applicationBean = applicationBean;
         this.applicationService = applicationService;
@@ -211,7 +216,7 @@ public class PropertyPanel extends ContentPanel {
      */
     public PropertyPanel(ApplicationBean applicationBean,
             ApplicationServiceBean applicationService,
-            BaUnitBean baUnitBean, boolean readOnly) {
+            BaUnitBean baUnitBean, Boolean readOnly) {
         this.baUnitBean1 = baUnitBean;
         this.readOnly = readOnly || !SecurityBean.isInRole(RolesConstants.ADMINISTRATIVE_BA_UNIT_SAVE);
         this.applicationBean = applicationBean;
@@ -224,7 +229,6 @@ public class PropertyPanel extends ContentPanel {
         resourceBundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle");
         initComponents();
         portInit();
-
 
     }
 
@@ -328,12 +332,11 @@ public class PropertyPanel extends ContentPanel {
             }
         }
 
-
         if (applicationBean != null && applicationService != null) {
             headerPanel.setTitleText(String.format("%s, %s",
                     headerPanel.getTitleText(),
                     String.format(resourceBundle.getString("PropertyPanel.applicationInfo.Text"),
-                    applicationService.getRequestType().getDisplayValue(), applicationBean.getNr())));
+                            applicationService.getRequestType().getDisplayValue(), applicationBean.getNr())));
         }
 
         btnSave.setEnabled(!readOnly);
@@ -622,8 +625,6 @@ public class PropertyPanel extends ContentPanel {
             cbxRightType.setEnabled(true);
 
             // Restrict selection of right type by application service
-
-
             if (applicationService != null && applicationService.getRequestType() != null
                     && applicationService.getRequestType().getRrrTypeCode() != null) {
                 rrrTypes.setSelectedRightByCode(applicationService.getRequestType().getRrrTypeCode());
@@ -924,46 +925,17 @@ public class PropertyPanel extends ContentPanel {
             rrrBean.setTypeCode(rrrTypes.getSelectedRrrType().getCode());
         }
 
-        RightFormListener rightFormListener = new RightFormListener();
-        ContentPanel panel;
-        String cardName = MainContentPanel.CARD_SIMPLE_RIGHT;
-        String rrrCode = rrrBean.getRrrType().getCode();
+        // Determine the panel to open for the Rrr
+        String rrrPanelCode = rrrBean.getRrrType().getRrrPanelCode();
 
-        if (rrrCode.equals(RrrBean.CODE_MORTGAGE)) {
-            panel = new MortgagePanel(rrrBean, applicationBean, applicationService, action);
-            cardName = MainContentPanel.CARD_MORTGAGE;
-        } else if (rrrCode.equalsIgnoreCase(RrrBean.CODE_LEASE)) {
-            panel = new LeasePanel(baUnitBean1, rrrBean, applicationBean, applicationService, action);
-            cardName = MainContentPanel.CARD_LEASE;
-        } else if (rrrCode.equalsIgnoreCase(RrrBean.CODE_AGRI_ACTIVITY)
-                || rrrCode.equalsIgnoreCase(RrrBean.CODE_COMMON_OWNERSHIP)
-                || rrrCode.equalsIgnoreCase(RrrBean.CODE_CUSTOMARY_TYPE)
-                || rrrCode.equalsIgnoreCase(RrrBean.CODE_FIREWOOD)
-                || rrrCode.equalsIgnoreCase(RrrBean.CODE_FISHING)
-                || rrrCode.equalsIgnoreCase(RrrBean.CODE_GRAZING)
-                || rrrCode.equalsIgnoreCase(RrrBean.CODE_OCCUPATION)
-                || rrrCode.equalsIgnoreCase(RrrBean.CODE_OWNERSHIP_ASSUMED)
-                || rrrCode.equalsIgnoreCase(RrrBean.CODE_SUPERFICIES)
-                || rrrCode.equalsIgnoreCase(RrrBean.CODE_TENANCY)
-                || rrrCode.equalsIgnoreCase(RrrBean.CODE_USUFRUCT)
-                || rrrCode.equalsIgnoreCase(RrrBean.CODE_WATERRIGHTS)
-                || rrrCode.equalsIgnoreCase(RrrBean.CODE_ADMIN_PUBLIC_SERVITUDE)
-                || rrrCode.equalsIgnoreCase(RrrBean.CODE_MONUMENT)
-                || rrrCode.equalsIgnoreCase(RrrBean.CODE_LIFE_ESTATE)
-                || rrrCode.equalsIgnoreCase(RrrBean.CODE_CAVEAT)) {
-            panel = new SimpleRightholderPanel(rrrBean, applicationBean, applicationService, action);
-            cardName = MainContentPanel.CARD_SIMPLE_OWNERSHIP;
-        } else if (rrrCode.equalsIgnoreCase(RrrBean.CODE_OWNERSHIP)
-                || rrrCode.equalsIgnoreCase(RrrBean.CODE_STATE_OWNERSHIP)
-                || rrrCode.equalsIgnoreCase(RrrBean.CODE_APARTMENT)) {
-            panel = new OwnershipPanel(rrrBean, applicationBean, applicationService, action);
-            cardName = MainContentPanel.CARD_OWNERSHIP;
+        if (PanelLauncher.isLaunchGroup(PanelLauncherGroupBean.CODE_LEASE_RRR, rrrPanelCode)) {
+            // Lease RRR requires additional constructor argument
+            PanelLauncher.launch(rrrPanelCode, getMainContentPanel(), new RightFormListener(), null,
+                    baUnitBean1, rrrBean, applicationBean, applicationService, action);
         } else {
-            panel = new SimpleRightPanel(rrrBean, applicationBean, applicationService, action);
+            PanelLauncher.launch(rrrPanelCode, getMainContentPanel(), new RightFormListener(), null,
+                    rrrBean, applicationBean, applicationService, action);
         }
-
-        panel.addPropertyChangeListener(SimpleRightPanel.UPDATED_RRR, rightFormListener);
-        getMainContentPanel().addPanel(panel, cardName, true);
     }
 
     private void calculateAreaSysreg() {
@@ -1016,7 +988,6 @@ public class PropertyPanel extends ContentPanel {
             } else {
                 java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle");
 
-
                 if (baUnitAreaBean1.getSize() == null) {
                     MessageUtility.displayMessage(ClientMessage.CHECK_BAUNITAREA_VALUE,
                             new Object[]{bundle.getString("PropertyPanel.labArea.text")});
@@ -1024,7 +995,6 @@ public class PropertyPanel extends ContentPanel {
                     txtArea.requestFocus();
                     return;
                 }
-
 
                 baUnitAreaBean1.setTypeCode("officialArea");
                 baUnitAreaBean1.setBaUnitId(baUnitBean1.getId());
@@ -1037,7 +1007,6 @@ public class PropertyPanel extends ContentPanel {
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_SAVING));
 
-
                 if (baUnitID != null && !baUnitID.equals("")) {
                     baUnitBean1.saveBaUnit(applicationService.getId());
                 } else {
@@ -1046,7 +1015,6 @@ public class PropertyPanel extends ContentPanel {
                 if (closeOnSave) {
                     close();
                 }
-
 
                 if ((!txtArea.getText().equals(null)) && txtArea.getText() != "" && (!txtArea.getText().isEmpty())) {
                     baUnitAreaBean1.createBaUnitArea(baUnitBean1.getId());

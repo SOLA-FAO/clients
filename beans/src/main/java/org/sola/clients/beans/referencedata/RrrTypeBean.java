@@ -1,55 +1,62 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.beans.referencedata;
 
 import org.sola.clients.beans.AbstractCodeBean;
 import org.sola.clients.beans.cache.CacheManager;
+import org.sola.clients.beans.system.ConfigPanelLauncherBean;
 import org.sola.clients.beans.validation.CodeBeanNotEmpty;
 import org.sola.webservices.transferobjects.referencedata.RrrTypeTO;
 
-/** 
- * Represents reference data object of the <b>rrr_type</b> table. 
- * Could be populated from the {@link RrrTypeTO} object.<br />
+/**
+ * Represents reference data object of the <b>rrr_type</b> table. Could be
+ * populated from the {@link RrrTypeTO} object.<br />
  * For more information see data dictionary <b>Administrative</b> schema.
  */
 public class RrrTypeBean extends AbstractCodeBean {
+
     public static final String RRR_GROUP_TYPE_PROPERTY = "rrrGroupType";
     public static final String RRR_GROUP_TYPE_CODE_PROPERTY = "rrrGroupTypeCode";
     public static final String IS_PRIMARY_TYPE_PROPERTY = "primary";
     public static final String PARTY_REQUIRED_PROPERTY = "partyRequired";
     public static final String SHARE_CHECK_PROPERTY = "shareCheck";
-    
-    @CodeBeanNotEmpty(message="Select group type.")
+    public static final String RRR_PANEL_PROPERTY = "rrrPanel";
+    public static final String RRR_PANEL_CODE_PROPERTY = "rrrPanelCode";
+
+    @CodeBeanNotEmpty(message = "Select group type.")
     private RrrGroupTypeBean rrrGroupType;
     private boolean primary;
     private boolean partyRequired;
     private boolean shareCheck;
-    
+    private ConfigPanelLauncherBean rrrPanel;
+
     public RrrTypeBean() {
         super();
         rrrGroupType = new RrrGroupTypeBean();
@@ -85,16 +92,16 @@ public class RrrTypeBean extends AbstractCodeBean {
     }
 
     public String getRrrGroupTypeCode() {
-        if(rrrGroupType!=null){
+        if (rrrGroupType != null) {
             return rrrGroupType.getCode();
-        }else{
+        } else {
             return null;
         }
     }
 
     public void setRrrGroupTypeCode(String value) {
-        String old=null;
-        if(rrrGroupType!=null){
+        String old = null;
+        if (rrrGroupType != null) {
             old = rrrGroupType.getCode();
         }
         setRrrGroupType(CacheManager.getBeanByCode(
@@ -112,5 +119,35 @@ public class RrrTypeBean extends AbstractCodeBean {
         propertySupport.firePropertyChange(SHARE_CHECK_PROPERTY, old, value);
     }
 
-}
+    public String getRrrPanelCode() {
+        if (rrrPanel != null) {
+            return rrrPanel.getCode();
+        } else {
+            return null;
+        }
+    }
 
+    public void setRrrPanelCode(String panelCode) {
+        String oldValue = null;
+        if (rrrPanel != null) {
+            oldValue = rrrPanel.getCode();
+        }
+        setRrrPanel(CacheManager.getBeanByCode(CacheManager.getPanelLauncherConfiguration(), panelCode));
+        propertySupport.firePropertyChange(RRR_PANEL_CODE_PROPERTY, oldValue, panelCode);
+    }
+
+    public ConfigPanelLauncherBean getRrrPanel() {
+        if (rrrPanel == null) {
+            rrrPanel = new ConfigPanelLauncherBean();
+        }
+        return rrrPanel;
+    }
+
+    public void setRrrPanel(ConfigPanelLauncherBean panelType) {
+        if (this.rrrPanel == null) {
+            this.rrrPanel = new ConfigPanelLauncherBean();
+        }
+        this.setJointRefDataBean(this.rrrPanel, panelType, RRR_PANEL_PROPERTY);
+    }
+
+}

@@ -1,28 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.desktop.party;
@@ -61,11 +63,10 @@ public class PartyPanelForm extends ContentPanel {
     /**
      * Form constructor.
      *
-     * @param savePartyOnAction If
-     * <code>true</code>, party will be saved into database. If
-     * <code>false</code>, party will be validated and validation result
-     * returned as a value of
-     * {@link PartyPanel.PARTY_SAVED} property change event.
+     * @param savePartyOnAction If <code>true</code>, party will be saved into
+     * database. If <code>false</code>, party will be validated and validation
+     * result returned as a value of {@link PartyPanel.PARTY_SAVED} property
+     * change event.
      */
     public PartyPanelForm(boolean savePartyOnAction) {
         this(savePartyOnAction, null, false, false);
@@ -74,11 +75,10 @@ public class PartyPanelForm extends ContentPanel {
     /**
      * Form constructor.
      *
-     * @param savePartyOnAction If
-     * <code>true</code>, party will be saved into database. If
-     * <code>false</code>, party will be validated and validation result
-     * returned as a value of
-     * {@link PartyPanel.PARTY_SAVED} property change event.
+     * @param savePartyOnAction If <code>true</code>, party will be saved into
+     * database. If <code>false</code>, party will be validated and validation
+     * result returned as a value of {@link PartyPanel.PARTY_SAVED} property
+     * change event.
      * @param partyBean The party bean instance to show on the panel.
      * @param readOnly Indicates whether to display provided {@link PartyBean}
      * in read only mode or not.
@@ -100,11 +100,10 @@ public class PartyPanelForm extends ContentPanel {
     /**
      * Form constructor.
      *
-     * @param savePartyOnAction If
-     * <code>true</code>, party will be saved into database. If
-     * <code>false</code>, party will be validated and validation result
-     * returned as a value of
-     * {@link PartyPanel.PARTY_SAVED} property change event.
+     * @param savePartyOnAction If <code>true</code>, party will be saved into
+     * database. If <code>false</code>, party will be validated and validation
+     * result returned as a value of {@link PartyPanel.PARTY_SAVED} property
+     * change event.
      * @param partySummaryBean The party summary bean instance to retrieve
      * actual {@link PartyBean} to show on the panel.
      * @param readOnly Indicates whether to display provided {@link PartyBean}
@@ -178,11 +177,11 @@ public class PartyPanelForm extends ContentPanel {
         if (closeOnSave) {
             btnSave.setText(MessageUtility.getLocalizedMessage(
                     ClientMessage.GENERAL_LABELS_SAVE_AND_CLOSE).getMessage());
-            
-           if (partyBean == null) { 
-            partyPanel.jPanel1.setVisible(false);
-            partyPanel.groupPanel1.setVisible(false);
-           } 
+
+            if (partyBean == null) {
+                partyPanel.jPanel1.setVisible(false);
+                partyPanel.groupPanel1.setVisible(false);
+            }
         } else {
             btnSave.setText(MessageUtility.getLocalizedMessage(
                     ClientMessage.GENERAL_LABELS_SAVE).getMessage());
