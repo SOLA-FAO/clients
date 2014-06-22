@@ -1,28 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.gis.tool;
@@ -34,6 +36,7 @@ import org.geotools.swing.event.MapMouseEvent;
 import org.geotools.swing.extended.util.Messaging;
 import org.opengis.feature.simple.SimpleFeature;
 import org.sola.clients.swing.gis.beans.CadastreObjectBean;
+import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.layer.CadastreChangeNewCadastreObjectLayer;
 import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -47,6 +50,7 @@ public class CadastreChangeNewCadastreObjectTool
         extends CadastreChangeEditAbstractTool implements TargetCadastreObjectTool {
 
     public final static String NAME = "new-parcel";
+    private static Integer maxAllowedFeatures = null;
     private String toolTip = MessageUtility.getLocalizedMessage(
             GisMessage.CADASTRE_CHANGE_TOOLTIP_NEW_PARCEL).getMessage();
     private String cadastreObjectType;
@@ -54,7 +58,8 @@ public class CadastreChangeNewCadastreObjectTool
     /**
      * Constructor
      *
-     * @param newCadastreObjectLayer The layer where the new cadastre objects are maintained
+     * @param newCadastreObjectLayer The layer where the new cadastre objects
+     * are maintained
      */
     public CadastreChangeNewCadastreObjectTool(
             CadastreChangeNewCadastreObjectLayer newCadastreObjectLayer) {
@@ -71,10 +76,19 @@ public class CadastreChangeNewCadastreObjectTool
         this.getLayer().setCadastreObjectType(cadastreObjectType);
     }
 
+    private static Integer getMaxAllowedFeatures() {
+        if (CadastreChangeNewCadastreObjectTool.maxAllowedFeatures == null) {
+            CadastreChangeNewCadastreObjectTool.maxAllowedFeatures =
+                    Integer.parseInt(PojoDataAccess.getInstance().getWSManager().getAdminService().getSetting(
+                    "cadastre-change-max-allowed-parcels", "20"));
+        }
+        return CadastreChangeNewCadastreObjectTool.maxAllowedFeatures;
+    }
+
     /**
-     * If a new click is done while creating a cadastre object, it has to snap to a point. Because
-     * the only layer used as snaptarget is the NewSurveyPointLayer the only points are the survey
-     * points.
+     * If a new click is done while creating a cadastre object, it has to snap
+     * to a point. Because the only layer used as snaptarget is the
+     * NewSurveyPointLayer the only points are the survey points.
      *
      * @param ev
      */
@@ -85,12 +99,19 @@ public class CadastreChangeNewCadastreObjectTool
             Messaging.getInstance().show(GisMessage.CADASTRE_CHANGE_NEW_CO_MUST_SNAP);
             return;
         }
+        if (this.getLayer().getFeatureCollection().size()
+                >= CadastreChangeNewCadastreObjectTool.getMaxAllowedFeatures()) {
+            MessageUtility.displayMessage(
+                    GisMessage.CADASTRE_CHANGE_ERROR_MAX_NUMBER_OF_PARCELS_REACHED,
+                    new Object[]{CadastreChangeNewCadastreObjectTool.getMaxAllowedFeatures()});
+            return;
+        }
         super.onMouseClicked(ev);
     }
 
     /**
-     * It means a vertex of a cadastre object cannot be changed from this tool. It must be changed
-     * by changing the vertices in the NewSurveyPointLayer.
+     * It means a vertex of a cadastre object cannot be changed from this tool.
+     * It must be changed by changing the vertices in the NewSurveyPointLayer.
      *
      * @param mousePositionInMap
      * @return

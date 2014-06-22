@@ -154,7 +154,7 @@ public class Development {
     /**
      * Test the controls bundle for cadastre change
      */
-    @Ignore
+    //@Ignore
     @Test
     public void testUIControlsBundleForCadastreChange() throws Exception {
         System.out.println("Test ControlsBundle for cadastre change");
@@ -241,6 +241,7 @@ public class Development {
         this.displayControlsBundleForm(ctrl);
     }
 
+    @Ignore
     @Test
     public void TestTitlePlan() throws Exception {
         System.out.println("Test title plan");

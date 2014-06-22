@@ -15,8 +15,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
+import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.feature.SchemaException;
 import org.geotools.geometry.jts.Geometries;
+import org.geotools.geometry.jts.JTS;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.map.extended.layer.ExtendedFeatureLayer;
 import org.geotools.map.extended.layer.ExtendedLayerGraphics;
@@ -58,17 +60,20 @@ public class MapImageGeneratorForSelectedParcel {
     private int imageMargin = 55;
     private int scalebarWidth;
     private int coordinateLineLength = 6;
+    private double[] scaleRange = new double[]{500, 1000, 2000, 2500, 5000, 10000, 20000, 25000, 50000};
 
     /**
-     * Constructor of the class that generates map image and scalebar information.
-     * 
+     * Constructor of the class that generates map image and scalebar
+     * information.
+     *
      * @param imageWidth The map image width
      * @param imageHeight The map image height
-     * @param scalebarWidth The scalebar width. The returned width of the scalebar can vary to fit a good scale.
+     * @param scalebarWidth The scalebar width. The returned width of the
+     * scalebar can vary to fit a good scale.
      * @param scalebarHeight The scalebar height
      * @throws InitializeLayerException
      * @throws InitializeMapException
-     * @throws SchemaException 
+     * @throws SchemaException
      */
     public MapImageGeneratorForSelectedParcel(
             int imageWidth, int imageHeight, int scalebarWidth, int scalebarHeight)
@@ -88,6 +93,8 @@ public class MapImageGeneratorForSelectedParcel {
         mapImageGenerator.setTextInTheMapCenter(null);
         scalebarGenerator = new ScalebarGenerator();
         scalebarGenerator.setHeight(scalebarHeight);
+
+        this.setScaleRange();
     }
 
     public int getImageMargin() {
@@ -177,10 +184,9 @@ public class MapImageGeneratorForSelectedParcel {
             addFeature(cadastreObject);
         }
         SimpleFeature targetFeature = addFeature(targetObject);
-        ReferencedEnvelope extent =
-                new ReferencedEnvelope(layer.getFeatureCollection().getBounds(), 
-                this.map.getMapContent().getCoordinateReferenceSystem());
-        extent.expandBy(10);
+        ReferencedEnvelope extent = getProperExtent();
+        //        new ReferencedEnvelope(layer.getFeatureCollection().getBounds(),
+        //        this.map.getMapContent().getCoordinateReferenceSystem());
         double scale = getProperScale(extent);
         String mapImageLocation = this.getMapImageAsFileLocation(
                 extent, scale, String.format("map-%s", cadastreObjectID));
@@ -206,33 +212,33 @@ public class MapImageGeneratorForSelectedParcel {
 
         graphics.drawImage(mapOnlyImage, null, 0, 0);
         graphics.setColor(Color.BLACK);
-        graphics.drawRect(0, 0, getMapOnlyWidth()-1, getMapOnlyHeight()-1);
-        
+        graphics.drawRect(0, 0, getMapOnlyWidth() - 1, getMapOnlyHeight() - 1);
+
         //Print the coordinates in the bottom right corner
-        int xCoordinate =  ((int)extent.getMaxX()/10) * 10;
-        int yCoordinate =  (((int)extent.getMinY()/10) * 10)+10;
-        double pixelPerMeter = getMapOnlyWidth()/ extent.getWidth();
-        int xCoordinateLocation = getMapOnlyWidth() - 1 
-                - (int)((extent.getMaxX()-xCoordinate)* pixelPerMeter);
+        int xCoordinate = ((int) extent.getMaxX() / 10) * 10;
+        int yCoordinate = (((int) extent.getMinY() / 10) * 10) + 10;
+        double pixelPerMeter = getMapOnlyWidth() / extent.getWidth();
+        int xCoordinateLocation = getMapOnlyWidth() - 1
+                - (int) ((extent.getMaxX() - xCoordinate) * pixelPerMeter);
         int yCoordinateLocation = getMapOnlyHeight() - 1
-                - (int)((yCoordinate- extent.getMinY())*pixelPerMeter);
+                - (int) ((yCoordinate - extent.getMinY()) * pixelPerMeter);
         graphics.drawLine(
-                getMapOnlyWidth()-1- coordinateLineLength, yCoordinateLocation, 
-                getMapOnlyWidth()-1, yCoordinateLocation);
+                getMapOnlyWidth() - 1 - coordinateLineLength, yCoordinateLocation,
+                getMapOnlyWidth() - 1, yCoordinateLocation);
         graphics.drawLine(
-                xCoordinateLocation - coordinateLineLength/2, yCoordinateLocation, 
-                xCoordinateLocation + coordinateLineLength/2, yCoordinateLocation);
+                xCoordinateLocation - coordinateLineLength / 2, yCoordinateLocation,
+                xCoordinateLocation + coordinateLineLength / 2, yCoordinateLocation);
         graphics.drawLine(
-                xCoordinateLocation, getMapOnlyHeight()-1, 
-                xCoordinateLocation, getMapOnlyHeight()-1 - coordinateLineLength);
+                xCoordinateLocation, getMapOnlyHeight() - 1,
+                xCoordinateLocation, getMapOnlyHeight() - 1 - coordinateLineLength);
         graphics.drawLine(
-                xCoordinateLocation, yCoordinateLocation + coordinateLineLength/2, 
-                xCoordinateLocation, yCoordinateLocation - coordinateLineLength/2);
-        
-        graphics.drawString(String.format("%s",yCoordinate), getMapOnlyWidth()+1, yCoordinateLocation);
-        
+                xCoordinateLocation, yCoordinateLocation + coordinateLineLength / 2,
+                xCoordinateLocation, yCoordinateLocation - coordinateLineLength / 2);
+
+        graphics.drawString(String.format("%s", yCoordinate), getMapOnlyWidth() + 1, yCoordinateLocation);
+
         graphics.rotate(Math.toRadians(-90), xCoordinateLocation, imageHeight);
-        graphics.drawString(String.format("%s",xCoordinate), xCoordinateLocation, imageHeight);
+        graphics.drawString(String.format("%s", xCoordinate), xCoordinateLocation, imageHeight);
 
         ImageIO.write(fullImage, IMAGE_FORMAT, outputFile);
         return pathToResult;
@@ -245,14 +251,87 @@ public class MapImageGeneratorForSelectedParcel {
         return layer.addFeature(cadastreObject.getId(), cadastreObject.getTheGeom(), fieldValues, false);
     }
 
-    private double getProperScale(ReferencedEnvelope extent) throws FactoryException, TransformException {
+    private void setScaleRange() {
+        String setting = PojoDataAccess.getInstance().getWSManager().getAdminService().getSetting(
+                "scale-range", "");
+        if (!(setting.isEmpty())) {
+            String[] scaleRangeAsString = setting.split(",");
+            scaleRange = new double[scaleRangeAsString.length];
+
+            for (int i = 0; i < scaleRangeAsString.length; i++) {
+                scaleRange[i] = Double.parseDouble(scaleRangeAsString[i]);
+            }
+        }
+    }
+
+    private double[] getScaleRange() {
+        return scaleRange;
+    }
+
+    private ReferencedEnvelope getProperExtent() {
+
+        // Make a list of all extents in the order of parcels. Target parcel is the last one.
+        SimpleFeatureIterator featureIterator =
+                (SimpleFeatureIterator) this.layer.getFeatureCollection().features();
+        List<ReferencedEnvelope> extents = new ArrayList<ReferencedEnvelope>();
+        while (featureIterator.hasNext()) {
+            extents.add(0, JTS.toEnvelope((Geometry) featureIterator.next().getDefaultGeometry()));
+        }
+        featureIterator.close();
+
+        //Max total parcels that can be used in calculation
+        int totalParcels = extents.size()-1;
+        //Calculate the best extent for all parcels
+        ReferencedEnvelope bestExtent = layer.getFeatureCollection().getBounds();
+        //Calculate the best scale for all parcels
+        double minScale = getProperScale(bestExtent);
+        //Start a cycle that calculates the best extent for the number of parcels starting
+        //with the total of all parcels minus 1 (because the total of all parcels is already 
+        //calculated. The cycle stops when the total number of parcels is 3.
+        for (int mainIndex = totalParcels; mainIndex > 2; mainIndex--) {
+            //Initialize the extent with the extent of the first parcel which is the target parcel.
+            ReferencedEnvelope extentToCheck = new ReferencedEnvelope(extents.get(0));
+            //Extend the extent in order to include all extents of the other parcels
+            //that has to be included for calculation.
+            for (int i = 1; i < mainIndex; i++) {
+                extentToCheck.expandToInclude(extents.get(i));
+            }
+            //Find the best scale for the calculated extent.
+            double scale = getProperScale(extentToCheck);
+            //If the scale is less(larger) than the minimum allowed scale, stop.
+            if (scale < this.getScaleRange()[0]) {
+                break;
+            }
+            //If the scale is less(larger) than the best scale already found,
+            // make this as the best scale and this as the best extent.
+            if (scale < minScale){
+                minScale = scale;
+                bestExtent = extentToCheck;
+            }
+        }
+
+        //Return the found extent with the CRS.
+        return new ReferencedEnvelope(bestExtent, this.map.getMapContent().getCoordinateReferenceSystem());
+    }
+
+    private double getProperScale(ReferencedEnvelope extent) {
         double dotPerCm = DPI / 2.54;
         double scale = (extent.getWidth() / getMapOnlyWidth()) * dotPerCm * 100;
         double scaleToFitHeight = (extent.getHeight() / getMapOnlyHeight()) * dotPerCm * 100;
         if (scaleToFitHeight > scale) {
             scale = scaleToFitHeight;
         }
-        scale = (((int) scale + 500) / 500) * 500;
+        double[] range = this.getScaleRange();
+        int scaleRangeIndex = 0;
+        while (!(range[scaleRangeIndex] < scale
+                && scale <= range[scaleRangeIndex + 1])) {
+            scaleRangeIndex += 1;
+            if (scaleRangeIndex == range.length) {
+                break;
+            }
+        }
+        scale = range[scaleRangeIndex + 1];
+
         return scale;
     }
 

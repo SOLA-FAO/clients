@@ -35,16 +35,20 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import javax.swing.Action;
+import org.geotools.swing.extended.util.Messaging;
 import org.geotools.swing.mapaction.extended.ExtendedAction;
 import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.clients.beans.validation.ValidationResultBean;
 import org.sola.clients.swing.common.DefaultExceptionHandler;
+import org.sola.clients.swing.gis.beans.CadastreObjectBean;
 import org.sola.clients.swing.gis.beans.TransactionBean;
+import org.sola.clients.swing.gis.beans.TransactionCadastreChangeBean;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForTransaction;
 import org.sola.clients.swing.ui.validation.ValidationResultForm;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.MessageUtility;
+import org.sola.webservices.transferobjects.EntityAction;
 
 /**
  * Map action that commits the Cadastre changes during GIS related transactions.
@@ -92,6 +96,26 @@ public class SaveTransaction extends ExtendedAction {
     @Override
     public void onClick() {
         TransactionBean transactionBean = transactionControlsBundle.getTransactionBean();
+        if (transactionBean instanceof TransactionCadastreChangeBean){
+            TransactionCadastreChangeBean tmp = (TransactionCadastreChangeBean) transactionBean;
+            int cadObjectsToBeDeletedCount = 0;
+            for(CadastreObjectBean bean: tmp.getCadastreObjectList()){
+                if (bean.getEntityAction() != null
+                        && bean.getEntityAction().equals(EntityAction.DELETE)){
+                    cadObjectsToBeDeletedCount +=1;
+                }
+            }
+            if (cadObjectsToBeDeletedCount>0){
+                //Show warning if parcels are being deleted
+                if (MessageUtility.displayMessage(
+                        GisMessage.CADASTRE_CHANGE_SAVE_WARNING_PARCELS_DELETED, 
+                        new Object[]{cadObjectsToBeDeletedCount}) == MessageUtility.BUTTON_TWO){
+                 // User does not intend to continue with the transaction.
+                    // The whole service will be stopped.
+                    return;
+                }
+            }
+        }
         List<ValidationResultBean> result = transactionBean.save();
         this.transactionControlsBundle.refreshTransactionFromServer();
         this.transactionControlsBundle.setTransaction();
