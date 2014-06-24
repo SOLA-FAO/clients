@@ -280,7 +280,7 @@ public class MapImageGeneratorForSelectedParcel {
         featureIterator.close();
 
         //Max total parcels that can be used in calculation
-        int totalParcels = extents.size()-1;
+        int totalParcels = extents.size() - 1;
         //Calculate the best extent for all parcels
         ReferencedEnvelope bestExtent = layer.getFeatureCollection().getBounds();
         //Calculate the best scale for all parcels
@@ -304,7 +304,7 @@ public class MapImageGeneratorForSelectedParcel {
             }
             //If the scale is less(larger) than the best scale already found,
             // make this as the best scale and this as the best extent.
-            if (scale < minScale){
+            if (scale < minScale) {
                 minScale = scale;
                 bestExtent = extentToCheck;
             }
@@ -326,7 +326,7 @@ public class MapImageGeneratorForSelectedParcel {
         while (!(range[scaleRangeIndex] < scale
                 && scale <= range[scaleRangeIndex + 1])) {
             scaleRangeIndex += 1;
-            if (scaleRangeIndex == range.length) {
+            if (scaleRangeIndex >= range.length - 1) {
                 break;
             }
         }
