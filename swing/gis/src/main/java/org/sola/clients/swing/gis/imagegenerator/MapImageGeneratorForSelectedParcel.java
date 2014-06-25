@@ -192,6 +192,7 @@ public class MapImageGeneratorForSelectedParcel {
                 extent, scale, String.format("map-%s", cadastreObjectID));
         info.setMapImageLocation(mapImageLocation);
         info.setArea(((Geometry) targetFeature.getDefaultGeometry()).getArea());
+		info.setSrid(this.map.getSrid());
         info.setScale(scale);
         info.setScalebarImageLocation(this.scalebarGenerator.getImageAsFileLocation(
                 scale, this.scalebarWidth, DPI, String.format("scalebar-%s", cadastreObjectID)));
@@ -321,18 +322,24 @@ public class MapImageGeneratorForSelectedParcel {
         if (scaleToFitHeight > scale) {
             scale = scaleToFitHeight;
         }
-        double[] range = this.getScaleRange();
-        int scaleRangeIndex = 0;
-        while (!(range[scaleRangeIndex] < scale
-                && scale <= range[scaleRangeIndex + 1])) {
-            scaleRangeIndex += 1;
-            if (scaleRangeIndex >= range.length - 1) {
-                break;
-            }
-        }
-        scale = range[scaleRangeIndex + 1];
+         double[] range = this.getScaleRange();
+        if (range[0] >= scale) {
+            scale = range[0];
+        } else {
+            int scaleRangeIndex = 0;
 
+            while (!(range[scaleRangeIndex] < scale
+                    && scale <= range[scaleRangeIndex + 1])) {
+                scaleRangeIndex += 1;
+                if (scaleRangeIndex >= range.length - 1) {
+                    break;
+                }
+            }
+            scale = range[scaleRangeIndex + 1];
+
+        }
         return scale;
+
     }
 
     private int getMapOnlyWidth() {
