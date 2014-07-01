@@ -98,6 +98,7 @@ public class MainContentPanel extends javax.swing.JPanel {
     public final static String CARD_RIGHT_EXPORT = "rightsExportPanel";
     public final static String CARD_MAPEXISTINGPARCEL = "mapExistingParcel";
     public final static String CARD_NOTATION_PANEL = "notationPanel";
+    public final static String CARD_SLPROPERTY_PANEL = "slPropertyPanel";
 
     private HashMap<String, Component> cards;
     private ArrayList<String> cardsIndex;

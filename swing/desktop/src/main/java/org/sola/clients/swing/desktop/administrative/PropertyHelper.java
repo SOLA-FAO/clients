@@ -40,6 +40,7 @@ import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationPropertyBean;
 import org.sola.clients.beans.application.ApplicationServiceBean;
 import org.sola.clients.beans.party.PartyBean;
+import org.sola.clients.beans.referencedata.BaUnitTypeBean;
 import org.sola.clients.beans.referencedata.RequestTypeBean;
 import org.sola.clients.beans.referencedata.StatusConstants;
 import org.sola.clients.swing.desktop.application.PropertiesList;
@@ -54,7 +55,7 @@ import org.sola.common.messaging.MessageUtility;
  * @author soladev
  */
 public class PropertyHelper {
-
+    
     private static ApplicationPropertyBean appProperty;
 
     /**
@@ -72,11 +73,11 @@ public class PropertyHelper {
      */
     public static BaUnitBean getBaUnitBeanForService(ApplicationBean appBean,
             ApplicationServiceBean appService, ContentPanel window, boolean isNewPropertyService) {
-
+        
         if (appBean == null || appService == null) {
             return null;
         }
-
+        
         BaUnitBean result = null;
         appProperty = null;
         List<BaUnitBean> baUnitList = BaUnitBean.getBaUnitsByServiceId(appService.getId());
@@ -84,7 +85,8 @@ public class PropertyHelper {
             // Serivce has previously linked to an BA Unit, so return that property for the service
             result = baUnitList.get(0);
         } else if (isNewPropertyService) {
-            result = prepareNewProperty(appBean, appService.getRequestType());
+            //result = prepareNewProperty(appBean, appService.getRequestType());
+            result = prepareNewStateLand();
         } else {
             // Determine the property to use for this service based on the list of application properties
             if (appBean.getPropertyList().getFilteredList().size() == 1) {
@@ -93,7 +95,7 @@ public class PropertyHelper {
                 // Prompt the user to indicate which property record is required. 
                 PropertiesList propertyListForm = new PropertiesList(appBean.getPropertyList());
                 propertyListForm.setLocationRelativeTo(window);
-
+                
                 propertyListForm.addPropertyChangeListener(new PropertyChangeListener() {
                     @Override
                     public void propertyChange(PropertyChangeEvent evt) {
@@ -109,7 +111,7 @@ public class PropertyHelper {
             } else {
                 MessageUtility.displayMessage(ClientMessage.APPLICATION_NO_PROPERTY_FOR_SERVICE);
             }
-
+            
             if (appProperty != null) {
                 if (appProperty.getBaUnitId() != null) {
                     result = BaUnitBean.getBaUnitsById(appProperty.getBaUnitId());
@@ -141,8 +143,8 @@ public class PropertyHelper {
         // for this application to avoid creating unnecessary party duplicates. 
         PartyBean owner = new PartyBean();
         owner.setId(appBean.getContactPerson().getId() + "_cp");
-        owner = owner.getPartyBean();
-        if (owner.isNew()) {
+        PartyBean tmpOwner = owner.getPartyBean();
+        if (tmpOwner == null || owner.isNew()) {
             // Owner has not been created yet, so duplicate the contact person 
             // details from the application and remove any roles they have. 
             owner = appBean.getContactPerson().copy();
@@ -153,6 +155,8 @@ public class PropertyHelper {
             // Save the party deails now as the Rrr does not attempt to save new
             // party records
             owner.saveParty();
+        } else {
+            owner = tmpOwner;
         }
 
         // Create a default 1 over 1 share
@@ -170,15 +174,23 @@ public class PropertyHelper {
             // Create a state ownership right
             rrrTypeCode = RrrBean.CODE_STATE_OWNERSHIP;
         }
-
+        
         RrrBean ownerRrr = new RrrBean();
         ownerRrr.setTypeCode(rrrTypeCode);
         ownerRrr.setPrimary(true);
         ownerRrr.setStatusCode(StatusConstants.PENDING);
         ownerRrr.getNotation().setNotationText(requestType.getNotationTemplate());
         ownerRrr.getRrrShareList().add(share);
-
+        
         result.addRrr(ownerRrr);
+        return result;
+    }
+    
+    private static BaUnitBean prepareNewStateLand() {
+        BaUnitBean result = new BaUnitBean();
+        result.setTypeCode(BaUnitTypeBean.CODE_STATE_LAND);
+        result.setStatusCode(StatusConstants.PENDING);
+        result.setNameFirstpart("SL");
         return result;
     }
 }

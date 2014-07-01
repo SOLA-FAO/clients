@@ -634,7 +634,8 @@ public class ApplicationPanel extends ContentPanel {
             Runnable postOpen = new Runnable() {
                 @Override
                 public void run() {
-                    if (!service.getRequestTypeCode().equalsIgnoreCase(RequestTypeBean.CODE_NEW_DIGITAL_TITLE)) {
+                    if (!service.getRequestTypeCode().equalsIgnoreCase(RequestTypeBean.CODE_NEW_DIGITAL_TITLE)
+                            && getMainContentPanel().getPanel(MainContentPanel.CARD_PROPERTY_PANEL) != null) {
                         ((PropertyPanel) getMainContentPanel().getPanel(MainContentPanel.CARD_PROPERTY_PANEL)).showPriorTitileMessage();
                     }
                 }

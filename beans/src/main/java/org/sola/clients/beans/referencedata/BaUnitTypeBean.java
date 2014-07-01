@@ -36,6 +36,8 @@ import org.sola.webservices.transferobjects.referencedata.BaUnitTypeTO;
  * For more information see data dictionary <b>Administrative</b> schema.
  */
 public class BaUnitTypeBean extends AbstractCodeBean {
+    
+    public static final String CODE_STATE_LAND = "stateLand";
 
     public BaUnitTypeBean() {
         super();

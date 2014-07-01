@@ -4,12 +4,12 @@
     <parent>
         <artifactId>sola-clients</artifactId>
         <groupId>org.sola</groupId>
-        <version>sl-SNAPSHOT</version>
+        <version>sl-001</version>
     </parent>
 
     <groupId>org.sola.clients</groupId>
     <artifactId>sola-desktop-web-start</artifactId>
-    <version>sl-SNAPSHOT</version>
+    <version>sl-001</version>
     <packaging>war</packaging>
 
     <name>Clients Desktop Web Start</name>
@@ -17,7 +17,7 @@
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <solaVersion>1402a SNAPSHOT</solaVersion>
+        <solaVersion>v001</solaVersion>
         <webstart.codesigning.keystore>${basedir}/sola.jks</webstart.codesigning.keystore>
         <webstart.codesigning.alias>sola</webstart.codesigning.alias>
         <webstart.codesigning.storepass>FLOSS2011</webstart.codesigning.storepass>
@@ -98,7 +98,7 @@
                     <jnlpFiles>
                         <jnlpFile>
                             <!-- JNLP file for the SOLA Desktop application -->
-                            <outputFilename>sola-desktop.jnlp</outputFilename>
+                            <outputFilename>sola-sl-desktop.jnlp</outputFilename>
                             <templateFilename>sola-desktop-jnlp-template.vm</templateFilename>
                             <jarResources>
                                 <jarResource>
@@ -111,7 +111,7 @@
                         </jnlpFile> 
                         <jnlpFile>
                             <!-- JNLP file for the SOLA Admin application -->
-                            <outputFilename>sola-admin.jnlp</outputFilename>
+                            <outputFilename>sola-sl-admin.jnlp</outputFilename>
                             <templateFilename>sola-admin-jnlp-template.vm</templateFilename>
                             <jarResources>
                                 <jarResource>
@@ -124,7 +124,7 @@
                         </jnlpFile>
                         <jnlpFile>
                             <!-- JNLP file for the SOLA Desktop application (Test Environment) -->
-                            <outputFilename>sola-desktop-test.jnlp</outputFilename>
+                            <outputFilename>sola-sl-desktop-test.jnlp</outputFilename>
                             <templateFilename>sola-desktop-jnlp-template-test.vm</templateFilename>
                             <jarResources>
                                 <jarResource>
@@ -137,7 +137,7 @@
                         </jnlpFile> 
                         <jnlpFile>
                             <!-- JNLP file for the SOLA Admin application (Test Environment) -->
-                            <outputFilename>sola-admin-test.jnlp</outputFilename>
+                            <outputFilename>sola-sl-admin-test.jnlp</outputFilename>
                             <templateFilename>sola-admin-jnlp-template-test.vm</templateFilename>
                             <jarResources>
                                 <jarResource>
@@ -197,7 +197,7 @@
                 </executions>
             </plugin>
         </plugins>
-        <finalName>desktop-web-start</finalName>
+        <finalName>desktop-sl-web-start</finalName>
     </build>
 
 </project>
