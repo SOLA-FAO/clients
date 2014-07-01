@@ -31,6 +31,8 @@ package org.sola.clients.swing.ui;
 
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.List;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.system.ConfigPanelLauncherBean;
 import org.sola.clients.swing.common.tasks.SolaTask;
@@ -55,12 +57,12 @@ import org.sola.common.messaging.MessageUtility;
  * @author soladev
  */
 public final class PanelLauncher {
-
+    
     private PanelLauncher() {
     }
-
+    
     private static class PanelLauncherHolder {
-
+        
         private static final PanelLauncher INSTANCE = new PanelLauncher();
     }
 
@@ -100,27 +102,34 @@ public final class PanelLauncher {
                 // Use reflection to create a class from the class name
                 Class<?> panelClass = Class.forName(bean.getPanelClass());
                 if (constructorArgs != null && constructorArgs.length > 0) {
-                    Class<?>[] constructorClasses = new Class<?>[constructorArgs.length];
-                    int idx = 0;
+                    List<Class<?>> constructorClasses = new ArrayList<Class<?>>();
+                    List<Object> arguments = new ArrayList<Object>();                    
                     for (Object arg : constructorArgs) {
                         // Determine the class of each constructor argument. Note that primitive
-                        // types are boxed, so boolean becomes Boolean. 
-                        constructorClasses[idx] = arg.getClass();
-                        idx++;
+                        // types are boxed, so boolean becomes Boolean. If the arg is null then
+                        // it will not be possible to determine the type of the arg, so exclude
+                        // it from the constructorClassses list. Note that this will require
+                        // the panel being launched to have an overloaded constructor(s) that 
+                        // omits any nullable parameters. 
+                        if (arg != null) {
+                            constructorClasses.add(arg.getClass());
+                            arguments.add(arg);
+                        }
                     }
                     // Retrieve the constructor from the class that matches the argument types.
                     // Primitive types are boxed, so you must ensure the panel class construtor
                     // is declared with boxed data types (i.e. nullable datatypes) instead of 
                     // primitive (non-nullable) data types. e.g. use Boolean instead of boolean 
                     // when declaring the readOnly parameter in the constructor arguments. 
-                    Constructor<?> constructor = panelClass.getConstructor(constructorClasses);
-                    panel = (ContentPanel) constructor.newInstance(constructorArgs);
+                    Constructor<?> constructor = panelClass.getConstructor(constructorClasses.toArray(new Class<?>[constructorClasses.size()]));
+                    panel = (ContentPanel) constructor.newInstance(arguments.toArray(new Object[arguments.size()]));
                 } else {
                     // No constructor arguments, - use the nullary constructor
                     panel = (ContentPanel) panelClass.newInstance();
                 }
             } catch (Exception ex) {
-                LogUtility.log("Unable to initialize panel for code " + panelLauncherCode, ex);
+                LogUtility.log("Unable to initialize panel for code " + panelLauncherCode
+                        + ". Ensure an overloaded constructor exists that excludes nullable parameters.", ex);
                 panel = null;
             }
         }
@@ -176,7 +185,7 @@ public final class PanelLauncher {
                     }
                     return null;
                 }
-
+                
                 @Override
                 protected void taskDone() {
                     if (result[0]) {
@@ -186,6 +195,7 @@ public final class PanelLauncher {
                         }
                     } else {
                         // The panel could not be created. Check the panel launcher configuration
+                        // as well as any null constructor arguments. 
                         MessageUtility.displayMessage(ClientMessage.ERR_UNABLE_TO_LAUNCH_PANEL,
                                 new String[]{bean.getDisplayValue()});
                     }
@@ -195,7 +205,7 @@ public final class PanelLauncher {
         } else {
             // The service could not be started. Check it is mapped by the service launcher
             MessageUtility.displayMessage(ClientMessage.ERR_MISSING_PANEL_LAUNCH_CODE,
-                     new String[]{panelLauncherCode});
+                    new String[]{panelLauncherCode});
         }
     }
 

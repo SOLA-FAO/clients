@@ -27,7 +27,6 @@
  */
 package org.sola.clients.beans;
 
-import javax.swing.JOptionPane;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.referencedata.RegistrationStatusTypeBean;
 import org.sola.services.boundary.wsclients.WSManager;
@@ -69,7 +68,7 @@ public abstract class AbstractTransactionedBean extends AbstractIdBean {
         }
     }
 
-    public RegistrationStatusTypeBean getStatus() {
+    public AbstractCodeBean getStatus() {
         return status;
     }
 
@@ -83,7 +82,7 @@ public abstract class AbstractTransactionedBean extends AbstractIdBean {
         propertySupport.firePropertyChange(IS_LOCKED_PROPERTY, oldValue, locked);
     }
 
-    public void setStatus(RegistrationStatusTypeBean status) {
+    public void setStatus(AbstractCodeBean status) {
         if (this.status == null) {
             this.status = new RegistrationStatusTypeBean();
         }

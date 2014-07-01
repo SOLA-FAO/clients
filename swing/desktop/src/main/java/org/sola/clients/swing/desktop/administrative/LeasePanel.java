@@ -1,28 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.desktop.administrative;
@@ -64,7 +66,8 @@ import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
 /**
- * Form for managing simple ownership right. {@link RrrBean} is used to bind the data on the form.
+ * Form for managing simple ownership right. {@link RrrBean} is used to bind the
+ * data on the form.
  */
 public class LeasePanel extends ContentPanel {
 
@@ -73,7 +76,7 @@ public class LeasePanel extends ContentPanel {
     private RrrBean.RRR_ACTION rrrAction;
     private BaUnitBean baUnit;
     public static final String UPDATED_RRR = "updatedRRR";
-    
+
     private DocumentsManagementExtPanel createDocumentsPanel() {
         if (rrrBean == null) {
             rrrBean = new RrrBean();
@@ -98,11 +101,15 @@ public class LeasePanel extends ContentPanel {
         }
         return rrrBean;
     }
-    
+
+    public LeasePanel(BaUnitBean baUnit, RrrBean rrrBean, RrrBean.RRR_ACTION rrrAction) {
+        this(baUnit, rrrBean, null, null, rrrAction);
+    }
+
     /**
      * Creates new form SimpleOwhershipPanel
      */
-    public LeasePanel(BaUnitBean baUnit, RrrBean rrrBean, ApplicationBean applicationBean, 
+    public LeasePanel(BaUnitBean baUnit, RrrBean rrrBean, ApplicationBean applicationBean,
             ApplicationServiceBean applicationService, RrrBean.RRR_ACTION rrrAction) {
         this.baUnit = baUnit;
         this.applicationBean = applicationBean;
@@ -112,33 +119,33 @@ public class LeasePanel extends ContentPanel {
         initComponents();
         postInit();
     }
-    
-    private void postInit(){
+
+    private void postInit() {
         // Populate lease conditions list with standard conditions for new RrrBean
-        if(rrrAction == RrrBean.RRR_ACTION.NEW){
+        if (rrrAction == RrrBean.RRR_ACTION.NEW) {
             rrrBean.addConditions(conditionTypes.getLeaseConditionList());
         }
-        
+
         conditionTypes.addPropertyChangeListener(new PropertyChangeListener() {
 
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                if(evt.getPropertyName().equals(ConditionTypeListBean.SELECTED_CONDITION_TYPE_PROPERTY)){
+                if (evt.getPropertyName().equals(ConditionTypeListBean.SELECTED_CONDITION_TYPE_PROPERTY)) {
                     customizeAddStandardConditionButton();
                 }
             }
         });
-        
+
         rrrBean.addPropertyChangeListener(new PropertyChangeListener() {
 
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                if(evt.getPropertyName().equals(RrrBean.SELECTED_CONDITION_PROPERTY)){
+                if (evt.getPropertyName().equals(RrrBean.SELECTED_CONDITION_PROPERTY)) {
                     customizeLeaseConditionsButtons();
                 }
             }
         });
-        
+
         customizeForm();
         customizeOwnerButtons(null);
         customizeAddStandardConditionButton();
@@ -146,11 +153,11 @@ public class LeasePanel extends ContentPanel {
         saveRrrState();
     }
 
-    private void customizeLeaseConditionsButtons(){
-        boolean enabled = rrrBean.getSelectedCondition()!=null && rrrAction != RrrBean.RRR_ACTION.VIEW;
-        
+    private void customizeLeaseConditionsButtons() {
+        boolean enabled = rrrBean.getSelectedCondition() != null && rrrAction != RrrBean.RRR_ACTION.VIEW;
+
         btnRemoveCondition.setEnabled(enabled);
-        if(enabled){
+        if (enabled) {
             btnEditCondition.setEnabled(rrrBean.getSelectedCondition().isCustomCondition());
         } else {
             btnEditCondition.setEnabled(enabled);
@@ -158,23 +165,23 @@ public class LeasePanel extends ContentPanel {
         menuEditCondition.setEnabled(btnEditCondition.isEnabled());
         menuRemoveCondition.setEnabled(btnRemoveCondition.isEnabled());
     }
-    
-    private void customizeAddStandardConditionButton(){
-        if(rrrAction != RrrBean.RRR_ACTION.VIEW){
+
+    private void customizeAddStandardConditionButton() {
+        if (rrrAction != RrrBean.RRR_ACTION.VIEW) {
             return;
         }
-        btnAddStandardCondition.setEnabled(conditionTypes.getSelectedConditionType()!=null);
+        btnAddStandardCondition.setEnabled(conditionTypes.getSelectedConditionType() != null);
     }
-    
+
     private void customizeForm() {
         headerPanel.setTitleText(rrrBean.getRrrType().getDisplayValue());
         if (rrrAction == RrrBean.RRR_ACTION.NEW) {
             btnSave.setText(MessageUtility.getLocalizedMessage(
-                            ClientMessage.GENERAL_LABELS_CREATE_AND_CLOSE).getMessage());
+                    ClientMessage.GENERAL_LABELS_CREATE_AND_CLOSE).getMessage());
         }
         if (rrrAction == RrrBean.RRR_ACTION.CANCEL) {
             btnSave.setText(MessageUtility.getLocalizedMessage(
-                            ClientMessage.GENERAL_LABELS_TERMINATE_AND_CLOSE).getMessage());
+                    ClientMessage.GENERAL_LABELS_TERMINATE_AND_CLOSE).getMessage());
         }
 
         if (rrrAction != RrrBean.RRR_ACTION.EDIT && rrrAction != RrrBean.RRR_ACTION.VIEW
@@ -206,7 +213,7 @@ public class LeasePanel extends ContentPanel {
         cbxStandardConditions.setEnabled(enabled);
         menuAddCustomCondition.setEnabled(btnAddCustomCondition.isEnabled());
     }
-    
+
     private void prepareRrrBean(RrrBean rrrBean, RrrBean.RRR_ACTION rrrAction) {
         if (rrrBean == null) {
             this.rrrBean = new RrrBean();
@@ -224,7 +231,7 @@ public class LeasePanel extends ContentPanel {
             }
         });
     }
-    
+
     private void customizeOwnerButtons(PartySummaryBean owner) {
         boolean isChangesAllowed = false;
         if (rrrAction == RrrBean.RRR_ACTION.VARY || rrrAction == RrrBean.RRR_ACTION.EDIT
@@ -234,7 +241,7 @@ public class LeasePanel extends ContentPanel {
 
         btnAddOwner.setEnabled(isChangesAllowed);
         btnSelectExisting.setEnabled(isChangesAllowed);
-        
+
         if (owner == null) {
             btnRemoveOwner.setEnabled(false);
             btnEditOwner.setEnabled(false);
@@ -244,14 +251,14 @@ public class LeasePanel extends ContentPanel {
             btnEditOwner.setEnabled(isChangesAllowed);
             btnViewOwner.setEnabled(true);
         }
-        
+
         menuAddOwner.setEnabled(btnAddOwner.isEnabled());
         menuRemoveOwner.setEnabled(btnRemoveOwner.isEnabled());
         menuEditOwner.setEnabled(btnEditOwner.isEnabled());
         menuViewOwner.setEnabled(btnViewOwner.isEnabled());
     }
-    
-    private boolean saveRrr() {  
+
+    private boolean saveRrr() {
         if (rrrBean.validate(true, Default.class, LeaseValidationGroup.class).size() < 1) {
             firePropertyChange(UPDATED_RRR, null, rrrBean);
             close();
@@ -259,7 +266,7 @@ public class LeasePanel extends ContentPanel {
         }
         return false;
     }
-    
+
     private void saveRrrState() {
         MainForm.saveBeanState(rrrBean);
     }
@@ -271,7 +278,7 @@ public class LeasePanel extends ContentPanel {
         }
         return true;
     }
-    
+
     private void viewOwner() {
         if (rrrBean.getSelectedRightHolder() != null) {
             openRightHolderForm(rrrBean.getSelectedRightHolder(), true);
@@ -294,7 +301,7 @@ public class LeasePanel extends ContentPanel {
             openRightHolderForm(rrrBean.getSelectedRightHolder(), false);
         }
     }
-    
+
     private class RightHolderFormListener implements PropertyChangeListener {
 
         @Override
@@ -305,7 +312,7 @@ public class LeasePanel extends ContentPanel {
             }
         }
     }
-    
+
     private void openRightHolderForm(final PartySummaryBean partySummaryBean, final boolean isReadOnly) {
         final RightHolderFormListener listener = new RightHolderFormListener();
 
@@ -327,9 +334,8 @@ public class LeasePanel extends ContentPanel {
         };
         TaskManager.getInstance().runTask(t);
     }
-    
-    
-     private void openSelectRightHolderForm() {
+
+    private void openSelectRightHolderForm() {
         final RightHolderFormListener listener = new RightHolderFormListener();
 
         SolaTask t = new SolaTask<Void, Void>() {
@@ -355,83 +361,83 @@ public class LeasePanel extends ContentPanel {
 
     }
 
-    private void addCustomCondition(){
+    private void addCustomCondition() {
         CustomConditionDialog form = new CustomConditionDialog(null, MainForm.getInstance(), true);
         WindowUtility.centerForm(form);
-        
+
         form.addPropertyChangeListener(new PropertyChangeListener() {
 
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                if(evt.getPropertyName().equals(CustomConditionDialog.CONDITION_SAVED)){
-                    rrrBean.addRrrCondition((ConditionForRrrBean)evt.getNewValue());
+                if (evt.getPropertyName().equals(CustomConditionDialog.CONDITION_SAVED)) {
+                    rrrBean.addRrrCondition((ConditionForRrrBean) evt.getNewValue());
                 }
             }
         });
         form.setVisible(true);
     }
-    
-    private void editCustomCondition(){
+
+    private void editCustomCondition() {
         CustomConditionDialog form = new CustomConditionDialog(
-                (ConditionForRrrBean)rrrBean.getSelectedCondition().copy(), 
+                (ConditionForRrrBean) rrrBean.getSelectedCondition().copy(),
                 MainForm.getInstance(), true);
         WindowUtility.centerForm(form);
-        
+
         form.addPropertyChangeListener(new PropertyChangeListener() {
 
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                if(evt.getPropertyName().equals(CustomConditionDialog.CONDITION_SAVED)){
-                    ConditionForRrrBean cond = (ConditionForRrrBean)evt.getNewValue();
+                if (evt.getPropertyName().equals(CustomConditionDialog.CONDITION_SAVED)) {
+                    ConditionForRrrBean cond = (ConditionForRrrBean) evt.getNewValue();
                     rrrBean.getSelectedCondition().setCustomConditionText(cond.getCustomConditionText());
                 }
             }
         });
         form.setVisible(true);
     }
-    
-    private void addStandardCondition(){
+
+    private void addStandardCondition() {
         rrrBean.addCondition(conditionTypes.getSelectedConditionType());
     }
-    
-    private void removeCondition(){
+
+    private void removeCondition() {
         rrrBean.removeSelectedRrrCondition();
     }
-    
-    private RrrReportBean prepareReportBean(){
+
+    private RrrReportBean prepareReportBean() {
         RrrReportBean reportBean = new RrrReportBean(baUnit, rrrBean, applicationBean, appService);
         String warnings = "";
         String warning;
-        
-        if(applicationBean == null || applicationBean.isNew()){
+
+        if (applicationBean == null || applicationBean.isNew()) {
             warnings = warnings + MessageUtility.getLocalizedMessageText(ClientMessage.APPLICATION_NOT_FOUND);
         }
-        
-        if(reportBean.getRrrRegNumber().isEmpty()){
+
+        if (reportBean.getRrrRegNumber().isEmpty()) {
             warning = MessageUtility.getLocalizedMessageText(
-                        ClientMessage.BAUNIT_RRR_NO_REGISTRATION_NUMBER,
-                        new Object[]{rrrBean.getRrrType().getDisplayValue()});
-            if(warnings.isEmpty()){
+                    ClientMessage.BAUNIT_RRR_NO_REGISTRATION_NUMBER,
+                    new Object[]{rrrBean.getRrrType().getDisplayValue()});
+            if (warnings.isEmpty()) {
                 warnings = "- " + warning;
             } else {
                 warnings = warnings + "\n- " + warning;
             }
         }
 
-        if(reportBean.getBaUnit().getCadastreObjectFilteredList().size() < 1){
+        if (reportBean.getBaUnit().getCadastreObjectFilteredList().size() < 1) {
             warning = MessageUtility.getLocalizedMessageText(ClientMessage.BAUNIT_HAS_NO_PARCELS);
-            if(warnings.isEmpty()){
+            if (warnings.isEmpty()) {
                 warnings = "- " + warning;
             } else {
                 warnings = warnings + "\n- " + warning;
             }
         }
-        
-        if(!warnings.isEmpty()){
-            warnings = MessageUtility.getLocalizedMessageText(ClientMessage.BAUNIT_RRR_REPORT_WARNINGS) +
-                    "\n\n" + warnings;
-            if(JOptionPane.showConfirmDialog(MainForm.getInstance(), warnings, "", 
-                    JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
+
+        if (!warnings.isEmpty()) {
+            warnings = MessageUtility.getLocalizedMessageText(ClientMessage.BAUNIT_RRR_REPORT_WARNINGS)
+                    + "\n\n" + warnings;
+            if (JOptionPane.showConfirmDialog(MainForm.getInstance(), warnings, "",
+                    JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                 return reportBean;
             } else {
                 return null;
@@ -439,22 +445,22 @@ public class LeasePanel extends ContentPanel {
         }
         return reportBean;
     }
-    
-    private void printRejectionLetter(){
+
+    private void printRejectionLetter() {
         final RrrReportBean reportBean = prepareReportBean();
-        if(reportBean!=null){
+        if (reportBean != null) {
             // Show free text form
             FreeTextDialog form = new FreeTextDialog(
-                    MessageUtility.getLocalizedMessageText(ClientMessage.BAUNIT_LEASE_REJECTION_REASON_TITLE), 
+                    MessageUtility.getLocalizedMessageText(ClientMessage.BAUNIT_LEASE_REJECTION_REASON_TITLE),
                     null, MainForm.getInstance(), true);
             WindowUtility.centerForm(form);
-            
+
             form.addPropertyChangeListener(new PropertyChangeListener() {
 
                 @Override
                 public void propertyChange(PropertyChangeEvent evt) {
-                    if(evt.getPropertyName().equals(FreeTextDialog.TEXT_TO_SAVE)){
-                        reportBean.setFreeText((String)evt.getNewValue());
+                    if (evt.getPropertyName().equals(FreeTextDialog.TEXT_TO_SAVE)) {
+                        reportBean.setFreeText((String) evt.getNewValue());
                     }
                 }
             });
@@ -462,21 +468,21 @@ public class LeasePanel extends ContentPanel {
             showReport(ReportManager.getLeaseRejectionReport(reportBean));
         }
     }
-    
-    private void printOfferLetter(boolean isDraft){
+
+    private void printOfferLetter(boolean isDraft) {
         final RrrReportBean reportBean = prepareReportBean();
-        if(reportBean!=null){
+        if (reportBean != null) {
             showReport(ReportManager.getLeaseOfferReport(reportBean, isDraft));
         }
     }
-    
-    private void printLease(boolean isDraft){
+
+    private void printLease(boolean isDraft) {
         final RrrReportBean reportBean = prepareReportBean();
-        if(reportBean!=null){
+        if (reportBean != null) {
             showReport(ReportManager.getLeaseReport(reportBean, isDraft));
         }
     }
-    
+
     /**
      * Opens {@link ReportViewerForm} to display report.
      */
@@ -485,12 +491,12 @@ public class LeasePanel extends ContentPanel {
         form.setLocationRelativeTo(this);
         form.setVisible(true);
     }
-    
+
     private void showCalendar(JFormattedTextField dateField) {
         CalendarForm calendar = new CalendarForm(null, true, dateField);
         calendar.setVisible(true);
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

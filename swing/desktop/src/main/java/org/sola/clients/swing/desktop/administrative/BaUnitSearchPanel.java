@@ -68,7 +68,7 @@ public class BaUnitSearchPanel extends ContentPanel {
             @Override
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PROPERTY));
-                PropertyPanel propertyPanel = new PropertyPanel(nameFirstPart, nameLastPart);
+                SLPropertyPanel propertyPanel = new SLPropertyPanel(nameFirstPart, nameLastPart, true);
                 getMainContentPanel().addPanel(propertyPanel, MainContentPanel.CARD_PROPERTY_PANEL, true);
                 return null;
             }

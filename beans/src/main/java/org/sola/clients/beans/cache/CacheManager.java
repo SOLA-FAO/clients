@@ -209,13 +209,17 @@ public final class CacheManager {
      * {@link org.sola.clients.beans.system.ConfigPanelLauncherBean} collection.
      */
     public static final String CONFIG_PANEL_LAUNCHER_KEY = ConfigPanelLauncherBean.class.getName() + LIST_POSTFIX;
-    
-        /**
+
+    /**
      * Cache key of the
      * {@link org.sola.clients.beans.system.PanelLauncherGroupBean} collection.
      */
     public static final String CONFIG_PANEL_LAUNCHER_GROUP_KEY = PanelLauncherGroupBean.class.getName() + LIST_POSTFIX;
-    
+
+    /**
+     * Cache key of the {@link NotationStatusTypeBean} collection.
+     */
+    public static final String NOTATION_STATUS_TYPE_GROUP_KEY = NotationStatusTypeBean.class.getName() + LIST_POSTFIX;
 
     private static final String GET_APPLICATION_STATUS_TYPES = "getApplicationStatusTypes";
     private static final String GET_SOURCE_TYPES = "getSourceTypes";
@@ -249,6 +253,7 @@ public final class CacheManager {
     private static final String GET_HIERARCHY_LEVELS = "getHierarchyLevels";
     private static final String GET_PANEL_LAUNCHER_CONFIG = "getPanelLauncherConfiguration";
     private static final String GET_PANEL_LAUNCHER_GROUPS = "getPanelLauncherGroups";
+    private static final String GET_NOTATION_STATUS_TYPES = "getNotationStatusTypes";
 
     public static List<BrValidationTargetTypeBean> getBrValidationTargetTypes() {
         return getCachedBeanList(BrValidationTargetTypeBean.class,
@@ -475,11 +480,17 @@ public final class CacheManager {
                 WSManager.getInstance().getAdminService(),
                 GET_PANEL_LAUNCHER_CONFIG, CONFIG_PANEL_LAUNCHER_KEY);
     }
-    
-        public static List<PanelLauncherGroupBean> getPanelLauncherGroups() {
+
+    public static List<PanelLauncherGroupBean> getPanelLauncherGroups() {
         return getCachedBeanList(PanelLauncherGroupBean.class,
                 WSManager.getInstance().getAdminService(),
                 GET_PANEL_LAUNCHER_GROUPS, CONFIG_PANEL_LAUNCHER_GROUP_KEY);
+    }
+
+    public static List<NotationStatusTypeBean> getNotationStatusTypes() {
+        return getCachedBeanList(NotationStatusTypeBean.class,
+                WSManager.getInstance().getReferenceDataService(),
+                GET_NOTATION_STATUS_TYPES, NOTATION_STATUS_TYPE_GROUP_KEY);
     }
 
     /**

@@ -35,15 +35,15 @@ import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.controls.SolaCodeList;
 
 /**
- * Holds list of {@link RegistrationStatusTypeBean} objects.
+ * Holds list of {@link NotationStatusTypeBean} objects.
  */
-public class RegistrationStatusTypeListBean extends AbstractBindingListBean {
+public class NotationStatusTypeListBean extends AbstractBindingListBean {
 
-    public static final String SELECTED_REGISTRATION_STATUS_TYPE_PROPERTY = "selectedRegistrationStatusType";
-    private SolaCodeList<RegistrationStatusTypeBean> registrationStatusTypes;
-    private RegistrationStatusTypeBean selectedRegistrationStatusType;
+    public static final String SELECTED_NOTATION_STATUS_TYPE_PROPERTY = "selectedNotationStatusType";
+    private SolaCodeList<NotationStatusTypeBean> notationStatusTypes;
+    private NotationStatusTypeBean selectedNotationStatusType;
 
-    public RegistrationStatusTypeListBean() {
+    public NotationStatusTypeListBean() {
         this(false);
     }
 
@@ -52,7 +52,7 @@ public class RegistrationStatusTypeListBean extends AbstractBindingListBean {
      *
      * @param createDummy Indicates whether to add empty object on the list.
      */
-    public RegistrationStatusTypeListBean(boolean createDummy) {
+    public NotationStatusTypeListBean(boolean createDummy) {
         this(createDummy, (String) null);
     }
 
@@ -62,38 +62,38 @@ public class RegistrationStatusTypeListBean extends AbstractBindingListBean {
      * @param createDummy Indicates whether to add empty object on the list.
      * @param excludedCodes Codes, which should be skipped while filtering.
      */
-    public RegistrationStatusTypeListBean(boolean createDummy, String... excludedCodes) {
+    public NotationStatusTypeListBean(boolean createDummy, String... excludedCodes) {
         super();
-        registrationStatusTypes = new SolaCodeList<RegistrationStatusTypeBean>(excludedCodes);
+        notationStatusTypes = new SolaCodeList<NotationStatusTypeBean>(excludedCodes);
         loadList(createDummy);
     }
 
     /**
-     * Loads list of {@link RegistrationStatusTypeBean}.
+     * Loads list of {@link NotationStatusTypeBean}.
      *
      * @param createDummy Indicates whether to add empty object on the list.
      */
     public final void loadList(boolean createDummy) {
-        loadCodeList(RegistrationStatusTypeBean.class, registrationStatusTypes,
-                CacheManager.getRegistrationStatusTypes(), createDummy);
+        loadCodeList(NotationStatusTypeBean.class, notationStatusTypes,
+                CacheManager.getNotationStatusTypes(), createDummy);
     }
 
-    public ObservableList<RegistrationStatusTypeBean> getRegistrationStatusTypes() {
-        return registrationStatusTypes.getFilteredList();
+    public ObservableList<NotationStatusTypeBean> getNotationStatusTypes() {
+        return notationStatusTypes.getFilteredList();
     }
 
     public void setExcludedCodes(String... codes) {
-        registrationStatusTypes.setExcludedCodes(codes);
+        notationStatusTypes.setExcludedCodes(codes);
     }
 
-    public RegistrationStatusTypeBean getSelectedRegistrationStatusType() {
-        return selectedRegistrationStatusType;
+    public NotationStatusTypeBean getSelectedNotationStatusType() {
+        return selectedNotationStatusType;
     }
 
-    public void setSelectedRegistrationStatusType(RegistrationStatusTypeBean selectedRegistrationStatusType) {
-        RegistrationStatusTypeBean oldValue = this.selectedRegistrationStatusType;
-        this.selectedRegistrationStatusType = selectedRegistrationStatusType;
-        propertySupport.firePropertyChange(SELECTED_REGISTRATION_STATUS_TYPE_PROPERTY, oldValue, this.selectedRegistrationStatusType);
+    public void setSelectedRegistrationStatusType(NotationStatusTypeBean selectedNotationStatusType) {
+        NotationStatusTypeBean oldValue = this.selectedNotationStatusType;
+        this.selectedNotationStatusType = selectedNotationStatusType;
+        propertySupport.firePropertyChange(SELECTED_NOTATION_STATUS_TYPE_PROPERTY, oldValue, this.selectedNotationStatusType);
     }
 
     /**
@@ -102,7 +102,7 @@ public class RegistrationStatusTypeListBean extends AbstractBindingListBean {
      * @param codes
      */
     public void setAllowedCodes(String... codes) {
-        registrationStatusTypes.setAllowedCodes(codes);
+        notationStatusTypes.setAllowedCodes(codes);
     }
 
 }

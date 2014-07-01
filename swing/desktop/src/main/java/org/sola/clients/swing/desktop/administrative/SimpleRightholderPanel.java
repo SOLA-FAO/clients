@@ -1,28 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.desktop.administrative;
@@ -53,7 +55,8 @@ import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
 /**
- * Form for managing simple ownership right. {@link RrrBean} is used to bind the data on the form.
+ * Form for managing simple ownership right. {@link RrrBean} is used to bind the
+ * data on the form.
  */
 public class SimpleRightholderPanel extends ContentPanel {
 
@@ -61,7 +64,7 @@ public class SimpleRightholderPanel extends ContentPanel {
     private ApplicationServiceBean appService;
     private RrrBean.RRR_ACTION rrrAction;
     public static final String UPDATED_RRR = "updatedRRR";
-    
+
     private DocumentsManagementExtPanel createDocumentsPanel() {
         if (rrrBean == null) {
             rrrBean = new RrrBean();
@@ -86,17 +89,21 @@ public class SimpleRightholderPanel extends ContentPanel {
         }
         return rrrBean;
     }
-    
+
+    public SimpleRightholderPanel(RrrBean rrrBean, RrrBean.RRR_ACTION rrrAction) {
+        this(rrrBean, null, null, rrrAction);
+    }
+
     /**
      * Creates new form SimpleOwhershipPanel
      */
-    public SimpleRightholderPanel(RrrBean rrrBean, ApplicationBean applicationBean, 
+    public SimpleRightholderPanel(RrrBean rrrBean, ApplicationBean applicationBean,
             ApplicationServiceBean applicationService, RrrBean.RRR_ACTION rrrAction) {
         this.applicationBean = applicationBean;
         this.appService = applicationService;
         this.rrrAction = rrrAction;
         prepareRrrBean(rrrBean, rrrAction);
-    
+
         initComponents();
 
         customizeForm();
@@ -108,11 +115,11 @@ public class SimpleRightholderPanel extends ContentPanel {
         headerPanel.setTitleText(rrrBean.getRrrType().getDisplayValue());
         if (rrrAction == RrrBean.RRR_ACTION.NEW) {
             btnSave.setText(MessageUtility.getLocalizedMessage(
-                            ClientMessage.GENERAL_LABELS_CREATE_AND_CLOSE).getMessage());
+                    ClientMessage.GENERAL_LABELS_CREATE_AND_CLOSE).getMessage());
         }
         if (rrrAction == RrrBean.RRR_ACTION.CANCEL) {
             btnSave.setText(MessageUtility.getLocalizedMessage(
-                            ClientMessage.GENERAL_LABELS_TERMINATE_AND_CLOSE).getMessage());
+                    ClientMessage.GENERAL_LABELS_TERMINATE_AND_CLOSE).getMessage());
         }
 
         if (rrrAction != RrrBean.RRR_ACTION.EDIT && rrrAction != RrrBean.RRR_ACTION.VIEW
@@ -130,7 +137,7 @@ public class SimpleRightholderPanel extends ContentPanel {
             cbxIsPrimary.setEnabled(false);
         }
     }
-    
+
     private void prepareRrrBean(RrrBean rrrBean, RrrBean.RRR_ACTION rrrAction) {
         if (rrrBean == null) {
             this.rrrBean = new RrrBean();
@@ -148,7 +155,7 @@ public class SimpleRightholderPanel extends ContentPanel {
             }
         });
     }
-    
+
     private void customizeOwnerButtons(PartySummaryBean owner) {
         boolean isChangesAllowed = false;
         if (rrrAction == RrrBean.RRR_ACTION.VARY || rrrAction == RrrBean.RRR_ACTION.EDIT
@@ -167,22 +174,22 @@ public class SimpleRightholderPanel extends ContentPanel {
             btnEditOwner.setEnabled(isChangesAllowed);
             btnViewOwner.setEnabled(true);
         }
-        
+
         menuAddOwner.setEnabled(btnAddOwner.isEnabled());
         menuRemoveOwner.setEnabled(btnRemoveOwner.isEnabled());
         menuEditOwner.setEnabled(btnEditOwner.isEnabled());
         menuViewOwner.setEnabled(btnViewOwner.isEnabled());
     }
-    
+
     private boolean saveRrr() {
-        
-        if (rrrBean.getFilteredRightHolderList().size() <1 ) {
-             java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
-             MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_FIELDS,
-                            new Object[]{bundle.getString("SimpleOwhershipPanel.groupPanel1.titleText")});
-                    return false;
-        } 
-        
+
+        if (rrrBean.getFilteredRightHolderList().size() < 1) {
+            java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
+            MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_FIELDS,
+                    new Object[]{bundle.getString("SimpleOwhershipPanel.groupPanel1.titleText")});
+            return false;
+        }
+
         if (rrrBean.validate(true, Default.class, SimpleOwnershipValidationGroup.class).size() < 1) {
             firePropertyChange(UPDATED_RRR, null, rrrBean);
             close();
@@ -190,7 +197,7 @@ public class SimpleRightholderPanel extends ContentPanel {
         }
         return false;
     }
-    
+
     private void saveRrrState() {
         MainForm.saveBeanState(rrrBean);
     }
@@ -202,7 +209,7 @@ public class SimpleRightholderPanel extends ContentPanel {
         }
         return true;
     }
-    
+
     private void viewOwner() {
         if (rrrBean.getSelectedRightHolder() != null) {
             openRightHolderForm(rrrBean.getSelectedRightHolder(), true);
@@ -225,7 +232,7 @@ public class SimpleRightholderPanel extends ContentPanel {
             openRightHolderForm(rrrBean.getSelectedRightHolder(), false);
         }
     }
-    
+
     private class RightHolderFormListener implements PropertyChangeListener {
 
         @Override
@@ -236,7 +243,7 @@ public class SimpleRightholderPanel extends ContentPanel {
             }
         }
     }
-    
+
     private void openRightHolderForm(final PartySummaryBean partySummaryBean, final boolean isReadOnly) {
         final RightHolderFormListener listener = new RightHolderFormListener();
 
@@ -258,9 +265,8 @@ public class SimpleRightholderPanel extends ContentPanel {
         };
         TaskManager.getInstance().runTask(t);
     }
-    
-    
-     private void openSelectRightHolderForm() {
+
+    private void openSelectRightHolderForm() {
         final RightHolderFormListener listener = new RightHolderFormListener();
 
         SolaTask t = new SolaTask<Void, Void>() {
@@ -290,7 +296,7 @@ public class SimpleRightholderPanel extends ContentPanel {
         CalendarForm calendar = new CalendarForm(null, true, dateField);
         calendar.setVisible(true);
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
