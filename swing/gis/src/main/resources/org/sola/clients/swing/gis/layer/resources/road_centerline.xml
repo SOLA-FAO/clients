@@ -1,48 +1,55 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<StyledLayerDescriptor version="1.0.0" xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc"
-                       xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                       xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.0.0/StyledLayerDescriptor.xsd">
-    <NamedLayer>
-        <Name>Spatial unit</Name>
-        <UserStyle>
-            <FeatureTypeStyle>
-                <Rule>
-                    <LineSymbolizer>
-                        <Stroke>
-                            <CssParameter name="stroke">#FF0000</CssParameter>
-                        </Stroke>
-                    </LineSymbolizer>
-
-                    <TextSymbolizer>
-                        <Label>
-                            <ogc:PropertyName>label</ogc:PropertyName>
-                        </Label>
-                        <Font>
-                            <CssParameter name="font-family">Arial</CssParameter>
-                            <CssParameter name="font-size">13</CssParameter>
-                            <CssParameter name="font-style">normal</CssParameter>
-                            <CssParameter name="font-weight">normal</CssParameter>
-                        </Font>
-                        <LabelPlacement>
-                            <LinePlacement>
-                                <PerpendicularOffset>4</PerpendicularOffset>				
-                            </LinePlacement>
-                        </LabelPlacement>
-                        <Fill>
-                            <CssParameter name="fill">#000000</CssParameter>				
-                        </Fill>
-                        <VendorOption name="followLine">true</VendorOption>					
-                    </TextSymbolizer>
-                </Rule>
-            </FeatureTypeStyle>
-        </UserStyle>
-    </NamedLayer>
-</StyledLayerDescriptor>
-
-   
-   
-   
-   
- 
-   
-   
+<?xml version="1.0" encoding="UTF-8"?>
+<sld:UserStyle xmlns="http://www.opengis.net/sld" xmlns:sld="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml">
+    <sld:Name>Road Centreline</sld:Name>
+    <sld:Title/>
+    <sld:FeatureTypeStyle>
+        <sld:Rule>
+            <sld:Name>&lt; 50,000</sld:Name>
+            <sld:MaxScaleDenominator>50000.0</sld:MaxScaleDenominator>
+            <sld:LineSymbolizer>
+                <sld:Stroke>
+                    <sld:CssParameter name="stroke">#FF3333</sld:CssParameter>
+                    <sld:CssParameter name="stroke-dasharray">4.0</sld:CssParameter>
+                    <sld:CssParameter name="stroke-width">1.0</sld:CssParameter>
+                </sld:Stroke>
+            </sld:LineSymbolizer>
+            <sld:TextSymbolizer>
+                <sld:Label>
+                    <ogc:PropertyName>label</ogc:PropertyName>
+                </sld:Label>
+                <sld:Font>
+                    <sld:CssParameter name="font-family">Arial</sld:CssParameter>
+                    <sld:CssParameter name="font-size">12.0</sld:CssParameter>
+                    <sld:CssParameter name="font-style">normal</sld:CssParameter>
+                    <sld:CssParameter name="font-weight">normal</sld:CssParameter>
+                </sld:Font>
+                <sld:LabelPlacement>
+                    <sld:LinePlacement>
+                        <sld:PerpendicularOffset>0.0</sld:PerpendicularOffset>
+                    </sld:LinePlacement>
+                </sld:LabelPlacement>
+                <sld:Halo>
+                    <sld:Radius>2.0</sld:Radius>
+                    <sld:Fill>
+                        <sld:CssParameter name="fill">#FFFFFF</sld:CssParameter>
+                    </sld:Fill>
+                </sld:Halo>
+                <sld:Fill>
+                    <sld:CssParameter name="fill">#000000</sld:CssParameter>
+                </sld:Fill>
+            </sld:TextSymbolizer>
+        </sld:Rule>
+        <sld:Rule>
+            <sld:Name>50,000 - 200,000</sld:Name>
+            <sld:MinScaleDenominator>50000.0</sld:MinScaleDenominator>
+            <sld:MaxScaleDenominator>200000.0</sld:MaxScaleDenominator>
+            <sld:LineSymbolizer>
+                <sld:Stroke>
+                    <sld:CssParameter name="stroke">#FF3333</sld:CssParameter>
+                    <sld:CssParameter name="stroke-dasharray">4.0</sld:CssParameter>
+                    <sld:CssParameter name="stroke-width">1.0</sld:CssParameter>
+                </sld:Stroke>
+            </sld:LineSymbolizer>
+        </sld:Rule>
+    </sld:FeatureTypeStyle>
+</sld:UserStyle>
