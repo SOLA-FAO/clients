@@ -5,11 +5,11 @@
     <parent>
         <artifactId>sola-clients-swing</artifactId>
         <groupId>org.sola.clients</groupId>
-        <version>sl-001</version>
+        <version>sl-002</version>
     </parent>
     <groupId>org.sola.clients.swing</groupId>
     <artifactId>clients-swing-common</artifactId>
-    <version>sl-001</version>
+    <version>sl-002</version>
     <name>Clients SWING Common</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
