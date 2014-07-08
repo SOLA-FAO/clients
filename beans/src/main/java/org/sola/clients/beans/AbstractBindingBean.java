@@ -1,28 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.beans;
@@ -58,6 +60,10 @@ public abstract class AbstractBindingBean implements Serializable {
     protected transient final PropertyChangeSupport propertySupport;
     private EntityAction entityAction;
     private transient String stateHash;
+    // Variable used to indicate when a bean is being copied. Useful if a 
+    // a getter/setter also modifies a list field on the object. 
+    // e.g. See CadastreObjectBean.officialAreaSize
+    private boolean copyInProgress = false;
 
     public AbstractBindingBean() {
         propertySupport = new PropertyChangeSupport(this);
@@ -99,7 +105,7 @@ public abstract class AbstractBindingBean implements Serializable {
 //        if(this.getEntityAction()!=null && this.getEntityAction() == EntityAction.DELETE){
 //            return new HashSet<ConstraintViolation<T>>();
 //        }
-        
+
         T bean = (T) this;
         Set<ConstraintViolation<T>> warningsList = ValidatorFactory.getInstance().getValidator().validate(bean, group);
 
@@ -142,10 +148,18 @@ public abstract class AbstractBindingBean implements Serializable {
     }
 
     /**
-     * Makes a copy of current object instance.
+     * Makes a copy of current object instance. Sets copyInProgress variable to
+     * indicate when the copy is occuring.
      */
     public <T extends AbstractBindingBean> T copy() {
-        return (T) MappingManager.getMapper().map(this, this.getClass());
+        T copy = null;
+        try {
+            copyInProgress = true;
+            copy = (T) MappingManager.getMapper().map(this, this.getClass());
+        } finally {
+            copyInProgress = false;
+        }
+        return copy;
     }
 
     /**
@@ -155,8 +169,21 @@ public abstract class AbstractBindingBean implements Serializable {
      */
     public <T extends AbstractBindingBean> void copyFromObject(T sourceObject) {
         if (sourceObject != null) {
-            MappingManager.getMapper().map(sourceObject, this);
+            try {
+                copyInProgress = true;
+                MappingManager.getMapper().map(sourceObject, this);
+            } finally {
+                copyInProgress = false;
+            }
         }
+    }
+    
+    /**
+     * Can be used to identify when an object is being copied. 
+     * @return 
+     */
+    public boolean isCopyInProgress() {
+        return copyInProgress; 
     }
 
     /**
@@ -200,38 +227,44 @@ public abstract class AbstractBindingBean implements Serializable {
         propertySupport.firePropertyChange(property, null, refDataBean);
     }
 
-    /** 
-     * Compares current object state with saved state. If they are different, returns true. 
-     * @see AbstractBindingBean#saveStateHash() 
+    /**
+     * Compares current object state with saved state. If they are different,
+     * returns true.
+     *
+     * @see AbstractBindingBean#saveStateHash()
      */
-    public boolean hasChanges() throws IOException, NoSuchAlgorithmException{
+    public boolean hasChanges() throws IOException, NoSuchAlgorithmException {
         String newState = getCheckSum();
-        if(stateHash == null || !stateHash.equals(newState)){
+        if (stateHash == null || !stateHash.equals(newState)) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
-    
-    /** 
-     * Generates hash of the object and saves it locally. It might be used to 
+
+    /**
+     * Generates hash of the object and saves it locally. It might be used to
      * compare this value, later after doing changes on the object.
-     * @see AbstractBindingBean#getCheckSum()  
-     * @see AbstractBindingBean#hasChanges()  
+     *
+     * @see AbstractBindingBean#getCheckSum()
+     * @see AbstractBindingBean#hasChanges()
      */
-    public void saveStateHash() throws IOException, NoSuchAlgorithmException{
+    public void saveStateHash() throws IOException, NoSuchAlgorithmException {
         stateHash = getCheckSum();
     }
-    
-    /** 
-     * Returns previously saved object state hash. 
-     * @see AbstractBindingBean#saveStateHash() 
+
+    /**
+     * Returns previously saved object state hash.
+     *
+     * @see AbstractBindingBean#saveStateHash()
      */
-    public String getSavedHash(){
+    public String getSavedHash() {
         return stateHash;
     }
-    
-    /** Calculates hash for this object and child objects. */
+
+    /**
+     * Calculates hash for this object and child objects.
+     */
     public String getCheckSum() throws IOException, NoSuchAlgorithmException {
         String hashString;
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -246,8 +279,8 @@ public abstract class AbstractBindingBean implements Serializable {
         byte[] bytes = baos.toByteArray();
         m.update(bytes);
         hashString = (new BigInteger(1, m.digest())).toString(16);
-        System.out.println("Bean="+ bytes.toString()); 
+        System.out.println("Bean=" + bytes.toString());
         return hashString;
     }
-    
+
 }

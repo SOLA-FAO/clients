@@ -220,6 +220,10 @@ public final class CacheManager {
      * Cache key of the {@link NotationStatusTypeBean} collection.
      */
     public static final String NOTATION_STATUS_TYPE_GROUP_KEY = NotationStatusTypeBean.class.getName() + LIST_POSTFIX;
+    /**
+     * Cache key of the {@link StateLandStatusTypeBean} collection.
+     */
+    public static final String STATE_LAND_STATUS_TYPE_GROUP_KEY = StateLandStatusTypeBean.class.getName() + LIST_POSTFIX;
 
     private static final String GET_APPLICATION_STATUS_TYPES = "getApplicationStatusTypes";
     private static final String GET_SOURCE_TYPES = "getSourceTypes";
@@ -254,6 +258,7 @@ public final class CacheManager {
     private static final String GET_PANEL_LAUNCHER_CONFIG = "getPanelLauncherConfiguration";
     private static final String GET_PANEL_LAUNCHER_GROUPS = "getPanelLauncherGroups";
     private static final String GET_NOTATION_STATUS_TYPES = "getNotationStatusTypes";
+    private static final String GET_STATE_LAND_STATUS_TYPES = "getStateLandStatusTypes";
 
     public static List<BrValidationTargetTypeBean> getBrValidationTargetTypes() {
         return getCachedBeanList(BrValidationTargetTypeBean.class,
@@ -491,6 +496,12 @@ public final class CacheManager {
         return getCachedBeanList(NotationStatusTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_NOTATION_STATUS_TYPES, NOTATION_STATUS_TYPE_GROUP_KEY);
+    }
+
+    public static List<StateLandStatusTypeBean> getStateLandStatusTypes() {
+        return getCachedBeanList(StateLandStatusTypeBean.class,
+                WSManager.getInstance().getReferenceDataService(),
+                GET_STATE_LAND_STATUS_TYPES, STATE_LAND_STATUS_TYPE_GROUP_KEY);
     }
 
     /**

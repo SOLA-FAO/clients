@@ -63,7 +63,7 @@ public class BaUnitNotationBean extends AbstractTransactionedBean {
     private String baUnitId;
     private String transactionId;
 
-    @Length(max = 1000, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH_NOTATION, payload = Localized.class)
+    // @Length(max = 1000, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH_NOTATION, payload = Localized.class)
     private String notationText;
     private String referenceNr;
     private Date changeTime;

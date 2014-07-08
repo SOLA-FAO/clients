@@ -1,28 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.beans.cadastre;
@@ -40,13 +42,14 @@ import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.controls.SolaList;
 import org.sola.clients.beans.referencedata.CadastreObjectTypeBean;
 import org.sola.clients.beans.referencedata.LandUseTypeBean;
+import org.sola.clients.beans.referencedata.StateLandStatusTypeBean;
 import org.sola.clients.beans.validation.Localized;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.webservices.transferobjects.cadastre.CadastreObjectTO;
 import org.sola.webservices.transferobjects.EntityAction;
 
-/** 
- * Contains properties and methods to manage <b>Cadastre</b> object of the 
+/**
+ * Contains properties and methods to manage <b>Cadastre</b> object of the
  * domain model. Could be populated from the {@link CadastreObjectTO} object.
  */
 public class CadastreObjectBean extends AbstractTransactionedBean {
@@ -66,18 +69,21 @@ public class CadastreObjectBean extends AbstractTransactionedBean {
     public static final String ADDRESS_LIST_PROPERTY = "addressList";
     public static final String SELECTED_ADDRESS_PROPERTY = "selectedAddress";
     public static final String OFFICIAL_AREA_SIZE_PROPERTY = "officialAreaSize";
-    
+    public static final String DESCRIPTION_PROPERTY = "description";
+    public static final String STATE_LAND_STATUS_TYPE_PROPERTY = "stateLandStatusType";
+    public static final String STATE_LAND_STATUS_CODE_PROPERTY = "stateLandStatusCode";
+
     private Date approvalDatetime;
     private Date historicDatetime;
-    @Length(max = 100, message =  ClientMessage.CHECK_FIELD_INVALID_LENGTH_SRCREF, payload=Localized.class)
+    @Length(max = 100, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH_SRCREF, payload = Localized.class)
     private String sourceReference;
-    @Length(max = 20, message =  ClientMessage.CHECK_FIELD_INVALID_LENGTH_FIRSTPART, payload=Localized.class)
-    @NotEmpty(message =  ClientMessage.CHECK_NOTNULL_CADFIRSTPART, payload=Localized.class)
+    @Length(max = 20, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH_FIRSTPART, payload = Localized.class)
+    @NotEmpty(message = ClientMessage.CHECK_NOTNULL_CADFIRSTPART, payload = Localized.class)
     private String nameFirstpart;
-    @Length(max = 50, message =  ClientMessage.CHECK_FIELD_INVALID_LENGTH_LASTPART, payload=Localized.class)
-    @NotEmpty(message =  ClientMessage.CHECK_NOTNULL_CADLASTPART, payload=Localized.class)
+    @Length(max = 50, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH_LASTPART, payload = Localized.class)
+    @NotEmpty(message = ClientMessage.CHECK_NOTNULL_CADLASTPART, payload = Localized.class)
     private String nameLastpart;
-    @NotNull(message =  ClientMessage.CHECK_NOTNULL_CADOBJTYPE, payload=Localized.class)
+    //@NotNull(message = ClientMessage.CHECK_NOTNULL_CADOBJTYPE, payload = Localized.class)
     private CadastreObjectTypeBean cadastreObjectType;
     private byte[] geomPolygon;
     private transient boolean selected;
@@ -85,7 +91,9 @@ public class CadastreObjectBean extends AbstractTransactionedBean {
     private SolaList<SpatialValueAreaBean> spatialValueAreaList;
     private SolaList<AddressBean> addressList;
     private transient AddressBean selectedAddress;
-    
+    private String description;
+    private StateLandStatusTypeBean stateLandStatusType;
+
     public CadastreObjectBean() {
         super();
         addressList = new SolaList<AddressBean>();
@@ -164,6 +172,7 @@ public class CadastreObjectBean extends AbstractTransactionedBean {
                 CacheManager.getCadastreObjectTypes(), typeCode));
         propertySupport.firePropertyChange(TYPE_CODE_PROPERTY, oldValue, typeCode);
     }
+
     public String getLandUseCode() {
         if (landUseType != null) {
             return landUseType.getCode();
@@ -187,17 +196,18 @@ public class CadastreObjectBean extends AbstractTransactionedBean {
     }
 
     public void setCadastreObjectType(CadastreObjectTypeBean cadastreObjectType) {
-        if(this.cadastreObjectType==null){
+        if (this.cadastreObjectType == null) {
             this.cadastreObjectType = new CadastreObjectTypeBean();
         }
         this.setJointRefDataBean(this.cadastreObjectType, cadastreObjectType, CADASTRE_OBJECT_TYPE_PROPERTY);
     }
-     public LandUseTypeBean getLandUseType() {
+
+    public LandUseTypeBean getLandUseType() {
         return landUseType;
     }
 
     public void setLandUseType(LandUseTypeBean landUseType) {
-        if(this.landUseType==null){
+        if (this.landUseType == null) {
             this.landUseType = new LandUseTypeBean();
         }
         this.setJointRefDataBean(this.landUseType, landUseType, LAND_USE_TYPE_PROPERTY);
@@ -222,37 +232,50 @@ public class CadastreObjectBean extends AbstractTransactionedBean {
         this.selected = selected;
         propertySupport.firePropertyChange(SELECTED_PROPERTY, oldValue, this.selected);
     }
-    
-    /** Looks for officialArea code in the list of areas. */
-    @NotNull(message=ClientMessage.CHECK_NOTNULL_AREA, payload=Localized.class)
-    public BigDecimal getOfficialAreaSize(){
-        if(getSpatialValueAreaFiletredList()==null || getSpatialValueAreaFiletredList().size() < 1){
+
+    /**
+     * Looks for officialArea code in the list of areas.
+     */
+    //@NotNull(message = ClientMessage.CHECK_NOTNULL_AREA, payload = Localized.class)
+    public BigDecimal getOfficialAreaSize() {
+        if (isCopyInProgress() || getSpatialValueAreaFiletredList() == null
+                || getSpatialValueAreaFiletredList().size() < 1) {
             return null;
         }
-        for(SpatialValueAreaBean areaBean : getSpatialValueAreaFiletredList()){
-            if(areaBean.getTypeCode()!=null && areaBean.getTypeCode().equals(SpatialValueAreaBean.CODE_OFFICIAL_AREA)){
+        for (SpatialValueAreaBean areaBean : getSpatialValueAreaFiletredList()) {
+            if (SpatialValueAreaBean.CODE_OFFICIAL_AREA.equals(areaBean.getTypeCode())) {
                 return areaBean.getSize();
             }
         }
         return null;
     }
 
-    /** Sets officialArea code. */
-    public void setOfficialAreaSize(BigDecimal area){
-        for(SpatialValueAreaBean areaBean : getSpatialValueAreaFiletredList()){
-            if(areaBean.getTypeCode()!=null && areaBean.getTypeCode().equals(SpatialValueAreaBean.CODE_OFFICIAL_AREA)){
+    /**
+     * Sets officialArea code.
+     */
+    public void setOfficialAreaSize(BigDecimal area) {
+        if (isCopyInProgress()) {
+            // Don't modify the areaList if the Bean is being copied otherwise
+            // the list may end up with a duplicate area bean. 
+            return;
+        }
+        boolean found = false;
+        for (SpatialValueAreaBean areaBean : getSpatialValueAreaList()) {
+            if (SpatialValueAreaBean.CODE_OFFICIAL_AREA.equals(areaBean.getTypeCode())) {
                 // Delete area if provided value is null
-                if(area == null){
+                if (area == null) {
                     areaBean.setEntityAction(EntityAction.DELETE);
                 } else {
                     areaBean.setSize(area);
+                    areaBean.setEntityAction(null);
                 }
+                found = true;
                 break;
             }
         }
-        
+
         // Official area not found, add new if provided area not null
-        if(area!=null){
+        if (area != null && !found) {
             SpatialValueAreaBean areaBean = new SpatialValueAreaBean();
             areaBean.setSize(area);
             areaBean.setTypeCode(SpatialValueAreaBean.CODE_OFFICIAL_AREA);
@@ -261,12 +284,12 @@ public class CadastreObjectBean extends AbstractTransactionedBean {
         }
         propertySupport.firePropertyChange(OFFICIAL_AREA_SIZE_PROPERTY, null, area);
     }
-    
+
     @Valid
     public ObservableList<AddressBean> getAddressFilteredList() {
         return addressList.getFilteredList();
     }
-    
+
     public SolaList<AddressBean> getAddressList() {
         return addressList;
     }
@@ -275,13 +298,15 @@ public class CadastreObjectBean extends AbstractTransactionedBean {
         this.addressList = addressList;
     }
 
-    /** Returns merged string of addresses. */
-    public String getAddressString(){
+    /**
+     * Returns merged string of addresses.
+     */
+    public String getAddressString() {
         String address = "";
-        if(getAddressFilteredList()!=null){
-            for (AddressBean addressBean : getAddressFilteredList()){
-                if(addressBean.getDescription()!=null && !addressBean.getDescription().isEmpty()){
-                    if(address.isEmpty()){
+        if (getAddressFilteredList() != null) {
+            for (AddressBean addressBean : getAddressFilteredList()) {
+                if (addressBean.getDescription() != null && !addressBean.getDescription().isEmpty()) {
+                    if (address.isEmpty()) {
                         address = addressBean.getDescription();
                     } else {
                         address = address + "; " + addressBean.getDescription();
@@ -291,7 +316,7 @@ public class CadastreObjectBean extends AbstractTransactionedBean {
         }
         return address;
     }
-    
+
     public AddressBean getSelectedAddress() {
         return selectedAddress;
     }
@@ -310,46 +335,86 @@ public class CadastreObjectBean extends AbstractTransactionedBean {
     public ObservableList<SpatialValueAreaBean> getSpatialValueAreaFiletredList() {
         return spatialValueAreaList.getFilteredList();
     }
-    
+
     public void setSpatialValueAreaList(SolaList<SpatialValueAreaBean> spatialValueAreaList) {
         this.spatialValueAreaList = spatialValueAreaList;
     }
-    
-    /** Adds new cadastre object address. */
-    public void addAddress(AddressBean address){
-        if(address!=null){
+
+    /**
+     * Adds new cadastre object address.
+     */
+    public void addAddress(AddressBean address) {
+        if (address != null) {
             getAddressList().addAsNew(address);
         }
     }
-    
-    /** Removes selected address. */
-    public void removeSelectedAddress(){
-        if(selectedAddress!=null){
-            if(selectedAddress.isNew()){
+
+    /**
+     * Removes selected address.
+     */
+    public void removeSelectedAddress() {
+        if (selectedAddress != null) {
+            if (selectedAddress.isNew()) {
                 getAddressList().remove(selectedAddress);
             } else {
                 getAddressList().safeRemove(selectedAddress, EntityAction.DELETE);
             }
         }
     }
-    
-    /** Updates selected address. */
-    public void updateSelectedAddress(AddressBean address){
-        if(selectedAddress!=null && address!=null){
+
+    /**
+     * Updates selected address.
+     */
+    public void updateSelectedAddress(AddressBean address) {
+        if (selectedAddress != null && address != null) {
             selectedAddress.setDescription(address.getDescription());
         }
     }
-    
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        String oldValue = this.description;
+        this.description = description;
+        propertySupport.firePropertyChange(DESCRIPTION_PROPERTY, oldValue, description);
+    }
+
+    public String getStateLandStatusCode() {
+        if (stateLandStatusType != null) {
+            return stateLandStatusType.getCode();
+        } else {
+            return null;
+        }
+    }
+
+    public void setStateLandStatusCode(String statusCode) {
+        String oldValue = null;
+        if (stateLandStatusType != null) {
+            oldValue = stateLandStatusType.getCode();
+        }
+        setStateLandStatusType(CacheManager.getBeanByCode(
+                CacheManager.getStateLandStatusTypes(), statusCode));
+        propertySupport.firePropertyChange(STATE_LAND_STATUS_CODE_PROPERTY, oldValue, statusCode);
+    }
+
+    public StateLandStatusTypeBean getStateLandStatusType() {
+        return stateLandStatusType;
+    }
+
+    public void setStateLandStatusType(StateLandStatusTypeBean stateLandStatusType) {
+        if (this.stateLandStatusType == null) {
+            this.stateLandStatusType = new StateLandStatusTypeBean();
+        }
+        this.setJointRefDataBean(this.stateLandStatusType, stateLandStatusType, STATE_LAND_STATUS_TYPE_PROPERTY);
+    }
+
     @Override
     public String toString() {
-        String result = "";
-        if(nameFirstpart!=null){
-            result = nameFirstpart;
-            if(nameLastpart!=null){
-                result += " / " + nameLastpart;
-            }
-        }
+        String result = nameFirstpart == null ? "" : nameFirstpart;
+        result += nameLastpart == null ? "" : " " + nameLastpart;
         return result;
     }
-    
+
 }

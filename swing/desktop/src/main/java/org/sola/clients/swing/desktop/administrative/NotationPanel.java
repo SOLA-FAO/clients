@@ -33,11 +33,11 @@ import org.sola.clients.beans.administrative.BaUnitBean;
 import org.sola.clients.beans.administrative.BaUnitNotationBean;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.referencedata.NotationStatusTypeBean;
-import org.sola.clients.beans.referencedata.NotationStatusTypeListBean;
-import org.sola.clients.beans.referencedata.StatusConstants;
+import org.sola.clients.swing.common.utils.FormattersFactory;
 import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel;
 import org.sola.clients.swing.ui.ContentPanel;
+import org.sola.common.DateUtility;
 
 /**
  * Panel used to add and edit Notation details
@@ -45,17 +45,17 @@ import org.sola.clients.swing.ui.ContentPanel;
  * @author soladev
  */
 public class NotationPanel extends ContentPanel {
-    
+
     public static final String SAVE_NOTATION = "saveNotation";
-    
-    private ApplicationBean applicationBean;
-    private BaUnitBean baUnitBean;
-    private boolean readOnly = false;    
-    
+
+    final private ApplicationBean applicationBean;
+    final private BaUnitBean baUnitBean;
+    private boolean readOnly = false;
+
     public NotationPanel(BaUnitNotationBean noteBean, BaUnitBean baUnitBean,
             ApplicationBean appBean, Boolean readOnly) {
         this.notationBean = noteBean == null ? null : (BaUnitNotationBean) noteBean.copy();
-        this.baUnitBean = baUnitBean;        
+        this.baUnitBean = baUnitBean;
         this.applicationBean = appBean;
         this.readOnly = readOnly;
         initComponents();
@@ -72,6 +72,7 @@ public class NotationPanel extends ContentPanel {
             notationBean.setStatusCode(NotationStatusTypeBean.GENERAL);
             if (baUnitBean != null) {
                 notationBean.setBaUnitId(baUnitBean.getId());
+                notationBean.setNotationDate(DateUtility.now());
             }
         }
         return notationBean;
@@ -90,30 +91,43 @@ public class NotationPanel extends ContentPanel {
         }
         return panel;
     }
-    
+
     private void customizeForm() {
+
+        java.util.ResourceBundle resourceBundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle");
+        if (notationBean.getReferenceNr() == null) {
+            headerPanel1.setTitleText(String.format(
+                    resourceBundle.getString("NotationPanel.TitleText.NewNote"),
+                    baUnitBean.getDisplayName()));
+        } else {
+            headerPanel1.setTitleText(String.format(
+                    resourceBundle.getString("NotationPanel.TitleText.ExistingNote"),
+                    baUnitBean.getDisplayName(), notationBean.getReferenceNr()));
+        }
         boolean enabled = !readOnly;
         btnSave1.setEnabled(enabled);
         txtNr.setEnabled(enabled);
         txtNotation.setEnabled(enabled);
         cbxStatus.setEnabled(enabled);
+        txtDate.setEnabled(false);
+        txtUser.setEnabled(false);
     }
-    
+
     private boolean saveNotation() {
         if (notationBean.validate(true).size() <= 0) {
             MainForm.saveBeanState(this.notationBean);
             if (applicationBean == null) {
                 // This notation has been added/edited outside of an application.
                 // Explicilty save the notation now
-                notationBean.save();                
-            }            
+                notationBean.save();
+            }
             firePropertyChange(SAVE_NOTATION, null, notationBean);
             close();
             return true;
         }
         return false;
     }
-    
+
     @Override
     protected boolean panelClosing() {
         if (btnSave1.isEnabled() && MainForm.checkSaveBeforeClose(notationBean)) {
@@ -121,7 +135,7 @@ public class NotationPanel extends ContentPanel {
         }
         return true;
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -142,7 +156,11 @@ public class NotationPanel extends ContentPanel {
         lblStatus = new javax.swing.JLabel();
         cbxStatus = new javax.swing.JComboBox();
         jPanel7 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        txtDate = new javax.swing.JFormattedTextField();
         jPanel8 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        txtUser = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtNotation = new javax.swing.JTextArea();
         lblNotation = new javax.swing.JLabel();
@@ -217,28 +235,54 @@ public class NotationPanel extends ContentPanel {
 
         jPanel4.add(jPanel6);
 
+        jLabel1.setText(bundle.getString("NotationPanel.jLabel1.text")); // NOI18N
+
+        txtDate.setFormatterFactory(FormattersFactory.getInstance().getDateTimeFormatterFactory());
+        txtDate.setText(bundle.getString("NotationPanel.txtDate.text")); // NOI18N
+        txtDate.setEnabled(false);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, notationBean, org.jdesktop.beansbinding.ELProperty.create("${notationDate}"), txtDate, org.jdesktop.beansbinding.BeanProperty.create("value"));
+        bindingGroup.addBinding(binding);
+
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 150, Short.MAX_VALUE)
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+            .addComponent(txtDate)
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 51, Short.MAX_VALUE)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 11, Short.MAX_VALUE))
         );
 
         jPanel4.add(jPanel7);
+
+        jLabel2.setText(bundle.getString("NotationPanel.jLabel2.text")); // NOI18N
+
+        txtUser.setEnabled(false);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, notationBean, org.jdesktop.beansbinding.ELProperty.create("${changeUser}"), txtUser, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 150, Short.MAX_VALUE)
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+            .addComponent(txtUser)
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 51, Short.MAX_VALUE)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 11, Short.MAX_VALUE))
         );
 
         jPanel4.add(jPanel8);
@@ -329,6 +373,8 @@ public class NotationPanel extends ContentPanel {
     private org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel documentsPanel;
     private org.sola.clients.swing.ui.GroupPanel groupPanel1;
     private org.sola.clients.swing.ui.HeaderPanel headerPanel1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
@@ -343,8 +389,10 @@ public class NotationPanel extends ContentPanel {
     private javax.swing.JLabel lblStatus;
     private org.sola.clients.beans.administrative.BaUnitNotationBean notationBean;
     private org.sola.clients.beans.referencedata.NotationStatusTypeListBean statusCodesList;
+    private javax.swing.JFormattedTextField txtDate;
     private javax.swing.JTextArea txtNotation;
     private javax.swing.JTextField txtNr;
+    private javax.swing.JTextField txtUser;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }

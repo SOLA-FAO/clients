@@ -189,8 +189,7 @@ public class PropertyHelper {
     private static BaUnitBean prepareNewStateLand() {
         BaUnitBean result = new BaUnitBean();
         result.setTypeCode(BaUnitTypeBean.CODE_STATE_LAND);
-        result.setStatusCode(StatusConstants.PENDING);
-        result.setNameFirstpart("SL");
+        result.setStatusCode(StatusConstants.PENDING);;
         return result;
     }
 }
