@@ -247,10 +247,10 @@ public class Development {
         System.out.println("Test title plan");
         SecurityBean.authenticate("test", "test".toCharArray(), this.getWSConfig());
         MapImageGeneratorForSelectedParcel gen = 
-                new MapImageGeneratorForSelectedParcel(400, 500, 200, 40);
-        MapImageInformation info = gen.getMapAndScalebarImage("5050170");
+                new MapImageGeneratorForSelectedParcel(400, 500, 200, 200, false, 0,0);
+        MapImageInformation info = gen.getInformation("5050170");
         System.out.println(info);
-        info = gen.getMapAndScalebarImage("4821936");
+        info = gen.getInformation("4821936");
         System.out.println(info);
     }
     

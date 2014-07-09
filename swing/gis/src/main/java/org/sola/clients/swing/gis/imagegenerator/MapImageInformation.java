@@ -11,6 +11,7 @@ package org.sola.clients.swing.gis.imagegenerator;
  */
 public class MapImageInformation {
    private String mapImageLocation;
+   private String sketchMapImageLocation;
    private String scalebarImageLocation;
    private Integer srid;
    private double scale;
@@ -22,6 +23,14 @@ public class MapImageInformation {
 
     public void setMapImageLocation(String mapImageLocation) {
         this.mapImageLocation = mapImageLocation;
+    }
+
+    public String getSketchMapImageLocation() {
+        return sketchMapImageLocation;
+    }
+
+    public void setSketchMapImageLocation(String sketchMapImageLocation) {
+        this.sketchMapImageLocation = sketchMapImageLocation;
     }
 
     public String getScalebarImageLocation() {
