@@ -68,8 +68,8 @@ public class MapImageInformation {
     @Override
     public String toString() {
         return String.format(
-                "map:%s\r\nscalebar:%s\r\narea:%s\r\nscale:%s", 
+                "map:%s\r\nscalebar:%s\r\narea:%s\r\nscale:%s\nsrid:%s", 
                 getMapImageLocation(), getScalebarImageLocation(), 
-                getArea(), getScale());
+                getArea(), getScale(), getSrid());
     }
 }
