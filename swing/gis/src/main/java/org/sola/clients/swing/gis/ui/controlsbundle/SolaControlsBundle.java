@@ -34,7 +34,6 @@ import org.geotools.map.extended.layer.ExtendedLayer;
 import org.geotools.swing.extended.ControlsBundle;
 import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.geotools.swing.extended.exception.InitializeMapException;
-import org.geotools.swing.extended.util.CRSUtility;
 import org.geotools.swing.mapaction.extended.KMLExportAction;
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.swing.gis.Messaging;
@@ -150,6 +149,9 @@ public abstract class SolaControlsBundle extends ControlsBundle {
      */
     private void addLayerConfig(ConfigMapLayerTO configMapLayer)
             throws InitializeLayerException, SchemaException {
+        if (!configMapLayer.isActive()){
+            return;
+        }
         if (configMapLayer.getTypeCode().equals("wms")) {
             String wmsServerURL = configMapLayer.getUrl();
             ArrayList<String> wmsLayerNames = new ArrayList<String>();

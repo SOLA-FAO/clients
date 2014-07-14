@@ -11,6 +11,7 @@ import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -68,7 +69,7 @@ public class MapImageGeneratorForSelectedParcel {
     private int imageWidth;
     private int imageHeight;
     private int imageMarginTop = 11, imageMarginBottom = 11;
-    private int imageMarginLeft = 55, imageMarginRight = 55;
+    private int imageMarginLeft = 11, imageMarginRight = 11;
     private int sketchWidth;
     private int sketchHeight;
     private int scalebarWidth;
@@ -321,12 +322,21 @@ public class MapImageGeneratorForSelectedParcel {
 
         FontMetrics fontMetrics = graphics.getFontMetrics();
         String coordinateToPrint = String.format("%s", yCoordinate);
-        int yLocationCoordinateToPrint = yCoordinateLocation + fontMetrics.getAscent() / 2;
+        int yLocationCoordinateToPrint = yCoordinateLocation + fontMetrics.stringWidth(coordinateToPrint) / 2;
+        //yLocationCoordinateToPrint = imageHeight - yLocationCoordinateToPrint;
+        AffineTransform originalTransform = graphics.getTransform();
+        
+        //Rotate 90degrees
+        graphics.rotate(-Math.PI / 2, 10, yLocationCoordinateToPrint);
         //Print y coordinate on the left
-        graphics.drawString(coordinateToPrint, 0, yLocationCoordinateToPrint);
+        graphics.drawString(coordinateToPrint, 10, yLocationCoordinateToPrint);
+        
+        graphics.setTransform(originalTransform);
+        graphics.rotate(Math.PI / 2, getMapOnlyWidth() + imageMarginLeft + 1, imageHeight - yLocationCoordinateToPrint);
         //Print y coordinate on the right
-        graphics.drawString(coordinateToPrint, getMapOnlyWidth() + imageMarginLeft + 1, yLocationCoordinateToPrint);
+        graphics.drawString(coordinateToPrint, getMapOnlyWidth() + imageMarginLeft + 1, imageHeight - yLocationCoordinateToPrint);
 
+        graphics.setTransform(originalTransform);
         coordinateToPrint = String.format("%s", xCoordinate);
         int xLocationCoordinateToPrint =
                 xCoordinateLocation - fontMetrics.stringWidth(coordinateToPrint) / 2;
@@ -400,7 +410,7 @@ public class MapImageGeneratorForSelectedParcel {
             scaleRange[0] = 0;
 
             for (int i = 1; i <= scaleRangeAsString.length; i++) {
-                scaleRange[i] = Double.parseDouble(scaleRangeAsString[i]);
+                scaleRange[i] = Double.parseDouble(scaleRangeAsString[i-1]);
             }
         }
     }

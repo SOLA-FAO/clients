@@ -88,6 +88,9 @@ public final class ControlsBundleForPublicDisplay extends SolaControlsBundle {
         super.addLayers();
         for (ConfigMapLayerTO configMapLayer :
                 this.getPojoDataAccess().getMapDefinition().getLayers()) {
+            if (!configMapLayer.isActive()){
+                continue;
+            }
             if (configMapLayer.getTypeCode().equals("pojo_public_display")) {
                 PojoForPublicDisplayLayer layer = new PojoForPublicDisplayLayer(
                         configMapLayer.getId(), getPojoDataAccess(),
