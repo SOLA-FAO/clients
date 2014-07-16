@@ -38,6 +38,8 @@ import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.common.DateUtility;
+import org.sola.common.messaging.ClientMessage;
+import org.sola.common.messaging.MessageUtility;
 
 /**
  * Panel used to add and edit Notation details
@@ -99,6 +101,8 @@ public class NotationPanel extends ContentPanel {
             headerPanel1.setTitleText(String.format(
                     resourceBundle.getString("NotationPanel.TitleText.NewNote"),
                     baUnitBean.getDisplayName()));
+            btnSave1.setText(MessageUtility.getLocalizedMessage(
+                    ClientMessage.GENERAL_LABELS_CREATE_AND_CLOSE).getMessage());
         } else {
             headerPanel1.setTitleText(String.format(
                     resourceBundle.getString("NotationPanel.TitleText.ExistingNote"),
@@ -288,6 +292,7 @@ public class NotationPanel extends ContentPanel {
         jPanel4.add(jPanel8);
 
         txtNotation.setColumns(20);
+        txtNotation.setLineWrap(true);
         txtNotation.setRows(5);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, notationBean, org.jdesktop.beansbinding.ELProperty.create("${notationText}"), txtNotation, org.jdesktop.beansbinding.BeanProperty.create("text"));

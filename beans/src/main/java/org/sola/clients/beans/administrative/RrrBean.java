@@ -47,12 +47,14 @@ import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.controls.SolaList;
 import org.sola.clients.beans.party.PartySummaryBean;
 import org.sola.clients.beans.referencedata.ConditionTypeBean;
+import org.sola.clients.beans.referencedata.RrrSubTypeBean;
 import org.sola.clients.beans.referencedata.MortgageTypeBean;
 import org.sola.clients.beans.referencedata.RrrTypeBean;
 import org.sola.clients.beans.referencedata.StatusConstants;
 import org.sola.clients.beans.source.SourceBean;
 import org.sola.clients.beans.validation.Localized;
 import org.sola.clients.beans.validation.NoDuplicates;
+import org.sola.common.StringUtility;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.webservices.transferobjects.EntityAction;
 import org.sola.webservices.transferobjects.administrative.RrrTO;
@@ -106,6 +108,8 @@ public class RrrBean extends AbstractTransactionedBean {
     public static final String SELECTED_RIGHTHOLDER_PROPERTY = "selectedRightHolder";
     public static final String DUE_DATE_PROPERTY = "dueDate";
     public static final String SELECTED_CONDITION_PROPERTY = "selectedCondition";
+    public static final String RRR_SUB_TYPE_CODE_PROPERTY = "rrrSubType";
+    public static final String RRR_SUB_TYPE_PROPERTY = "rrrSubType";
 
     private String baUnitId;
     private String nr;
@@ -140,9 +144,28 @@ public class RrrBean extends AbstractTransactionedBean {
     private transient PartySummaryBean selectedRightholder;
     private transient ConditionForRrrBean selectedCondition;
     private String concatenatedName;
+    private transient String referenceNum;
+    private RrrSubTypeBean rrrSubType;
 
     public String getConcatenatedName() {
-        return concatenatedName;
+        // Display the Notation text entered by the user or the list of rightholders
+        // if no text is supplied. 
+        String result = "";
+        if (getRrrSubType() != null) {
+            result = getRrrSubType().getDisplayValue();
+        }
+        if (getNotation() != null && !StringUtility.isEmpty(getNotation().getNotationText())) {
+            result = result == "" ? getNotation().getNotationText()
+                    : result + " - " + getNotation().getNotationText();
+        } else {
+            if (getFilteredRightHolderList().size() > 0) {
+                for (PartySummaryBean rightHolder : getFilteredRightHolderList()) {
+                    result = result + rightHolder.getFullName() + ", ";
+                }
+                result = result.substring(0, result.length() - 2);
+            }
+        }
+        return result;
     }
 
     public void setConcatenatedName(String concatenatedName) {
@@ -342,7 +365,7 @@ public class RrrBean extends AbstractTransactionedBean {
         return sourceList;
     }
 
-    @Size(min = 1, message = ClientMessage.CHECK_SIZE_SOURCELIST, payload = Localized.class)
+    // @Size(min = 1, message = ClientMessage.CHECK_SIZE_SOURCELIST, payload = Localized.class)
     @NoDuplicates(message = ClientMessage.CHECK_NODUPLICATED_SOURCELIST, payload = Localized.class)
     public ObservableList<SourceBean> getFilteredSourceList() {
         return sourceList.getFilteredList();
@@ -417,8 +440,8 @@ public class RrrBean extends AbstractTransactionedBean {
         return conditionsList;
     }
 
-    @Size(min = 1, groups = {SimpleOwnershipValidationGroup.class, LeaseValidationGroup.class},
-            message = ClientMessage.CHECK_SIZE_CONDITIONS_LIST, payload = Localized.class)
+    //  @Size(min = 1, groups = {SimpleOwnershipValidationGroup.class, LeaseValidationGroup.class},
+    //          message = ClientMessage.CHECK_SIZE_CONDITIONS_LIST, payload = Localized.class)
     public ObservableList<ConditionForRrrBean> getConditionsFilteredList() {
         return conditionsList.getFilteredList();
     }
@@ -469,6 +492,53 @@ public class RrrBean extends AbstractTransactionedBean {
         boolean oldValue = this.selected;
         this.selected = selected;
         propertySupport.firePropertyChange(SELECTED_PROPERTY, oldValue, this.selected);
+    }
+
+    /**
+     * Return a reference number for the RRR. Use the Ref number from the
+     * notation as the user can edit this value. Do not allow the user to edit
+     * the rrr.nr as this is used by SOLA when updating previous RRR versions.
+     */
+    public String getReferenceNum() {
+        String result = getNr();
+        if (getNotation() != null) {
+            result = getNotation().getReferenceNr();
+        }
+        return result;
+    }
+
+    public void setReferenceNum(String referenceNum) {
+        this.referenceNum = referenceNum;
+    }
+
+    public String getRrrSubTypeCode() {
+        if (rrrSubType != null) {
+            return rrrSubType.getCode();
+        } else {
+            return null;
+        }
+    }
+
+    public void setRrrSubTypeCode(String rrrSubTypeCode) {
+        String oldValue = null;
+        if (rrrSubType != null) {
+            oldValue = rrrSubType.getCode();
+        }
+        setRrrSubType(CacheManager.getBeanByCode(
+                CacheManager.getRrrSubTypes(), rrrSubTypeCode));
+        propertySupport.firePropertyChange(RRR_SUB_TYPE_CODE_PROPERTY,
+                oldValue, rrrSubTypeCode);
+    }
+
+    public RrrSubTypeBean getRrrSubType() {
+        return rrrSubType;
+    }
+
+    public void setRrrSubType(RrrSubTypeBean rrrSubType) {
+        if (this.rrrSubType == null) {
+            this.rrrSubType = new RrrSubTypeBean();
+        }
+        this.setJointRefDataBean(this.rrrSubType, rrrSubType, RRR_SUB_TYPE_PROPERTY);
     }
 
     public void removeSelectedRightHolder() {

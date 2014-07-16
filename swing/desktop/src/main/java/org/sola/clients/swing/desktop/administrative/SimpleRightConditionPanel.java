@@ -40,15 +40,16 @@ import org.sola.clients.swing.common.controls.CalendarForm;
 import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel;
 import org.sola.clients.swing.ui.ContentPanel;
+import org.sola.clients.swing.ui.administrative.ConditionsPanel;
 import org.sola.clients.swing.ui.source.DocumentsManagementPanel;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
 /**
  * Used to create and manage simple types of rights. {@link RrrBean} is used to
- * bind the data on the form.
+ * bind the data on the form. Includes a conditions tab.
  */
-public class SimpleRightPanel extends ContentPanel {
+public class SimpleRightConditionPanel extends ContentPanel {
 
     private ApplicationBean appBean;
     private ApplicationServiceBean appService;
@@ -87,13 +88,17 @@ public class SimpleRightPanel extends ContentPanel {
         return rrrBean;
     }
 
+    private ConditionsPanel createConditionsPanel() {
+        return new ConditionsPanel(rrrBean, rrrAction);
+    }
+
     private RrrSubTypeListBean createRrrSubTypes() {
         RrrSubTypeListBean list = new RrrSubTypeListBean(true);
         list.setRrrTypeFilter(rrrBean.getTypeCode(), rrrBean.getRrrSubTypeCode());
         return list;
     }
 
-    public SimpleRightPanel(BaUnitBean baUnit, RrrBean rrrBean, RrrBean.RRR_ACTION rrrAction) {
+    public SimpleRightConditionPanel(BaUnitBean baUnit, RrrBean rrrBean, RrrBean.RRR_ACTION rrrAction) {
         this(baUnit, rrrBean, null, null, rrrAction);
     }
 
@@ -107,7 +112,7 @@ public class SimpleRightPanel extends ContentPanel {
      * @param rrrAction {@link RrrBean#RRR_ACTION} type, used to customize form
      * view.
      */
-    public SimpleRightPanel(BaUnitBean baUnit, RrrBean rrrBean, ApplicationBean applicationBean,
+    public SimpleRightConditionPanel(BaUnitBean baUnit, RrrBean rrrBean, ApplicationBean applicationBean,
             ApplicationServiceBean applicationService, RrrBean.RRR_ACTION rrrAction) {
 
         this.appBean = applicationBean;
@@ -210,6 +215,8 @@ public class SimpleRightPanel extends ContentPanel {
         headerPanel = new org.sola.clients.swing.ui.HeaderPanel();
         jToolBar1 = new javax.swing.JToolBar();
         btnSave = new javax.swing.JButton();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        tabGeneral = new javax.swing.JPanel();
         pnlTop = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
@@ -232,22 +239,24 @@ public class SimpleRightPanel extends ContentPanel {
         txtNotationText = new javax.swing.JTextArea();
         jPanel4 = new javax.swing.JPanel();
         documentsPanel = createDocumentsPanel();
+        tabCondition = new javax.swing.JPanel();
+        conditionsPanel1 = createConditionsPanel();
 
         setCloseOnHide(true);
         setHeaderPanel(headerPanel);
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
-        setHelpTopic(bundle.getString("SimpleRightPanel.helpTopic")); // NOI18N
+        setHelpTopic(bundle.getString("SimpleRightConditionPanel.helpTopic")); // NOI18N
         setName("Form"); // NOI18N
 
         headerPanel.setName("headerPanel"); // NOI18N
-        headerPanel.setTitleText(bundle.getString("SimpleRightPanel.headerPanel.titleText")); // NOI18N
+        headerPanel.setTitleText(bundle.getString("SimpleRightConditionPanel.headerPanel.titleText")); // NOI18N
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
         jToolBar1.setName("jToolBar1"); // NOI18N
 
         btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/save.png"))); // NOI18N
-        btnSave.setText(bundle.getString("SimpleRightPanel.btnSave.text")); // NOI18N
+        btnSave.setText(bundle.getString("SimpleRightConditionPanel.btnSave.text")); // NOI18N
         btnSave.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSave.setName("btnSave"); // NOI18N
         btnSave.addActionListener(new java.awt.event.ActionListener() {
@@ -257,12 +266,16 @@ public class SimpleRightPanel extends ContentPanel {
         });
         jToolBar1.add(btnSave);
 
+        jTabbedPane1.setName("jTabbedPane1"); // NOI18N
+
+        tabGeneral.setName("tabGeneral"); // NOI18N
+
         pnlTop.setName("pnlTop"); // NOI18N
         pnlTop.setLayout(new java.awt.GridLayout(1, 4, 15, 0));
 
         jPanel6.setName("jPanel6"); // NOI18N
 
-        jLabel5.setText(bundle.getString("SimpleRightPanel.jLabel5.text")); // NOI18N
+        jLabel5.setText(bundle.getString("SimpleRightConditionPanel.jLabel5.text")); // NOI18N
         jLabel5.setName("jLabel5"); // NOI18N
 
         txtRefNum.setName("txtRefNum"); // NOI18N
@@ -274,7 +287,7 @@ public class SimpleRightPanel extends ContentPanel {
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jLabel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
+            .add(jLabel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
             .add(txtRefNum)
         );
         jPanel6Layout.setVerticalGroup(
@@ -290,7 +303,7 @@ public class SimpleRightPanel extends ContentPanel {
 
         jPanel5.setName("jPanel5"); // NOI18N
 
-        jLabel13.setText(bundle.getString("SimpleRightPanel.jLabel13.text")); // NOI18N
+        jLabel13.setText(bundle.getString("SimpleRightConditionPanel.jLabel13.text")); // NOI18N
         jLabel13.setName("jLabel13"); // NOI18N
 
         txtRegDatetime.setName(bundle.getString("SimpleRightPanel.txtRegDatetime.name")); // NOI18N
@@ -299,7 +312,7 @@ public class SimpleRightPanel extends ContentPanel {
         bindingGroup.addBinding(binding);
 
         btnRegDate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/calendar.png"))); // NOI18N
-        btnRegDate.setText(bundle.getString("SimpleRightPanel.btnRegDate.text")); // NOI18N
+        btnRegDate.setText(bundle.getString("SimpleRightConditionPanel.btnRegDate.text")); // NOI18N
         btnRegDate.setBorder(null);
         btnRegDate.setName(bundle.getString("SimpleRightPanel.btnRegDate.name")); // NOI18N
         btnRegDate.addActionListener(new java.awt.event.ActionListener() {
@@ -315,7 +328,7 @@ public class SimpleRightPanel extends ContentPanel {
             .add(jPanel5Layout.createSequentialGroup()
                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jPanel5Layout.createSequentialGroup()
-                        .add(txtRegDatetime, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
+                        .add(txtRegDatetime, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(btnRegDate))
                     .add(jLabel13, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -336,7 +349,7 @@ public class SimpleRightPanel extends ContentPanel {
 
         pnlPurpose.setName("pnlPurpose"); // NOI18N
 
-        jLabel1.setText(bundle.getString("SimpleRightPanel.jLabel1.text")); // NOI18N
+        jLabel1.setText(bundle.getString("SimpleRightConditionPanel.jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
 
         cbxRrrSubType.setName("cbxRrrSubType"); // NOI18N
@@ -351,7 +364,7 @@ public class SimpleRightPanel extends ContentPanel {
         pnlPurpose.setLayout(pnlPurposeLayout);
         pnlPurposeLayout.setHorizontalGroup(
             pnlPurposeLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jLabel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
+            .add(jLabel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .add(cbxRrrSubType, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         pnlPurposeLayout.setVerticalGroup(
@@ -367,7 +380,7 @@ public class SimpleRightPanel extends ContentPanel {
 
         jPanel7.setName("jPanel7"); // NOI18N
 
-        jLabel4.setText(bundle.getString("SimpleRightPanel.jLabel4.text")); // NOI18N
+        jLabel4.setText(bundle.getString("SimpleRightConditionPanel.jLabel4.text")); // NOI18N
         jLabel4.setName("jLabel4"); // NOI18N
 
         txtStatus.setName("txtStatus"); // NOI18N
@@ -379,7 +392,7 @@ public class SimpleRightPanel extends ContentPanel {
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jLabel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
+            .add(jLabel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
             .add(txtStatus)
         );
         jPanel7Layout.setVerticalGroup(
@@ -399,9 +412,9 @@ public class SimpleRightPanel extends ContentPanel {
         jPanel3.setName("jPanel3"); // NOI18N
 
         groupPanel1.setName("groupPanel1"); // NOI18N
-        groupPanel1.setTitleText(bundle.getString("SimpleRightPanel.groupPanel1.titleText")); // NOI18N
+        groupPanel1.setTitleText(bundle.getString("SimpleRightConditionPanel.groupPanel1.titleText")); // NOI18N
 
-        jLabel3.setText(bundle.getString("SimpleRightPanel.jLabel3.text")); // NOI18N
+        jLabel3.setText(bundle.getString("SimpleRightConditionPanel.jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
@@ -420,7 +433,7 @@ public class SimpleRightPanel extends ContentPanel {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, groupPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 557, Short.MAX_VALUE)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, groupPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jLabel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .add(jScrollPane1)
         );
@@ -429,7 +442,7 @@ public class SimpleRightPanel extends ContentPanel {
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
                 .add(jLabel3)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(groupPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
         );
@@ -444,14 +457,60 @@ public class SimpleRightPanel extends ContentPanel {
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, documentsPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 557, Short.MAX_VALUE)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, documentsPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(documentsPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
+            .add(documentsPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
         );
 
         jPanel2.add(jPanel4);
+
+        org.jdesktop.layout.GroupLayout tabGeneralLayout = new org.jdesktop.layout.GroupLayout(tabGeneral);
+        tabGeneral.setLayout(tabGeneralLayout);
+        tabGeneralLayout.setHorizontalGroup(
+            tabGeneralLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(tabGeneralLayout.createSequentialGroup()
+                .addContainerGap()
+                .add(tabGeneralLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(pnlTop, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        tabGeneralLayout.setVerticalGroup(
+            tabGeneralLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(tabGeneralLayout.createSequentialGroup()
+                .addContainerGap()
+                .add(pnlTop, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab(bundle.getString("SimpleRightConditionPanel.tabGeneral.TabConstraints.tabTitle"), tabGeneral); // NOI18N
+
+        tabCondition.setName("tabCondition"); // NOI18N
+
+        conditionsPanel1.setName("conditionsPanel1"); // NOI18N
+
+        org.jdesktop.layout.GroupLayout tabConditionLayout = new org.jdesktop.layout.GroupLayout(tabCondition);
+        tabCondition.setLayout(tabConditionLayout);
+        tabConditionLayout.setHorizontalGroup(
+            tabConditionLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(tabConditionLayout.createSequentialGroup()
+                .addContainerGap()
+                .add(conditionsPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        tabConditionLayout.setVerticalGroup(
+            tabConditionLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, tabConditionLayout.createSequentialGroup()
+                .addContainerGap()
+                .add(conditionsPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab(bundle.getString("SimpleRightConditionPanel.tabCondition.TabConstraints.tabTitle"), tabCondition); // NOI18N
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
@@ -459,11 +518,9 @@ public class SimpleRightPanel extends ContentPanel {
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(headerPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .add(jToolBar1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .add(layout.createSequentialGroup()
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(pnlTop, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(jTabbedPane1)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -472,10 +529,8 @@ public class SimpleRightPanel extends ContentPanel {
                 .add(headerPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jToolBar1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(pnlTop, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(jTabbedPane1)
                 .addContainerGap())
         );
 
@@ -494,6 +549,7 @@ public class SimpleRightPanel extends ContentPanel {
     private javax.swing.JButton btnRegDate;
     private javax.swing.JButton btnSave;
     private javax.swing.JComboBox cbxRrrSubType;
+    private org.sola.clients.swing.ui.administrative.ConditionsPanel conditionsPanel1;
     private org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel documentsPanel;
     private org.sola.clients.swing.ui.GroupPanel groupPanel1;
     private org.sola.clients.swing.ui.HeaderPanel headerPanel;
@@ -509,11 +565,14 @@ public class SimpleRightPanel extends ContentPanel {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JPanel pnlPurpose;
     private javax.swing.JPanel pnlTop;
     private org.sola.clients.beans.administrative.RrrBean rrrBean;
     private org.sola.clients.beans.referencedata.RrrSubTypeListBean rrrSubTypes;
+    private javax.swing.JPanel tabCondition;
+    private javax.swing.JPanel tabGeneral;
     private javax.swing.JTextArea txtNotationText;
     private javax.swing.JTextField txtRefNum;
     private org.sola.clients.swing.common.controls.WatermarkDate txtRegDatetime;

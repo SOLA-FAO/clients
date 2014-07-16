@@ -270,7 +270,6 @@ public class ParcelPanel extends javax.swing.JPanel {
 
         jPanel2.setName(bundle.getString("ParcelPanel.jPanel2.name")); // NOI18N
 
-        jLabel17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         jLabel17.setText(bundle.getString("ParcelPanel.jLabel17.text")); // NOI18N
         jLabel17.setName("jLabel17"); // NOI18N
 
@@ -299,7 +298,6 @@ public class ParcelPanel extends javax.swing.JPanel {
 
         jPanel3.setName(bundle.getString("ParcelPanel.jPanel3.name")); // NOI18N
 
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         jLabel7.setText(bundle.getString("ParcelPanel.jLabel7.text")); // NOI18N
         jLabel7.setName("jLabel7"); // NOI18N
 

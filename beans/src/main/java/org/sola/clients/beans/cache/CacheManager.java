@@ -224,6 +224,10 @@ public final class CacheManager {
      * Cache key of the {@link StateLandStatusTypeBean} collection.
      */
     public static final String STATE_LAND_STATUS_TYPE_GROUP_KEY = StateLandStatusTypeBean.class.getName() + LIST_POSTFIX;
+    /**
+     * Cache key of the {@link RrrSubTypeBean} collection.
+     */
+    public static final String RRR_SUB_TYPE_GROUP_KEY = RrrSubTypeBean.class.getName() + LIST_POSTFIX;
 
     private static final String GET_APPLICATION_STATUS_TYPES = "getApplicationStatusTypes";
     private static final String GET_SOURCE_TYPES = "getSourceTypes";
@@ -259,6 +263,7 @@ public final class CacheManager {
     private static final String GET_PANEL_LAUNCHER_GROUPS = "getPanelLauncherGroups";
     private static final String GET_NOTATION_STATUS_TYPES = "getNotationStatusTypes";
     private static final String GET_STATE_LAND_STATUS_TYPES = "getStateLandStatusTypes";
+    private static final String GET_RRR_SUB_TYPES = "getRrrSubTypes";
 
     public static List<BrValidationTargetTypeBean> getBrValidationTargetTypes() {
         return getCachedBeanList(BrValidationTargetTypeBean.class,
@@ -502,6 +507,12 @@ public final class CacheManager {
         return getCachedBeanList(StateLandStatusTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_STATE_LAND_STATUS_TYPES, STATE_LAND_STATUS_TYPE_GROUP_KEY);
+    }
+
+    public static List<RrrSubTypeBean> getRrrSubTypes() {
+        return getCachedBeanList(RrrSubTypeBean.class,
+                WSManager.getInstance().getReferenceDataService(),
+                GET_RRR_SUB_TYPES, RRR_SUB_TYPE_GROUP_KEY);
     }
 
     /**

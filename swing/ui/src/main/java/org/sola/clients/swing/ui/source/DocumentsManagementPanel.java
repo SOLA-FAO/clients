@@ -275,25 +275,40 @@ public class DocumentsManagementPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         documentsTablePopupMenu = new javax.swing.JPopupMenu();
+        menuView = new javax.swing.JMenuItem();
+        jSeparator2 = new javax.swing.JPopupMenu.Separator();
         menuAdd = new javax.swing.JMenuItem();
         menuEdit = new javax.swing.JMenuItem();
         menuRemove = new javax.swing.JMenuItem();
         menuSeparator = new javax.swing.JPopupMenu.Separator();
-        menuView = new javax.swing.JMenuItem();
         menuViewAttachment = new javax.swing.JMenuItem();
         jToolBar1 = new javax.swing.JToolBar();
+        btnView = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JToolBar.Separator();
         btnAdd = new javax.swing.JButton();
         btnEdit = new javax.swing.JButton();
         btnRemove = new javax.swing.JButton();
         toolbarSeparator = new javax.swing.JToolBar.Separator();
-        btnView = new javax.swing.JButton();
         btnViewAttachmanet = new javax.swing.JButton();
         documentsPanel = createDocumentsPanel();
 
         documentsTablePopupMenu.setName("documentsTablePopupMenu"); // NOI18N
 
-        menuAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
+        menuView.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/view.png"))); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/source/Bundle"); // NOI18N
+        menuView.setText(bundle.getString("DocumentsManagementPanel.menuView.text")); // NOI18N
+        menuView.setName(bundle.getString("DocumentsManagementPanel.menuView.name")); // NOI18N
+        menuView.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuViewActionPerformed(evt);
+            }
+        });
+        documentsTablePopupMenu.add(menuView);
+
+        jSeparator2.setName("jSeparator2"); // NOI18N
+        documentsTablePopupMenu.add(jSeparator2);
+
+        menuAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
         menuAdd.setText(bundle.getString("DocumentsManagementPanel.menuAdd.text")); // NOI18N
         menuAdd.setName("menuAdd"); // NOI18N
         menuAdd.addActionListener(new java.awt.event.ActionListener() {
@@ -326,16 +341,6 @@ public class DocumentsManagementPanel extends javax.swing.JPanel {
         menuSeparator.setName(bundle.getString("DocumentsManagementPanel.menuSeparator.name")); // NOI18N
         documentsTablePopupMenu.add(menuSeparator);
 
-        menuView.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/view.png"))); // NOI18N
-        menuView.setText(bundle.getString("DocumentsManagementPanel.menuView.text")); // NOI18N
-        menuView.setName(bundle.getString("DocumentsManagementPanel.menuView.name")); // NOI18N
-        menuView.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuViewActionPerformed(evt);
-            }
-        });
-        documentsTablePopupMenu.add(menuView);
-
         menuViewAttachment.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/folder-open-document.png"))); // NOI18N
         menuViewAttachment.setText(bundle.getString("DocumentsManagementPanel.menuViewAttachment.text")); // NOI18N
         menuViewAttachment.setName("menuViewAttachment"); // NOI18N
@@ -349,6 +354,20 @@ public class DocumentsManagementPanel extends javax.swing.JPanel {
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
         jToolBar1.setName("jToolBar1"); // NOI18N
+
+        btnView.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/view.png"))); // NOI18N
+        btnView.setText(bundle.getString("DocumentsManagementPanel.btnView.text")); // NOI18N
+        btnView.setFocusable(false);
+        btnView.setName(bundle.getString("DocumentsManagementPanel.btnView.name")); // NOI18N
+        btnView.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnView);
+
+        jSeparator1.setName("jSeparator1"); // NOI18N
+        jToolBar1.add(jSeparator1);
 
         btnAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
         btnAdd.setText(bundle.getString("DocumentsManagementPanel.btnAdd.text")); // NOI18N
@@ -387,17 +406,6 @@ public class DocumentsManagementPanel extends javax.swing.JPanel {
 
         toolbarSeparator.setName(bundle.getString("DocumentsManagementPanel.toolbarSeparator.name")); // NOI18N
         jToolBar1.add(toolbarSeparator);
-
-        btnView.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/view.png"))); // NOI18N
-        btnView.setText(bundle.getString("DocumentsManagementPanel.btnView.text")); // NOI18N
-        btnView.setFocusable(false);
-        btnView.setName(bundle.getString("DocumentsManagementPanel.btnView.name")); // NOI18N
-        btnView.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnViewActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(btnView);
 
         btnViewAttachmanet.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/folder-open-document.png"))); // NOI18N
         btnViewAttachmanet.setText(bundle.getString("DocumentsManagementPanel.btnViewAttachmanet.text")); // NOI18N
@@ -478,6 +486,8 @@ public class DocumentsManagementPanel extends javax.swing.JPanel {
     private javax.swing.JButton btnViewAttachmanet;
     private org.sola.clients.swing.ui.source.DocumentsPanel documentsPanel;
     private javax.swing.JPopupMenu documentsTablePopupMenu;
+    private javax.swing.JToolBar.Separator jSeparator1;
+    private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JMenuItem menuAdd;
     private javax.swing.JMenuItem menuEdit;

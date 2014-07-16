@@ -346,16 +346,19 @@ if (theme=="green") {
 //         UIManager.put("Button[Disabled].textForeground", new Color(255,255,255)); 
 //         UIManager.put("Button[Pressed].textForeground", new Color(255,255,255)); 
          
-         UIManager.put("TextField.font", Font.decode("AppleGothic"));
-         UIManager.put("TextArea.font", Font.decode("AppleGothic"));
-         UIManager.put("PasswordField.font", Font.decode("AppleGothic"));
-         UIManager.put("ComboBox.font", Font.decode("AppleGothic"));
-         UIManager.put("Button.font", Font.decode("AppleGothic"));
-         UIManager.put("TabbedPane.font", Font.decode("AppleGothic"));
-         UIManager.put("Table.font", Font.decode("AppleGothic"));
-         UIManager.put("Label.font", Font.decode("AppleGothic"));
-         UIManager.put("List.font", Font.decode("AppleGothic")); 
-         UIManager.put("RadioButton.font", Font.decode("AppleGothic"));
+        // String fontname = ("AppleGothic-24"); 
+         // Use default size for font (12) instead of specifiying the font size. 
+         String fontname = ("AppleGothic"); 
+         UIManager.put("TextField.font", Font.decode(fontname));
+         UIManager.put("TextArea.font", Font.decode(fontname));
+         UIManager.put("PasswordField.font", Font.decode(fontname));
+         UIManager.put("ComboBox.font", Font.decode(fontname));
+         UIManager.put("Button.font", Font.decode(fontname));
+         UIManager.put("TabbedPane.font", Font.decode(fontname));
+         UIManager.put("Table.font", Font.decode(fontname));
+         UIManager.put("Label.font", Font.decode(fontname));
+         UIManager.put("List.font", Font.decode(fontname)); 
+         UIManager.put("RadioButton.font", Font.decode(fontname));
          
  }
  if (theme=="autumn") {

@@ -278,29 +278,10 @@ public class SLPropertyPanel extends ContentPanel {
         if (nameFirstPart != null && nameLastPart != null) {
             headerPanel.setTitleText(String.format(
                     resourceBundle.getString("SLPropertyPanel.existingProperty.Text"), baUnitBean1.getDisplayName()));
-            txtArea.setEditable(baUnitBean1.getStatusCode() == null || baUnitBean1.getStatusCode().equalsIgnoreCase(StatusConstants.PENDING));
 
         } else {
             headerPanel.setTitleText(resourceBundle.getString("SLPropertyPanel.newProperty.Text"));
-
-            areaPanel.setEnabled(true);
-            areaPanel.setEnabled(true);
-            txtArea.setEnabled(true);
-            txtArea.setEditable(true);
-            txtArea.setVisible(true);
-            labArea.setEnabled(true);
-            labArea.setVisible(true);
-        }
-
-        if (baUnitBean1.isNew()) {
-            areaPanel.setEnabled(true);
-            areaPanel.setEnabled(true);
-            txtArea.setEnabled(true);
-            txtArea.setEditable(true);
-            txtArea.setVisible(true);
-            labArea.setEnabled(true);
-            labArea.setVisible(true);
-        }
+        }       
 
         if (applicationBean != null && applicationService != null) {
             headerPanel.setTitleText(String.format("%s, %s",
@@ -310,7 +291,8 @@ public class SLPropertyPanel extends ContentPanel {
         }
 
         btnSave.setEnabled(!readOnly);
-        txtName.setEditable(!readOnly);
+        txtName.setEnabled(!readOnly);
+        txtArea.setEnabled(!readOnly);
 
         if (!SecurityBean.isInRole(RolesConstants.GIS_VIEW_MAP)) {
             // User does not have rights to view the map
@@ -943,7 +925,7 @@ public class SLPropertyPanel extends ContentPanel {
                     baUnitBean1, rrrBean, applicationBean, applicationService, action);
         } else {
             PanelLauncher.launch(rrrPanelCode, getMainContentPanel(), new RightFormListener(), null,
-                    rrrBean, applicationBean, applicationService, action);
+                    baUnitBean1, rrrBean, applicationBean, applicationService, action);
         }
     }
 
@@ -1197,9 +1179,6 @@ public class SLPropertyPanel extends ContentPanel {
         tableRights = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
         jToolBar2 = new javax.swing.JToolBar();
         btnViewRight = new javax.swing.JButton();
-        jSeparator1 = new javax.swing.JToolBar.Separator();
-        btnEditRight = new javax.swing.JButton();
-        btnRemoveRight = new javax.swing.JButton();
         jSeparator10 = new javax.swing.JToolBar.Separator();
         jLabel16 = new javax.swing.JLabel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
@@ -1208,13 +1187,15 @@ public class SLPropertyPanel extends ContentPanel {
         btnCreateRight = new javax.swing.JButton();
         btnChangeRight = new javax.swing.JButton();
         btnExtinguish = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JToolBar.Separator();
+        btnEditRight = new javax.swing.JButton();
+        btnRemoveRight = new javax.swing.JButton();
         jPanel17 = new javax.swing.JPanel();
         jToolBar8 = new javax.swing.JToolBar();
-        jLabel8 = new javax.swing.JLabel();
-        jSeparator6 = new javax.swing.JToolBar.Separator();
         btnViewHistoricRight = new javax.swing.JButton();
         jScrollPane8 = new javax.swing.JScrollPane();
         tableRightsHistory = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
+        groupPanel2 = new org.sola.clients.swing.ui.GroupPanel();
         pnlRelationships = new javax.swing.JPanel();
         jPanel14 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
@@ -1635,6 +1616,7 @@ public class SLPropertyPanel extends ContentPanel {
         jScrollPane5.setName("jScrollPane5"); // NOI18N
 
         txtName.setColumns(20);
+        txtName.setLineWrap(true);
         txtName.setRows(5);
         txtName.setName("txtName"); // NOI18N
 
@@ -1685,7 +1667,7 @@ public class SLPropertyPanel extends ContentPanel {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(groupPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(documentsPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
+                .add(documentsPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1802,7 +1784,7 @@ public class SLPropertyPanel extends ContentPanel {
                 .addContainerGap()
                 .add(jToolBar3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 381, Short.MAX_VALUE)
+                .add(jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1854,14 +1836,14 @@ public class SLPropertyPanel extends ContentPanel {
         if (tableParcels.getColumnModel().getColumnCount() > 0) {
             tableParcels.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("SLPropertyPanel.tableParcels.columnModel.title0")); // NOI18N
             tableParcels.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("SLPropertyPanel.tableParcels.columnModel.title1")); // NOI18N
-            tableParcels.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title6")); // NOI18N
+            tableParcels.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("SLPropertyPanel.tableParcels.columnModel.title6")); // NOI18N
             tableParcels.getColumnModel().getColumn(2).setCellRenderer(new AreaCellRenderer());
-            tableParcels.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title8")); // NOI18N
+            tableParcels.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("SLPropertyPanel.tableParcels.columnModel.title8")); // NOI18N
             tableParcels.getColumnModel().getColumn(4).setPreferredWidth(180);
-            tableParcels.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title7")); // NOI18N
+            tableParcels.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("SLPropertyPanel.tableParcels.columnModel.title7")); // NOI18N
             tableParcels.getColumnModel().getColumn(4).setCellRenderer(new CellDelimitedListRenderer("; ", false));
-            tableParcels.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title3")); // NOI18N
-            tableParcels.getColumnModel().getColumn(6).setHeaderValue(bundle.getString("PropertyPanel.tableParcels.columnModel.title4")); // NOI18N
+            tableParcels.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("SLPropertyPanel.tableParcels.columnModel.title3")); // NOI18N
+            tableParcels.getColumnModel().getColumn(6).setHeaderValue(bundle.getString("SLPropertyPanel.tableParcels.columnModel.title4")); // NOI18N
         }
 
         jToolBar1.setFloatable(false);
@@ -1944,7 +1926,7 @@ public class SLPropertyPanel extends ContentPanel {
                 .addContainerGap()
                 .add(jToolBar1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 381, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1961,6 +1943,7 @@ public class SLPropertyPanel extends ContentPanel {
 
         tableRights.setComponentPopupMenu(popupRights);
         tableRights.setName("tableRights"); // NOI18N
+        tableRights.getTableHeader().setReorderingAllowed(false);
 
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${rrrFilteredList}");
         jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitBean1, eLProperty, tableRights);
@@ -1968,8 +1951,8 @@ public class SLPropertyPanel extends ContentPanel {
         columnBinding.setColumnName("Rrr Type.display Value");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${nr}"));
-        columnBinding.setColumnName("Nr");
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${referenceNum}"));
+        columnBinding.setColumnName("Reference Num");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${registrationDate}"));
@@ -1995,20 +1978,13 @@ public class SLPropertyPanel extends ContentPanel {
         });
         jScrollPane2.setViewportView(tableRights);
         if (tableRights.getColumnModel().getColumnCount() > 0) {
-            tableRights.getColumnModel().getColumn(0).setPreferredWidth(100);
-            tableRights.getColumnModel().getColumn(0).setMaxWidth(100);
             tableRights.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("SLPropertyPanel.tableRights.columnModel.title0")); // NOI18N
-            tableRights.getColumnModel().getColumn(1).setPreferredWidth(100);
-            tableRights.getColumnModel().getColumn(1).setMaxWidth(100);
-            tableRights.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("PropertyPanel.tableRights.columnModel.title3")); // NOI18N
-            tableRights.getColumnModel().getColumn(2).setPreferredWidth(120);
-            tableRights.getColumnModel().getColumn(2).setMaxWidth(120);
-            tableRights.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PropertyPanel.tableRights.columnModel.title1")); // NOI18N
+            tableRights.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("SLPropertyPanel.tableRights.columnModel.title3")); // NOI18N
+            tableRights.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("SLPropertyPanel.tableRights.columnModel.title1")); // NOI18N
             tableRights.getColumnModel().getColumn(2).setCellRenderer(new DateTimeRenderer());
-            tableRights.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("PropertyPanel.tableRights.columnModel.title4_1")); // NOI18N
-            tableRights.getColumnModel().getColumn(4).setPreferredWidth(100);
-            tableRights.getColumnModel().getColumn(4).setMaxWidth(100);
-            tableRights.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("PropertyPanel.tableRights.columnModel.title2")); // NOI18N
+            tableRights.getColumnModel().getColumn(3).setPreferredWidth(360);
+            tableRights.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("SLPropertyPanel.tableRights.columnModel.title4_1")); // NOI18N
+            tableRights.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("SLPropertyPanel.tableRights.columnModel.title2")); // NOI18N
         }
 
         jToolBar2.setFloatable(false);
@@ -2026,29 +2002,6 @@ public class SLPropertyPanel extends ContentPanel {
             }
         });
         jToolBar2.add(btnViewRight);
-
-        jSeparator1.setName("jSeparator1"); // NOI18N
-        jToolBar2.add(jSeparator1);
-
-        btnEditRight.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/pencil.png"))); // NOI18N
-        btnEditRight.setText(bundle.getString("SLPropertyPanel.btnEditRight.text")); // NOI18N
-        btnEditRight.setName("btnEditRight"); // NOI18N
-        btnEditRight.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditRightActionPerformed(evt);
-            }
-        });
-        jToolBar2.add(btnEditRight);
-
-        btnRemoveRight.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
-        btnRemoveRight.setText(bundle.getString("SLPropertyPanel.btnRemoveRight.text")); // NOI18N
-        btnRemoveRight.setName("btnRemoveRight"); // NOI18N
-        btnRemoveRight.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRemoveRightActionPerformed(evt);
-            }
-        });
-        jToolBar2.add(btnRemoveRight);
 
         jSeparator10.setName("jSeparator10"); // NOI18N
         jToolBar2.add(jSeparator10);
@@ -2107,6 +2060,29 @@ public class SLPropertyPanel extends ContentPanel {
         });
         jToolBar2.add(btnExtinguish);
 
+        jSeparator1.setName("jSeparator1"); // NOI18N
+        jToolBar2.add(jSeparator1);
+
+        btnEditRight.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/pencil.png"))); // NOI18N
+        btnEditRight.setText(bundle.getString("SLPropertyPanel.btnEditRight.text")); // NOI18N
+        btnEditRight.setName("btnEditRight"); // NOI18N
+        btnEditRight.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditRightActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(btnEditRight);
+
+        btnRemoveRight.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
+        btnRemoveRight.setText(bundle.getString("SLPropertyPanel.btnRemoveRight.text")); // NOI18N
+        btnRemoveRight.setName("btnRemoveRight"); // NOI18N
+        btnRemoveRight.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveRightActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(btnRemoveRight);
+
         org.jdesktop.layout.GroupLayout jPanel15Layout = new org.jdesktop.layout.GroupLayout(jPanel15);
         jPanel15.setLayout(jPanel15Layout);
         jPanel15Layout.setHorizontalGroup(
@@ -2119,7 +2095,7 @@ public class SLPropertyPanel extends ContentPanel {
             .add(jPanel15Layout.createSequentialGroup()
                 .add(jToolBar2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE))
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE))
         );
 
         jPanel16.add(jPanel15);
@@ -2129,13 +2105,6 @@ public class SLPropertyPanel extends ContentPanel {
         jToolBar8.setFloatable(false);
         jToolBar8.setRollover(true);
         jToolBar8.setName(bundle.getString("PropertyPanel.jToolBar8.name")); // NOI18N
-
-        jLabel8.setText(bundle.getString("SLPropertyPanel.jLabel8.text")); // NOI18N
-        jLabel8.setName(bundle.getString("PropertyPanel.jLabel8.name")); // NOI18N
-        jToolBar8.add(jLabel8);
-
-        jSeparator6.setName(bundle.getString("PropertyPanel.jSeparator6.name")); // NOI18N
-        jToolBar8.add(jSeparator6);
 
         btnViewHistoricRight.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/view.png"))); // NOI18N
         btnViewHistoricRight.setText(bundle.getString("SLPropertyPanel.btnViewHistoricRight.text")); // NOI18N
@@ -2152,6 +2121,7 @@ public class SLPropertyPanel extends ContentPanel {
         jScrollPane8.setName(bundle.getString("PropertyPanel.jScrollPane8.name")); // NOI18N
 
         tableRightsHistory.setName(bundle.getString("PropertyPanel.tableRightsHistory.name")); // NOI18N
+        tableRightsHistory.getTableHeader().setReorderingAllowed(false);
 
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${rrrHistoricList}");
         jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitBean1, eLProperty, tableRightsHistory);
@@ -2159,8 +2129,8 @@ public class SLPropertyPanel extends ContentPanel {
         columnBinding.setColumnName("Rrr Type.display Value");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${nr}"));
-        columnBinding.setColumnName("Nr");
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${referenceNum}"));
+        columnBinding.setColumnName("Reference Num");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${registrationDate}"));
@@ -2186,21 +2156,17 @@ public class SLPropertyPanel extends ContentPanel {
         });
         jScrollPane8.setViewportView(tableRightsHistory);
         if (tableRightsHistory.getColumnModel().getColumnCount() > 0) {
-            tableRightsHistory.getColumnModel().getColumn(0).setPreferredWidth(100);
-            tableRightsHistory.getColumnModel().getColumn(0).setMaxWidth(100);
             tableRightsHistory.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("SLPropertyPanel.tableRightsHistory.columnModel.title0")); // NOI18N
-            tableRightsHistory.getColumnModel().getColumn(1).setPreferredWidth(100);
-            tableRightsHistory.getColumnModel().getColumn(1).setMaxWidth(100);
-            tableRightsHistory.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("PropertyPanel.tableRightsHistory.columnModel.title3")); // NOI18N
-            tableRightsHistory.getColumnModel().getColumn(2).setPreferredWidth(120);
-            tableRightsHistory.getColumnModel().getColumn(2).setMaxWidth(120);
-            tableRightsHistory.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PropertyPanel.tableRightsHistory.columnModel.title1")); // NOI18N
+            tableRightsHistory.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("SLPropertyPanel.tableRightsHistory.columnModel.title3")); // NOI18N
+            tableRightsHistory.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("SLPropertyPanel.tableRightsHistory.columnModel.title1")); // NOI18N
             tableRightsHistory.getColumnModel().getColumn(2).setCellRenderer(new DateTimeRenderer());
-            tableRightsHistory.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("PropertyPanel.tableRightsHistory.columnModel.title4")); // NOI18N
-            tableRightsHistory.getColumnModel().getColumn(4).setPreferredWidth(100);
-            tableRightsHistory.getColumnModel().getColumn(4).setMaxWidth(100);
-            tableRightsHistory.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("PropertyPanel.tableRightsHistory.columnModel.title2")); // NOI18N
+            tableRightsHistory.getColumnModel().getColumn(3).setPreferredWidth(360);
+            tableRightsHistory.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("SLPropertyPanel.tableRightsHistory.columnModel.title4")); // NOI18N
+            tableRightsHistory.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("SLPropertyPanel.tableRightsHistory.columnModel.title2")); // NOI18N
         }
+
+        groupPanel2.setName("groupPanel2"); // NOI18N
+        groupPanel2.setTitleText(bundle.getString("SLPropertyPanel.groupPanel2.titleText")); // NOI18N
 
         org.jdesktop.layout.GroupLayout jPanel17Layout = new org.jdesktop.layout.GroupLayout(jPanel17);
         jPanel17.setLayout(jPanel17Layout);
@@ -2208,13 +2174,16 @@ public class SLPropertyPanel extends ContentPanel {
             jPanel17Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jToolBar8, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .add(jScrollPane8, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 665, Short.MAX_VALUE)
+            .add(groupPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel17Layout.setVerticalGroup(
             jPanel17Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel17Layout.createSequentialGroup()
+                .add(groupPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jToolBar8, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane8, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE))
+                .add(jScrollPane8, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE))
         );
 
         jPanel16.add(jPanel17);
@@ -2472,7 +2441,7 @@ public class SLPropertyPanel extends ContentPanel {
                 .add(jPanel14, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 293, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(pnlNextButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(90, Short.MAX_VALUE))
+                .addContainerGap(96, Short.MAX_VALUE))
         );
 
         tabsMain.addTab(bundle.getString("SLPropertyPanel.pnlRelationships.TabConstraints.tabTitle"), pnlRelationships); // NOI18N
@@ -2492,7 +2461,7 @@ public class SLPropertyPanel extends ContentPanel {
         );
         pnlMapLayout.setVerticalGroup(
             pnlMapLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 434, Short.MAX_VALUE)
+            .add(0, 440, Short.MAX_VALUE)
         );
 
         tabsMain.addTab(bundle.getString("SLPropertyPanel.pnlMap.TabConstraints.tabTitle"), pnlMap); // NOI18N
@@ -2507,7 +2476,7 @@ public class SLPropertyPanel extends ContentPanel {
         );
         pnlHistoryLayout.setVerticalGroup(
             pnlHistoryLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 434, Short.MAX_VALUE)
+            .add(0, 440, Short.MAX_VALUE)
         );
 
         tabsMain.addTab(bundle.getString("SLPropertyPanel.pnlHistory.TabConstraints.tabTitle"), pnlHistory); // NOI18N
@@ -2533,7 +2502,7 @@ public class SLPropertyPanel extends ContentPanel {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jToolBar5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(tabsMain, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 462, Short.MAX_VALUE)
+                .add(tabsMain, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -2767,6 +2736,7 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private org.sola.clients.swing.ui.GroupPanel groupPanel1;
+    private org.sola.clients.swing.ui.GroupPanel groupPanel2;
     private org.sola.clients.swing.ui.HeaderPanel headerPanel;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
@@ -2775,7 +2745,6 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
@@ -2805,7 +2774,6 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JToolBar.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator5;
-    private javax.swing.JToolBar.Separator jSeparator6;
     private javax.swing.JToolBar.Separator jSeparator7;
     private javax.swing.JPopupMenu.Separator jSeparator8;
     private javax.swing.JToolBar.Separator jSeparator9;

@@ -70,6 +70,8 @@ public class SLParcelPanel extends ContentPanel {
             headerPanel1.setTitleText(String.format(
                     resourceBundle.getString("SLParcelPanel.TitleText.NewParcel"),
                     property.getDisplayName()));
+            btnSave.setText(MessageUtility.getLocalizedMessage(
+                    ClientMessage.GENERAL_LABELS_CREATE_AND_CLOSE).getMessage());
         } else {
             headerPanel1.setTitleText(String.format(
                     resourceBundle.getString("SLParcelPanel.TitleText.ExistingParcel"),

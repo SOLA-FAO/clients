@@ -29,21 +29,25 @@
  */
 package org.sola.clients.beans.referencedata;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingListBean;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.controls.SolaCodeList;
+import org.sola.common.StringUtility;
 
 /**
- * Holds list of {@link NotationStatusTypeBean} objects.
+ * Holds list of {@link RrrSubTypeBean} objects.
  */
-public class NotationStatusTypeListBean extends AbstractBindingListBean {
+public class RrrSubTypeListBean extends AbstractBindingListBean {
 
-    public static final String SELECTED_NOTATION_STATUS_TYPE_PROPERTY = "selectedNotationStatusType";
-    private SolaCodeList<NotationStatusTypeBean> notationStatusTypes;
-    private NotationStatusTypeBean selectedNotationStatusType;
+    public static final String SELECTED_RRR_SUB_TYPE_PROPERTY = "selectedRrrSubType";
+    private SolaCodeList<RrrSubTypeBean> rrrSubTypes;
+    private RrrSubTypeBean selectedRrrSubType;
+    private boolean createDummy = false;
 
-    public NotationStatusTypeListBean() {
+    public RrrSubTypeListBean() {
         this(false);
     }
 
@@ -52,7 +56,7 @@ public class NotationStatusTypeListBean extends AbstractBindingListBean {
      *
      * @param createDummy Indicates whether to add empty object on the list.
      */
-    public NotationStatusTypeListBean(boolean createDummy) {
+    public RrrSubTypeListBean(boolean createDummy) {
         this(createDummy, (String) null);
     }
 
@@ -62,38 +66,39 @@ public class NotationStatusTypeListBean extends AbstractBindingListBean {
      * @param createDummy Indicates whether to add empty object on the list.
      * @param excludedCodes Codes, which should be skipped while filtering.
      */
-    public NotationStatusTypeListBean(boolean createDummy, String... excludedCodes) {
+    public RrrSubTypeListBean(boolean createDummy, String... excludedCodes) {
         super();
-        notationStatusTypes = new SolaCodeList<NotationStatusTypeBean>(excludedCodes);
+        this.createDummy = createDummy;
+        rrrSubTypes = new SolaCodeList<RrrSubTypeBean>(excludedCodes);
         loadList(createDummy);
     }
 
     /**
-     * Loads list of {@link NotationStatusTypeBean}.
+     * Loads list of {@link RrrSubTypeBean}.
      *
      * @param createDummy Indicates whether to add empty object on the list.
      */
     public final void loadList(boolean createDummy) {
-        loadCodeList(NotationStatusTypeBean.class, notationStatusTypes,
-                CacheManager.getNotationStatusTypes(), createDummy);
+        loadCodeList(RrrSubTypeBean.class, rrrSubTypes,
+                CacheManager.getRrrSubTypes(), createDummy);
     }
 
-    public ObservableList<NotationStatusTypeBean> getNotationStatusTypes() {
-        return notationStatusTypes.getFilteredList();
+    public ObservableList<RrrSubTypeBean> getRrrSubTypes() {
+        return rrrSubTypes.getFilteredList();
     }
 
     public void setExcludedCodes(String... codes) {
-        notationStatusTypes.setExcludedCodes(codes);
+        rrrSubTypes.setExcludedCodes(codes);
     }
 
-    public NotationStatusTypeBean getSelectedNotationStatusType() {
-        return selectedNotationStatusType;
+    public RrrSubTypeBean getSelectedRrrSubType() {
+        return selectedRrrSubType;
     }
 
-    public void setSelectedNotationStatusType(NotationStatusTypeBean selectedNotationStatusType) {
-        NotationStatusTypeBean oldValue = this.selectedNotationStatusType;
-        this.selectedNotationStatusType = selectedNotationStatusType;
-        propertySupport.firePropertyChange(SELECTED_NOTATION_STATUS_TYPE_PROPERTY, oldValue, this.selectedNotationStatusType);
+    public void setSelectedRrrSubType(RrrSubTypeBean selectedRrrSubType) {
+        RrrSubTypeBean oldValue = this.selectedRrrSubType;
+        this.selectedRrrSubType = selectedRrrSubType;
+        propertySupport.firePropertyChange(SELECTED_RRR_SUB_TYPE_PROPERTY, oldValue, this.selectedRrrSubType);
     }
 
     /**
@@ -102,7 +107,42 @@ public class NotationStatusTypeListBean extends AbstractBindingListBean {
      * @param codes
      */
     public void setAllowedCodes(String... codes) {
-        notationStatusTypes.setAllowedCodes(codes);
+        rrrSubTypes.setAllowedCodes(codes);
+    }
+
+    /**
+     * Filters the list of RrrSubTypes so that only those applicable to the
+     * RrrType are displayed. Can also optionally include the currentRrrSubType
+     * to ensure that is displayed regardless of whether it is still current or
+     * not.
+     *
+     * @param rrrTypeCode
+     * @param defaultRrrSubType
+     */
+    public void setRrrTypeFilter(String rrrTypeCode, String defaultRrrSubType) {
+        if (StringUtility.isEmpty(rrrTypeCode)) {
+            return;
+        }
+        List<String> codes = new ArrayList<String>();
+        if (!StringUtility.isEmpty(defaultRrrSubType)) {
+            codes.add(defaultRrrSubType);
+        }
+        for (RrrSubTypeBean bean : rrrSubTypes) {
+            if (rrrTypeCode.equals(bean.getRrrTypeCode())) {
+                codes.add(bean.getCode());
+            }
+        }
+        setAllowedCodes(codes.toArray(new String[codes.size()]));
+    }
+
+    /**
+     * Indicates if there are any RrrSubTypes for display for this Rrr Type.
+     * Requires setRrrTypeFilter to be called prior to calling this method.
+     */
+    public boolean hasRrrSubTypes() {
+        // Determine if the list should contain a dummy entry to not
+        return this.createDummy ? getRrrSubTypes().size() > 1
+                : getRrrSubTypes().size() > 0;
     }
 
 }

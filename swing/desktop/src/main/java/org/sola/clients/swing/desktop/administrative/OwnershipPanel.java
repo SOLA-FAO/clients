@@ -33,13 +33,14 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.JFormattedTextField;
 import javax.validation.groups.Default;
+import org.sola.clients.beans.administrative.BaUnitBean;
 import org.sola.clients.beans.administrative.RrrBean;
 import org.sola.clients.beans.administrative.RrrShareBean;
 import org.sola.clients.beans.administrative.validation.OwnershipValidationGroup;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationServiceBean;
+import org.sola.clients.beans.referencedata.RrrSubTypeListBean;
 import org.sola.clients.beans.referencedata.StatusConstants;
-import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.common.controls.CalendarForm;
 import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel;
@@ -71,6 +72,7 @@ public class OwnershipPanel extends ContentPanel {
     private ApplicationBean applicationBean;
     private ApplicationServiceBean appService;
     private RrrBean.RRR_ACTION rrrAction;
+    private BaUnitBean baUnitBean;
     public static final String UPDATED_RRR = "updatedRRR";
 
     private DocumentsManagementExtPanel createDocumentsPanel() {
@@ -98,16 +100,23 @@ public class OwnershipPanel extends ContentPanel {
         return rrrBean;
     }
 
-    public OwnershipPanel(RrrBean rrrBean, RrrBean.RRR_ACTION rrrAction) {
-        this(rrrBean, null, null, rrrAction);
+    private RrrSubTypeListBean createRrrSubTypes() {
+        RrrSubTypeListBean list = new RrrSubTypeListBean(true);
+        list.setRrrTypeFilter(rrrBean.getTypeCode(), rrrBean.getRrrSubTypeCode());
+        return list;
     }
 
-    public OwnershipPanel(RrrBean rrrBean, ApplicationBean applicationBean,
+    public OwnershipPanel(BaUnitBean baUnit, RrrBean rrrBean, RrrBean.RRR_ACTION rrrAction) {
+        this(baUnit, rrrBean, null, null, rrrAction);
+    }
+
+    public OwnershipPanel(BaUnitBean baUnit, RrrBean rrrBean, ApplicationBean applicationBean,
             ApplicationServiceBean applicationService, RrrBean.RRR_ACTION rrrAction) {
 
         this.applicationBean = applicationBean;
         this.appService = applicationService;
         this.rrrAction = rrrAction;
+        this.baUnitBean = baUnit;
         prepareRrrBean(rrrBean, rrrAction);
 
         initComponents();
@@ -161,7 +170,9 @@ public class OwnershipPanel extends ContentPanel {
     }
 
     private void customizeForm() {
-        headerPanel.setTitleText(rrrBean.getRrrType().getDisplayValue());
+        txtStatus.setEnabled(false);
+        headerPanel.setTitleText(String.format("%s, %s", baUnitBean.getDisplayName(),
+                rrrBean.getRrrType().getDisplayValue()));
         if (rrrAction == RrrBean.RRR_ACTION.NEW) {
             btnSave.setText(MessageUtility.getLocalizedMessage(
                     ClientMessage.GENERAL_LABELS_CREATE_AND_CLOSE).getMessage());
@@ -180,10 +191,18 @@ public class OwnershipPanel extends ContentPanel {
         if (rrrAction == RrrBean.RRR_ACTION.VIEW) {
             btnSave.setEnabled(false);
             txtNotationText.setEnabled(false);
-            txtRegDatetime.setEditable(false);
+            txtRegDatetime.setEnabled(false);
             btnRegDate.setEnabled(false);
-            txtNotationText.setEditable(false);
-            cbxIsPrimary.setEnabled(false);
+            txtNotationText.setEnabled(false);
+            txtRefNum.setEnabled(false);
+            cbxRrrSubType.setEnabled(false);
+        }
+
+        if (!rrrSubTypes.hasRrrSubTypes()) {
+            // Hide the purpose panel and put it at the end of the panel list. 
+            pnlTop.remove(pnlPurpose);
+            pnlTop.add(pnlPurpose);
+            pnlPurpose.setVisible(false);
         }
     }
 
@@ -231,33 +250,42 @@ public class OwnershipPanel extends ContentPanel {
         menuRemoveShare = new javax.swing.JMenuItem();
         menuChangeShare = new javax.swing.JMenuItem();
         menuViewShare = new javax.swing.JMenuItem();
-        jPanel3 = new javax.swing.JPanel();
-        jLabel13 = new javax.swing.JLabel();
-        cbxIsPrimary = new javax.swing.JCheckBox();
-        txtRegDatetime = new org.sola.clients.swing.common.controls.WatermarkDate();
-        btnRegDate = new javax.swing.JButton();
+        rrrSubTypes =  createRrrSubTypes();
         headerPanel = new org.sola.clients.swing.ui.HeaderPanel();
         jToolBar2 = new javax.swing.JToolBar();
         btnSave = new javax.swing.JButton();
-        jSeparator1 = new javax.swing.JToolBar.Separator();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(7, 0), new java.awt.Dimension(7, 0), new java.awt.Dimension(7, 32767));
-        jLabel1 = new javax.swing.JLabel();
-        lblStatus = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
-        txtNotationText = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel15 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtNotationText = new javax.swing.JTextArea();
+        groupPanel1 = new org.sola.clients.swing.ui.GroupPanel();
         jToolBar1 = new javax.swing.JToolBar();
-        btnAddShare = new javax.swing.JButton();
-        btnRemoveShare = new javax.swing.JButton();
-        btnChangeShare = new javax.swing.JButton();
         btnViewShare = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JToolBar.Separator();
+        btnAddShare = new javax.swing.JButton();
+        btnChangeShare = new javax.swing.JButton();
+        btnRemoveShare = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableShares = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
-        groupPanel1 = new org.sola.clients.swing.ui.GroupPanel();
-        jPanel1 = new javax.swing.JPanel();
         groupPanel2 = new org.sola.clients.swing.ui.GroupPanel();
+        jPanel1 = new javax.swing.JPanel();
         documentsPanel = createDocumentsPanel();
+        pnlTop = new javax.swing.JPanel();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        txtRefNum = new javax.swing.JTextField();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel13 = new javax.swing.JLabel();
+        txtRegDatetime = new org.sola.clients.swing.common.controls.WatermarkDate();
+        btnRegDate = new javax.swing.JButton();
+        pnlPurpose = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        cbxRrrSubType = new javax.swing.JComboBox();
+        jPanel8 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        txtStatus = new javax.swing.JTextField();
 
         popUpShares.setName("popUpShares"); // NOI18N
 
@@ -306,62 +334,6 @@ public class OwnershipPanel extends ContentPanel {
         setHelpTopic(bundle.getString("OwnershipPanel.helpTopic")); // NOI18N
         setName("Form"); // NOI18N
 
-        jPanel3.setName("jPanel3"); // NOI18N
-
-        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
-        jLabel13.setText(bundle.getString("OwnershipPanel.jLabel13.text")); // NOI18N
-        jLabel13.setToolTipText(bundle.getString("OwnershipPanel.jLabel13.toolTipText")); // NOI18N
-        jLabel13.setName("jLabel13"); // NOI18N
-
-        cbxIsPrimary.setText(bundle.getString("OwnershipPanel.cbxIsPrimary.text")); // NOI18N
-        cbxIsPrimary.setToolTipText(bundle.getString("OwnershipPanel.cbxIsPrimary.toolTipText")); // NOI18N
-        cbxIsPrimary.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        cbxIsPrimary.setName("cbxIsPrimary"); // NOI18N
-
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${primary}"), cbxIsPrimary, org.jdesktop.beansbinding.BeanProperty.create("selected"));
-        bindingGroup.addBinding(binding);
-
-        txtRegDatetime.setName(bundle.getString("OwnershipPanel.txtRegDatetime.name")); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${registrationDate}"), txtRegDatetime, org.jdesktop.beansbinding.BeanProperty.create("value"));
-        bindingGroup.addBinding(binding);
-
-        btnRegDate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/calendar.png"))); // NOI18N
-        btnRegDate.setText(bundle.getString("OwnershipPanel.btnRegDate.text")); // NOI18N
-        btnRegDate.setBorder(null);
-        btnRegDate.setName(bundle.getString("OwnershipPanel.btnRegDate.name")); // NOI18N
-        btnRegDate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRegDateActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jLabel13)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtRegDatetime, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnRegDate)
-                .addGap(29, 29, 29)
-                .addComponent(cbxIsPrimary, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel13)
-                        .addComponent(txtRegDatetime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnRegDate)
-                    .addComponent(cbxIsPrimary))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
         headerPanel.setName("headerPanel"); // NOI18N
         headerPanel.setTitleText(bundle.getString("OwnershipPanel.headerPanel.titleText")); // NOI18N
 
@@ -379,71 +351,32 @@ public class OwnershipPanel extends ContentPanel {
         });
         jToolBar2.add(btnSave);
 
-        jSeparator1.setName("jSeparator1"); // NOI18N
-        jToolBar2.add(jSeparator1);
+        jPanel4.setName("jPanel4"); // NOI18N
+        jPanel4.setLayout(new java.awt.GridLayout(3, 1, 15, 6));
 
-        filler1.setName("filler1"); // NOI18N
-        jToolBar2.add(filler1);
+        jPanel3.setName("jPanel3"); // NOI18N
 
-        jLabel1.setText(bundle.getString("OwnershipPanel.jLabel1.text")); // NOI18N
-        jLabel1.setName("jLabel1"); // NOI18N
-        jToolBar2.add(jLabel1);
-
-        lblStatus.setFont(LafManager.getInstance().getLabFontBold());
-        lblStatus.setName("lblStatus"); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${status.displayValue}"), lblStatus, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        jToolBar2.add(lblStatus);
-
-        jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         jLabel15.setText(bundle.getString("OwnershipPanel.jLabel15.text")); // NOI18N
         jLabel15.setName("jLabel15"); // NOI18N
 
+        jScrollPane2.setName("jScrollPane2"); // NOI18N
+
+        txtNotationText.setColumns(20);
+        txtNotationText.setLineWrap(true);
+        txtNotationText.setRows(5);
         txtNotationText.setName("txtNotationText"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${notation.notationText}"), txtNotationText, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${notation.notationText}"), txtNotationText, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        jPanel4.setName("jPanel4"); // NOI18N
-        jPanel4.setLayout(new java.awt.GridLayout(2, 1, 0, 20));
+        jScrollPane2.setViewportView(txtNotationText);
 
-        jPanel2.setName("jPanel2"); // NOI18N
+        groupPanel1.setName("groupPanel1"); // NOI18N
+        groupPanel1.setTitleText(bundle.getString("OwnershipPanel.groupPanel1.titleText")); // NOI18N
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
         jToolBar1.setName("jToolBar1"); // NOI18N
-
-        btnAddShare.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
-        btnAddShare.setText(bundle.getString("OwnershipPanel.btnAddShare.text")); // NOI18N
-        btnAddShare.setName("btnAddShare"); // NOI18N
-        btnAddShare.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddShareActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(btnAddShare);
-
-        btnRemoveShare.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
-        btnRemoveShare.setText(bundle.getString("OwnershipPanel.btnRemoveShare.text")); // NOI18N
-        btnRemoveShare.setName("btnRemoveShare"); // NOI18N
-        btnRemoveShare.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRemoveShareActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(btnRemoveShare);
-
-        btnChangeShare.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/change-share.png"))); // NOI18N
-        btnChangeShare.setText(bundle.getString("OwnershipPanel.btnChangeShare.text")); // NOI18N
-        btnChangeShare.setName("btnChangeShare"); // NOI18N
-        btnChangeShare.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnChangeShareActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(btnChangeShare);
 
         btnViewShare.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/view.png"))); // NOI18N
         btnViewShare.setText(bundle.getString("OwnershipPanel.btnViewShare.text")); // NOI18N
@@ -457,6 +390,64 @@ public class OwnershipPanel extends ContentPanel {
             }
         });
         jToolBar1.add(btnViewShare);
+
+        jSeparator1.setName("jSeparator1"); // NOI18N
+        jToolBar1.add(jSeparator1);
+
+        btnAddShare.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
+        btnAddShare.setText(bundle.getString("OwnershipPanel.btnAddShare.text")); // NOI18N
+        btnAddShare.setName("btnAddShare"); // NOI18N
+        btnAddShare.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddShareActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnAddShare);
+
+        btnChangeShare.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/change-share.png"))); // NOI18N
+        btnChangeShare.setText(bundle.getString("OwnershipPanel.btnChangeShare.text")); // NOI18N
+        btnChangeShare.setName("btnChangeShare"); // NOI18N
+        btnChangeShare.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnChangeShareActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnChangeShare);
+
+        btnRemoveShare.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
+        btnRemoveShare.setText(bundle.getString("OwnershipPanel.btnRemoveShare.text")); // NOI18N
+        btnRemoveShare.setName("btnRemoveShare"); // NOI18N
+        btnRemoveShare.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveShareActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnRemoveShare);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jScrollPane2)
+            .addComponent(groupPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 630, Short.MAX_VALUE)
+            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(groupPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        jPanel4.add(jPanel3);
+
+        jPanel2.setName("jPanel2"); // NOI18N
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
@@ -483,40 +474,36 @@ public class OwnershipPanel extends ContentPanel {
             }
         });
         jScrollPane1.setViewportView(tableShares);
-        tableShares.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("OwnershipPanel.tableShares.columnModel.title0")); // NOI18N
-        tableShares.getColumnModel().getColumn(0).setCellRenderer(new TableCellListRenderer("getName", "getLastName"));
-        tableShares.getColumnModel().getColumn(1).setMinWidth(150);
-        tableShares.getColumnModel().getColumn(1).setPreferredWidth(150);
-        tableShares.getColumnModel().getColumn(1).setMaxWidth(150);
-        tableShares.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("OwnershipPanel.tableShares.columnModel.title1")); // NOI18N
+        if (tableShares.getColumnModel().getColumnCount() > 0) {
+            tableShares.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("OwnershipPanel.tableShares.columnModel.title0")); // NOI18N
+            tableShares.getColumnModel().getColumn(0).setCellRenderer(new TableCellListRenderer("getName", "getLastName"));
+            tableShares.getColumnModel().getColumn(1).setMinWidth(150);
+            tableShares.getColumnModel().getColumn(1).setPreferredWidth(150);
+            tableShares.getColumnModel().getColumn(1).setMaxWidth(150);
+            tableShares.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("OwnershipPanel.tableShares.columnModel.title1")); // NOI18N
+        }
 
-        groupPanel1.setName("groupPanel1"); // NOI18N
-        groupPanel1.setTitleText(bundle.getString("OwnershipPanel.groupPanel1.titleText")); // NOI18N
+        groupPanel2.setName("groupPanel2"); // NOI18N
+        groupPanel2.setTitleText(bundle.getString("OwnershipPanel.groupPanel2.titleText")); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(groupPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 604, Short.MAX_VALUE)
-            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 604, Short.MAX_VALUE)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 604, Short.MAX_VALUE)
+            .addComponent(jScrollPane1)
+            .addComponent(groupPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 630, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(groupPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(groupPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jPanel4.add(jPanel2);
 
         jPanel1.setName("jPanel1"); // NOI18N
-
-        groupPanel2.setName("groupPanel2"); // NOI18N
-        groupPanel2.setTitleText(bundle.getString("OwnershipPanel.groupPanel2.titleText")); // NOI18N
 
         documentsPanel.setName(bundle.getString("OwnershipPanel.documentsPanel.name")); // NOI18N
 
@@ -524,18 +511,154 @@ public class OwnershipPanel extends ContentPanel {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(groupPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(documentsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(documentsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 630, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(groupPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(documentsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE))
+            .addComponent(documentsPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
         );
 
         jPanel4.add(jPanel1);
+
+        pnlTop.setName("pnlTop"); // NOI18N
+        pnlTop.setLayout(new java.awt.GridLayout(1, 4, 15, 6));
+
+        jPanel7.setName("jPanel7"); // NOI18N
+
+        jLabel2.setText(bundle.getString("OwnershipPanel.jLabel2.text")); // NOI18N
+        jLabel2.setName("jLabel2"); // NOI18N
+
+        txtRefNum.setName("txtRefNum"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${notation.referenceNr}"), txtRefNum, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)
+            .addComponent(txtRefNum)
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtRefNum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        pnlTop.add(jPanel7);
+
+        jPanel6.setName("jPanel6"); // NOI18N
+
+        jLabel13.setText(bundle.getString("OwnershipPanel.jLabel13.text")); // NOI18N
+        jLabel13.setToolTipText(bundle.getString("OwnershipPanel.jLabel13.toolTipText")); // NOI18N
+        jLabel13.setName("jLabel13"); // NOI18N
+
+        txtRegDatetime.setName(bundle.getString("OwnershipPanel.txtRegDatetime.name")); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${registrationDate}"), txtRegDatetime, org.jdesktop.beansbinding.BeanProperty.create("value"));
+        bindingGroup.addBinding(binding);
+
+        txtRegDatetime.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtRegDatetimeActionPerformed(evt);
+            }
+        });
+
+        btnRegDate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/calendar.png"))); // NOI18N
+        btnRegDate.setText(bundle.getString("OwnershipPanel.btnRegDate.text")); // NOI18N
+        btnRegDate.setBorder(null);
+        btnRegDate.setName(bundle.getString("OwnershipPanel.btnRegDate.name")); // NOI18N
+        btnRegDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegDateActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addComponent(txtRegDatetime, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnRegDate))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addComponent(jLabel13)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtRegDatetime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRegDate))
+                .addContainerGap(14, Short.MAX_VALUE))
+        );
+
+        pnlTop.add(jPanel6);
+
+        pnlPurpose.setName("pnlPurpose"); // NOI18N
+
+        jLabel1.setText(bundle.getString("OwnershipPanel.jLabel1.text")); // NOI18N
+        jLabel1.setName("jLabel1"); // NOI18N
+
+        cbxRrrSubType.setName("cbxRrrSubType"); // NOI18N
+
+        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${rrrSubTypes}");
+        org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrSubTypes, eLProperty, cbxRrrSubType);
+        bindingGroup.addBinding(jComboBoxBinding);
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${rrrSubType}"), cbxRrrSubType, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        javax.swing.GroupLayout pnlPurposeLayout = new javax.swing.GroupLayout(pnlPurpose);
+        pnlPurpose.setLayout(pnlPurposeLayout);
+        pnlPurposeLayout.setHorizontalGroup(
+            pnlPurposeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)
+            .addComponent(cbxRrrSubType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        pnlPurposeLayout.setVerticalGroup(
+            pnlPurposeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlPurposeLayout.createSequentialGroup()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbxRrrSubType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 14, Short.MAX_VALUE))
+        );
+
+        pnlTop.add(pnlPurpose);
+
+        jPanel8.setName("jPanel8"); // NOI18N
+
+        jLabel3.setText(bundle.getString("OwnershipPanel.jLabel3.text")); // NOI18N
+        jLabel3.setName("jLabel3"); // NOI18N
+
+        txtStatus.setName("txtStatus"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${status.displayValue}"), txtStatus, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)
+            .addComponent(txtStatus)
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        pnlTop.add(jPanel8);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -546,10 +669,8 @@ public class OwnershipPanel extends ContentPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtNotationText)
-                    .addComponent(jLabel15)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnlTop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -559,12 +680,8 @@ public class OwnershipPanel extends ContentPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(11, 11, 11)
-                .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnlTop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtNotationText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
                 .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
@@ -618,6 +735,10 @@ public class OwnershipPanel extends ContentPanel {
         showCalendar(txtRegDatetime);
     }//GEN-LAST:event_btnRegDateActionPerformed
 
+    private void txtRegDatetimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRegDatetimeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtRegDatetimeActionPerformed
+
     private void changeShare() {
         if (rrrBean.getSelectedShare() != null) {
             openShareForm(rrrBean.getSelectedShare(), RrrBean.RRR_ACTION.VARY);
@@ -647,33 +768,42 @@ public class OwnershipPanel extends ContentPanel {
     private javax.swing.JButton btnRemoveShare;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnViewShare;
-    private javax.swing.JCheckBox cbxIsPrimary;
+    private javax.swing.JComboBox cbxRrrSubType;
     private org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel documentsPanel;
-    private javax.swing.Box.Filler filler1;
     private org.sola.clients.swing.ui.GroupPanel groupPanel1;
     private org.sola.clients.swing.ui.GroupPanel groupPanel2;
     private org.sola.clients.swing.ui.HeaderPanel headerPanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
-    private javax.swing.JLabel lblStatus;
     private javax.swing.JMenuItem menuAddShare;
     private javax.swing.JMenuItem menuChangeShare;
     private javax.swing.JMenuItem menuRemoveShare;
     private javax.swing.JMenuItem menuViewShare;
+    private javax.swing.JPanel pnlPurpose;
+    private javax.swing.JPanel pnlTop;
     private javax.swing.JPopupMenu popUpShares;
     private org.sola.clients.beans.administrative.RrrBean rrrBean;
+    private org.sola.clients.beans.referencedata.RrrSubTypeListBean rrrSubTypes;
     private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tableShares;
-    private javax.swing.JTextField txtNotationText;
+    private javax.swing.JTextArea txtNotationText;
+    private javax.swing.JTextField txtRefNum;
     private org.sola.clients.swing.common.controls.WatermarkDate txtRegDatetime;
+    private javax.swing.JTextField txtStatus;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }

@@ -934,7 +934,7 @@ public class PropertyPanel extends ContentPanel {
                     baUnitBean1, rrrBean, applicationBean, applicationService, action);
         } else {
             PanelLauncher.launch(rrrPanelCode, getMainContentPanel(), new RightFormListener(), null,
-                    rrrBean, applicationBean, applicationService, action);
+                    baUnitBean1, rrrBean, applicationBean, applicationService, action);
         }
     }
 
