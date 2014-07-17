@@ -332,11 +332,21 @@ public class MapImageGeneratorForSelectedParcel {
         graphics.drawString(coordinateToPrint, 10, yLocationCoordinateToPrint);
         
         graphics.setTransform(originalTransform);
-        graphics.rotate(Math.PI / 2, getMapOnlyWidth() + imageMarginLeft + 1, imageHeight - yLocationCoordinateToPrint);
-        //Print y coordinate on the right
-        graphics.drawString(coordinateToPrint, getMapOnlyWidth() + imageMarginLeft + 1, imageHeight - yLocationCoordinateToPrint);
 
+////        graphics.rotate(Math.PI / 2, getMapOnlyWidth() + imageMarginLeft + 1, imageHeight - yLocationCoordinateToPrint);
+//        //Print y coordinate on the right
+////        graphics.drawString(coordinateToPrint, getMapOnlyWidth() + imageMarginLeft + 1, imageHeight - yLocationCoordinateToPrint);
+//        graphics.setTransform(originalTransform);
+        
+         //Rotate 90degrees
+        graphics.rotate(-Math.PI / 2, getMapOnlyWidth() + imageMarginLeft + 10, yLocationCoordinateToPrint);
+        //Print y coordinate on the left
+        graphics.drawString(coordinateToPrint, getMapOnlyWidth() + imageMarginLeft + 10, yLocationCoordinateToPrint);
+        
         graphics.setTransform(originalTransform);
+//     
+        
+        
         coordinateToPrint = String.format("%s", xCoordinate);
         int xLocationCoordinateToPrint =
                 xCoordinateLocation - fontMetrics.stringWidth(coordinateToPrint) / 2;
