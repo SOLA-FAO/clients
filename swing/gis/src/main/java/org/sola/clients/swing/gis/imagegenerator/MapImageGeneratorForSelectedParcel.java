@@ -306,8 +306,14 @@ public class MapImageGeneratorForSelectedParcel {
         if (coordinate < min || coordinate > max) {
             coordinate = (min / 10) * 10;
             while (coordinate < middleCoordinate) {
+                if (coordinate + 10 > max) {
+                    break;
+                }
                 coordinate += 10;
             }
+        }
+        if (coordinate < min || coordinate > max){
+            coordinate = middleCoordinate;
         }
         return coordinate;
 
