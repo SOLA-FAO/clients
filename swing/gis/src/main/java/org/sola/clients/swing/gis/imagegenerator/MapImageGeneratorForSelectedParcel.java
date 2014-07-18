@@ -272,7 +272,7 @@ public class MapImageGeneratorForSelectedParcel {
         graphics.drawRect(imageMarginLeft, imageMarginTop, getMapOnlyWidth() - 1, getMapOnlyHeight() - 1);
 
         //Print gridcut
-        printGridCut(graphics, getMapExtentInGridCutCrs(extent));
+        printGridCut(graphics, scale, getMapExtentInGridCutCrs(extent));
 
         ImageIO.write(fullImage, IMAGE_FORMAT, outputFile);
         return pathToResult;
@@ -295,33 +295,39 @@ public class MapImageGeneratorForSelectedParcel {
     }
 
     private int getProperGridCutCoordinate(int min, int max) {
-        int middleCoordinate = min + (max - min) / 2;
-        int coordinate = (min / 100) * 100;
-        while (coordinate < middleCoordinate) {
-            if (coordinate + 100 > max) {
+        int[] gridCutIntervals = {1000, 100, 50, 10};
+        int coordinate = 0;
+        for (int i = 0; i <= gridCutIntervals.length; i++){
+            coordinate = getProperGridCutCoordinate(min, max, gridCutIntervals[i]);
+            if (coordinate >= min && coordinate <= max){
                 break;
-            }
-            coordinate += 100;
-        }
-        if (coordinate < min || coordinate > max) {
-            coordinate = (min / 10) * 10;
-            while (coordinate < middleCoordinate) {
-                if (coordinate + 10 > max) {
-                    break;
-                }
-                coordinate += 10;
             }
         }
         if (coordinate < min || coordinate > max){
-            coordinate = middleCoordinate;
+            coordinate = min + (max - min) / 2;
         }
         return coordinate;
 
     }
 
-    private void printGridCut(Graphics2D graphics, ReferencedEnvelope extent) {
-        int xCoordinate = getProperGridCutCoordinate((int) extent.getMinX(), (int) extent.getMaxX());
-        int yCoordinate = getProperGridCutCoordinate((int) extent.getMinY(), (int) extent.getMaxY());
+    private int getProperGridCutCoordinate(int min, int max, int gridCutDistance) {
+        int middleCoordinate = min + (max - min) / 2;
+        int coordinate = (min / gridCutDistance) * gridCutDistance;
+        while (coordinate < middleCoordinate) {
+            if (coordinate + gridCutDistance > max) {
+                break;
+            }
+            coordinate += gridCutDistance;
+        }
+        return coordinate;
+    }
+    
+    private void printGridCut(Graphics2D graphics, double scale, ReferencedEnvelope extent) {
+        int marginCoordinate = (int) scale/100;
+        int xCoordinate = getProperGridCutCoordinate(
+                (int) extent.getMinX() + marginCoordinate, (int) extent.getMaxX() - marginCoordinate);
+        int yCoordinate = getProperGridCutCoordinate(
+                (int) extent.getMinY() + marginCoordinate, (int) extent.getMaxY() - marginCoordinate);
         int xCoordinateLocation = (int) ((xCoordinate - extent.getMinX()) * getMapOnlyWidth() / extent.getWidth()) + imageMarginLeft;
         int yCoordinateLocation = (int) ((extent.getMaxY() - yCoordinate) * getMapOnlyHeight() / extent.getHeight()) + imageMarginTop;
 
