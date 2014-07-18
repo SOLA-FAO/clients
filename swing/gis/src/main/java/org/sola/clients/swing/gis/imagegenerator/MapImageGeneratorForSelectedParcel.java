@@ -316,14 +316,14 @@ public class MapImageGeneratorForSelectedParcel {
     private void printGridCut(Graphics2D graphics, ReferencedEnvelope extent) {
         int xCoordinate = getProperGridCutCoordinate((int) extent.getMinX(), (int) extent.getMaxX());
         int yCoordinate = getProperGridCutCoordinate((int) extent.getMinY(), (int) extent.getMaxY());
-        double pixelPerMeter = getMapOnlyWidth() / extent.getWidth();
-        int xCoordinateLocation = (int) ((xCoordinate - extent.getMinX()) * pixelPerMeter) + imageMarginLeft;
-        int yCoordinateLocation = (int) ((extent.getMaxY() - yCoordinate) * pixelPerMeter) + imageMarginTop;
+        int xCoordinateLocation = (int) ((xCoordinate - extent.getMinX()) * getMapOnlyWidth() / extent.getWidth()) + imageMarginLeft;
+        int yCoordinateLocation = (int) ((extent.getMaxY() - yCoordinate) * getMapOnlyHeight() / extent.getHeight()) + imageMarginTop;
 
         FontMetrics fontMetrics = graphics.getFontMetrics();
         String coordinateToPrint = String.format("%s", yCoordinate);
         int yLocationCoordinateToPrint = yCoordinateLocation + fontMetrics.stringWidth(coordinateToPrint) / 2;
-        //yLocationCoordinateToPrint = imageHeight - yLocationCoordinateToPrint;
+
+        //Save original graphic affinetransform
         AffineTransform originalTransform = graphics.getTransform();
         
         //Rotate 90degrees
@@ -333,18 +333,12 @@ public class MapImageGeneratorForSelectedParcel {
         
         graphics.setTransform(originalTransform);
 
-////        graphics.rotate(Math.PI / 2, getMapOnlyWidth() + imageMarginLeft + 1, imageHeight - yLocationCoordinateToPrint);
-//        //Print y coordinate on the right
-////        graphics.drawString(coordinateToPrint, getMapOnlyWidth() + imageMarginLeft + 1, imageHeight - yLocationCoordinateToPrint);
-//        graphics.setTransform(originalTransform);
-        
          //Rotate 90degrees
         graphics.rotate(-Math.PI / 2, getMapOnlyWidth() + imageMarginLeft + 10, yLocationCoordinateToPrint);
-        //Print y coordinate on the left
+        //Print y coordinate on the right
         graphics.drawString(coordinateToPrint, getMapOnlyWidth() + imageMarginLeft + 10, yLocationCoordinateToPrint);
         
         graphics.setTransform(originalTransform);
-//     
         
         
         coordinateToPrint = String.format("%s", xCoordinate);
