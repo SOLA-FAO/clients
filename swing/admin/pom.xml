@@ -5,7 +5,7 @@
     <parent>
         <artifactId>sola-clients-swing</artifactId>
         <groupId>org.sola.clients</groupId>
-        <version>sl-004</version>
+        <version>sl-005</version>
     </parent>
     
     <groupId>org.sola.clients.swing</groupId>
@@ -14,7 +14,7 @@
     See  https://jira.atlassian.com/browse/CLOV-1026 -->
     <artifactId>sola-desktop-admin</artifactId>
     <packaging>jar</packaging>
-    <version>sl-004</version>
+    <version>sl-005</version>
     <name>Clients Admin</name>
 
     <properties>
