@@ -5,11 +5,11 @@
     <parent>
         <artifactId>sola-clients-swing</artifactId>
         <groupId>org.sola.clients</groupId>
-        <version>sl-003</version>
+        <version>sl-004</version>
     </parent>
     <groupId>org.sola.clients.swing</groupId>
     <artifactId>clients-swing-ui</artifactId>
-    <version>sl-003</version>
+    <version>sl-004</version>
     <name>Clients SWING UI</name>
     <url>http://maven.apache.org</url>
     <properties>
