@@ -5,7 +5,6 @@
 package org.sola.clients.swing.gis.imagegenerator;
 
 import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.io.ParseException;
 import java.awt.Color;
 import java.awt.FontMetrics;
@@ -20,7 +19,6 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.feature.SchemaException;
-import org.geotools.geometry.Envelope2D;
 import org.geotools.geometry.jts.Geometries;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.geometry.jts.ReferencedEnvelope;
@@ -29,12 +27,10 @@ import org.geotools.map.extended.layer.ExtendedLayerGraphics;
 import org.geotools.swing.extended.Map;
 import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.geotools.swing.extended.exception.InitializeMapException;
-import org.geotools.swing.extended.util.CRSUtility;
 import org.geotools.swing.extended.util.GeometryUtility;
 import org.geotools.swing.extended.util.MapImageGenerator;
 import org.geotools.swing.extended.util.ScalebarGenerator;
 import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.geometry.BoundingBox;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.TransformException;
@@ -65,7 +61,7 @@ public class MapImageGeneratorForSelectedParcel {
     private MapImageGenerator mapImageGenerator = null;
     private MapImageGenerator mapImageSketchGenerator = null;
     private ScalebarGenerator scalebarGenerator = null;
-    //private Map map;
+    private double mainToSketchScaleRatio = 2;
     private int imageWidth;
     private int imageHeight;
     private int imageMarginTop = 11, imageMarginBottom = 11;
@@ -136,6 +132,11 @@ public class MapImageGeneratorForSelectedParcel {
             scalebarGenerator = new ScalebarGenerator();
             scalebarGenerator.setHeight(scalebarHeight);
         }
+        
+        mainToSketchScaleRatio = Double.parseDouble(
+                PojoDataAccess.getInstance().getWSManager().getAdminService().getSetting(
+                "title-plan-main-sketch-scale-ratio", "2"));
+        
     }
 
     /**
@@ -243,7 +244,7 @@ public class MapImageGeneratorForSelectedParcel {
                 extent, scale, String.format("map-%s", cadastreObjectID));
         info.setMapImageLocation(mapImageLocation);
         String mapSketchImageLocation = this.getMapSketchImageAsFileLocation(
-                extent, scale * 2, String.format("map-%s-sketch", cadastreObjectID));
+                extent, scale * mainToSketchScaleRatio, String.format("map-%s-sketch", cadastreObjectID));
         info.setSketchMapImageLocation(mapSketchImageLocation);
         info.setArea(((Geometry) targetFeature.getDefaultGeometry()).getArea());
         info.setSrid(this.gridCutSrid);
