@@ -101,6 +101,7 @@ public class SLPropertyPanel extends ContentPanel {
     private ControlsBundleForBaUnit mapControl = null;
     private boolean readOnly = false;
     java.util.ResourceBundle resourceBundle;
+    private PropertyChangeListener propertyRelationshipListener;
     public BaUnitBean whichBaUnitSelected;
 
     /**
@@ -275,13 +276,17 @@ public class SLPropertyPanel extends ContentPanel {
      */
     private void customizeForm() {
 
+        txtLastPart.setEnabled(false);
+        txtBaUnitStatus.setEnabled(false);
+        txtLandUse.setEnabled(false);
+
         if (nameFirstPart != null && nameLastPart != null) {
             headerPanel.setTitleText(String.format(
                     resourceBundle.getString("SLPropertyPanel.existingProperty.Text"), baUnitBean1.getDisplayName()));
 
         } else {
             headerPanel.setTitleText(resourceBundle.getString("SLPropertyPanel.newProperty.Text"));
-        }       
+        }
 
         if (applicationBean != null && applicationService != null) {
             headerPanel.setTitleText(String.format("%s, %s",
@@ -311,6 +316,41 @@ public class SLPropertyPanel extends ContentPanel {
     }
 
     /**
+     * Opens the property relationship panel so the user can associate this property
+     * with another property. 
+     */
+    private void openPropertyRelationshipPanel() {
+        if (baUnitBean1 == null) {
+            return;
+        }
+        if (getMainContentPanel() != null) {
+            if (propertyRelationshipListener == null) {
+                propertyRelationshipListener = new PropertyChangeListener() {
+                    @Override
+                    public void propertyChange(PropertyChangeEvent evt) {
+                        if (evt.getPropertyName().equals(SLPropertyRelationshipPanel.SELECTED_RESULT_PROPERTY)) {
+                            addParentProperty((Object[]) evt.getNewValue());
+                        }
+                    }
+                };
+            }
+        }
+
+        SolaTask t = new SolaTask<Void, Void>() {
+            @Override
+            public Void doTask() {
+                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PROPERTYLINK));
+
+                SLPropertyRelationshipPanel propRelPanel = new SLPropertyRelationshipPanel();
+                propRelPanel.addPropertyChangeListener(propertyRelationshipListener);
+                getMainContentPanel().addPanel(propRelPanel, MainContentPanel.CARD_PROPERTY_RELATIONSHIP, true);
+                return null;
+            }
+        };
+        TaskManager.getInstance().runTask(t);
+    }
+
+    /**
      * Populates rights, parcels and parent Properties lists from provided
      * result object.
      *
@@ -319,55 +359,27 @@ public class SLPropertyPanel extends ContentPanel {
      * contains {@link BaUnitRelTypeBean}.
      */
     private boolean addParentProperty(Object[] selectedResult) {
-        if (selectedResult == null) {
+                if (selectedResult == null) {
             return false;
         }
 
         BaUnitBean selectedBaUnit = (BaUnitBean) selectedResult[0];
         BaUnitRelTypeBean baUnitRelType = (BaUnitRelTypeBean) selectedResult[1];
         this.whichBaUnitSelected = selectedBaUnit;
-        // Check relation type to be same as on the list.
+        // Check if relation type duplicates a relationship already on the list
         for (RelatedBaUnitInfoBean parent : baUnitBean1.getFilteredParentBaUnits()) {
             if (parent.getRelationCode() != null
-                    && !parent.getRelationCode().equals(baUnitRelType.getCode())) {
+                    && parent.getRelationCode().equals(baUnitRelType.getCode())) {
                 MessageUtility.displayMessage(ClientMessage.BAUNIT_WRONG_RELATION_TYPE);
                 return false;
             }
         }
 
-        // Check if relation already exists
-        for (RelatedBaUnitInfoBean parent : baUnitBean1.getParentBaUnits()) {
+        // Check if baUnit is already related as a parent baUnit
+        for (RelatedBaUnitInfoBean parent : baUnitBean1.getFilteredParentBaUnits()) {
             if (parent.getRelatedBaUnitId() != null && parent.getRelatedBaUnitId().equals(selectedBaUnit.getId())) {
                 MessageUtility.displayMessage(ClientMessage.BAUNIT_HAS_SELECTED_PARENT_BA_UNIT);
                 return false;
-            }
-        }
-
-        // Go througth the rights and add them, avoiding duplications
-        for (RrrBean rrr : selectedBaUnit.getSelectedRrrs(true)) {
-            boolean exists = false;
-            for (RrrBean currentRrr : baUnitBean1.getRrrList()) {
-                if (rrr.getId().equals(currentRrr.getId())) {
-                    exists = true;
-                    break;
-                }
-            }
-            if (!exists) {
-                baUnitBean1.getRrrList().addAsNew(rrr);
-            }
-        }
-
-        // Go througth the parcels and add them, avoiding duplications
-        for (CadastreObjectBean cadastreObject : selectedBaUnit.getSelectedCadastreObjects()) {
-            boolean exists = false;
-            for (CadastreObjectBean currentCadastreObject : baUnitBean1.getCadastreObjectList()) {
-                if (cadastreObject.getId().equals(currentCadastreObject.getId())) {
-                    exists = true;
-                    break;
-                }
-            }
-            if (!exists) {
-                baUnitBean1.getCadastreObjectList().addAsNew(cadastreObject);
             }
         }
 
@@ -394,11 +406,11 @@ public class SLPropertyPanel extends ContentPanel {
             enabled = false;
         }
 
-        btnOpenParent.setEnabled(baUnitBean1.getSelectedParentBaUnit() != null);
+        btnViewParent.setEnabled(baUnitBean1.getSelectedParentBaUnit() != null);
         btnAddParent.setEnabled(enabled);
-        btnRemoveParent.setEnabled(enabled && btnOpenParent.isEnabled());
+        btnRemoveParent.setEnabled(enabled && btnViewParent.isEnabled());
 
-        menuOpenParentBaUnit.setEnabled(btnOpenParent.isEnabled());
+        menuViewParentBaUnit.setEnabled(btnViewParent.isEnabled());
         menuAddParentBaUnit.setEnabled(btnAddParent.isEnabled());
         menuRemoveParentBaUnit.setEnabled(btnRemoveParent.isEnabled());
     }
@@ -407,8 +419,8 @@ public class SLPropertyPanel extends ContentPanel {
      * Enables or disables "open" button for the child Properties list.
      */
     private void customizeChildPropertyButtons() {
-        btnOpenChild.setEnabled(baUnitBean1.getSelectedChildBaUnit() != null);
-        menuOpenChildBaUnit.setEnabled(btnOpenChild.isEnabled());
+        btnViewChild.setEnabled(baUnitBean1.getSelectedChildBaUnit() != null);
+        menuViewChildBaUnit.setEnabled(btnViewChild.isEnabled());
     }
 
     /**
@@ -884,10 +896,6 @@ public class SLPropertyPanel extends ContentPanel {
         TaskManager.getInstance().runTask(t);
     }
 
-    private void addParentProperty() {
-        MessageUtility.displayMessage("Not yet implemented!");
-    }
-
     /**
      * Prints BA unit certificate.
      */
@@ -1118,11 +1126,12 @@ public class SLPropertyPanel extends ContentPanel {
         menuEditNotation = new javax.swing.JMenuItem();
         menuRemoveNotation = new javax.swing.JMenuItem();
         popupParentBaUnits = new javax.swing.JPopupMenu();
-        menuOpenParentBaUnit = new javax.swing.JMenuItem();
+        menuViewParentBaUnit = new javax.swing.JMenuItem();
+        jSeparator2 = new javax.swing.JPopupMenu.Separator();
         menuAddParentBaUnit = new javax.swing.JMenuItem();
         menuRemoveParentBaUnit = new javax.swing.JMenuItem();
         popupChildBaUnits = new javax.swing.JPopupMenu();
-        menuOpenChildBaUnit = new javax.swing.JMenuItem();
+        menuViewChildBaUnit = new javax.swing.JMenuItem();
         baUnitAreaBean1 = createBaUnitAreaBean();
         jToolBar5 = new javax.swing.JToolBar();
         btnSave = new javax.swing.JButton();
@@ -1145,7 +1154,7 @@ public class SLPropertyPanel extends ContentPanel {
         txtArea = new javax.swing.JFormattedTextField();
         jPanel11 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        txtEstateType = new javax.swing.JTextField();
+        txtLandUse = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jPanel12 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
@@ -1200,23 +1209,20 @@ public class SLPropertyPanel extends ContentPanel {
         jPanel14 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
         jToolBar6 = new javax.swing.JToolBar();
-        jLabel6 = new javax.swing.JLabel();
+        btnViewParent = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JToolBar.Separator();
-        btnOpenParent = new javax.swing.JButton();
         btnAddParent = new javax.swing.JButton();
         btnRemoveParent = new javax.swing.JButton();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        tableParentBaUnits = new javax.swing.JTable();
+        groupPanel4 = new org.sola.clients.swing.ui.GroupPanel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        tableParentBaUnits = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
         jPanel5 = new javax.swing.JPanel();
         jToolBar7 = new javax.swing.JToolBar();
-        jLabel3 = new javax.swing.JLabel();
-        jSeparator2 = new javax.swing.JToolBar.Separator();
-        btnOpenChild = new javax.swing.JButton();
-        jScrollPane7 = new javax.swing.JScrollPane();
-        tableChildBaUnits = new javax.swing.JTable();
-        pnlNextButton = new javax.swing.JPanel();
+        btnViewChild = new javax.swing.JButton();
+        groupPanel3 = new org.sola.clients.swing.ui.GroupPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tableChildBaUnits = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
         pnlMap = new javax.swing.JPanel();
-        pnlHistory = new javax.swing.JPanel();
         headerPanel = new org.sola.clients.swing.ui.HeaderPanel();
 
         popupParcels.setName("popupParcels"); // NOI18N
@@ -1377,15 +1383,18 @@ public class SLPropertyPanel extends ContentPanel {
 
         popupParentBaUnits.setName("popupParentBaUnits"); // NOI18N
 
-        menuOpenParentBaUnit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/folder-open-document.png"))); // NOI18N
-        menuOpenParentBaUnit.setText(bundle.getString("SLPropertyPanel.menuOpenParentBaUnit.text")); // NOI18N
-        menuOpenParentBaUnit.setName("menuOpenParentBaUnit"); // NOI18N
-        menuOpenParentBaUnit.addActionListener(new java.awt.event.ActionListener() {
+        menuViewParentBaUnit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/view.png"))); // NOI18N
+        menuViewParentBaUnit.setText(bundle.getString("SLPropertyPanel.menuViewParentBaUnit.text")); // NOI18N
+        menuViewParentBaUnit.setName("menuViewParentBaUnit"); // NOI18N
+        menuViewParentBaUnit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuOpenParentBaUnitActionPerformed(evt);
+                menuViewParentBaUnitActionPerformed(evt);
             }
         });
-        popupParentBaUnits.add(menuOpenParentBaUnit);
+        popupParentBaUnits.add(menuViewParentBaUnit);
+
+        jSeparator2.setName("jSeparator2"); // NOI18N
+        popupParentBaUnits.add(jSeparator2);
 
         menuAddParentBaUnit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
         menuAddParentBaUnit.setText(bundle.getString("SLPropertyPanel.menuAddParentBaUnit.text")); // NOI18N
@@ -1409,15 +1418,15 @@ public class SLPropertyPanel extends ContentPanel {
 
         popupChildBaUnits.setName("popupChildBaUnits"); // NOI18N
 
-        menuOpenChildBaUnit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/folder-open-document.png"))); // NOI18N
-        menuOpenChildBaUnit.setText(bundle.getString("SLPropertyPanel.menuOpenChildBaUnit.text")); // NOI18N
-        menuOpenChildBaUnit.setName("menuOpenChildBaUnit"); // NOI18N
-        menuOpenChildBaUnit.addActionListener(new java.awt.event.ActionListener() {
+        menuViewChildBaUnit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/view.png"))); // NOI18N
+        menuViewChildBaUnit.setText(bundle.getString("SLPropertyPanel.menuViewChildBaUnit.text")); // NOI18N
+        menuViewChildBaUnit.setName("menuViewChildBaUnit"); // NOI18N
+        menuViewChildBaUnit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuOpenChildBaUnitActionPerformed(evt);
+                menuViewChildBaUnitActionPerformed(evt);
             }
         });
-        popupChildBaUnits.add(menuOpenChildBaUnit);
+        popupChildBaUnits.add(menuViewChildBaUnit);
 
         setHeaderPanel(headerPanel);
         setHelpTopic(bundle.getString("SLPropertyPanel.helpTopic")); // NOI18N
@@ -1502,7 +1511,7 @@ public class SLPropertyPanel extends ContentPanel {
         jPanel9Layout.setHorizontalGroup(
             jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(txtLastPart)
-            .add(jLabel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
+            .add(jLabel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -1531,7 +1540,7 @@ public class SLPropertyPanel extends ContentPanel {
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(txtBaUnitStatus)
-            .add(jLabel7, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
+            .add(jLabel7, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -1579,17 +1588,17 @@ public class SLPropertyPanel extends ContentPanel {
         jLabel4.setText(bundle.getString("SLPropertyPanel.jLabel4.text")); // NOI18N
         jLabel4.setName("jLabel4"); // NOI18N
 
-        txtEstateType.setEditable(false);
-        txtEstateType.setName("txtEstateType"); // NOI18N
+        txtLandUse.setEditable(false);
+        txtLandUse.setName("txtLandUse"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitBean1, org.jdesktop.beansbinding.ELProperty.create("${purpose}"), txtEstateType, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitBean1, org.jdesktop.beansbinding.ELProperty.create("${landUseType.displayValue}"), txtLandUse, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         org.jdesktop.layout.GroupLayout jPanel11Layout = new org.jdesktop.layout.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
         jPanel11Layout.setHorizontalGroup(
             jPanel11Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(txtEstateType)
+            .add(txtLandUse)
             .add(jLabel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel11Layout.setVerticalGroup(
@@ -1597,7 +1606,7 @@ public class SLPropertyPanel extends ContentPanel {
             .add(jPanel11Layout.createSequentialGroup()
                 .add(jLabel4)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(txtEstateType, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(txtLandUse, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -1630,15 +1639,15 @@ public class SLPropertyPanel extends ContentPanel {
         jPanel12Layout.setHorizontalGroup(
             jPanel12Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jLabel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .add(jScrollPane5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
+            .add(jScrollPane5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
         );
         jPanel12Layout.setVerticalGroup(
             jPanel12Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel12Layout.createSequentialGroup()
                 .add(jLabel5)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(jScrollPane5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jPanel2.add(jPanel12);
@@ -1654,7 +1663,7 @@ public class SLPropertyPanel extends ContentPanel {
             .add(org.jdesktop.layout.GroupLayout.TRAILING, pnlGeneralLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(pnlGeneralLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(documentsPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(documentsPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, groupPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel13, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -1667,7 +1676,7 @@ public class SLPropertyPanel extends ContentPanel {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(groupPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(documentsPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+                .add(documentsPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1774,7 +1783,7 @@ public class SLPropertyPanel extends ContentPanel {
             .add(org.jdesktop.layout.GroupLayout.TRAILING, pnlNotesLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(pnlNotesLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 665, Short.MAX_VALUE)
+                    .add(jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 595, Short.MAX_VALUE)
                     .add(jToolBar3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -1784,7 +1793,7 @@ public class SLPropertyPanel extends ContentPanel {
                 .addContainerGap()
                 .add(jToolBar3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE)
+                .add(jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1914,10 +1923,10 @@ public class SLPropertyPanel extends ContentPanel {
                 .addContainerGap()
                 .add(pnlParcelsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(pnlParcelsLayout.createSequentialGroup()
-                        .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 665, Short.MAX_VALUE)
+                        .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 595, Short.MAX_VALUE)
                         .addContainerGap())
                     .add(pnlParcelsLayout.createSequentialGroup()
-                        .add(jToolBar1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 655, Short.MAX_VALUE)
+                        .add(jToolBar1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 585, Short.MAX_VALUE)
                         .add(20, 20, 20))))
         );
         pnlParcelsLayout.setVerticalGroup(
@@ -1926,7 +1935,7 @@ public class SLPropertyPanel extends ContentPanel {
                 .addContainerGap()
                 .add(jToolBar1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -2087,15 +2096,15 @@ public class SLPropertyPanel extends ContentPanel {
         jPanel15.setLayout(jPanel15Layout);
         jPanel15Layout.setHorizontalGroup(
             jPanel15Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 665, Short.MAX_VALUE)
-            .add(jToolBar2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 595, Short.MAX_VALUE)
+            .add(jToolBar2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 595, Short.MAX_VALUE)
         );
         jPanel15Layout.setVerticalGroup(
             jPanel15Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel15Layout.createSequentialGroup()
                 .add(jToolBar2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE))
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE))
         );
 
         jPanel16.add(jPanel15);
@@ -2173,7 +2182,7 @@ public class SLPropertyPanel extends ContentPanel {
         jPanel17Layout.setHorizontalGroup(
             jPanel17Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jToolBar8, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .add(jScrollPane8, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 665, Short.MAX_VALUE)
+            .add(jScrollPane8, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 595, Short.MAX_VALUE)
             .add(groupPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel17Layout.setVerticalGroup(
@@ -2183,7 +2192,7 @@ public class SLPropertyPanel extends ContentPanel {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jToolBar8, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane8, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE))
+                .add(jScrollPane8, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE))
         );
 
         jPanel16.add(jPanel17);
@@ -2210,7 +2219,7 @@ public class SLPropertyPanel extends ContentPanel {
         pnlRelationships.setName("pnlRelationships"); // NOI18N
 
         jPanel14.setName("jPanel14"); // NOI18N
-        jPanel14.setLayout(new java.awt.GridLayout(2, 1, 0, 15));
+        jPanel14.setLayout(new java.awt.GridLayout(2, 1, 15, 6));
 
         jPanel8.setName("jPanel8"); // NOI18N
 
@@ -2218,27 +2227,22 @@ public class SLPropertyPanel extends ContentPanel {
         jToolBar6.setRollover(true);
         jToolBar6.setName("jToolBar6"); // NOI18N
 
-        jLabel6.setFont(LafManager.getInstance().getLabFontBold());
-        jLabel6.setText(bundle.getString("SLPropertyPanel.jLabel6.text")); // NOI18N
-        jLabel6.setName("jLabel6"); // NOI18N
-        jToolBar6.add(jLabel6);
+        btnViewParent.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/view.png"))); // NOI18N
+        btnViewParent.setText(bundle.getString("SLPropertyPanel.btnViewParent.text")); // NOI18N
+        btnViewParent.setToolTipText(bundle.getString("SLPropertyPanel.btnViewParent.toolTipText")); // NOI18N
+        btnViewParent.setFocusable(false);
+        btnViewParent.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnViewParent.setName("btnViewParent"); // NOI18N
+        btnViewParent.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnViewParent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewParentActionPerformed(evt);
+            }
+        });
+        jToolBar6.add(btnViewParent);
 
         jSeparator3.setName("jSeparator3"); // NOI18N
         jToolBar6.add(jSeparator3);
-
-        btnOpenParent.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/folder-open-document.png"))); // NOI18N
-        btnOpenParent.setText(bundle.getString("SLPropertyPanel.btnOpenParent.text")); // NOI18N
-        btnOpenParent.setToolTipText(bundle.getString("SLPropertyPanel.btnOpenParent.toolTipText")); // NOI18N
-        btnOpenParent.setFocusable(false);
-        btnOpenParent.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnOpenParent.setName("btnOpenParent"); // NOI18N
-        btnOpenParent.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnOpenParent.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOpenParentActionPerformed(evt);
-            }
-        });
-        jToolBar6.add(btnOpenParent);
 
         btnAddParent.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
         btnAddParent.setText(bundle.getString("SLPropertyPanel.btnAddParent.text")); // NOI18N
@@ -2266,27 +2270,31 @@ public class SLPropertyPanel extends ContentPanel {
         });
         jToolBar6.add(btnRemoveParent);
 
-        jScrollPane3.setName("jScrollPane3"); // NOI18N
+        groupPanel4.setName("groupPanel4"); // NOI18N
+        groupPanel4.setTitleText(bundle.getString("SLPropertyPanel.groupPanel4.titleText")); // NOI18N
+
+        jScrollPane6.setName("jScrollPane6"); // NOI18N
 
         tableParentBaUnits.setComponentPopupMenu(popupParentBaUnits);
         tableParentBaUnits.setName("tableParentBaUnits"); // NOI18N
+        tableParentBaUnits.getTableHeader().setReorderingAllowed(false);
 
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${filteredParentBaUnits}");
         jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitBean1, eLProperty, tableParentBaUnits);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${relatedBaUnit.name}"));
-        columnBinding.setColumnName("Related Ba Unit.name");
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${relatedBaUnit.displayName}"));
+        columnBinding.setColumnName("Related Ba Unit.display Name");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${relatedBaUnit.nameFirstpart}"));
-        columnBinding.setColumnName("Related Ba Unit.name Firstpart");
-        columnBinding.setColumnClass(String.class);
-        columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${relatedBaUnit.nameLastpart}"));
-        columnBinding.setColumnName("Related Ba Unit.name Lastpart");
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${relatedBaUnit.baUnitType.displayValue}"));
+        columnBinding.setColumnName("Related Ba Unit.ba Unit Type.display Value");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${baUnitRelType.displayValue}"));
         columnBinding.setColumnName("Ba Unit Rel Type.display Value");
+        columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${relatedBaUnit.description}"));
+        columnBinding.setColumnName("Related Ba Unit.description");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${relatedBaUnit.status.displayValue}"));
@@ -2297,28 +2305,32 @@ public class SLPropertyPanel extends ContentPanel {
         jTableBinding.bind();binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitBean1, org.jdesktop.beansbinding.ELProperty.create("${selectedParentBaUnit}"), tableParentBaUnits, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
         bindingGroup.addBinding(binding);
 
-        jScrollPane3.setViewportView(tableParentBaUnits);
+        jScrollPane6.setViewportView(tableParentBaUnits);
         if (tableParentBaUnits.getColumnModel().getColumnCount() > 0) {
-            tableParentBaUnits.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("SLPropertyPanel.tableParentBaUnits.columnModel.title0_1")); // NOI18N
+            tableParentBaUnits.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("SLPropertyPanel.tableParentBaUnits.columnModel.title2")); // NOI18N
             tableParentBaUnits.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("SLPropertyPanel.tableParentBaUnits.columnModel.title1_1")); // NOI18N
-            tableParentBaUnits.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("SLPropertyPanel.tableParentBaUnits.columnModel.title2_1")); // NOI18N
-            tableParentBaUnits.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("PropertyPanel.jTable1.columnModel.title4")); // NOI18N
-            tableParentBaUnits.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("PropertyPanel.jTable1.columnModel.title3_1")); // NOI18N
+            tableParentBaUnits.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("SLPropertyPanel.tableParentBaUnits.columnModel.title0_1")); // NOI18N
+            tableParentBaUnits.getColumnModel().getColumn(3).setPreferredWidth(260);
+            tableParentBaUnits.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("SLPropertyPanel.tableParentBaUnits.columnModel.title3")); // NOI18N
+            tableParentBaUnits.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("SLPropertyPanel.tableParentBaUnits.columnModel.title4")); // NOI18N
         }
 
         org.jdesktop.layout.GroupLayout jPanel8Layout = new org.jdesktop.layout.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jToolBar6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 665, Short.MAX_VALUE)
-            .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 665, Short.MAX_VALUE)
+            .add(jToolBar6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .add(groupPanel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .add(jScrollPane6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 595, Short.MAX_VALUE)
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel8Layout.createSequentialGroup()
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel8Layout.createSequentialGroup()
+                .add(groupPanel4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jToolBar6, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE))
+                .add(jScrollPane6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE))
         );
 
         jPanel14.add(jPanel8);
@@ -2329,48 +2341,44 @@ public class SLPropertyPanel extends ContentPanel {
         jToolBar7.setRollover(true);
         jToolBar7.setName("jToolBar7"); // NOI18N
 
-        jLabel3.setFont(LafManager.getInstance().getLabFontBold());
-        jLabel3.setText(bundle.getString("SLPropertyPanel.jLabel3.text")); // NOI18N
-        jLabel3.setName("jLabel3"); // NOI18N
-        jToolBar7.add(jLabel3);
-
-        jSeparator2.setName("jSeparator2"); // NOI18N
-        jToolBar7.add(jSeparator2);
-
-        btnOpenChild.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/folder-open-document.png"))); // NOI18N
-        btnOpenChild.setText(bundle.getString("SLPropertyPanel.btnOpenChild.text")); // NOI18N
-        btnOpenChild.setFocusable(false);
-        btnOpenChild.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnOpenChild.setName("btnOpenChild"); // NOI18N
-        btnOpenChild.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnOpenChild.addActionListener(new java.awt.event.ActionListener() {
+        btnViewChild.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/view.png"))); // NOI18N
+        btnViewChild.setText(bundle.getString("SLPropertyPanel.btnViewChild.text")); // NOI18N
+        btnViewChild.setFocusable(false);
+        btnViewChild.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnViewChild.setName("btnViewChild"); // NOI18N
+        btnViewChild.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnViewChild.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOpenChildActionPerformed(evt);
+                btnViewChildActionPerformed(evt);
             }
         });
-        jToolBar7.add(btnOpenChild);
+        jToolBar7.add(btnViewChild);
 
-        jScrollPane7.setName("jScrollPane7"); // NOI18N
+        groupPanel3.setName("groupPanel3"); // NOI18N
+        groupPanel3.setTitleText(bundle.getString("SLPropertyPanel.groupPanel3.titleText")); // NOI18N
+
+        jScrollPane3.setName("jScrollPane3"); // NOI18N
 
         tableChildBaUnits.setComponentPopupMenu(popupChildBaUnits);
         tableChildBaUnits.setName("tableChildBaUnits"); // NOI18N
+        tableChildBaUnits.getTableHeader().setReorderingAllowed(false);
 
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${filteredChildBaUnits}");
         jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitBean1, eLProperty, tableChildBaUnits);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${relatedBaUnit.name}"));
-        columnBinding.setColumnName("Related Ba Unit.name");
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${relatedBaUnit.displayName}"));
+        columnBinding.setColumnName("Related Ba Unit.display Name");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${relatedBaUnit.nameFirstpart}"));
-        columnBinding.setColumnName("Related Ba Unit.name Firstpart");
-        columnBinding.setColumnClass(String.class);
-        columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${relatedBaUnit.nameLastpart}"));
-        columnBinding.setColumnName("Related Ba Unit.name Lastpart");
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${relatedBaUnit.baUnitType.displayValue}"));
+        columnBinding.setColumnName("Related Ba Unit.ba Unit Type.display Value");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${baUnitRelType.displayValue}"));
         columnBinding.setColumnName("Ba Unit Rel Type.display Value");
+        columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${relatedBaUnit.description}"));
+        columnBinding.setColumnName("Related Ba Unit.description");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${relatedBaUnit.status.displayValue}"));
@@ -2381,44 +2389,35 @@ public class SLPropertyPanel extends ContentPanel {
         jTableBinding.bind();binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitBean1, org.jdesktop.beansbinding.ELProperty.create("${selectedChildBaUnit}"), tableChildBaUnits, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
         bindingGroup.addBinding(binding);
 
-        jScrollPane7.setViewportView(tableChildBaUnits);
+        jScrollPane3.setViewportView(tableChildBaUnits);
         if (tableChildBaUnits.getColumnModel().getColumnCount() > 0) {
-            tableChildBaUnits.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("SLPropertyPanel.tableChildBaUnits.columnModel.title0_1")); // NOI18N
-            tableChildBaUnits.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("SLPropertyPanel.tableChildBaUnits.columnModel.title1_1")); // NOI18N
-            tableChildBaUnits.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("SLPropertyPanel.tableChildBaUnits.columnModel.title2_1")); // NOI18N
-            tableChildBaUnits.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("SLPropertyPanel.tableChildBaUnits.columnModel.title3_1")); // NOI18N
-            tableChildBaUnits.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("SLPropertyPanel.tableChildBaUnits.columnModel.title4")); // NOI18N
+            tableChildBaUnits.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("SLPropertyPanel.tableChildBaUnits.columnModel.title2")); // NOI18N
+            tableChildBaUnits.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("SLPropertyPanel.tableChildBaUnits.columnModel.title4")); // NOI18N
+            tableChildBaUnits.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("SLPropertyPanel.tableChildBaUnits.columnModel.title3")); // NOI18N
+            tableChildBaUnits.getColumnModel().getColumn(3).setPreferredWidth(260);
+            tableChildBaUnits.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("SLPropertyPanel.tableChildBaUnits.columnModel.title5")); // NOI18N
+            tableChildBaUnits.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("SLPropertyPanel.tableChildBaUnits.columnModel.title6")); // NOI18N
         }
 
         org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jToolBar7, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 665, Short.MAX_VALUE)
-            .add(jScrollPane7, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 665, Short.MAX_VALUE)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jToolBar7, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 595, Short.MAX_VALUE)
+            .add(groupPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .add(jScrollPane3)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel5Layout.createSequentialGroup()
+                .add(groupPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jToolBar7, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane7, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE))
+                .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE))
         );
 
         jPanel14.add(jPanel5);
-
-        pnlNextButton.setName(bundle.getString("PropertyPanel.pnlNextButton.name_2")); // NOI18N
-
-        org.jdesktop.layout.GroupLayout pnlNextButtonLayout = new org.jdesktop.layout.GroupLayout(pnlNextButton);
-        pnlNextButton.setLayout(pnlNextButtonLayout);
-        pnlNextButtonLayout.setHorizontalGroup(
-            pnlNextButtonLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 0, Short.MAX_VALUE)
-        );
-        pnlNextButtonLayout.setVerticalGroup(
-            pnlNextButtonLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 34, Short.MAX_VALUE)
-        );
 
         org.jdesktop.layout.GroupLayout pnlRelationshipsLayout = new org.jdesktop.layout.GroupLayout(pnlRelationships);
         pnlRelationships.setLayout(pnlRelationshipsLayout);
@@ -2426,22 +2425,15 @@ public class SLPropertyPanel extends ContentPanel {
             pnlRelationshipsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(pnlRelationshipsLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(pnlRelationshipsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(pnlRelationshipsLayout.createSequentialGroup()
-                        .add(10, 10, 10)
-                        .add(pnlNextButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .add(61, 61, 61))
-                    .add(jPanel14, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(jPanel14, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         pnlRelationshipsLayout.setVerticalGroup(
             pnlRelationshipsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(pnlRelationshipsLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel14, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 293, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(pnlNextButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(96, Short.MAX_VALUE))
+                .add(jPanel14, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         tabsMain.addTab(bundle.getString("SLPropertyPanel.pnlRelationships.TabConstraints.tabTitle"), pnlRelationships); // NOI18N
@@ -2457,29 +2449,14 @@ public class SLPropertyPanel extends ContentPanel {
         pnlMap.setLayout(pnlMapLayout);
         pnlMapLayout.setHorizontalGroup(
             pnlMapLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 685, Short.MAX_VALUE)
+            .add(0, 615, Short.MAX_VALUE)
         );
         pnlMapLayout.setVerticalGroup(
             pnlMapLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 440, Short.MAX_VALUE)
+            .add(0, 408, Short.MAX_VALUE)
         );
 
         tabsMain.addTab(bundle.getString("SLPropertyPanel.pnlMap.TabConstraints.tabTitle"), pnlMap); // NOI18N
-
-        pnlHistory.setName("pnlHistory"); // NOI18N
-
-        org.jdesktop.layout.GroupLayout pnlHistoryLayout = new org.jdesktop.layout.GroupLayout(pnlHistory);
-        pnlHistory.setLayout(pnlHistoryLayout);
-        pnlHistoryLayout.setHorizontalGroup(
-            pnlHistoryLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 685, Short.MAX_VALUE)
-        );
-        pnlHistoryLayout.setVerticalGroup(
-            pnlHistoryLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 440, Short.MAX_VALUE)
-        );
-
-        tabsMain.addTab(bundle.getString("SLPropertyPanel.pnlHistory.TabConstraints.tabTitle"), pnlHistory); // NOI18N
 
         headerPanel.setName("headerPanel"); // NOI18N
         headerPanel.setTitleText(bundle.getString("SLPropertyPanel.headerPanel.titleText")); // NOI18N
@@ -2488,11 +2465,11 @@ public class SLPropertyPanel extends ContentPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(headerPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 710, Short.MAX_VALUE)
+            .add(headerPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)
             .add(jToolBar5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(tabsMain, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(tabsMain, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 620, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -2502,7 +2479,7 @@ public class SLPropertyPanel extends ContentPanel {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jToolBar5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(tabsMain, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
+                .add(tabsMain, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 436, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -2525,21 +2502,21 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     }
 }//GEN-LAST:event_formComponentShown
 
-    private void menuOpenParentBaUnitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpenParentBaUnitActionPerformed
-        btnOpenParentActionPerformed(evt);
-    }//GEN-LAST:event_menuOpenParentBaUnitActionPerformed
+    private void menuViewParentBaUnitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuViewParentBaUnitActionPerformed
+        btnViewParentActionPerformed(evt);
+    }//GEN-LAST:event_menuViewParentBaUnitActionPerformed
 
     private void menuAddParentBaUnitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAddParentBaUnitActionPerformed
-        btnAddParentActionPerformed(evt);
+        openPropertyRelationshipPanel();
     }//GEN-LAST:event_menuAddParentBaUnitActionPerformed
 
     private void menuRemoveParentBaUnitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRemoveParentBaUnitActionPerformed
         btnRemoveParentActionPerformed(evt);
     }//GEN-LAST:event_menuRemoveParentBaUnitActionPerformed
 
-    private void menuOpenChildBaUnitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpenChildBaUnitActionPerformed
-        btnOpenChildActionPerformed(evt);
-    }//GEN-LAST:event_menuOpenChildBaUnitActionPerformed
+    private void menuViewChildBaUnitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuViewChildBaUnitActionPerformed
+        btnViewChildActionPerformed(evt);
+    }//GEN-LAST:event_menuViewChildBaUnitActionPerformed
 
     private void btnTerminateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTerminateActionPerformed
         terminateBaUnit();
@@ -2583,21 +2560,21 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
         }
     }//GEN-LAST:event_pnlMapComponentShown
 
-    private void btnOpenChildActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenChildActionPerformed
+    private void btnViewChildActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewChildActionPerformed
         openPropertyForm(baUnitBean1.getSelectedChildBaUnit());
-    }//GEN-LAST:event_btnOpenChildActionPerformed
+    }//GEN-LAST:event_btnViewChildActionPerformed
 
     private void btnRemoveParentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveParentActionPerformed
         baUnitBean1.removeSelectedParentBaUnit();
     }//GEN-LAST:event_btnRemoveParentActionPerformed
 
     private void btnAddParentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddParentActionPerformed
-        addParentProperty();
+        openPropertyRelationshipPanel();
     }//GEN-LAST:event_btnAddParentActionPerformed
 
-    private void btnOpenParentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenParentActionPerformed
+    private void btnViewParentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewParentActionPerformed
         openPropertyForm(baUnitBean1.getSelectedParentBaUnit());
-    }//GEN-LAST:event_btnOpenParentActionPerformed
+    }//GEN-LAST:event_btnViewParentActionPerformed
 
     private void btnRemoveNotationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveNotationActionPerformed
         removeNotation();
@@ -2717,8 +2694,6 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private org.sola.clients.swing.common.buttons.BtnEdit btnEditParcel;
     private javax.swing.JButton btnEditRight;
     private javax.swing.JButton btnExtinguish;
-    private javax.swing.JButton btnOpenChild;
-    private javax.swing.JButton btnOpenParent;
     private javax.swing.JButton btnPrintBaUnit;
     private javax.swing.JButton btnRemoveNotation;
     private javax.swing.JButton btnRemoveParcel;
@@ -2727,9 +2702,11 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSearchParcel;
     private javax.swing.JButton btnTerminate;
+    private javax.swing.JButton btnViewChild;
     private javax.swing.JButton btnViewHistoricRight;
     private org.sola.clients.swing.common.buttons.BtnView btnViewNotation;
     private org.sola.clients.swing.common.buttons.BtnView btnViewParcel;
+    private javax.swing.JButton btnViewParent;
     private javax.swing.JButton btnViewRight;
     private javax.swing.JComboBox cbxRightType;
     private org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel documentsPanel1;
@@ -2737,13 +2714,13 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private javax.swing.Box.Filler filler2;
     private org.sola.clients.swing.ui.GroupPanel groupPanel1;
     private org.sola.clients.swing.ui.GroupPanel groupPanel2;
+    private org.sola.clients.swing.ui.GroupPanel groupPanel3;
+    private org.sola.clients.swing.ui.GroupPanel groupPanel4;
     private org.sola.clients.swing.ui.HeaderPanel headerPanel;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel11;
@@ -2763,14 +2740,14 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator10;
     private javax.swing.JPopupMenu.Separator jSeparator11;
     private javax.swing.JToolBar.Separator jSeparator12;
     private javax.swing.JPopupMenu.Separator jSeparator13;
-    private javax.swing.JToolBar.Separator jSeparator2;
+    private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JToolBar.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator5;
@@ -2792,22 +2769,20 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private javax.swing.JMenuItem menuEditParcel;
     private javax.swing.JMenuItem menuEditRight;
     private javax.swing.JMenuItem menuExtinguishRight;
-    private javax.swing.JMenuItem menuOpenChildBaUnit;
-    private javax.swing.JMenuItem menuOpenParentBaUnit;
     private javax.swing.JMenuItem menuRemoveNotation;
     private javax.swing.JMenuItem menuRemoveParcel;
     private javax.swing.JMenuItem menuRemoveParentBaUnit;
     private javax.swing.JMenuItem menuRemoveRight;
     private javax.swing.JMenuItem menuSearchParcel;
     private javax.swing.JMenuItem menuVaryRight;
+    private javax.swing.JMenuItem menuViewChildBaUnit;
     private javax.swing.JMenuItem menuViewNotation;
     private javax.swing.JMenuItem menuViewParcel;
+    private javax.swing.JMenuItem menuViewParentBaUnit;
     private javax.swing.JMenuItem menuViewRight;
     private javax.swing.JPanel pnlGeneral;
-    private javax.swing.JPanel pnlHistory;
     private javax.swing.JPanel pnlInterests;
     private javax.swing.JPanel pnlMap;
-    private javax.swing.JPanel pnlNextButton;
     private javax.swing.JPanel pnlNotes;
     private javax.swing.JPanel pnlParcels;
     private javax.swing.JPanel pnlRelationships;
@@ -2817,16 +2792,16 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private javax.swing.JPopupMenu popupParentBaUnits;
     private javax.swing.JPopupMenu popupRights;
     private org.sola.clients.beans.referencedata.RrrTypeListBean rrrTypes;
-    private javax.swing.JTable tableChildBaUnits;
+    private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tableChildBaUnits;
     private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tableNotations;
     private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tableParcels;
-    private javax.swing.JTable tableParentBaUnits;
+    private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tableParentBaUnits;
     private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tableRights;
     private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tableRightsHistory;
     private javax.swing.JTabbedPane tabsMain;
     private javax.swing.JFormattedTextField txtArea;
     private javax.swing.JTextField txtBaUnitStatus;
-    private javax.swing.JTextField txtEstateType;
+    private javax.swing.JTextField txtLandUse;
     private javax.swing.JTextField txtLastPart;
     private javax.swing.JTextArea txtName;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;

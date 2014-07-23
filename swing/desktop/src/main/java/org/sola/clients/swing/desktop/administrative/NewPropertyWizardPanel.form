@@ -718,8 +718,8 @@
                       <SubComponents>
                         <Component class="org.sola.clients.swing.ui.administrative.BaUnitSearchPanel" name="baUnitSearchPanel">
                           <Properties>
+                            <Property name="defaultActionOpen" type="boolean" value="false"/>
                             <Property name="name" type="java.lang.String" value="baUnitSearchPanel" noResource="true"/>
-                            <Property name="showOpenButton" type="boolean" value="false"/>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JButton" name="btnSelectFromSearch">

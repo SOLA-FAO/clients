@@ -48,6 +48,7 @@ public class BaUnitSummaryBean extends AbstractTransactionedBean {
     public static final String NAME_LASTPART_PROPERTY = "nameLastpart";
     public static final String DISPLAY_NAME_PROPERTY = "displayName";
     public static final String DESCRIPTION_PROPERTY = "description";
+    public static final String TYPE_STATE_LAND = "stateLand"; 
 
     private String name;
     //@NotEmpty(message = ClientMessage.CHECK_NOTNULL_FIRSTPART, payload=Localized.class)

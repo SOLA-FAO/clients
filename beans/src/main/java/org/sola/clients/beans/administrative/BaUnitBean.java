@@ -43,6 +43,7 @@ import org.sola.clients.beans.cadastre.CadastreObjectBean;
 import org.sola.clients.beans.controls.SolaList;
 import org.sola.clients.beans.controls.SolaObservableList;
 import org.sola.clients.beans.converters.TypeConverters;
+import org.sola.clients.beans.referencedata.LandUseTypeBean;
 import org.sola.clients.beans.referencedata.NotationStatusTypeBean;
 import org.sola.clients.beans.referencedata.StatusConstants;
 import org.sola.clients.beans.referencedata.TypeActionBean;
@@ -54,7 +55,6 @@ import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.EntityAction;
 import org.sola.webservices.transferobjects.administrative.BaUnitTO;
 import org.sola.webservices.transferobjects.search.SpatialSearchResultTO;
-import org.sola.webservices.transferobjects.administrative.BaUnitAreaTO;
 
 /**
  * Contains properties and methods to manage <b>BA Unit</b> object of the domain
@@ -180,6 +180,8 @@ public class BaUnitBean extends BaUnitSummaryBean {
     public static final String ESTATE_TYPE_PROPERTY = "estateType";
     public static final String PENDING_ACTION_CODE_PROPERTY = "pendingActionCode";
     public static final String PENDING_ACTION_PROPERTY = "pendingTypeAction";
+    public static final String LAND_USE_CODE_PROPERTY = "landUseCode";
+    public static final String LAND_USE_TYPE_PROPERTY = "landUseType";
     public static final String SELECTED_BA_UNIT_AREA_PROPERTY = "selectedBaUnitArea";
 
     private SolaList<RrrBean> rrrList;
@@ -201,7 +203,7 @@ public class BaUnitBean extends BaUnitSummaryBean {
     private transient RelatedBaUnitInfoBean selectedChildBaUnit;
 
     private String estateType;
-    private transient String purpose;
+    private LandUseTypeBean landUseType;
     private TypeActionBean pendingTypeAction;
     private BigDecimal calculatedAreaSize;
 
@@ -591,12 +593,33 @@ public class BaUnitBean extends BaUnitSummaryBean {
 
     }
 
-    public String getPurpose() {
-        purpose = ""; 
-        if (cadastreObjectList.getFilteredList().size() > 0) {
-            purpose = cadastreObjectList.getFilteredList().get(0).getLandUseType().getDisplayValue();
+    public String getLandUseCode() {
+        if (landUseType != null) {
+            return landUseType.getCode();
+        } else {
+            return null;
         }
-        return purpose;
+    }
+
+    public void setLandUseCode(String landUseCode) {
+        String oldValue = null;
+        if (landUseType != null) {
+            oldValue = landUseType.getCode();
+        }
+        setLandUseType(CacheManager.getBeanByCode(
+                CacheManager.getLandUseTypes(), landUseCode));
+        propertySupport.firePropertyChange(LAND_USE_CODE_PROPERTY, oldValue, landUseCode);
+    }
+
+    public LandUseTypeBean getLandUseType() {
+        return landUseType;
+    }
+
+    public void setLandUseType(LandUseTypeBean landUseType) {
+        if (this.landUseType == null) {
+            this.landUseType = new LandUseTypeBean();
+        }
+        this.setJointRefDataBean(this.landUseType, landUseType, LAND_USE_TYPE_PROPERTY);
     }
 
     public SolaList<SourceBean> getSourceList() {

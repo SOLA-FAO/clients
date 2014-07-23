@@ -105,6 +105,7 @@ public class MainContentPanel extends javax.swing.JPanel {
     public final static String CARD_SLPPARCEL_PANEL = "slParcelPanel";
     public final static String CARD_SIMPLE_RIGHT_CONDITION_PANEL = "simpleRightCondPanel";
     public final static String CARD_SIMPLE_RIGHTHOLDER_CONDITION_PANEL = "simpleRightholderCondPanel";
+    public final static String CARD_PROPERTY_RELATIONSHIP = "propertyRelationshipPanel";
 
     private HashMap<String, Component> cards;
     private ArrayList<String> cardsIndex;
