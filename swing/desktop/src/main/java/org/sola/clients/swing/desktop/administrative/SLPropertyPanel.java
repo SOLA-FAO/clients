@@ -42,13 +42,13 @@ import org.sola.clients.beans.application.ApplicationServiceBean;
 import org.sola.clients.beans.cadastre.CadastreObjectBean;
 import org.sola.clients.beans.cadastre.SpatialValueAreaBean;
 import org.sola.clients.beans.converters.TypeConverters;
+import org.sola.clients.beans.party.PartySummaryListBean;
 import org.sola.clients.beans.referencedata.*;
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.beans.source.SourceBean;
 import org.sola.clients.beans.source.SourceListBean;
 import org.sola.clients.beans.system.PanelLauncherGroupBean;
 import org.sola.clients.reports.ReportManager;
-import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.common.utils.FormattersFactory;
@@ -178,6 +178,13 @@ public class SLPropertyPanel extends ContentPanel {
             panel = new DocumentsPanel();
         }
         return panel;
+    }
+
+    private PartySummaryListBean createPartySummaryList() {
+        PartySummaryListBean agentsList = new PartySummaryListBean();
+        agentsList.loadParties(PartyRoleTypeBean.ROLE_PROPERTY_MANAGER,
+                true, null);
+        return agentsList;
     }
 
     /**
@@ -337,6 +344,7 @@ public class SLPropertyPanel extends ContentPanel {
         btnSave.setEnabled(!readOnly);
         txtSLDescription.setEnabled(!readOnly);
         txtSLArea.setEnabled(!readOnly);
+        cbxPropertyManager.setEnabled(!readOnly);
 
         if (!SecurityBean.isInRole(RolesConstants.GIS_VIEW_MAP)) {
             // User does not have rights to view the map
@@ -1197,6 +1205,7 @@ public class SLPropertyPanel extends ContentPanel {
         baUnitAreaBean1 = createBaUnitAreaBean();
         popupPropertyDocuments = new javax.swing.JPopupMenu();
         menuViewPropertyDocument = new javax.swing.JMenuItem();
+        propertyManagerList = createPartySummaryList();
         jToolBar5 = new javax.swing.JToolBar();
         btnSave = new javax.swing.JButton();
         btnTerminate = new javax.swing.JButton();
@@ -1210,21 +1219,28 @@ public class SLPropertyPanel extends ContentPanel {
         jPanel9 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         txtSLLastPart = new javax.swing.JTextField();
-        jPanel11 = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
-        txtSLLandUse = new javax.swing.JTextField();
         areaPanel = new javax.swing.JPanel();
         labArea = new javax.swing.JLabel();
         txtSLArea = new javax.swing.JFormattedTextField();
         jPanel6 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         txtSLStatus = new javax.swing.JTextField();
+        jPanel23 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel12 = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
+        jPanel22 = new javax.swing.JPanel();
+        jLabel10 = new javax.swing.JLabel();
+        cbxPropertyManager = new javax.swing.JComboBox();
+        jPanel11 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        txtSLLandUse = new javax.swing.JTextField();
+        jPanel27 = new javax.swing.JPanel();
+        jPanel26 = new javax.swing.JPanel();
+        documentsPanel1 = createDocumentsPanel();
+        jPanel25 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         txtSLDescription = new javax.swing.JTextArea();
-        documentsPanel1 = createDocumentsPanel();
+        jLabel5 = new javax.swing.JLabel();
         pnlGeneral = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
@@ -1234,21 +1250,22 @@ public class SLPropertyPanel extends ContentPanel {
         jPanel18 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         txtPropLastpart = new javax.swing.JTextField();
+        jPanel7 = new javax.swing.JPanel();
         jPanel19 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         txtPropArea = new javax.swing.JFormattedTextField();
         jPanel20 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         txtPropStatus = new javax.swing.JTextField();
-        jPanel7 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jScrollPane7 = new javax.swing.JScrollPane();
-        txtPropDescription = new javax.swing.JTextArea();
         jPanel21 = new javax.swing.JPanel();
-        groupPanel5 = new org.sola.clients.swing.ui.GroupPanel();
         jToolBar4 = new javax.swing.JToolBar();
         btnViewPropDoc = new org.sola.clients.swing.common.buttons.BtnView();
         propertyDocsPanel = createPropertyDocsPanel();
+        jPanel24 = new javax.swing.JPanel();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        txtPropDescription = new javax.swing.JTextArea();
+        jLabel1 = new javax.swing.JLabel();
+        groupPanel5 = new org.sola.clients.swing.ui.GroupPanel();
         pnlNotes = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         tableNotes = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
@@ -1617,7 +1634,7 @@ public class SLPropertyPanel extends ContentPanel {
         jPanel9Layout.setHorizontalGroup(
             jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(txtSLLastPart)
-            .add(jLabel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
+            .add(jLabel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -1625,39 +1642,10 @@ public class SLPropertyPanel extends ContentPanel {
                 .add(jLabel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 14, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(txtSLLastPart, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel1.add(jPanel9);
-
-        jPanel11.setName("jPanel11"); // NOI18N
-
-        jLabel4.setText(bundle.getString("SLPropertyPanel.jLabel4.text")); // NOI18N
-        jLabel4.setName("jLabel4"); // NOI18N
-
-        txtSLLandUse.setEditable(false);
-        txtSLLandUse.setName("txtSLLandUse"); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitBean1, org.jdesktop.beansbinding.ELProperty.create("${landUseType.displayValue}"), txtSLLandUse, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        org.jdesktop.layout.GroupLayout jPanel11Layout = new org.jdesktop.layout.GroupLayout(jPanel11);
-        jPanel11.setLayout(jPanel11Layout);
-        jPanel11Layout.setHorizontalGroup(
-            jPanel11Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(txtSLLandUse)
-            .add(jLabel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        jPanel11Layout.setVerticalGroup(
-            jPanel11Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel11Layout.createSequentialGroup()
-                .add(jLabel4)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(txtSLLandUse, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(13, Short.MAX_VALUE))
-        );
-
-        jPanel1.add(jPanel11);
 
         areaPanel.setName(bundle.getString("PropertyPanel.areaPanel.name_1")); // NOI18N
 
@@ -1684,7 +1672,7 @@ public class SLPropertyPanel extends ContentPanel {
                 .add(labArea)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(txtSLArea, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel1.add(areaPanel);
@@ -1705,7 +1693,7 @@ public class SLPropertyPanel extends ContentPanel {
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(txtSLStatus)
-            .add(jLabel7, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
+            .add(jLabel7, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -1713,20 +1701,139 @@ public class SLPropertyPanel extends ContentPanel {
                 .add(jLabel7)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(txtSLStatus, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel1.add(jPanel6);
 
+        jPanel23.setName("jPanel23"); // NOI18N
+
+        org.jdesktop.layout.GroupLayout jPanel23Layout = new org.jdesktop.layout.GroupLayout(jPanel23);
+        jPanel23.setLayout(jPanel23Layout);
+        jPanel23Layout.setHorizontalGroup(
+            jPanel23Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 140, Short.MAX_VALUE)
+        );
+        jPanel23Layout.setVerticalGroup(
+            jPanel23Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 51, Short.MAX_VALUE)
+        );
+
+        jPanel1.add(jPanel23);
+
         jPanel13.add(jPanel1);
 
         jPanel2.setName("jPanel2"); // NOI18N
-        jPanel2.setLayout(new java.awt.GridLayout(1, 1, 15, 0));
 
         jPanel12.setName("jPanel12"); // NOI18N
+        jPanel12.setLayout(new java.awt.GridLayout(2, 2, 15, 0));
 
-        jLabel5.setText(bundle.getString("SLPropertyPanel.jLabel5.text")); // NOI18N
-        jLabel5.setName("jLabel5"); // NOI18N
+        jPanel22.setName("jPanel22"); // NOI18N
+
+        jLabel10.setText(bundle.getString("SLPropertyPanel.jLabel10.text")); // NOI18N
+        jLabel10.setName("jLabel10"); // NOI18N
+
+        cbxPropertyManager.setName("cbxPropertyManager"); // NOI18N
+
+        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${partySummaryList}");
+        org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, propertyManagerList, eLProperty, cbxPropertyManager);
+        bindingGroup.addBinding(jComboBoxBinding);
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitBean1, org.jdesktop.beansbinding.ELProperty.create("${propertyManager}"), cbxPropertyManager, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        org.jdesktop.layout.GroupLayout jPanel22Layout = new org.jdesktop.layout.GroupLayout(jPanel22);
+        jPanel22.setLayout(jPanel22Layout);
+        jPanel22Layout.setHorizontalGroup(
+            jPanel22Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jLabel10, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+            .add(cbxPropertyManager, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel22Layout.setVerticalGroup(
+            jPanel22Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel22Layout.createSequentialGroup()
+                .add(jLabel10)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(cbxPropertyManager, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(0, 11, Short.MAX_VALUE))
+        );
+
+        jPanel12.add(jPanel22);
+
+        jPanel11.setName("jPanel11"); // NOI18N
+
+        jLabel4.setText(bundle.getString("SLPropertyPanel.jLabel4.text")); // NOI18N
+        jLabel4.setName("jLabel4"); // NOI18N
+
+        txtSLLandUse.setEditable(false);
+        txtSLLandUse.setName("txtSLLandUse"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitBean1, org.jdesktop.beansbinding.ELProperty.create("${landUseType.displayValue}"), txtSLLandUse, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        org.jdesktop.layout.GroupLayout jPanel11Layout = new org.jdesktop.layout.GroupLayout(jPanel11);
+        jPanel11.setLayout(jPanel11Layout);
+        jPanel11Layout.setHorizontalGroup(
+            jPanel11Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(txtSLLandUse)
+            .add(jLabel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+        );
+        jPanel11Layout.setVerticalGroup(
+            jPanel11Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel11Layout.createSequentialGroup()
+                .add(jLabel4)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(txtSLLandUse, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel12.add(jPanel11);
+
+        jPanel27.setName("jPanel27"); // NOI18N
+
+        org.jdesktop.layout.GroupLayout jPanel27Layout = new org.jdesktop.layout.GroupLayout(jPanel27);
+        jPanel27.setLayout(jPanel27Layout);
+        jPanel27Layout.setHorizontalGroup(
+            jPanel27Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 0, Short.MAX_VALUE)
+        );
+        jPanel27Layout.setVerticalGroup(
+            jPanel27Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 0, Short.MAX_VALUE)
+        );
+
+        jPanel12.add(jPanel27);
+
+        jPanel26.setName("jPanel26"); // NOI18N
+
+        org.jdesktop.layout.GroupLayout jPanel26Layout = new org.jdesktop.layout.GroupLayout(jPanel26);
+        jPanel26.setLayout(jPanel26Layout);
+        jPanel26Layout.setHorizontalGroup(
+            jPanel26Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 140, Short.MAX_VALUE)
+        );
+        jPanel26Layout.setVerticalGroup(
+            jPanel26Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 51, Short.MAX_VALUE)
+        );
+
+        jPanel12.add(jPanel26);
+
+        org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel12, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel12, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        jPanel13.add(jPanel2);
+
+        documentsPanel1.setName("documentsPanel1"); // NOI18N
+
+        jPanel25.setName("jPanel25"); // NOI18N
 
         jScrollPane5.setName("jScrollPane5"); // NOI18N
 
@@ -1740,38 +1847,35 @@ public class SLPropertyPanel extends ContentPanel {
 
         jScrollPane5.setViewportView(txtSLDescription);
 
-        org.jdesktop.layout.GroupLayout jPanel12Layout = new org.jdesktop.layout.GroupLayout(jPanel12);
-        jPanel12.setLayout(jPanel12Layout);
-        jPanel12Layout.setHorizontalGroup(
-            jPanel12Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+        jLabel5.setText(bundle.getString("SLPropertyPanel.jLabel5.text")); // NOI18N
+        jLabel5.setName("jLabel5"); // NOI18N
+
+        org.jdesktop.layout.GroupLayout jPanel25Layout = new org.jdesktop.layout.GroupLayout(jPanel25);
+        jPanel25.setLayout(jPanel25Layout);
+        jPanel25Layout.setHorizontalGroup(
+            jPanel25Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jScrollPane5)
             .add(jLabel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .add(jScrollPane5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
         );
-        jPanel12Layout.setVerticalGroup(
-            jPanel12Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel12Layout.createSequentialGroup()
+        jPanel25Layout.setVerticalGroup(
+            jPanel25Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel25Layout.createSequentialGroup()
                 .add(jLabel5)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
-                .add(8, 8, 8))
+                .add(jScrollPane5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 63, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
         );
-
-        jPanel2.add(jPanel12);
-
-        jPanel13.add(jPanel2);
-
-        documentsPanel1.setName("documentsPanel1"); // NOI18N
 
         org.jdesktop.layout.GroupLayout pnlSLGeneralLayout = new org.jdesktop.layout.GroupLayout(pnlSLGeneral);
         pnlSLGeneral.setLayout(pnlSLGeneralLayout);
         pnlSLGeneralLayout.setHorizontalGroup(
             pnlSLGeneralLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, pnlSLGeneralLayout.createSequentialGroup()
+            .add(pnlSLGeneralLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(pnlSLGeneralLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(documentsPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, groupPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel13, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 592, Short.MAX_VALUE))
+                .add(pnlSLGeneralLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, documentsPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .add(groupPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(jPanel13, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(jPanel25, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         pnlSLGeneralLayout.setVerticalGroup(
@@ -1780,9 +1884,11 @@ public class SLPropertyPanel extends ContentPanel {
                 .addContainerGap()
                 .add(jPanel13, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(groupPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(documentsPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
+                .add(documentsPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1794,7 +1900,7 @@ public class SLPropertyPanel extends ContentPanel {
         jPanel3.setLayout(new java.awt.GridLayout(1, 2, 15, 0));
 
         jPanel4.setName("jPanel4"); // NOI18N
-        jPanel4.setLayout(new java.awt.GridLayout(2, 2, 15, 0));
+        jPanel4.setLayout(new java.awt.GridLayout(1, 2, 15, 0));
 
         jPanel10.setName("jPanel10"); // NOI18N
 
@@ -1812,7 +1918,7 @@ public class SLPropertyPanel extends ContentPanel {
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jLabel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .add(txtPropFirstpart, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
+            .add(txtPropFirstpart, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -1820,7 +1926,7 @@ public class SLPropertyPanel extends ContentPanel {
                 .add(jLabel3)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(txtPropFirstpart, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(0, 12, Short.MAX_VALUE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel4.add(jPanel10);
@@ -1841,7 +1947,7 @@ public class SLPropertyPanel extends ContentPanel {
         jPanel18Layout.setHorizontalGroup(
             jPanel18Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jLabel6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .add(txtPropLastpart, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
+            .add(txtPropLastpart, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
         );
         jPanel18Layout.setVerticalGroup(
             jPanel18Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -1849,10 +1955,15 @@ public class SLPropertyPanel extends ContentPanel {
                 .add(jLabel6)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(txtPropLastpart, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(0, 12, Short.MAX_VALUE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel4.add(jPanel18);
+
+        jPanel3.add(jPanel4);
+
+        jPanel7.setName("jPanel7"); // NOI18N
+        jPanel7.setLayout(new java.awt.GridLayout(1, 2, 15, 0));
 
         jPanel19.setName("jPanel19"); // NOI18N
 
@@ -1871,8 +1982,8 @@ public class SLPropertyPanel extends ContentPanel {
         jPanel19.setLayout(jPanel19Layout);
         jPanel19Layout.setHorizontalGroup(
             jPanel19Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jLabel8, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .add(txtPropArea, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
+            .add(jLabel8, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+            .add(txtPropArea)
         );
         jPanel19Layout.setVerticalGroup(
             jPanel19Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -1880,10 +1991,10 @@ public class SLPropertyPanel extends ContentPanel {
                 .add(jLabel8)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(txtPropArea, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(0, 12, Short.MAX_VALUE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel4.add(jPanel19);
+        jPanel7.add(jPanel19);
 
         jPanel20.setName("jPanel20"); // NOI18N
 
@@ -1900,8 +2011,8 @@ public class SLPropertyPanel extends ContentPanel {
         jPanel20.setLayout(jPanel20Layout);
         jPanel20Layout.setHorizontalGroup(
             jPanel20Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jLabel9, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .add(txtPropStatus, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
+            .add(jLabel9, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+            .add(txtPropStatus)
         );
         jPanel20Layout.setVerticalGroup(
             jPanel20Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -1909,52 +2020,14 @@ public class SLPropertyPanel extends ContentPanel {
                 .add(jLabel9)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(txtPropStatus, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(0, 12, Short.MAX_VALUE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel4.add(jPanel20);
-
-        jPanel3.add(jPanel4);
-
-        jPanel7.setName("jPanel7"); // NOI18N
-
-        jLabel1.setText(bundle.getString("SLPropertyPanel.jLabel1.text")); // NOI18N
-        jLabel1.setName("jLabel1"); // NOI18N
-
-        jScrollPane7.setName("jScrollPane7"); // NOI18N
-
-        txtPropDescription.setColumns(20);
-        txtPropDescription.setRows(5);
-        txtPropDescription.setEnabled(false);
-        txtPropDescription.setName("txtPropDescription"); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitBean1, org.jdesktop.beansbinding.ELProperty.create("${description}"), txtPropDescription, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        jScrollPane7.setViewportView(txtPropDescription);
-
-        org.jdesktop.layout.GroupLayout jPanel7Layout = new org.jdesktop.layout.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jScrollPane7, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jLabel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel7Layout.createSequentialGroup()
-                .add(jLabel1)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane7, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE)
-                .add(8, 8, 8))
-        );
+        jPanel7.add(jPanel20);
 
         jPanel3.add(jPanel7);
 
         jPanel21.setName("jPanel21"); // NOI18N
-
-        groupPanel5.setName("groupPanel5"); // NOI18N
-        groupPanel5.setTitleText(bundle.getString("SLPropertyPanel.groupPanel5.titleText")); // NOI18N
 
         jToolBar4.setFloatable(false);
         jToolBar4.setRollover(true);
@@ -1976,30 +2049,64 @@ public class SLPropertyPanel extends ContentPanel {
         jPanel21.setLayout(jPanel21Layout);
         jPanel21Layout.setHorizontalGroup(
             jPanel21Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(groupPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .add(jToolBar4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .add(propertyDocsPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel21Layout.setVerticalGroup(
             jPanel21Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel21Layout.createSequentialGroup()
-                .add(groupPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(jToolBar4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jToolBar4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(propertyDocsPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(0, 120, Short.MAX_VALUE))
+                .add(propertyDocsPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 76, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(0, 56, Short.MAX_VALUE))
         );
+
+        jPanel24.setName("jPanel24"); // NOI18N
+
+        jScrollPane7.setName("jScrollPane7"); // NOI18N
+
+        txtPropDescription.setColumns(20);
+        txtPropDescription.setRows(5);
+        txtPropDescription.setEnabled(false);
+        txtPropDescription.setName("txtPropDescription"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitBean1, org.jdesktop.beansbinding.ELProperty.create("${description}"), txtPropDescription, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        jScrollPane7.setViewportView(txtPropDescription);
+
+        jLabel1.setText(bundle.getString("SLPropertyPanel.jLabel1.text")); // NOI18N
+        jLabel1.setName("jLabel1"); // NOI18N
+
+        org.jdesktop.layout.GroupLayout jPanel24Layout = new org.jdesktop.layout.GroupLayout(jPanel24);
+        jPanel24.setLayout(jPanel24Layout);
+        jPanel24Layout.setHorizontalGroup(
+            jPanel24Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jScrollPane7)
+            .add(jLabel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel24Layout.setVerticalGroup(
+            jPanel24Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel24Layout.createSequentialGroup()
+                .add(jLabel1)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jScrollPane7, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE))
+        );
+
+        groupPanel5.setName("groupPanel5"); // NOI18N
+        groupPanel5.setTitleText(bundle.getString("SLPropertyPanel.groupPanel5.titleText")); // NOI18N
 
         org.jdesktop.layout.GroupLayout pnlGeneralLayout = new org.jdesktop.layout.GroupLayout(pnlGeneral);
         pnlGeneral.setLayout(pnlGeneralLayout);
         pnlGeneralLayout.setHorizontalGroup(
             pnlGeneralLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, pnlGeneralLayout.createSequentialGroup()
+            .add(pnlGeneralLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(pnlGeneralLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(jPanel21, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(jPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 592, Short.MAX_VALUE))
+                .add(pnlGeneralLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel21, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel24, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(groupPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         pnlGeneralLayout.setVerticalGroup(
@@ -2007,6 +2114,10 @@ public class SLPropertyPanel extends ContentPanel {
             .add(pnlGeneralLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(groupPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel21, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -2022,7 +2133,7 @@ public class SLPropertyPanel extends ContentPanel {
         tableNotes.setName("tableNotes"); // NOI18N
         tableNotes.getTableHeader().setReorderingAllowed(false);
 
-        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${baUnitFilteredNotationList}");
+        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${baUnitFilteredNotationList}");
         org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitBean1, eLProperty, tableNotes);
         org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${referenceNr}"));
         columnBinding.setColumnName("Reference Nr");
@@ -2115,7 +2226,7 @@ public class SLPropertyPanel extends ContentPanel {
             .add(org.jdesktop.layout.GroupLayout.TRAILING, pnlNotesLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(pnlNotesLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 592, Short.MAX_VALUE)
+                    .add(jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 605, Short.MAX_VALUE)
                     .add(jToolBar3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -2125,7 +2236,7 @@ public class SLPropertyPanel extends ContentPanel {
                 .addContainerGap()
                 .add(jToolBar3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE)
+                .add(jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 303, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -2255,10 +2366,10 @@ public class SLPropertyPanel extends ContentPanel {
                 .addContainerGap()
                 .add(pnlParcelsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(pnlParcelsLayout.createSequentialGroup()
-                        .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 592, Short.MAX_VALUE)
+                        .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 605, Short.MAX_VALUE)
                         .addContainerGap())
                     .add(pnlParcelsLayout.createSequentialGroup()
-                        .add(jToolBar1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 582, Short.MAX_VALUE)
+                        .add(jToolBar1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 595, Short.MAX_VALUE)
                         .add(20, 20, 20))))
         );
         pnlParcelsLayout.setVerticalGroup(
@@ -2267,7 +2378,7 @@ public class SLPropertyPanel extends ContentPanel {
                 .addContainerGap()
                 .add(jToolBar1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 303, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -2360,7 +2471,7 @@ public class SLPropertyPanel extends ContentPanel {
         cbxRightType.setRenderer(new SimpleComboBoxRenderer("getDisplayValue"));
 
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${rrrTypeBeanList}");
-        org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrTypes, eLProperty, cbxRightType);
+        jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrTypes, eLProperty, cbxRightType);
         bindingGroup.addBinding(jComboBoxBinding);
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrTypes, org.jdesktop.beansbinding.ELProperty.create("${selectedRrrType}"), cbxRightType, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
@@ -2428,15 +2539,15 @@ public class SLPropertyPanel extends ContentPanel {
         jPanel15.setLayout(jPanel15Layout);
         jPanel15Layout.setHorizontalGroup(
             jPanel15Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 592, Short.MAX_VALUE)
-            .add(jToolBar2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 592, Short.MAX_VALUE)
+            .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 605, Short.MAX_VALUE)
+            .add(jToolBar2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 605, Short.MAX_VALUE)
         );
         jPanel15Layout.setVerticalGroup(
             jPanel15Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel15Layout.createSequentialGroup()
                 .add(jToolBar2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE))
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE))
         );
 
         jPanel16.add(jPanel15);
@@ -2514,7 +2625,7 @@ public class SLPropertyPanel extends ContentPanel {
         jPanel17Layout.setHorizontalGroup(
             jPanel17Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jToolBar8, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .add(jScrollPane8, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 592, Short.MAX_VALUE)
+            .add(jScrollPane8, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 605, Short.MAX_VALUE)
             .add(groupPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel17Layout.setVerticalGroup(
@@ -2524,7 +2635,7 @@ public class SLPropertyPanel extends ContentPanel {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jToolBar8, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane8, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE))
+                .add(jScrollPane8, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE))
         );
 
         jPanel16.add(jPanel17);
@@ -2542,7 +2653,7 @@ public class SLPropertyPanel extends ContentPanel {
             pnlInterestsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(pnlInterestsLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel16, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE)
+                .add(jPanel16, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -2586,14 +2697,14 @@ public class SLPropertyPanel extends ContentPanel {
             pnlOwnershipLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(pnlOwnershipLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane9, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 592, Short.MAX_VALUE)
+                .add(jScrollPane9, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 605, Short.MAX_VALUE)
                 .addContainerGap())
         );
         pnlOwnershipLayout.setVerticalGroup(
             pnlOwnershipLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, pnlOwnershipLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane9, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE)
+                .add(jScrollPane9, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 334, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -2642,14 +2753,14 @@ public class SLPropertyPanel extends ContentPanel {
             pnlNotationsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(pnlNotationsLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane10, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 592, Short.MAX_VALUE)
+                .add(jScrollPane10, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 605, Short.MAX_VALUE)
                 .addContainerGap())
         );
         pnlNotationsLayout.setVerticalGroup(
             pnlNotationsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, pnlNotationsLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane10, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE)
+                .add(jScrollPane10, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 334, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -2760,7 +2871,7 @@ public class SLPropertyPanel extends ContentPanel {
             jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jToolBar6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .add(groupPanel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .add(jScrollPane6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 592, Short.MAX_VALUE)
+            .add(jScrollPane6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 605, Short.MAX_VALUE)
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -2769,7 +2880,7 @@ public class SLPropertyPanel extends ContentPanel {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jToolBar6, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE))
+                .add(jScrollPane6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE))
         );
 
         jPanel14.add(jPanel8);
@@ -2842,7 +2953,7 @@ public class SLPropertyPanel extends ContentPanel {
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jToolBar7, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 592, Short.MAX_VALUE)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jToolBar7, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 605, Short.MAX_VALUE)
             .add(groupPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .add(jScrollPane3)
         );
@@ -2853,7 +2964,7 @@ public class SLPropertyPanel extends ContentPanel {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jToolBar7, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE))
+                .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE))
         );
 
         jPanel14.add(jPanel5);
@@ -2871,7 +2982,7 @@ public class SLPropertyPanel extends ContentPanel {
             pnlRelationshipsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(pnlRelationshipsLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel14, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE)
+                .add(jPanel14, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -2888,11 +2999,11 @@ public class SLPropertyPanel extends ContentPanel {
         pnlMap.setLayout(pnlMapLayout);
         pnlMapLayout.setHorizontalGroup(
             pnlMapLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 612, Short.MAX_VALUE)
+            .add(0, 625, Short.MAX_VALUE)
         );
         pnlMapLayout.setVerticalGroup(
             pnlMapLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 411, Short.MAX_VALUE)
+            .add(0, 356, Short.MAX_VALUE)
         );
 
         tabsMain.addTab(bundle.getString("SLPropertyPanel.pnlMap.TabConstraints.tabTitle"), pnlMap); // NOI18N
@@ -2904,7 +3015,7 @@ public class SLPropertyPanel extends ContentPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(headerPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 637, Short.MAX_VALUE)
+            .add(headerPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 650, Short.MAX_VALUE)
             .add(jToolBar5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
@@ -2918,7 +3029,7 @@ public class SLPropertyPanel extends ContentPanel {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jToolBar5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(tabsMain, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE)
+                .add(tabsMain, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -3156,6 +3267,7 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private javax.swing.JButton btnViewParent;
     private org.sola.clients.swing.common.buttons.BtnView btnViewPropDoc;
     private javax.swing.JButton btnViewRight;
+    private javax.swing.JComboBox cbxPropertyManager;
     private javax.swing.JComboBox cbxRightType;
     private org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel documentsPanel1;
     private javax.swing.Box.Filler filler1;
@@ -3167,6 +3279,7 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private org.sola.clients.swing.ui.GroupPanel groupPanel5;
     private org.sola.clients.swing.ui.HeaderPanel headerPanel;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -3190,6 +3303,12 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel20;
     private javax.swing.JPanel jPanel21;
+    private javax.swing.JPanel jPanel22;
+    private javax.swing.JPanel jPanel23;
+    private javax.swing.JPanel jPanel24;
+    private javax.swing.JPanel jPanel25;
+    private javax.swing.JPanel jPanel26;
+    private javax.swing.JPanel jPanel27;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
@@ -3264,6 +3383,7 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private javax.swing.JPopupMenu popupPropertyDocuments;
     private javax.swing.JPopupMenu popupRights;
     private org.sola.clients.swing.ui.source.DocumentsPanel propertyDocsPanel;
+    private org.sola.clients.beans.party.PartySummaryListBean propertyManagerList;
     private org.sola.clients.beans.referencedata.RrrTypeListBean rrrTypes;
     private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tableChildBaUnits;
     private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tableNotes;

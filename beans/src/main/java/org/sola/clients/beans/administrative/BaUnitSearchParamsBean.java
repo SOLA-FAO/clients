@@ -52,6 +52,7 @@ public class BaUnitSearchParamsBean extends AbstractBindingBean {
     public static final String PLAN_NUMBER_PROPERTY = "planNumber";
     public static final String PROPERTY_MANAGER_PROPERTY = "propertyManager";
     public static final String INTEREST_REF_NUM_PROPERTY = "interestRefNum";
+    public static final String DESCRIPTION_PROPERTY = "description";
 
     private String nameFirstPart;
     private String nameLastPart;
@@ -64,6 +65,7 @@ public class BaUnitSearchParamsBean extends AbstractBindingBean {
     private String planNumber;
     private String propertyManager;
     private String interestRefNum;
+    private String description;
 
     public BaUnitSearchParamsBean() {
         super();
@@ -199,6 +201,16 @@ public class BaUnitSearchParamsBean extends AbstractBindingBean {
         propertySupport.firePropertyChange(INTEREST_REF_NUM_PROPERTY, oldValue, this.interestRefNum);
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        String oldValue = this.description;
+        this.description = description;
+        propertySupport.firePropertyChange(DESCRIPTION_PROPERTY, oldValue, this.description);
+    }
+
     /**
      * Clears the search criteria from the form.
      */
@@ -213,5 +225,6 @@ public class BaUnitSearchParamsBean extends AbstractBindingBean {
         setPlanNumber(null);
         setPropertyManager(null);
         setInterestRefNum(null);
+        setDescription(null);
     }
 }

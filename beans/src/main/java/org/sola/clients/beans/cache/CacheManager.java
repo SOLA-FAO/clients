@@ -37,8 +37,10 @@ import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.clients.beans.AbstractCodeBean;
 import org.sola.clients.beans.AbstractIdBean;
 import org.sola.clients.beans.converters.TypeConverters;
+import org.sola.clients.beans.party.PartySummaryBean;
 import org.sola.clients.beans.referencedata.*;
 import org.sola.clients.beans.security.RoleBean;
+import org.sola.clients.beans.security.UserSearchResultBean;
 import org.sola.clients.beans.system.ConfigPanelLauncherBean;
 import org.sola.clients.beans.system.LanguageBean;
 import org.sola.clients.beans.system.PanelLauncherGroupBean;
@@ -47,6 +49,7 @@ import org.sola.common.messaging.MessageUtility;
 import org.sola.services.boundary.wsclients.AbstractWSClient;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.AbstractTO;
+import org.sola.webservices.transferobjects.casemanagement.PartySummaryTO;
 
 public final class CacheManager {
 
@@ -228,6 +231,11 @@ public final class CacheManager {
      * Cache key of the {@link RrrSubTypeBean} collection.
      */
     public static final String RRR_SUB_TYPE_GROUP_KEY = RrrSubTypeBean.class.getName() + LIST_POSTFIX;
+    /**
+     * Cache key of the parties list by role collection.
+     */
+    public static final String PARTIES_BY_ROLE_GROUP_KEY = PartySummaryBean.class.getName() + LIST_POSTFIX;
+    public static final String ACTIVE_USERS_GROUP_KEY = UserSearchResultBean.class.getName() + LIST_POSTFIX;
 
     private static final String GET_APPLICATION_STATUS_TYPES = "getApplicationStatusTypes";
     private static final String GET_SOURCE_TYPES = "getSourceTypes";
@@ -264,6 +272,8 @@ public final class CacheManager {
     private static final String GET_NOTATION_STATUS_TYPES = "getNotationStatusTypes";
     private static final String GET_STATE_LAND_STATUS_TYPES = "getStateLandStatusTypes";
     private static final String GET_RRR_SUB_TYPES = "getRrrSubTypes";
+    private static final String GET_PARTIES_BY_ROLE = "getPartiesByRole";
+    private static final String GET_ACTIVE_USERS = "getActiveUsers";
 
     public static List<BrValidationTargetTypeBean> getBrValidationTargetTypes() {
         return getCachedBeanList(BrValidationTargetTypeBean.class,
@@ -513,6 +523,25 @@ public final class CacheManager {
         return getCachedBeanList(RrrSubTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_RRR_SUB_TYPES, RRR_SUB_TYPE_GROUP_KEY);
+    }
+
+    public static List<PartySummaryBean> getPartiesByRole(String partyRoleCode) {
+        String key = partyRoleCode + PARTIES_BY_ROLE_GROUP_KEY;
+        List<PartySummaryBean> result = new ArrayList<PartySummaryBean>();
+        if (cache.contains(key)) {
+            result = (List<PartySummaryBean>) cache.get(key);
+        } else {
+            List<PartySummaryTO> toList = WSManager.getInstance().getCaseManagementService().getPartiesByRole(partyRoleCode);
+            TypeConverters.TransferObjectListToBeanList(toList, PartySummaryBean.class, (List) result);
+            cache.put(key, result);
+        }
+        return Collections.unmodifiableList(result);
+    }
+
+    public static List<UserSearchResultBean> getActiveUsers() {
+        return getCachedBeanList(UserSearchResultBean.class,
+                WSManager.getInstance().getSearchService(),
+                GET_ACTIVE_USERS, ACTIVE_USERS_GROUP_KEY);
     }
 
     /**

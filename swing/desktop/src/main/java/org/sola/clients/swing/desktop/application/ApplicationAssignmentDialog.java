@@ -48,6 +48,7 @@ public class ApplicationAssignmentDialog extends javax.swing.JDialog {
 
     public static final String ASSIGNMENT_CHANGED = "assignmentChanged";
     private List<ApplicationSearchResultBean> applications;
+    private ApplicationBean app;
 
     /**
      * Default constructor
@@ -62,16 +63,30 @@ public class ApplicationAssignmentDialog extends javax.swing.JDialog {
         customizeForm();
     }
 
+    /**
+     * Supports re-assignment of a individual application
+     * @param app
+     * @param parent
+     * @param modal 
+     */
+    public ApplicationAssignmentDialog(ApplicationBean app,
+            java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
+        this.app = app;
+        initComponents();
+        customizeForm();
+    }
+
     private void customizeForm() {
 
         URL imgURL = this.getClass().getResource("/images/sola/logo_icon.jpg");
         this.setIconImage(new ImageIcon(imgURL).getImage());
 
         WindowUtility.addEscapeListener(this, false);
-        
+
         cbxUsers.setEnabled(false);
 
-        if (applications == null || applications.size() < 1) {
+        if (app == null && (applications == null || applications.size() < 1)) {
             btnAssign.setEnabled(false);
             return;
         }
@@ -95,8 +110,12 @@ public class ApplicationAssignmentDialog extends javax.swing.JDialog {
             return;
         }
 
-        for (ApplicationSearchResultBean app : applications) {
-            ApplicationBean.assignUser(app, usersList.getSelectedUser().getId());
+        if (app != null) {
+            app.assignUser(usersList.getSelectedUser().getId());
+        } else {
+            for (ApplicationSearchResultBean app : applications) {
+                ApplicationBean.assignUser(app, usersList.getSelectedUser().getId());
+            }
         }
 
         MessageUtility.displayMessage(ClientMessage.APPLICATION_ASSIGNED);

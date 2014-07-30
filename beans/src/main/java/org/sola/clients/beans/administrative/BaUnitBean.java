@@ -43,12 +43,14 @@ import org.sola.clients.beans.cadastre.CadastreObjectBean;
 import org.sola.clients.beans.controls.SolaList;
 import org.sola.clients.beans.controls.SolaObservableList;
 import org.sola.clients.beans.converters.TypeConverters;
+import org.sola.clients.beans.party.PartySummaryBean;
 import org.sola.clients.beans.referencedata.LandUseTypeBean;
 import org.sola.clients.beans.referencedata.NotationStatusTypeBean;
 import org.sola.clients.beans.referencedata.StatusConstants;
 import org.sola.clients.beans.referencedata.TypeActionBean;
 import org.sola.clients.beans.source.SourceBean;
 import org.sola.clients.beans.utils.RrrComparatorByRegistrationDate;
+import org.sola.common.StringUtility;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 import org.sola.services.boundary.wsclients.WSManager;
@@ -183,6 +185,7 @@ public class BaUnitBean extends BaUnitSummaryBean {
     public static final String LAND_USE_CODE_PROPERTY = "landUseCode";
     public static final String LAND_USE_TYPE_PROPERTY = "landUseType";
     public static final String SELECTED_BA_UNIT_AREA_PROPERTY = "selectedBaUnitArea";
+    public static final String PROPERTY_MANAGER_PROPERTY = "propertyManager";
 
     private SolaList<RrrBean> rrrList;
     private SolaList<BaUnitNotationBean> baUnitNotationList;
@@ -193,6 +196,7 @@ public class BaUnitBean extends BaUnitSummaryBean {
     private SolaObservableList<RrrShareWithStatus> rrrSharesList;
     private SolaList<RelatedBaUnitInfoBean> childBaUnits;
     private SolaList<RelatedBaUnitInfoBean> parentBaUnits;
+    private SolaList<PartySummaryBean> partyList;
 
     private transient CadastreObjectBean selectedParcel;
     private transient SolaList<RrrBean> rrrHistoricList;
@@ -201,6 +205,7 @@ public class BaUnitBean extends BaUnitSummaryBean {
     private transient BaUnitNotationBean selectedBaUnitNotation;
     private transient RelatedBaUnitInfoBean selectedParentBaUnit;
     private transient RelatedBaUnitInfoBean selectedChildBaUnit;
+    private transient PartySummaryBean propertyManager;
 
     private String estateType;
     private LandUseTypeBean landUseType;
@@ -224,6 +229,7 @@ public class BaUnitBean extends BaUnitSummaryBean {
         childBaUnits = new SolaList();
         parentBaUnits = new SolaList();
         sourceList = new SolaList();
+        partyList = new SolaList();
         allBaUnitNotationList = new SolaObservableList<BaUnitNotationBean>();
         rrrSharesList = new SolaObservableList<RrrShareWithStatus>();
         rrrList.getFilteredList().addObservableListListener(new RrrListListener());
@@ -632,6 +638,32 @@ public class BaUnitBean extends BaUnitSummaryBean {
 
     public ObservableList<SourceBean> getFilteredSourceList() {
         return sourceList.getFilteredList();
+    }
+
+    public SolaList<PartySummaryBean> getPartyList() {
+        return partyList;
+    }
+
+    public void setPartyList(SolaList<PartySummaryBean> partyList) {
+        this.partyList = partyList;
+    }
+
+    public PartySummaryBean getPropertyManager() {
+        if (getPartyList().getFilteredList().size() > 0) {
+            return getPartyList().getFilteredList().get(0);
+        }
+        return null;
+    }
+
+    public void setPropertyManager(PartySummaryBean propertyManager) {
+        this.propertyManager = getPropertyManager();
+        if (this.propertyManager != null) {
+            this.propertyManager.setEntityAction(EntityAction.DISASSOCIATE);
+        }
+        if (propertyManager != null && !StringUtility.isEmpty(propertyManager.getName())) {
+            getPartyList().add(propertyManager);
+        }
+        propertySupport.firePropertyChange(PROPERTY_MANAGER_PROPERTY, this.propertyManager, propertyManager);
     }
 
     public void removeSelectedParentBaUnit() {

@@ -261,6 +261,8 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
         jLabel14 = new javax.swing.JLabel();
         txtSLDocumentRef = new javax.swing.JTextField();
         jPanel21 = new javax.swing.JPanel();
+        txtDescription = new javax.swing.JTextField();
+        jLabel19 = new javax.swing.JLabel();
         jToolBar2 = new javax.swing.JToolBar();
         btnSLSearch = new org.sola.clients.swing.common.buttons.BtnSearch();
         btnSLClear = new javax.swing.JButton();
@@ -632,15 +634,28 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
 
         jPanel21.setName("jPanel21"); // NOI18N
 
+        txtDescription.setName("txtDescription"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, searchParamsSL, org.jdesktop.beansbinding.ELProperty.create("${description}"), txtDescription, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        jLabel19.setText(bundle.getString("BaUnitSearchPanel.jLabel19.text")); // NOI18N
+        jLabel19.setName("jLabel19"); // NOI18N
+
         javax.swing.GroupLayout jPanel21Layout = new javax.swing.GroupLayout(jPanel21);
         jPanel21.setLayout(jPanel21Layout);
         jPanel21Layout.setHorizontalGroup(
             jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 333, Short.MAX_VALUE)
+            .addComponent(txtDescription)
+            .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, 333, Short.MAX_VALUE)
         );
         jPanel21Layout.setVerticalGroup(
             jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 51, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel21Layout.createSequentialGroup()
+                .addComponent(jLabel19)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jPanel12.add(jPanel21);
@@ -1270,6 +1285,7 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1326,6 +1342,7 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
     private javax.swing.JPanel tabProperty;
     private javax.swing.JPanel tabStateLand;
     private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tableSearchResults;
+    private javax.swing.JTextField txtDescription;
     private javax.swing.JTextField txtDocumentRef;
     private javax.swing.JTextField txtInterestRefNum;
     private javax.swing.JTextField txtLocality;

@@ -218,7 +218,6 @@ public class MainForm extends javax.swing.JFrame {
 
         menuSearchApplication.setEnabled(btnSearchApplications.isEnabled());
         menuNewApplication.setEnabled(btnNewApplication.isEnabled());
-        menuExportRights.setEnabled(SecurityBean.isInRole(RolesConstants.ADMINISTRATIVE_RIGHTS_EXPORT));
         menuBaUnitSearch.setEnabled(btnOpenBaUnitSearch.isEnabled());
         menuPersons.setEnabled(btnManageParties.isEnabled());
         menuShowMap.setEnabled(btnOpenMap.isEnabled());
@@ -523,7 +522,7 @@ public class MainForm extends javax.swing.JFrame {
      */
     public void openDashBoard(boolean forceRefresh) {
         if (!pnlContent.isPanelOpened(MainContentPanel.CARD_DASHBOARD)) {
-            DashBoardPanel dashBoard = new DashBoardPanel(forceRefresh);
+            SLDashBoardPanel dashBoard = new SLDashBoardPanel(forceRefresh);
             pnlContent.addPanel(dashBoard, MainContentPanel.CARD_DASHBOARD);
         }
         pnlContent.showPanel(MainContentPanel.CARD_DASHBOARD);
@@ -800,7 +799,6 @@ public class MainForm extends javax.swing.JFrame {
         pnlContent = new org.sola.clients.swing.ui.MainContentPanel();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
-        menuExportRights = new javax.swing.JMenuItem();
         javax.swing.JMenuItem menuExitItem = new javax.swing.JMenuItem();
         menuView = new javax.swing.JMenu();
         menuLanguage = new javax.swing.JMenu();
@@ -819,19 +817,6 @@ public class MainForm extends javax.swing.JFrame {
         menuShowMap = new javax.swing.JMenuItem();
         menuReportsDesktop = new javax.swing.JMenu();
         menuLodgementReport = new javax.swing.JMenuItem();
-        manuGenderReport = new javax.swing.JMenuItem();
-        menuSystematic = new javax.swing.JMenu();
-        menuPublicDisplay = new javax.swing.JMenu();
-        menuPublicNotification = new javax.swing.JMenuItem();
-        menuOwnerName = new javax.swing.JMenuItem();
-        menuStateLand = new javax.swing.JMenuItem();
-        menuItemMapPublicDisplay = new javax.swing.JMenuItem();
-        menuCertificates = new javax.swing.JMenuItem();
-        menuReports = new javax.swing.JMenu();
-        menuStatus = new javax.swing.JMenuItem();
-        menuProgress = new javax.swing.JMenuItem();
-        menuSpatialUnitGroup = new javax.swing.JMenuItem();
-        mnuSpatialUnitEditor = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
         jmiContextHelp = new javax.swing.JMenuItem();
@@ -977,15 +962,6 @@ public class MainForm extends javax.swing.JFrame {
 
         fileMenu.setText(bundle.getString("MainForm.fileMenu.text")); // NOI18N
 
-        menuExportRights.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/export.png"))); // NOI18N
-        menuExportRights.setText(bundle.getString("MainForm.menuExportRights.text")); // NOI18N
-        menuExportRights.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuExportRightsActionPerformed(evt);
-            }
-        });
-        fileMenu.add(menuExportRights);
-
         menuExitItem.setText(bundle.getString("MainForm.menuExitItem.text")); // NOI18N
         menuExitItem.setToolTipText(bundle.getString("MainForm.menuExitItem.toolTipText")); // NOI18N
         menuExitItem.addActionListener(new java.awt.event.ActionListener() {
@@ -1109,99 +1085,7 @@ public class MainForm extends javax.swing.JFrame {
         menuReportsDesktop.add(menuLodgementReport);
         menuLodgementReport.getAccessibleContext().setAccessibleName(bundle.getString("MainForm.menuLodgementReport.AccessibleContext.accessibleName")); // NOI18N
 
-        manuGenderReport.setText(bundle.getString("MainForm.manuGenderReport.text")); // NOI18N
-        manuGenderReport.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                manuGenderReportActionPerformed(evt);
-            }
-        });
-        menuReportsDesktop.add(manuGenderReport);
-
         menuBar.add(menuReportsDesktop);
-
-        menuSystematic.setText(bundle.getString("MainForm.menuSystematic.text")); // NOI18N
-
-        menuPublicDisplay.setText(bundle.getString("MainForm.menuPublicDisplay.text")); // NOI18N
-
-        menuPublicNotification.setText(bundle.getString("MainForm.menuPublicNotification.text")); // NOI18N
-        menuPublicNotification.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuPublicNotificationActionPerformed(evt);
-            }
-        });
-        menuPublicDisplay.add(menuPublicNotification);
-
-        menuOwnerName.setText(bundle.getString("MainForm.menuOwnerName.text")); // NOI18N
-        menuOwnerName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuOwnerNameActionPerformed(evt);
-            }
-        });
-        menuPublicDisplay.add(menuOwnerName);
-
-        menuStateLand.setText(bundle.getString("MainForm.menuStateLand.text")); // NOI18N
-        menuStateLand.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuStateLandActionPerformed(evt);
-            }
-        });
-        menuPublicDisplay.add(menuStateLand);
-
-        menuSystematic.add(menuPublicDisplay);
-
-        menuItemMapPublicDisplay.setText(bundle.getString("MainForm.menuItemMapPublicDisplay.text")); // NOI18N
-        menuItemMapPublicDisplay.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuItemMapPublicDisplayActionPerformed(evt);
-            }
-        });
-        menuSystematic.add(menuItemMapPublicDisplay);
-
-        menuCertificates.setText(bundle.getString("MainForm.menuCertificates.text")); // NOI18N
-        menuCertificates.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuCertificatesActionPerformed(evt);
-            }
-        });
-        menuSystematic.add(menuCertificates);
-
-        menuReports.setText(bundle.getString("MainForm.menuReports.text")); // NOI18N
-
-        menuStatus.setText(bundle.getString("MainForm.menuStatus.text")); // NOI18N
-        menuStatus.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuStatusActionPerformed(evt);
-            }
-        });
-        menuReports.add(menuStatus);
-
-        menuProgress.setText(bundle.getString("MainForm.menuProgress.text")); // NOI18N
-        menuProgress.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuProgressActionPerformed(evt);
-            }
-        });
-        menuReports.add(menuProgress);
-
-        menuSystematic.add(menuReports);
-
-        menuSpatialUnitGroup.setText(bundle.getString("MainForm.menuSpatialUnitGroup.text")); // NOI18N
-        menuSpatialUnitGroup.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuSpatialUnitGroupActionPerformed(evt);
-            }
-        });
-        menuSystematic.add(menuSpatialUnitGroup);
-
-        mnuSpatialUnitEditor.setText(bundle.getString("MainForm.mnuSpatialUnitEditor.text")); // NOI18N
-        mnuSpatialUnitEditor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuSpatialUnitEditorActionPerformed(evt);
-            }
-        });
-        menuSystematic.add(mnuSpatialUnitEditor);
-
-        menuBar.add(menuSystematic);
 
         helpMenu.setText(bundle.getString("MainForm.helpMenu.text")); // NOI18N
 
@@ -1332,53 +1216,9 @@ public class MainForm extends javax.swing.JFrame {
         editPassword();
     }//GEN-LAST:event_btnSetPasswordActionPerformed
 
-    private void menuPublicNotificationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuPublicNotificationActionPerformed
-        openSysRegListingParamsForm("ParcelNumber");
-    }//GEN-LAST:event_menuPublicNotificationActionPerformed
-
-    private void menuOwnerNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOwnerNameActionPerformed
-        openSysRegListingParamsForm("Owners");
-    }//GEN-LAST:event_menuOwnerNameActionPerformed
-
-    private void menuStateLandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuStateLandActionPerformed
-        openSysRegListingParamsForm("StateLand");
-    }//GEN-LAST:event_menuStateLandActionPerformed
-
-    private void menuCertificatesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCertificatesActionPerformed
-        openSysRegCertificatesParamsForm();
-    }//GEN-LAST:event_menuCertificatesActionPerformed
-
-    private void menuItemMapPublicDisplayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemMapPublicDisplayActionPerformed
-        openMapPublicDisplay();
-    }//GEN-LAST:event_menuItemMapPublicDisplayActionPerformed
-
-    private void menuStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuStatusActionPerformed
-        openSysRegManagementParamsForm("sysRegStatusBean");
-    }//GEN-LAST:event_menuStatusActionPerformed
-
-    private void menuExportRightsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuExportRightsActionPerformed
-        showRightsExportPanel();
-    }//GEN-LAST:event_menuExportRightsActionPerformed
-
-    private void menuProgressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuProgressActionPerformed
-        openSysRegManagementParamsForm("sysRegProgressBean");
-    }//GEN-LAST:event_menuProgressActionPerformed
-
-    private void menuSpatialUnitGroupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSpatialUnitGroupActionPerformed
-        openMapSpatialUnitGroupEditor();
-    }//GEN-LAST:event_menuSpatialUnitGroupActionPerformed
-
     private void jmiContextHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiContextHelpActionPerformed
         HelpUtility.getInstance().showTopic("overview");
     }//GEN-LAST:event_jmiContextHelpActionPerformed
-
-    private void mnuSpatialUnitEditorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSpatialUnitEditorActionPerformed
-        openMapSpatialUnitEditor();
-    }//GEN-LAST:event_mnuSpatialUnitEditorActionPerformed
-
-    private void manuGenderReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manuGenderReportActionPerformed
-        openSysRegGenderReport (evt);
-    }//GEN-LAST:event_manuGenderReportActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToolBar applicationsMain;
@@ -1396,38 +1236,24 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JToolBar.Separator jSeparator4;
     private javax.swing.JMenuItem jmiContextHelp;
     private javax.swing.JLabel labStatus;
-    private javax.swing.JMenuItem manuGenderReport;
     private javax.swing.JMenuItem menuAllLogLevel;
     private javax.swing.JMenu menuApplications;
     private javax.swing.JMenuItem menuBaUnitSearch;
     private javax.swing.JMenuBar menuBar;
-    private javax.swing.JMenuItem menuCertificates;
     private javax.swing.JMenuItem menuDefaultLogLevel;
     private javax.swing.JMenuItem menuDocumentSearch;
-    private javax.swing.JMenuItem menuExportRights;
-    private javax.swing.JMenuItem menuItemMapPublicDisplay;
     private javax.swing.JMenu menuLanguage;
     private javax.swing.JMenuItem menuLodgementReport;
     private javax.swing.JMenu menuLogLevel;
     private javax.swing.JMenu menuMap;
     private javax.swing.JMenuItem menuNewApplication;
     private javax.swing.JMenuItem menuOffLogLevel;
-    private javax.swing.JMenuItem menuOwnerName;
     private javax.swing.JMenuItem menuPersons;
-    private javax.swing.JMenuItem menuProgress;
-    private javax.swing.JMenu menuPublicDisplay;
-    private javax.swing.JMenuItem menuPublicNotification;
-    private javax.swing.JMenu menuReports;
     private javax.swing.JMenu menuReportsDesktop;
     private javax.swing.JMenu menuSearch;
     private javax.swing.JMenuItem menuSearchApplication;
     private javax.swing.JMenuItem menuShowMap;
-    private javax.swing.JMenuItem menuSpatialUnitGroup;
-    private javax.swing.JMenuItem menuStateLand;
-    private javax.swing.JMenuItem menuStatus;
-    private javax.swing.JMenu menuSystematic;
     private javax.swing.JMenu menuView;
-    private javax.swing.JMenuItem mnuSpatialUnitEditor;
     private org.sola.clients.swing.ui.MainContentPanel pnlContent;
     private javax.swing.JPanel statusPanel;
     private org.sola.clients.swing.common.tasks.TaskPanel taskPanel1;

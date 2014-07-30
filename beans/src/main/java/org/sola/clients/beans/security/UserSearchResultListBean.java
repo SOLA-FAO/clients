@@ -31,6 +31,7 @@ import java.util.Iterator;
 import java.util.List;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingBean;
+import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.controls.SolaObservableList;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.services.boundary.wsclients.WSManager;
@@ -55,10 +56,7 @@ public class UserSearchResultListBean extends AbstractBindingBean {
 
     /** Populates the list of users with active users. */
     private void loadActiveUsers() {
-        if (WSManager.getInstance().getSearchService() != null) {
-            List<UserSearchResultTO> userListTO = WSManager.getInstance().getSearchService().getActiveUsers();
-            TypeConverters.TransferObjectListToBeanList(userListTO, UserSearchResultBean.class, (List) usersList);
-        }
+        usersList.addAll(CacheManager.getActiveUsers()); 
     }
 
     public ObservableList<UserSearchResultBean> getUsers() {

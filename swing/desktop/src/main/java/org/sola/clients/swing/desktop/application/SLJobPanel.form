@@ -152,11 +152,6 @@
         </MenuItem>
       </SubComponents>
     </Container>
-    <Component class="org.sola.clients.beans.referencedata.CommunicationTypeListBean" name="communicationTypes">
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="createCommunicationTypes()"/>
-      </AuxValues>
-    </Component>
     <Container class="javax.swing.JPopupMenu" name="popupApplicationActions">
       <Properties>
         <Property name="name" type="java.lang.String" value="popupApplicationActions" noResource="true"/>
@@ -280,22 +275,12 @@
         </MenuItem>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JFormattedTextField" name="jFormattedTextField1">
-      <Properties>
-        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.jFormattedTextField1.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-        </Property>
-        <Property name="name" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="ApplicationPanel.jFormattedTextField1.name" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-        </Property>
-      </Properties>
-    </Component>
     <Component class="org.sola.clients.beans.referencedata.LandUseTypeListBean" name="landUseTypeListBean1">
     </Component>
     <Container class="javax.swing.JPopupMenu" name="popUpParcels">
       <Properties>
         <Property name="name" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="ApplicationPanel.popUpParcels.name" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+          <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.popUpParcels.name" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
         </Property>
       </Properties>
 
@@ -318,11 +303,6 @@
         </Menu>
       </SubComponents>
     </Container>
-    <Component class="org.sola.clients.beans.referencedata.GenderTypeListBean" name="genderTypes">
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="createGenderTypes()"/>
-      </AuxValues>
-    </Component>
   </NonVisualComponents>
   <Properties>
     <Property name="headerPanel" type="org.sola.clients.swing.ui.HeaderPanel" editor="org.netbeans.modules.form.ComponentChooserEditor">
@@ -357,8 +337,8 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="pnlHeader" alignment="0" pref="791" max="32767" attributes="2"/>
-          <Component id="jToolBar3" alignment="0" pref="791" max="32767" attributes="2"/>
+          <Component id="pnlHeader" alignment="0" max="32767" attributes="2"/>
+          <Component id="jToolBar3" alignment="0" pref="660" max="32767" attributes="2"/>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="tabbedControlMain" max="32767" attributes="0"/>
@@ -372,8 +352,8 @@
               <Component id="pnlHeader" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="jToolBar3" min="-2" pref="25" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="tabbedControlMain" pref="423" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="tabbedControlMain" pref="380" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -416,21 +396,6 @@
             <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="btnSave.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));"/>
           </AuxValues>
         </Component>
-        <Component class="javax.swing.JButton" name="btnCalculateFee">
-          <Properties>
-            <Property name="font" postCode="LafManager.getInstance().setBtnProperties(btnCalculateFee);"/>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/images/common/calculate.png"/>
-            </Property>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.btnCalculateFee.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-            </Property>
-            <Property name="name" type="java.lang.String" value="btnCalculateFee" noResource="true"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCalculateFeeActionPerformed"/>
-          </Events>
-        </Component>
         <Component class="javax.swing.JButton" name="btnValidate">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
@@ -448,24 +413,26 @@
             <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="btnValidate.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));"/>
           </AuxValues>
         </Component>
+        <Component class="javax.swing.JButton" name="btnAssignApp">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/images/common/assign.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.btnAssignApp.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="name" type="java.lang.String" value="btnAssignApp" noResource="true"/>
+            <Property name="verticalTextPosition" type="int" value="3"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAssignAppActionPerformed"/>
+          </Events>
+        </Component>
         <Component class="javax.swing.JToolBar$Separator" name="jSeparator6">
           <Properties>
             <Property name="name" type="java.lang.String" value="jSeparator6" noResource="true"/>
           </Properties>
-        </Component>
-        <Component class="javax.swing.JButton" name="btnPrintFee">
-          <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/images/common/print.png"/>
-            </Property>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.btnPrintFee.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-            </Property>
-            <Property name="name" type="java.lang.String" value="btnPrintFee" noResource="true"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPrintFeeActionPerformed"/>
-          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnPrintStatusReport">
           <Properties>
@@ -552,9 +519,6 @@
               <Dimension value="[645, 331]"/>
             </Property>
           </Properties>
-          <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="contactPanelMouseClicked"/>
-          </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="contactPanel.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));"/>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
@@ -572,11 +536,11 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jPanel25" pref="746" max="32767" attributes="0"/>
-                          <Component id="jPanel12" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jPanel1" max="32767" attributes="0"/>
+                          <Component id="jPanel25" pref="615" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -587,541 +551,23 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jPanel25" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="jPanel12" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jPanel1" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Container class="javax.swing.JPanel" name="jPanel12">
-              <Properties>
-                <Property name="name" type="java.lang.String" value="jPanel12" noResource="true"/>
-              </Properties>
-
-              <Layout>
-                <DimensionLayout dim="0">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jPanel6" alignment="0" pref="0" max="32767" attributes="1"/>
-                      <Component id="jPanel11" alignment="0" pref="746" max="32767" attributes="1"/>
-                      <Component id="groupPanel1" alignment="1" max="32767" attributes="0"/>
-                  </Group>
-                </DimensionLayout>
-                <DimensionLayout dim="1">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="groupPanel1" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="jPanel6" min="-2" pref="50" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="jPanel11" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
-                </DimensionLayout>
-              </Layout>
-              <SubComponents>
-                <Container class="javax.swing.JPanel" name="jPanel6">
-                  <Properties>
-                    <Property name="name" type="java.lang.String" value="jPanel6" noResource="true"/>
-                  </Properties>
-
-                  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
-                    <Property name="columns" type="int" value="2"/>
-                    <Property name="horizontalGap" type="int" value="15"/>
-                    <Property name="rows" type="int" value="1"/>
-                  </Layout>
-                  <SubComponents>
-                    <Container class="javax.swing.JPanel" name="jPanel3">
-                      <Properties>
-                        <Property name="name" type="java.lang.String" value="jPanel3" noResource="true"/>
-                      </Properties>
-
-                      <Layout>
-                        <DimensionLayout dim="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="labName" min="-2" pref="111" max="-2" attributes="0"/>
-                                  <EmptySpace pref="127" max="32767" attributes="0"/>
-                              </Group>
-                              <Component id="txtFirstName" alignment="0" pref="238" max="32767" attributes="0"/>
-                          </Group>
-                        </DimensionLayout>
-                        <DimensionLayout dim="1">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="labName" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="txtFirstName" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="32767" attributes="0"/>
-                              </Group>
-                          </Group>
-                        </DimensionLayout>
-                      </Layout>
-                      <SubComponents>
-                        <Component class="javax.swing.JTextField" name="txtFirstName">
-                          <Properties>
-                            <Property name="name" type="java.lang.String" value="txtFirstName" noResource="true"/>
-                          </Properties>
-                          <BindingProperties>
-                            <BindingProperty name="text" source="appBean" sourcePath="${contactPerson.name}" target="txtFirstName" targetPath="text" updateStrategy="0" immediately="false"/>
-                          </BindingProperties>
-                          <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="LafManager.getInstance().setTxtProperties(txtFirstName);"/>
-                            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
-                          </AuxValues>
-                        </Component>
-                        <Component class="javax.swing.JLabel" name="labName">
-                          <Properties>
-                            <Property name="font" postCode="LafManager.getInstance().setLabProperties(labName);"/>
-                            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                              <Image iconType="3" name="/images/common/red_asterisk.gif"/>
-                            </Property>
-                            <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-                              <ComponentRef name="txtFirstName"/>
-                            </Property>
-                            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                              <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.labName.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                            </Property>
-                            <Property name="iconTextGap" type="int" value="1"/>
-                            <Property name="name" type="java.lang.String" value="labName" noResource="true"/>
-                          </Properties>
-                        </Component>
-                      </SubComponents>
-                    </Container>
-                    <Container class="javax.swing.JPanel" name="jPanel4">
-                      <Properties>
-                        <Property name="name" type="java.lang.String" value="jPanel4" noResource="true"/>
-                      </Properties>
-
-                      <Layout>
-                        <DimensionLayout dim="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="labLastName" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="178" max="32767" attributes="0"/>
-                              </Group>
-                              <Component id="txtLastName" alignment="0" pref="238" max="32767" attributes="0"/>
-                          </Group>
-                        </DimensionLayout>
-                        <DimensionLayout dim="1">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="labLastName" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="txtLastName" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="32767" attributes="0"/>
-                              </Group>
-                          </Group>
-                        </DimensionLayout>
-                      </Layout>
-                      <SubComponents>
-                        <Component class="javax.swing.JLabel" name="labLastName">
-                          <Properties>
-                            <Property name="font" postCode="LafManager.getInstance().setLabProperties(labLastName);"/>
-                            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                              <Image iconType="3" name="/images/common/red_asterisk.gif"/>
-                            </Property>
-                            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                              <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.labLastName.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                            </Property>
-                            <Property name="iconTextGap" type="int" value="1"/>
-                            <Property name="name" type="java.lang.String" value="labLastName" noResource="true"/>
-                          </Properties>
-                        </Component>
-                        <Component class="javax.swing.JTextField" name="txtLastName">
-                          <Properties>
-                            <Property name="name" type="java.lang.String" value="txtLastName" noResource="true"/>
-                          </Properties>
-                          <BindingProperties>
-                            <BindingProperty name="text" source="appBean" sourcePath="${contactPerson.lastName}" target="txtLastName" targetPath="text" updateStrategy="0" immediately="false">
-                              <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-                            </BindingProperty>
-                          </BindingProperties>
-                          <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="txtLastName.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));&#xa;txtLastName.setHorizontalAlignment(JTextField.LEADING);"/>
-                            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
-                          </AuxValues>
-                        </Component>
-                      </SubComponents>
-                    </Container>
-                    <Container class="javax.swing.JPanel" name="jPanel5">
-                      <Properties>
-                        <Property name="name" type="java.lang.String" value="jPanel5" noResource="true"/>
-                      </Properties>
-
-                      <Layout>
-                        <DimensionLayout dim="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <Component id="labAddress" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="188" max="32767" attributes="0"/>
-                              </Group>
-                              <Component id="txtAddress" alignment="0" max="32767" attributes="1"/>
-                          </Group>
-                        </DimensionLayout>
-                        <DimensionLayout dim="1">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="labAddress" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
-                                  <Component id="txtAddress" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="12" max="32767" attributes="0"/>
-                              </Group>
-                          </Group>
-                        </DimensionLayout>
-                      </Layout>
-                      <SubComponents>
-                        <Component class="javax.swing.JTextField" name="txtAddress">
-                          <Properties>
-                            <Property name="name" type="java.lang.String" value="txtAddress" noResource="true"/>
-                          </Properties>
-                          <BindingProperties>
-                            <BindingProperty name="text" source="appBean" sourcePath="${contactPerson.address.description}" target="txtAddress" targetPath="text" updateStrategy="0" immediately="false">
-                              <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-                            </BindingProperty>
-                          </BindingProperties>
-                          <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="txtAddress.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));&#xa;txtAddress.setHorizontalAlignment(JTextField.LEADING);"/>
-                            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
-                          </AuxValues>
-                        </Component>
-                        <Component class="javax.swing.JLabel" name="labAddress">
-                          <Properties>
-                            <Property name="font" postCode="LafManager.getInstance().setLabProperties(labAddress);"/>
-                            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                              <Image iconType="3" name="/images/common/red_asterisk.gif"/>
-                            </Property>
-                            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                              <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.labAddress.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                            </Property>
-                            <Property name="iconTextGap" type="int" value="1"/>
-                            <Property name="name" type="java.lang.String" value="labAddress" noResource="true"/>
-                          </Properties>
-                        </Component>
-                      </SubComponents>
-                    </Container>
-                  </SubComponents>
-                </Container>
-                <Container class="javax.swing.JPanel" name="jPanel11">
-                  <Properties>
-                    <Property name="name" type="java.lang.String" value="jPanel11" noResource="true"/>
-                  </Properties>
-
-                  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
-                    <Property name="columns" type="int" value="3"/>
-                    <Property name="horizontalGap" type="int" value="15"/>
-                    <Property name="rows" type="int" value="2"/>
-                    <Property name="verticalGap" type="int" value="5"/>
-                  </Layout>
-                  <SubComponents>
-                    <Container class="javax.swing.JPanel" name="jPanel19">
-                      <Properties>
-                        <Property name="name" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="ApplicationPanel.jPanel19.name" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                        </Property>
-                      </Properties>
-
-                      <Layout>
-                        <DimensionLayout dim="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <Component id="lblGender" min="-2" pref="64" max="-2" attributes="0"/>
-                                  <EmptySpace min="0" pref="174" max="32767" attributes="0"/>
-                              </Group>
-                              <Component id="cbxGender" alignment="0" max="32767" attributes="0"/>
-                          </Group>
-                        </DimensionLayout>
-                        <DimensionLayout dim="1">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="1" attributes="0">
-                                  <Component id="lblGender" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="cbxGender" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="12" max="32767" attributes="0"/>
-                              </Group>
-                          </Group>
-                        </DimensionLayout>
-                      </Layout>
-                      <SubComponents>
-                        <Component class="javax.swing.JLabel" name="lblGender">
-                          <Properties>
-                            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                              <Image iconType="3" name="/images/common/red_asterisk.gif"/>
-                            </Property>
-                            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                              <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.lblGender.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                            </Property>
-                            <Property name="name" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                              <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="ApplicationPanel.lblGender.name" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                            </Property>
-                          </Properties>
-                        </Component>
-                        <Component class="javax.swing.JComboBox" name="cbxGender">
-                          <Properties>
-                            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                              <Color blue="e0" green="f4" red="e2" type="rgb"/>
-                            </Property>
-                            <Property name="name" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                              <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="ApplicationPanel.cbxGender.name" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                            </Property>
-                            <Property name="renderer" type="javax.swing.ListCellRenderer" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                              <Connection code="new SimpleComboBoxRenderer(&quot;getDisplayValue&quot;)" type="code"/>
-                            </Property>
-                          </Properties>
-                          <BindingProperties>
-                            <BindingProperty name="elements" source="genderTypes" sourcePath="${genderTypeList}" target="cbxGender" targetPath="elements" updateStrategy="0" immediately="false"/>
-                            <BindingProperty name="selectedItem" source="appBean" sourcePath="${contactPerson.genderType}" target="cbxGender" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
-                          </BindingProperties>
-                          <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
-                          </AuxValues>
-                        </Component>
-                      </SubComponents>
-                    </Container>
-                    <Container class="javax.swing.JPanel" name="jPanel7">
-                      <Properties>
-                        <Property name="name" type="java.lang.String" value="jPanel7" noResource="true"/>
-                      </Properties>
-
-                      <Layout>
-                        <DimensionLayout dim="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="labPhone" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="208" max="32767" attributes="0"/>
-                              </Group>
-                              <Component id="txtPhone" alignment="1" max="32767" attributes="1"/>
-                          </Group>
-                        </DimensionLayout>
-                        <DimensionLayout dim="1">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="labPhone" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="txtPhone" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="12" max="32767" attributes="0"/>
-                              </Group>
-                          </Group>
-                        </DimensionLayout>
-                      </Layout>
-                      <SubComponents>
-                        <Component class="javax.swing.JLabel" name="labPhone">
-                          <Properties>
-                            <Property name="font" postCode="LafManager.getInstance().setLabProperties(labPhone);"/>
-                            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                              <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.labPhone.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                            </Property>
-                            <Property name="name" type="java.lang.String" value="labPhone" noResource="true"/>
-                          </Properties>
-                        </Component>
-                        <Component class="javax.swing.JTextField" name="txtPhone">
-                          <Properties>
-                            <Property name="name" type="java.lang.String" value="txtPhone" noResource="true"/>
-                          </Properties>
-                          <BindingProperties>
-                            <BindingProperty name="text" source="appBean" sourcePath="${contactPerson.phone}" target="txtPhone" targetPath="text" updateStrategy="0" immediately="false">
-                              <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-                            </BindingProperty>
-                          </BindingProperties>
-                          <Events>
-                            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtPhoneFocusLost"/>
-                          </Events>
-                          <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="txtPhone.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));&#xa;txtPhone.setHorizontalAlignment(JTextField.LEADING);"/>
-                            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
-                          </AuxValues>
-                        </Component>
-                      </SubComponents>
-                    </Container>
-                    <Container class="javax.swing.JPanel" name="jPanel8">
-                      <Properties>
-                        <Property name="name" type="java.lang.String" value="jPanel8" noResource="true"/>
-                      </Properties>
-
-                      <Layout>
-                        <DimensionLayout dim="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="txtFax" alignment="0" pref="238" max="32767" attributes="1"/>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="labFax" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
-                        </DimensionLayout>
-                        <DimensionLayout dim="1">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="labFax" min="-2" pref="15" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="txtFax" min="-2" max="-2" attributes="1"/>
-                                  <EmptySpace max="32767" attributes="0"/>
-                              </Group>
-                          </Group>
-                        </DimensionLayout>
-                      </Layout>
-                      <SubComponents>
-                        <Component class="javax.swing.JLabel" name="labFax">
-                          <Properties>
-                            <Property name="font" postCode="LafManager.getInstance().setLabProperties(labFax);"/>
-                            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                              <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.labFax.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                            </Property>
-                            <Property name="name" type="java.lang.String" value="labFax" noResource="true"/>
-                          </Properties>
-                        </Component>
-                        <Component class="javax.swing.JTextField" name="txtFax">
-                          <Properties>
-                            <Property name="name" type="java.lang.String" value="txtFax" noResource="true"/>
-                          </Properties>
-                          <BindingProperties>
-                            <BindingProperty name="text" source="appBean" sourcePath="${contactPerson.fax}" target="txtFax" targetPath="text" updateStrategy="0" immediately="false">
-                              <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-                            </BindingProperty>
-                          </BindingProperties>
-                          <Events>
-                            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtFaxFocusLost"/>
-                          </Events>
-                          <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="txtFax.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));&#xa;txtFax.setHorizontalAlignment(JTextField.LEADING);"/>
-                            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
-                          </AuxValues>
-                        </Component>
-                      </SubComponents>
-                    </Container>
-                    <Container class="javax.swing.JPanel" name="jPanel9">
-                      <Properties>
-                        <Property name="name" type="java.lang.String" value="jPanel9" noResource="true"/>
-                      </Properties>
-
-                      <Layout>
-                        <DimensionLayout dim="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <Component id="labEmail" min="-2" pref="140" max="-2" attributes="0"/>
-                                  <EmptySpace pref="98" max="32767" attributes="0"/>
-                              </Group>
-                              <Component id="txtEmail" alignment="0" max="32767" attributes="1"/>
-                          </Group>
-                        </DimensionLayout>
-                        <DimensionLayout dim="1">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="labEmail" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="txtEmail" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="12" max="32767" attributes="0"/>
-                              </Group>
-                          </Group>
-                        </DimensionLayout>
-                      </Layout>
-                      <SubComponents>
-                        <Component class="javax.swing.JLabel" name="labEmail">
-                          <Properties>
-                            <Property name="font" postCode="LafManager.getInstance().setLabProperties(labEmail);"/>
-                            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                              <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.labEmail.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                            </Property>
-                            <Property name="name" type="java.lang.String" value="labEmail" noResource="true"/>
-                          </Properties>
-                        </Component>
-                        <Component class="javax.swing.JTextField" name="txtEmail">
-                          <Properties>
-                            <Property name="name" type="java.lang.String" value="txtEmail" noResource="true"/>
-                          </Properties>
-                          <BindingProperties>
-                            <BindingProperty name="text" source="appBean" sourcePath="${contactPerson.email}" target="txtEmail" targetPath="text" updateStrategy="0" immediately="false">
-                              <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-                            </BindingProperty>
-                          </BindingProperties>
-                          <Events>
-                            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtEmailFocusLost"/>
-                          </Events>
-                          <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="txtEmail.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));&#xa;txtEmail.setHorizontalAlignment(JTextField.LEADING);"/>
-                            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
-                          </AuxValues>
-                        </Component>
-                      </SubComponents>
-                    </Container>
-                    <Container class="javax.swing.JPanel" name="jPanel10">
-                      <Properties>
-                        <Property name="name" type="java.lang.String" value="jPanel10" noResource="true"/>
-                      </Properties>
-
-                      <Layout>
-                        <DimensionLayout dim="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <Component id="labPreferredWay" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="119" max="32767" attributes="0"/>
-                              </Group>
-                              <Component id="cbxCommunicationWay" alignment="0" max="32767" attributes="1"/>
-                          </Group>
-                        </DimensionLayout>
-                        <DimensionLayout dim="1">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="labPreferredWay" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="cbxCommunicationWay" min="-2" max="-2" attributes="1"/>
-                                  <EmptySpace pref="12" max="32767" attributes="0"/>
-                              </Group>
-                          </Group>
-                        </DimensionLayout>
-                      </Layout>
-                      <SubComponents>
-                        <Component class="javax.swing.JLabel" name="labPreferredWay">
-                          <Properties>
-                            <Property name="font" postCode="LafManager.getInstance().setLabProperties(labPreferredWay);"/>
-                            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                              <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.labPreferredWay.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                            </Property>
-                            <Property name="name" type="java.lang.String" value="labPreferredWay" noResource="true"/>
-                          </Properties>
-                        </Component>
-                        <Component class="javax.swing.JComboBox" name="cbxCommunicationWay">
-                          <Properties>
-                            <Property name="font" postCode="LafManager.getInstance().setCmbProperties(cbxCommunicationWay);"/>
-                            <Property name="maximumRowCount" type="int" value="9"/>
-                            <Property name="name" type="java.lang.String" value="cbxCommunicationWay" noResource="true"/>
-                            <Property name="renderer" type="javax.swing.ListCellRenderer" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                              <Connection code="new SimpleComboBoxRenderer(&quot;getDisplayValue&quot;)" type="code"/>
-                            </Property>
-                          </Properties>
-                          <BindingProperties>
-                            <BindingProperty name="elements" source="communicationTypes" sourcePath="${communicationTypeList}" target="cbxCommunicationWay" targetPath="elements" updateStrategy="0" immediately="false"/>
-                            <BindingProperty name="selectedItem" source="appBean" sourcePath="${contactPerson.preferredCommunication}" target="cbxCommunicationWay" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
-                          </BindingProperties>
-                          <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="cbxCommunicationWay.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));"/>
-                            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
-                          </AuxValues>
-                        </Component>
-                      </SubComponents>
-                    </Container>
-                  </SubComponents>
-                </Container>
-                <Component class="org.sola.clients.swing.ui.GroupPanel" name="groupPanel1">
-                  <Properties>
-                    <Property name="name" type="java.lang.String" value="groupPanel1" noResource="true"/>
-                    <Property name="titleText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.groupPanel1.titleText" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                    </Property>
-                  </Properties>
-                </Component>
-              </SubComponents>
-            </Container>
             <Container class="javax.swing.JPanel" name="jPanel25">
               <Properties>
                 <Property name="name" type="java.lang.String" value="jPanel25" noResource="true"/>
               </Properties>
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
-                <Property name="columns" type="int" value="3"/>
+                <Property name="columns" type="int" value="4"/>
                 <Property name="horizontalGap" type="int" value="15"/>
                 <Property name="rows" type="int" value="2"/>
-                <Property name="verticalGap" type="int" value="10"/>
               </Layout>
               <SubComponents>
                 <Container class="javax.swing.JPanel" name="jPanel24">
@@ -1135,8 +581,8 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="txtAppNumber" alignment="0" pref="238" max="32767" attributes="0"/>
-                          <Component id="jLabel1" alignment="0" pref="238" max="32767" attributes="0"/>
+                          <Component id="txtAppNumber" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jLabel1" alignment="0" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
@@ -1186,7 +632,7 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="labDate" pref="238" max="32767" attributes="0"/>
+                          <Component id="labDate" max="32767" attributes="0"/>
                           <Component id="txtDate" alignment="0" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
@@ -1231,6 +677,107 @@
                     </Component>
                   </SubComponents>
                 </Container>
+                <Container class="javax.swing.JPanel" name="jPanel14">
+                  <Properties>
+                    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[28, 20]"/>
+                    </Property>
+                    <Property name="name" type="java.lang.String" value="jPanel14" noResource="true"/>
+                  </Properties>
+
+                  <Layout>
+                    <DimensionLayout dim="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="cbxAgents" alignment="0" pref="142" max="32767" attributes="0"/>
+                          <Component id="labAgents" alignment="0" max="32767" attributes="0"/>
+                      </Group>
+                    </DimensionLayout>
+                    <DimensionLayout dim="1">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="labAgents" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="cbxAgents" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                    </DimensionLayout>
+                  </Layout>
+                  <SubComponents>
+                    <Component class="javax.swing.JLabel" name="labAgents">
+                      <Properties>
+                        <Property name="font" postCode="LafManager.getInstance().setLabProperties(labAgents);"/>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.labAgents.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
+                        <Property name="iconTextGap" type="int" value="1"/>
+                        <Property name="name" type="java.lang.String" value="labAgents" noResource="true"/>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JComboBox" name="cbxAgents">
+                      <Properties>
+                        <Property name="font" postCode="LafManager.getInstance().setCmbProperties(cbxAgents);"/>
+                        <Property name="name" type="java.lang.String" value="cbxAgents" noResource="true" postCode="AutoCompletion.enable(cbxAgents);"/>
+                        <Property name="renderer" type="javax.swing.ListCellRenderer" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                          <Connection code="new SimpleComboBoxRenderer(&quot;getFullName&quot;)" type="code"/>
+                        </Property>
+                        <Property name="requestFocusEnabled" type="boolean" value="false"/>
+                      </Properties>
+                      <BindingProperties>
+                        <BindingProperty name="elements" source="partySummaryList" sourcePath="${partySummaryList}" target="cbxAgents" targetPath="elements" updateStrategy="0" immediately="false"/>
+                        <BindingProperty name="selectedItem" source="appBean" sourcePath="${agent}" target="cbxAgents" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+                      </BindingProperties>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="cbxAgents.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));"/>
+                      </AuxValues>
+                    </Component>
+                  </SubComponents>
+                </Container>
+                <Container class="javax.swing.JPanel" name="jPanel30">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="jPanel30" noResource="true"/>
+                  </Properties>
+
+                  <Layout>
+                    <DimensionLayout dim="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jLabel5" pref="142" max="32767" attributes="0"/>
+                          <Component id="txtAssignedTo" alignment="0" max="32767" attributes="0"/>
+                      </Group>
+                    </DimensionLayout>
+                    <DimensionLayout dim="1">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Component id="txtAssignedTo" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                    </DimensionLayout>
+                  </Layout>
+                  <SubComponents>
+                    <Component class="javax.swing.JLabel" name="jLabel5">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.jLabel5.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
+                        <Property name="name" type="java.lang.String" value="jLabel5" noResource="true"/>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JTextField" name="txtAssignedTo">
+                      <Properties>
+                        <Property name="enabled" type="boolean" value="false"/>
+                        <Property name="name" type="java.lang.String" value="txtAssignedTo" noResource="true"/>
+                      </Properties>
+                      <BindingProperties>
+                        <BindingProperty name="text" source="appBean" sourcePath="${assignee.fullUserName}" target="txtAssignedTo" targetPath="text" updateStrategy="0" immediately="false">
+                          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                        </BindingProperty>
+                      </BindingProperties>
+                    </Component>
+                  </SubComponents>
+                </Container>
                 <Container class="javax.swing.JPanel" name="jPanel26">
                   <Properties>
                     <Property name="enabled" type="boolean" value="false"/>
@@ -1242,7 +789,7 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabel2" pref="238" max="32767" attributes="0"/>
+                          <Component id="jLabel2" max="32767" attributes="0"/>
                           <Component id="txtCompleteBy" alignment="0" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
@@ -1286,64 +833,6 @@
                     </Component>
                   </SubComponents>
                 </Container>
-                <Container class="javax.swing.JPanel" name="jPanel14">
-                  <Properties>
-                    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[28, 20]"/>
-                    </Property>
-                    <Property name="name" type="java.lang.String" value="jPanel14" noResource="true"/>
-                  </Properties>
-
-                  <Layout>
-                    <DimensionLayout dim="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="cbxAgents" alignment="0" pref="238" max="32767" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="labAgents" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="209" max="32767" attributes="0"/>
-                          </Group>
-                      </Group>
-                    </DimensionLayout>
-                    <DimensionLayout dim="1">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="labAgents" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="cbxAgents" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                    </DimensionLayout>
-                  </Layout>
-                  <SubComponents>
-                    <Component class="javax.swing.JLabel" name="labAgents">
-                      <Properties>
-                        <Property name="font" postCode="LafManager.getInstance().setLabProperties(labAgents);"/>
-                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.labAgents.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                        </Property>
-                        <Property name="iconTextGap" type="int" value="1"/>
-                        <Property name="name" type="java.lang.String" value="labAgents" noResource="true"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JComboBox" name="cbxAgents">
-                      <Properties>
-                        <Property name="font" postCode="LafManager.getInstance().setCmbProperties(cbxAgents);"/>
-                        <Property name="name" type="java.lang.String" value="cbxAgents" noResource="true" postCode="AutoCompletion.enable(cbxAgents);"/>
-                        <Property name="renderer" type="javax.swing.ListCellRenderer" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="new SimpleComboBoxRenderer(&quot;getFullName&quot;)" type="code"/>
-                        </Property>
-                        <Property name="requestFocusEnabled" type="boolean" value="false"/>
-                      </Properties>
-                      <BindingProperties>
-                        <BindingProperty name="elements" source="partySummaryList" sourcePath="${partySummaryList}" target="cbxAgents" targetPath="elements" updateStrategy="0" immediately="false"/>
-                        <BindingProperty name="selectedItem" source="appBean" sourcePath="${agent}" target="cbxAgents" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
-                      </BindingProperties>
-                      <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="cbxAgents.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));"/>
-                      </AuxValues>
-                    </Component>
-                  </SubComponents>
-                </Container>
                 <Container class="javax.swing.JPanel" name="jPanel15">
                   <Properties>
                     <Property name="name" type="java.lang.String" value="jPanel15" noResource="true"/>
@@ -1352,11 +841,8 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="txtStatus" alignment="0" pref="238" max="32767" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="labStatus" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="207" max="32767" attributes="0"/>
-                          </Group>
+                          <Component id="txtStatus" alignment="0" max="32767" attributes="0"/>
+                          <Component id="labStatus" alignment="0" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
@@ -1396,6 +882,100 @@
                     </Component>
                   </SubComponents>
                 </Container>
+                <Container class="javax.swing.JPanel" name="jPanel29">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="jPanel29" noResource="true"/>
+                  </Properties>
+
+                  <Layout>
+                    <DimensionLayout dim="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      </Group>
+                    </DimensionLayout>
+                    <DimensionLayout dim="1">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      </Group>
+                    </DimensionLayout>
+                  </Layout>
+                </Container>
+                <Container class="javax.swing.JPanel" name="jPanel31">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="jPanel31" noResource="true"/>
+                  </Properties>
+
+                  <Layout>
+                    <DimensionLayout dim="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      </Group>
+                    </DimensionLayout>
+                    <DimensionLayout dim="1">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      </Group>
+                    </DimensionLayout>
+                  </Layout>
+                </Container>
+              </SubComponents>
+            </Container>
+            <Container class="javax.swing.JPanel" name="jPanel1">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="jPanel1" noResource="true"/>
+              </Properties>
+
+              <Layout>
+                <DimensionLayout dim="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="jLabel6" pref="615" max="32767" attributes="0"/>
+                      <Component id="jScrollPane2" max="32767" attributes="0"/>
+                  </Group>
+                </DimensionLayout>
+                <DimensionLayout dim="1">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jScrollPane2" pref="202" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+              </Layout>
+              <SubComponents>
+                <Container class="javax.swing.JScrollPane" name="jScrollPane2">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="jScrollPane2" noResource="true"/>
+                  </Properties>
+                  <AuxValues>
+                    <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+                  </AuxValues>
+
+                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+                  <SubComponents>
+                    <Component class="javax.swing.JTextArea" name="txtDescription">
+                      <Properties>
+                        <Property name="columns" type="int" value="20"/>
+                        <Property name="lineWrap" type="boolean" value="true"/>
+                        <Property name="rows" type="int" value="5"/>
+                        <Property name="name" type="java.lang.String" value="txtDescription" noResource="true"/>
+                      </Properties>
+                      <BindingProperties>
+                        <BindingProperty name="text" source="appBean" sourcePath="${description}" target="txtDescription" targetPath="text" updateStrategy="0" immediately="false">
+                          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                        </BindingProperty>
+                      </BindingProperties>
+                    </Component>
+                  </SubComponents>
+                </Container>
+                <Component class="javax.swing.JLabel" name="jLabel6">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                      <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.jLabel6.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                    </Property>
+                    <Property name="name" type="java.lang.String" value="jLabel6" noResource="true"/>
+                  </Properties>
+                </Component>
               </SubComponents>
             </Container>
           </SubComponents>
@@ -1406,7 +986,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Services">
+              <JTabbedPaneConstraints tabName="Tasks">
                 <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                   <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.servicesPanel.TabConstraints.tabTitle" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                 </Property>
@@ -1420,8 +1000,8 @@
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="scrollFeeDetails1" alignment="0" pref="746" max="32767" attributes="3"/>
-                          <Component id="tbServices" alignment="0" pref="746" max="32767" attributes="1"/>
+                          <Component id="scrollFeeDetails1" alignment="0" pref="615" max="32767" attributes="3"/>
+                          <Component id="tbServices" alignment="0" pref="615" max="32767" attributes="1"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -1433,7 +1013,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="tbServices" min="-2" pref="25" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="scrollFeeDetails1" pref="342" max="32767" attributes="0"/>
+                      <Component id="scrollFeeDetails1" pref="299" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -1460,28 +1040,28 @@
                       <TableColumnModel selectionModel="0">
                         <Column maxWidth="70" minWidth="70" prefWidth="70" resizable="true">
                           <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                            <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="ApplicationPanel.tabFeeDetails1.columnModel.title0" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                            <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.tabFeeDetails1.columnModel.title0" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                           </Title>
                           <Editor/>
                           <Renderer/>
                         </Column>
                         <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                           <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                            <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="ApplicationPanel.tabFeeDetails1.columnModel.title1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                            <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.tabFeeDetails1.columnModel.title1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                           </Title>
                           <Editor/>
                           <Renderer/>
                         </Column>
                         <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                           <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                            <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="ApplicationPanel.tabServices.columnModel.title3" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                            <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.tabServices.columnModel.title3" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                           </Title>
                           <Editor/>
                           <Renderer/>
                         </Column>
                         <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                           <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                            <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="ApplicationPanel.tabFeeDetails1.columnModel.title2" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                            <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.tabFeeDetails1.columnModel.title2" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                           </Title>
                           <Editor/>
                           <Renderer/>
@@ -1534,6 +1114,28 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
               <SubComponents>
+                <Component class="javax.swing.JButton" name="btnViewService">
+                  <Properties>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/images/common/view.png"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                      <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.btnViewService.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                    </Property>
+                    <Property name="focusable" type="boolean" value="false"/>
+                    <Property name="horizontalAlignment" type="int" value="2"/>
+                    <Property name="name" type="java.lang.String" value="btnViewService" noResource="true"/>
+                    <Property name="verticalTextPosition" type="int" value="3"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnViewServiceActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JToolBar$Separator" name="jSeparator9">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="jSeparator9" noResource="true"/>
+                  </Properties>
+                </Component>
                 <Component class="javax.swing.JButton" name="btnAddService">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
@@ -1606,23 +1208,6 @@
                   <Properties>
                     <Property name="name" type="java.lang.String" value="jSeparator2" noResource="true"/>
                   </Properties>
-                </Component>
-                <Component class="javax.swing.JButton" name="btnViewService">
-                  <Properties>
-                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/images/common/view.png"/>
-                    </Property>
-                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.btnViewService.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                    </Property>
-                    <Property name="focusable" type="boolean" value="false"/>
-                    <Property name="horizontalAlignment" type="int" value="2"/>
-                    <Property name="name" type="java.lang.String" value="btnViewService" noResource="true"/>
-                    <Property name="verticalTextPosition" type="int" value="3"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnViewServiceActionPerformed"/>
-                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="btnStartService">
                   <Properties>
@@ -1697,9 +1282,6 @@
           <Properties>
             <Property name="name" type="java.lang.String" value="documentPanel" noResource="true"/>
           </Properties>
-          <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="documentPanelMouseClicked"/>
-          </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="documentPanel.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));"/>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
@@ -1719,12 +1301,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="documentsPanel" pref="500" max="32767" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="scrollDocRequired" alignment="1" min="-2" pref="236" max="-2" attributes="1"/>
-                          <Component id="labDocRequired" alignment="1" min="-2" pref="236" max="-2" attributes="1"/>
-                      </Group>
+                      <Component id="documentsPanel" pref="615" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -1733,103 +1310,13 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Component id="labDocRequired" min="-2" pref="24" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="scrollDocRequired" pref="0" max="32767" attributes="0"/>
-                          </Group>
-                          <Component id="documentsPanel" pref="373" max="32767" attributes="0"/>
-                      </Group>
+                      <Component id="documentsPanel" pref="330" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JLabel" name="labDocRequired">
-              <Properties>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="cc" green="ff" red="ff" type="rgb"/>
-                </Property>
-                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.labDocRequired.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                </Property>
-                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                  <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                    <LineBorder>
-                      <Color PropertyName="color" blue="66" green="66" red="66" type="rgb"/>
-                    </LineBorder>
-                  </Border>
-                </Property>
-                <Property name="name" type="java.lang.String" value="labDocRequired" noResource="true"/>
-                <Property name="opaque" type="boolean" value="true"/>
-              </Properties>
-            </Component>
-            <Container class="javax.swing.JScrollPane" name="scrollDocRequired">
-              <Properties>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
-                </Property>
-                <Property name="name" type="java.lang.String" value="scrollDocRequired" noResource="true"/>
-              </Properties>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="scrollDocRequired.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));"/>
-              </AuxValues>
-
-              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-              <SubComponents>
-                <Component class="org.sola.clients.swing.common.controls.JTableWithDefaultStyles" name="tblDocTypesHelper">
-                  <Properties>
-                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="ff" green="ff" red="ff" type="rgb"/>
-                    </Property>
-                    <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
-                      <TableColumnModel selectionModel="0">
-                        <Column maxWidth="20" minWidth="20" prefWidth="20" resizable="true">
-                          <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                            <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.tblDocTypesHelper.columnModel.title0_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                          </Title>
-                          <Editor/>
-                          <Renderer editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                            <Connection code="new BooleanCellRenderer()" type="code"/>
-                          </Renderer>
-                        </Column>
-                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                          <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                            <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.tblDocTypesHelper.columnModel.title1_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                          </Title>
-                          <Editor/>
-                          <Renderer/>
-                        </Column>
-                      </TableColumnModel>
-                    </Property>
-                    <Property name="gridColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="ff" green="ff" red="ff" type="rgb"/>
-                    </Property>
-                    <Property name="name" type="java.lang.String" value="tblDocTypesHelper" noResource="true"/>
-                    <Property name="opaque" type="boolean" value="false"/>
-                    <Property name="showHorizontalLines" type="boolean" value="false"/>
-                    <Property name="showVerticalLines" type="boolean" value="false"/>
-                    <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
-                      <TableHeader reorderingAllowed="false" resizingAllowed="false"/>
-                    </Property>
-                  </Properties>
-                  <BindingProperties>
-                    <BindingProperty name="elements" source="applicationDocumentsHelper" sourcePath="${checkList}" target="tblDocTypesHelper" targetPath="elements" updateStrategy="0" immediately="true">
-                      <Subbinding sourcePath="${isInList}">
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Boolean.class"/>
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
-                      </Subbinding>
-                      <Subbinding sourcePath="${displayValue}">
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
-                      </Subbinding>
-                    </BindingProperty>
-                  </BindingProperties>
-                </Component>
-              </SubComponents>
-            </Container>
             <Component class="org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel" name="documentsPanel">
               <Properties>
                 <Property name="name" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
@@ -1846,9 +1333,6 @@
           <Properties>
             <Property name="name" type="java.lang.String" value="propertyPanel" noResource="true"/>
           </Properties>
-          <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="propertyPanelMouseClicked"/>
-          </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="propertyPanel.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));"/>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
@@ -1877,7 +1361,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jPanel28" max="32767" attributes="0"/>
+                      <Component id="jPanel28" pref="330" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -1894,7 +1378,7 @@
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
                 <Property name="columns" type="int" value="1"/>
                 <Property name="rows" type="int" value="2"/>
-                <Property name="verticalGap" type="int" value="15"/>
+                <Property name="verticalGap" type="int" value="6"/>
               </Layout>
               <SubComponents>
                 <Container class="javax.swing.JPanel" name="jPanel23">
@@ -1907,26 +1391,19 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="scrollPropertyDetails" max="32767" attributes="1"/>
+                          <Component id="scrollPropertyDetails" pref="615" max="32767" attributes="1"/>
                           <Component id="tbPropertyDetails" max="32767" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="jPanel22" max="32767" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="jPanel18" min="-2" pref="103" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="jPanel22" alignment="0" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="1" attributes="0">
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jPanel18" max="32767" attributes="0"/>
-                                  <Component id="jPanel22" max="32767" attributes="0"/>
-                              </Group>
+                              <Component id="jPanel22" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="tbPropertyDetails" min="-2" pref="25" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="scrollPropertyDetails" pref="99" max="32767" attributes="1"/>
+                              <Component id="scrollPropertyDetails" pref="74" max="32767" attributes="1"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -1980,7 +1457,7 @@
                                 </Column>
                                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                                   <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                                    <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="ApplicationPanel.tabPropertyDetails.columnModel.title6" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                                    <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.tabPropertyDetails.columnModel.title6" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                                   </Title>
                                   <Editor/>
                                   <Renderer editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -1989,7 +1466,7 @@
                                 </Column>
                                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                                   <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                                    <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="ApplicationPanel.tabPropertyDetails.columnModel.title4" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                                    <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.tabPropertyDetails.columnModel.title4" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                                   </Title>
                                   <Editor/>
                                   <Renderer editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -2001,12 +1478,11 @@
                             <Property name="name" type="java.lang.String" value="tabPropertyDetails" noResource="true"/>
                             <Property name="selectionForeground" postCode="tabPropertyDetails.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));"/>
                             <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
-                              <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
+                              <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
                             </Property>
                           </Properties>
                           <BindingProperties>
                             <BindingProperty name="elements" source="appBean" sourcePath="${filteredPropertyList}" target="tabPropertyDetails" targetPath="elements" updateStrategy="0" immediately="true">
-                              <Property name="name" type="java.lang.String" value=""/>
                               <Subbinding sourcePath="${nameFirstpart}">
                                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
                                 <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
@@ -2049,6 +1525,22 @@
 
                       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
                       <SubComponents>
+                        <Component class="javax.swing.JButton" name="btnAddProperty">
+                          <Properties>
+                            <Property name="font" postCode="LafManager.getInstance().setBtnProperties(btnAddProperty);"/>
+                            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                              <Image iconType="3" name="/images/common/add.png"/>
+                            </Property>
+                            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                              <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.btnAddProperty.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                            </Property>
+                            <Property name="horizontalAlignment" type="int" value="2"/>
+                            <Property name="name" type="java.lang.String" value="btnAddProperty" noResource="true"/>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddPropertyActionPerformed"/>
+                          </Events>
+                        </Component>
                         <Component class="javax.swing.JButton" name="btnRemoveProperty">
                           <Properties>
                             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
@@ -2087,7 +1579,7 @@
                       </Properties>
 
                       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
-                        <Property name="columns" type="int" value="0"/>
+                        <Property name="columns" type="int" value="4"/>
                         <Property name="horizontalGap" type="int" value="15"/>
                         <Property name="rows" type="int" value="1"/>
                       </Layout>
@@ -2102,11 +1594,8 @@
                           <Layout>
                             <DimensionLayout dim="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <Component id="labFirstPart" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="0" pref="103" max="32767" attributes="0"/>
-                                  </Group>
-                                  <Component id="txtFirstPart" max="32767" attributes="0"/>
+                                  <Component id="txtFirstPart" pref="142" max="32767" attributes="0"/>
+                                  <Component id="labFirstPart" alignment="0" max="32767" attributes="0"/>
                               </Group>
                             </DimensionLayout>
                             <DimensionLayout dim="1">
@@ -2115,6 +1604,7 @@
                                       <Component id="labFirstPart" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="txtFirstPart" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                             </DimensionLayout>
@@ -2153,11 +1643,8 @@
                           <Layout>
                             <DimensionLayout dim="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="labLastPart" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="0" pref="104" max="32767" attributes="0"/>
-                                  </Group>
-                                  <Component id="txtLastPart" alignment="1" max="32767" attributes="0"/>
+                                  <Component id="txtLastPart" alignment="1" pref="142" max="32767" attributes="0"/>
+                                  <Component id="labLastPart" alignment="0" max="32767" attributes="0"/>
                               </Group>
                             </DimensionLayout>
                             <DimensionLayout dim="1">
@@ -2166,6 +1653,7 @@
                                       <Component id="labLastPart" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="txtLastPart" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                             </DimensionLayout>
@@ -2201,11 +1689,8 @@
                           <Layout>
                             <DimensionLayout dim="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="labValue" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="0" pref="121" max="32767" attributes="0"/>
-                                  </Group>
-                                  <Component id="txtValue" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="txtValue" alignment="0" pref="142" max="32767" attributes="0"/>
+                                  <Component id="labValue" alignment="0" max="32767" attributes="0"/>
                               </Group>
                             </DimensionLayout>
                             <DimensionLayout dim="1">
@@ -2214,6 +1699,7 @@
                                       <Component id="labValue" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="txtValue" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                             </DimensionLayout>
@@ -2249,11 +1735,8 @@
                           <Layout>
                             <DimensionLayout dim="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="labArea" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="0" pref="99" max="32767" attributes="0"/>
-                                  </Group>
-                                  <Component id="txtArea" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="txtArea" alignment="0" pref="142" max="32767" attributes="0"/>
+                                  <Component id="labArea" alignment="0" max="32767" attributes="0"/>
                               </Group>
                             </DimensionLayout>
                             <DimensionLayout dim="1">
@@ -2262,6 +1745,7 @@
                                       <Component id="labArea" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="txtArea" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                             </DimensionLayout>
@@ -2291,59 +1775,6 @@
                         </Container>
                       </SubComponents>
                     </Container>
-                    <Container class="javax.swing.JPanel" name="jPanel18">
-                      <Properties>
-                        <Property name="name" type="java.lang.String" value="jPanel18" noResource="true"/>
-                      </Properties>
-
-                      <Layout>
-                        <DimensionLayout dim="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="btnAddProperty" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace max="32767" attributes="0"/>
-                              </Group>
-                          </Group>
-                        </DimensionLayout>
-                        <DimensionLayout dim="1">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" max="-2" attributes="0"/>
-                                  <Component id="btnAddProperty" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
-                        </DimensionLayout>
-                      </Layout>
-                      <SubComponents>
-                        <Component class="javax.swing.JButton" name="btnAddProperty">
-                          <Properties>
-                            <Property name="font" postCode="LafManager.getInstance().setBtnProperties(btnAddProperty);"/>
-                            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                              <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.btnAddProperty.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                            </Property>
-                            <Property name="horizontalTextPosition" type="int" value="0"/>
-                            <Property name="name" type="java.lang.String" value="btnAddProperty" noResource="true"/>
-                          </Properties>
-                          <Events>
-                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddPropertyActionPerformed"/>
-                          </Events>
-                        </Component>
-                        <Component class="javax.swing.JLabel" name="jLabel3">
-                          <Properties>
-                            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                              <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.jLabel3.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                            </Property>
-                            <Property name="name" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                              <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="ApplicationPanel.jLabel3.name" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                            </Property>
-                          </Properties>
-                        </Component>
-                      </SubComponents>
-                    </Container>
                   </SubComponents>
                 </Container>
                 <Container class="javax.swing.JPanel" name="jPanel27">
@@ -2356,7 +1787,7 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="groupPanel2" pref="746" max="32767" attributes="0"/>
+                          <Component id="groupPanel2" pref="615" max="32767" attributes="0"/>
                           <Component id="jScrollPane1" alignment="1" max="32767" attributes="0"/>
                           <Component id="jToolBar1" alignment="1" max="32767" attributes="0"/>
                       </Group>
@@ -2368,7 +1799,7 @@
                               <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
                               <Component id="jToolBar1" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jScrollPane1" pref="121" max="32767" attributes="0"/>
+                              <Component id="jScrollPane1" pref="104" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -2416,21 +1847,21 @@
                                 </Column>
                                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                                   <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                                    <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="ApplicationPanel.tableParcels.columnModel.title4" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                                    <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.tableParcels.columnModel.title4" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                                   </Title>
                                   <Editor/>
                                   <Renderer/>
                                 </Column>
                                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                                   <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                                    <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="ApplicationPanel.tableParcels.columnModel.title2" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                                    <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.tableParcels.columnModel.title2" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                                   </Title>
                                   <Editor/>
                                   <Renderer/>
                                 </Column>
                                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                                   <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                                    <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="ApplicationPanel.tableParcels.columnModel.title3" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                                    <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.tableParcels.columnModel.title3" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                                   </Title>
                                   <Editor/>
                                   <Renderer/>
@@ -2444,7 +1875,7 @@
                               <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="ApplicationPanel.tableParcels.name" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                             </Property>
                             <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
-                              <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
+                              <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
                             </Property>
                           </Properties>
                           <BindingProperties>
@@ -2607,406 +2038,15 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="766" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="635" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="395" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="352" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
-        </Container>
-        <Container class="javax.swing.JPanel" name="feesPanel">
-          <Properties>
-            <Property name="name" type="java.lang.String" value="feesPanel" noResource="true"/>
-          </Properties>
-          <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="feesPanelMouseClicked"/>
-          </Events>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="feesPanel.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));"/>
-            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
-          </AuxValues>
-          <Constraints>
-            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Fees">
-                <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.feesPanel.TabConstraints.tabTitle" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                </Property>
-              </JTabbedPaneConstraints>
-            </Constraint>
-          </Constraints>
-
-          <Layout>
-            <DimensionLayout dim="0">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="scrollFeeDetails" pref="746" max="32767" attributes="0"/>
-                          <Component id="jPanel2" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                  </Group>
-              </Group>
-            </DimensionLayout>
-            <DimensionLayout dim="1">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="scrollFeeDetails" pref="304" max="32767" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jPanel2" min="-2" pref="63" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                  </Group>
-              </Group>
-            </DimensionLayout>
-          </Layout>
-          <SubComponents>
-            <Container class="javax.swing.JScrollPane" name="scrollFeeDetails">
-              <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Tahoma" size="12" style="0"/>
-                </Property>
-                <Property name="name" type="java.lang.String" value="scrollFeeDetails" noResource="true"/>
-              </Properties>
-              <AuxValues>
-                <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-              </AuxValues>
-
-              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-              <SubComponents>
-                <Component class="org.sola.clients.swing.common.controls.JTableWithDefaultStyles" name="tabFeeDetails">
-                  <Properties>
-                    <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
-                      <TableColumnModel selectionModel="1">
-                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                          <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                            <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.tabFeeDetails.columnModel.title0" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                          </Title>
-                          <Editor/>
-                          <Renderer/>
-                        </Column>
-                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                          <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                            <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.tabFeeDetails.columnModel.title1_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                          </Title>
-                          <Editor/>
-                          <Renderer editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                            <Connection code="new MoneyCellRenderer()" type="code"/>
-                          </Renderer>
-                        </Column>
-                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                          <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                            <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.tabFeeDetails.columnModel.title2_2" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                          </Title>
-                          <Editor/>
-                          <Renderer editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                            <Connection code="new MoneyCellRenderer()" type="code"/>
-                          </Renderer>
-                        </Column>
-                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                          <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                            <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.tabFeeDetails.columnModel.title3" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                          </Title>
-                          <Editor/>
-                          <Renderer editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                            <Connection code="new MoneyCellRenderer()" type="code"/>
-                          </Renderer>
-                        </Column>
-                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                          <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                            <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.tabFeeDetails.columnModel.title4" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                          </Title>
-                          <Editor/>
-                          <Renderer editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                            <Connection code="new DateTimeRenderer(false)" type="code"/>
-                          </Renderer>
-                        </Column>
-                      </TableColumnModel>
-                    </Property>
-                    <Property name="columnSelectionAllowed" type="boolean" value="true"/>
-                    <Property name="name" type="java.lang.String" value="tabFeeDetails" noResource="true"/>
-                    <Property name="selectionForeground" postCode="tabFeeDetails.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));"/>
-                    <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
-                      <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
-                    </Property>
-                  </Properties>
-                  <BindingProperties>
-                    <BindingProperty name="elements" source="appBean" sourcePath="${serviceList}" target="tabFeeDetails" targetPath="elements" updateStrategy="0" immediately="true">
-                      <Subbinding sourcePath="${requestType.displayValue}">
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
-                      </Subbinding>
-                      <Subbinding sourcePath="${baseFee}">
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="java.math.BigDecimal.class"/>
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
-                      </Subbinding>
-                      <Subbinding sourcePath="${areaFee}">
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="java.math.BigDecimal.class"/>
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
-                      </Subbinding>
-                      <Subbinding sourcePath="${valueFee}">
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="java.math.BigDecimal.class"/>
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
-                      </Subbinding>
-                      <Subbinding sourcePath="${expectedCompletionDate}">
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="java.util.Date.class"/>
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
-                      </Subbinding>
-                    </BindingProperty>
-                  </BindingProperties>
-                </Component>
-              </SubComponents>
-            </Container>
-            <Container class="javax.swing.JPanel" name="jPanel2">
-              <Properties>
-                <Property name="name" type="java.lang.String" value="jPanel2" noResource="true"/>
-              </Properties>
-
-              <Layout>
-                <DimensionLayout dim="0">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="formTxtServiceFee" max="32767" attributes="1"/>
-                              <Component id="labFixedFee" pref="135" max="32767" attributes="1"/>
-                          </Group>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="formTxtTaxes" max="32767" attributes="1"/>
-                              <Component id="labTotalFee1" pref="121" max="32767" attributes="1"/>
-                          </Group>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="labTotalFee" pref="123" max="32767" attributes="1"/>
-                              <Component id="formTxtFee" max="32767" attributes="1"/>
-                          </Group>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="formTxtPaid" min="-2" pref="115" max="-2" attributes="0"/>
-                              <Component id="labTotalFee2" min="-2" pref="115" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="labReceiptRef" max="32767" attributes="0"/>
-                              <Component id="formTxtReceiptRef" min="-2" pref="102" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="1" pref="1" max="-2" attributes="0"/>
-                                  <Component id="cbxPaid" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Component id="labTotalFee3" alignment="0" min="-2" pref="64" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
-                </DimensionLayout>
-                <DimensionLayout dim="1">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace max="32767" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="labReceiptRef" min="-2" pref="16" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-                                  <Component id="formTxtReceiptRef" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="labTotalFee2" min="-2" pref="16" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-                                  <Component id="formTxtPaid" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" attributes="0">
-                                  <Component id="labTotalFee3" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="cbxPaid" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="103" alignment="0" groupAlignment="1" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <Component id="labTotalFee" min="-2" pref="16" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-                                      <Component id="formTxtFee" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="labFixedFee" alignment="0" min="-2" pref="15" max="-2" attributes="0"/>
-                                          <Component id="labTotalFee1" min="-2" pref="16" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="formTxtServiceFee" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="formTxtTaxes" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                              </Group>
-                          </Group>
-                          <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
-                </DimensionLayout>
-              </Layout>
-              <SubComponents>
-                <Component class="javax.swing.JFormattedTextField" name="formTxtServiceFee">
-                  <Properties>
-                    <Property name="editable" type="boolean" value="false"/>
-                    <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="FormattersFactory.getInstance().getMoneyFormatterFactory()" type="code"/>
-                    </Property>
-                    <Property name="inheritsPopupMenu" type="boolean" value="true"/>
-                    <Property name="name" type="java.lang.String" value="formTxtServiceFee" noResource="true"/>
-                  </Properties>
-                  <BindingProperties>
-                    <BindingProperty name="value" source="appBean" sourcePath="${servicesFee}" target="formTxtServiceFee" targetPath="value" updateStrategy="0" immediately="false"/>
-                  </BindingProperties>
-                  <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="formTxtServiceFee.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));&#xa;formTxtServiceFee.setHorizontalAlignment(JFormattedTextField.LEADING);"/>
-                  </AuxValues>
-                </Component>
-                <Component class="javax.swing.JFormattedTextField" name="formTxtTaxes">
-                  <Properties>
-                    <Property name="editable" type="boolean" value="false"/>
-                    <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="FormattersFactory.getInstance().getMoneyFormatterFactory()" type="code"/>
-                    </Property>
-                    <Property name="inheritsPopupMenu" type="boolean" value="true"/>
-                    <Property name="name" type="java.lang.String" value="formTxtTaxes" noResource="true"/>
-                  </Properties>
-                  <BindingProperties>
-                    <BindingProperty name="value" source="appBean" sourcePath="${tax}" target="formTxtTaxes" targetPath="value" updateStrategy="0" immediately="false"/>
-                  </BindingProperties>
-                  <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="formTxtTaxes.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));&#xa;formTxtTaxes.setHorizontalAlignment(JFormattedTextField.LEADING);"/>
-                  </AuxValues>
-                </Component>
-                <Component class="javax.swing.JFormattedTextField" name="formTxtFee">
-                  <Properties>
-                    <Property name="editable" type="boolean" value="false"/>
-                    <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="FormattersFactory.getInstance().getMoneyFormatterFactory()" type="code"/>
-                    </Property>
-                    <Property name="name" type="java.lang.String" value="formTxtFee" noResource="true"/>
-                  </Properties>
-                  <BindingProperties>
-                    <BindingProperty name="value" source="appBean" sourcePath="${totalFee}" target="formTxtFee" targetPath="value" updateStrategy="0" immediately="false"/>
-                  </BindingProperties>
-                  <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="formTxtFee.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));&#xa;formTxtFee.setHorizontalAlignment(JFormattedTextField.LEADING);"/>
-                  </AuxValues>
-                </Component>
-                <Component class="javax.swing.JLabel" name="labTotalFee2">
-                  <Properties>
-                    <Property name="font" postCode="LafManager.getInstance().setLabProperties(labTotalFee2);"/>
-                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.labTotalFee2.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                    </Property>
-                    <Property name="name" type="java.lang.String" value="labTotalFee2" noResource="true"/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JLabel" name="labTotalFee">
-                  <Properties>
-                    <Property name="font" postCode="LafManager.getInstance().setLabProperties(labTotalFee);"/>
-                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.labTotalFee.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                    </Property>
-                    <Property name="name" type="java.lang.String" value="labTotalFee" noResource="true"/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JLabel" name="labTotalFee1">
-                  <Properties>
-                    <Property name="font" postCode="LafManager.getInstance().setLabProperties(labTotalFee1);"/>
-                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.labTotalFee1.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                    </Property>
-                    <Property name="name" type="java.lang.String" value="labTotalFee1" noResource="true"/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JLabel" name="labFixedFee">
-                  <Properties>
-                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="ff" green="ff" red="ff" type="rgb"/>
-                    </Property>
-                    <Property name="font" postCode="LafManager.getInstance().setLabProperties(labFixedFee);"/>
-                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.labFixedFee.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                    </Property>
-                    <Property name="name" type="java.lang.String" value="labFixedFee" noResource="true"/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JTextField" name="formTxtReceiptRef">
-                  <Properties>
-                    <Property name="name" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="ApplicationPanel.formTxtReceiptRef.name" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                    </Property>
-                  </Properties>
-                  <BindingProperties>
-                    <BindingProperty name="text" source="appBean" sourcePath="${receiptRef}" target="formTxtReceiptRef" targetPath="text" updateStrategy="0" immediately="false">
-                      <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-                    </BindingProperty>
-                  </BindingProperties>
-                </Component>
-                <Component class="javax.swing.JLabel" name="labReceiptRef">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.labReceiptRef.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                    </Property>
-                    <Property name="name" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="ApplicationPanel.labReceiptRef.name" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                    </Property>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JLabel" name="labTotalFee3">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.labTotalFee3.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                    </Property>
-                    <Property name="name" type="java.lang.String" value="labTotalFee3" noResource="true"/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JCheckBox" name="cbxPaid">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.cbxPaid.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                    </Property>
-                    <Property name="actionCommand" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.cbxPaid.actionCommand" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                    </Property>
-                    <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-                      <Insets value="[2, 0, 2, 2]"/>
-                    </Property>
-                    <Property name="name" type="java.lang.String" value="cbxPaid" noResource="true"/>
-                  </Properties>
-                  <BindingProperties>
-                    <BindingProperty name="selected" source="appBean" sourcePath="${feePaid}" target="cbxPaid" targetPath="selected" updateStrategy="0" immediately="false"/>
-                  </BindingProperties>
-                </Component>
-                <Component class="javax.swing.JFormattedTextField" name="formTxtPaid">
-                  <Properties>
-                    <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="FormattersFactory.getInstance().getMoneyFormatterFactory()" type="code"/>
-                    </Property>
-                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.formTxtPaid.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                    </Property>
-                    <Property name="name" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="ApplicationPanel.formTxtPaid.name" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                    </Property>
-                  </Properties>
-                  <BindingProperties>
-                    <BindingProperty name="value" source="appBean" sourcePath="${totalAmountPaid}" target="formTxtPaid" targetPath="value" updateStrategy="0" immediately="false">
-                      <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                        <Connection code="new BigDecimalMoneyConverter()" type="code"/>
-                      </Property>
-                      <Property name="name" type="java.lang.String" value="formTxtPaidBinding" noResource="true"/>
-                    </BindingProperty>
-                  </BindingProperties>
-                </Component>
-              </SubComponents>
-            </Container>
-          </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="validationPanel">
           <Properties>
@@ -3034,7 +2074,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="validationsPanel" pref="746" max="32767" attributes="0"/>
+                      <Component id="validationsPanel" pref="615" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -3043,7 +2083,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="validationsPanel" pref="373" max="32767" attributes="0"/>
+                      <Component id="validationsPanel" pref="330" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -3067,25 +2107,25 @@
                   <Properties>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor" postCode="tabValidations.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));">
                       <TableColumnModel selectionModel="0">
-                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="280" resizable="true">
                           <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                            <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="ApplicationPanel.tabValidations.columnModel.title1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                            <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.tabValidations.columnModel.title1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                           </Title>
                           <Editor/>
                           <Renderer editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                             <Connection code="new TableCellTextAreaRenderer()" type="code"/>
                           </Renderer>
                         </Column>
-                        <Column maxWidth="100" minWidth="-1" prefWidth="100" resizable="true">
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="100" resizable="true">
                           <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                            <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="ApplicationPanel.tabValidations.columnModel.title2" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                            <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.tabValidations.columnModel.title2" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                           </Title>
                           <Editor/>
                           <Renderer/>
                         </Column>
-                        <Column maxWidth="45" minWidth="-1" prefWidth="45" resizable="true">
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="50" resizable="true">
                           <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                            <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="ApplicationPanel.tabValidations.columnModel.title3" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                            <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.tabValidations.columnModel.title3" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                           </Title>
                           <Editor/>
                           <Renderer editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -3096,7 +2136,7 @@
                     </Property>
                     <Property name="name" type="java.lang.String" value="tabValidations" noResource="true"/>
                     <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
-                      <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
+                      <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
                     </Property>
                   </Properties>
                   <BindingProperties>
@@ -3127,9 +2167,6 @@
             </Property>
             <Property name="name" type="java.lang.String" value="historyPanel" noResource="true"/>
           </Properties>
-          <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="historyPanelMouseClicked"/>
-          </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="historyPanel.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));"/>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
@@ -3149,7 +2186,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="actionLogPanel" pref="746" max="32767" attributes="1"/>
+                      <Component id="actionLogPanel" pref="615" max="32767" attributes="1"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -3158,7 +2195,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="actionLogPanel" pref="373" max="32767" attributes="0"/>
+                      <Component id="actionLogPanel" pref="330" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>

@@ -45,6 +45,7 @@ public class ApplicationSummaryBean extends AbstractIdBean {
     public static final String AGENT_ID_PROPERTY = "agentId";
     public static final String CONTACT_PERSON_ID_PROPERTY = "contactPersonId";
     public static final String FEE_PAID_PROPERTY = "feePaid";
+    public static final String DESCRIPTION_PROPERTY = "description";
     
     private String nr;
     private Date lodgingDatetime;
@@ -53,6 +54,7 @@ public class ApplicationSummaryBean extends AbstractIdBean {
     private String agentId;
     private String contactPersonId;
     private boolean feePaid;
+    private String description;
 
     public ApplicationSummaryBean() {
         super();
@@ -124,5 +126,15 @@ public class ApplicationSummaryBean extends AbstractIdBean {
         String old = this.nr;
         this.nr = nr;
         propertySupport.firePropertyChange(NR_PROPERTY, old, this.nr);
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        String old = this.description;
+        this.description = description;
+        propertySupport.firePropertyChange(DESCRIPTION_PROPERTY, old, this.description);
     }
 }

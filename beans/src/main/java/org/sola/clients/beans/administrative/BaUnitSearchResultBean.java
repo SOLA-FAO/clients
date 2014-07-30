@@ -33,6 +33,7 @@ import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.referencedata.BaUnitTypeBean;
 import org.sola.clients.beans.referencedata.LandUseTypeBean;
+import org.sola.clients.beans.referencedata.NotationStatusTypeBean;
 import org.sola.clients.beans.referencedata.RegistrationStatusTypeBean;
 
 /**
@@ -55,6 +56,10 @@ public class BaUnitSearchResultBean extends AbstractBindingBean {
     public static final String PROPERTY_MANAGER_PROPERTY = "propertyManager";
     public static final String BA_UNIT_TYPE_PROPERTY = "baUnitType";
     public static final String TYPE_CODE_PROPERTY = "typeCode";
+    public static final String ACTIVE_JOBS_PROPERTY = "activeJobs";
+    public static final String ACTION_STATUS_CODE_PROPERTY = "actionStatusCode";
+    public static final String ACTION_STATUS_PROPERTY = "actionStatus";
+    public static final String NOTATION_TEXT_PROPERTY = "notationText";
 
     private String id;
     private String name;
@@ -69,6 +74,9 @@ public class BaUnitSearchResultBean extends AbstractBindingBean {
     private String propertyManager;
     private BaUnitTypeBean baUnitType;
     private transient String stateLandName;
+    private String activeJobs;
+    private NotationStatusTypeBean actionStatus;
+    private String notationText;
 
     public BaUnitSearchResultBean() {
         super();
@@ -241,6 +249,49 @@ public class BaUnitSearchResultBean extends AbstractBindingBean {
             this.landUseType = new LandUseTypeBean();
         }
         this.setJointRefDataBean(this.landUseType, landUseType, LAND_USE_TYPE_PROPERTY);
+    }
+
+    public String getActiveJobs() {
+        return activeJobs;
+    }
+
+    public void setActiveJobs(String activeJobs) {
+        this.activeJobs = activeJobs;
+    }
+
+    public String getActionStatusCode() {
+        return actionStatus == null ? null : actionStatus.getCode();
+    }
+
+    public void setActionStatusCode(String actionStatusCode) {
+        String oldValue = null;
+        if (actionStatus != null) {
+            oldValue = actionStatus.getCode();
+        }
+        setActionStatus(CacheManager.getBeanByCode(
+                CacheManager.getNotationStatusTypes(), actionStatusCode));
+        propertySupport.firePropertyChange(ACTION_STATUS_PROPERTY, oldValue, actionStatusCode);
+    }
+
+    public NotationStatusTypeBean getActionStatus() {
+        return actionStatus;
+    }
+
+    public void setActionStatus(NotationStatusTypeBean actionStatus) {
+        if (this.actionStatus == null) {
+            this.actionStatus = new NotationStatusTypeBean();
+        }
+        this.setJointRefDataBean(this.actionStatus, actionStatus, ACTION_STATUS_PROPERTY);
+    }
+
+    public String getNotationText() {
+        return notationText;
+    }
+
+    public void setNotationText(String notationText) {
+        String oldValue = this.notationText;
+        this.notationText = notationText;
+        propertySupport.firePropertyChange(NOTATION_TEXT_PROPERTY, oldValue, this.notationText);
     }
 
     /**

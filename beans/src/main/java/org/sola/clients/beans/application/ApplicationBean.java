@@ -1,33 +1,34 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.beans.application;
 
-import java.util.ResourceBundle;
 import java.math.BigDecimal;
 import java.util.*;
 import javax.validation.Valid;
@@ -44,6 +45,7 @@ import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.beans.party.PartyBean;
 import org.sola.clients.beans.party.PartySummaryBean;
 import org.sola.clients.beans.referencedata.*;
+import org.sola.clients.beans.security.UserSearchResultBean;
 import org.sola.clients.beans.source.SourceBean;
 import org.sola.clients.beans.validation.Localized;
 import org.sola.clients.beans.validation.ValidationResultBean;
@@ -81,6 +83,7 @@ public class ApplicationBean extends ApplicationSummaryBean {
     public static final String APPLICATION_PROPERTY = "application";
     public static final String SELECTED_CADASTRE_OBJECT = "selectedCadastreObject";
     public static final String LODGED_ROLE = "applicant";
+    public static final String ASSIGNEE_PROPERTY = "assignee";
     private ApplicationActionTypeBean actionBean;
     private String actionNotes;
     private SolaList<ApplicationPropertyBean> propertyList;
@@ -100,13 +103,15 @@ public class ApplicationBean extends ApplicationSummaryBean {
     private transient SourceBean selectedSource;
     private PartySummaryBean agent;
     private String assigneeId;
+    private UserSearchResultBean assignee;
     private ApplicationStatusTypeBean statusBean;
     private SolaList<CadastreObjectBean> cadastreObjectList;
     private transient CadastreObjectBean selectedCadastreObject;
 
     /**
      * Default constructor to create application bean. Initializes the following
-     * list of beans which are the parts of the application bean: <br /> {@link ApplicationActionTypeBean}
+     * list of beans which are the parts of the application bean: <br />
+     * {@link ApplicationActionTypeBean}
      * <br /> {@link PartySummaryBean} <br /> {@link ApplicationPropertyBean}
      * <br /> {@link ApplicationServiceBean} <br /> {@link SourceBean}
      */
@@ -253,8 +258,8 @@ public class ApplicationBean extends ApplicationSummaryBean {
     }
 
     /**
-     * Sets application status code and retrieves {@link ApplicationStatusTypeBean}
-     * from the cache.
+     * Sets application status code and retrieves
+     * {@link ApplicationStatusTypeBean} from the cache.
      *
      * @param value Application status code.
      */
@@ -264,13 +269,40 @@ public class ApplicationBean extends ApplicationSummaryBean {
     }
 
     public String getAssigneeId() {
-        return assigneeId;
+        if (assignee != null) {
+            return assignee.getId();
+        }
+        return null;
     }
 
     public void setAssigneeId(String value) {
-        String old = assigneeId;
-        assigneeId = value;
+        String old = null;
+        if (assignee != null) {
+            old = assignee.getId();
+        }
+        if (value == null) {
+            setAssignee(null);
+        } else {
+            setAssignee(CacheManager.getBeanById(CacheManager.getActiveUsers(),
+                    value));
+        }
         propertySupport.firePropertyChange(ASSIGNEE_ID_PROPERTY, old, value);
+    }
+
+    public UserSearchResultBean getAssignee() {
+        return assignee;
+    }
+
+    public void setAssignee(UserSearchResultBean value) {
+        if (value == null) {
+            this.assignee = null;
+        } else {
+            if (this.assignee == null) {
+                this.assignee = new UserSearchResultBean();
+            }
+            this.assignee.copyFromObject(value);
+        }
+        propertySupport.firePropertyChange(ASSIGNEE_PROPERTY, null, value);
     }
 
     /**
@@ -302,8 +334,8 @@ public class ApplicationBean extends ApplicationSummaryBean {
     }
 
     /**
-     * Sets application action code and retrieves {@link ApplicationActionTypeBean}
-     * from the cache.
+     * Sets application action code and retrieves
+     * {@link ApplicationActionTypeBean} from the cache.
      *
      * @param value Application action code.
      */
@@ -490,14 +522,18 @@ public class ApplicationBean extends ApplicationSummaryBean {
         this.cadastreObjectList = cadastreObjectList;
     }
 
-    /** Removes selected cadastre object from the list of CadastreObjects. */
+    /**
+     * Removes selected cadastre object from the list of CadastreObjects.
+     */
     public void removeSelectedCadastreObject() {
         if (selectedCadastreObject != null && cadastreObjectList != null) {
             cadastreObjectList.safeRemove(selectedCadastreObject, EntityAction.DISASSOCIATE);
         }
     }
 
-    /** Adds new cadastre object in the list of CadastreObjects. */
+    /**
+     * Adds new cadastre object in the list of CadastreObjects.
+     */
     public void addCadastreObject(CadastreObjectBean cadastreObject) {
         if (getCadastreObjectList() != null && cadastreObject != null
                 && cadastreObject.getEntityAction() != EntityAction.DELETE
@@ -533,7 +569,6 @@ public class ApplicationBean extends ApplicationSummaryBean {
      */
     public void addService(RequestTypeBean requestTypeBean) {
 
-
         if (requestTypeBean != null && serviceList != null) {
             int order = 0;
 
@@ -551,8 +586,6 @@ public class ApplicationBean extends ApplicationSummaryBean {
             newService.setApplicationId(this.getId());
             newService.setRequestTypeCode(requestTypeBean.getCode());
             newService.setServiceOrder(order + 1);
-
-
 
             serviceList.add(newService);
         }
@@ -740,22 +773,20 @@ public class ApplicationBean extends ApplicationSummaryBean {
      * Validates application against business rules
      */
     public ObservableList<ValidationResultBean> validate() {
-        ObservableList<ValidationResultBean> validationResults =
-                ObservableCollections.observableList(
-                TypeConverters.TransferObjectListToBeanList(WSManager.getInstance().getCaseManagementService().applicationActionValidate(
-                this.getId(), this.getRowVersion()),
-                ValidationResultBean.class, null));
+        ObservableList<ValidationResultBean> validationResults
+                = ObservableCollections.observableList(
+                        TypeConverters.TransferObjectListToBeanList(WSManager.getInstance().getCaseManagementService().applicationActionValidate(
+                                        this.getId(), this.getRowVersion()),
+                                ValidationResultBean.class, null));
         // Validation updates the Application, so need to reload to get the
         // lastest rowversion, etc. 
         this.reload();
-
 
         ObservableList<ValidationResultBean> validationSorted1List = ObservableCollections.observableList(new ArrayList<ValidationResultBean>());
         ObservableList<ValidationResultBean> validationSorted2List = ObservableCollections.observableList(new ArrayList<ValidationResultBean>());
         ObservableList<ValidationResultBean> validationSorted3List = ObservableCollections.observableList(new ArrayList<ValidationResultBean>());
         ObservableList<ValidationResultBean> validationSorted4List = ObservableCollections.observableList(new ArrayList<ValidationResultBean>());
         ObservableList<ValidationResultBean> validationSortedList = ObservableCollections.observableList(new ArrayList<ValidationResultBean>());
-
 
         for (ValidationResultBean resultBean : validationResults) {
             if ((resultBean.getSeverity().contains("medium"))) {
@@ -860,7 +891,7 @@ public class ApplicationBean extends ApplicationSummaryBean {
     public List<ValidationResultBean> lapse() {
         List<ValidationResultBean> result = TypeConverters.TransferObjectListToBeanList(
                 WSManager.getInstance().getCaseManagementService().applicationActionLapse(
-                this.getId(), this.getRowVersion()),
+                        this.getId(), this.getRowVersion()),
                 ValidationResultBean.class, null);
         this.reload();
         return result;
@@ -872,7 +903,7 @@ public class ApplicationBean extends ApplicationSummaryBean {
     public List<ValidationResultBean> resubmit() {
         List<ValidationResultBean> result = TypeConverters.TransferObjectListToBeanList(
                 WSManager.getInstance().getCaseManagementService().applicationActionResubmit(
-                this.getId(), this.getRowVersion()),
+                        this.getId(), this.getRowVersion()),
                 ValidationResultBean.class, null);
         this.reload();
         return result;
@@ -924,30 +955,30 @@ public class ApplicationBean extends ApplicationSummaryBean {
         }
         return true;
     }
-     
-    
-     /** set the contact person's role to applicant
+
+    /**
+     * set the contact person's role to applicant
      *
      */
     public boolean setApplicantRole() {
         PartyRoleTypeBean partyRoleType = new PartyRoleTypeBean();
         partyRoleType.setCode(LODGED_ROLE);
         if (!contactPerson.checkRoleExists(partyRoleType)) {
-           contactPerson.addRole(partyRoleType);
-        } 
+            contactPerson.addRole(partyRoleType);
+        }
         return true;
     }
-    
+
     /**
-    
-    /**
+     *
+     * /**
      * Creates new application in the database.
      *
      * @throws Exception
      */
     public boolean lodgeApplication() {
         setApplicantRole();
-        if (getContactPerson().getGenderCode()==null&&getContactPerson().getTypeCode().contentEquals("naturalPerson")){
+        if (getContactPerson().getGenderCode() == null && getContactPerson().getTypeCode().contentEquals("naturalPerson")) {
             MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_GENDER);
             return false;
         }
@@ -965,7 +996,7 @@ public class ApplicationBean extends ApplicationSummaryBean {
      */
     public boolean saveApplication() {
         setApplicantRole();
-        if (getContactPerson().getGenderCode()==null && getContactPerson().getTypeCode().contentEquals("naturalPerson")){
+        if (getContactPerson().getGenderCode() == null && getContactPerson().getTypeCode().contentEquals("naturalPerson")) {
             MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_GENDER);
             return false;
         }
