@@ -929,8 +929,8 @@ public class ApplicationBean extends ApplicationSummaryBean {
      *
      * @param userId ID of the user.
      */
-    public boolean assignUser(String userId) {
-        if (ApplicationBean.assignUser(this, userId)) {
+    public boolean assignUser(String userId, String teamId) {
+        if (ApplicationBean.assignUser(this, userId, teamId)) {
             this.reload();
             return true;
         }
@@ -944,13 +944,13 @@ public class ApplicationBean extends ApplicationSummaryBean {
      * @param userId ID of the user.
      * @param app Application to assign/unassign
      */
-    public static boolean assignUser(ApplicationSummaryBean app, String userId) {
+    public static boolean assignUser(ApplicationSummaryBean app, String userId, String teamId) {
         if (userId == null) {
             WSManager.getInstance().getCaseManagementService().applicationActionUnassign(
                     app.getId(), app.getRowVersion());
         } else {
             WSManager.getInstance().getCaseManagementService().applicationActionAssign(
-                    app.getId(), userId, app.getRowVersion());
+                    app.getId(), userId, teamId, app.getRowVersion());
 
         }
         return true;

@@ -29,7 +29,7 @@
  */
 package org.sola.clients.beans.security;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.Length;
@@ -70,6 +70,7 @@ public class UserBean extends UserSummaryBean {
     private String mobileNumber;
     private String lastPwordChangeUser;
     private Integer pwordExpiryDays;
+    private SolaList<UserTeamBean> userTeams;
 
     public String getPassword() {
         return password;
@@ -83,6 +84,7 @@ public class UserBean extends UserSummaryBean {
         super();
         active = true;
         userGroups = new SolaList<UserGroupBean>();
+        userTeams = new SolaList<UserTeamBean>();
     }
 
     public String getUserName() {
@@ -166,6 +168,66 @@ public class UserBean extends UserSummaryBean {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public SolaList<UserTeamBean> getUserTeams() {
+        return userTeams;
+    }
+
+    public void setUserTeams(SolaList<UserTeamBean> userTeams) {
+        this.userTeams = userTeams;
+    }
+
+    /**
+     * Retrieves the ids of the teams this user is associated to
+     *
+     * @return
+     */
+    public List<String> getTeamIds() {
+        List<String> result = new ArrayList<String>();
+        for (UserTeamBean bean : userTeams.getFilteredList()) {
+            result.add(bean.getTeamId());
+        }
+        return result;
+    }
+
+    /**
+     * Ensures the teams linked to this user matches the list of ids passed in.
+     * If the list is empty or null, any teams associated to the user will be
+     * removed.
+     *
+     * @param teamIds
+     */
+    public void setTeamIds(List<String> teamIds) {
+        if (teamIds == null) {
+            teamIds = new ArrayList<String>();
+        }
+        for (UserTeamBean bean : userTeams.getFilteredList()) {
+            boolean found = false;
+            for (String id : teamIds) {
+                if (bean.getTeamId().equals(id)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                // Remove the Bean from the user teams
+                bean.setEntityAction(EntityAction.DELETE);
+            }
+        }
+        for (String id : teamIds) {
+            boolean found = false;
+            for (UserTeamBean bean : userTeams.getFilteredList()) {
+                if (bean.getTeamId().equals(id)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                // Add the new user team
+                userTeams.addAsNew(new UserTeamBean(id));
+            }
+        }
     }
 
     // Methods

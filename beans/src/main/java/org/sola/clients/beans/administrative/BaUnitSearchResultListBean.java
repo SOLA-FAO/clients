@@ -29,8 +29,12 @@
  */
 package org.sola.clients.beans.administrative;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.List;
 import org.jdesktop.observablecollections.ObservableList;
+import org.jdesktop.observablecollections.ObservableListListener;
 import org.sola.clients.beans.AbstractBindingListBean;
 import org.sola.clients.beans.controls.SolaObservableList;
 import org.sola.clients.beans.converters.TypeConverters;
@@ -42,12 +46,50 @@ import org.sola.webservices.transferobjects.search.BaUnitSearchParamsTO;
  */
 public class BaUnitSearchResultListBean extends AbstractBindingListBean {
 
+    private class BaUnitSearchResultListener implements PropertyChangeListener {
+
+        @Override
+        public void propertyChange(PropertyChangeEvent evt) {
+            if (evt.getPropertyName().equals(BaUnitSearchResultBean.CHECKED_PROPERTY)) {
+                propertySupport.firePropertyChange(BAUNIT_CHECKED_PROPERTY, false, true);
+            }
+        }
+    }
+
     public static final String SELECTED_BAUNIT_SEARCH_RESULT_PROPERTY = "selectedBaUnitSearchResult";
+    public static final String BAUNIT_CHECKED_PROPERTY = "baUnitChecked";
     private SolaObservableList<BaUnitSearchResultBean> baUnitSearchResults;
     private BaUnitSearchResultBean selectedBaUnitSearchResult;
+    private BaUnitSearchResultListener listener = new BaUnitSearchResultListener();
 
     public BaUnitSearchResultListBean() {
         super();
+        baUnitSearchResults = new SolaObservableList<BaUnitSearchResultBean>();
+        // Listen for changes to the beans in the list
+        baUnitSearchResults.addObservableListListener(new ObservableListListener() {
+            @Override
+            public void listElementsAdded(ObservableList list, int index, int length) {
+                for (int i = index; i < length + index; i++) {
+                    ((BaUnitSearchResultBean) list.get(i)).addPropertyChangeListener(listener);
+                }
+            }
+
+            @Override
+            public void listElementsRemoved(ObservableList list, int index, List oldElements) {
+                for (Object app : oldElements) {
+                    ((BaUnitSearchResultBean) app).removePropertyChangeListener(listener);
+                }
+            }
+
+            @Override
+            public void listElementReplaced(ObservableList list, int index, Object oldElement) {
+                ((BaUnitSearchResultBean) oldElement).removePropertyChangeListener(listener);
+            }
+
+            @Override
+            public void listElementPropertyChanged(ObservableList list, int index) {
+            }
+        });
     }
 
     public ObservableList<BaUnitSearchResultBean> getBaUnitSearchResults() {
@@ -86,5 +128,37 @@ public class BaUnitSearchResultListBean extends AbstractBindingListBean {
         TypeConverters.TransferObjectListToBeanList(
                 WSManager.getInstance().getSearchService().getPropertiesToAction(),
                 BaUnitSearchResultBean.class, (List) getBaUnitSearchResults());
+    }
+
+    /**
+     * Returns true if there are checked properties on the list. Otherwise
+     * false.
+     */
+    public boolean hasChecked() {
+        for (BaUnitSearchResultBean prop : getBaUnitSearchResults()) {
+            if (prop.isChecked()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Returns list of checked properties.
+     *
+     * @param includeSelected Indicates whether to include in the list selected
+     * property if there no properties checked.
+     */
+    public List<BaUnitSearchResultBean> getChecked(boolean includeSelected) {
+        List<BaUnitSearchResultBean> checkedProps = new ArrayList<BaUnitSearchResultBean>();
+        for (BaUnitSearchResultBean prop : getBaUnitSearchResults()) {
+            if (prop.isChecked()) {
+                checkedProps.add(prop);
+            }
+        }
+        if (includeSelected && checkedProps.size() < 1 && selectedBaUnitSearchResult != null) {
+            checkedProps.add(selectedBaUnitSearchResult);
+        }
+        return checkedProps;
     }
 }

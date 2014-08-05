@@ -30,6 +30,7 @@
 package org.sola.clients.beans.administrative;
 
 import org.sola.clients.beans.AbstractBindingBean;
+import static org.sola.clients.beans.application.ApplicationSearchResultBean.CHECKED_PROPERTY;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.referencedata.BaUnitTypeBean;
 import org.sola.clients.beans.referencedata.LandUseTypeBean;
@@ -60,6 +61,7 @@ public class BaUnitSearchResultBean extends AbstractBindingBean {
     public static final String ACTION_STATUS_CODE_PROPERTY = "actionStatusCode";
     public static final String ACTION_STATUS_PROPERTY = "actionStatus";
     public static final String NOTATION_TEXT_PROPERTY = "notationText";
+    public static final String CHECKED_PROPERTY = "checked";
 
     private String id;
     private String name;
@@ -77,6 +79,8 @@ public class BaUnitSearchResultBean extends AbstractBindingBean {
     private String activeJobs;
     private NotationStatusTypeBean actionStatus;
     private String notationText;
+    private int rowVersion;
+    private boolean checked;
 
     public BaUnitSearchResultBean() {
         super();
@@ -307,5 +311,23 @@ public class BaUnitSearchResultBean extends AbstractBindingBean {
 
     public void setStateLandName(String stateLandName) {
         this.stateLandName = stateLandName;
+    }
+
+    public int getRowVersion() {
+        return rowVersion;
+    }
+
+    public void setRowVersion(int rowVersion) {
+        this.rowVersion = rowVersion;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        boolean oldValue = this.checked;
+        this.checked = checked;
+        propertySupport.firePropertyChange(CHECKED_PROPERTY, oldValue, this.checked);
     }
 }

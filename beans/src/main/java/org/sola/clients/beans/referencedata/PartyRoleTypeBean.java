@@ -42,6 +42,7 @@ public class PartyRoleTypeBean extends AbstractCodeBean {
 
     public static final String ROLE_LODGING_AGENT = "lodgingAgent";
     public static final String ROLE_PROPERTY_MANAGER = "propManager";
+    public static final String ROLE_TEAM = "team";
 
     public PartyRoleTypeBean() {
         super();

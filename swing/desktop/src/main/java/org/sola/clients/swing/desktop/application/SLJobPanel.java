@@ -264,7 +264,6 @@ public class SLJobPanel extends ContentPanel {
             tabbedControlMain.addTab(bundle.getString("SLJobPanel.historyPanel.TabConstraints.tabTitle"), historyPanel);
             btnValidate.setEnabled(true);
         } else {
-            cbxAgents.requestFocus(true);
             tabbedControlMain.removeTabAt(tabbedControlMain.indexOfComponent(historyPanel));
             tabbedControlMain.removeTabAt(tabbedControlMain.indexOfComponent(validationPanel));
             btnValidate.setEnabled(false);
@@ -309,7 +308,6 @@ public class SLJobPanel extends ContentPanel {
             btnVerifyProperty.setEnabled(editAllowed);
 
             btnValidate.setEnabled(editAllowed);
-            cbxAgents.setEnabled(editAllowed);
             txtFirstPart.setEditable(editAllowed);
             txtLastPart.setEditable(editAllowed);
             txtArea.setEditable(editAllowed);
@@ -322,8 +320,7 @@ public class SLJobPanel extends ContentPanel {
             }
 
             txtDescription.setEnabled(editAllowed);
-            btnAssignApp.setEnabled(appBean.isEditingAllowed()
-                    && SecurityBean.isInRole(RolesConstants.APPLICATION_ASSIGN_TO_OTHERS,
+            btnAssignApp.setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_ASSIGN_TO_OTHERS,
                             RolesConstants.APPLICATION_ASSIGN_TO_YOURSELF));
 
         } else {
@@ -1224,7 +1221,7 @@ public class SLJobPanel extends ContentPanel {
         txtDate = new javax.swing.JFormattedTextField();
         jPanel14 = new javax.swing.JPanel();
         labAgents = new javax.swing.JLabel();
-        cbxAgents = new javax.swing.JComboBox();
+        txtAgent = new javax.swing.JTextField();
         jPanel30 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         txtAssignedTo = new javax.swing.JTextField();
@@ -1674,34 +1671,26 @@ public class SLJobPanel extends ContentPanel {
         labAgents.setIconTextGap(1);
         labAgents.setName("labAgents"); // NOI18N
 
-        LafManager.getInstance().setCmbProperties(cbxAgents);
-        cbxAgents.setName("cbxAgents"); // NOI18N
-        AutoCompletion.enable(cbxAgents);
-        cbxAgents.setRenderer(new SimpleComboBoxRenderer("getFullName"));
-        cbxAgents.setRequestFocusEnabled(false);
+        txtAgent.setEnabled(false);
+        txtAgent.setName("txtAgent"); // NOI18N
 
-        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${partySummaryList}");
-        org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, partySummaryList, eLProperty, cbxAgents);
-        bindingGroup.addBinding(jComboBoxBinding);
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, appBean, org.jdesktop.beansbinding.ELProperty.create("${agent}"), cbxAgents, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, appBean, org.jdesktop.beansbinding.ELProperty.create("${agent.fullName}"), txtAgent, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
-
-        cbxAgents.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
 
         javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
         jPanel14.setLayout(jPanel14Layout);
         jPanel14Layout.setHorizontalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(cbxAgents, 0, 142, Short.MAX_VALUE)
-            .addComponent(labAgents, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(labAgents, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
+            .addComponent(txtAgent)
         );
         jPanel14Layout.setVerticalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel14Layout.createSequentialGroup()
                 .addComponent(labAgents)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbxAgents, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(txtAgent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jPanel25.add(jPanel14);
@@ -1900,7 +1889,7 @@ public class SLJobPanel extends ContentPanel {
         tabServices.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
         tabServices.getTableHeader().setReorderingAllowed(false);
 
-        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${serviceList}");
+        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${serviceList}");
         org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, appBean, eLProperty, tabServices);
         org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${serviceOrder}"));
         columnBinding.setColumnName("Service Order");
@@ -2450,7 +2439,7 @@ public class SLJobPanel extends ContentPanel {
             propertyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, propertyPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel28, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
+                .addComponent(jPanel28, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -2790,7 +2779,6 @@ public class SLJobPanel extends ContentPanel {
     private javax.swing.JButton btnVerifyProperty;
     private javax.swing.JButton btnViewService;
     private org.sola.clients.swing.ui.cadastre.CadastreObjectSearch2 cadastreObjectSearch;
-    private javax.swing.JComboBox cbxAgents;
     public javax.swing.JPanel contactPanel;
     public javax.swing.JPanel documentPanel;
     private org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel documentsPanel;
@@ -2878,6 +2866,7 @@ public class SLJobPanel extends ContentPanel {
     private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tableParcels;
     private javax.swing.JToolBar tbPropertyDetails;
     private javax.swing.JToolBar tbServices;
+    private javax.swing.JTextField txtAgent;
     private javax.swing.JTextField txtAppNumber;
     private javax.swing.JTextField txtArea;
     private javax.swing.JTextField txtAssignedTo;

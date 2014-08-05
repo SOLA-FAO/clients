@@ -458,6 +458,27 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSaveActionPerformed"/>
           </Events>
         </Component>
+        <Component class="javax.swing.JButton" name="btnAssign">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/images/common/assign.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="SLPropertyPanel.btnAssign.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="name" type="java.lang.String" value="btnAssign" noResource="true"/>
+            <Property name="verticalTextPosition" type="int" value="3"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAssignActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JToolBar$Separator" name="jSeparator6">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="jSeparator6" noResource="true"/>
+          </Properties>
+        </Component>
         <Component class="javax.swing.JButton" name="btnTerminate">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
@@ -785,16 +806,16 @@
                             <DimensionLayout dim="0">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jLabel10" pref="140" max="32767" attributes="0"/>
-                                  <Component id="cbxPropertyManager" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="txtPropertyManager" alignment="0" max="32767" attributes="0"/>
                               </Group>
                             </DimensionLayout>
                             <DimensionLayout dim="1">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="32767" attributes="0"/>
+                                      <Component id="txtPropertyManager" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="cbxPropertyManager" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="0" pref="11" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                             </DimensionLayout>
@@ -808,13 +829,15 @@
                                 <Property name="name" type="java.lang.String" value="jLabel10" noResource="true"/>
                               </Properties>
                             </Component>
-                            <Component class="javax.swing.JComboBox" name="cbxPropertyManager">
+                            <Component class="javax.swing.JTextField" name="txtPropertyManager">
                               <Properties>
-                                <Property name="name" type="java.lang.String" value="cbxPropertyManager" noResource="true"/>
+                                <Property name="enabled" type="boolean" value="false"/>
+                                <Property name="name" type="java.lang.String" value="txtPropertyManager" noResource="true"/>
                               </Properties>
                               <BindingProperties>
-                                <BindingProperty name="elements" source="propertyManagerList" sourcePath="${partySummaryList}" target="cbxPropertyManager" targetPath="elements" updateStrategy="0" immediately="false"/>
-                                <BindingProperty name="selectedItem" source="baUnitBean1" sourcePath="${propertyManager}" target="cbxPropertyManager" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+                                <BindingProperty name="text" source="baUnitBean1" sourcePath="${propertyManager.fullName}" target="txtPropertyManager" targetPath="text" updateStrategy="0" immediately="false">
+                                  <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                                </BindingProperty>
                               </BindingProperties>
                             </Component>
                           </SubComponents>

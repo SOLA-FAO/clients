@@ -29,16 +29,25 @@
  */
 package org.sola.clients.swing.desktop.application;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.ImageIcon;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationSearchResultBean;
+import org.sola.clients.beans.party.PartySummaryBean;
+import org.sola.clients.beans.party.PartySummaryListBean;
+import org.sola.clients.beans.referencedata.PartyRoleTypeBean;
 import org.sola.clients.beans.security.SecurityBean;
+import org.sola.clients.swing.common.tasks.SolaTask;
+import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.common.RolesConstants;
 import org.sola.common.WindowUtility;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
+import org.sola.webservices.transferobjects.EntityAction;
 
 /**
  * This dialog form is used to assign application to the user or unassign it
@@ -65,9 +74,10 @@ public class ApplicationAssignmentDialog extends javax.swing.JDialog {
 
     /**
      * Supports re-assignment of a individual application
+     *
      * @param app
      * @param parent
-     * @param modal 
+     * @param modal
      */
     public ApplicationAssignmentDialog(ApplicationBean app,
             java.awt.Frame parent, boolean modal) {
@@ -77,12 +87,39 @@ public class ApplicationAssignmentDialog extends javax.swing.JDialog {
         customizeForm();
     }
 
+    private PartySummaryListBean createPartySummaryList() {
+        PartySummaryListBean teamList = new PartySummaryListBean();
+        teamList.loadParties(PartyRoleTypeBean.ROLE_TEAM,
+                true, (String) null);
+        return teamList;
+    }
+
     private void customizeForm() {
 
         URL imgURL = this.getClass().getResource("/images/sola/logo_icon.jpg");
         this.setIconImage(new ImageIcon(imgURL).getImage());
 
         WindowUtility.addEscapeListener(this, false);
+
+        teamListBean.addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals(PartySummaryListBean.SELECTED_PARTYSUMMARY_PROPERTY)
+                        && SecurityBean.isInRole(RolesConstants.APPLICATION_ASSIGN_TO_OTHERS)) {
+                    // Only filter the users list if the current user has permission to assign 
+                    // the job to a different user
+                    PartySummaryBean party = (PartySummaryBean) evt.getNewValue();
+                    List<String> list = null;
+                    if (party != null && party.getEntityAction() != EntityAction.DISASSOCIATE) {
+                        list = new ArrayList();
+                        list.add(party.getId());
+                    }
+                    usersList.filterUsersByTeamIds(list);
+                    // Set the current user as the default if they are part of the selected team. 
+                    usersList.setSelectedUserById(SecurityBean.getCurrentUser().getId());
+                }
+            }
+        });
 
         cbxUsers.setEnabled(false);
 
@@ -91,13 +128,29 @@ public class ApplicationAssignmentDialog extends javax.swing.JDialog {
             return;
         }
 
-        usersList.setSelectedUserById(SecurityBean.getCurrentUser().getId());
-        cbxUsers.setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_ASSIGN_TO_OTHERS));
-        btnAssign.setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_ASSIGN_TO_OTHERS));
+        boolean allowAssignTeam = SecurityBean.isInRole(RolesConstants.APPLICATION_ASSIGN_TO_YOURSELF,
+                RolesConstants.APPLICATION_ASSIGN_TO_OTHERS);
+        boolean allowAssignUser = SecurityBean.isInRole(RolesConstants.APPLICATION_ASSIGN_TO_OTHERS);
 
-        if (usersList.getSelectedUser() != null && !btnAssign.isEnabled()
-                && usersList.getSelectedUser().getId().equals(SecurityBean.getCurrentUser().getId())) {
-            btnAssign.setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_ASSIGN_TO_YOURSELF));
+        usersList.setSelectedUserById(SecurityBean.getCurrentUser().getId());
+        cbxUsers.setEnabled(allowAssignUser);
+        cbxTeam.setEnabled(allowAssignTeam);
+        btnAssign.setEnabled(allowAssignTeam || allowAssignUser);
+
+        // User cannot reassign the application to another user. Setup the teams so that they 
+        // can only select a team they are part of. 
+        if (!allowAssignUser && SecurityBean.getCurrentUser().getTeamIds() != null) {
+            teamListBean.filterParties(SecurityBean.getCurrentUser().getTeamIds());
+            teamListBean.setSelectedPartyById(SecurityBean.getCurrentUser().getTeamIds().get(0));
+        }
+
+        // Reset the default team based on the team previously set for the job
+        if (app != null && app.getAgentId() != null) {
+            teamListBean.setSelectedPartyById(app.getAgentId());
+        }
+        if (applications != null && applications.size() == 1
+                && applications.get(0).getAgentId() != null) {
+            teamListBean.setSelectedPartyById(applications.get(0).getAgentId());
         }
     }
 
@@ -109,18 +162,37 @@ public class ApplicationAssignmentDialog extends javax.swing.JDialog {
             MessageUtility.displayMessage(ClientMessage.APPLICATION_NOSEL_USER);
             return;
         }
+        final String teamId = teamListBean.getSelectedPartySummaryBean() == null
+                || teamListBean.getSelectedPartySummaryBean().getEntityAction() == EntityAction.DISASSOCIATE
+                ? null : teamListBean.getSelectedPartySummaryBean().getId();
 
-        if (app != null) {
-            app.assignUser(usersList.getSelectedUser().getId());
-        } else {
-            for (ApplicationSearchResultBean app : applications) {
-                ApplicationBean.assignUser(app, usersList.getSelectedUser().getId());
+        final ApplicationAssignmentDialog dialog = this;
+
+        SolaTask t = new SolaTask<Void, Void>() {
+
+            @Override
+            public Void doTask() {
+                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_ASSIGN_JOB));
+                if (app != null) {
+                    app.assignUser(usersList.getSelectedUser().getId(), teamId);
+                } else {
+                    for (ApplicationSearchResultBean app : applications) {
+                        ApplicationBean.assignUser(app, usersList.getSelectedUser().getId(), teamId);
+                    }
+                }
+                return null;
             }
-        }
 
-        MessageUtility.displayMessage(ClientMessage.APPLICATION_ASSIGNED);
-        this.firePropertyChange(ASSIGNMENT_CHANGED, false, true);
-        this.dispose();
+            @Override
+            protected void taskDone() {
+                MessageUtility.displayMessage(ClientMessage.APPLICATION_ASSIGNED);
+                dialog.firePropertyChange(ASSIGNMENT_CHANGED, false, true);
+                dialog.dispose();
+            }
+
+        };
+        TaskManager.getInstance().runTask(t);
+
     }
 
     @SuppressWarnings("unchecked")
@@ -129,11 +201,15 @@ public class ApplicationAssignmentDialog extends javax.swing.JDialog {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         usersList = new org.sola.clients.beans.security.UserSearchResultListBean();
+        teamListBean = createPartySummaryList();
         jToolBar1 = new javax.swing.JToolBar();
         btnAssign = new javax.swing.JButton();
-        jPanel1 = new javax.swing.JPanel();
+        pnlAssignee = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         cbxUsers = new javax.swing.JComboBox();
+        pnlTeam = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        cbxTeam = new javax.swing.JComboBox();
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/application/Bundle"); // NOI18N
         setTitle(bundle.getString("ApplicationAssignmentDialog.title")); // NOI18N
@@ -161,22 +237,46 @@ public class ApplicationAssignmentDialog extends javax.swing.JDialog {
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, usersList, org.jdesktop.beansbinding.ELProperty.create("${selectedUser}"), cbxUsers, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel1)
-                .addGap(0, 252, Short.MAX_VALUE))
-            .addComponent(cbxUsers, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        javax.swing.GroupLayout pnlAssigneeLayout = new javax.swing.GroupLayout(pnlAssignee);
+        pnlAssignee.setLayout(pnlAssigneeLayout);
+        pnlAssigneeLayout.setHorizontalGroup(
+            pnlAssigneeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(cbxUsers, 0, 252, Short.MAX_VALUE)
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        pnlAssigneeLayout.setVerticalGroup(
+            pnlAssigneeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlAssigneeLayout.createSequentialGroup()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbxUsers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 20, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jLabel2.setText(bundle.getString("ApplicationAssignmentDialog.jLabel2.text")); // NOI18N
+
+        cbxTeam.setEnabled(false);
+
+        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${partySummaryList}");
+        jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, teamListBean, eLProperty, cbxTeam);
+        bindingGroup.addBinding(jComboBoxBinding);
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, teamListBean, org.jdesktop.beansbinding.ELProperty.create("${selectedPartySummaryBean}"), cbxTeam, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        javax.swing.GroupLayout pnlTeamLayout = new javax.swing.GroupLayout(pnlTeam);
+        pnlTeam.setLayout(pnlTeamLayout);
+        pnlTeamLayout.setHorizontalGroup(
+            pnlTeamLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(cbxTeam, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        pnlTeamLayout.setVerticalGroup(
+            pnlTeamLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlTeamLayout.createSequentialGroup()
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbxTeam, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 11, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -184,18 +284,22 @@ public class ApplicationAssignmentDialog extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(pnlTeam, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnlAssignee, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 32, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pnlTeam, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pnlAssignee, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         bindingGroup.bind();
@@ -208,10 +312,14 @@ public class ApplicationAssignmentDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_btnAssignActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAssign;
+    private javax.swing.JComboBox cbxTeam;
     private javax.swing.JComboBox cbxUsers;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JPanel pnlAssignee;
+    private javax.swing.JPanel pnlTeam;
+    private org.sola.clients.beans.party.PartySummaryListBean teamListBean;
     private org.sola.clients.beans.security.UserSearchResultListBean usersList;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables

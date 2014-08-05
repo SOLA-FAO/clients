@@ -29,6 +29,7 @@
  */
 package org.sola.clients.swing.desktop.administrative;
 
+import org.sola.clients.swing.ui.administrative.PropertyAssignmentDialog;
 import org.sola.clients.swing.desktop.cadastre.CreateParcelDialog;
 import java.awt.BorderLayout;
 import java.beans.PropertyChangeEvent;
@@ -183,7 +184,7 @@ public class SLPropertyPanel extends ContentPanel {
     private PartySummaryListBean createPartySummaryList() {
         PartySummaryListBean agentsList = new PartySummaryListBean();
         agentsList.loadParties(PartyRoleTypeBean.ROLE_PROPERTY_MANAGER,
-                true, null);
+                true, (String) null);
         return agentsList;
     }
 
@@ -266,6 +267,7 @@ public class SLPropertyPanel extends ContentPanel {
             this.readOnly = true;
             tabsMain.removeTabAt(tabsMain.indexOfComponent(pnlSLGeneral));
             tabsMain.removeTabAt(tabsMain.indexOfComponent(pnlNotes));
+            btnAssign.setVisible(false);
         }
 
         customizeForm();
@@ -325,6 +327,7 @@ public class SLPropertyPanel extends ContentPanel {
         txtSLLastPart.setEnabled(false);
         txtSLStatus.setEnabled(false);
         txtSLLandUse.setEnabled(false);
+        txtPropertyManager.setEnabled(false);
 
         if (nameFirstPart != null && nameLastPart != null) {
             headerPanel.setTitleText(String.format(
@@ -341,10 +344,13 @@ public class SLPropertyPanel extends ContentPanel {
                             applicationService.getRequestType().getDisplayValue(), applicationBean.getNr())));
         }
 
-        btnSave.setEnabled(!readOnly);
-        txtSLDescription.setEnabled(!readOnly);
-        txtSLArea.setEnabled(!readOnly);
-        cbxPropertyManager.setEnabled(!readOnly);
+        boolean editProperty = SecurityBean.isInRole(RolesConstants.ADMINISTRATIVE_BA_UNIT_SAVE) && !readOnly;
+        btnSave.setEnabled(editProperty);
+        txtSLDescription.setEnabled(editProperty);
+        txtSLArea.setEnabled(editProperty);
+
+        btnAssign.setEnabled(SecurityBean.isInRole(RolesConstants.ADMINISTRATIVE_BA_UNIT_SAVE, 
+                RolesConstants.ADMINISTRATIVE_ASSIGN_TEAM));
 
         if (!SecurityBean.isInRole(RolesConstants.GIS_VIEW_MAP)) {
             // User does not have rights to view the map
@@ -1166,6 +1172,12 @@ public class SLPropertyPanel extends ContentPanel {
         return true;
     }
 
+    private void assignProperty() {
+        PropertyAssignmentDialog form = new PropertyAssignmentDialog(baUnitBean1, MainForm.getInstance(), true);
+        WindowUtility.centerForm(form);
+        form.setVisible(true);
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -1208,6 +1220,8 @@ public class SLPropertyPanel extends ContentPanel {
         propertyManagerList = createPartySummaryList();
         jToolBar5 = new javax.swing.JToolBar();
         btnSave = new javax.swing.JButton();
+        btnAssign = new javax.swing.JButton();
+        jSeparator6 = new javax.swing.JToolBar.Separator();
         btnTerminate = new javax.swing.JButton();
         jSeparator4 = new javax.swing.JToolBar.Separator();
         btnPrintBaUnit = new javax.swing.JButton();
@@ -1230,7 +1244,7 @@ public class SLPropertyPanel extends ContentPanel {
         jPanel12 = new javax.swing.JPanel();
         jPanel22 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
-        cbxPropertyManager = new javax.swing.JComboBox();
+        txtPropertyManager = new javax.swing.JTextField();
         jPanel11 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         txtSLLandUse = new javax.swing.JTextField();
@@ -1575,6 +1589,21 @@ public class SLPropertyPanel extends ContentPanel {
         });
         jToolBar5.add(btnSave);
 
+        btnAssign.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/assign.png"))); // NOI18N
+        btnAssign.setText(bundle.getString("SLPropertyPanel.btnAssign.text")); // NOI18N
+        btnAssign.setFocusable(false);
+        btnAssign.setName("btnAssign"); // NOI18N
+        btnAssign.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAssign.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAssignActionPerformed(evt);
+            }
+        });
+        jToolBar5.add(btnAssign);
+
+        jSeparator6.setName("jSeparator6"); // NOI18N
+        jToolBar5.add(jSeparator6);
+
         btnTerminate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/stop.png"))); // NOI18N
         btnTerminate.setText(bundle.getString("SLPropertyPanel.btnTerminate.text")); // NOI18N
         btnTerminate.setFocusable(false);
@@ -1733,12 +1762,10 @@ public class SLPropertyPanel extends ContentPanel {
         jLabel10.setText(bundle.getString("SLPropertyPanel.jLabel10.text")); // NOI18N
         jLabel10.setName("jLabel10"); // NOI18N
 
-        cbxPropertyManager.setName("cbxPropertyManager"); // NOI18N
+        txtPropertyManager.setEnabled(false);
+        txtPropertyManager.setName("txtPropertyManager"); // NOI18N
 
-        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${partySummaryList}");
-        org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, propertyManagerList, eLProperty, cbxPropertyManager);
-        bindingGroup.addBinding(jComboBoxBinding);
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitBean1, org.jdesktop.beansbinding.ELProperty.create("${propertyManager}"), cbxPropertyManager, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitBean1, org.jdesktop.beansbinding.ELProperty.create("${propertyManager.fullName}"), txtPropertyManager, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         org.jdesktop.layout.GroupLayout jPanel22Layout = new org.jdesktop.layout.GroupLayout(jPanel22);
@@ -1746,15 +1773,15 @@ public class SLPropertyPanel extends ContentPanel {
         jPanel22Layout.setHorizontalGroup(
             jPanel22Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jLabel10, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
-            .add(cbxPropertyManager, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .add(txtPropertyManager)
         );
         jPanel22Layout.setVerticalGroup(
             jPanel22Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel22Layout.createSequentialGroup()
                 .add(jLabel10)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(cbxPropertyManager, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(0, 11, Short.MAX_VALUE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(txtPropertyManager, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jPanel12.add(jPanel22);
@@ -2133,7 +2160,7 @@ public class SLPropertyPanel extends ContentPanel {
         tableNotes.setName("tableNotes"); // NOI18N
         tableNotes.getTableHeader().setReorderingAllowed(false);
 
-        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${baUnitFilteredNotationList}");
+        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${baUnitFilteredNotationList}");
         org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitBean1, eLProperty, tableNotes);
         org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${referenceNr}"));
         columnBinding.setColumnName("Reference Nr");
@@ -2471,7 +2498,7 @@ public class SLPropertyPanel extends ContentPanel {
         cbxRightType.setRenderer(new SimpleComboBoxRenderer("getDisplayValue"));
 
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${rrrTypeBeanList}");
-        jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrTypes, eLProperty, cbxRightType);
+        org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrTypes, eLProperty, cbxRightType);
         bindingGroup.addBinding(jComboBoxBinding);
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrTypes, org.jdesktop.beansbinding.ELProperty.create("${selectedRrrType}"), cbxRightType, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
@@ -3238,6 +3265,10 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
         viewDocument();
     }//GEN-LAST:event_menuViewPropertyDocumentActionPerformed
 
+    private void btnAssignActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAssignActionPerformed
+        assignProperty();
+    }//GEN-LAST:event_btnAssignActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel areaPanel;
     private org.sola.clients.beans.administrative.BaUnitAreaBean baUnitAreaBean1;
@@ -3246,6 +3277,7 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private javax.swing.JButton btnAddNotation;
     private javax.swing.JButton btnAddParcel;
     private javax.swing.JButton btnAddParent;
+    private javax.swing.JButton btnAssign;
     private javax.swing.JButton btnChangeRight;
     private javax.swing.JButton btnCreateRight;
     private org.sola.clients.swing.common.buttons.BtnEdit btnEditNotation;
@@ -3267,7 +3299,6 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private javax.swing.JButton btnViewParent;
     private org.sola.clients.swing.common.buttons.BtnView btnViewPropDoc;
     private javax.swing.JButton btnViewRight;
-    private javax.swing.JComboBox cbxPropertyManager;
     private javax.swing.JComboBox cbxRightType;
     private org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel documentsPanel1;
     private javax.swing.Box.Filler filler1;
@@ -3335,6 +3366,7 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JToolBar.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator5;
+    private javax.swing.JToolBar.Separator jSeparator6;
     private javax.swing.JToolBar.Separator jSeparator7;
     private javax.swing.JPopupMenu.Separator jSeparator8;
     private javax.swing.JToolBar.Separator jSeparator9;
@@ -3398,6 +3430,7 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private javax.swing.JTextField txtPropFirstpart;
     private javax.swing.JTextField txtPropLastpart;
     private javax.swing.JTextField txtPropStatus;
+    private javax.swing.JTextField txtPropertyManager;
     private javax.swing.JFormattedTextField txtSLArea;
     private javax.swing.JTextArea txtSLDescription;
     private javax.swing.JTextField txtSLLandUse;

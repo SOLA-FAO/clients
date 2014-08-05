@@ -31,16 +31,20 @@ package org.sola.clients.swing.ui.administrative;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.List;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import org.sola.clients.beans.administrative.BaUnitSearchParamsBean;
 import org.sola.clients.beans.administrative.BaUnitSearchResultBean;
 import org.sola.clients.beans.administrative.BaUnitSearchResultListBean;
+import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.common.controls.CalendarForm;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.ui.renderers.CellDelimitedListRenderer;
+import org.sola.common.RolesConstants;
+import org.sola.common.WindowUtility;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
@@ -48,6 +52,17 @@ import org.sola.common.messaging.MessageUtility;
  * Allows to search BA Units.
  */
 public class BaUnitSearchPanel extends javax.swing.JPanel {
+
+    private class AssignmentPanelListener implements PropertyChangeListener {
+
+        @Override
+        public void propertyChange(PropertyChangeEvent e) {
+            if (e.getPropertyName().equals(PropertyAssignmentDialog.ASSIGNMENT_CHANGED)) {
+                executeSearch(searchParamsSL, lblSLSearchResultCount, searchResultsSL);
+            }
+        }
+    }
+    private AssignmentPanelListener listener = new AssignmentPanelListener();
 
     public static final String OPEN_BAUNIT_SEARCH_RESULT = "openBaUnit";
     public static final String SELECT_BAUNIT_SEARCH_RESULT = "selectBaUnit";
@@ -77,11 +92,9 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
         searchResultsSL.addPropertyChangeListener(new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                if (evt.getPropertyName().equals(BaUnitSearchResultListBean.SELECTED_BAUNIT_SEARCH_RESULT_PROPERTY)) {
-                    btnSLOpen.setEnabled(evt.getNewValue() != null);
-                    btnSLSelect.setEnabled(evt.getNewValue() != null);
-                    menuSLOpen.setEnabled(evt.getNewValue() != null);
-                    menuSLSelect.setEnabled(evt.getNewValue() != null);
+                if (evt.getPropertyName().equals(BaUnitSearchResultListBean.SELECTED_BAUNIT_SEARCH_RESULT_PROPERTY)
+                        || evt.getPropertyName().equals(BaUnitSearchResultListBean.BAUNIT_CHECKED_PROPERTY)) {
+                    customizeSLButtons(evt.getNewValue() != null);
                 }
             }
         });
@@ -94,10 +107,13 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
         btnSLOpen.setEnabled(false);
         btnSelectBaUnit.setEnabled(false);
         btnSLSelect.setEnabled(false);
+        btnSLAssign.setEnabled(false);
         menuOpenBaUnit.setEnabled(false);
         menuSelectBaUnit.setEnabled(false);
         menuSLOpen.setEnabled(false);
         menuSLSelect.setEnabled(false);
+        menuSLAssign.setEnabled(false);
+
         showSelectButtons(false);
         showOpenButtons(true);
     }
@@ -114,6 +130,22 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
         btnSLOpen.setVisible(show);
         menuOpenBaUnit.setVisible(show);
         menuSLOpen.setVisible(show);
+        btnSLAssign.setVisible(show);
+        menuSLAssign.setVisible(show);
+    }
+
+    private void customizeSLButtons(boolean selected) {
+        btnSLOpen.setEnabled(selected);
+        if (searchResultsSL.hasChecked() && SecurityBean.isInRole(RolesConstants.ADMINISTRATIVE_BA_UNIT_SAVE, 
+                RolesConstants.ADMINISTRATIVE_ASSIGN_TEAM)) {
+            btnSLAssign.setEnabled(true);
+        } else {
+            btnSLAssign.setEnabled(false);
+        }
+        btnSLSelect.setEnabled(btnSLOpen.isEnabled());
+        menuSLOpen.setEnabled(btnSLOpen.isEnabled());
+        menuSLSelect.setEnabled(btnSLOpen.isEnabled());
+        menuSLAssign.setEnabled(btnSLAssign.isEnabled());
     }
 
     private void showCalendar(JFormattedTextField dateField) {
@@ -211,6 +243,21 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
         //btnSearchActionPerformed(null);
     }
 
+    /**
+     * Opens property assignment form with selected properties.
+     *
+     * @param propList Selected properties to assign.
+     */
+    private void assignProperty(final List<BaUnitSearchResultBean> propList) {
+        if (propList == null || propList.size() < 1) {
+            return;
+        }
+        PropertyAssignmentDialog form = new PropertyAssignmentDialog(propList, WindowUtility.getTopFrame(), true);
+        WindowUtility.centerForm(form);
+        form.addPropertyChangeListener(listener);
+        form.setVisible(true);
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -227,6 +274,7 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
         popUpSLSearchResults = new javax.swing.JPopupMenu();
         menuSLOpen = new javax.swing.JMenuItem();
         menuSLSelect = new javax.swing.JMenuItem();
+        menuSLAssign = new javax.swing.JMenuItem();
         tabMain = new javax.swing.JTabbedPane();
         tabStateLand = new javax.swing.JPanel();
         jPanel10 = new javax.swing.JPanel();
@@ -269,6 +317,7 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
         jSeparator1 = new javax.swing.JToolBar.Separator();
         btnSLOpen = new org.sola.clients.swing.common.buttons.BtnOpen();
         btnSLSelect = new org.sola.clients.swing.common.buttons.BtnSelect();
+        btnSLAssign = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JToolBar.Separator();
         jLabel15 = new javax.swing.JLabel();
         lblSLSearchResultCount = new javax.swing.JLabel();
@@ -356,6 +405,16 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
             }
         });
         popUpSLSearchResults.add(menuSLSelect);
+
+        menuSLAssign.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/assign.png"))); // NOI18N
+        menuSLAssign.setText(bundle.getString("BaUnitSearchPanel.menuSLAssign.text")); // NOI18N
+        menuSLAssign.setName("menuSLAssign"); // NOI18N
+        menuSLAssign.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuSLAssignActionPerformed(evt);
+            }
+        });
+        popUpSLSearchResults.add(menuSLAssign);
 
         tabMain.setName("tabMain"); // NOI18N
 
@@ -708,6 +767,18 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
         });
         jToolBar2.add(btnSLSelect);
 
+        btnSLAssign.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/assign.png"))); // NOI18N
+        btnSLAssign.setText(bundle.getString("BaUnitSearchPanel.btnSLAssign.text")); // NOI18N
+        btnSLAssign.setFocusable(false);
+        btnSLAssign.setName("btnSLAssign"); // NOI18N
+        btnSLAssign.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSLAssign.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSLAssignActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(btnSLAssign);
+
         jSeparator2.setName("jSeparator2"); // NOI18N
         jToolBar2.add(jSeparator2);
 
@@ -727,12 +798,19 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
 
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${baUnitSearchResults}");
         org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, searchResultsSL, eLProperty, jTableWithDefaultStyles1);
-        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${stateLandName}"));
+        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${checked}"));
+        columnBinding.setColumnName("Checked");
+        columnBinding.setColumnClass(Boolean.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${stateLandName}"));
         columnBinding.setColumnName("State Land Name");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${landUseType.displayValue}"));
         columnBinding.setColumnName("Land Use Type.display Value");
+        columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${propertyManager}"));
+        columnBinding.setColumnName("Property Manager");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${rightholders}"));
@@ -766,19 +844,24 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
         });
         jScrollPane2.setViewportView(jTableWithDefaultStyles1);
         if (jTableWithDefaultStyles1.getColumnModel().getColumnCount() > 0) {
-            jTableWithDefaultStyles1.getColumnModel().getColumn(0).setPreferredWidth(30);
-            jTableWithDefaultStyles1.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("BaUnitSearchPanel.jTableWithDefaultStyles1.columnModel.title0_2")); // NOI18N
+            jTableWithDefaultStyles1.getColumnModel().getColumn(0).setMinWidth(25);
+            jTableWithDefaultStyles1.getColumnModel().getColumn(0).setPreferredWidth(25);
+            jTableWithDefaultStyles1.getColumnModel().getColumn(0).setMaxWidth(25);
+            jTableWithDefaultStyles1.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("BaUnitSearchPanel.jTableWithDefaultStyles1.columnModel.title7_1")); // NOI18N
             jTableWithDefaultStyles1.getColumnModel().getColumn(1).setPreferredWidth(30);
-            jTableWithDefaultStyles1.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("BaUnitSearchPanel.jTableWithDefaultStyles1.columnModel.title6_1")); // NOI18N
-            jTableWithDefaultStyles1.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("BaUnitSearchPanel.jTableWithDefaultStyles1.columnModel.title3_1")); // NOI18N
-            jTableWithDefaultStyles1.getColumnModel().getColumn(2).setCellRenderer(new CellDelimitedListRenderer("::::"));
-            jTableWithDefaultStyles1.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("BaUnitSearchPanel.jTableWithDefaultStyles1.columnModel.title4")); // NOI18N
-            jTableWithDefaultStyles1.getColumnModel().getColumn(3).setCellRenderer(new CellDelimitedListRenderer("::::"));
-            jTableWithDefaultStyles1.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("BaUnitSearchPanel.jTableWithDefaultStyles1.columnModel.title5")); // NOI18N
+            jTableWithDefaultStyles1.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("BaUnitSearchPanel.jTableWithDefaultStyles1.columnModel.title0_2")); // NOI18N
+            jTableWithDefaultStyles1.getColumnModel().getColumn(2).setPreferredWidth(30);
+            jTableWithDefaultStyles1.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("BaUnitSearchPanel.jTableWithDefaultStyles1.columnModel.title6_1")); // NOI18N
+            jTableWithDefaultStyles1.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("BaUnitSearchPanel.jTableWithDefaultStyles1.columnModel.title8")); // NOI18N
+            jTableWithDefaultStyles1.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("BaUnitSearchPanel.jTableWithDefaultStyles1.columnModel.title3_1")); // NOI18N
             jTableWithDefaultStyles1.getColumnModel().getColumn(4).setCellRenderer(new CellDelimitedListRenderer("::::"));
-            jTableWithDefaultStyles1.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("BaUnitSearchPanel.jTableWithDefaultStyles1.columnModel.title6")); // NOI18N
-            jTableWithDefaultStyles1.getColumnModel().getColumn(6).setPreferredWidth(30);
-            jTableWithDefaultStyles1.getColumnModel().getColumn(6).setHeaderValue(bundle.getString("BaUnitSearchPanel.jTableWithDefaultStyles1.columnModel.title7")); // NOI18N
+            jTableWithDefaultStyles1.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("BaUnitSearchPanel.jTableWithDefaultStyles1.columnModel.title4")); // NOI18N
+            jTableWithDefaultStyles1.getColumnModel().getColumn(5).setCellRenderer(new CellDelimitedListRenderer("::::"));
+            jTableWithDefaultStyles1.getColumnModel().getColumn(6).setHeaderValue(bundle.getString("BaUnitSearchPanel.jTableWithDefaultStyles1.columnModel.title5")); // NOI18N
+            jTableWithDefaultStyles1.getColumnModel().getColumn(6).setCellRenderer(new CellDelimitedListRenderer("::::"));
+            jTableWithDefaultStyles1.getColumnModel().getColumn(7).setHeaderValue(bundle.getString("BaUnitSearchPanel.jTableWithDefaultStyles1.columnModel.title6")); // NOI18N
+            jTableWithDefaultStyles1.getColumnModel().getColumn(8).setPreferredWidth(30);
+            jTableWithDefaultStyles1.getColumnModel().getColumn(8).setHeaderValue(bundle.getString("BaUnitSearchPanel.jTableWithDefaultStyles1.columnModel.title7")); // NOI18N
         }
 
         javax.swing.GroupLayout tabStateLandLayout = new javax.swing.GroupLayout(tabStateLand);
@@ -1260,14 +1343,23 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_menuSLOpenActionPerformed
 
     private void menuSLSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSLSelectActionPerformed
-       selectBaUnit(searchResultsSL.getSelectedBaUnitSearchResult());
+        selectBaUnit(searchResultsSL.getSelectedBaUnitSearchResult());
     }//GEN-LAST:event_menuSLSelectActionPerformed
+
+    private void btnSLAssignActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSLAssignActionPerformed
+        assignProperty(searchResultsSL.getChecked(true));
+    }//GEN-LAST:event_btnSLAssignActionPerformed
+
+    private void menuSLAssignActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSLAssignActionPerformed
+        assignProperty(searchResultsSL.getChecked(true));
+    }//GEN-LAST:event_menuSLAssignActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.sola.clients.beans.administrative.BaUnitSearchParamsBean baUnitSearchParams;
     private org.sola.clients.beans.administrative.BaUnitSearchResultListBean baUnitSearchResults;
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnOpenBaUnit;
+    private javax.swing.JButton btnSLAssign;
     private javax.swing.JButton btnSLClear;
     private org.sola.clients.swing.common.buttons.BtnOpen btnSLOpen;
     private org.sola.clients.swing.common.buttons.BtnSearch btnSLSearch;
@@ -1330,6 +1422,7 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
     private javax.swing.JLabel lblSearchResult;
     private javax.swing.JLabel lblSearchResultCount;
     private javax.swing.JMenuItem menuOpenBaUnit;
+    private javax.swing.JMenuItem menuSLAssign;
     private javax.swing.JMenuItem menuSLOpen;
     private javax.swing.JMenuItem menuSLSelect;
     private javax.swing.JMenuItem menuSelectBaUnit;

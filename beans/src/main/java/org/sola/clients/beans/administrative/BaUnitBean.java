@@ -38,6 +38,7 @@ import java.util.List;
 import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.jdesktop.observablecollections.ObservableListListener;
+import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.cadastre.CadastreObjectBean;
 import org.sola.clients.beans.controls.SolaList;
@@ -55,7 +56,9 @@ import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.EntityAction;
+import org.sola.webservices.transferobjects.administrative.BaUnitBasicTO;
 import org.sola.webservices.transferobjects.administrative.BaUnitTO;
+import org.sola.webservices.transferobjects.casemanagement.ApplicationTO;
 import org.sola.webservices.transferobjects.search.SpatialSearchResultTO;
 
 /**
@@ -791,4 +794,48 @@ public class BaUnitBean extends BaUnitSummaryBean {
         collection.add(bean);
         return collection;
     }
+
+    /**
+     * Set the team on a list of property records to the value specified. If
+     * teamId is null, any existing teams are removed from the property.
+     *
+     * @param properties
+     * @param teamId
+     */
+    public static void assignTeam(List<BaUnitSearchResultBean> properties, String teamId) {
+        List<BaUnitBasicTO> props = new ArrayList<BaUnitBasicTO>();
+        for (BaUnitSearchResultBean bean : properties) {
+            BaUnitBasicTO p = new BaUnitBasicTO();
+            p.setId(bean.getId());
+            p.setRowVersion(bean.getRowVersion());
+            props.add(p);
+        }
+        WSManager.getInstance().getAdministrative().assignTeam(props, teamId);
+    }
+
+    /**
+     * Sets the team for this property record.
+     *
+     * @param teamId
+     */
+    public void assignTeam(String teamId) {
+        PartySummaryBean oldValue = this.getPropertyManager();
+        List<BaUnitSearchResultBean> props = new ArrayList<BaUnitSearchResultBean>();
+        BaUnitSearchResultBean p = new BaUnitSearchResultBean();
+        p.setId(this.getId());
+        p.setRowVersion(this.getRowVersion());
+        props.add(p);
+        BaUnitBean.assignTeam(props, teamId);
+        reload();
+        propertySupport.firePropertyChange(PROPERTY_MANAGER_PROPERTY, oldValue, this.getPropertyManager());
+    }
+
+    /**
+     * Reloads the details of the property from the database;
+     */
+    public void reload() {
+        BaUnitTO baUnit = WSManager.getInstance().getAdministrative().getBaUnitById(this.getId());
+        TypeConverters.TransferObjectToBean(baUnit, BaUnitBean.class, this);
+    }
+
 }

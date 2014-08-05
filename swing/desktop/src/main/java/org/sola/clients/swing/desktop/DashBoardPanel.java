@@ -219,7 +219,7 @@ public class DashBoardPanel extends ContentPanel {
                                 new Object[]{app.getNr()});
                         break;
                     }
-                    ApplicationBean.assignUser(app, null);
+                    ApplicationBean.assignUser(app, null, null);
                 }
                 refreshApplications();
             }
