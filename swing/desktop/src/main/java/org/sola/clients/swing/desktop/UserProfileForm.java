@@ -224,8 +224,18 @@ public class UserProfileForm extends ContentPanel {
                 md.update(password.getBytes("UTF-8"));
                 byte[] hash = md.digest();
 
-                BigInteger bigInt = new BigInteger(1, hash);
-                hashString = bigInt.toString(16);
+                // Ticket #410 - Fix password encyption. Ensure 0 is prepended
+                // if the hex length is == 1 
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < hash.length; i++) {
+                    String hex = Integer.toHexString(0xff & hash[i]);
+                    if (hex.length() == 1) {
+                        sb.append('0');
+                    }
+                    sb.append(hex);
+                }
+                
+                hashString = sb.toString();
 
             } catch (Exception e) {
                 e.printStackTrace(System.err);
