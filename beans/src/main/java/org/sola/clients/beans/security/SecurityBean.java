@@ -1,36 +1,41 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.beans.security;
 
+import java.security.MessageDigest;
 import java.util.HashMap;
 import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.clients.beans.converters.TypeConverters;
+import org.sola.common.RolesConstants;
 import org.sola.common.SOLAException;
+import org.sola.common.StringUtility;
 import org.sola.common.logging.LogUtility;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -176,6 +181,82 @@ public class SecurityBean extends AbstractBindingBean {
             if (showMessage) {
                 MessageUtility.displayMessage(ClientMessage.SECURITY_PASSWORD_SET_BY_ADMIN);
             }
+        }
+        return result;
+    }
+
+    /**
+     * Returns SHA-256 hash for the password.
+     *
+     * @param password Password string to hash.
+     */
+    public static String getPasswordHash(String password) {
+        String hashString = null;
+
+        if (password != null && password.length() > 0) {
+            try {
+                MessageDigest md = MessageDigest.getInstance("SHA-256");
+                md.update(password.getBytes("UTF-8"));
+                byte[] hash = md.digest();
+
+                // Ticket #410 - Fix password encyption. Ensure 0 is prepended
+                // if the hex length is == 1 
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < hash.length; i++) {
+                    String hex = Integer.toHexString(0xff & hash[i]);
+                    if (hex.length() == 1) {
+                        sb.append('0');
+                    }
+                    sb.append(hex);
+                }
+
+                hashString = sb.toString();
+
+            } catch (Exception e) {
+                e.printStackTrace(System.err);
+                return null;
+            }
+        }
+
+        return hashString;
+    }
+
+    /**
+     * Checks the Security Classification to ensure the user has the appropriate
+     * clearance to view the record details. The security clearance assigned to
+     * a user will grant them access to all records that have the same or lower
+     * security classification. Where a specialty classification is being used,
+     * the user must have that clearance assigned (as a security role) or have a
+     * clearance level of Top Secret.
+     *
+     * @param classificationCode The security classification to check
+     * @return true user has the appropriate security clearance to view the
+     * entity, false otherwise.
+     */
+    public static boolean hasSecurityClearance(String classificationCode) {
+        boolean result;
+        if (StringUtility.isEmpty(classificationCode)
+                || RolesConstants.CLASSIFICATION_UNRESTRICTED.equals(classificationCode)) {
+            result = true;
+        } else if (RolesConstants.CLASSIFICATION_RESTRICTED.equals(classificationCode)) {
+            result = isInRole(RolesConstants.CLASSIFICATION_RESTRICTED,
+                    RolesConstants.CLASSIFICATION_CONFIDENTIAL,
+                    RolesConstants.CLASSIFICATION_SECRET,
+                    RolesConstants.CLASSIFICATION_TOPSECRET);
+        } else if (RolesConstants.CLASSIFICATION_CONFIDENTIAL.equals(classificationCode)) {
+            result = isInRole(RolesConstants.CLASSIFICATION_CONFIDENTIAL,
+                    RolesConstants.CLASSIFICATION_SECRET,
+                    RolesConstants.CLASSIFICATION_TOPSECRET);
+        } else if (RolesConstants.CLASSIFICATION_SECRET.equals(classificationCode)) {
+            result = isInRole(RolesConstants.CLASSIFICATION_SECRET,
+                    RolesConstants.CLASSIFICATION_TOPSECRET);
+        } else if (RolesConstants.CLASSIFICATION_TOPSECRET.equals(classificationCode)) {
+            result = isInRole(RolesConstants.CLASSIFICATION_TOPSECRET);
+        } else {
+            // Specialty Classification so allow users with that clearance or 
+            // TOP SECRET to view it. 
+            result = isInRole(classificationCode,
+                    RolesConstants.CLASSIFICATION_TOPSECRET);
         }
         return result;
     }

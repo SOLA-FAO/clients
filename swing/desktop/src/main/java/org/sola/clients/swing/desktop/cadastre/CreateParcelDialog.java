@@ -43,11 +43,11 @@ public class CreateParcelDialog extends javax.swing.JDialog {
 
     public final static String SELECTED_PARCEL = "selectedParcel";
     private CadastreObjectBean cadastreObject;
-    
+
     private ParcelPanel createParcelPanel(){
         return new ParcelPanel(cadastreObject);
     }
-            
+
     /** Form constructor. */
     public CreateParcelDialog(CadastreObjectBean cadastreObject, java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -109,15 +109,15 @@ public class CreateParcelDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
 private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
-    
+
     String parcelName = parcelPanel.getCadastreObject().getNameFirstpart()+' ' +parcelPanel.getCadastreObject().getNameLastpart();
     final List<CadastreObjectBean> searchResult = new LinkedList<CadastreObjectBean>();
-     TypeConverters.TransferObjectListToBeanList(
-                        WSManager.getInstance().getCadastreService().getCadastreObjectByAllParts(parcelName),
-                        CadastreObjectBean.class, (List) searchResult);
+    TypeConverters.TransferObjectListToBeanList(
+            WSManager.getInstance().getCadastreService().getCadastreObjectByAllParts(parcelName),
+            CadastreObjectBean.class, (List) searchResult);
     if (searchResult.size() > 0) {
-      MessageUtility.displayMessage(ClientMessage.BAUNIT_PARCEL_EXISTS);
-      return;
+        MessageUtility.displayMessage(ClientMessage.BAUNIT_PARCEL_EXISTS);
+        return;
     }
     if(parcelPanel.getCadastreObject().validate(true).size()<=0){
         parcelPanel.getCadastreObject().setStatusCode(StatusConstants.PENDING);

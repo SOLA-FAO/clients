@@ -34,8 +34,13 @@ import java.util.List;
 import org.sola.clients.beans.administrative.BaUnitBean;
 import org.sola.clients.beans.cadastre.CadastreObjectBean;
 import org.sola.clients.beans.converters.TypeConverters;
+import org.sola.clients.beans.security.SecurityBean;
+import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.cadastre.ParcelPanel;
+import org.sola.clients.swing.ui.security.SecurityClassificationDialog;
+import org.sola.common.RolesConstants;
+import org.sola.common.WindowUtility;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 import org.sola.services.boundary.wsclients.WSManager;
@@ -46,7 +51,7 @@ import org.sola.services.boundary.wsclients.WSManager;
  * @author soladev
  */
 public class SLParcelPanel extends ContentPanel {
-
+    
     public final static String SAVE_PARCEL = "saveParcel";
     private CadastreObjectBean cadastreObject;
     private boolean readOnly = true;
@@ -62,9 +67,9 @@ public class SLParcelPanel extends ContentPanel {
         initComponents();
         customizeForm();
     }
-
+    
     private void customizeForm() {
-
+        
         java.util.ResourceBundle resourceBundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/cadastre/Bundle");
         if (cadastreObject == null) {
             headerPanel1.setTitleText(String.format(
@@ -78,12 +83,14 @@ public class SLParcelPanel extends ContentPanel {
                     property.getDisplayName(), cadastreObject.toString()));
         }
         btnSave.setEnabled(!readOnly);
+        btnSecurity.setVisible(!readOnly 
+                && SecurityBean.isInRole(RolesConstants.CLASSIFICATION_CHANGE_CLASS));
     }
-
+    
     private ParcelPanel createParcelPanel() {
         return new ParcelPanel(cadastreObject, readOnly);
     }
-
+    
     private void saveParcel() {
         String parcelId = parcelPanel.getCadastreObject().getId();
         String parcelName = parcelPanel.getCadastreObject().getNameFirstpart() + ' ' + parcelPanel.getCadastreObject().getNameLastpart();
@@ -103,6 +110,13 @@ public class SLParcelPanel extends ContentPanel {
             close();
         }
     }
+    
+    private void configureSecurity() {
+        SecurityClassificationDialog form = new SecurityClassificationDialog(parcelPanel.getCadastreObject(),
+                MainForm.getInstance(), true);
+        WindowUtility.centerForm(form);
+        form.setVisible(true);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -117,6 +131,7 @@ public class SLParcelPanel extends ContentPanel {
         parcelPanel = createParcelPanel();
         jToolBar1 = new javax.swing.JToolBar();
         btnSave = new org.sola.clients.swing.common.buttons.BtnSave();
+        btnSecurity = new javax.swing.JButton();
 
         setHeaderPanel(headerPanel1);
 
@@ -132,6 +147,17 @@ public class SLParcelPanel extends ContentPanel {
             }
         });
         jToolBar1.add(btnSave);
+
+        btnSecurity.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/lock.png"))); // NOI18N
+        btnSecurity.setText(bundle.getString("SLParcelPanel.btnSecurity.text")); // NOI18N
+        btnSecurity.setFocusable(false);
+        btnSecurity.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSecurity.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSecurityActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnSecurity);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -160,9 +186,14 @@ public class SLParcelPanel extends ContentPanel {
         saveParcel();
     }//GEN-LAST:event_btnSaveActionPerformed
 
+    private void btnSecurityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSecurityActionPerformed
+        configureSecurity();
+    }//GEN-LAST:event_btnSecurityActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.sola.clients.swing.common.buttons.BtnSave btnSave;
+    private javax.swing.JButton btnSecurity;
     private org.sola.clients.swing.ui.HeaderPanel headerPanel1;
     private javax.swing.JToolBar jToolBar1;
     private org.sola.clients.swing.ui.cadastre.ParcelPanel parcelPanel;

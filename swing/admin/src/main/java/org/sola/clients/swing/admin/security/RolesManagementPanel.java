@@ -154,12 +154,12 @@ public class RolesManagementPanel extends ContentPanel {
 
         org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${roleListFiltered}");
         org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, roleListBean, eLProperty, tableRoles);
-        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${displayValue}"));
-        columnBinding.setColumnName("Display Value");
+        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${translatedDisplayValue}"));
+        columnBinding.setColumnName("Translated Display Value");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${description}"));
-        columnBinding.setColumnName("Description");
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${translatedDescription}"));
+        columnBinding.setColumnName("Translated Description");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${status}"));
@@ -171,13 +171,13 @@ public class RolesManagementPanel extends ContentPanel {
         bindingGroup.addBinding(binding);
 
         jScrollPane1.setViewportView(tableRoles);
-        tableRoles.getColumnModel().getColumn(0).setPreferredWidth(160);
-        tableRoles.getColumnModel().getColumn(0).setMaxWidth(500);
-        tableRoles.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("RolesManagementPanel.tableRoles.columnModel.title0")); // NOI18N
-        tableRoles.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("RolesManagementPanel.tableRoles.columnModel.title1")); // NOI18N
-        tableRoles.getColumnModel().getColumn(1).setCellRenderer(new TableCellTextAreaRenderer());
-        tableRoles.getColumnModel().getColumn(2).setMaxWidth(90);
-        tableRoles.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("RolesManagementPanel.tableRoles.columnModel.title2")); // NOI18N
+        if (tableRoles.getColumnModel().getColumnCount() > 0) {
+            tableRoles.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("RolesManagementPanel.tableRoles.columnModel.title0")); // NOI18N
+            tableRoles.getColumnModel().getColumn(1).setPreferredWidth(400);
+            tableRoles.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("RolesManagementPanel.tableRoles.columnModel.title1")); // NOI18N
+            tableRoles.getColumnModel().getColumn(1).setCellRenderer(new TableCellTextAreaRenderer());
+            tableRoles.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("RolesManagementPanel.tableRoles.columnModel.title2")); // NOI18N
+        }
 
         toolBarRoles.setFloatable(false);
         toolBarRoles.setRollover(true);
@@ -226,8 +226,8 @@ public class RolesManagementPanel extends ContentPanel {
         pnlRoles.setLayout(pnlRolesLayout);
         pnlRolesLayout.setHorizontalGroup(
             pnlRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(toolBarRoles, javax.swing.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE)
+            .addComponent(toolBarRoles, javax.swing.GroupLayout.DEFAULT_SIZE, 632, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 632, Short.MAX_VALUE)
         );
         pnlRolesLayout.setVerticalGroup(
             pnlRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -241,7 +241,7 @@ public class RolesManagementPanel extends ContentPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlHeader, javax.swing.GroupLayout.DEFAULT_SIZE, 424, Short.MAX_VALUE)
+            .addComponent(pnlHeader, javax.swing.GroupLayout.DEFAULT_SIZE, 652, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addGap(10, 10, 10)
                 .addComponent(pnlRoles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)

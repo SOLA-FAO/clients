@@ -33,11 +33,15 @@ import org.sola.clients.beans.administrative.BaUnitBean;
 import org.sola.clients.beans.administrative.BaUnitNotationBean;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.referencedata.NotationStatusTypeBean;
+import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.swing.common.utils.FormattersFactory;
 import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel;
 import org.sola.clients.swing.ui.ContentPanel;
+import org.sola.clients.swing.ui.security.SecurityClassificationDialog;
 import org.sola.common.DateUtility;
+import org.sola.common.RolesConstants;
+import org.sola.common.WindowUtility;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
@@ -115,6 +119,10 @@ public class NotationPanel extends ContentPanel {
         cbxStatus.setEnabled(enabled);
         txtDate.setEnabled(false);
         txtUser.setEnabled(false);
+
+        // Configure Security button
+        btnSecurity.setVisible(btnSave1.isEnabled()
+                && SecurityBean.isInRole(RolesConstants.CLASSIFICATION_CHANGE_CLASS));
     }
 
     private boolean saveNotation() {
@@ -140,6 +148,13 @@ public class NotationPanel extends ContentPanel {
         return true;
     }
 
+    private void configureSecurity() {
+        SecurityClassificationDialog form = new SecurityClassificationDialog(notationBean,
+                MainForm.getInstance(), true);
+        WindowUtility.centerForm(form);
+        form.setVisible(true);
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -150,6 +165,7 @@ public class NotationPanel extends ContentPanel {
         headerPanel1 = new org.sola.clients.swing.ui.HeaderPanel();
         jToolBar1 = new javax.swing.JToolBar();
         btnSave1 = new org.sola.clients.swing.common.buttons.BtnSave();
+        btnSecurity = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
@@ -187,6 +203,17 @@ public class NotationPanel extends ContentPanel {
             }
         });
         jToolBar1.add(btnSave1);
+
+        btnSecurity.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/lock.png"))); // NOI18N
+        btnSecurity.setText(bundle.getString("NotationPanel.btnSecurity.text")); // NOI18N
+        btnSecurity.setFocusable(false);
+        btnSecurity.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSecurity.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSecurityActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnSecurity);
 
         jPanel4.setLayout(new java.awt.GridLayout(1, 4, 15, 0));
 
@@ -371,9 +398,14 @@ public class NotationPanel extends ContentPanel {
         saveNotation();
     }//GEN-LAST:event_btnSave1ActionPerformed
 
+    private void btnSecurityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSecurityActionPerformed
+        configureSecurity();
+    }//GEN-LAST:event_btnSecurityActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.sola.clients.swing.common.buttons.BtnSave btnSave1;
+    private javax.swing.JButton btnSecurity;
     private javax.swing.JComboBox cbxStatus;
     private org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel documentsPanel;
     private org.sola.clients.swing.ui.GroupPanel groupPanel1;

@@ -152,31 +152,34 @@ public class GroupPanel extends javax.swing.JPanel {
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
         tableRoles.setName("tableRoles"); // NOI18N
+        tableRoles.getTableHeader().setReorderingAllowed(false);
 
         org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${groupRoleHelperList.groupRoleHelpers}");
         org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, tableRoles);
         org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${inGroup}"));
         columnBinding.setColumnName("In Group");
         columnBinding.setColumnClass(Boolean.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${role.displayValue}"));
-        columnBinding.setColumnName("Role.display Value");
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${role.translatedDisplayValue}"));
+        columnBinding.setColumnName("Role.translated Display Value");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${role.description}"));
-        columnBinding.setColumnName("Role.description");
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${role.translatedDescription}"));
+        columnBinding.setColumnName("Role.translated Description");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();
         jScrollPane1.setViewportView(tableRoles);
-        tableRoles.getColumnModel().getColumn(0).setPreferredWidth(40);
-        tableRoles.getColumnModel().getColumn(0).setMaxWidth(40);
-        tableRoles.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("GroupPanel.tableRoles.columnModel.title0_1")); // NOI18N
-        tableRoles.getColumnModel().getColumn(1).setPreferredWidth(160);
-        tableRoles.getColumnModel().getColumn(1).setMaxWidth(160);
-        tableRoles.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("GroupPanel.tableRoles.columnModel.title1_1")); // NOI18N
-        tableRoles.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("GroupPanel.tableRoles.columnModel.title2_1")); // NOI18N
-        tableRoles.getColumnModel().getColumn(2).setCellRenderer(new TableCellTextAreaRenderer());
+        if (tableRoles.getColumnModel().getColumnCount() > 0) {
+            tableRoles.getColumnModel().getColumn(0).setPreferredWidth(40);
+            tableRoles.getColumnModel().getColumn(0).setMaxWidth(40);
+            tableRoles.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("GroupPanel.tableRoles.columnModel.title0_1")); // NOI18N
+            tableRoles.getColumnModel().getColumn(1).setPreferredWidth(200);
+            tableRoles.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("GroupPanel.tableRoles.columnModel.title1_1")); // NOI18N
+            tableRoles.getColumnModel().getColumn(2).setPreferredWidth(500);
+            tableRoles.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("GroupPanel.tableRoles.columnModel.title2_1")); // NOI18N
+            tableRoles.getColumnModel().getColumn(2).setCellRenderer(new TableCellTextAreaRenderer());
+        }
 
         jLabel3.setText(bundle.getString("GroupPanel.jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N

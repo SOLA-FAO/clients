@@ -31,13 +31,10 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.beans.security.UserBean;
-import org.sola.clients.swing.common.config.ConfigurationManager;
 import org.sola.clients.swing.ui.ContentPanel;
-import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.clients.swing.ui.security.UserPasswordPanel;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
-import org.sola.services.boundary.wsclients.WSManager;
 
 /**
  * Holds {@link UserPasswordPanel} instance.
@@ -209,32 +206,6 @@ public class UserProfileForm extends ContentPanel {
             user.save();
             MessageUtility.displayMessage(ClientMessage.ADMIN_USER_SAVED);
     }//GEN-LAST:event_btnSaveUserDetailsActionPerformed
-
-    /**
-     * Returns SHA-256 hash for the password.
-     *
-     * @param password Password string to hash.
-     */
-    private String getPasswordHash(String password) {
-        String hashString = null;
-
-        if (password != null && password.length() > 0) {
-            try {
-                MessageDigest md = MessageDigest.getInstance("SHA-256");
-                md.update(password.getBytes("UTF-8"));
-                byte[] hash = md.digest();
-
-                BigInteger bigInt = new BigInteger(1, hash);
-                hashString = bigInt.toString(16);
-
-            } catch (Exception e) {
-                e.printStackTrace(System.err);
-                return null;
-            }
-        }
-
-        return hashString;
-    }
     
     
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
@@ -248,7 +219,7 @@ public class UserProfileForm extends ContentPanel {
         }
         
 //        Verify that the old password is correct encrypting it and matching it with the one retrieved by the db
-        oldPassword = getPasswordHash(oldPassword); 
+        oldPassword = SecurityBean.getPasswordHash(oldPassword); 
         String dbPassword =  new String(SecurityBean.getCurrentUser().getPassword().toCharArray()); 
         if (!oldPassword.equals(dbPassword)) {
           MessageUtility.displayMessage(ClientMessage.CHECK_CURRENTPSSWD_NOTMATCH);

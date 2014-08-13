@@ -82,7 +82,7 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="pnlHeader" alignment="0" pref="424" max="32767" attributes="0"/>
+          <Component id="pnlHeader" alignment="0" pref="652" max="32767" attributes="0"/>
           <Group type="102" attributes="0">
               <EmptySpace min="10" pref="10" max="10" attributes="0"/>
               <Component id="pnlRoles" max="32767" attributes="0"/>
@@ -118,8 +118,8 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="toolBarRoles" alignment="0" pref="404" max="32767" attributes="0"/>
-              <Component id="jScrollPane1" alignment="0" pref="404" max="32767" attributes="0"/>
+              <Component id="toolBarRoles" alignment="0" pref="632" max="32767" attributes="0"/>
+              <Component id="jScrollPane1" alignment="0" pref="632" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -147,14 +147,14 @@
               <Properties>
                 <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                   <TableColumnModel selectionModel="0">
-                    <Column maxWidth="500" minWidth="-1" prefWidth="160" resizable="true">
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                       <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                         <ResourceString bundle="org/sola/clients/swing/admin/security/Bundle.properties" key="RolesManagementPanel.tableRoles.columnModel.title0" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                       </Title>
                       <Editor/>
                       <Renderer/>
                     </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="400" resizable="true">
                       <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                         <ResourceString bundle="org/sola/clients/swing/admin/security/Bundle.properties" key="RolesManagementPanel.tableRoles.columnModel.title1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                       </Title>
@@ -163,7 +163,7 @@
                         <Connection code="new TableCellTextAreaRenderer()" type="code"/>
                       </Renderer>
                     </Column>
-                    <Column maxWidth="90" minWidth="-1" prefWidth="-1" resizable="true">
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                       <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                         <ResourceString bundle="org/sola/clients/swing/admin/security/Bundle.properties" key="RolesManagementPanel.tableRoles.columnModel.title2" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                       </Title>
@@ -182,11 +182,11 @@
               </Properties>
               <BindingProperties>
                 <BindingProperty name="elements" source="roleListBean" sourcePath="${roleListFiltered}" target="tableRoles" targetPath="elements" updateStrategy="0" immediately="true">
-                  <Subbinding sourcePath="${displayValue}">
+                  <Subbinding sourcePath="${translatedDisplayValue}">
                     <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
                     <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
                   </Subbinding>
-                  <Subbinding sourcePath="${description}">
+                  <Subbinding sourcePath="${translatedDescription}">
                     <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
                     <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
                   </Subbinding>

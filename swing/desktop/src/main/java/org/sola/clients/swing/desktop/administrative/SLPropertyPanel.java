@@ -64,6 +64,7 @@ import org.sola.clients.swing.ui.PanelLauncher;
 import org.sola.clients.swing.ui.cadastre.CadastreObjectsDialog;
 import org.sola.clients.swing.ui.renderers.*;
 import org.sola.clients.swing.ui.reports.ReportViewerForm;
+import org.sola.clients.swing.ui.security.SecurityClassificationDialog;
 import org.sola.clients.swing.ui.source.DocumentsPanel;
 import org.sola.common.RolesConstants;
 import org.sola.common.WindowUtility;
@@ -349,8 +350,11 @@ public class SLPropertyPanel extends ContentPanel {
         txtSLDescription.setEnabled(editProperty);
         txtSLArea.setEnabled(editProperty);
 
-        btnAssign.setEnabled(SecurityBean.isInRole(RolesConstants.ADMINISTRATIVE_BA_UNIT_SAVE, 
+        btnAssign.setEnabled(SecurityBean.isInRole(RolesConstants.ADMINISTRATIVE_BA_UNIT_SAVE,
                 RolesConstants.ADMINISTRATIVE_ASSIGN_TEAM));
+
+        // Make security button invisible unless the user has permission to set the classification level.
+        btnSecurity.setVisible(editProperty && SecurityBean.isInRole(RolesConstants.CLASSIFICATION_CHANGE_CLASS));
 
         if (!SecurityBean.isInRole(RolesConstants.GIS_VIEW_MAP)) {
             // User does not have rights to view the map
@@ -1177,6 +1181,12 @@ public class SLPropertyPanel extends ContentPanel {
         WindowUtility.centerForm(form);
         form.setVisible(true);
     }
+    
+    private void configureSecurity() {
+        SecurityClassificationDialog form = new SecurityClassificationDialog(baUnitBean1, MainForm.getInstance(), true);
+        WindowUtility.centerForm(form);
+        form.setVisible(true);
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -1221,6 +1231,7 @@ public class SLPropertyPanel extends ContentPanel {
         jToolBar5 = new javax.swing.JToolBar();
         btnSave = new javax.swing.JButton();
         btnAssign = new javax.swing.JButton();
+        btnSecurity = new javax.swing.JButton();
         jSeparator6 = new javax.swing.JToolBar.Separator();
         btnTerminate = new javax.swing.JButton();
         jSeparator4 = new javax.swing.JToolBar.Separator();
@@ -1600,6 +1611,18 @@ public class SLPropertyPanel extends ContentPanel {
             }
         });
         jToolBar5.add(btnAssign);
+
+        btnSecurity.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/lock.png"))); // NOI18N
+        btnSecurity.setText(bundle.getString("SLPropertyPanel.btnSecurity.text")); // NOI18N
+        btnSecurity.setFocusable(false);
+        btnSecurity.setName("btnSecurity"); // NOI18N
+        btnSecurity.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSecurity.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSecurityActionPerformed(evt);
+            }
+        });
+        jToolBar5.add(btnSecurity);
 
         jSeparator6.setName("jSeparator6"); // NOI18N
         jToolBar5.add(jSeparator6);
@@ -3269,6 +3292,10 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
         assignProperty();
     }//GEN-LAST:event_btnAssignActionPerformed
 
+    private void btnSecurityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSecurityActionPerformed
+       configureSecurity();
+    }//GEN-LAST:event_btnSecurityActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel areaPanel;
     private org.sola.clients.beans.administrative.BaUnitAreaBean baUnitAreaBean1;
@@ -3291,6 +3318,7 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private javax.swing.JButton btnRemoveRight;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSearchParcel;
+    private javax.swing.JButton btnSecurity;
     private javax.swing.JButton btnTerminate;
     private javax.swing.JButton btnViewChild;
     private javax.swing.JButton btnViewHistoricRight;

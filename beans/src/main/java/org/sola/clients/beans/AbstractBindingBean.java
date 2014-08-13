@@ -64,6 +64,14 @@ public abstract class AbstractBindingBean implements Serializable {
     // a getter/setter also modifies a list field on the object. 
     // e.g. See CadastreObjectBean.officialAreaSize
     private boolean copyInProgress = false;
+    /**
+     * The security classification assigned to the bean
+     */
+    private String classificationCode;
+    /**
+     * The redact code assigned to the bean.
+     */
+    private String redactCode;
 
     public AbstractBindingBean() {
         propertySupport = new PropertyChangeSupport(this);
@@ -77,6 +85,22 @@ public abstract class AbstractBindingBean implements Serializable {
         EntityAction oldValue = this.entityAction;
         this.entityAction = entityAction;
         propertySupport.firePropertyChange(ENTITY_ACTION_PROPERTY, oldValue, entityAction);
+    }
+
+    public String getClassificationCode() {
+        return classificationCode;
+    }
+
+    public void setClassificationCode(String classificationCode) {
+        this.classificationCode = classificationCode;
+    }
+
+    public String getRedactCode() {
+        return redactCode;
+    }
+
+    public void setRedactCode(String redactCode) {
+        this.redactCode = redactCode;
     }
 
     /**
@@ -177,13 +201,14 @@ public abstract class AbstractBindingBean implements Serializable {
             }
         }
     }
-    
+
     /**
-     * Can be used to identify when an object is being copied. 
-     * @return 
+     * Can be used to identify when an object is being copied.
+     *
+     * @return
      */
     public boolean isCopyInProgress() {
-        return copyInProgress; 
+        return copyInProgress;
     }
 
     /**
