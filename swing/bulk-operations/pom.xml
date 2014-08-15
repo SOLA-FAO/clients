@@ -22,6 +22,14 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <repositories>
+        <repository>
+            <id>sourceforge</id>
+            <name>Sourceforge Repository</name>
+            <url>http://logicaldoc.sourceforge.net/maven/</url>
+        </repository>
+      
+    </repositories>
 
     <pluginRepositories>
         <pluginRepository>
@@ -82,6 +90,11 @@
             <artifactId>reflections</artifactId>
             <version>0.9.8</version>
         </dependency>
+        <dependency>
+            <groupId>org.kabeja</groupId>
+            <artifactId>kabeja</artifactId>
+            <version>0.4</version>            
+        </dependency>
     </dependencies>
     <profiles>
         <profile>
@@ -92,7 +105,7 @@
             <build>
                 <plugins>           
                     <plugin>
-                            <!-- Copies all of the external sola-external dependencies to the lib directory --> 
+                        <!-- Copies all of the external sola-external dependencies to the lib directory --> 
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-dependency-plugin</artifactId>
                         <version>2.3</version>
@@ -115,8 +128,8 @@
                         </executions>
                     </plugin>
                     <plugin>
-                <!-- Configures the manifest for the sola-external.jar including a 
-                classpath entry for all lib jars. -->
+                        <!-- Configures the manifest for the sola-external.jar including a 
+                        classpath entry for all lib jars. -->
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-jar-plugin</artifactId>
                         <version>2.3.1</version>
