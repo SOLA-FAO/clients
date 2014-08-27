@@ -75,6 +75,7 @@ public class PartySummaryBean extends AbstractIdBean {
     public PartySummaryBean() {
         super();
         typeBean = new PartyTypeBean();
+        setTypeCode(PartyTypeBean.CODE_NATURAL_PERSON);
     }
 
     public String getExtId() {

@@ -1,28 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.desktop;
@@ -41,6 +43,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
 import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.clients.beans.application.ApplicationBean;
+import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.beans.source.PowerOfAttorneyBean;
 import org.sola.clients.beans.system.LanguageBean;
@@ -53,8 +56,8 @@ import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.common.utils.LocalizationTools;
 import org.sola.clients.swing.desktop.administrative.BaUnitSearchPanel;
 import org.sola.clients.swing.desktop.administrative.RightsExportForm;
-import org.sola.clients.swing.desktop.application.ApplicationPanel;
 import org.sola.clients.swing.desktop.application.ApplicationSearchPanel;
+import org.sola.clients.swing.desktop.application.SLJobPanel;
 import org.sola.clients.swing.desktop.cadastre.MapPanelForm;
 import org.sola.clients.swing.desktop.cadastre.MapPublicDisplayPanel;
 import org.sola.clients.swing.desktop.cadastre.MapSpatialUnitEditPanel;
@@ -73,6 +76,7 @@ import org.sola.common.help.HelpUtility;
 import org.sola.common.logging.LogUtility;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
+import org.sola.services.boundary.wsclients.WSManager;
 
 /**
  * Main form of the application.
@@ -223,6 +227,7 @@ public class MainForm extends javax.swing.JFrame {
         menuShowMap.setEnabled(btnOpenMap.isEnabled());
         menuLodgementReport.setEnabled(SecurityBean.isInRole(RolesConstants.REPORTS_VIEW));
         menuDocumentSearch.setEnabled(btnDocumentSearch.isEnabled());
+        menuFlushCache.setVisible(SecurityBean.isInRole(RolesConstants.ADMIN_MANAGE_REFDATA));
 
         if (SecurityBean.isPasswordChangeReqd(false)) {
             // Load the user profile page
@@ -441,7 +446,7 @@ public class MainForm extends javax.swing.JFrame {
         };
         TaskManager.getInstance().runTask(t);
     }
-    
+
     private void openSearchParties() {
         SolaTask t = new SolaTask<Void, Void>() {
 
@@ -606,7 +611,7 @@ public class MainForm extends javax.swing.JFrame {
             @Override
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_APP));
-                ApplicationPanel form = new ApplicationPanel(app);
+                SLJobPanel form = new SLJobPanel(app);
                 getMainContentPanel().addPanel(form, MainContentPanel.CARD_APPLICATION, true);
                 return null;
             }
@@ -625,7 +630,7 @@ public class MainForm extends javax.swing.JFrame {
             @Override
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_APP));
-                ApplicationPanel form = new ApplicationPanel(id);
+                SLJobPanel form = new SLJobPanel(id);
                 getMainContentPanel().addPanel(form, MainContentPanel.CARD_APPLICATION, true);
                 return null;
             }
@@ -642,7 +647,7 @@ public class MainForm extends javax.swing.JFrame {
             @Override
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_APPNEW));
-                ApplicationPanel applicationPanel = new ApplicationPanel();
+                SLJobPanel applicationPanel = new SLJobPanel();
                 getMainContentPanel().addPanel(applicationPanel, MainContentPanel.CARD_APPLICATION, true);
                 return null;
             }
@@ -756,7 +761,7 @@ public class MainForm extends javax.swing.JFrame {
             menuLang.addActionListener(new java.awt.event.ActionListener() {
 
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    ((JCheckBoxMenuItem)evt.getSource()).setSelected(true);
+                    ((JCheckBoxMenuItem) evt.getSource()).setSelected(true);
                     selectLanguage(localeCode);
                 }
             });
@@ -765,10 +770,10 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     private void selectLanguage(String locale) {
-        if(LocalizationManager.getLocaleCode().equals(locale)){
+        if (LocalizationManager.getLocaleCode().equals(locale)) {
             return;
         }
-        
+
         if (MessageUtility.displayMessage(ClientMessage.CONFIRM_CHANGE_LANGUAGE) == MessageUtility.BUTTON_ONE) {
             LocalizationManager.setLanguage(LocalizationManager.getLangCode(locale),
                     LocalizationManager.getCountryCode(locale));
@@ -800,6 +805,8 @@ public class MainForm extends javax.swing.JFrame {
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem menuExitItem = new javax.swing.JMenuItem();
+        menuFlushCache = new javax.swing.JMenuItem();
+        menuSpatialEditMap = new javax.swing.JMenuItem();
         menuView = new javax.swing.JMenu();
         menuLanguage = new javax.swing.JMenu();
         menuLogLevel = new javax.swing.JMenu();
@@ -970,6 +977,22 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         fileMenu.add(menuExitItem);
+
+        menuFlushCache.setText(bundle.getString("MainForm.menuFlushCache.text")); // NOI18N
+        menuFlushCache.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuFlushCacheActionPerformed(evt);
+            }
+        });
+        fileMenu.add(menuFlushCache);
+
+        menuSpatialEditMap.setText(bundle.getString("MainForm.menuSpatialEditMap.text")); // NOI18N
+        menuSpatialEditMap.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuSpatialEditMapActionPerformed(evt);
+            }
+        });
+        fileMenu.add(menuSpatialEditMap);
 
         menuBar.add(fileMenu);
 
@@ -1190,12 +1213,12 @@ public class MainForm extends javax.swing.JFrame {
     private void btnManagePartiesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManagePartiesActionPerformed
         openSearchParties();
     }//GEN-LAST:event_btnManagePartiesActionPerformed
-    
+
     private void openSysRegGenderReport(java.awt.event.ActionEvent evt) {
-       SysRegManagementParamsForm managementGenerator = new SysRegManagementParamsForm(this, true, "sysRegGenderBean");
+        SysRegManagementParamsForm managementGenerator = new SysRegManagementParamsForm(this, true, "sysRegGenderBean");
         managementGenerator.clickView(evt);
     }
-    
+
     private void btnOpenMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenMapActionPerformed
         openMap();
     }//GEN-LAST:event_btnOpenMapActionPerformed
@@ -1220,6 +1243,18 @@ public class MainForm extends javax.swing.JFrame {
         HelpUtility.getInstance().showTopic("overview");
     }//GEN-LAST:event_jmiContextHelpActionPerformed
 
+    private void menuFlushCacheActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFlushCacheActionPerformed
+        // Clear the local cache and the server cache. 
+        CacheManager.clear();
+        if (WSManager.getInstance().getAdminService().flushCache()) {
+            MessageUtility.displayMessage(ClientMessage.ADMIN_FLUSH_CACHE);
+        }
+    }//GEN-LAST:event_menuFlushCacheActionPerformed
+
+    private void menuSpatialEditMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSpatialEditMapActionPerformed
+       openMapSpatialUnitEditor();
+    }//GEN-LAST:event_menuSpatialEditMapActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToolBar applicationsMain;
     private javax.swing.JButton btnDocumentSearch;
@@ -1242,6 +1277,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem menuDefaultLogLevel;
     private javax.swing.JMenuItem menuDocumentSearch;
+    private javax.swing.JMenuItem menuFlushCache;
     private javax.swing.JMenu menuLanguage;
     private javax.swing.JMenuItem menuLodgementReport;
     private javax.swing.JMenu menuLogLevel;
@@ -1253,6 +1289,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenu menuSearch;
     private javax.swing.JMenuItem menuSearchApplication;
     private javax.swing.JMenuItem menuShowMap;
+    private javax.swing.JMenuItem menuSpatialEditMap;
     private javax.swing.JMenu menuView;
     private org.sola.clients.swing.ui.MainContentPanel pnlContent;
     private javax.swing.JPanel statusPanel;

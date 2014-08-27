@@ -44,7 +44,6 @@ import org.geotools.data.collection.extended.GraphicsFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.feature.CollectionEvent;
 import org.geotools.geometry.jts.JTS;
-import org.geotools.graph.util.geom.GeometryUtil;
 import org.geotools.swing.extended.exception.GeometryTransformException;
 import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.geotools.swing.extended.util.CRSUtility;

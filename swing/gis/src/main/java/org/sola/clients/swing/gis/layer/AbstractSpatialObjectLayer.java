@@ -1,28 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 /*
@@ -55,10 +57,11 @@ import org.sola.common.messaging.GisMessage;
 import org.sola.webservices.transferobjects.EntityAction;
 
 /**
- * Abstract Layer that maintains a list of beans, which is synchronized with the feature collection.
- * For each feature there is a bean and viceversa. Not all attributes in the bean need to be in the
- * feature and viceversa. <br/> Optionally, it offers the interface for a host form to show
- * information about the beans. Using the form the information about the beans can change.
+ * Abstract Layer that maintains a list of beans, which is synchronized with the
+ * feature collection. For each feature there is a bean and viceversa. Not all
+ * attributes in the bean need to be in the feature and viceversa. <br/>
+ * Optionally, it offers the interface for a host form to show information about
+ * the beans. Using the form the information about the beans can change.
  *
  * @author Elton Manoku
  */
@@ -76,8 +79,8 @@ public abstract class AbstractSpatialObjectLayer extends ExtendedLayerEditor {
      * @param layerName The layer name
      * @param geometryType The geometry type
      * @param styleResource The style
-     * @param extraFieldsFormat Extra field information formated according to DataUtility of
-     * geotools.
+     * @param extraFieldsFormat Extra field information formated according to
+     * DataUtility of geotools.
      * @param beanClass A class which will be used for initialization of beans.
      *
      * @throws InitializeLayerException
@@ -106,9 +109,9 @@ public abstract class AbstractSpatialObjectLayer extends ExtendedLayerEditor {
     }
 
     /**
-     * It initializes the events on the list of the beans and also a change event handler for every
-     * bean. It is called after the listBean is initialized which happens in the constructor of the
-     * inheriting classes.
+     * It initializes the events on the list of the beans and also a change
+     * event handler for every bean. It is called after the listBean is
+     * initialized which happens in the constructor of the inheriting classes.
      *
      */
     protected void initializeListBeanEvents() {
@@ -146,9 +149,10 @@ public abstract class AbstractSpatialObjectLayer extends ExtendedLayerEditor {
     }
 
     /**
-     * It is called after the bean has been changed. If the property of the bean is also in the list
-     * of attributes in the feature, the corresponding attribute in the feature is changed as well.
-     * If an attribute of the feature is changed, the map is refreshed.
+     * It is called after the bean has been changed. If the property of the bean
+     * is also in the list of attributes in the feature, the corresponding
+     * attribute in the feature is changed as well. If an attribute of the
+     * feature is changed, the map is refreshed.
      *
      * @param bean
      * @param propertyName
@@ -161,7 +165,7 @@ public abstract class AbstractSpatialObjectLayer extends ExtendedLayerEditor {
             return;
         }
         SimpleFeature feature = this.getFeatureCollection().getFeature(bean.getRowId());
-        if (feature == null) {
+        if (feature == null || feature.getAttribute(propertyName) == null) {
             return;
         }
         if (feature.getAttribute(propertyName).equals(newValue)) {
@@ -172,10 +176,11 @@ public abstract class AbstractSpatialObjectLayer extends ExtendedLayerEditor {
     }
 
     /**
-     * It is called when beans are removed. It removes the corresponding features from the layer. If
-     * the beans are not new, they are moved in the removedItems list. They are moved there, because
-     * when the full list of affected beans is created it must include also beans that are removed
-     * but marked for deletion.
+     * It is called when beans are removed. It removes the corresponding
+     * features from the layer. If the beans are not new, they are moved in the
+     * removedItems list. They are moved there, because when the full list of
+     * affected beans is created it must include also beans that are removed but
+     * marked for deletion.
      *
      * @param beanList
      */
@@ -223,9 +228,9 @@ public abstract class AbstractSpatialObjectLayer extends ExtendedLayerEditor {
                 continue;
             }
             try {
-                if (bean.getFeatureGeom() != null){
-                    if (bean.getFeatureGeom().getSRID() == 0){
-                        Geometry newGeom = (Geometry)bean.getFeatureGeom().clone();
+                if (bean.getFeatureGeom() != null) {
+                    if (bean.getFeatureGeom().getSRID() == 0) {
+                        Geometry newGeom = (Geometry) bean.getFeatureGeom().clone();
                         newGeom.setSRID(this.getSrid());
                         bean.setFeatureGeom(newGeom);
                     }
@@ -257,15 +262,16 @@ public abstract class AbstractSpatialObjectLayer extends ExtendedLayerEditor {
     }
 
     /**
-     * It initializes event handlers and form hosting. This is also called from the constructor of
-     * the subclass. It is optional.
+     * It initializes event handlers and form hosting. This is also called from
+     * the constructor of the subclass. It is optional.
      */
     protected void initializeFormHosting(String title, JPanel hostPanel) {
         this.setHostForm(UiUtil.getInstance().getDialog(title, hostPanel));
     }
 
     /**
-     * Gets the form that is responsible showing/editing the attributes in the beans
+     * Gets the form that is responsible showing/editing the attributes in the
+     * beans
      *
      * @return
      */
@@ -274,7 +280,8 @@ public abstract class AbstractSpatialObjectLayer extends ExtendedLayerEditor {
     }
 
     /**
-     * Sets the hosting component that is used to show the editor/table to change the attributes.
+     * Sets the hosting component that is used to show the editor/table to
+     * change the attributes.
      *
      * @param hostForm
      */
@@ -292,9 +299,9 @@ public abstract class AbstractSpatialObjectLayer extends ExtendedLayerEditor {
     }
 
     /**
-     * Gets the list of current Spatial Beans combined with the list of Beans that need to be
-     * removed. This list is needed when the beans are supposed to be sent to the server for
-     * processing.
+     * Gets the list of current Spatial Beans combined with the list of Beans
+     * that need to be removed. This list is needed when the beans are supposed
+     * to be sent to the server for processing.
      *
      * @return
      */
@@ -308,8 +315,8 @@ public abstract class AbstractSpatialObjectLayer extends ExtendedLayerEditor {
     }
 
     /**
-     * Sets the list of new cadastre objects. This is used if the transaction is read from the
-     * server.
+     * Sets the list of new cadastre objects. This is used if the transaction is
+     * read from the server.
      *
      * @param beanList
      */
@@ -320,7 +327,8 @@ public abstract class AbstractSpatialObjectLayer extends ExtendedLayerEditor {
     }
 
     /**
-     * It adds a feature. If fid is missing it is generated from a GUID generator.
+     * It adds a feature. If fid is missing it is generated from a GUID
+     * generator.
      *
      * @param fid
      * @param geom
@@ -344,8 +352,8 @@ public abstract class AbstractSpatialObjectLayer extends ExtendedLayerEditor {
     }
 
     /**
-     * Gets the attributes with their values for a new feature. For each layer it is supposed to be
-     * overridden.
+     * Gets the attributes with their values for a new feature. For each layer
+     * it is supposed to be overridden.
      *
      * @param geom
      * @return

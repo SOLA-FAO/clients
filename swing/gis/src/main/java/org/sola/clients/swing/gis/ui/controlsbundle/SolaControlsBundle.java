@@ -104,6 +104,12 @@ public abstract class SolaControlsBundle extends ControlsBundle {
             InformationTool infoTool = new InformationTool(this.pojoDataAccess);
             this.getMap().addTool(infoTool, this.getToolbar(), true);
 
+            // Add new Measure tool into toolbar
+            if (SecurityBean.isInRole(RolesConstants.GIS_MEASURE_MAP)) {
+                MeasureTool measureTool = new MeasureTool();
+                this.getMap().addTool(measureTool, this.getToolbar(), true);
+            }
+
             // CHOOSE WHICH TOOL IS PREFERRED FOR THE MAP PRINT COMMENTING AND UNCOMMENTING THE FOLLOWING LINES
             //this is used for creating a pdf map print
             //            this.solaPrint = new SolaPrint(this.getMap());
@@ -115,12 +121,6 @@ public abstract class SolaControlsBundle extends ControlsBundle {
             }
             if (SecurityBean.isInRole(RolesConstants.GIS_EXPORT_MAP)) {
                 this.getMap().addMapAction(new KMLExportAction(this.getMap()), this.getToolbar(), true);
-            }
-
-            // Add new Measure tool into toolbar
-            if (SecurityBean.isInRole(RolesConstants.GIS_MEASURE_MAP)) {
-                MeasureTool measureTool = new MeasureTool();
-                this.getMap().addTool(measureTool, this.getToolbar(), true);
             }
 
             this.getMap().setFullExtent(

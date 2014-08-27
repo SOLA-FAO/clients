@@ -27,39 +27,50 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package org.sola.clients.swing.ui.cadastre;
+package org.sola.clients.swing.gis.mapaction;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import org.sola.clients.beans.cadastre.CadastreObjectBean;
-import org.sola.clients.beans.converters.TypeConverters;
-import org.sola.clients.swing.common.controls.TextSearch;
-import org.sola.common.messaging.ClientMessage;
-import org.sola.services.boundary.wsclients.WSManager;
+import org.geotools.swing.extended.Map;
+import org.geotools.swing.mapaction.extended.ExtendedAction;
+import org.sola.clients.swing.gis.layer.StateLandEditLayer;
+import org.sola.clients.swing.gis.ui.control.StateLandParcelListForm;
+import org.sola.common.WindowUtility;
+import org.sola.common.messaging.GisMessage;
+import org.sola.common.messaging.MessageUtility;
 
 /**
- * Extends {@link TextSearch} components to search for cadastre objects
+ *
+ * @author soladev
  */
-public class CadastreObjectSearch2 extends TextSearch {
+public class DisplayStateLandParcelListForm extends ExtendedAction {
 
-    public CadastreObjectSearch2() {
-        super();
-        this.setMinSearchStringLength(2);
-        this.setProgessMessage(ClientMessage.PROGRESS_MSG_SEARCHING_PARCELS);
+    public final static String MAPACTION_NAME = "state-land-parcel-list-show";
+    private final StateLandEditLayer layer;
+    private StateLandParcelListForm displayFrom;
+
+    /**
+     * Constructor for the map action.
+     *
+     * @param mapObj The map object to associate the tool with
+     * @param layer The SpatialUnitEditLayer to associate the tool with.
+     */
+    public DisplayStateLandParcelListForm(Map mapObj, StateLandEditLayer layer) {
+        super(mapObj, MAPACTION_NAME, MessageUtility.getLocalizedMessage(
+                GisMessage.STATE_LAND_PARCEL_LIST_TOOLTIP).getMessage(),
+                "resources/table.png");
+        this.layer = layer;
     }
 
+    /**
+     * Displays the StateLandParcelListForm to the user. If the form is hidden
+     * or not visible, it will appear on top of the other forms.
+     */
     @Override
-    public void search(String searchText) {
-        List<CadastreObjectBean> searchResult = new LinkedList<CadastreObjectBean>();
-
-        TypeConverters.TransferObjectListToBeanList(
-                WSManager.getInstance().getCadastreService().getCadastreObjectByAllParts(searchText),
-                CadastreObjectBean.class, (List) searchResult);
-        setDataList(searchResult);
+    public void onClick() {
+        if (displayFrom == null) {
+            displayFrom = new StateLandParcelListForm(layer.getSLParcelListBean(),
+                    WindowUtility.getTopFrame(), false);
+        }
+        displayFrom.setVisible(true);
     }
+
 }

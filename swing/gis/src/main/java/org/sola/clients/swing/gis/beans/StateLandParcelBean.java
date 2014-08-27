@@ -27,66 +27,62 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-package org.sola.clients.beans.cadastre;
+package org.sola.clients.swing.gis.beans;
 
+import com.vividsolutions.jts.geom.Geometry;
 import java.math.BigDecimal;
 import java.util.Date;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.NotEmpty;
-import org.hibernate.validator.constraints.Length;
+import org.geotools.swing.extended.util.GeometryUtility;
 import org.jdesktop.observablecollections.ObservableList;
-import org.sola.clients.beans.AbstractTransactionedBean;
+import org.sola.clients.beans.AbstractCodeBean;
 import org.sola.clients.beans.address.AddressBean;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.controls.SolaList;
 import org.sola.clients.beans.referencedata.CadastreObjectTypeBean;
 import org.sola.clients.beans.referencedata.LandUseTypeBean;
+import org.sola.clients.beans.referencedata.RegistrationStatusTypeBean;
 import org.sola.clients.beans.referencedata.StateLandStatusTypeBean;
-import org.sola.clients.beans.validation.Localized;
-import org.sola.common.messaging.ClientMessage;
-import org.sola.webservices.transferobjects.cadastre.CadastreObjectTO;
+import org.sola.clients.beans.referencedata.StatusConstants;
+import org.sola.common.StringUtility;
+import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.EntityAction;
 
 /**
- * Contains properties and methods to manage <b>Cadastre</b> object of the
- * domain model. Could be populated from the {@link CadastreObjectTO} object.
+ * Represents State Land Cadastre Objects. Based on the implementation of the
+ * CadastreObjectBean in the Clients Beans Project so that State Land Parcels
+ * can be easily displayed in the ParcelPanel.
+ *
+ * @author soladev
  */
-public class CadastreObjectBean extends AbstractTransactionedBean {
+public class StateLandParcelBean extends SpatialBean {
 
     public static final String TYPE_CODE_PROPERTY = "typeCode";
+        public static final String STATUS_CODE_PROPERTY = "statusCode";
+    public static final String STATUS_PROPERTY = "status";
     public static final String APPROVAL_DATETIME_PROPERTY = "approvalDatetime";
-    public static final String HISTORIC_DATETIME_PROPERTY = "historicDatetime";
     public static final String SOURCE_REFERENCE_PROPERTY = "sourceReference";
     public static final String NAME_FIRSTPART_PROPERTY = "nameFirstpart";
     public static final String NAME_LASTPART_PROPERTY = "nameLastpart";
     public static final String CADASTRE_OBJECT_TYPE_PROPERTY = "cadastreObjectType";
     public static final String GEOM_POLYGON_PROPERTY = "geomPolygon";
-    public static final String SELECTED_PROPERTY = "selected";
-    public static final String PENDING_STATUS = "pending";
     public static final String LAND_USE_TYPE_PROPERTY = "landUseType";
     public static final String LAND_USE_CODE_PROPERTY = "landUseCode";
     public static final String ADDRESS_LIST_PROPERTY = "addressList";
     public static final String SELECTED_ADDRESS_PROPERTY = "selectedAddress";
     public static final String OFFICIAL_AREA_SIZE_PROPERTY = "officialAreaSize";
+    public static final String CALCULATED_AREA_SIZE_PROPERTY = "calculatedAreaSize";
     public static final String DESCRIPTION_PROPERTY = "description";
     public static final String STATE_LAND_STATUS_TYPE_PROPERTY = "stateLandStatusType";
     public static final String STATE_LAND_STATUS_CODE_PROPERTY = "stateLandStatusCode";
 
+    private String id;
+    private RegistrationStatusTypeBean status;
     private Date approvalDatetime;
-    private Date historicDatetime;
-    @Length(max = 100, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH_SRCREF, payload = Localized.class)
     private String sourceReference;
-    @Length(max = 20, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH_FIRSTPART, payload = Localized.class)
-    @NotEmpty(message = ClientMessage.CHECK_NOTNULL_CADFIRSTPART, payload = Localized.class)
     private String nameFirstpart;
-    @Length(max = 50, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH_LASTPART, payload = Localized.class)
-    @NotEmpty(message = ClientMessage.CHECK_NOTNULL_CADLASTPART, payload = Localized.class)
     private String nameLastpart;
-    //@NotNull(message = ClientMessage.CHECK_NOTNULL_CADOBJTYPE, payload = Localized.class)
     private CadastreObjectTypeBean cadastreObjectType;
     private byte[] geomPolygon;
-    private transient boolean selected;
     private LandUseTypeBean landUseType;
     private SolaList<SpatialValueAreaBean> spatialValueAreaList;
     private SolaList<AddressBean> addressList;
@@ -94,12 +90,63 @@ public class CadastreObjectBean extends AbstractTransactionedBean {
     private String description;
     private StateLandStatusTypeBean stateLandStatusType;
 
-    public CadastreObjectBean() {
+    public StateLandParcelBean() {
         super();
+        setTypeCode(CadastreObjectTypeBean.CODE_STATE_LAND); 
+        setStatusCode(StatusConstants.PENDING);
+        setStateLandStatusCode(StateLandStatusTypeBean.CODE_PROPOSED); 
         addressList = new SolaList<AddressBean>();
         spatialValueAreaList = new SolaList<SpatialValueAreaBean>();
     }
+
+    @Override
+    public void setFeatureGeom(Geometry geometryValue) {
+        super.setFeatureGeom(geometryValue);
+        this.setGeomPolygon(GeometryUtility.getWkbFromGeometry(geometryValue));
+    }
+
+    public String getId() {
+        if (StringUtility.isEmpty(id)) {
+            id = this.generateId();
+        }
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
     
+    public String getStatusCode() {
+        if (status != null) {
+            return status.getCode();
+        } else {
+            return null;
+        }
+    }
+
+    public void setStatusCode(String statusCode) {
+        String oldValue = null;
+        if (status != null) {
+            oldValue = status.getCode();
+        }
+        if (WSManager.getInstance().getReferenceDataService() != null) {
+            setStatus(CacheManager.getBeanByCode(
+                    CacheManager.getRegistrationStatusTypes(), statusCode));
+            propertySupport.firePropertyChange(STATUS_CODE_PROPERTY, oldValue, statusCode);
+        }
+    }
+
+    public AbstractCodeBean getStatus() {
+        return status;
+    }
+
+    public void setStatus(AbstractCodeBean status) {
+        if (this.status == null) {
+            this.status = new RegistrationStatusTypeBean();
+        }
+        this.setJointRefDataBean(this.status, status, STATUS_PROPERTY);
+    }
+
     public Date getApprovalDatetime() {
         return approvalDatetime;
     }
@@ -109,17 +156,6 @@ public class CadastreObjectBean extends AbstractTransactionedBean {
         this.approvalDatetime = approvalDatetime;
         propertySupport.firePropertyChange(APPROVAL_DATETIME_PROPERTY,
                 oldValue, approvalDatetime);
-    }
-
-    public Date getHistoricDatetime() {
-        return historicDatetime;
-    }
-
-    public void setHistoricDatetime(Date historicDatetime) {
-        Date oldValue = this.historicDatetime;
-        this.historicDatetime = historicDatetime;
-        propertySupport.firePropertyChange(HISTORIC_DATETIME_PROPERTY,
-                oldValue, historicDatetime);
     }
 
     public String getNameFirstpart() {
@@ -219,31 +255,23 @@ public class CadastreObjectBean extends AbstractTransactionedBean {
 
     public void setGeomPolygon(byte[] geomPolygon) { //NOSONAR
         byte[] old = this.geomPolygon;
-        this.geomPolygon = geomPolygon; //NOSONAR
+        this.geomPolygon = geomPolygon.clone(); //NOSONAR
+        if (getFeatureGeom() == null) {
+            super.setFeatureGeom(GeometryUtility.getGeometryFromWkb(geomPolygon));
+        }
         propertySupport.firePropertyChange(GEOM_POLYGON_PROPERTY, old, this.geomPolygon);
-    }
-
-    public boolean isSelected() {
-        return selected;
-    }
-
-    public void setSelected(boolean selected) {
-        boolean oldValue = this.selected;
-        this.selected = selected;
-        propertySupport.firePropertyChange(SELECTED_PROPERTY, oldValue, this.selected);
     }
 
     /**
      * Looks for officialArea code in the list of areas.
      */
-    //@NotNull(message = ClientMessage.CHECK_NOTNULL_AREA, payload = Localized.class)
     public BigDecimal getOfficialAreaSize() {
         if (isCopyInProgress() || getSpatialValueAreaFiletredList() == null
                 || getSpatialValueAreaFiletredList().size() < 1) {
             return null;
         }
         for (SpatialValueAreaBean areaBean : getSpatialValueAreaFiletredList()) {
-            if (SpatialValueAreaBean.CODE_OFFICIAL_AREA.equals(areaBean.getTypeCode())) {
+            if (SpatialValueAreaBean.TYPE_OFFICIAL.equals(areaBean.getTypeCode())) {
                 return areaBean.getSize();
             }
         }
@@ -261,7 +289,7 @@ public class CadastreObjectBean extends AbstractTransactionedBean {
         }
         boolean found = false;
         for (SpatialValueAreaBean areaBean : getSpatialValueAreaList()) {
-            if (SpatialValueAreaBean.CODE_OFFICIAL_AREA.equals(areaBean.getTypeCode())) {
+            if (SpatialValueAreaBean.TYPE_OFFICIAL.equals(areaBean.getTypeCode())) {
                 // Delete area if provided value is null
                 if (area == null) {
                     areaBean.setEntityAction(EntityAction.DELETE);
@@ -278,14 +306,62 @@ public class CadastreObjectBean extends AbstractTransactionedBean {
         if (area != null && !found) {
             SpatialValueAreaBean areaBean = new SpatialValueAreaBean();
             areaBean.setSize(area);
-            areaBean.setTypeCode(SpatialValueAreaBean.CODE_OFFICIAL_AREA);
-            areaBean.setSpatialUnitId(this.getId());
+            areaBean.setTypeCode(SpatialValueAreaBean.TYPE_OFFICIAL);
             getSpatialValueAreaList().addAsNew(areaBean);
         }
         propertySupport.firePropertyChange(OFFICIAL_AREA_SIZE_PROPERTY, null, area);
     }
 
-    @Valid
+    /**
+     * Looks for officialArea code in the list of areas.
+     */
+    public BigDecimal getCalculatedAreaSize() {
+        if (isCopyInProgress() || getSpatialValueAreaFiletredList() == null
+                || getSpatialValueAreaFiletredList().size() < 1) {
+            return null;
+        }
+        for (SpatialValueAreaBean areaBean : getSpatialValueAreaFiletredList()) {
+            if (SpatialValueAreaBean.TYPE_CALCULATED.equals(areaBean.getTypeCode())) {
+                return areaBean.getSize();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Sets officialArea code.
+     */
+    public void setCalculatedAreaSize(BigDecimal area) {
+        if (isCopyInProgress()) {
+            // Don't modify the areaList if the Bean is being copied otherwise
+            // the list may end up with a duplicate area bean. 
+            return;
+        }
+        boolean found = false;
+        for (SpatialValueAreaBean areaBean : getSpatialValueAreaList()) {
+            if (SpatialValueAreaBean.TYPE_OFFICIAL.equals(areaBean.getTypeCode())) {
+                // Delete area if provided value is null
+                if (area == null) {
+                    areaBean.setEntityAction(EntityAction.DELETE);
+                } else {
+                    areaBean.setSize(area);
+                    areaBean.setEntityAction(null);
+                }
+                found = true;
+                break;
+            }
+        }
+
+        // Calculated area not found, add new if provided area not null
+        if (area != null && !found) {
+            SpatialValueAreaBean areaBean = new SpatialValueAreaBean();
+            areaBean.setSize(area);
+            areaBean.setTypeCode(SpatialValueAreaBean.TYPE_CALCULATED);
+            getSpatialValueAreaList().addAsNew(areaBean);
+        }
+        propertySupport.firePropertyChange(CALCULATED_AREA_SIZE_PROPERTY, null, area);
+    }
+
     public ObservableList<AddressBean> getAddressFilteredList() {
         return addressList.getFilteredList();
     }
@@ -331,7 +407,6 @@ public class CadastreObjectBean extends AbstractTransactionedBean {
         return spatialValueAreaList;
     }
 
-    @Valid
     public ObservableList<SpatialValueAreaBean> getSpatialValueAreaFiletredList() {
         return spatialValueAreaList.getFilteredList();
     }
@@ -414,7 +489,29 @@ public class CadastreObjectBean extends AbstractTransactionedBean {
     public String toString() {
         String result = nameFirstpart == null ? "" : nameFirstpart;
         result += nameLastpart == null ? "" : " " + nameLastpart;
+        return result.trim();
+    }
+
+    /**
+     * Copies the StateLandParcelBean onto a CadastreObjectBean from the Clients
+     * Beans project.
+     *
+     * @return
+     */
+    public org.sola.clients.beans.cadastre.CadastreObjectBean getClientCadastreObject() {
+        org.sola.clients.beans.cadastre.CadastreObjectBean result = new org.sola.clients.beans.cadastre.CadastreObjectBean();
+        result.copyFromObject(this);
         return result;
+    }
+
+    /**
+     * Copies the specified CadastreObjectBean from the Clients Beans project
+     * onto this StateLandParcelBean
+     *
+     * @param clientBean The CadastreObjectBean to copy from.
+     */
+    public void copyClientCadastreObject(org.sola.clients.beans.cadastre.CadastreObjectBean clientBean) {
+        this.copyFromObject(clientBean);
     }
 
 }

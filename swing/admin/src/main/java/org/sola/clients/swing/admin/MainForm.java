@@ -41,6 +41,7 @@ import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JasperPrint;
 import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.clients.beans.AbstractCodeBean;
+import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.referencedata.*;
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.reports.ReportManager;
@@ -754,6 +755,7 @@ public class MainForm extends javax.swing.JFrame {
         menuRefData.add(menuTransaction);
 
         menuFlushCache.setText(bundle.getString("MainForm.menuFlushCache.text")); // NOI18N
+        menuFlushCache.setToolTipText(bundle.getString("MainForm.menuFlushCache.toolTipText")); // NOI18N
         menuFlushCache.setName("menuFlushCache"); // NOI18N
         menuFlushCache.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -975,6 +977,8 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnConsolidateActionPerformed
 
     private void menuFlushCacheActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFlushCacheActionPerformed
+        // Clear the local cache and the server cache. 
+        CacheManager.clear();
         if (WSManager.getInstance().getAdminService().flushCache()) {
             MessageUtility.displayMessage(ClientMessage.ADMIN_FLUSH_CACHE);
         }

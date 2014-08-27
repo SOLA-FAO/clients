@@ -44,7 +44,7 @@ import org.sola.clients.swing.common.controls.TreeTableRowData;
  */
 public class RequestTypeTreeTableModel extends AbstractTreeTableModel {
 
-    private final static String[] COLUMN_NAMES = {"Service", "Reqd. num of properties"};
+    private static String[] COLUMN_NAMES = {"Service", "Reqd. num of properties"};
 
     public RequestTypeTreeTableModel(List<RequestTypeBean> requestTypes) {
         super(new DefaultMutableTreeNode());
@@ -141,8 +141,18 @@ public class RequestTypeTreeTableModel extends AbstractTreeTableModel {
      */
     public void setColumnLabels(String serviceColLbl, String numPropertiesColLbl) {
         COLUMN_NAMES[0] = serviceColLbl;
-        COLUMN_NAMES[1] = numPropertiesColLbl;
-    
-    }  
-    
+        if (COLUMN_NAMES.length > 1) {
+            COLUMN_NAMES[1] = numPropertiesColLbl;
+        }
+
+    }
+
+    /**
+     * Prevents the Reqd. Nr of Properties column from displaying in the Tree table. 
+     * Must be set before the model is added to the treetable control. 
+     */
+    public void hideNrPropertiesColumn() {
+        COLUMN_NAMES = new String[]{COLUMN_NAMES[0]};
+    }
+
 }

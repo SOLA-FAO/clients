@@ -39,6 +39,7 @@ public class CadastreObjectTypeBean extends AbstractCodeBean {
     
     public static final String CODE_PARCEL = "parcel";
     public static final String CODE_BUILDING = "building";
+    public static final String CODE_STATE_LAND = "stateLand";
 
     public CadastreObjectTypeBean() {
         super();

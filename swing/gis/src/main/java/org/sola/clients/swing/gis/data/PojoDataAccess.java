@@ -27,7 +27,6 @@
  */
 package org.sola.clients.swing.gis.data;
 
-import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,10 +36,10 @@ import org.geotools.geometry.jts.JTS;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.swing.extended.util.CRSUtility;
 import org.geotools.swing.extended.util.GeometryUtility;
-import org.opengis.geometry.BoundingBox;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.swing.gis.beans.TransactionCadastreChangeBean;
 import org.sola.clients.swing.gis.beans.TransactionCadastreRedefinitionBean;
+import org.sola.clients.swing.gis.beans.TransactionStateLandBean;
 import org.sola.common.logging.LogUtility;
 import org.sola.common.messaging.MessageUtility;
 import org.sola.services.boundary.wsclients.*;
@@ -55,6 +54,7 @@ import org.sola.webservices.spatial.QueryForPublicDisplayMap;
 import org.sola.webservices.spatial.ResultForNavigationInfo;
 import org.sola.webservices.transferobjects.transaction.TransactionCadastreChangeTO;
 import org.sola.webservices.transferobjects.transaction.TransactionCadastreRedefinitionTO;
+import org.sola.webservices.transferobjects.transaction.TransactionStateLandTO;
 
 /**
  *
@@ -312,5 +312,26 @@ public class PojoDataAccess {
         }
         Geometry extent = GeometryUtility.getGeometryFromWkb(e);
         return JTS.toEnvelope(extent);
+    }
+    
+        /**
+     * Gets a state land transaction
+     *
+     * @param serviceId The service id which initializes the transaction
+     * @return
+     */
+    public TransactionStateLandBean getStateLandChange(
+            String serviceId) {
+        TransactionStateLandTO objTO =
+                getInstance().getCadastreService().getStateLandChange(serviceId);
+        TransactionStateLandBean transactionBean =
+                new TransactionStateLandBean();
+        if (objTO == null) {
+            transactionBean.setFromServiceId(serviceId);
+        } else {
+             transactionBean = TypeConverters.TransferObjectToBean(objTO, 
+                     TransactionStateLandBean.class, null);
+        }
+        return transactionBean;
     }
 }

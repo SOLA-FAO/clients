@@ -36,7 +36,6 @@ import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.geometry.jts.Geometries;
 import org.opengis.feature.simple.SimpleFeature;
-import org.geotools.swing.extended.util.Messaging;
 
 /**
  * This feature collection is used from the 

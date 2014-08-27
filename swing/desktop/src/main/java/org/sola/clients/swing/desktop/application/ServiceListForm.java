@@ -67,6 +67,7 @@ public class ServiceListForm extends javax.swing.JDialog {
         String propColLbl = bundle.getString("ServiceListForm.tabFeeDetails1.columnModel.title1");
         RequestTypeTreeTableModel model = new RequestTypeTreeTableModel(
                 requestTypeList.sortRequestTypes(requestTypeList.getRequestTypeList()));
+        model.hideNrPropertiesColumn();
         model.setColumnLabels(serviceColLbl, propColLbl);
         treeTable.setTreeTableModel(model);
         treeTable.setRootVisible(false);

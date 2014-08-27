@@ -1,28 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.desktop.cadastre;
@@ -49,30 +51,44 @@ public class CadastreTransactionMapPanel extends ContentPanel {
     private ApplicationPropertyBean applicationProperty;
     private ControlsBundleForTransaction mapControl = null;
     private String targetCadastreObjectType = CadastreObjectTypeBean.CODE_PARCEL;
-
-    /**
-     * It initiates the panel with the target cadastre object type as being parcel.
-     * 
+    
+        /**
+     * Overloaded constructor for map panel
+     *
      * @param applicationBean
      * @param applicationService
-     * @param applicationProperty 
+     */
+    public CadastreTransactionMapPanel(
+            ApplicationBean applicationBean,
+            ApplicationServiceBean applicationService) {
+        this(applicationBean, applicationService,
+                null, CadastreObjectTypeBean.CODE_PARCEL);
+    }
+
+    /**
+     * It initiates the panel with the target cadastre object type as being
+     * parcel.
+     *
+     * @param applicationBean
+     * @param applicationService
+     * @param applicationProperty
      */
     public CadastreTransactionMapPanel(
             ApplicationBean applicationBean,
             ApplicationServiceBean applicationService,
             ApplicationPropertyBean applicationProperty) {
-        this(applicationBean, applicationService, 
+        this(applicationBean, applicationService,
                 applicationProperty, CadastreObjectTypeBean.CODE_PARCEL);
         saveTransactionState();
     }
 
     /**
      * It initiates the panel with the target cadastre object type as parameter.
-     * 
+     *
      * @param applicationBean
      * @param applicationService
      * @param applicationProperty
-     * @param targetCadastreObjectType 
+     * @param targetCadastreObjectType
      */
     public CadastreTransactionMapPanel(
             ApplicationBean applicationBean,
@@ -94,12 +110,12 @@ public class CadastreTransactionMapPanel extends ContentPanel {
 
     private void initializeMap() {
         this.mapControl = ControlsBundleForTransaction.getInstance(
-                applicationService.getRequestType().getCode(), this.applicationBean, 
+                applicationService.getRequestType().getCode(), this.applicationBean,
                 this.applicationService.getId(), this.getBaUnitId(), getTargetCadastreObjectType());
         this.mapControl.setReadOnly(!this.applicationService.isManagementAllowed());
     }
-    
-    private String getTargetCadastreObjectType(){
+
+    private String getTargetCadastreObjectType() {
         return targetCadastreObjectType;
     }
 
@@ -128,32 +144,24 @@ public class CadastreTransactionMapPanel extends ContentPanel {
             }
         }
         headerPanel.setTitleText(title);
-     }
+    }
 
     private String getBaUnitId() {
-        String baUnitId = null;
-        if (applicationProperty != null) {
-            BaUnitTO baUnitTO = WSManager.getInstance().getAdministrative().getBaUnitById(
-                    applicationProperty.getBaUnitId());
-            if (baUnitTO != null) {
-                baUnitId = baUnitTO.getId();
-            }
-        }
-        return baUnitId;
+        return applicationProperty == null ? null : applicationProperty.getBaUnitId();
     }
-     
-    
+
     private void saveTransactionState() {
         MainForm.saveBeanState(this.mapControl.getTransactionBean());
     }
-    
+
     private boolean saveTransaction() {
-       SaveTransaction actionSave = new SaveTransaction(this.mapControl);
-       actionSave.onClick();
-       close();
+        SaveTransaction actionSave = new SaveTransaction(this.mapControl);
+        actionSave.onClick();
+        close();
         saveTransactionState();
         return true;
     }
+
     @Override
     protected boolean panelClosing() {
         if (MainForm.checkSaveBeforeClose(this.mapControl.getTransactionBean())) {
@@ -161,11 +169,11 @@ public class CadastreTransactionMapPanel extends ContentPanel {
         }
         return true;
     }
-    
-    
+
     /**
-     * This method is called from within the constructor to initialize the form. WARNING: Do NOT
-     * modify this code. The content of this method is always regenerated by the Form Editor.
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

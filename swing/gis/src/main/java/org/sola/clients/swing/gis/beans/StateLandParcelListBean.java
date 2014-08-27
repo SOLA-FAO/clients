@@ -27,39 +27,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package org.sola.clients.swing.ui.cadastre;
+package org.sola.clients.swing.gis.beans;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import org.sola.clients.beans.cadastre.CadastreObjectBean;
-import org.sola.clients.beans.converters.TypeConverters;
-import org.sola.clients.swing.common.controls.TextSearch;
-import org.sola.common.messaging.ClientMessage;
-import org.sola.services.boundary.wsclients.WSManager;
+import org.sola.clients.beans.controls.SolaObservableList;
 
 /**
- * Extends {@link TextSearch} components to search for cadastre objects
+ *
+ * @author Andrew
  */
-public class CadastreObjectSearch2 extends TextSearch {
+public class StateLandParcelListBean extends AbstractListSpatialBean {
 
-    public CadastreObjectSearch2() {
+    public StateLandParcelListBean() {
         super();
-        this.setMinSearchStringLength(2);
-        this.setProgessMessage(ClientMessage.PROGRESS_MSG_SEARCHING_PARCELS);
     }
 
     @Override
-    public void search(String searchText) {
-        List<CadastreObjectBean> searchResult = new LinkedList<CadastreObjectBean>();
-
-        TypeConverters.TransferObjectListToBeanList(
-                WSManager.getInstance().getCadastreService().getCadastreObjectByAllParts(searchText),
-                CadastreObjectBean.class, (List) searchResult);
-        setDataList(searchResult);
+    protected SolaObservableList initializeBeanList() {
+        return new SolaObservableList<StateLandParcelBean>();
     }
+
+    @Override
+    public SolaObservableList<StateLandParcelBean> getBeanList() {
+        return super.getBeanList();
+    }
+
 }

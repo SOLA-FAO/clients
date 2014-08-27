@@ -39,6 +39,7 @@ import org.sola.webservices.transferobjects.referencedata.PartyTypeTO;
  */
 public class PartyTypeBean extends AbstractCodeBean {
 
+    public static final String CODE_NATURAL_PERSON = "naturalPerson";
     public PartyTypeBean() {
         super();
     }
