@@ -1112,6 +1112,9 @@
                       <BindingParameter name="IGNORE_ADJUSTING" value="N"/>
                     </BindingProperty>
                   </BindingProperties>
+                  <Events>
+                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tabServicesMouseClicked"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>

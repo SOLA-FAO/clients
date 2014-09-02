@@ -30,14 +30,24 @@
 package org.sola.clients.swing.ui.security;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.ImageIcon;
 import org.sola.clients.beans.AbstractBindingBean;
+import org.sola.clients.beans.AbstractIdBean;
+import org.sola.clients.beans.administrative.BaUnitBean;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.security.RoleListBean;
 import org.sola.clients.beans.security.SecurityBean;
+import org.sola.clients.swing.common.tasks.SolaTask;
+import org.sola.clients.swing.common.tasks.TaskManager;
+import static org.sola.clients.swing.ui.administrative.PropertyAssignmentDialog.ASSIGNMENT_CHANGED;
 import org.sola.common.RolesConstants;
 import org.sola.common.WindowUtility;
+import org.sola.common.messaging.ClientMessage;
+import org.sola.common.messaging.MessageUtility;
+import org.sola.services.boundary.wsclients.WSManager;
+import org.sola.webservices.transferobjects.EntityTable;
 
 /**
  * This dialog form is used to configure the security classification and
@@ -48,6 +58,7 @@ public class SecurityClassificationDialog extends javax.swing.JDialog {
     public static final String CLASSIFICATION_CHANGED = "classificationChanged";
     private List<AbstractBindingBean> beanList;
     private AbstractBindingBean bean;
+    private EntityTable entityTable = null;
 
     /**
      * Default constructor
@@ -59,6 +70,7 @@ public class SecurityClassificationDialog extends javax.swing.JDialog {
             java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         this.beanList = list;
+        this.entityTable = null;
         initComponents();
         customizeForm();
     }
@@ -74,6 +86,7 @@ public class SecurityClassificationDialog extends javax.swing.JDialog {
             java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         this.bean = bean;
+        this.entityTable = null;
         initComponents();
         customizeForm();
     }
@@ -134,26 +147,73 @@ public class SecurityClassificationDialog extends javax.swing.JDialog {
     }
 
     /**
+     * If set to a non null value, the dialog will trigger an update to the
+     * entity (or entities) to save changes to the security classification or
+     * redact code.
+     *
+     * @param entityTable Enumeration identifying the SOLA table that must be
+     * updated when saving security classification changes. If NULL, the dialog
+     * will set the new security classification codes on the entity, but it will
+     * not perform an explicity update
+     */
+    public void setSaveChanges(EntityTable entityTable) {
+        this.entityTable = entityTable;
+    }
+
+    /**
      * Assign team to properties
      */
     private void save() {
 
-        String classificationCode = classificationList.getSelectedRole() == null ? null
+        final String classificationCode = classificationList.getSelectedRole() == null ? null
                 : classificationList.getSelectedRole().getCode();
-        String redactCode = redactList.getSelectedRole() == null ? null
+        final String redactCode = redactList.getSelectedRole() == null ? null
                 : redactList.getSelectedRole().getCode();
+        final List<String> entityIds = new ArrayList<String>();
+
         if (bean != null) {
             bean.setClassificationCode(classificationCode);
             bean.setRedactCode(redactCode);
+            if (AbstractIdBean.class.isAssignableFrom(bean.getClass())) {
+                entityIds.add(((AbstractIdBean) bean).getId());
+
+            }
         } else if (beanList != null && beanList.size() > 0) {
             for (AbstractBindingBean b : beanList) {
                 b.setClassificationCode(classificationCode);
                 b.setRedactCode(redactCode);
+                if (AbstractIdBean.class.isAssignableFrom(b.getClass())) {
+                    entityIds.add(((AbstractIdBean) b).getId());
+                }
             }
         }
-        //MessageUtility.displayMessage(ClientMessage.BAUNIT_PROP_MANAGER_ASSIGNED);
-        this.firePropertyChange(CLASSIFICATION_CHANGED, false, true);
-        this.dispose();
+        if (entityTable != null) {
+            // Save the changes directly
+            final SecurityClassificationDialog dialog = this;
+            SolaTask t = new SolaTask<Void, Void>() {
+
+                @Override
+                public Void doTask() {
+                    setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_SAVE_SECURITY_CHANGES));
+                    WSManager.getInstance().getAdminService().saveSecurityClassifications(entityIds,
+                            entityTable, classificationCode, redactCode);
+                    return null;
+                }
+
+                @Override
+                protected void taskDone() {
+                    dialog.firePropertyChange(CLASSIFICATION_CHANGED, false, true);
+                    dialog.dispose();
+                }
+
+            };
+            TaskManager.getInstance().runTask(t);
+
+        } else {
+            // Allow the calling form to determine when changes to the classification should be saved. 
+            this.firePropertyChange(CLASSIFICATION_CHANGED, false, true);
+            this.dispose();
+        }
     }
 
     @SuppressWarnings("unchecked")

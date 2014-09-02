@@ -71,6 +71,7 @@ import org.sola.common.WindowUtility;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 import org.sola.services.boundary.wsclients.WSManager;
+import org.sola.webservices.transferobjects.EntityTable;
 import org.sola.webservices.transferobjects.administrative.BaUnitAreaTO;
 import org.sola.webservices.transferobjects.administrative.BaUnitTO;
 import org.sola.webservices.transferobjects.cadastre.SpatialValueAreaTO;
@@ -351,10 +352,10 @@ public class SLPropertyPanel extends ContentPanel {
         txtSLArea.setEnabled(editProperty);
 
         btnAssign.setEnabled(SecurityBean.isInRole(RolesConstants.ADMINISTRATIVE_BA_UNIT_SAVE,
-                RolesConstants.ADMINISTRATIVE_ASSIGN_TEAM));
+                RolesConstants.ADMINISTRATIVE_ASSIGN_TEAM) && !baUnitBean1.isNew());
 
         // Make security button invisible unless the user has permission to set the classification level.
-        btnSecurity.setVisible(editProperty && SecurityBean.isInRole(RolesConstants.CLASSIFICATION_CHANGE_CLASS));
+        btnSecurity.setVisible(SecurityBean.isInRole(RolesConstants.CLASSIFICATION_CHANGE_CLASS));
 
         if (!SecurityBean.isInRole(RolesConstants.GIS_VIEW_MAP)) {
             // User does not have rights to view the map
@@ -1186,6 +1187,9 @@ public class SLPropertyPanel extends ContentPanel {
     private void configureSecurity() {
         SecurityClassificationDialog form = new SecurityClassificationDialog(baUnitBean1, MainForm.getInstance(), true);
         WindowUtility.centerForm(form);
+        if (!btnSave.isEnabled()) {
+            form.setSaveChanges(EntityTable.BAUNIT);
+        }
         form.setVisible(true);
     }
 

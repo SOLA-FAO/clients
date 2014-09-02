@@ -43,6 +43,7 @@ import org.sola.clients.swing.gis.beans.TransactionStateLandBean;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.layer.StateLandEditLayer;
 import org.sola.clients.swing.gis.mapaction.DisplayStateLandParcelListForm;
+import org.sola.clients.swing.gis.mapaction.ZoomToTransaction;
 import org.sola.clients.swing.gis.tool.StateLandCreateTool;
 import org.sola.clients.swing.gis.tool.StateLandEditTool;
 import org.sola.clients.swing.gis.tool.StateLandSelectTool;
@@ -143,19 +144,17 @@ public class ControlBundleForStateLand extends ControlsBundleForTransaction {
      * @param applicationLocation The point location of the application.
      */
     @Override
-    protected void zoomToInterestingArea(
+    public void zoomToInterestingArea(
             ReferencedEnvelope interestingArea, byte[] applicationLocation) {
-        ReferencedEnvelope boundsToZoom = null;
-        if (this.editLayer.getFeatureCollection().size() > 0) {
-            boundsToZoom = this.editLayer.getFeatureCollection().getBounds();
-        }
-        super.zoomToInterestingArea(boundsToZoom, applicationLocation);
+        super.zoomToInterestingArea(this.editLayer.getLayerEnvelope(), applicationLocation);
     }
 
     @Override
     protected void addToolsAndCommands() {
 
         //State Land Edit Tools
+        this.getMap().addMapAction(new ZoomToTransaction(this), this.getToolbar(), true);
+        
         ExtendedFeatureLayer parcelsLayer = (ExtendedFeatureLayer) this.getMap().getSolaLayers().get("parcels");
         ExtendedFeatureLayer roadLayer = (ExtendedFeatureLayer) this.getMap().getSolaLayers().get("roads");
         ExtendedFeatureLayer stateLandParcelsLayer = (ExtendedFeatureLayer) this.getMap().getSolaLayers().get("state-land");

@@ -143,7 +143,7 @@ public final class ControlsBundleForCadastreChange extends ControlsBundleForTran
      * @param applicationLocation
      */
     @Override
-    protected void zoomToInterestingArea(
+    public void zoomToInterestingArea(
             ReferencedEnvelope interestingArea, byte[] applicationLocation) {
         ReferencedEnvelope boundsToZoom = null;
         if (this.newPointsLayer.getFeatureCollection().size() > 0) {

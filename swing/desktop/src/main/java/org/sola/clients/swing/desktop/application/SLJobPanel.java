@@ -335,8 +335,8 @@ public class SLJobPanel extends ContentPanel {
             btnCertificate.setEnabled(false);
         }
 
-        btnSecurity.setVisible(btnSave.isEnabled()
-                && SecurityBean.isInRole(RolesConstants.CLASSIFICATION_CHANGE_CLASS));
+        btnSecurity.setEnabled(btnSave.isEnabled());
+        btnSecurity.setVisible(SecurityBean.isInRole(RolesConstants.CLASSIFICATION_CHANGE_CLASS));
 
         saveAppState();
     }
@@ -684,7 +684,7 @@ public class SLJobPanel extends ContentPanel {
         if (!checkApplication()) {
             return;
         }
-        saveInProgress = true; 
+        saveInProgress = true;
 
         SolaTask<Void, Void> t = new SolaTask<Void, Void>() {
             @Override
@@ -699,7 +699,7 @@ public class SLJobPanel extends ContentPanel {
 
             @Override
             public void taskDone() {
-                saveInProgress = false; 
+                saveInProgress = false;
 //                MessageUtility.displayMessage(ClientMessage.APPLICATION_SUCCESSFULLY_SAVED);
                 customizeApplicationForm();
                 saveAppState();
@@ -1940,6 +1940,11 @@ public class SLJobPanel extends ContentPanel {
         jTableBinding.bind();binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, appBean, org.jdesktop.beansbinding.ELProperty.create("${selectedService}"), tabServices, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
         bindingGroup.addBinding(binding);
 
+        tabServices.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabServicesMouseClicked(evt);
+            }
+        });
         scrollFeeDetails1.setViewportView(tabServices);
         if (tabServices.getColumnModel().getColumnCount() > 0) {
             tabServices.getColumnModel().getColumn(0).setMinWidth(70);
@@ -2788,6 +2793,16 @@ public class SLJobPanel extends ContentPanel {
     private void btnSecurityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSecurityActionPerformed
         configureSecurity();
     }//GEN-LAST:event_btnSecurityActionPerformed
+
+    private void tabServicesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabServicesMouseClicked
+        if (evt.getClickCount() == 2) {
+            if (btnStartService.isEnabled()) {
+                startService();
+            } else if (btnViewService.isEnabled()) {
+                viewService();
+            }
+        }
+    }//GEN-LAST:event_tabServicesMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane actionLogPanel;

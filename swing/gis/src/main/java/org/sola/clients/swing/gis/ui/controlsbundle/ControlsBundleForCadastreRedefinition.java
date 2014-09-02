@@ -99,7 +99,7 @@ public final class ControlsBundleForCadastreRedefinition extends ControlsBundleF
     }
 
     @Override
-    protected void zoomToInterestingArea(
+    public void zoomToInterestingArea(
             ReferencedEnvelope interestingArea, byte[] applicationLocation) {
         if (interestingArea == null
                 && this.cadastreObjectModifiedLayer.getFeatureCollection().size() > 0) {

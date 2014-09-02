@@ -212,7 +212,7 @@ public abstract class ControlsBundleForTransaction extends SolaControlsBundle {
      * @param interestingArea
      * @param applicationLocation
      */
-    protected void zoomToInterestingArea(
+    public void zoomToInterestingArea(
             ReferencedEnvelope interestingArea,
             byte[] applicationLocation) {
         if (interestingArea == null && applicationLocation != null) {
