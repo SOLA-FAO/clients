@@ -30,12 +30,12 @@
 package org.sola.clients.beans.administrative;
 
 import org.sola.clients.beans.AbstractBindingBean;
-import static org.sola.clients.beans.application.ApplicationSearchResultBean.CHECKED_PROPERTY;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.referencedata.BaUnitTypeBean;
 import org.sola.clients.beans.referencedata.LandUseTypeBean;
 import org.sola.clients.beans.referencedata.NotationStatusTypeBean;
 import org.sola.clients.beans.referencedata.RegistrationStatusTypeBean;
+import org.sola.clients.beans.referencedata.StateLandStatusTypeBean;
 
 /**
  * Represents BA unit search result.
@@ -62,6 +62,9 @@ public class BaUnitSearchResultBean extends AbstractBindingBean {
     public static final String ACTION_STATUS_PROPERTY = "actionStatus";
     public static final String NOTATION_TEXT_PROPERTY = "notationText";
     public static final String CHECKED_PROPERTY = "checked";
+    public static final String STATE_LAND_STATUS_PROPERTY = "stateLandStatus";
+    public static final String STATE_LAND_STATUS_CODE_PROPERTY = "stateLandStatusCode";
+    public static final String STATE_LAND_NAME_PROPERTY = "stateLandName";
 
     private String id;
     private String name;
@@ -81,6 +84,7 @@ public class BaUnitSearchResultBean extends AbstractBindingBean {
     private String notationText;
     private int rowVersion;
     private boolean checked;
+    private StateLandStatusTypeBean stateLandStatus;
 
     public BaUnitSearchResultBean() {
         super();
@@ -114,6 +118,7 @@ public class BaUnitSearchResultBean extends AbstractBindingBean {
         String oldValue = this.nameFirstPart;
         this.nameFirstPart = nameFirstPart;
         propertySupport.firePropertyChange(NAME_FIRST_PART_PROPERTY, oldValue, this.nameFirstPart);
+        propertySupport.firePropertyChange(STATE_LAND_NAME_PROPERTY, oldValue, getStateLandName());
     }
 
     public String getNameLastPart() {
@@ -124,6 +129,7 @@ public class BaUnitSearchResultBean extends AbstractBindingBean {
         String oldValue = this.nameLastPart;
         this.nameLastPart = nameLastPart;
         propertySupport.firePropertyChange(NAME_LAST_PART_PROPERTY, oldValue, this.nameLastPart);
+        propertySupport.firePropertyChange(STATE_LAND_NAME_PROPERTY, oldValue, getStateLandName());
     }
 
     public String getRightholders() {
@@ -306,7 +312,8 @@ public class BaUnitSearchResultBean extends AbstractBindingBean {
      * @return
      */
     public String getStateLandName() {
-        return String.format("%s%s", getNameFirstPart(), getNameLastPart());
+        return String.format("%s%s", getNameFirstPart() == null ? "" : getNameFirstPart(),
+                getNameLastPart() == null ? "" : getNameLastPart());
     }
 
     public void setStateLandName(String stateLandName) {
@@ -329,5 +336,30 @@ public class BaUnitSearchResultBean extends AbstractBindingBean {
         boolean oldValue = this.checked;
         this.checked = checked;
         propertySupport.firePropertyChange(CHECKED_PROPERTY, oldValue, this.checked);
+    }
+
+    public String getStateLandStatusCode() {
+        return stateLandStatus == null ? null : stateLandStatus.getCode();
+    }
+
+    public void setStateLandStatusCode(String statusCode) {
+        String oldValue = null;
+        if (stateLandStatus != null) {
+            oldValue = stateLandStatus.getCode();
+        }
+        setStateLandStatus(CacheManager.getBeanByCode(
+                CacheManager.getStateLandStatusTypes(), statusCode));
+        propertySupport.firePropertyChange(STATE_LAND_STATUS_CODE_PROPERTY, oldValue, statusCode);
+    }
+
+    public StateLandStatusTypeBean getStateLandStatus() {
+        return stateLandStatus;
+    }
+
+    public void setStateLandStatus(StateLandStatusTypeBean stateLandStatus) {
+        if (this.stateLandStatus == null) {
+            this.stateLandStatus = new StateLandStatusTypeBean();
+        }
+        this.setJointRefDataBean(this.stateLandStatus, stateLandStatus, STATE_LAND_STATUS_PROPERTY);
     }
 }

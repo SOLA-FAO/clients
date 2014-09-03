@@ -32,6 +32,7 @@ package org.sola.clients.beans.administrative;
 import org.sola.clients.beans.AbstractTransactionedBean;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.referencedata.BaUnitTypeBean;
+import org.sola.clients.beans.referencedata.StateLandStatusTypeBean;
 import org.sola.webservices.transferobjects.administrative.BaUnitBasicTO;
 
 /**
@@ -48,7 +49,9 @@ public class BaUnitSummaryBean extends AbstractTransactionedBean {
     public static final String NAME_LASTPART_PROPERTY = "nameLastpart";
     public static final String DISPLAY_NAME_PROPERTY = "displayName";
     public static final String DESCRIPTION_PROPERTY = "description";
-    public static final String TYPE_STATE_LAND = "stateLand"; 
+    public static final String STATE_LAND_STATUS_PROPERTY = "stateLandStatus";
+    public static final String STATE_LAND_STATUS_CODE_PROPERTY = "stateLandStatusCode";
+    public static final String TYPE_STATE_LAND = "stateLand";
 
     private String name;
     //@NotEmpty(message = ClientMessage.CHECK_NOTNULL_FIRSTPART, payload=Localized.class)
@@ -58,6 +61,7 @@ public class BaUnitSummaryBean extends AbstractTransactionedBean {
     private BaUnitTypeBean baUnitType;
     private transient String displayName;
     private String description;
+    private StateLandStatusTypeBean stateLandStatus;
 
     public BaUnitSummaryBean() {
         super();
@@ -89,7 +93,7 @@ public class BaUnitSummaryBean extends AbstractTransactionedBean {
         String oldValue = this.nameFirstpart;
         this.nameFirstpart = nameFirstpart;
         propertySupport.firePropertyChange(NAME_FIRSTPART_PROPERTY, oldValue, nameFirstpart);
-        propertySupport.firePropertyChange(DISPLAY_NAME_PROPERTY, "", nameFirstpart);
+        propertySupport.firePropertyChange(DISPLAY_NAME_PROPERTY, oldValue, getDisplayName());
     }
 
     public String getNameLastpart() {
@@ -100,7 +104,7 @@ public class BaUnitSummaryBean extends AbstractTransactionedBean {
         String oldValue = this.nameLastpart;
         this.nameLastpart = nameLastpart;
         propertySupport.firePropertyChange(NAME_LASTPART_PROPERTY, oldValue, nameLastpart);
-        propertySupport.firePropertyChange(DISPLAY_NAME_PROPERTY, "", nameLastpart);
+        propertySupport.firePropertyChange(DISPLAY_NAME_PROPERTY, oldValue, getDisplayName());
     }
 
     public void setTypeCode(String typeCode) {
@@ -135,7 +139,7 @@ public class BaUnitSummaryBean extends AbstractTransactionedBean {
         String formatMask = "%s/%s";
         if (BaUnitTypeBean.CODE_STATE_LAND.equals(getTypeCode())) {
             // Modify the format of the display name for State Land
-            formatMask = String.format("%s%s", getNameFirstpart(), getNameLastpart());
+            formatMask = "%s%s";
         }
         return String.format(formatMask,
                 getNameFirstpart() == null ? "" : getNameFirstpart(),
@@ -154,5 +158,30 @@ public class BaUnitSummaryBean extends AbstractTransactionedBean {
         String oldValue = this.description;
         this.description = description;
         propertySupport.firePropertyChange(DESCRIPTION_PROPERTY, oldValue, description);
+    }
+
+    public String getStateLandStatusCode() {
+        return stateLandStatus == null ? null : stateLandStatus.getCode();
+    }
+
+    public void setStateLandStatusCode(String statusCode) {
+        String oldValue = null;
+        if (stateLandStatus != null) {
+            oldValue = stateLandStatus.getCode();
+        }
+        setStateLandStatus(CacheManager.getBeanByCode(
+                CacheManager.getStateLandStatusTypes(), statusCode));
+        propertySupport.firePropertyChange(STATE_LAND_STATUS_CODE_PROPERTY, oldValue, statusCode);
+    }
+
+    public StateLandStatusTypeBean getStateLandStatus() {
+        return stateLandStatus;
+    }
+
+    public void setStateLandStatus(StateLandStatusTypeBean stateLandStatus) {
+        if (this.stateLandStatus == null) {
+            this.stateLandStatus = new StateLandStatusTypeBean();
+        }
+        this.setJointRefDataBean(this.stateLandStatus, stateLandStatus, STATE_LAND_STATUS_PROPERTY);
     }
 }

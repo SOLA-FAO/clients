@@ -34,6 +34,7 @@ import java.beans.PropertyChangeListener;
 import org.sola.clients.beans.address.AddressBean;
 import org.sola.clients.beans.cadastre.CadastreObjectBean;
 import org.sola.clients.beans.referencedata.CadastreObjectTypeBean;
+import org.sola.clients.beans.referencedata.StateLandStatusTypeBean;
 import org.sola.clients.beans.referencedata.StatusConstants;
 import org.sola.clients.swing.ui.address.AddressDialog;
 import org.sola.clients.swing.common.utils.FormattersFactory;
@@ -50,8 +51,9 @@ public class ParcelPanel extends javax.swing.JPanel {
     private CadastreObjectBean createCadastreBean() {
         if (cadastreObjectBean1 == null) {
             cadastreObjectBean1 = new CadastreObjectBean();
-            cadastreObjectBean1.setTypeCode(CadastreObjectTypeBean.CODE_PARCEL);
+            cadastreObjectBean1.setTypeCode(CadastreObjectTypeBean.CODE_STATE_LAND);
             cadastreObjectBean1.setStatusCode(StatusConstants.PENDING);
+            cadastreObjectBean1.setStateLandStatusCode(StateLandStatusTypeBean.CODE_PROPOSED);
         }
         return cadastreObjectBean1;
     }
@@ -95,8 +97,21 @@ public class ParcelPanel extends javax.swing.JPanel {
         cbxLandUse.setEnabled(enabled);
         txtDescription.setEnabled(enabled);
         cbxStateLandStatusType.setEnabled(enabled);
+        txtStatus.setEnabled(false);
 
-        txtParcelStatus.setEnabled(false);
+        // Determine if the State Land Status or the Parcel Status panel should be displayed.
+        // Remove then add to ensure the panel is now at the end of the panel list before
+        // making it invisible. 
+        if (CadastreObjectTypeBean.CODE_STATE_LAND.equals(cadastreObjectBean1.getTypeCode())) {
+            pnlTop.remove(pnlParcelStatus);
+            pnlTop.add(pnlParcelStatus);
+            pnlParcelStatus.setVisible(false);
+        } else {
+            pnlTop.remove(pnlSLStatus);
+            pnlTop.add(pnlSLStatus);
+            pnlSLStatus.setVisible(false);
+        }
+
         customizeAddressButtons();
     }
 
@@ -186,7 +201,7 @@ public class ParcelPanel extends javax.swing.JPanel {
         menuEdit1 = new org.sola.clients.swing.common.menuitems.MenuEdit();
         menuRemove1 = new org.sola.clients.swing.common.menuitems.MenuRemove();
         stateLandStatusTypeList = new org.sola.clients.beans.referencedata.StateLandStatusTypeListBean();
-        jPanel1 = new javax.swing.JPanel();
+        pnlTop = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel17 = new javax.swing.JLabel();
         txtParcelFirstPart = new javax.swing.JTextField();
@@ -196,15 +211,17 @@ public class ParcelPanel extends javax.swing.JPanel {
         jPanel7 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txtArea = new javax.swing.JFormattedTextField();
+        pnlParcelStatus = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        txtStatus = new javax.swing.JTextField();
+        pnlSLStatus = new javax.swing.JPanel();
+        jLabel10 = new javax.swing.JLabel();
+        cbxStateLandStatusType = new javax.swing.JComboBox();
         jPanel6 = new javax.swing.JPanel();
         labLandUse = new javax.swing.JLabel();
         cbxLandUse = new javax.swing.JComboBox();
-        jPanel4 = new javax.swing.JPanel();
-        jLabel10 = new javax.swing.JLabel();
-        cbxStateLandStatusType = new javax.swing.JComboBox();
+        jPanel12 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        txtParcelStatus = new javax.swing.JTextField();
         jPanel9 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -265,8 +282,8 @@ public class ParcelPanel extends javax.swing.JPanel {
 
         setName("Form"); // NOI18N
 
-        jPanel1.setName(bundle.getString("ParcelPanel.jPanel1.name")); // NOI18N
-        jPanel1.setLayout(new java.awt.GridLayout(2, 3, 15, 15));
+        pnlTop.setName(bundle.getString("ParcelPanel.jPanel1.name")); // NOI18N
+        pnlTop.setLayout(new java.awt.GridLayout(2, 4, 15, 0));
 
         jPanel2.setName(bundle.getString("ParcelPanel.jPanel2.name")); // NOI18N
 
@@ -282,7 +299,7 @@ public class ParcelPanel extends javax.swing.JPanel {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(txtParcelFirstPart, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+            .add(txtParcelFirstPart, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
             .add(jLabel17, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
@@ -294,7 +311,7 @@ public class ParcelPanel extends javax.swing.JPanel {
                 .add(0, 0, Short.MAX_VALUE))
         );
 
-        jPanel1.add(jPanel2);
+        pnlTop.add(jPanel2);
 
         jPanel3.setName(bundle.getString("ParcelPanel.jPanel3.name")); // NOI18N
 
@@ -310,7 +327,7 @@ public class ParcelPanel extends javax.swing.JPanel {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(txtParcelLastPart, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+            .add(txtParcelLastPart, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
             .add(jLabel7, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
@@ -322,7 +339,7 @@ public class ParcelPanel extends javax.swing.JPanel {
                 .add(0, 0, Short.MAX_VALUE))
         );
 
-        jPanel1.add(jPanel3);
+        pnlTop.add(jPanel3);
 
         jPanel7.setName(bundle.getString("ParcelPanel.jPanel7.name")); // NOI18N
 
@@ -340,7 +357,7 @@ public class ParcelPanel extends javax.swing.JPanel {
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(txtArea, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+            .add(txtArea, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
             .add(jLabel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel7Layout.setVerticalGroup(
@@ -351,7 +368,69 @@ public class ParcelPanel extends javax.swing.JPanel {
                 .add(txtArea, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
         );
 
-        jPanel1.add(jPanel7);
+        pnlTop.add(jPanel7);
+
+        pnlParcelStatus.setName("pnlParcelStatus"); // NOI18N
+
+        jLabel3.setText(bundle.getString("ParcelPanel.jLabel3.text")); // NOI18N
+        jLabel3.setName("jLabel3"); // NOI18N
+
+        txtStatus.setEnabled(false);
+        txtStatus.setName("txtStatus"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, cadastreObjectBean1, org.jdesktop.beansbinding.ELProperty.create("${status.displayValue}"), txtStatus, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        org.jdesktop.layout.GroupLayout pnlParcelStatusLayout = new org.jdesktop.layout.GroupLayout(pnlParcelStatus);
+        pnlParcelStatus.setLayout(pnlParcelStatusLayout);
+        pnlParcelStatusLayout.setHorizontalGroup(
+            pnlParcelStatusLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jLabel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+            .add(txtStatus)
+        );
+        pnlParcelStatusLayout.setVerticalGroup(
+            pnlParcelStatusLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(pnlParcelStatusLayout.createSequentialGroup()
+                .add(jLabel3)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(txtStatus, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(0, 17, Short.MAX_VALUE))
+        );
+
+        pnlTop.add(pnlParcelStatus);
+
+        pnlSLStatus.setName(bundle.getString("ParcelPanel.jPanel4.name")); // NOI18N
+
+        jLabel10.setText(bundle.getString("ParcelPanel.jLabel10.text")); // NOI18N
+        jLabel10.setToolTipText(bundle.getString("ParcelPanel.jLabel10.toolTipText")); // NOI18N
+        jLabel10.setName("jLabel10"); // NOI18N
+
+        cbxStateLandStatusType.setName("cbxStateLandStatusType"); // NOI18N
+        cbxStateLandStatusType.setRenderer(new SimpleComboBoxRenderer("getDisplayValue"));
+
+        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${stateLandStatusTypeList}");
+        org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, stateLandStatusTypeList, eLProperty, cbxStateLandStatusType);
+        bindingGroup.addBinding(jComboBoxBinding);
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, cadastreObjectBean1, org.jdesktop.beansbinding.ELProperty.create("${stateLandStatusType}"), cbxStateLandStatusType, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        org.jdesktop.layout.GroupLayout pnlSLStatusLayout = new org.jdesktop.layout.GroupLayout(pnlSLStatus);
+        pnlSLStatus.setLayout(pnlSLStatusLayout);
+        pnlSLStatusLayout.setHorizontalGroup(
+            pnlSLStatusLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(cbxStateLandStatusType, 0, 118, Short.MAX_VALUE)
+            .add(jLabel10, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        pnlSLStatusLayout.setVerticalGroup(
+            pnlSLStatusLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(pnlSLStatusLayout.createSequentialGroup()
+                .add(jLabel10)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(cbxStateLandStatusType, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(0, 0, Short.MAX_VALUE))
+        );
+
+        pnlTop.add(pnlSLStatus);
 
         jPanel6.setName(bundle.getString("ParcelPanel.jPanel6.name")); // NOI18N
 
@@ -360,8 +439,8 @@ public class ParcelPanel extends javax.swing.JPanel {
 
         cbxLandUse.setName(bundle.getString("ParcelPanel.cbxLandUse.name")); // NOI18N
 
-        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${landUseTypeList}");
-        org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, landUseTypeListBean1, eLProperty, cbxLandUse);
+        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${landUseTypeList}");
+        jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, landUseTypeListBean1, eLProperty, cbxLandUse);
         bindingGroup.addBinding(jComboBoxBinding);
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, cadastreObjectBean1, org.jdesktop.beansbinding.ELProperty.create("${landUseType}"), cbxLandUse, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
@@ -370,7 +449,7 @@ public class ParcelPanel extends javax.swing.JPanel {
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(cbxLandUse, 0, 131, Short.MAX_VALUE)
+            .add(cbxLandUse, 0, 118, Short.MAX_VALUE)
             .add(labLandUse, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel6Layout.setVerticalGroup(
@@ -382,67 +461,37 @@ public class ParcelPanel extends javax.swing.JPanel {
                 .add(0, 0, Short.MAX_VALUE))
         );
 
-        jPanel1.add(jPanel6);
+        pnlTop.add(jPanel6);
 
-        jPanel4.setName(bundle.getString("ParcelPanel.jPanel4.name")); // NOI18N
+        jPanel12.setName("jPanel12"); // NOI18N
 
-        jLabel10.setText(bundle.getString("ParcelPanel.jLabel10.text")); // NOI18N
-        jLabel10.setToolTipText(bundle.getString("ParcelPanel.jLabel10.toolTipText")); // NOI18N
-        jLabel10.setName("jLabel10"); // NOI18N
-
-        cbxStateLandStatusType.setName("cbxStateLandStatusType"); // NOI18N
-        cbxStateLandStatusType.setRenderer(new SimpleComboBoxRenderer("getDisplayValue"));
-
-        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${stateLandStatusTypeList}");
-        jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, stateLandStatusTypeList, eLProperty, cbxStateLandStatusType);
-        bindingGroup.addBinding(jComboBoxBinding);
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, cadastreObjectBean1, org.jdesktop.beansbinding.ELProperty.create("${stateLandStatusType}"), cbxStateLandStatusType, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
-
-        org.jdesktop.layout.GroupLayout jPanel4Layout = new org.jdesktop.layout.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(cbxStateLandStatusType, 0, 131, Short.MAX_VALUE)
-            .add(jLabel10, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        org.jdesktop.layout.GroupLayout jPanel12Layout = new org.jdesktop.layout.GroupLayout(jPanel12);
+        jPanel12.setLayout(jPanel12Layout);
+        jPanel12Layout.setHorizontalGroup(
+            jPanel12Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 118, Short.MAX_VALUE)
         );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel4Layout.createSequentialGroup()
-                .add(jLabel10)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(cbxStateLandStatusType, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(0, 0, Short.MAX_VALUE))
+        jPanel12Layout.setVerticalGroup(
+            jPanel12Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 57, Short.MAX_VALUE)
         );
 
-        jPanel1.add(jPanel4);
+        pnlTop.add(jPanel12);
 
         jPanel5.setName(bundle.getString("ParcelPanel.jPanel5.name")); // NOI18N
-
-        jLabel3.setText(bundle.getString("ParcelPanel.jLabel3.text")); // NOI18N
-        jLabel3.setName("jLabel3"); // NOI18N
-
-        txtParcelStatus.setName("txtParcelStatus"); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, cadastreObjectBean1, org.jdesktop.beansbinding.ELProperty.create("${status.displayValue}"), txtParcelStatus, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
 
         org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jLabel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
-            .add(txtParcelStatus)
+            .add(0, 118, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel5Layout.createSequentialGroup()
-                .add(jLabel3)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(txtParcelStatus, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+            .add(0, 57, Short.MAX_VALUE)
         );
 
-        jPanel1.add(jPanel5);
+        pnlTop.add(jPanel5);
 
         jPanel9.setName("jPanel9"); // NOI18N
         jPanel9.setLayout(new java.awt.GridLayout(2, 1, 15, 3));
@@ -471,7 +520,7 @@ public class ParcelPanel extends javax.swing.JPanel {
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jLabel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 519, Short.MAX_VALUE)
             .add(groupPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
         jPanel8Layout.setVerticalGroup(
@@ -480,7 +529,7 @@ public class ParcelPanel extends javax.swing.JPanel {
                 .add(0, 0, 0)
                 .add(jLabel2)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 92, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(groupPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(3, 3, 3))
@@ -556,14 +605,14 @@ public class ParcelPanel extends javax.swing.JPanel {
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jToolBar1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
+            .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 519, Short.MAX_VALUE)
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel10Layout.createSequentialGroup()
                 .add(jToolBar1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE))
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE))
         );
 
         jPanel9.add(jPanel10);
@@ -572,14 +621,14 @@ public class ParcelPanel extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .add(pnlTop, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel9, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
-                .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(pnlTop, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel9, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -615,7 +664,7 @@ public class ParcelPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnViewAddressActionPerformed
 
     private void menuView1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuView1ActionPerformed
-        viewAddress(); 
+        viewAddress();
     }//GEN-LAST:event_menuView1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -634,11 +683,10 @@ public class ParcelPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
@@ -656,13 +704,16 @@ public class ParcelPanel extends javax.swing.JPanel {
     private org.sola.clients.swing.common.menuitems.MenuEdit menuEdit1;
     private org.sola.clients.swing.common.menuitems.MenuRemove menuRemove1;
     private org.sola.clients.swing.common.menuitems.MenuView menuView1;
+    private javax.swing.JPanel pnlParcelStatus;
+    private javax.swing.JPanel pnlSLStatus;
+    private javax.swing.JPanel pnlTop;
     private javax.swing.JPopupMenu popUpAddresses;
     private org.sola.clients.beans.referencedata.StateLandStatusTypeListBean stateLandStatusTypeList;
     private javax.swing.JFormattedTextField txtArea;
     private javax.swing.JTextArea txtDescription;
     private javax.swing.JTextField txtParcelFirstPart;
     private javax.swing.JTextField txtParcelLastPart;
-    private javax.swing.JTextField txtParcelStatus;
+    private javax.swing.JTextField txtStatus;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }
