@@ -41,6 +41,8 @@ import org.geotools.map.extended.layer.ExtendedFeatureLayer;
 import org.geotools.swing.event.MapMouseEvent;
 import org.geotools.swing.tool.extended.ExtendedTool;
 import org.opengis.feature.simple.SimpleFeature;
+import org.sola.clients.swing.gis.beans.StateLandParcelBean;
+import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.layer.StateLandEditLayer;
 import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -111,16 +113,8 @@ public class StateLandSelectTool extends ExtendedTool {
                     while (i.hasNext()) {
                         SimpleFeature feature = (SimpleFeature) i.next();
                         if (this.editLayer.removeFeature(feature.getID(), false) == null) {
-                            HashMap attributes = new HashMap<String, Object>();
-                            attributes.put(StateLandEditLayer.LAYER_FIELD_FIRST_PART,
-                                    (String) feature.getAttribute(StateLandEditLayer.LAYER_FIELD_FIRST_PART));
-                            attributes.put(StateLandEditLayer.LAYER_FIELD_LAST_PART,
-                                    (String) feature.getAttribute(StateLandEditLayer.LAYER_FIELD_LAST_PART));
-                            attributes.put(StateLandEditLayer.LAYER_FIELD_OFFICIAL_AREA,
-                                    feature.getDefaultGeometry() == null ? null
-                                    : new BigDecimal(((Geometry) feature.getDefaultGeometry()).getArea()));
-                            this.editLayer.addFeature(feature.getID(), (Geometry) feature.getDefaultGeometry(),
-                                    attributes, false, true);
+                            this.editLayer.addFeature(feature.getID(),
+                                    (Geometry) feature.getDefaultGeometry(), false, true);
                         }
                     }
                 } finally {

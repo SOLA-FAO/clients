@@ -47,7 +47,6 @@ import org.sola.clients.swing.gis.mapaction.ZoomToTransaction;
 import org.sola.clients.swing.gis.tool.StateLandCreateTool;
 import org.sola.clients.swing.gis.tool.StateLandEditTool;
 import org.sola.clients.swing.gis.tool.StateLandSelectTool;
-import org.sola.common.StringUtility;
 
 /**
  *
@@ -82,22 +81,8 @@ public class ControlBundleForStateLand extends ControlsBundleForTransaction {
         transactionBean.getStateLandParcels().clear();
         if (this.editLayer.getBeanListForTransaction() != null
                 && this.editLayer.getBeanListForTransaction().size() > 0) {
-            List newSLParcels = new ArrayList();
-            int i = 1;
-            for (StateLandParcelBean b
-                    : (List<StateLandParcelBean>) this.editLayer.getBeanListForTransaction()) {
-                if (StringUtility.isEmpty(b.getNameFirstpart())) {
-                    b.setNameFirstpart("LOT " + i);
-                }
-                if (StringUtility.isEmpty(b.getNameLastpart())) {
-                    b.setNameLastpart("12345");
-                }
-
-                newSLParcels.add(b);
-
-                i++;
-            }
-            transactionBean.getStateLandParcels().addAll(newSLParcels);
+            transactionBean.getStateLandParcels().addAll(
+                    (List<StateLandParcelBean>) this.editLayer.getBeanListForTransaction());
         }
         return transactionBean;
     }
@@ -146,7 +131,9 @@ public class ControlBundleForStateLand extends ControlsBundleForTransaction {
     @Override
     public void zoomToInterestingArea(
             ReferencedEnvelope interestingArea, byte[] applicationLocation) {
-        super.zoomToInterestingArea(this.editLayer.getLayerEnvelope(), applicationLocation);
+        if (transactionBean.getStateLandParcels().size() > 0 || applicationLocation != null) {
+            super.zoomToInterestingArea(this.editLayer.getLayerEnvelope(), applicationLocation);
+        }
     }
 
     @Override
@@ -154,7 +141,7 @@ public class ControlBundleForStateLand extends ControlsBundleForTransaction {
 
         //State Land Edit Tools
         this.getMap().addMapAction(new ZoomToTransaction(this), this.getToolbar(), true);
-        
+
         ExtendedFeatureLayer parcelsLayer = (ExtendedFeatureLayer) this.getMap().getSolaLayers().get("parcels");
         ExtendedFeatureLayer roadLayer = (ExtendedFeatureLayer) this.getMap().getSolaLayers().get("roads");
         ExtendedFeatureLayer stateLandParcelsLayer = (ExtendedFeatureLayer) this.getMap().getSolaLayers().get("state-land");
@@ -176,7 +163,7 @@ public class ControlBundleForStateLand extends ControlsBundleForTransaction {
         editTool.getTargetSnappingLayers().add(parcelsLayer);
         editTool.getTargetSnappingLayers().add(roadLayer);
         this.getMap().addTool(editTool, this.getToolbar(), true);
-        this.getMap().addMapAction(new DisplayStateLandParcelListForm(this.getMap(), this.editLayer), 
+        this.getMap().addMapAction(new DisplayStateLandParcelListForm(this.getMap(), this.editLayer),
                 this.getToolbar(), true);
 
         // Add tools and commands to the end of the state land tools
@@ -191,7 +178,8 @@ public class ControlBundleForStateLand extends ControlsBundleForTransaction {
     @Override
     protected void addLayers() throws InitializeLayerException, SchemaException {
         super.addLayers();
-        editLayer = new StateLandEditLayer(getAppBean().getNr());
+        String appNr = getAppBean() == null ? "" : getAppBean().getNr();
+        editLayer = new StateLandEditLayer(appNr);
         getMap().addLayer(editLayer);
         getMap().moveSelectionLayer();
     }

@@ -29,6 +29,7 @@
  */
 package org.sola.clients.beans.administrative;
 
+import java.math.BigDecimal;
 import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.referencedata.BaUnitTypeBean;
@@ -44,8 +45,8 @@ public class BaUnitSearchResultBean extends AbstractBindingBean {
 
     public static final String ID_PROPERTY = "id";
     public static final String NAME_PROPERTY = "name";
-    public static final String NAME_FIRST_PART_PROPERTY = "nameFirstPart";
-    public static final String NAME_LAST_PART_PROPERTY = "nameLastPart";
+    public static final String NAME_FIRST_PART_PROPERTY = "nameFirstpart";
+    public static final String NAME_LAST_PART_PROPERTY = "nameLastpart";
     public static final String STATUS_CODE_PROPERTY = "statusCode";
     public static final String REGISTRATION_STATUS_PROPERTY = "registrationStatus";
     public static final String RIGHTHOLDERS_PROPERTY = "rightholders";
@@ -65,17 +66,19 @@ public class BaUnitSearchResultBean extends AbstractBindingBean {
     public static final String STATE_LAND_STATUS_PROPERTY = "stateLandStatus";
     public static final String STATE_LAND_STATUS_CODE_PROPERTY = "stateLandStatusCode";
     public static final String STATE_LAND_NAME_PROPERTY = "stateLandName";
+    public static final String AREA_PROPERTY = "area";
 
     private String id;
     private String name;
-    private String nameFirstPart;
-    private String nameLastPart;
+    private String nameFirstpart;
+    private String nameLastpart;
     private RegistrationStatusTypeBean registrationStatus;
     private String rightholders;
     private String description;
     private LandUseTypeBean landUseType;
     private String parcels;
     private String locality;
+    private BigDecimal area;
     private String propertyManager;
     private BaUnitTypeBean baUnitType;
     private transient String stateLandName;
@@ -110,25 +113,25 @@ public class BaUnitSearchResultBean extends AbstractBindingBean {
         propertySupport.firePropertyChange(NAME_PROPERTY, oldValue, this.name);
     }
 
-    public String getNameFirstPart() {
-        return nameFirstPart;
+    public String getNameFirstpart() {
+        return nameFirstpart;
     }
 
-    public void setNameFirstPart(String nameFirstPart) {
-        String oldValue = this.nameFirstPart;
-        this.nameFirstPart = nameFirstPart;
-        propertySupport.firePropertyChange(NAME_FIRST_PART_PROPERTY, oldValue, this.nameFirstPart);
+    public void setNameFirstpart(String nameFirstPart) {
+        String oldValue = this.nameFirstpart;
+        this.nameFirstpart = nameFirstPart;
+        propertySupport.firePropertyChange(NAME_FIRST_PART_PROPERTY, oldValue, this.nameFirstpart);
         propertySupport.firePropertyChange(STATE_LAND_NAME_PROPERTY, oldValue, getStateLandName());
     }
 
-    public String getNameLastPart() {
-        return nameLastPart;
+    public String getNameLastpart() {
+        return nameLastpart;
     }
 
-    public void setNameLastPart(String nameLastPart) {
-        String oldValue = this.nameLastPart;
-        this.nameLastPart = nameLastPart;
-        propertySupport.firePropertyChange(NAME_LAST_PART_PROPERTY, oldValue, this.nameLastPart);
+    public void setNameLastpart(String nameLastPart) {
+        String oldValue = this.nameLastpart;
+        this.nameLastpart = nameLastPart;
+        propertySupport.firePropertyChange(NAME_LAST_PART_PROPERTY, oldValue, this.nameLastpart);
         propertySupport.firePropertyChange(STATE_LAND_NAME_PROPERTY, oldValue, getStateLandName());
     }
 
@@ -191,6 +194,16 @@ public class BaUnitSearchResultBean extends AbstractBindingBean {
         String oldValue = this.locality;
         this.locality = locality;
         propertySupport.firePropertyChange(LOCALITY_PROPERTY, oldValue, this.locality);
+    }
+
+    public BigDecimal getArea() {
+        return area;
+    }
+
+    public void setArea(BigDecimal area) {
+        BigDecimal oldValue = this.area;
+        this.area = area;
+        propertySupport.firePropertyChange(AREA_PROPERTY, oldValue, this.area);
     }
 
     public String getPropertyManager() {
@@ -312,8 +325,8 @@ public class BaUnitSearchResultBean extends AbstractBindingBean {
      * @return
      */
     public String getStateLandName() {
-        return String.format("%s%s", getNameFirstPart() == null ? "" : getNameFirstPart(),
-                getNameLastPart() == null ? "" : getNameLastPart());
+        return String.format("%s%s", getNameFirstpart() == null ? "" : getNameFirstpart(),
+                getNameLastpart() == null ? "" : getNameLastpart());
     }
 
     public void setStateLandName(String stateLandName) {

@@ -152,11 +152,11 @@ public class SimpleRightConditionPanel extends ContentPanel {
         headerPanel.setTitleText(String.format("%s, %s", baUnitBean.getDisplayName(),
                 rrrBean.getRrrType().getDisplayValue()));
         if (rrrAction == RrrBean.RRR_ACTION.NEW) {
-            btnSave.setText(MessageUtility.getLocalizedMessage(
+            btnClose.setText(MessageUtility.getLocalizedMessage(
                     ClientMessage.GENERAL_LABELS_CREATE_AND_CLOSE).getMessage());
         }
         if (rrrAction == RrrBean.RRR_ACTION.CANCEL) {
-            btnSave.setText(MessageUtility.getLocalizedMessage(
+            btnClose.setText(MessageUtility.getLocalizedMessage(
                     ClientMessage.GENERAL_LABELS_TERMINATE_AND_CLOSE).getMessage());
         }
 
@@ -167,7 +167,7 @@ public class SimpleRightConditionPanel extends ContentPanel {
         }
 
         if (rrrAction == RrrBean.RRR_ACTION.VIEW) {
-            btnSave.setEnabled(false);
+            btnClose.setEnabled(false);
             txtNotationText.setEnabled(false);
             txtRefNum.setEnabled(false);
             txtRegDatetime.setEnabled(false);
@@ -183,7 +183,7 @@ public class SimpleRightConditionPanel extends ContentPanel {
         }
 
         // Configure Security button
-        btnSecurity.setVisible(btnSave.isEnabled()
+        btnSecurity.setVisible(btnClose.isEnabled()
                 && SecurityBean.isInRole(RolesConstants.CLASSIFICATION_CHANGE_CLASS));
     }
 
@@ -202,7 +202,7 @@ public class SimpleRightConditionPanel extends ContentPanel {
 
     @Override
     protected boolean panelClosing() {
-        if (btnSave.isEnabled() && MainForm.checkSaveBeforeClose(rrrBean)) {
+        if (btnClose.isEnabled() && MainForm.checkSaveBeforeClose(rrrBean)) {
             return saveRrr();
         }
         return true;
@@ -229,7 +229,7 @@ public class SimpleRightConditionPanel extends ContentPanel {
         rrrSubTypes =  createRrrSubTypes();
         headerPanel = new org.sola.clients.swing.ui.HeaderPanel();
         jToolBar1 = new javax.swing.JToolBar();
-        btnSave = new javax.swing.JButton();
+        btnClose = new javax.swing.JButton();
         btnSecurity = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         tabGeneral = new javax.swing.JPanel();
@@ -271,20 +271,20 @@ public class SimpleRightConditionPanel extends ContentPanel {
         jToolBar1.setRollover(true);
         jToolBar1.setName("jToolBar1"); // NOI18N
 
-        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/save.png"))); // NOI18N
-        btnSave.setText(bundle.getString("SimpleRightConditionPanel.btnSave.text")); // NOI18N
-        btnSave.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnSave.setName("btnSave"); // NOI18N
-        btnSave.addActionListener(new java.awt.event.ActionListener() {
+        btnClose.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/confirm-close.png"))); // NOI18N
+        btnClose.setText(bundle.getString("SimpleRightConditionPanel.btnClose.text")); // NOI18N
+        btnClose.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnClose.setName("btnClose"); // NOI18N
+        btnClose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveActionPerformed(evt);
+                btnCloseActionPerformed(evt);
             }
         });
-        jToolBar1.add(btnSave);
+        jToolBar1.add(btnClose);
 
+        btnSecurity.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/lock.png"))); // NOI18N
         btnSecurity.setText(bundle.getString("SimpleRightConditionPanel.btnSecurity.text")); // NOI18N
         btnSecurity.setFocusable(false);
-        btnSecurity.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnSecurity.setName("btnSecurity"); // NOI18N
         btnSecurity.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnSecurity.addActionListener(new java.awt.event.ActionListener() {
@@ -565,9 +565,9 @@ public class SimpleRightConditionPanel extends ContentPanel {
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
         saveRrr();
-    }//GEN-LAST:event_btnSaveActionPerformed
+    }//GEN-LAST:event_btnCloseActionPerformed
 
     private void btnRegDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegDateActionPerformed
         showCalendar(txtRegDatetime);
@@ -578,8 +578,8 @@ public class SimpleRightConditionPanel extends ContentPanel {
     }//GEN-LAST:event_btnSecurityActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnClose;
     private javax.swing.JButton btnRegDate;
-    private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSecurity;
     private javax.swing.JComboBox cbxRrrSubType;
     private org.sola.clients.swing.ui.administrative.ConditionsPanel conditionsPanel1;

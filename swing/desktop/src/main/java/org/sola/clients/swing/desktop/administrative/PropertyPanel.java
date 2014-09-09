@@ -54,7 +54,7 @@ import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.desktop.MainForm;
-import org.sola.clients.swing.desktop.cadastre.SearchParcelDialog;
+import org.sola.clients.swing.desktop.cadastre.AddParcelDialog;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForBaUnit;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
@@ -778,7 +778,7 @@ public class PropertyPanel extends ContentPanel {
      * Open form to add new parcel or search for existing one.\
      *
      * @param isNew Opens {@link CreateParcelDialog} if true, otherwise opens
-     * {@link SearchParcelDialog}
+     * {@link AddParcelDialog}
      */
     private void addParcel(boolean isNew) {
 
@@ -797,7 +797,9 @@ public class PropertyPanel extends ContentPanel {
         if (isNew) {
             form = new CreateParcelDialog(null, null, true);
         } else {
-            form = new SearchParcelDialog(null, true);
+            // Updates for State Land
+            //form = new SearchParcelDialog(null, true);
+            form = new AddParcelDialog(this.applicationBean, null, true);
         }
 
         form.setLocationRelativeTo(this);

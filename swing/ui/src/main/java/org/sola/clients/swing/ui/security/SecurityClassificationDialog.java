@@ -110,6 +110,14 @@ public class SecurityClassificationDialog extends javax.swing.JDialog {
         this.setIconImage(new ImageIcon(imgURL).getImage());
 
         WindowUtility.addEscapeListener(this, false);
+        java.util.ResourceBundle bundle1 = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/security/Bundle");
+        if (entityTable == null) {
+            btnSave.setText(bundle1.getString("SecurityClassificationDialog.btnSave.close_text"));
+            btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/confirm-close.png")));
+        } else {
+            btnSave.setText(bundle1.getString("SecurityClassificationDialog.btnSave.text"));
+            btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/save.png")));
+        }
 
         // Determine the default classificationCode and redactCode for the
         // bean or use the highest codes if there is a list of beans. 

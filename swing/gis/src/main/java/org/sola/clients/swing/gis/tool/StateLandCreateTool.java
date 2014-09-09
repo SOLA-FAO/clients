@@ -78,12 +78,7 @@ public class StateLandCreateTool extends ExtendedDrawToolWithSnapping {
      */
     @Override
     protected void treatFinalizedGeometry(Geometry geometry) {
-        HashMap attributes = new HashMap<String, Object>();
-        attributes.put(StateLandEditLayer.LAYER_FIELD_FIRST_PART, null);
-        attributes.put(StateLandEditLayer.LAYER_FIELD_LAST_PART, null);
-        attributes.put(StateLandEditLayer.LAYER_FIELD_OFFICIAL_AREA, new BigDecimal(geometry.getArea()));
-        this.editLayer.addFeature(UUID.randomUUID().toString(),
-                geometry, attributes, true, true);
+        this.editLayer.addFeature(null, geometry, true, true);
     }
 
     /**

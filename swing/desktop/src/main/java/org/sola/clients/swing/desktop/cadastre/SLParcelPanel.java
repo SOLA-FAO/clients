@@ -138,6 +138,7 @@ public class SLParcelPanel extends ContentPanel {
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
+        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/confirm-close.png"))); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/cadastre/Bundle"); // NOI18N
         btnSave.setText(bundle.getString("SLParcelPanel.btnSave.text")); // NOI18N
         btnSave.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);

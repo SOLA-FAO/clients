@@ -32,10 +32,8 @@ package org.sola.clients.swing.desktop.administrative;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import org.sola.clients.beans.administrative.BaUnitSearchResultBean;
-import org.sola.clients.beans.administrative.BaUnitSummaryBean;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
-import org.sola.clients.swing.desktop.party.PartySearchPanelForm;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.common.messaging.ClientMessage;
@@ -45,6 +43,9 @@ import org.sola.common.messaging.MessageUtility;
  * Allows to search BA units.
  */
 public class BaUnitSearchPanel extends ContentPanel {
+
+    public static final String SELECTED_RESULT_PROPERTY = "selectedResult";
+    private boolean closeOnSelect = true;
 
     /**
      * Default constructor.
@@ -59,8 +60,20 @@ public class BaUnitSearchPanel extends ContentPanel {
                 if (evt.getPropertyName().equals(org.sola.clients.swing.ui.administrative.BaUnitSearchPanel.OPEN_BAUNIT_SEARCH_RESULT)) {
                     BaUnitSearchResultBean searchResult = (BaUnitSearchResultBean) evt.getNewValue();
                     if (searchResult != null) {
-                        openPropertyForm(searchResult.getNameFirstPart(), searchResult.getNameLastPart(),
+                        openPropertyForm(searchResult.getNameFirstpart(), searchResult.getNameLastpart(),
                                 searchResult.getTypeCode());
+                    }
+                }
+            }
+        });
+
+        baUnitSearchPanel.addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals(org.sola.clients.swing.ui.administrative.BaUnitSearchPanel.SELECT_BAUNIT_SEARCH_RESULT)) {
+                    BaUnitSearchResultBean selectedResult = (BaUnitSearchResultBean) evt.getNewValue();
+                    if (selectedResult != null) {
+                        selectResult(selectedResult);
                     }
                 }
             }
@@ -80,6 +93,34 @@ public class BaUnitSearchPanel extends ContentPanel {
         TaskManager.getInstance().runTask(t);
     }
 
+    private void selectResult(final BaUnitSearchResultBean selectedSearchBean) {
+        firePropertyChange(SELECTED_RESULT_PROPERTY, null, selectedSearchBean);
+        if (closeOnSelect) {
+            getMainContentPanel().closePanel(this);
+        }
+    }
+
+    /**
+     * If flag is true, the search form will be closed when the user selects a
+     * search result. If false, the search form will remain open allowing the
+     * user to make another selection
+     *
+     * @param flag
+     */
+    public void setCloseOnSelect(boolean flag) {
+        closeOnSelect = flag;
+    }
+
+    /**
+     * Provides access to the main search panel component so allowing the form
+     * to be configured as required by the developer.
+     *
+     * @return
+     */
+    public org.sola.clients.swing.ui.administrative.BaUnitSearchPanel getSearchPanel() {
+        return baUnitSearchPanel;
+    }
+
     public void clickFind() {
         baUnitSearchPanel.clickFind();
     }
@@ -88,11 +129,8 @@ public class BaUnitSearchPanel extends ContentPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        baUnitSearchPanel1 = new org.sola.clients.swing.ui.administrative.BaUnitSearchPanel();
         headerPanel1 = new org.sola.clients.swing.ui.HeaderPanel();
         baUnitSearchPanel = new org.sola.clients.swing.ui.administrative.BaUnitSearchPanel();
-
-        baUnitSearchPanel1.setName("baUnitSearchPanel1"); // NOI18N
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
         setHelpTopic(bundle.getString("BaUnitSearchPanel.helpTopic")); // NOI18N
@@ -124,7 +162,6 @@ public class BaUnitSearchPanel extends ContentPanel {
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.sola.clients.swing.ui.administrative.BaUnitSearchPanel baUnitSearchPanel;
-    private org.sola.clients.swing.ui.administrative.BaUnitSearchPanel baUnitSearchPanel1;
     private org.sola.clients.swing.ui.HeaderPanel headerPanel1;
     // End of variables declaration//GEN-END:variables
 }

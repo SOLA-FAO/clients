@@ -266,7 +266,7 @@ public class SLDashBoardPanel extends ContentPanel {
                 @Override
                 public Void doTask() {
                     setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PROPERTY));
-                    SLPropertyPanel propertyPanel = new SLPropertyPanel(property.getNameFirstPart(), property.getNameLastPart(), true);
+                    SLPropertyPanel propertyPanel = new SLPropertyPanel(property.getNameFirstpart(), property.getNameLastpart(), true);
                     getMainContentPanel().addPanel(propertyPanel, MainContentPanel.CARD_PROPERTY_PANEL, true);
                     return null;
                 }

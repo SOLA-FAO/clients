@@ -34,12 +34,17 @@ import org.sola.clients.swing.desktop.cadastre.CreateParcelDialog;
 import java.awt.BorderLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import net.sf.jasperreports.engine.JasperPrint;
 import org.sola.clients.beans.administrative.*;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationServiceBean;
+import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.cadastre.CadastreObjectBean;
 import org.sola.clients.beans.cadastre.SpatialValueAreaBean;
 import org.sola.clients.beans.converters.TypeConverters;
@@ -55,7 +60,7 @@ import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.common.utils.FormattersFactory;
 import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.desktop.cadastre.SLParcelPanel;
-import org.sola.clients.swing.desktop.cadastre.SearchParcelDialog;
+import org.sola.clients.swing.desktop.cadastre.AddParcelDialog;
 import org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForBaUnit;
 import org.sola.clients.swing.ui.ContentPanel;
@@ -388,7 +393,7 @@ public class SLPropertyPanel extends ContentPanel {
                     @Override
                     public void propertyChange(PropertyChangeEvent evt) {
                         if (evt.getPropertyName().equals(SLPropertyRelationshipPanel.SELECTED_RESULT_PROPERTY)) {
-                            addParentProperty((Object[]) evt.getNewValue());
+                            addParentProperty((Object[]) evt.getNewValue(), true);
                         }
                     }
                 };
@@ -417,27 +422,30 @@ public class SLPropertyPanel extends ContentPanel {
      * First item of array contains selected {@link BaUnitBean}, second item
      * contains {@link BaUnitRelTypeBean}.
      */
-    private boolean addParentProperty(Object[] selectedResult) {
+    private boolean addParentProperty(Object[] selectedResult, boolean showMessage) {
         if (selectedResult == null) {
             return false;
         }
 
-        BaUnitBean selectedBaUnit = (BaUnitBean) selectedResult[0];
+        BaUnitSummaryBean selectedBaUnit = (BaUnitSummaryBean) selectedResult[0];
         BaUnitRelTypeBean baUnitRelType = (BaUnitRelTypeBean) selectedResult[1];
-        this.whichBaUnitSelected = selectedBaUnit;
+        //this.whichBaUnitSelected = selectedBaUnit;
         // Check if relation type duplicates a relationship already on the list
-        for (RelatedBaUnitInfoBean parent : baUnitBean1.getFilteredParentBaUnits()) {
-            if (parent.getRelationCode() != null
-                    && parent.getRelationCode().equals(baUnitRelType.getCode())) {
-                MessageUtility.displayMessage(ClientMessage.BAUNIT_WRONG_RELATION_TYPE);
-                return false;
-            }
-        }
+//        for (RelatedBaUnitInfoBean parent : baUnitBean1.getFilteredParentBaUnits()) {
+//            if (parent.getRelationCode() != null
+//                    && parent.getRelationCode().equals(baUnitRelType.getCode())) {
+//                MessageUtility.displayMessage(ClientMessage.BAUNIT_WRONG_RELATION_TYPE);
+//                return false;
+//            }
+//        }
 
-        // Check if baUnit is already related as a parent baUnit
+        // Check if baUnit is already related as a parent baUnit with the same relationship type
         for (RelatedBaUnitInfoBean parent : baUnitBean1.getFilteredParentBaUnits()) {
-            if (parent.getRelatedBaUnitId() != null && parent.getRelatedBaUnitId().equals(selectedBaUnit.getId())) {
-                MessageUtility.displayMessage(ClientMessage.BAUNIT_HAS_SELECTED_PARENT_BA_UNIT);
+            if (parent.getRelatedBaUnitId() != null && parent.getRelatedBaUnitId().equals(selectedBaUnit.getId())
+                    && parent.getRelationCode() != null && parent.getRelationCode().equals(baUnitRelType.getCode())) {
+                if (showMessage) {
+                    MessageUtility.displayMessage(ClientMessage.BAUNIT_HAS_SELECTED_PARENT_BA_UNIT);
+                }
                 return false;
             }
         }
@@ -450,7 +458,9 @@ public class SLPropertyPanel extends ContentPanel {
         relatedBuUnit.setRelatedBaUnitId(selectedBaUnit.getId());
         baUnitBean1.getParentBaUnits().addAsNew(relatedBuUnit);
 
-        tabsMain.setSelectedIndex(tabsMain.indexOfComponent(pnlRelationships));
+        if (showMessage) {
+            tabsMain.setSelectedIndex(tabsMain.indexOfComponent(pnlRelationships));
+        }
         return true;
     }
 
@@ -558,10 +568,8 @@ public class SLPropertyPanel extends ContentPanel {
         }
         btnViewParcel.setEnabled(cadastreBean != null);
         btnAddParcel.setEnabled(!readOnly);
-        btnSearchParcel.setEnabled(!readOnly);
         menuAddParcel.setEnabled(btnAddParcel.isEnabled());
         menuRemoveParcel.setEnabled(btnRemoveParcel.isEnabled());
-        menuSearchParcel.setEnabled(btnSearchParcel.isEnabled());
         menuViewParcel.setEnabled(btnViewParcel.isEnabled());
         menuEditParcel.setEnabled(btnEditParcel.isEnabled());
     }
@@ -753,34 +761,72 @@ public class SLPropertyPanel extends ContentPanel {
      * Open form to add new parcel or search for existing one.\
      *
      * @param isNew Opens {@link CreateParcelDialog} if true, otherwise opens
-     * {@link SearchParcelDialog}
+     * {@link AddParcelDialog}
      */
-    private void addParcel(boolean isNew) {
-        if (isNew) {
-            PropertyChangeListener listener = new PropertyChangeListener() {
-                @Override
-                public void propertyChange(PropertyChangeEvent e) {
-                    if (e.getPropertyName().equals(SLParcelPanel.SAVE_PARCEL) && e.getNewValue() != null) {
-                        baUnitBean1.getCadastreObjectList().addAsNew((CadastreObjectBean) e.getNewValue());
+    private void addParcel() {
+        PropertyChangeListener listener = new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent e) {
+                if (e.getNewValue() != null) {
+                    CadastreObjectBean bean = (CadastreObjectBean) e.getNewValue();
+                    baUnitBean1.getCadastreObjectList().addAsNew((CadastreObjectBean) e.getNewValue());
+                    if (bean.getGeomPolygon() != null) {
+                        // Locate any underlying titles and add them to this state land property
+                        addUnderlyingTitles(bean.getId());
+                    }
+                    // Increase the area of the property by the official area of the parcel
+                    if (bean.getOfficialAreaSize() != null) {
+                        BigDecimal area = new BigDecimal(bean.getOfficialAreaSize().doubleValue());
+                        if (baUnitAreaBean1.getSize() == null) {
+                            txtSLArea.setValue(area);
+                        } else {
+                            txtSLArea.setValue(area.add(baUnitAreaBean1.getSize()));
+                        }
+
+                        // Force the area to be accepted by the FormattedTextField
+                        txtSLArea.transferFocus();
                     }
                 }
-            };
-            openParcelPanel(null, listener, false);
-        } else {
-            PropertyChangeListener listener = new PropertyChangeListener() {
-                @Override
-                public void propertyChange(PropertyChangeEvent e) {
-                    if (e.getNewValue() != null) {
-                        baUnitBean1.getCadastreObjectList().addAsNew((CadastreObjectBean) e.getNewValue());
-                    }
+            }
+        };
+        JDialog form = new AddParcelDialog(this.applicationBean, null, true);
+        form.setLocationRelativeTo(this);
+        form.addPropertyChangeListener(AddParcelDialog.SELECTED_PARCEL, listener);
+        form.setVisible(true);
+        form.removePropertyChangeListener(AddParcelDialog.SELECTED_PARCEL, listener);
+    }
+
+    /**
+     * Locates the titles underlying the state land parcel and adds them as
+     * parent properties to the state land property.
+     *
+     * @param parcelId
+     */
+    private void addUnderlyingTitles(final String parcelId) {
+        final List<BaUnitSummaryBean> underlyingTitles = new ArrayList<BaUnitSummaryBean>();
+        SolaTask t = new SolaTask<Void, Void>() {
+
+            @Override
+            public Void doTask() {
+                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_GET_UNDERLYING_TITLES));
+                TypeConverters.TransferObjectListToBeanList(
+                        WSManager.getInstance().getSearchService().getUnderlyingTitles(parcelId),
+                        BaUnitSummaryBean.class, (List) underlyingTitles);
+                return null;
+            }
+
+            @Override
+            protected void taskDone() {
+                BaUnitRelTypeBean underlyingTitleRel = CacheManager.getBeanByCode(CacheManager.getBaUnitRelTypes(),
+                        BaUnitRelTypeBean.CODE_UNDERLYING_TITLE);
+                for (BaUnitSummaryBean bean : underlyingTitles) {
+                    Object[] params = new Object[]{bean, underlyingTitleRel};
+                    addParentProperty(params, false);
                 }
-            };
-            JDialog form = new SearchParcelDialog(null, true);
-            form.setLocationRelativeTo(this);
-            form.addPropertyChangeListener(CreateParcelDialog.SELECTED_PARCEL, listener);
-            form.setVisible(true);
-            form.removePropertyChangeListener(CreateParcelDialog.SELECTED_PARCEL, listener);
-        }
+            }
+        };
+        TaskManager.getInstance().runTask(t);
+
     }
 
     private void editParcel() {
@@ -1183,7 +1229,7 @@ public class SLPropertyPanel extends ContentPanel {
         WindowUtility.centerForm(form);
         form.setVisible(true);
     }
-    
+
     private void configureSecurity() {
         SecurityClassificationDialog form = new SecurityClassificationDialog(baUnitBean1, MainForm.getInstance(), true);
         WindowUtility.centerForm(form);
@@ -1207,8 +1253,6 @@ public class SLPropertyPanel extends ContentPanel {
         menuAddParcel = new javax.swing.JMenuItem();
         menuEditParcel = new javax.swing.JMenuItem();
         menuRemoveParcel = new javax.swing.JMenuItem();
-        jSeparator13 = new javax.swing.JPopupMenu.Separator();
-        menuSearchParcel = new javax.swing.JMenuItem();
         popupRights = new javax.swing.JPopupMenu();
         menuVaryRight = new javax.swing.JMenuItem();
         menuExtinguishRight = new javax.swing.JMenuItem();
@@ -1313,8 +1357,6 @@ public class SLPropertyPanel extends ContentPanel {
         btnAddParcel = new javax.swing.JButton();
         btnEditParcel = new org.sola.clients.swing.common.buttons.BtnEdit();
         btnRemoveParcel = new javax.swing.JButton();
-        jSeparator12 = new javax.swing.JToolBar.Separator();
-        btnSearchParcel = new javax.swing.JButton();
         pnlInterests = new javax.swing.JPanel();
         jPanel16 = new javax.swing.JPanel();
         jPanel15 = new javax.swing.JPanel();
@@ -1411,19 +1453,6 @@ public class SLPropertyPanel extends ContentPanel {
             }
         });
         popupParcels.add(menuRemoveParcel);
-
-        jSeparator13.setName("jSeparator13"); // NOI18N
-        popupParcels.add(jSeparator13);
-
-        menuSearchParcel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/search.png"))); // NOI18N
-        menuSearchParcel.setText(bundle.getString("SLPropertyPanel.menuSearchParcel.text")); // NOI18N
-        menuSearchParcel.setName("menuSearchParcel"); // NOI18N
-        menuSearchParcel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuSearchParcelActionPerformed(evt);
-            }
-        });
-        popupParcels.add(menuSearchParcel);
 
         popupRights.setName("popupRights"); // NOI18N
 
@@ -2380,20 +2409,6 @@ public class SLPropertyPanel extends ContentPanel {
         });
         jToolBar1.add(btnRemoveParcel);
 
-        jSeparator12.setName("jSeparator12"); // NOI18N
-        jToolBar1.add(jSeparator12);
-
-        btnSearchParcel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/search.png"))); // NOI18N
-        btnSearchParcel.setText(bundle.getString("SLPropertyPanel.btnSearchParcel.text_1")); // NOI18N
-        btnSearchParcel.setFocusable(false);
-        btnSearchParcel.setName(bundle.getString("PropertyPanel.btnSearchParcel.name_1")); // NOI18N
-        btnSearchParcel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSearchParcelActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(btnSearchParcel);
-
         org.jdesktop.layout.GroupLayout pnlParcelsLayout = new org.jdesktop.layout.GroupLayout(pnlParcels);
         pnlParcels.setLayout(pnlParcelsLayout);
         pnlParcelsLayout.setHorizontalGroup(
@@ -3113,7 +3128,7 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     }//GEN-LAST:event_btnPrintBaUnitActionPerformed
 
     private void menuAddParcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAddParcelActionPerformed
-        addParcel(true);
+        addParcel();
     }//GEN-LAST:event_menuAddParcelActionPerformed
 
     private void menuRemoveParcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRemoveParcelActionPerformed
@@ -3218,12 +3233,8 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
         removeParcel();
     }//GEN-LAST:event_btnRemoveParcelActionPerformed
 
-    private void btnSearchParcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchParcelActionPerformed
-        addParcel(false);
-    }//GEN-LAST:event_btnSearchParcelActionPerformed
-
     private void btnAddParcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddParcelActionPerformed
-        addParcel(true);
+        addParcel();
     }//GEN-LAST:event_btnAddParcelActionPerformed
 
     private void btnEditNotationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditNotationActionPerformed
@@ -3262,10 +3273,6 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
         editParcel();
     }//GEN-LAST:event_menuEditParcelActionPerformed
 
-    private void menuSearchParcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSearchParcelActionPerformed
-        addParcel(false);
-    }//GEN-LAST:event_menuSearchParcelActionPerformed
-
     private void btnViewPropDocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewPropDocActionPerformed
         viewDocument();
     }//GEN-LAST:event_btnViewPropDocActionPerformed
@@ -3279,7 +3286,7 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     }//GEN-LAST:event_btnAssignActionPerformed
 
     private void btnSecurityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSecurityActionPerformed
-       configureSecurity();
+        configureSecurity();
     }//GEN-LAST:event_btnSecurityActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -3303,7 +3310,6 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private javax.swing.JButton btnRemoveParent;
     private javax.swing.JButton btnRemoveRight;
     private javax.swing.JButton btnSave;
-    private javax.swing.JButton btnSearchParcel;
     private javax.swing.JButton btnSecurity;
     private javax.swing.JButton btnTerminate;
     private javax.swing.JButton btnViewChild;
@@ -3373,8 +3379,6 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator10;
     private javax.swing.JPopupMenu.Separator jSeparator11;
-    private javax.swing.JToolBar.Separator jSeparator12;
-    private javax.swing.JPopupMenu.Separator jSeparator13;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JToolBar.Separator jSeparator4;
@@ -3404,7 +3408,6 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private javax.swing.JMenuItem menuRemoveParcel;
     private javax.swing.JMenuItem menuRemoveParentBaUnit;
     private javax.swing.JMenuItem menuRemoveRight;
-    private javax.swing.JMenuItem menuSearchParcel;
     private javax.swing.JMenuItem menuVaryRight;
     private javax.swing.JMenuItem menuViewChildBaUnit;
     private javax.swing.JMenuItem menuViewNotation;

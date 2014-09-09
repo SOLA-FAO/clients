@@ -112,6 +112,13 @@ public class NotationPanel extends ContentPanel {
                     resourceBundle.getString("NotationPanel.TitleText.ExistingNote"),
                     baUnitBean.getDisplayName(), notationBean.getReferenceNr()));
         }
+        if (applicationBean != null) {
+            btnSave1.setText(resourceBundle.getString("NotationPanel.btnSave1.text"));
+            btnSave1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/save.png")));
+        } else {
+            btnSave1.setText(resourceBundle.getString("NotationPanel.btnSave1.close_text"));
+            btnSave1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/confirm-close.png")));
+        }
         boolean enabled = !readOnly;
         btnSave1.setEnabled(enabled);
         txtNr.setEnabled(enabled);

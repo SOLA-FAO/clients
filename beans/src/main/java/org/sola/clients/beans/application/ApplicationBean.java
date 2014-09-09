@@ -205,15 +205,6 @@ public class ApplicationBean extends ApplicationSummaryBean {
      */
     public boolean isEditingAllowed() {
         return isNew() || isLodged();
-//        boolean result = true;
-//        String appStatus = getStatusCode();
-//        if (appStatus != null && (appStatus.equals(StatusConstants.APPROVED)
-//                || appStatus.equals(StatusConstants.CANCELED)
-//                || appStatus.equals(StatusConstants.ARCHIVED)
-//                || appStatus.equals(StatusConstants.REJECTED))) {
-//            result = false;
-//        }
-//        return result;
     }
 
     /**
@@ -397,10 +388,6 @@ public class ApplicationBean extends ApplicationSummaryBean {
     }
 
     public ApplicationPropertyBean getSelectedProperty() {
-        if (getPropertyList().size() == 1) {
-            ApplicationPropertyBean onlyOneProperty = getPropertyList().get(0);
-            selectedProperty = onlyOneProperty;
-        }
         return selectedProperty;
     }
 
@@ -709,6 +696,13 @@ public class ApplicationBean extends ApplicationSummaryBean {
             newProperty.setTotalValue(value);
             propertyList.addAsNew(newProperty);
             selectedProperty = newProperty;
+        }
+    }
+
+    public void addProperty(ApplicationPropertyBean appProperty) {
+        if (appProperty != null) {
+            propertyList.addAsNew(appProperty);
+            selectedProperty = appProperty;
         }
     }
 

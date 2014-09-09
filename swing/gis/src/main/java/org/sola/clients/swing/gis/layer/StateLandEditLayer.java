@@ -32,17 +32,20 @@ package org.sola.clients.swing.gis.layer;
 import com.vividsolutions.jts.geom.Geometry;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.UUID;
 import org.geotools.geometry.jts.Geometries;
 import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.geotools.swing.extended.util.Messaging;
 import org.opengis.feature.simple.SimpleFeature;
+import org.sola.clients.beans.address.AddressBean;
 import org.sola.clients.swing.gis.beans.AbstractListSpatialBean;
 import org.sola.clients.swing.gis.beans.SpatialBean;
 import org.sola.clients.swing.gis.beans.StateLandParcelBean;
 import org.sola.clients.swing.gis.beans.StateLandParcelListBean;
+import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.ui.control.StateLandParcelForm;
-import org.sola.common.StringUtility;
 import org.sola.common.WindowUtility;
 import org.sola.common.logging.LogUtility;
 import org.sola.common.messaging.GisMessage;
@@ -109,8 +112,20 @@ public class StateLandEditLayer extends AbstractSpatialObjectLayer {
         getMapControl().refresh();
     }
 
-    public SimpleFeature addFeature(String fid, Geometry geom,
-            HashMap<String, Object> fieldsWithValues, boolean refreshMap, boolean displayEditForm) {
+    /**
+     * Adds a new feature to the map as well as the list of State Land beans
+     * managed by the Layer
+     *
+     * @param fid The id of the feature to add. Should be null if the feature is
+     * new
+     * @param geom The geometry representing the new feature. Should be of type
+     * POLYGON
+     * @param refreshMap Flag to indicate when the map should be refreshed.
+     * @param displayEditForm Flag to indicate if the State Land Parcel Form
+     * should be displayed after the feature as been added to the layer
+     * @return The new feature added to the Map
+     */
+    public SimpleFeature addFeature(String fid, Geometry geom, boolean refreshMap, boolean displayEditForm) {
         if (Geometries.get(geom) == Geometries.MULTIPOLYGON
                 || Geometries.get(geom) == Geometries.GEOMETRYCOLLECTION) {
             // Only process the first geometry of the collection as cadastre objects must be POLYGON
@@ -119,14 +134,55 @@ public class StateLandEditLayer extends AbstractSpatialObjectLayer {
                 LogUtility.log("StateLandEditLayer: Only first geometry added of " + geom.getNumGeometries());
             }
         }
-        if (StringUtility.isEmpty((String) fieldsWithValues.get(LAYER_FIELD_LAST_PART))) {
-            fieldsWithValues.put(LAYER_FIELD_LAST_PART, applicationNumber);
+        StateLandParcelBean sourceCadObj = null;
+        HashMap attributes = new HashMap<String, Object>();
+
+        if (fid == null) {
+            // New spatial object, generate an id for it
+            fid = UUID.randomUUID().toString();
+        } else {
+            // Try to retrieve the source cadastre object from the DB. Will only 
+            // retrieve Cadastre Objects, Spatial Units are not be retrieved. 
+            sourceCadObj = PojoDataAccess.getInstance().getStateLandBean(fid);
         }
-        SimpleFeature result = super.addFeature(fid, geom, fieldsWithValues, refreshMap);
+
+        if (sourceCadObj != null) {
+            // Copy relevant info from the source CO for the new SL Parcel bean.
+            attributes.put(StateLandEditLayer.LAYER_FIELD_FIRST_PART, sourceCadObj.getNameFirstpart() + " ");
+            attributes.put(StateLandEditLayer.LAYER_FIELD_LAST_PART, sourceCadObj.getNameLastpart());
+            if (sourceCadObj.getOfficialAreaSize() != null) {
+                attributes.put(StateLandEditLayer.LAYER_FIELD_OFFICIAL_AREA, sourceCadObj.getOfficialAreaSize());
+            } else {
+                attributes.put(StateLandEditLayer.LAYER_FIELD_OFFICIAL_AREA,
+                        geom == null ? null
+                        : new BigDecimal(geom.getArea()));
+            }
+        } else {
+            // This is a new spatial object, or a Spatial Unit, so default the attributes accordingly. 
+            attributes.put(StateLandEditLayer.LAYER_FIELD_FIRST_PART, null);
+            attributes.put(StateLandEditLayer.LAYER_FIELD_LAST_PART, applicationNumber);
+            attributes.put(StateLandEditLayer.LAYER_FIELD_OFFICIAL_AREA,
+                    geom == null ? null
+                    : new BigDecimal(geom.getArea()));
+        }
+
+        SimpleFeature result = super.addFeature(fid, geom, attributes, refreshMap);
+        StateLandParcelBean slBean = this.getBean(result);
+        if (sourceCadObj != null) {
+            // Copy Address and Description details from the source cadastre object 
+            // onto the new State Land Bean
+            slBean.setDescription(sourceCadObj.getDescription());
+            slBean.setLandUseCode(sourceCadObj.getLandUseCode());
+            slBean.setClassificationCode(sourceCadObj.getClassificationCode());
+            slBean.setRedactCode(sourceCadObj.getRedactCode());
+            for (AddressBean addr : sourceCadObj.getAddressFilteredList()) {
+                slBean.addAddress(addr.getDescription());
+            }
+        }
         if (displayEditForm) {
-            StateLandParcelBean bean = this.getBean(result);
-            highlightSelectedBean(bean);
-            StateLandParcelForm form = new StateLandParcelForm(bean, false, 
+            // Show the details for the bean in the SL Parcel Form. 
+            highlightSelectedBean(slBean);
+            StateLandParcelForm form = new StateLandParcelForm(slBean, false,
                     WindowUtility.getTopFrame(), true);
             form.setVisible(true);
             highlightSelectedBean(null);

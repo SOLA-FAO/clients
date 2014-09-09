@@ -69,14 +69,14 @@ public class StateLandParcelListForm extends javax.swing.JDialog {
     }
 
     private void save() {
-        clearSelection(); 
+        clearSelection();
         this.setVisible(false);
     }
 
     private void showParcel(boolean readOnly) {
         if (listBean.getSelectedBean() != null) {
             StateLandParcelForm form = new StateLandParcelForm(
-                    (StateLandParcelBean) listBean.getSelectedBean(), readOnly, 
+                    (StateLandParcelBean) listBean.getSelectedBean(), readOnly,
                     WindowUtility.getTopFrame(), true);
             form.setVisible(true);
         }
@@ -135,6 +135,8 @@ public class StateLandParcelListForm extends javax.swing.JDialog {
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
+        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/confirm-close.png"))); // NOI18N
+        btnSave.setText(bundle.getString("StateLandParcelListForm.btnSave.text")); // NOI18N
         btnSave.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -208,14 +210,15 @@ public class StateLandParcelListForm extends javax.swing.JDialog {
         columnBinding.setColumnName("State Land Status Type.display Value");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${status.displayValue}"));
-        columnBinding.setColumnName("Status.display Value");
-        columnBinding.setColumnClass(String.class);
-        columnBinding.setEditable(false);
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, listBean, org.jdesktop.beansbinding.ELProperty.create("${selectedBean}"), tblParcelList, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
         bindingGroup.addBinding(binding);
 
+        tblParcelList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblParcelListMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblParcelList);
         if (tblParcelList.getColumnModel().getColumnCount() > 0) {
             tblParcelList.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("StateLandParcelListForm.tblParcelList.columnModel.title0")); // NOI18N
@@ -227,7 +230,6 @@ public class StateLandParcelListForm extends javax.swing.JDialog {
             tblParcelList.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("StateLandParcelListForm.tblParcelList.columnModel.title4")); // NOI18N
             tblParcelList.getColumnModel().getColumn(4).setCellRenderer(new CellDelimitedListRenderer("; ", false));
             tblParcelList.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("StateLandParcelListForm.tblParcelList.columnModel.title5")); // NOI18N
-            tblParcelList.getColumnModel().getColumn(6).setHeaderValue(bundle.getString("StateLandParcelListForm.tblParcelList.columnModel.title6")); // NOI18N
         }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -271,12 +273,22 @@ public class StateLandParcelListForm extends javax.swing.JDialog {
     }//GEN-LAST:event_btnRemove1ActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        clearSelection(); 
+        clearSelection();
     }//GEN-LAST:event_formWindowClosing
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
-        clearSelection(); 
+        clearSelection();
     }//GEN-LAST:event_btnClearActionPerformed
+
+    private void tblParcelListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblParcelListMouseClicked
+        if (evt.getClickCount() == 2) {
+            if (btnEdit1.isEnabled()) {
+                showParcel(false);
+            } else {
+                showParcel(true);
+            }
+        }
+    }//GEN-LAST:event_tblParcelListMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

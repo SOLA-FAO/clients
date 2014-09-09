@@ -1,28 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.gis.data;
@@ -37,6 +39,7 @@ import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.swing.extended.util.CRSUtility;
 import org.geotools.swing.extended.util.GeometryUtility;
 import org.sola.clients.beans.converters.TypeConverters;
+import org.sola.clients.swing.gis.beans.StateLandParcelBean;
 import org.sola.clients.swing.gis.beans.TransactionCadastreChangeBean;
 import org.sola.clients.swing.gis.beans.TransactionCadastreRedefinitionBean;
 import org.sola.clients.swing.gis.beans.TransactionStateLandBean;
@@ -52,14 +55,16 @@ import org.sola.webservices.search.ResultForSelectionInfo;
 import org.sola.webservices.spatial.QueryForNavigation;
 import org.sola.webservices.spatial.QueryForPublicDisplayMap;
 import org.sola.webservices.spatial.ResultForNavigationInfo;
+import org.sola.webservices.transferobjects.cadastre.CadastreObjectTO;
 import org.sola.webservices.transferobjects.transaction.TransactionCadastreChangeTO;
 import org.sola.webservices.transferobjects.transaction.TransactionCadastreRedefinitionTO;
 import org.sola.webservices.transferobjects.transaction.TransactionStateLandTO;
 
 /**
  *
- * This class is a singletone class. It handles the communication with the services for all needs
- * that gis component has for information from server. It uses Sola infrastructure to achieve this.
+ * This class is a singletone class. It handles the communication with the
+ * services for all needs that gis component has for information from server. It
+ * uses Sola infrastructure to achieve this.
  *
  * @author Elton Manoku
  */
@@ -78,8 +83,8 @@ public class PojoDataAccess {
     }
 
     /**
-     * It gets the singletone instance of itself. Use this instead of using the constructor to get a
-     * reference to the object.
+     * It gets the singletone instance of itself. Use this instead of using the
+     * constructor to get a reference to the object.
      */
     public static PojoDataAccess getInstance() {
         if (poJoDataAccess == null) {
@@ -89,8 +94,8 @@ public class PojoDataAccess {
     }
 
     /**
-     * Gets the map definition from the server. This object is used to define startup parameters for
-     * the map control
+     * Gets the map definition from the server. This object is used to define
+     * startup parameters for the map control
      *
      * @return
      */
@@ -104,11 +109,11 @@ public class PojoDataAccess {
     /**
      * It resets the map definition.
      */
-    public void resetMapDefinition(){
+    public void resetMapDefinition() {
         this.mapDefinition = getSearchService().getMapDefinition();
         this.mapLayerInfoList = null;
         CRSUtility.getInstance().clearCRSList();
-        for (CrsTO crsTO:this.mapDefinition.getCrsList()){
+        for (CrsTO crsTO : this.mapDefinition.getCrsList()) {
             CRSUtility.getInstance().setCRS(crsTO.getSrid(), crsTO.getWkt());
         }
     }
@@ -129,7 +134,8 @@ public class PojoDataAccess {
     }
 
     /**
-     * Gets the list of features and other relevant information for the given extent
+     * Gets the list of features and other relevant information for the given
+     * extent
      *
      * @param name Name of layer
      * @param west West coordinate
@@ -151,13 +157,13 @@ public class PojoDataAccess {
         spatialQueryInfo.setEast(east);
         spatialQueryInfo.setNorth(north);
         spatialQueryInfo.setSrid(srid);
-        spatialQueryInfo.setPixelResolution(pixelTolerance);        
+        spatialQueryInfo.setPixelResolution(pixelTolerance);
         return getSpatialService().getSpatialForNavigation(spatialQueryInfo);
     }
 
     /**
-     * Gets the list of features and other relevant information for the given extent
-     * for a layer of type pojo_public_display
+     * Gets the list of features and other relevant information for the given
+     * extent for a layer of type pojo_public_display
      *
      * @param name Name of layer
      * @param west West coordinate
@@ -181,13 +187,14 @@ public class PojoDataAccess {
         spatialQueryInfo.setEast(east);
         spatialQueryInfo.setNorth(north);
         spatialQueryInfo.setSrid(srid);
-        spatialQueryInfo.setPixelResolution(pixelTolerance);        
+        spatialQueryInfo.setPixelResolution(pixelTolerance);
         spatialQueryInfo.setNameLastPart(nameLastPart);
         return getSpatialService().getSpatialForPublicDisplay(spatialQueryInfo);
     }
 
     /**
-     * Gets a list of selected set of features for each query defined in the parameter.
+     * Gets a list of selected set of features for each query defined in the
+     * parameter.
      *
      * @param queries List of queries used for selecting features
      * @return
@@ -204,8 +211,8 @@ public class PojoDataAccess {
     }
 
     /**
-     * Gets a reference to the Sola Web service manager. This is used to finally communicate with
-     * the web services
+     * Gets a reference to the Sola Web service manager. This is used to finally
+     * communicate with the web services
      *
      * @return
      */
@@ -247,13 +254,13 @@ public class PojoDataAccess {
      * @return
      */
     public TransactionCadastreChangeBean getTransactionCadastreChange(String serviceId) {
-        TransactionCadastreChangeTO objTO =
-                getInstance().getCadastreService().getTransactionCadastreChange(serviceId);
+        TransactionCadastreChangeTO objTO
+                = getInstance().getCadastreService().getTransactionCadastreChange(serviceId);
         TransactionCadastreChangeBean transactionBean = new TransactionCadastreChangeBean();
         if (objTO == null) {
             transactionBean.setFromServiceId(serviceId);
         } else {
-            transactionBean = TypeConverters.TransferObjectToBean(objTO, 
+            transactionBean = TypeConverters.TransferObjectToBean(objTO,
                     TransactionCadastreChangeBean.class, null);
         }
         return transactionBean;
@@ -266,13 +273,13 @@ public class PojoDataAccess {
      * @return
      */
     public TransactionCadastreChangeBean getTransactionCadastreChangeById(String id) {
-        TransactionCadastreChangeTO objTO =
-                getInstance().getCadastreService().getTransactionCadastreChangeById(id);
+        TransactionCadastreChangeTO objTO
+                = getInstance().getCadastreService().getTransactionCadastreChangeById(id);
         TransactionCadastreChangeBean transactionBean = new TransactionCadastreChangeBean();
         if (objTO == null) {
             transactionBean.setId(id);
         } else {
-            transactionBean = TypeConverters.TransferObjectToBean(objTO, 
+            transactionBean = TypeConverters.TransferObjectToBean(objTO,
                     TransactionCadastreChangeBean.class, null);
         }
         return transactionBean;
@@ -286,35 +293,35 @@ public class PojoDataAccess {
      */
     public TransactionCadastreRedefinitionBean getTransactionCadastreRedefinition(
             String serviceId) {
-        TransactionCadastreRedefinitionTO objTO =
-                getInstance().getCadastreService().getTransactionCadastreRedefinition(serviceId);
-        TransactionCadastreRedefinitionBean transactionBean =
-                new TransactionCadastreRedefinitionBean();
+        TransactionCadastreRedefinitionTO objTO
+                = getInstance().getCadastreService().getTransactionCadastreRedefinition(serviceId);
+        TransactionCadastreRedefinitionBean transactionBean
+                = new TransactionCadastreRedefinitionBean();
         if (objTO == null) {
             transactionBean.setFromServiceId(serviceId);
         } else {
-             transactionBean = TypeConverters.TransferObjectToBean(objTO, 
-                     TransactionCadastreRedefinitionBean.class, null);
+            transactionBean = TypeConverters.TransferObjectToBean(objTO,
+                    TransactionCadastreRedefinitionBean.class, null);
         }
         return transactionBean;
     }
-    
+
     /**
      * Gets the extent of the public display map
-     * 
+     *
      * @param nameLastPart
-     * @return 
+     * @return
      */
-    public ReferencedEnvelope getExtentOfPublicDisplay(String nameLastPart){
+    public ReferencedEnvelope getExtentOfPublicDisplay(String nameLastPart) {
         byte[] e = getSearchService().getExtentOfPublicDisplayMap(nameLastPart);
-        if (e == null){
+        if (e == null) {
             return null;
         }
         Geometry extent = GeometryUtility.getGeometryFromWkb(e);
         return JTS.toEnvelope(extent);
     }
-    
-        /**
+
+    /**
      * Gets a state land transaction
      *
      * @param serviceId The service id which initializes the transaction
@@ -322,16 +329,36 @@ public class PojoDataAccess {
      */
     public TransactionStateLandBean getStateLandChange(
             String serviceId) {
-        TransactionStateLandTO objTO =
-                getInstance().getCadastreService().getStateLandChange(serviceId);
-        TransactionStateLandBean transactionBean =
-                new TransactionStateLandBean();
+        TransactionStateLandTO objTO
+                = getInstance().getCadastreService().getStateLandChange(serviceId);
+        TransactionStateLandBean transactionBean
+                = new TransactionStateLandBean();
         if (objTO == null) {
             transactionBean.setFromServiceId(serviceId);
         } else {
-             transactionBean = TypeConverters.TransferObjectToBean(objTO, 
-                     TransactionStateLandBean.class, null);
+            transactionBean = TypeConverters.TransferObjectToBean(objTO,
+                    TransactionStateLandBean.class, null);
         }
         return transactionBean;
+    }
+
+    /**
+     * Retrieves a cadastre object from the database by id and transfers it onto
+     * a StateLandParcelBean to ensure all address and related details are
+     * preserved.
+     *
+     * @param id
+     * @return
+     */
+    public StateLandParcelBean getStateLandBean(String id) {
+        StateLandParcelBean result = null;
+        List<String> ids = new ArrayList<String>();
+        ids.add(id);
+        List<CadastreObjectTO> toList = getCadastreService().getCadastreObjects(ids);
+        if (toList != null && toList.size() == 1) {
+            result = TypeConverters.TransferObjectToBean(toList.get(0),
+                    StateLandParcelBean.class, null);
+        }
+        return result;
     }
 }

@@ -57,7 +57,7 @@ import org.sola.webservices.transferobjects.EntityAction;
 public class StateLandParcelBean extends SpatialBean {
 
     public static final String TYPE_CODE_PROPERTY = "typeCode";
-        public static final String STATUS_CODE_PROPERTY = "statusCode";
+    public static final String STATUS_CODE_PROPERTY = "statusCode";
     public static final String STATUS_PROPERTY = "status";
     public static final String APPROVAL_DATETIME_PROPERTY = "approvalDatetime";
     public static final String SOURCE_REFERENCE_PROPERTY = "sourceReference";
@@ -74,6 +74,7 @@ public class StateLandParcelBean extends SpatialBean {
     public static final String DESCRIPTION_PROPERTY = "description";
     public static final String STATE_LAND_STATUS_TYPE_PROPERTY = "stateLandStatusType";
     public static final String STATE_LAND_STATUS_CODE_PROPERTY = "stateLandStatusCode";
+    public static final String ADDRESS_STRING_PROPERTY = "addressString";
 
     private String id;
     private RegistrationStatusTypeBean status;
@@ -92,9 +93,9 @@ public class StateLandParcelBean extends SpatialBean {
 
     public StateLandParcelBean() {
         super();
-        setTypeCode(CadastreObjectTypeBean.CODE_STATE_LAND); 
+        setTypeCode(CadastreObjectTypeBean.CODE_STATE_LAND);
         setStatusCode(StatusConstants.PENDING);
-        setStateLandStatusCode(StateLandStatusTypeBean.CODE_PROPOSED); 
+        setStateLandStatusCode(StateLandStatusTypeBean.CODE_PROPOSED);
         addressList = new SolaList<AddressBean>();
         spatialValueAreaList = new SolaList<SpatialValueAreaBean>();
     }
@@ -115,7 +116,7 @@ public class StateLandParcelBean extends SpatialBean {
     public void setId(String id) {
         this.id = id;
     }
-    
+
     public String getStatusCode() {
         if (status != null) {
             return status.getCode();
@@ -421,6 +422,20 @@ public class StateLandParcelBean extends SpatialBean {
     public void addAddress(AddressBean address) {
         if (address != null) {
             getAddressList().addAsNew(address);
+            propertySupport.firePropertyChange(ADDRESS_STRING_PROPERTY, null, getAddressString());
+        }
+    }
+
+    /**
+     * Creates a new address for the parcel from the address string.
+     *
+     * @param addressString
+     */
+    public void addAddress(String addressString) {
+        if (addressString != null) {
+            AddressBean addr = new AddressBean();
+            addr.setDescription(addressString);
+            addAddress(addr);
         }
     }
 
@@ -434,6 +449,7 @@ public class StateLandParcelBean extends SpatialBean {
             } else {
                 getAddressList().safeRemove(selectedAddress, EntityAction.DELETE);
             }
+            propertySupport.firePropertyChange(ADDRESS_STRING_PROPERTY, null, getAddressString());
         }
     }
 
@@ -443,6 +459,7 @@ public class StateLandParcelBean extends SpatialBean {
     public void updateSelectedAddress(AddressBean address) {
         if (selectedAddress != null && address != null) {
             selectedAddress.setDescription(address.getDescription());
+            propertySupport.firePropertyChange(ADDRESS_STRING_PROPERTY, null, getAddressString());
         }
     }
 

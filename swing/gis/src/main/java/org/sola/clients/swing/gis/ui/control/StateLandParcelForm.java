@@ -114,6 +114,7 @@ public class StateLandParcelForm extends javax.swing.JDialog {
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
+        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/confirm-close.png"))); // NOI18N
         btnSave.setText(bundle.getString("StateLandParcelForm.btnSave.text")); // NOI18N
         btnSave.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnSave.addActionListener(new java.awt.event.ActionListener() {

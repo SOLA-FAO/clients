@@ -93,6 +93,7 @@ public class ServiceListForm extends javax.swing.JDialog {
 
         requestTypeList = new org.sola.clients.beans.referencedata.RequestTypeListBean();
         jToolBar1 = new javax.swing.JToolBar();
+        btnClose = new javax.swing.JButton();
         btnAddService = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         treeTable = new org.sola.clients.swing.common.controls.JTreeTableWithDefaultStyles();
@@ -105,6 +106,18 @@ public class ServiceListForm extends javax.swing.JDialog {
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
         jToolBar1.setName(bundle.getString("ServiceListForm.jToolBar1.name")); // NOI18N
+
+        btnClose.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/confirm-close.png"))); // NOI18N
+        btnClose.setText(bundle.getString("ServiceListForm.btnClose.text")); // NOI18N
+        btnClose.setFocusable(false);
+        btnClose.setName("btnClose"); // NOI18N
+        btnClose.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnClose.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCloseActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnClose);
 
         btnAddService.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
         btnAddService.setText(bundle.getString("ServiceListForm.btnAddService.text")); // NOI18N
@@ -157,8 +170,14 @@ public class ServiceListForm extends javax.swing.JDialog {
         };
     }//GEN-LAST:event_treeTableMouseClicked
 
+    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
+        addService();
+        this.dispose();
+    }//GEN-LAST:event_btnCloseActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddService;
+    private javax.swing.JButton btnClose;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar jToolBar1;
     private org.sola.clients.beans.referencedata.RequestTypeListBean requestTypeList;
