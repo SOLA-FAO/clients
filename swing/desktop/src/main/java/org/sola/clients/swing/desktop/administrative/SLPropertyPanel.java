@@ -769,7 +769,7 @@ public class SLPropertyPanel extends ContentPanel {
             public void propertyChange(PropertyChangeEvent e) {
                 if (e.getNewValue() != null) {
                     CadastreObjectBean bean = (CadastreObjectBean) e.getNewValue();
-                    baUnitBean1.getCadastreObjectList().addAsNew((CadastreObjectBean) e.getNewValue());
+                    baUnitBean1.addParcel(bean);
                     if (bean.getGeomPolygon() != null) {
                         // Locate any underlying titles and add them to this state land property
                         addUnderlyingTitles(bean.getId());

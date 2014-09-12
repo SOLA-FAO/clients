@@ -140,17 +140,11 @@ public class PropertyHelper {
         result.setTypeCode(BaUnitTypeBean.CODE_STATE_LAND);
         result.setStatusCode(StatusConstants.PENDING);
 
-        // Create a default 1 over 1 share
-        RrrShareBean share = new RrrShareBean();
-        share.setNominator(Short.parseShort("1"));
-        share.setDenominator(Short.parseShort("1"));
-
         RrrBean ownerRrr = new RrrBean();
         ownerRrr.setTypeCode(RrrBean.CODE_STATE_OWNERSHIP);
         ownerRrr.setPrimary(true);
         ownerRrr.setStatusCode(StatusConstants.PENDING);
         ownerRrr.getNotation().setNotationText(requestType.getNotationTemplate());
-        ownerRrr.getRrrShareList().add(share);
 
         result.addRrr(ownerRrr);
 

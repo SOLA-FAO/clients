@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<StyledLayerDescriptor version="1.0.0" xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc"
+                       xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                       xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.0.0/StyledLayerDescriptor.xsd">
+    <NamedLayer>
+        <Name>state-land-parcel-disposed</Name>
+        <UserStyle>
+            <FeatureTypeStyle>
+                <Name>State Land Parcels - Disposed</Name>
+                <FeatureTypeName>Feature</FeatureTypeName>
+                <Rule>
+                    <Name>&lt; 50,000</Name>
+                    <MaxScaleDenominator>50000.0</MaxScaleDenominator>
+                    <PolygonSymbolizer>
+                        <Fill>
+                            <CssParameter name="fill">#D9B2B2</CssParameter>
+                            <CssParameter name="opacity">0.4</CssParameter>
+                        </Fill>
+                        <Stroke>
+                            <CssParameter name="stroke">#800000</CssParameter>
+                            <CssParameter name="stroke-width">2.0</CssParameter>
+                        </Stroke>
+                    </PolygonSymbolizer>
+                    <TextSymbolizer>
+                        <Label>
+                            <ogc:PropertyName>label</ogc:PropertyName>
+                        </Label>
+                        <Font>
+                            <CssParameter name="font-family">Arial</CssParameter>
+                            <CssParameter name="font-size">13.0</CssParameter>
+                            <CssParameter name="font-style">normal</CssParameter>
+                            <CssParameter name="font-weight">normal</CssParameter>
+                        </Font>
+                        <LabelPlacement>
+                            <PointPlacement>
+                                <AnchorPoint>
+                                    <AnchorPointX>0.5</AnchorPointX>
+                                    <AnchorPointY>0.5</AnchorPointY>
+                                </AnchorPoint>
+                                <Displacement>
+                                    <DisplacementX>0.0</DisplacementX>
+                                    <DisplacementY>6.0</DisplacementY>
+                                </Displacement>
+                            </PointPlacement>
+                        </LabelPlacement>
+                        <Halo>
+                            <Radius>1.0</Radius>
+                            <Fill>
+                                <CssParameter name="fill">#FFFFFF</CssParameter>
+                                <CssParameter name="fill-opacity">0.5</CssParameter>
+                            </Fill>
+                        </Halo>
+                        <Fill>
+                            <CssParameter name="fill">#000000</CssParameter>
+                        </Fill>
+                        <VendorOption name="group">false</VendorOption>
+                    </TextSymbolizer>
+                </Rule>
+                <Rule>
+                    <Name>&gt; 50,000</Name>
+                    <MinScaleDenominator>50000.0</MinScaleDenominator>
+                    <MaxScaleDenominator>1.0E20</MaxScaleDenominator>
+                    <PolygonSymbolizer>
+                        <Fill>
+                            <CssParameter name="fill">#D9B2B2</CssParameter>
+                            <CssParameter name="opacity">0.4</CssParameter>
+                        </Fill>
+                        <Stroke>
+                            <CssParameter name="stroke">#800000</CssParameter>
+                            <CssParameter name="stroke-width">1.0</CssParameter>
+                        </Stroke>
+                    </PolygonSymbolizer>
+                </Rule>
+            </FeatureTypeStyle>
+        </UserStyle>
+    </NamedLayer>
+</StyledLayerDescriptor>

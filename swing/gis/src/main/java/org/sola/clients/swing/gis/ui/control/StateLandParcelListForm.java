@@ -29,8 +29,12 @@
  */
 package org.sola.clients.swing.gis.ui.control;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.net.URL;
 import javax.swing.ImageIcon;
+import org.sola.clients.swing.gis.beans.AbstractListSpatialBean;
+import org.sola.clients.swing.gis.beans.SpatialBean;
 import org.sola.clients.swing.gis.beans.StateLandParcelBean;
 import org.sola.clients.swing.gis.beans.StateLandParcelListBean;
 import org.sola.clients.swing.ui.renderers.AreaCellRenderer;
@@ -43,13 +47,16 @@ import org.sola.common.WindowUtility;
  */
 public class StateLandParcelListForm extends javax.swing.JDialog {
 
+    private boolean readOnly = false;
+
     /**
      * Creates new form StateLandParcelListForm
      */
     public StateLandParcelListForm(StateLandParcelListBean listBean,
-            java.awt.Frame parent, boolean modal) {
+            boolean readOnly, java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         this.listBean = listBean;
+        this.readOnly = readOnly;
         initComponents();
         customizeForm();
     }
@@ -66,6 +73,21 @@ public class StateLandParcelListForm extends javax.swing.JDialog {
         WindowUtility.centerForm(this);
         URL imgURL = this.getClass().getResource("/images/logo_icon.jpg");
         this.setIconImage(new ImageIcon(imgURL).getImage());
+        listBean.addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals(AbstractListSpatialBean.SELECTED_BEAN_PROPERTY)) {
+                    customizeButtons((SpatialBean) evt.getNewValue());
+                }
+            }
+        });
+        customizeButtons(null);
+    }
+
+    private void customizeButtons(SpatialBean selectedBean) {
+        btnEdit1.setEnabled(!readOnly && selectedBean != null);
+        btnRemove1.setEnabled(!readOnly && selectedBean != null);
+        btnView1.setEnabled(selectedBean != null);
     }
 
     private void save() {

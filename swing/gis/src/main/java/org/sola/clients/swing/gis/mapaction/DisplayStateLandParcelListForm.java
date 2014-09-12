@@ -46,6 +46,7 @@ public class DisplayStateLandParcelListForm extends ExtendedAction {
     public final static String MAPACTION_NAME = "state-land-parcel-list-show";
     private final StateLandEditLayer layer;
     private StateLandParcelListForm displayFrom;
+    private boolean readOnly;
 
     /**
      * Constructor for the map action.
@@ -61,6 +62,16 @@ public class DisplayStateLandParcelListForm extends ExtendedAction {
     }
 
     /**
+     * Used to indicate the ParcelList form should be displayed readOnly
+     *
+     * @param readOnly
+     */
+    public void setReadOnly(boolean readOnly) {
+        this.readOnly = readOnly;
+    }
+
+
+    /**
      * Displays the StateLandParcelListForm to the user. If the form is hidden
      * or not visible, it will appear on top of the other forms.
      */
@@ -68,7 +79,7 @@ public class DisplayStateLandParcelListForm extends ExtendedAction {
     public void onClick() {
         if (displayFrom == null) {
             displayFrom = new StateLandParcelListForm(layer.getSLParcelListBean(),
-                    WindowUtility.getTopFrame(), false);
+                    this.readOnly, WindowUtility.getTopFrame(), false);
         }
         displayFrom.setVisible(true);
     }

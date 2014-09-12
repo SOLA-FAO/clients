@@ -52,6 +52,8 @@ import org.sola.services.boundary.wsclients.WSManager;
 public class AddParcelDialog extends javax.swing.JDialog {
 
     public final static String SELECTED_PARCEL = "selectedParcel";
+    public final static String APP_PARCEL_PROPERTY = "selectedAppParcel";
+    private CadastreObjectBean selectedAppParcel;
 
     /**
      * Form constructor.
@@ -114,11 +116,21 @@ public class AddParcelDialog extends javax.swing.JDialog {
 
     private void close(CadastreObjectBean selected) {
         if (selected != null) {
-            this.firePropertyChange(SELECTED_PARCEL, null, selected);
+            this.firePropertyChange(SELECTED_PARCEL, null, selected.copy());
             this.dispose();
         } else {
             MessageUtility.displayMessage(ClientMessage.BAUNIT_SELECT_PARCEL);
         }
+    }
+
+    public CadastreObjectBean getSelectedAppParcel() {
+        return selectedAppParcel;
+    }
+
+    public void setSelectedAppParcel(CadastreObjectBean selectedAppParcel) {
+        CadastreObjectBean old = this.selectedAppParcel;
+        this.selectedAppParcel = selectedAppParcel;
+        this.firePropertyChange(APP_PARCEL_PROPERTY, old, this.selectedAppParcel);
     }
 
     @SuppressWarnings("unchecked")
@@ -205,7 +217,7 @@ public class AddParcelDialog extends javax.swing.JDialog {
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
         bindingGroup.addBinding(jTableBinding);
-        jTableBinding.bind();org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, appBean, org.jdesktop.beansbinding.ELProperty.create("${selectedCadastreObject}"), jTableWithDefaultStyles1, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
+        jTableBinding.bind();org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${selectedAppParcel}"), jTableWithDefaultStyles1, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
         bindingGroup.addBinding(binding);
 
         jTableWithDefaultStyles1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -405,7 +417,7 @@ private void btnSearchSelectActionPerformed(java.awt.event.ActionEvent evt) {//G
 }//GEN-LAST:event_btnSearchSelectActionPerformed
 
     private void btnAppSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAppSelectActionPerformed
-        close(appBean.getSelectedCadastreObject());
+        close(getSelectedAppParcel());
     }//GEN-LAST:event_btnAppSelectActionPerformed
 
     private void btnNewCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewCloseActionPerformed
@@ -418,7 +430,7 @@ private void btnSearchSelectActionPerformed(java.awt.event.ActionEvent evt) {//G
 
     private void jTableWithDefaultStyles1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableWithDefaultStyles1MouseClicked
         if (evt.getClickCount() == 2) {
-            close(appBean.getSelectedCadastreObject());
+            close(getSelectedAppParcel());
         }
     }//GEN-LAST:event_jTableWithDefaultStyles1MouseClicked
 

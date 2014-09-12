@@ -312,6 +312,8 @@ public abstract class ControlsBundleForTransaction extends SolaControlsBundle {
      */
     public void setReadOnly(boolean readOnly) {
         this.getMap().getMapActionByName(SaveTransaction.MAPACTION_NAME).setEnabled(!readOnly);
+        this.getMap().getMapActionByName(AddDirectImageTool.NAME).setEnabled(!readOnly);
+        this.getMap().getMapActionByName(RemoveDirectImage.NAME).setEnabled(!readOnly);
         if (addBoundaryEditLayer) {
             this.getMap().getMapActionByName(CadastreBoundarySelectTool.MAP_ACTION_NAME).setEnabled(!readOnly);
         }

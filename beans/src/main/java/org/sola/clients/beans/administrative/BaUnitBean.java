@@ -327,10 +327,25 @@ public class BaUnitBean extends BaUnitSummaryBean {
         }
         return true;
     }
+    
+    public void addParcel(CadastreObjectBean parcel) {
+        // First check that the parcel doesn't already exist in the list. If it does, 
+        // make sure it is not marked for delete (in case it was previously deleted
+        // and force a filter on the list. 
+        int idx = cadastreObjectList.getRealIndex(parcel); 
+        if (idx >= 0) {
+            cadastreObjectList.get(idx).setEntityAction(null);
+            cadastreObjectList.filter();
+        } else {
+            cadastreObjectList.addAsNew(parcel);
+        }
+    }
 
     public void removeSelectedParcel() {
         if (selectedParcel != null && cadastreObjectList != null) {
-            if (selectedParcel.getStatusCode().equalsIgnoreCase(CadastreObjectBean.PENDING_STATUS)) {
+            if (selectedParcel.getStatusCode().equalsIgnoreCase(CadastreObjectBean.PENDING_STATUS) 
+                    && selectedParcel.getGeomPolygon() == null) {
+                // Only delete parcels that are pending with no polygon defined. 
                 cadastreObjectList.safeRemove(selectedParcel, EntityAction.DELETE);
             } else {
                 cadastreObjectList.safeRemove(selectedParcel, EntityAction.DISASSOCIATE);

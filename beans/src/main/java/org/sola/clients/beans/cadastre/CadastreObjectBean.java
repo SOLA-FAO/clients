@@ -282,7 +282,7 @@ public class CadastreObjectBean extends AbstractTransactionedBean {
             areaBean.setSpatialUnitId(this.getId());
             getSpatialValueAreaList().addAsNew(areaBean);
         }
-        propertySupport.firePropertyChange(OFFICIAL_AREA_SIZE_PROPERTY, null, area);
+        propertySupport.firePropertyChange(OFFICIAL_AREA_SIZE_PROPERTY, BigDecimal.ZERO, area);
     }
 
     @Valid

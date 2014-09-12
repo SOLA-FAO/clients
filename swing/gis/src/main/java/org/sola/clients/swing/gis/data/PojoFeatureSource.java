@@ -1,28 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 /*
@@ -102,7 +104,7 @@ public class PojoFeatureSource implements SimpleFeatureSource {
         SimpleFeatureType type = this.getNewFeatureType(
                 this.layer.getLayerName(),
                 this.dataSource.getMapLayerInfoList().get(
-                this.layer.getLayerName()).getPojoStructure());
+                        this.layer.getLayerName()).getPojoStructure());
         this.collection = new PojoFeatureCollection(type);
         this.builder = new SimpleFeatureBuilder(type);
     }
@@ -234,12 +236,25 @@ public class PojoFeatureSource implements SimpleFeatureSource {
         if (filter == null) {
             throw new UnsupportedOperationException(GisMessage.GENERAL_EXCEPTION_FILTER_NOTFOUND);
         }
-        if (!(filter instanceof org.opengis.filter.spatial.BBOX)) {
-            throw new UnsupportedOperationException(GisMessage.GENERAL_EXCEPTION_TYPE_NOTSUPPORTED);
+        org.opengis.filter.spatial.BBOX bboxFilter = null;
+        if (filter instanceof org.opengis.filter.spatial.BBOX) {
+            bboxFilter = (org.opengis.filter.spatial.BBOX) filter;
         }
-        org.opengis.filter.spatial.BBOX bboxFilter = (org.opengis.filter.spatial.BBOX) filter;
-        org.geotools.filter.LiteralExpressionImpl literalExpression =
-                (org.geotools.filter.LiteralExpressionImpl) bboxFilter.getExpression2();
+        if (filter instanceof org.opengis.filter.BinaryLogicOperator) {
+            // This layer has a filter_category specified. Locate the Bouding Box filter
+            // to use for the database query. 
+            for (Filter f : ((org.opengis.filter.BinaryLogicOperator) filter).getChildren()) {
+                if (f instanceof org.opengis.filter.spatial.BBOX) {
+                    bboxFilter = (org.opengis.filter.spatial.BBOX) f;
+                    break; 
+                }
+            }
+        }
+        if (bboxFilter == null) {
+            throw new UnsupportedOperationException(GisMessage.GENERAL_EXCEPTION_FILTER_NOTFOUND);
+        }
+        org.geotools.filter.LiteralExpressionImpl literalExpression
+                = (org.geotools.filter.LiteralExpressionImpl) bboxFilter.getExpression2();
         Geometry filteringGeometry = (Geometry) literalExpression.getValue();
         Envelope boundingBox = (Envelope) filteringGeometry.getEnvelopeInternal();
         double west = boundingBox.getMinX();
@@ -283,7 +298,7 @@ public class PojoFeatureSource implements SimpleFeatureSource {
         } catch (WebServiceClientException ex) {
             LogUtility.log(
                     String.format(GisMessage.GENERAL_RETRIEVE_FEATURES_ERROR,
-                    this.getLayer().getTitle()), ex);
+                            this.getLayer().getTitle()), ex);
             Messaging.getInstance().show(
                     GisMessage.GENERAL_RETRIEVE_FEATURES_ERROR, this.getLayer().getTitle());
         }
@@ -291,12 +306,12 @@ public class PojoFeatureSource implements SimpleFeatureSource {
 
     /**
      * It gets information from the service for the specified extent.
-     * 
+     *
      * @param west
      * @param south
      * @param east
      * @param north
-     * @return 
+     * @return
      */
     protected ResultForNavigationInfo getResultForNavigation(
             double west, double south, double east, double north) {

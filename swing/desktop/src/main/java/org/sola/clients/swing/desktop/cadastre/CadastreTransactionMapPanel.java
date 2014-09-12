@@ -38,8 +38,6 @@ import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.gis.mapaction.SaveTransaction;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForTransaction;
 import org.sola.clients.swing.ui.ContentPanel;
-import org.sola.services.boundary.wsclients.WSManager;
-import org.sola.webservices.transferobjects.administrative.BaUnitTO;
 
 /**
  * Used to produce cadastre changes.

@@ -1,33 +1,34 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.ui.party;
 
-import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.JPanel;
@@ -82,9 +83,7 @@ public class PartySearchPanel extends JPanel {
         btnView.setVisible(isVisible);
         menuView.setVisible(isVisible);
         separator1.setVisible(isVisible);
-        if (!isVisible && btnSelect.isVisible()) {
-            separator1.setVisible(true);
-        }
+       showViewEditSeparator();
     }
 
     public boolean isShowSelectButton() {
@@ -95,9 +94,7 @@ public class PartySearchPanel extends JPanel {
         btnSelect.setVisible(isVisible);
         menuSelect.setVisible(isVisible);
         separator1.setVisible(isVisible);
-        if (!isVisible && btnView.isVisible()) {
-            separator1.setVisible(true);
-        }
+        showViewEditSeparator();
     }
 
     public boolean isShowAddButton() {
@@ -107,6 +104,7 @@ public class PartySearchPanel extends JPanel {
     public void setShowAddButton(boolean isVisible) {
         btnAddParty.setVisible(isVisible);
         menuAdd.setVisible(isVisible);
+        showViewEditSeparator();
     }
 
     public boolean isShowEditButton() {
@@ -116,6 +114,7 @@ public class PartySearchPanel extends JPanel {
     public void setShowEditButton(boolean isVisible) {
         btnEditParty.setVisible(isVisible);
         menuEdit.setVisible(isVisible);
+        showViewEditSeparator();
     }
 
     public boolean isShowRemoveButton() {
@@ -125,6 +124,16 @@ public class PartySearchPanel extends JPanel {
     public void setShowRemoveButton(boolean isVisible) {
         btnRemoveParty.setVisible(isVisible);
         menuRemove.setVisible(isVisible);
+        showViewEditSeparator(); 
+    }
+
+    private void showViewEditSeparator() {
+        boolean showSeparator = false;
+        if (btnView.isVisible() || btnSelect.isVisible()) {
+            showSeparator = btnAddParty.isVisible() || btnEditParty.isVisible()
+                    || btnRemoveParty.isVisible();
+        }
+        separator1.setVisible(showSeparator);
     }
 
     private PartyTypeListBean createPartyTypes() {
@@ -166,12 +175,11 @@ public class PartySearchPanel extends JPanel {
         menuEdit.setEnabled(btnEditParty.isEnabled());
         menuRemove.setEnabled(btnRemoveParty.isEnabled());
     }
-     
-    
+
     public void clickFind() {
         search();
     }
-    
+
     /**
      * Searches parties with given criteria.
      */
@@ -663,22 +671,25 @@ public class PartySearchPanel extends JPanel {
     }//GEN-LAST:event_menuRemoveActionPerformed
 
     private void tableSearchResultsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableSearchResultsMouseClicked
-        if(evt.getClickCount() > 1 && evt.getButton() == MouseEvent.BUTTON1){
-            viewParty();
+        if (evt.getClickCount() == 2) {
+            if (btnView.isVisible()) {
+                viewParty();
+            } else if (btnSelect.isVisible()) {
+                selectParty();
+            }
         }
     }//GEN-LAST:event_tableSearchResultsMouseClicked
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
         clearForm();
     }//GEN-LAST:event_btnClearActionPerformed
-    
+
     private void clearForm() {
         cbxPartyTypes.setSelectedIndex(-1);
         cbxRoles.setSelectedIndex(-1);
         txtName.setText(null);
     }
-    
-    
+
     private void addParty() {
         firePropertyChange(CREATE_NEW_PARTY_PROPERTY, false, true);
     }

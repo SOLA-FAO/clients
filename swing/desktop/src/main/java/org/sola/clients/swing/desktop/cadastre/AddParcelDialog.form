@@ -211,7 +211,7 @@
                         <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
                       </Subbinding>
                     </BindingProperty>
-                    <BindingProperty name="selectedElement" source="appBean" sourcePath="${selectedCadastreObject}" target="jTableWithDefaultStyles1" targetPath="selectedElement" updateStrategy="0" immediately="false">
+                    <BindingProperty name="selectedElement" source="Form" sourcePath="${selectedAppParcel}" target="jTableWithDefaultStyles1" targetPath="selectedElement" updateStrategy="0" immediately="false">
                       <BindingParameter name="IGNORE_ADJUSTING" value="N"/>
                     </BindingProperty>
                   </BindingProperties>
