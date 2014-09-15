@@ -29,8 +29,8 @@
  */
 package org.sola.clients.swing.gis.beans;
 
+import java.util.ArrayList;
 import java.util.List;
-import org.sola.clients.beans.controls.SolaObservableList;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.beans.validation.ValidationResultBean;
 import org.sola.clients.swing.gis.data.PojoDataAccess;
@@ -44,20 +44,30 @@ import org.sola.webservices.transferobjects.transaction.TransactionStateLandTO;
 public class TransactionStateLandBean extends TransactionBean {
 
     public static final String SELECTED_STATE_LAND_PARCEL_PROPERTY = "selectedStateLandParcelBean";
-    private SolaObservableList<StateLandParcelBean> stateLandParcels;
+    private List<StateLandParcelBean> stateLandParcels;
+    private List<CadastreObjectTargetBean> stateLandTargetList;
     private StateLandParcelBean selectedStateLandParcelBean;
 
     public TransactionStateLandBean() {
         super();
-        stateLandParcels = new SolaObservableList<StateLandParcelBean>();
+        stateLandParcels = new ArrayList<StateLandParcelBean>();
+        stateLandTargetList = new ArrayList<CadastreObjectTargetBean>();
     }
 
-    public SolaObservableList<StateLandParcelBean> getStateLandParcels() {
+    public List<StateLandParcelBean> getStateLandParcels() {
         return stateLandParcels;
     }
 
-    public void setStateLandParcels(SolaObservableList<StateLandParcelBean> stateLandParcels) {
+    public void setStateLandParcels(List<StateLandParcelBean> stateLandParcels) {
         this.stateLandParcels = stateLandParcels;
+    }
+
+    public List<CadastreObjectTargetBean> getStateLandTargetList() {
+        return stateLandTargetList;
+    }
+
+    public void setStateLandTargetList(List<CadastreObjectTargetBean> stateLandTargetList) {
+        this.stateLandTargetList = stateLandTargetList;
     }
 
     public StateLandParcelBean getSelectedStateLandParcelBean() {

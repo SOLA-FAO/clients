@@ -30,9 +30,7 @@
 package org.sola.clients.swing.gis.tool;
 
 import com.vividsolutions.jts.geom.Geometry;
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import org.geotools.feature.FeatureCollection;
 import org.geotools.feature.FeatureIterator;
@@ -41,8 +39,6 @@ import org.geotools.map.extended.layer.ExtendedFeatureLayer;
 import org.geotools.swing.event.MapMouseEvent;
 import org.geotools.swing.tool.extended.ExtendedTool;
 import org.opengis.feature.simple.SimpleFeature;
-import org.sola.clients.swing.gis.beans.StateLandParcelBean;
-import org.sola.clients.swing.gis.data.PojoDataAccess;
 import org.sola.clients.swing.gis.layer.StateLandEditLayer;
 import org.sola.common.messaging.GisMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -117,11 +113,13 @@ public class StateLandSelectTool extends ExtendedTool {
                                     (Geometry) feature.getDefaultGeometry(), false, true);
                         }
                     }
+                    // Don't process any other selection layers. 
+                    break; 
                 } finally {
                     // Must close the iterator in a finally clause otherwise it may remain open and
                     // cause concurrent modfication errors. 
                     i.close();
-                    this.getMapControl().refresh();
+                    this.getMapControl().refresh(); 
                 }
 
             }

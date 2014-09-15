@@ -40,7 +40,9 @@ import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.geotools.swing.extended.util.Messaging;
 import org.opengis.feature.simple.SimpleFeature;
 import org.sola.clients.beans.address.AddressBean;
+import org.sola.clients.beans.referencedata.CadastreObjectTypeBean;
 import org.sola.clients.swing.gis.beans.AbstractListSpatialBean;
+import org.sola.clients.swing.gis.beans.CadastreObjectTargetBean;
 import org.sola.clients.swing.gis.beans.SpatialBean;
 import org.sola.clients.swing.gis.beans.StateLandParcelBean;
 import org.sola.clients.swing.gis.beans.StateLandParcelListBean;
@@ -49,6 +51,7 @@ import org.sola.clients.swing.gis.ui.control.StateLandParcelForm;
 import org.sola.common.WindowUtility;
 import org.sola.common.logging.LogUtility;
 import org.sola.common.messaging.GisMessage;
+import org.sola.webservices.transferobjects.EntityAction;
 
 /**
  *
@@ -113,6 +116,53 @@ public class StateLandEditLayer extends AbstractSpatialObjectLayer {
     }
 
     /**
+     * Adds a target parcel record if an existing state land parcel is added to the job.
+     * This ensures the original version of the state land parcel becomes historic 
+     * when the job is approved and the new pending version becomes current. 
+     * @param sourceCadObj 
+     */
+    private void addTargetParcel(StateLandParcelBean sourceCadObj) {
+        if (CadastreObjectTypeBean.CODE_STATE_LAND.equals(sourceCadObj.getTypeCode())) {
+            for (CadastreObjectTargetBean b : getSLParcelListBean().getStateLandTargetList()) {
+                if (sourceCadObj.getId().equals(b.getCadastreObjectId())) {
+                    // Make sure the entity action is cleared so the target is 
+                    // not removed from the list
+                    b.setEntityAction(null);
+                    return;
+                }
+            }
+            CadastreObjectTargetBean targetBean = new CadastreObjectTargetBean();
+            targetBean.setCadastreObjectId(sourceCadObj.getId());
+            getSLParcelListBean().getStateLandTargetList().add(targetBean);
+        }
+    }
+
+    /**
+     * Ensures the Target Parcel list remains consistent with the list of state
+     * land parcels created for this job.
+     *
+     * @param fid The id of the source cadastre object (set as the rowId for any
+     * new parcel)
+     * @param refreshMap
+     * @return
+     */
+    @Override
+    public SimpleFeature removeFeature(String fid, boolean refreshMap) {
+        SimpleFeature result = super.removeFeature(fid, refreshMap);
+        if (result != null) {
+            for (CadastreObjectTargetBean b : getSLParcelListBean().getStateLandTargetList()) {
+                // The fid is the id of the source parcel which is also set as the 
+                // rowId on the  new parcel and used as the featureId for the new parcel 
+                if (fid.equals(b.getCadastreObjectId())) {
+                    // Remove the source state land parcel from the targets parcels list. 
+                    b.setEntityAction(EntityAction.DELETE);
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
      * Adds a new feature to the map as well as the list of State Land beans
      * managed by the Layer
      *
@@ -142,7 +192,8 @@ public class StateLandEditLayer extends AbstractSpatialObjectLayer {
             fid = UUID.randomUUID().toString();
         } else {
             // Try to retrieve the source cadastre object from the DB. Will only 
-            // retrieve Cadastre Objects, Spatial Units are not be retrieved. 
+            // retrieve Cadastre Objects (State Land or Underlying Parcels), 
+            // Spatial Units are not be retrieved. 
             sourceCadObj = PojoDataAccess.getInstance().getStateLandBean(fid);
         }
 
@@ -169,8 +220,11 @@ public class StateLandEditLayer extends AbstractSpatialObjectLayer {
         SimpleFeature result = super.addFeature(fid, geom, attributes, refreshMap);
         StateLandParcelBean slBean = this.getBean(result);
         if (sourceCadObj != null) {
-            // Copy Address and Description details from the source cadastre object 
-            // onto the new State Land Bean
+            if (CadastreObjectTypeBean.CODE_STATE_LAND.equals(sourceCadObj.getTypeCode())) {
+                addTargetParcel(sourceCadObj);
+            }
+            // Copy the Address and Description details from the
+            // source cadastre object onto the new State Land Bean
             slBean.setDescription(sourceCadObj.getDescription());
             slBean.setLandUseCode(sourceCadObj.getLandUseCode());
             slBean.setClassificationCode(sourceCadObj.getClassificationCode());

@@ -29,6 +29,8 @@
  */
 package org.sola.clients.swing.gis.beans;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.sola.clients.beans.controls.SolaObservableList;
 
 /**
@@ -37,8 +39,11 @@ import org.sola.clients.beans.controls.SolaObservableList;
  */
 public class StateLandParcelListBean extends AbstractListSpatialBean {
 
+    SolaObservableList<CadastreObjectTargetBean> stateLandTargetList;
+
     public StateLandParcelListBean() {
         super();
+        stateLandTargetList = new SolaObservableList<CadastreObjectTargetBean>();
     }
 
     @Override
@@ -49,6 +54,14 @@ public class StateLandParcelListBean extends AbstractListSpatialBean {
     @Override
     public SolaObservableList<StateLandParcelBean> getBeanList() {
         return super.getBeanList();
+    }
+
+    public SolaObservableList<CadastreObjectTargetBean> getStateLandTargetList() {
+        return stateLandTargetList;
+    }
+
+    public void setStateLandTargetList(SolaObservableList<CadastreObjectTargetBean> stateLandTargetList) {
+        this.stateLandTargetList = stateLandTargetList;
     }
 
 }

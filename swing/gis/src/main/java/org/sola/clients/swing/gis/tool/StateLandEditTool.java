@@ -75,7 +75,7 @@ public class StateLandEditTool extends ExtendedEditGeometryTool {
     @Override
     protected void onSingleClick(MapMouseEvent ev) {
         VertexInformation vertexFound = this.layer.getFirstVertexWithinDistance(
-                ev.getWorldPos(), 2);
+                ev.getWorldPos(), 4);
 
         if (ev.isShiftDown() && vertexFound != null) {
             // Remove the coordinate from the feature

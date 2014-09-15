@@ -35,8 +35,6 @@ import org.geotools.feature.SchemaException;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.map.extended.layer.ExtendedFeatureLayer;
 import org.geotools.swing.extended.exception.InitializeLayerException;
-import org.geotools.swing.mapaction.extended.RemoveDirectImage;
-import org.geotools.swing.tool.extended.AddDirectImageTool;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.swing.gis.beans.StateLandParcelBean;
 import org.sola.clients.swing.gis.beans.TransactionBean;
@@ -54,13 +52,13 @@ import org.sola.clients.swing.gis.tool.StateLandSelectTool;
  * @author soladev
  */
 public class ControlBundleForStateLand extends ControlsBundleForTransaction {
-    
+
     private TransactionStateLandBean transactionBean;
     private String targetParcelType;
     private StateLandEditLayer editLayer;
     private StateLandEditTool editTool;
-    private DisplayStateLandParcelListForm showParcelListAction;    
-    
+    private DisplayStateLandParcelListForm showParcelListAction;
+
     public ControlBundleForStateLand(ApplicationBean applicationBean,
             String serviceId,
             String baUnitId,
@@ -69,32 +67,37 @@ public class ControlBundleForStateLand extends ControlsBundleForTransaction {
         this.targetParcelType = targetParcelType;
         initializeMap();
     }
-    
+
     private void initializeMap() {
         this.Setup(PojoDataAccess.getInstance(), false, false);
         this.refreshTransactionFromServer();
         this.setTransaction();
         zoomToInterestingArea(null, null);
     }
-    
+
     @Override
     public TransactionBean getTransactionBean() {
-        
+
         transactionBean.getStateLandParcels().clear();
-        if (this.editLayer.getBeanListForTransaction() != null
-                && this.editLayer.getBeanListForTransaction().size() > 0) {
-            transactionBean.getStateLandParcels().addAll(
-                    (List<StateLandParcelBean>) this.editLayer.getBeanListForTransaction());
+        transactionBean.getStateLandTargetList().clear();
+        List<StateLandParcelBean> beansForTransaction = (List<StateLandParcelBean>) this.editLayer.getBeanListForTransaction();
+        if (beansForTransaction != null && beansForTransaction.size() > 0) {
+            transactionBean.getStateLandParcels().addAll(beansForTransaction);
+            transactionBean.getStateLandTargetList().addAll(
+                    this.editLayer.getSLParcelListBean().getStateLandTargetList());
         }
         return transactionBean;
     }
-    
+
     @Override
-    public void setTransaction() {
-        editLayer.getBeanList().clear();
+    public void setTransaction() {       
         editLayer.setBeanList(transactionBean.getStateLandParcels());
+        
+        editLayer.getSLParcelListBean().getStateLandTargetList().clear();
+        editLayer.getSLParcelListBean().getStateLandTargetList()
+                .addAll(transactionBean.getStateLandTargetList());
     }
-    
+
     @Override
     public void refreshTransactionFromServer() {
         if (this.getTransactionStarterId() != null) {
@@ -103,7 +106,7 @@ public class ControlBundleForStateLand extends ControlsBundleForTransaction {
         } else {
             this.transactionBean = new TransactionStateLandBean();
         }
-        
+
     }
 
     /**
@@ -116,7 +119,7 @@ public class ControlBundleForStateLand extends ControlsBundleForTransaction {
     protected boolean transactionIsStarted() {
         return editLayer.getFeatureCollection().size() > 0;
     }
-    
+
     @Override
     protected void setTargetCadastreObjectTypeConfiguration(String targetCadastreObjectType) {
         // No action required
@@ -137,35 +140,36 @@ public class ControlBundleForStateLand extends ControlsBundleForTransaction {
             super.zoomToInterestingArea(this.editLayer.getLayerEnvelope(), applicationLocation);
         }
     }
-    
+
     @Override
     protected void addToolsAndCommands() {
 
         //State Land Edit Tools
         this.getMap().addMapAction(new ZoomToTransaction(this), this.getToolbar(), true);
-        
+
         ExtendedFeatureLayer parcelsLayer = (ExtendedFeatureLayer) this.getMap().getSolaLayers().get("parcels");
         ExtendedFeatureLayer roadLayer = (ExtendedFeatureLayer) this.getMap().getSolaLayers().get("roads");
         ExtendedFeatureLayer stateLandParcelsLayer = (ExtendedFeatureLayer) this.getMap().getSolaLayers().get("state-land");
         List<ExtendedFeatureLayer> selectionLayers = new ArrayList<ExtendedFeatureLayer>();
+        selectionLayers.add(stateLandParcelsLayer);
         selectionLayers.add(parcelsLayer);
         selectionLayers.add(roadLayer);
         this.getMap().addTool(new StateLandSelectTool(selectionLayers, this.editLayer),
                 this.getToolbar(), true);
-        
+
         StateLandCreateTool createTool = new StateLandCreateTool(this.editLayer);
         createTool.getTargetSnappingLayers().add(stateLandParcelsLayer);
         createTool.getTargetSnappingLayers().add(parcelsLayer);
         createTool.getTargetSnappingLayers().add(roadLayer);
         this.getMap().addTool(createTool, this.getToolbar(), true);
-        
+
         editTool = new StateLandEditTool(this.editLayer);
         // Set the snapping layers for the EditSpatialUnitTool
         editTool.getTargetSnappingLayers().add(stateLandParcelsLayer);
         editTool.getTargetSnappingLayers().add(parcelsLayer);
         editTool.getTargetSnappingLayers().add(roadLayer);
         this.getMap().addTool(editTool, this.getToolbar(), true);
-        showParcelListAction = new DisplayStateLandParcelListForm(this.getMap(), this.editLayer);        
+        showParcelListAction = new DisplayStateLandParcelListForm(this.getMap(), this.editLayer);
         this.getMap().addMapAction(showParcelListAction, this.getToolbar(), true);
 
         // Add tools and commands to the end of the state land tools
@@ -185,7 +189,7 @@ public class ControlBundleForStateLand extends ControlsBundleForTransaction {
         getMap().addLayer(editLayer);
         getMap().moveSelectionLayer();
     }
-    
+
     @Override
     public void setReadOnly(boolean readOnly) {
         super.setReadOnly(readOnly);
@@ -194,5 +198,5 @@ public class ControlBundleForStateLand extends ControlsBundleForTransaction {
         this.getMap().getMapActionByName(StateLandCreateTool.NAME).setEnabled(!readOnly);
         showParcelListAction.setReadOnly(readOnly);
     }
-    
+
 }

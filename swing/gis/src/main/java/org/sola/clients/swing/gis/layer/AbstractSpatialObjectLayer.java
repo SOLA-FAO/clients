@@ -196,7 +196,7 @@ public abstract class AbstractSpatialObjectLayer extends ExtendedLayerEditor {
                     //If feature is removed it means it returns the removed feature. Also
                     // map control needs to be refreshed.
                     featuresAreRemoved = true;
-                    if (!bean.isNew()) {
+                    if (!bean.isNew() && removedItems.indexOf(bean) < 0) {
                         removedItems.add(bean);
                     }
                 } else {
@@ -405,6 +405,9 @@ public abstract class AbstractSpatialObjectLayer extends ExtendedLayerEditor {
                 SpatialBean found = this.getBean(feature);
                 if (found != null) {
                     this.getBeanList().remove(found);
+                    if (!found.isNew() && removedItems.indexOf(found) < 0) {
+                        removedItems.add(found);
+                    }
                 }
             }
         } else if (ev.getEventType() == CollectionEvent.FEATURES_CHANGED) {
