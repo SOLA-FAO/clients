@@ -44,7 +44,7 @@ import org.sola.clients.swing.common.controls.TreeTableRowData;
  */
 public class RequestTypeTreeTableModel extends AbstractTreeTableModel {
 
-    private static String[] COLUMN_NAMES = {"Service", "Reqd. num of properties"};
+    private static String[] COLUMN_NAMES = {"Task", "Description"};
 
     public RequestTypeTreeTableModel(List<RequestTypeBean> requestTypes) {
         super(new DefaultMutableTreeNode());
@@ -59,7 +59,7 @@ public class RequestTypeTreeTableModel extends AbstractTreeTableModel {
                 group = bean.getCategoryDisplayValue();
             }
             DefaultMutableTreeNode child = new DefaultMutableTreeNode(new TreeTableRowData(false,
-                    bean, bean.getDisplayValue(), bean.getNrPropertiesRequired()));
+                    bean, bean.getDisplayValue(), bean.getDescription()));
             parent.add(child);
         }
     }
@@ -136,22 +136,22 @@ public class RequestTypeTreeTableModel extends AbstractTreeTableModel {
      * Identifies the label to use for the Columns displayed in the Add Service
      * dialog.
      *
-     * @param serviceColLbl
-     * @param numPropertiesColLbl
+     * @param column1Lbl
+     * @param column2Lbl
      */
-    public void setColumnLabels(String serviceColLbl, String numPropertiesColLbl) {
-        COLUMN_NAMES[0] = serviceColLbl;
+    public void setColumnLabels(String column1Lbl, String column2Lbl) {
+        COLUMN_NAMES[0] = column1Lbl;
         if (COLUMN_NAMES.length > 1) {
-            COLUMN_NAMES[1] = numPropertiesColLbl;
+            COLUMN_NAMES[1] = column2Lbl;
         }
 
     }
 
     /**
-     * Prevents the Reqd. Nr of Properties column from displaying in the Tree table. 
+     * Prevents the second column from displaying in the Tree table. 
      * Must be set before the model is added to the treetable control. 
      */
-    public void hideNrPropertiesColumn() {
+    public void hideColumn2() {
         COLUMN_NAMES = new String[]{COLUMN_NAMES[0]};
     }
 

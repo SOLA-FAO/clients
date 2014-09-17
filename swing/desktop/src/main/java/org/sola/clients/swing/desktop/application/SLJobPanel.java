@@ -517,7 +517,8 @@ public class SLJobPanel extends ContentPanel {
                 PanelLauncher.launch(servicePanelCode, getMainContentPanel(), refreshAppBeanOnClose, null,
                         appBean, service, propertyBean);
             } else if (PanelLauncher.isLaunchGroup(PanelLauncherGroupBean.CODE_PROPERTY_SERVICES, servicePanelCode)
-                    || PanelLauncher.isLaunchGroup(PanelLauncherGroupBean.CODE_NEW_PROPERTY_SERVICES, servicePanelCode)) {
+                    || PanelLauncher.isLaunchGroup(PanelLauncherGroupBean.CODE_NEW_PROPERTY_SERVICES, servicePanelCode)
+                    || PanelLauncher.isLaunchGroup(PanelLauncherGroupBean.CODE_STATE_LAND_PROPERTY_SERVICES, servicePanelCode)) {
 
                 // Property related service
                 final boolean isNewPropertyService = PanelLauncher.isLaunchGroup(PanelLauncherGroupBean.CODE_NEW_PROPERTY_SERVICES, servicePanelCode);

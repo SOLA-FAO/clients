@@ -45,6 +45,7 @@ public class PanelLauncherGroupBean extends AbstractCodeBean {
     public static final String CODE_NEW_PROPERTY_SERVICES = "newPropServices";
     public static final String CODE_GENERAL_RRR = "generalRRR";
     public static final String CODE_LEASE_RRR = "leaseRRR";
+    public static final String CODE_STATE_LAND_PROPERTY_SERVICES = "slPropertyServices";
 
     public PanelLauncherGroupBean() {
         super();

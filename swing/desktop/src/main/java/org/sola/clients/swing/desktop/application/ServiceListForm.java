@@ -63,12 +63,12 @@ public class ServiceListForm extends javax.swing.JDialog {
 
     private void configureTreeTable() {
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/application/Bundle");
-        String serviceColLbl = bundle.getString("ServiceListForm.tabFeeDetails1.columnModel.title0");
-        String propColLbl = bundle.getString("ServiceListForm.tabFeeDetails1.columnModel.title1");
+        String column1Lbl = bundle.getString("ServiceListForm.tabFeeDetails1.columnModel.title0");
+        String column2Lbl = bundle.getString("ServiceListForm.tabFeeDetails1.columnModel.title1");
         RequestTypeTreeTableModel model = new RequestTypeTreeTableModel(
                 requestTypeList.sortRequestTypes(requestTypeList.getRequestTypeList()));
-        model.hideNrPropertiesColumn();
-        model.setColumnLabels(serviceColLbl, propColLbl);
+        //model.hideColumn2();
+        model.setColumnLabels(column1Lbl, column2Lbl);
         treeTable.setTreeTableModel(model);
         treeTable.setRootVisible(false);
         // Allow user to resize the columns, but not reorder them. 
