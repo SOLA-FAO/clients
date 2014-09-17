@@ -49,6 +49,7 @@ public class ApplicationSearchResultBean extends ApplicationSummaryBean {
     private String contactPerson;
     private String agent;
     private String serviceList;
+    private String serviceDescriptions;
     private boolean checked;
 
     public ApplicationSearchResultBean() {
@@ -123,5 +124,13 @@ public class ApplicationSearchResultBean extends ApplicationSummaryBean {
     public void setStatus(String value) {
         setStatusBean(CacheManager.getBeanByCode(
                 CacheManager.getApplicationStatusTypes(), value));
+    }
+
+    public String getServiceDescriptions() {
+        return serviceDescriptions;
+    }
+
+    public void setServiceDescriptions(String serviceDescriptions) {
+        this.serviceDescriptions = serviceDescriptions;
     }
 }

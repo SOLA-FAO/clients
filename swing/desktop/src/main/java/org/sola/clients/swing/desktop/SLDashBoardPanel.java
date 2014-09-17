@@ -478,12 +478,16 @@ public class SLDashBoardPanel extends ContentPanel {
         columnBinding.setColumnName("Assignee Name");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${description}"));
+        columnBinding.setColumnName("Description");
+        columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${serviceList}"));
         columnBinding.setColumnName("Service List");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${description}"));
-        columnBinding.setColumnName("Description");
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${serviceDescriptions}"));
+        columnBinding.setColumnName("Service Descriptions");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${statusBean.displayValue}"));
@@ -510,12 +514,14 @@ public class SLDashBoardPanel extends ContentPanel {
             tbAssigned.getColumnModel().getColumn(2).setCellRenderer(new DateTimeRenderer());
             tbAssigned.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("SLDashBoardPanel.tbAssigned.columnModel.title3")); // NOI18N
             tbAssigned.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("SLDashBoardPanel.tbAssigned.columnModel.title4_1")); // NOI18N
-            tbAssigned.getColumnModel().getColumn(5).setPreferredWidth(200);
-            tbAssigned.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("SLDashBoardPanel.tbAssigned.columnModel.title5")); // NOI18N
-            tbAssigned.getColumnModel().getColumn(5).setCellRenderer(new org.sola.clients.swing.ui.renderers.CellDelimitedListRenderer());
+            tbAssigned.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("SLDashBoardPanel.tbAssigned.columnModel.title6")); // NOI18N
             tbAssigned.getColumnModel().getColumn(6).setPreferredWidth(200);
-            tbAssigned.getColumnModel().getColumn(6).setHeaderValue(bundle.getString("SLDashBoardPanel.tbAssigned.columnModel.title6")); // NOI18N
-            tbAssigned.getColumnModel().getColumn(7).setHeaderValue(bundle.getString("SLDashBoardPanel.tbAssigned.columnModel.title7_1")); // NOI18N
+            tbAssigned.getColumnModel().getColumn(6).setHeaderValue(bundle.getString("SLDashBoardPanel.tbAssigned.columnModel.title5")); // NOI18N
+            tbAssigned.getColumnModel().getColumn(6).setCellRenderer(new org.sola.clients.swing.ui.renderers.CellDelimitedListRenderer());
+            tbAssigned.getColumnModel().getColumn(7).setPreferredWidth(200);
+            tbAssigned.getColumnModel().getColumn(7).setHeaderValue(bundle.getString("SLDashBoardPanel.tbAssigned.columnModel.title8")); // NOI18N
+            tbAssigned.getColumnModel().getColumn(7).setCellRenderer(new org.sola.clients.swing.ui.renderers.CellDelimitedListRenderer(";"));
+            tbAssigned.getColumnModel().getColumn(8).setHeaderValue(bundle.getString("SLDashBoardPanel.tbAssigned.columnModel.title7_1")); // NOI18N
         }
 
         org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
@@ -524,10 +530,7 @@ public class SLDashBoardPanel extends ContentPanel {
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(tbAssignedApplications, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 568, Short.MAX_VALUE)
             .add(groupPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .add(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jScrollPane1)
-                .add(22, 22, 22))
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPane1)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -599,12 +602,16 @@ public class SLDashBoardPanel extends ContentPanel {
         columnBinding.setColumnName("State Land Name");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${description}"));
-        columnBinding.setColumnName("Description");
-        columnBinding.setColumnClass(String.class);
-        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${propertyManager}"));
         columnBinding.setColumnName("Property Manager");
+        columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${locality}"));
+        columnBinding.setColumnName("Locality");
+        columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${description}"));
+        columnBinding.setColumnName("Description");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${actionStatus.displayValue}"));
@@ -639,15 +646,17 @@ public class SLDashBoardPanel extends ContentPanel {
             tblPropertiesToAction.getColumnModel().getColumn(0).setMaxWidth(25);
             tblPropertiesToAction.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("SLDashBoardPanel.jTableWithDefaultStyles1.columnModel.title7_1")); // NOI18N
             tblPropertiesToAction.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("SLDashBoardPanel.jTableWithDefaultStyles1.columnModel.title0")); // NOI18N
-            tblPropertiesToAction.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("SLDashBoardPanel.jTableWithDefaultStyles1.columnModel.title3")); // NOI18N
-            tblPropertiesToAction.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("SLDashBoardPanel.jTableWithDefaultStyles1.columnModel.title1")); // NOI18N
-            tblPropertiesToAction.getColumnModel().getColumn(4).setPreferredWidth(120);
-            tblPropertiesToAction.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("SLDashBoardPanel.jTableWithDefaultStyles1.columnModel.title2")); // NOI18N
-            tblPropertiesToAction.getColumnModel().getColumn(5).setPreferredWidth(200);
-            tblPropertiesToAction.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("SLDashBoardPanel.jTableWithDefaultStyles1.columnModel.title4_1")); // NOI18N
-            tblPropertiesToAction.getColumnModel().getColumn(6).setHeaderValue(bundle.getString("SLDashBoardPanel.tblPropertiesToAction.columnModel.title6")); // NOI18N
-            tblPropertiesToAction.getColumnModel().getColumn(6).setCellRenderer(new CellDelimitedListRenderer("::::"));
-            tblPropertiesToAction.getColumnModel().getColumn(7).setHeaderValue(bundle.getString("SLDashBoardPanel.tblPropertiesToAction.columnModel.title7")); // NOI18N
+            tblPropertiesToAction.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("SLDashBoardPanel.jTableWithDefaultStyles1.columnModel.title1")); // NOI18N
+            tblPropertiesToAction.getColumnModel().getColumn(3).setPreferredWidth(200);
+            tblPropertiesToAction.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("SLDashBoardPanel.tblPropertiesToAction.columnModel.title8")); // NOI18N
+            tblPropertiesToAction.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("SLDashBoardPanel.jTableWithDefaultStyles1.columnModel.title3")); // NOI18N
+            tblPropertiesToAction.getColumnModel().getColumn(5).setPreferredWidth(120);
+            tblPropertiesToAction.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("SLDashBoardPanel.jTableWithDefaultStyles1.columnModel.title2")); // NOI18N
+            tblPropertiesToAction.getColumnModel().getColumn(6).setPreferredWidth(200);
+            tblPropertiesToAction.getColumnModel().getColumn(6).setHeaderValue(bundle.getString("SLDashBoardPanel.jTableWithDefaultStyles1.columnModel.title4_1")); // NOI18N
+            tblPropertiesToAction.getColumnModel().getColumn(7).setHeaderValue(bundle.getString("SLDashBoardPanel.tblPropertiesToAction.columnModel.title6")); // NOI18N
+            tblPropertiesToAction.getColumnModel().getColumn(7).setCellRenderer(new CellDelimitedListRenderer("::::"));
+            tblPropertiesToAction.getColumnModel().getColumn(8).setHeaderValue(bundle.getString("SLDashBoardPanel.tblPropertiesToAction.columnModel.title7")); // NOI18N
         }
 
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
