@@ -45,6 +45,7 @@ public class TaskManager {
 
     private HashMap<String, SolaTask> tasks;
     protected final PropertyChangeSupport propertySupport = new PropertyChangeSupport(this);
+    private int maximumAllowedNumberOfTasks = 0;
 
     /**
      * Class constructor.
@@ -78,7 +79,7 @@ public class TaskManager {
             return false;
         }
 
-        if (getNumberOfActiveTasks() > 0) {
+        if (getNumberOfActiveTasks() > maximumAllowedNumberOfTasks) {
             MessageUtility.displayMessage(ClientMessage.GENERAL_ACTIVE_TASKS_EXIST,
                     new Object[]{getNumberOfActiveTasks()});
             return false;
@@ -158,6 +159,16 @@ public class TaskManager {
         }
         tasks.remove(task.getId());
     }
+
+    public int getMaximumAllowedNumberOfTasks() {
+        return maximumAllowedNumberOfTasks;
+    }
+
+    public void setMaximumAllowedNumberOfTasks(int maximumAllowedNumberOfTasks) {
+        this.maximumAllowedNumberOfTasks = maximumAllowedNumberOfTasks;
+    }
+    
+    
 
     /**
      * Registers property change listener.

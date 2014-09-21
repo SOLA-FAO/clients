@@ -46,4 +46,5 @@ public class StatusConstants {
     public final static String UNASSIGNED = "unassigned";
     public final static String REJECTED = "rejected";
     public final static String DEAD = "dead";
+    public final static String TO_BE_TRANSFERRED = "to-be-transferred";
 }
