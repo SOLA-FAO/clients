@@ -52,6 +52,7 @@ public class ApplicationActionTypeBean extends AbstractCodeBean {
     public static final String ASSIGN = "assign";
     public static final String UNASSIGN = "unAssign";
     public static final String RESUBMIT = "resubmit";
+    public static final String TRANSFER = "transfer";
     public static final String VALIDATE_FAILED = "validateFailed";
     public static final String VALIDATE_PASSED = "validatePassed";
     

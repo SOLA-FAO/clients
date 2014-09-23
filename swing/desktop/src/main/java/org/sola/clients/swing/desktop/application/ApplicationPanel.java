@@ -322,6 +322,8 @@ public class ApplicationPanel extends ContentPanel {
                 && SecurityBean.isInRole(RolesConstants.APPLICATION_WITHDRAW));
         menuWithdraw.setEnabled(appBean.canWithdraw()
                 && SecurityBean.isInRole(RolesConstants.APPLICATION_WITHDRAW));
+        menuTransfer.setEnabled(appBean.canTransfer()
+                && SecurityBean.isInRole(RolesConstants.APPLICATION_TRANSFER));
         btnPrintStatusReport.setEnabled(appBean.getRowVersion() > 0
                 && SecurityBean.isInRole(RolesConstants.APPLICATION_PRINT_STATUS_REPORT));
 
@@ -798,6 +800,7 @@ System.err.println("SERVICE PANEL CODE   "+servicePanelCode);
         menuResubmit = new javax.swing.JMenuItem();
         menuDispatch = new javax.swing.JMenuItem();
         menuArchive = new javax.swing.JMenuItem();
+        menuTransfer = new javax.swing.JMenuItem();
         jFormattedTextField1 = new javax.swing.JFormattedTextField();
         landUseTypeListBean1 = new org.sola.clients.beans.referencedata.LandUseTypeListBean();
         popUpParcels = new javax.swing.JPopupMenu();
@@ -1116,6 +1119,16 @@ System.err.println("SERVICE PANEL CODE   "+servicePanelCode);
             }
         });
         popupApplicationActions.add(menuArchive);
+
+        menuTransfer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/transfer.png"))); // NOI18N
+        menuTransfer.setLabel(bundle.getString("ApplicationPanel.menuTransfer.label")); // NOI18N
+        menuTransfer.setName("menuTransfer"); // NOI18N
+        menuTransfer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuTransferActionPerformed(evt);
+            }
+        });
+        popupApplicationActions.add(menuTransfer);
 
         jFormattedTextField1.setText(bundle.getString("ApplicationPanel.jFormattedTextField1.text")); // NOI18N
         jFormattedTextField1.setName(bundle.getString("ApplicationPanel.jFormattedTextField1.name")); // NOI18N
@@ -3035,6 +3048,10 @@ System.err.println("SERVICE PANEL CODE   "+servicePanelCode);
         removeSelectedParcel();
     }//GEN-LAST:event_menuRemoveParcelActionPerformed
 
+    private void menuTransferActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuTransferActionPerformed
+        transferApplication();
+    }//GEN-LAST:event_menuTransferActionPerformed
+
     private void openSysRegCertParamsForm(String nr) {
         SysRegCertParamsForm certificateGenerator = new SysRegCertParamsForm(null, true, nr, null);
         certificateGenerator.setVisible(true);
@@ -3135,6 +3152,8 @@ System.err.println("SERVICE PANEL CODE   "+servicePanelCode);
                                 result = appBean.resubmit();
                             } else if (ApplicationActionTypeBean.APPROVE.equals(actionType)) {
                                 result = appBean.approve();
+                            } else if (ApplicationActionTypeBean.TRANSFER.equals(actionType)) {
+                                result = appBean.transfer();
                             }
 
                             if (displayValidationResultFormInSuccess) {
@@ -3424,6 +3443,10 @@ System.err.println("SERVICE PANEL CODE   "+servicePanelCode);
         takeActionAgainstApplication(ApplicationActionTypeBean.ARCHIVE);
     }
 
+    private void transferApplication() {
+        takeActionAgainstApplication(ApplicationActionTypeBean.TRANSFER);
+    }
+
     private void dispatchApplication() {
         takeActionAgainstApplication(ApplicationActionTypeBean.DISPATCH);
     }
@@ -3619,6 +3642,7 @@ System.err.println("SERVICE PANEL CODE   "+servicePanelCode);
     private javax.swing.JMenuItem menuResubmit;
     private javax.swing.JMenuItem menuRevertService;
     private javax.swing.JMenuItem menuStartService;
+    private javax.swing.JMenuItem menuTransfer;
     private javax.swing.JMenuItem menuViewService;
     private javax.swing.JMenuItem menuWithdraw;
     private org.sola.clients.beans.party.PartySummaryListBean partySummaryList;

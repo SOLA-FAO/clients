@@ -133,7 +133,7 @@ public class ApplicationBean extends ApplicationSummaryBean {
     }
 
     public boolean canResubmit() {
-        return isRequisitioned();
+        return isRequisitioned() || isToBeTransferred();
     }
 
     /**
@@ -162,6 +162,10 @@ public class ApplicationBean extends ApplicationSummaryBean {
 
     public boolean canCancel() {
         return isLodged();
+    }
+
+    public boolean canTransfer() {
+        return isAssigned() && !isToBeTransferred();
     }
 
     public boolean canWithdraw() {
@@ -195,6 +199,9 @@ public class ApplicationBean extends ApplicationSummaryBean {
         return getAssigneeId() != null;
     }
 
+    public boolean isToBeTransferred(){
+        return StatusConstants.TO_BE_TRANSFERRED.equalsIgnoreCase(getStatusCode());
+    }
     /**
      * Indicates whether editing of application is allowed or not
      */
@@ -838,6 +845,17 @@ public class ApplicationBean extends ApplicationSummaryBean {
     public List<ValidationResultBean> archive() {
         List<ValidationResultBean> result = TypeConverters.TransferObjectListToBeanList(
                 WSManager.getInstance().getCaseManagementService().applicationActionArchive(this.getId(), this.getRowVersion()),
+                ValidationResultBean.class, null);
+        this.reload();
+        return result;
+    }
+
+    /**
+     * Marks an application for transfer
+     */
+    public List<ValidationResultBean> transfer() {
+        List<ValidationResultBean> result = TypeConverters.TransferObjectListToBeanList(
+                WSManager.getInstance().getCaseManagementService().applicationActionTransfer(this.getId(), this.getRowVersion()),
                 ValidationResultBean.class, null);
         this.reload();
         return result;
