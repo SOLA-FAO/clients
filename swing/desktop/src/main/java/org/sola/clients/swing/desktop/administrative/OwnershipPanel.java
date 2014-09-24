@@ -174,12 +174,19 @@ public class OwnershipPanel extends ContentPanel {
     }
 
     private void customizeForm() {
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle");
+        String refNum = rrrBean.getReferenceNum() == null ? "" : rrrBean.getReferenceNum(); 
+        String title = String.format(bundle.getString("OwnershipPanel.headerPanel.titleText"),
+                rrrBean.getRrrType().getDisplayValue(), rrrBean.getFirstRightHolder() == null
+                ? refNum : rrrBean.getFirstRightHolder().getFullName());
         txtStatus.setEnabled(false);
         headerPanel.setTitleText(String.format("%s, %s", baUnitBean.getDisplayName(),
                 rrrBean.getRrrType().getDisplayValue()));
         if (rrrAction == RrrBean.RRR_ACTION.NEW) {
             btnSave.setText(MessageUtility.getLocalizedMessage(
                     ClientMessage.GENERAL_LABELS_CREATE_AND_CLOSE).getMessage());
+            title = String.format(bundle.getString("OwnershipPanel.headerPanel.titleText.newRrr"),
+                    rrrBean.getRrrType().getDisplayValue());
         }
         if (rrrAction == RrrBean.RRR_ACTION.CANCEL) {
             btnSave.setText(MessageUtility.getLocalizedMessage(
@@ -192,6 +199,7 @@ public class OwnershipPanel extends ContentPanel {
             txtNotationText.setText(appService.getRequestType().getNotationTemplate());
         }
 
+        this.setBreadCrumbTitle(this.getBreadCrumbPath(), title);
         if (rrrAction == RrrBean.RRR_ACTION.VIEW) {
             btnSave.setEnabled(false);
             txtNotationText.setEnabled(false);

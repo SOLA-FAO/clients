@@ -143,12 +143,17 @@ public class SimpleRightPanel extends ContentPanel {
      * the given {@link RrrBean#RRR_ACTION} and user rights.
      */
     private void customizeForm(RrrBean.RRR_ACTION rrrAction) {
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle");
+        String refNum = rrrBean.getReferenceNum() == null ? "" : rrrBean.getReferenceNum(); 
+        String title = String.format(bundle.getString("SimpleRightPanel.headerPanel.titleText"),
+               rrrBean.getRrrType().getDisplayValue(), rrrBean.getFirstRightHolder() == null
+                ? refNum : rrrBean.getFirstRightHolder().getFullName());
         txtStatus.setEnabled(false);
-        headerPanel.setTitleText(String.format("%s, %s", baUnitBean.getDisplayName(),
-                rrrBean.getRrrType().getDisplayValue()));
         if (rrrAction == RrrBean.RRR_ACTION.NEW) {
             btnSave.setText(MessageUtility.getLocalizedMessage(
                     ClientMessage.GENERAL_LABELS_CREATE_AND_CLOSE).getMessage());
+            title = String.format(bundle.getString("SimpleRightPanel.headerPanel.titleText.newRrr"),
+                    rrrBean.getRrrType().getDisplayValue());
         }
         if (rrrAction == RrrBean.RRR_ACTION.CANCEL) {
             btnSave.setText(MessageUtility.getLocalizedMessage(
@@ -160,6 +165,8 @@ public class SimpleRightPanel extends ContentPanel {
             // Set default noation text from the selected application service
             txtNotationText.setText(appService.getRequestType().getNotationTemplate());
         }
+
+        this.setBreadCrumbTitle(this.getBreadCrumbPath(), title);
 
         if (rrrAction == RrrBean.RRR_ACTION.VIEW) {
             btnSave.setEnabled(false);
@@ -176,7 +183,7 @@ public class SimpleRightPanel extends ContentPanel {
             pnlTop.add(pnlPurpose);
             pnlPurpose.setVisible(false);
         }
-        
+
         // Configure Security button
         btnSecurity.setVisible(btnSave.isEnabled()
                 && SecurityBean.isInRole(RolesConstants.CLASSIFICATION_CHANGE_CLASS));

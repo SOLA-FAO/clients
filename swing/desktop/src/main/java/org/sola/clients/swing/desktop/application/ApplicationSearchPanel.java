@@ -49,6 +49,7 @@ import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.common.RolesConstants;
+import org.sola.common.StringUtility;
 import org.sola.common.WindowUtility;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -61,9 +62,9 @@ import org.sola.common.messaging.MessageUtility;
  * />{@link ApplicationSearchParamsBean}</p>
  */
 public class ApplicationSearchPanel extends ContentPanel {
-    
+
     private class AssignmentPanelListener implements PropertyChangeListener {
-        
+
         @Override
         public void propertyChange(PropertyChangeEvent e) {
             if (e.getPropertyName().equals(ApplicationAssignmentDialog.ASSIGNMENT_CHANGED)) {
@@ -80,25 +81,25 @@ public class ApplicationSearchPanel extends ContentPanel {
         initComponents();
         setHeaderPanel(headerPanel1);
         this.appList.addPropertyChangeListener(new PropertyChangeListener() {
-            
+
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(ApplicationSearchResultsListBean.SELECTED_APPLICATION_PROPERTY)
                         || evt.getPropertyName().equals(ApplicationSearchResultsListBean.APPLICATION_CHECKED_PROPERTY)) {
                     customizeOpenButton();
                 }
-                
+
             }
         });
         customizeOpenButton();
-        
+
         btnFind.setEnabled(SecurityBean.isInRole(RolesConstants.APPLICATION_VIEW_APPS));
-        
+
     }
-    
+
     private void customizeOpenButton() {
         btnOpenApplication.setEnabled(appList.getSelectedApplication() != null);
-        
+
         if (appList.hasChecked()
                 && (SecurityBean.isInRole(RolesConstants.APPLICATION_ASSIGN_TO_YOURSELF)
                 || SecurityBean.isInRole(RolesConstants.APPLICATION_ASSIGN_TO_OTHERS))) {
@@ -106,11 +107,11 @@ public class ApplicationSearchPanel extends ContentPanel {
         } else {
             btnAssignJob.setEnabled(false);
         }
-        
+
         menuOpenApplication.setEnabled(btnOpenApplication.isEnabled());
         menuAssignApplication.setEnabled(btnAssignJob.isEnabled());
     }
-    
+
     private void showCalendar(JFormattedTextField dateField) {
         CalendarForm calendar = new CalendarForm(null, true, dateField);
         calendar.setVisible(true);
@@ -124,9 +125,9 @@ public class ApplicationSearchPanel extends ContentPanel {
                 || appList.getSelectedApplication() == null) {
             return;
         }
-        
+
         SolaTask t = new SolaTask<Void, Void>() {
-            
+
             @Override
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_APP));
@@ -140,24 +141,24 @@ public class ApplicationSearchPanel extends ContentPanel {
         };
         TaskManager.getInstance().runTask(t);
     }
-    
+
     private void searchJobs() {
         appList.getApplicationSearchResultsList().clear();
         SolaTask t = new SolaTask<Void, Void>() {
-            
+
             @Override
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_APP_SEARCHING));
                 appList.searchApplications(searchParams);
                 return null;
             }
-            
+
             @Override
             public void taskDone() {
                 if (appList.getApplicationSearchResultsList().size() <= 0) {
                     MessageUtility.displayMessage(ClientMessage.SEARCH_NO_RESULTS);
                 }
-                
+
                 if (appList.getApplicationSearchResultsList().size() > 99) {
                     Object[] parms = {100};
                     MessageUtility.displayMessage(ClientMessage.SEARCH_TOO_MANY_RESULTS, parms);
@@ -166,10 +167,10 @@ public class ApplicationSearchPanel extends ContentPanel {
                 txtAppNumber.requestFocus();
             }
         };
-        
+
         TaskManager.getInstance().runTask(t);
     }
-    
+
     public void clickFind() {
         searchJobs();
     }
@@ -188,7 +189,18 @@ public class ApplicationSearchPanel extends ContentPanel {
         form.addPropertyChangeListener(listener);
         form.setVisible(true);
     }
-    
+
+    @Override
+    public void setBreadCrumbTitle(String breadCrumbPath, String panelTitle) {
+        // Ignore the BreadCrumbPath
+        if (StringUtility.isEmpty(panelTitle)) {
+            panelTitle = getBreadCrumbTitle();
+        }
+        if (getHeaderPanel() != null) {
+            getHeaderPanel().setTitleText(panelTitle);
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

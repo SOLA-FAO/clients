@@ -30,6 +30,7 @@
 package org.sola.clients.swing.desktop.source;
 
 import org.sola.clients.swing.ui.ContentPanel;
+import org.sola.common.StringUtility;
 
 /**
  * Allows to search documents and print out digital copies.
@@ -49,6 +50,17 @@ public class DocumentSearchForm extends ContentPanel {
 
     public void clickFind() {
         documentSearchPanel.searchDocuments();
+    }
+
+    @Override
+    public void setBreadCrumbTitle(String breadCrumbPath, String panelTitle) {
+        // Ignore the BreadCrumbPath
+        if (StringUtility.isEmpty(panelTitle)) {
+            panelTitle = getBreadCrumbTitle();
+        }
+        if (getHeaderPanel() != null) {
+            getHeaderPanel().setTitleText(panelTitle);
+        }
     }
 
     @SuppressWarnings("unchecked")

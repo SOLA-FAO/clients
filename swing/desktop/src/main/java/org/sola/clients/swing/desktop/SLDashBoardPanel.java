@@ -51,6 +51,7 @@ import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.clients.swing.ui.renderers.CellDelimitedListRenderer;
 import org.sola.common.RolesConstants;
+import org.sola.common.StringUtility;
 import org.sola.common.WindowUtility;
 
 /**
@@ -288,6 +289,17 @@ public class SLDashBoardPanel extends ContentPanel {
         WindowUtility.centerForm(form);
         form.addPropertyChangeListener(assignmentPanelListener);
         form.setVisible(true);
+    }
+
+    @Override
+    public void setBreadCrumbTitle(String breadCrumbPath, String panelTitle) {
+        // Ignore the BreadCrumbPath
+        if (StringUtility.isEmpty(panelTitle)) {
+            panelTitle = getBreadCrumbTitle();
+        }
+        if (getHeaderPanel() != null) {
+            getHeaderPanel().setTitleText(panelTitle);
+        }
     }
 
     @SuppressWarnings("unchecked")

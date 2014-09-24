@@ -32,6 +32,7 @@ package org.sola.clients.swing.ui;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.JPanel;
+import org.sola.common.StringUtility;
 import org.sola.common.help.HelpUtility;
 
 /**
@@ -46,6 +47,7 @@ public class ContentPanel extends JPanel {
     private boolean closeOnHide = false;
     private String helpTopic;
     public String whichChangeEvent;
+    private String breadCrumbPath;
 
     public ContentPanel() {
         super();
@@ -163,5 +165,31 @@ public class ContentPanel extends JPanel {
      * panel.
      */
     protected void panelShown() {
+    }
+
+    public String getBreadCrumbTitle() {
+        String result = null;
+        if (getHeaderPanel() != null) {
+            result = getHeaderPanel().getTitleText();
+        }
+        return result;
+    }
+
+    public void setBreadCrumbTitle(String breadCrumbPath, String panelTitle) {
+        this.breadCrumbPath = breadCrumbPath;
+        if (StringUtility.isEmpty(panelTitle)) {
+            panelTitle = getBreadCrumbTitle();
+        }
+        if (getHeaderPanel() != null) {
+            if (StringUtility.isEmpty(breadCrumbPath)) {
+                getHeaderPanel().setTitleText(panelTitle);
+            } else {
+                getHeaderPanel().setTitleText(String.format("%s > %s", panelTitle, breadCrumbPath));
+            }
+        }
+    }
+
+    public String getBreadCrumbPath() {
+        return breadCrumbPath;
     }
 }

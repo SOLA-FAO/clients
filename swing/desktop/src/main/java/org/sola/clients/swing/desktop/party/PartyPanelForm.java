@@ -47,7 +47,7 @@ import org.sola.common.messaging.MessageUtility;
  * Used to create or edit party object.
  */
 public class PartyPanelForm extends ContentPanel {
-
+    
     public static final String PARTY_SAVED = "partySaved";
     private boolean savePartyOnAction;
     private boolean readOnly;
@@ -93,7 +93,7 @@ public class PartyPanelForm extends ContentPanel {
         this.savePartyOnAction = savePartyOnAction;
         this.closeOnSave = closeOnSave;
         resourceBundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/party/Bundle");
-
+        
         initComponents();
         customizePanel();
         savePartyState();
@@ -122,65 +122,65 @@ public class PartyPanelForm extends ContentPanel {
         if (partySummaryBean != null) {
             this.partyBean = partySummaryBean.getPartyBean();
         }
-
+        
         initComponents();
         customizePanel();
         savePartyState();
     }
-
+    
     public boolean isCloseOnSave() {
         return closeOnSave;
     }
-
+    
     public void setCloseOnSave(boolean closeOnSave) {
         this.closeOnSave = closeOnSave;
         customizePanel();
     }
-
+    
     public boolean isSavePartyOnAction() {
         return savePartyOnAction;
     }
-
+    
     public void setSavePartyOnAction(boolean savePartyOnAction) {
         this.savePartyOnAction = savePartyOnAction;
     }
-
+    
     public PartyBean getParty() {
         return partyPanel.getPartyBean();
     }
-
+    
     public void setParty(PartyBean partyBean) {
         this.partyBean = partyBean;
         partyPanel.setPartyBean(partyBean);
         customizePanel();
         savePartyState();
     }
-
+    
     private org.sola.clients.swing.ui.party.PartyPanel createPartyPanel() {
         org.sola.clients.swing.ui.party.PartyPanel panel;
         panel = new org.sola.clients.swing.ui.party.PartyPanel(partyBean, readOnly);
         return panel;
     }
-
+    
     private void customizePanel() {
         if (!readOnly) {
             this.readOnly = !SecurityBean.isInRole(RolesConstants.PARTY_SAVE);
         }
-
+        
         btnSave.setEnabled(!readOnly);
         btnSecurity.setVisible(!readOnly && SecurityBean.isInRole(RolesConstants.CLASSIFICATION_CHANGE_CLASS));
-
+        String title = null;        
         if (partyBean != null) {
-            headerPanel.setTitleText(String.format(resourceBundle.getString("PartyPanelForm.headerPanel.titleText2"),
-                    partyBean.getName(), partyBean.getLastName() == null ? "" : partyBean.getLastName()));
+            title = String.format(resourceBundle.getString("PartyPanelForm.headerPanel.titleText2"),
+                    partyBean.getName(), partyBean.getLastName() == null ? "" : partyBean.getLastName());
         } else {
-            headerPanel.setTitleText(resourceBundle.getString("PartyPanelForm.headerPanel.titleText"));
+            title = resourceBundle.getString("PartyPanelForm.headerPanel.titleText");
         }
-
+        this.setBreadCrumbTitle(this.getBreadCrumbPath(), title);
         if (closeOnSave) {
             btnSave.setText(MessageUtility.getLocalizedMessage(
                     ClientMessage.GENERAL_LABELS_SAVE_AND_CLOSE).getMessage());
-
+            
             if (partyBean == null) {
                 partyPanel.jPanel1.setVisible(false);
                 partyPanel.groupPanel1.setVisible(false);
@@ -190,17 +190,17 @@ public class PartyPanelForm extends ContentPanel {
                     ClientMessage.GENERAL_LABELS_SAVE).getMessage());
         }
     }
-
+    
     private void saveParty(final boolean allowClose) {
         if (savePartyOnAction) {
             SolaTask<Boolean, Boolean> t = new SolaTask<Boolean, Boolean>() {
-
+                
                 @Override
                 public Boolean doTask() {
                     setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_SAVING));
                     return partyPanel.saveParty();
                 }
-
+                
                 @Override
                 public void taskDone() {
                     if (get() != null && get()) {
@@ -226,11 +226,11 @@ public class PartyPanelForm extends ContentPanel {
             }
         }
     }
-
+    
     private void savePartyState() {
         MainForm.saveBeanState(partyPanel.getPartyBean());
     }
-
+    
     @Override
     protected boolean panelClosing() {
         if (btnSave.isEnabled() && savePartyOnAction && MainForm.checkSaveBeforeClose(partyPanel.getPartyBean())) {
@@ -239,14 +239,14 @@ public class PartyPanelForm extends ContentPanel {
         }
         return true;
     }
-
+    
     private void configureSecurity() {
-        SecurityClassificationDialog form = new SecurityClassificationDialog(partyPanel.getPartyBean(), 
+        SecurityClassificationDialog form = new SecurityClassificationDialog(partyPanel.getPartyBean(),
                 MainForm.getInstance(), true);
         WindowUtility.centerForm(form);
         form.setVisible(true);
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

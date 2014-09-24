@@ -70,13 +70,13 @@ import org.sola.common.messaging.MessageUtility;
  * data on the form.
  */
 public class LeasePanel extends ContentPanel {
-    
+
     private ApplicationBean applicationBean;
     private ApplicationServiceBean appService;
     private RrrBean.RRR_ACTION rrrAction;
     private BaUnitBean baUnit;
     public static final String UPDATED_RRR = "updatedRRR";
-    
+
     private DocumentsManagementExtPanel createDocumentsPanel() {
         if (rrrBean == null) {
             rrrBean = new RrrBean();
@@ -84,34 +84,34 @@ public class LeasePanel extends ContentPanel {
         if (applicationBean == null) {
             applicationBean = new ApplicationBean();
         }
-        
+
         boolean allowEdit = true;
         if (rrrAction == RrrBean.RRR_ACTION.VIEW) {
             allowEdit = false;
         }
-        
+
         DocumentsManagementExtPanel panel = new DocumentsManagementExtPanel(
                 rrrBean.getSourceList(), applicationBean, allowEdit);
         return panel;
     }
-    
+
     private RrrBean CreateRrrBean() {
         if (rrrBean == null) {
             rrrBean = new RrrBean();
         }
         return rrrBean;
     }
-    
+
     private ConditionsPanel createConditionsPanel() {
         return new ConditionsPanel(rrrBean, rrrAction);
     }
-    
+
     private RrrSubTypeListBean createRrrSubTypes() {
         RrrSubTypeListBean list = new RrrSubTypeListBean(true);
         list.setRrrTypeFilter(rrrBean.getTypeCode(), rrrBean.getRrrSubTypeCode());
         return list;
     }
-    
+
     public LeasePanel(BaUnitBean baUnit, RrrBean rrrBean, RrrBean.RRR_ACTION rrrAction) {
         this(baUnit, rrrBean, null, null, rrrAction);
     }
@@ -129,34 +129,40 @@ public class LeasePanel extends ContentPanel {
         initComponents();
         postInit();
     }
-    
+
     private void postInit() {
         customizeForm();
         customizeOwnerButtons(null);
         saveRrrState();
     }
-    
+
     private void customizeForm() {
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle");
+        String refNum = rrrBean.getReferenceNum() == null ? "" : rrrBean.getReferenceNum(); 
+        String title = String.format(bundle.getString("LeasePanel.headerPanel.titleText"),
+                rrrBean.getRrrType().getDisplayValue(), rrrBean.getFirstRightHolder() == null
+                ? refNum : rrrBean.getFirstRightHolder().getFullName());
         txtStatus.setEnabled(false);
-        headerPanel.setTitleText(String.format("%s, %s", baUnit.getDisplayName(),
-                rrrBean.getRrrType().getDisplayValue()));
         if (rrrAction == RrrBean.RRR_ACTION.NEW) {
             btnSave.setText(MessageUtility.getLocalizedMessage(
                     ClientMessage.GENERAL_LABELS_CREATE_AND_CLOSE).getMessage());
+            title = String.format(bundle.getString("LeasePanel.headerPanel.titleText.newRrr"), rrrBean.getRrrType().getDisplayValue());
         }
         if (rrrAction == RrrBean.RRR_ACTION.CANCEL) {
             btnSave.setText(MessageUtility.getLocalizedMessage(
                     ClientMessage.GENERAL_LABELS_TERMINATE_AND_CLOSE).getMessage());
         }
-        
+
         if (rrrAction != RrrBean.RRR_ACTION.EDIT && rrrAction != RrrBean.RRR_ACTION.VIEW
                 && appService != null) {
             // Set default noation text from the selected application service
             txtNotationText.setText(appService.getRequestType().getNotationTemplate());
         }
-        
+
+        this.setBreadCrumbTitle(this.getBreadCrumbPath(), title);
+
         boolean enabled = rrrAction != RrrBean.RRR_ACTION.VIEW;
-        
+
         btnSave.setEnabled(enabled);
         txtNotationText.setEnabled(enabled);
         txtRegDatetime.setEditable(enabled);
@@ -167,14 +173,14 @@ public class LeasePanel extends ContentPanel {
         txtRent.setEnabled(enabled);
         txtDueDate.setEnabled(enabled);
         btnDueDate.setEnabled(enabled);
-        
+
         btnPrintDraftLease.setEnabled(enabled);
         btnPrintDraftOffer.setEnabled(enabled);
         btnPrintLease.setEnabled(enabled);
         btnPrintOffer.setEnabled(enabled);
         btnPrintRejection.setEnabled(enabled);
         cbxRrrSubType.setEnabled(enabled);
-        
+
         if (!rrrSubTypes.hasRrrSubTypes()) {
             // Hide the purpose panel and put it at the end of the panel list. 
             pnlTop.remove(pnlPurpose);
@@ -196,9 +202,9 @@ public class LeasePanel extends ContentPanel {
         // Configure Security button
         btnSecurity.setVisible(btnSave.isEnabled()
                 && SecurityBean.isInRole(RolesConstants.CLASSIFICATION_CHANGE_CLASS));
-        
+
     }
-    
+
     private void prepareRrrBean(RrrBean rrrBean, RrrBean.RRR_ACTION rrrAction) {
         if (rrrBean == null) {
             this.rrrBean = new RrrBean();
@@ -207,7 +213,7 @@ public class LeasePanel extends ContentPanel {
             this.rrrBean = rrrBean.makeCopyByAction(rrrAction);
         }
         this.rrrBean.addPropertyChangeListener(new PropertyChangeListener() {
-            
+
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(RrrBean.SELECTED_RIGHTHOLDER_PROPERTY)) {
@@ -216,17 +222,17 @@ public class LeasePanel extends ContentPanel {
             }
         });
     }
-    
+
     private void customizeOwnerButtons(PartySummaryBean owner) {
         boolean isChangesAllowed = false;
         if (rrrAction == RrrBean.RRR_ACTION.VARY || rrrAction == RrrBean.RRR_ACTION.EDIT
                 || rrrAction == RrrBean.RRR_ACTION.NEW) {
             isChangesAllowed = true;
         }
-        
+
         btnAddOwner.setEnabled(isChangesAllowed);
         btnSelectExisting.setEnabled(isChangesAllowed);
-        
+
         if (owner == null) {
             btnRemoveOwner.setEnabled(false);
             btnEditOwner.setEnabled(false);
@@ -236,13 +242,13 @@ public class LeasePanel extends ContentPanel {
             btnEditOwner.setEnabled(isChangesAllowed);
             btnViewOwner.setEnabled(true);
         }
-        
+
         menuAddOwner.setEnabled(btnAddOwner.isEnabled());
         menuRemoveOwner.setEnabled(btnRemoveOwner.isEnabled());
         menuEditOwner.setEnabled(btnEditOwner.isEnabled());
         menuViewOwner.setEnabled(btnViewOwner.isEnabled());
     }
-    
+
     private boolean saveRrr() {
         if (rrrBean.validate(true, Default.class, LeaseValidationGroup.class).size() < 1) {
             firePropertyChange(UPDATED_RRR, null, rrrBean);
@@ -251,11 +257,11 @@ public class LeasePanel extends ContentPanel {
         }
         return false;
     }
-    
+
     private void saveRrrState() {
         MainForm.saveBeanState(rrrBean);
     }
-    
+
     @Override
     protected boolean panelClosing() {
         if (btnSave.isEnabled() && MainForm.checkSaveBeforeClose(rrrBean)) {
@@ -263,32 +269,32 @@ public class LeasePanel extends ContentPanel {
         }
         return true;
     }
-    
+
     private void viewOwner() {
         if (rrrBean.getSelectedRightHolder() != null) {
             openRightHolderForm(rrrBean.getSelectedRightHolder(), true);
         }
     }
-    
+
     private void removeOwner() {
         if (rrrBean.getSelectedRightHolder() != null
                 && MessageUtility.displayMessage(ClientMessage.CONFIRM_DELETE_RECORD) == MessageUtility.BUTTON_ONE) {
             rrrBean.removeSelectedRightHolder();
         }
     }
-    
+
     private void addOwner() {
         openRightHolderForm(null, false);
     }
-    
+
     private void editOwner() {
         if (rrrBean.getSelectedRightHolder() != null) {
             openRightHolderForm(rrrBean.getSelectedRightHolder(), false);
         }
     }
-    
+
     private class RightHolderFormListener implements PropertyChangeListener {
-        
+
         @Override
         public void propertyChange(PropertyChangeEvent evt) {
             if (evt.getPropertyName().equals(PartyPanelForm.PARTY_SAVED)) {
@@ -297,16 +303,16 @@ public class LeasePanel extends ContentPanel {
             }
         }
     }
-    
+
     private void openRightHolderForm(final PartySummaryBean partySummaryBean, final boolean isReadOnly) {
         final RightHolderFormListener listener = new RightHolderFormListener();
-        
+
         SolaTask t = new SolaTask<Void, Void>() {
             @Override
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PERSON));
                 PartyPanelForm partyForm;
-                
+
                 if (partySummaryBean != null) {
                     partyForm = new PartyPanelForm(true, partySummaryBean, isReadOnly, true);
                 } else {
@@ -319,19 +325,19 @@ public class LeasePanel extends ContentPanel {
         };
         TaskManager.getInstance().runTask(t);
     }
-    
+
     private void openSelectRightHolderForm() {
         final RightHolderFormListener listener = new RightHolderFormListener();
-        
+
         SolaTask t = new SolaTask<Void, Void>() {
-            
+
             @Override
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PERSON));
                 PartySearchPanelForm partySearchForm = null;
-                
+
                 partySearchForm = initializePartySearchForm(partySearchForm);
-                
+
                 partySearchForm.addPropertyChangeListener(listener);
                 getMainContentPanel().addPanel(partySearchForm, MainContentPanel.CARD_SEARCH_PERSONS, true);
                 return null;
@@ -339,22 +345,22 @@ public class LeasePanel extends ContentPanel {
         };
         TaskManager.getInstance().runTask(t);
     }
-    
+
     private PartySearchPanelForm initializePartySearchForm(PartySearchPanelForm partySearchForm) {
         partySearchForm = new PartySearchPanelForm(true, this.rrrBean);
         return partySearchForm;
-        
+
     }
-    
+
     private RrrReportBean prepareReportBean() {
         RrrReportBean reportBean = new RrrReportBean(baUnit, rrrBean, applicationBean, appService);
         String warnings = "";
         String warning;
-        
+
         if (applicationBean == null || applicationBean.isNew()) {
             warnings = warnings + MessageUtility.getLocalizedMessageText(ClientMessage.APPLICATION_NOT_FOUND);
         }
-        
+
         if (reportBean.getRrrRegNumber().isEmpty()) {
             warning = MessageUtility.getLocalizedMessageText(
                     ClientMessage.BAUNIT_RRR_NO_REGISTRATION_NUMBER,
@@ -365,7 +371,7 @@ public class LeasePanel extends ContentPanel {
                 warnings = warnings + "\n- " + warning;
             }
         }
-        
+
         if (reportBean.getBaUnit().getCadastreObjectFilteredList().size() < 1) {
             warning = MessageUtility.getLocalizedMessageText(ClientMessage.BAUNIT_HAS_NO_PARCELS);
             if (warnings.isEmpty()) {
@@ -374,7 +380,7 @@ public class LeasePanel extends ContentPanel {
                 warnings = warnings + "\n- " + warning;
             }
         }
-        
+
         if (!warnings.isEmpty()) {
             warnings = MessageUtility.getLocalizedMessageText(ClientMessage.BAUNIT_RRR_REPORT_WARNINGS)
                     + "\n\n" + warnings;
@@ -387,7 +393,7 @@ public class LeasePanel extends ContentPanel {
         }
         return reportBean;
     }
-    
+
     private void printRejectionLetter() {
         final RrrReportBean reportBean = prepareReportBean();
         if (reportBean != null) {
@@ -396,9 +402,9 @@ public class LeasePanel extends ContentPanel {
                     MessageUtility.getLocalizedMessageText(ClientMessage.BAUNIT_LEASE_REJECTION_REASON_TITLE),
                     null, MainForm.getInstance(), true);
             WindowUtility.centerForm(form);
-            
+
             form.addPropertyChangeListener(new PropertyChangeListener() {
-                
+
                 @Override
                 public void propertyChange(PropertyChangeEvent evt) {
                     if (evt.getPropertyName().equals(FreeTextDialog.TEXT_TO_SAVE)) {
@@ -410,14 +416,14 @@ public class LeasePanel extends ContentPanel {
             showReport(ReportManager.getLeaseRejectionReport(reportBean));
         }
     }
-    
+
     private void printOfferLetter(boolean isDraft) {
         final RrrReportBean reportBean = prepareReportBean();
         if (reportBean != null) {
             showReport(ReportManager.getLeaseOfferReport(reportBean, isDraft));
         }
     }
-    
+
     private void printLease(boolean isDraft) {
         final RrrReportBean reportBean = prepareReportBean();
         if (reportBean != null) {
@@ -433,19 +439,19 @@ public class LeasePanel extends ContentPanel {
         form.setLocationRelativeTo(this);
         form.setVisible(true);
     }
-    
+
     private void showCalendar(JFormattedTextField dateField) {
         CalendarForm calendar = new CalendarForm(null, true, dateField);
         calendar.setVisible(true);
     }
-    
+
     private void configureSecurity() {
         SecurityClassificationDialog form = new SecurityClassificationDialog(rrrBean,
                 MainForm.getInstance(), true);
         WindowUtility.centerForm(form);
         form.setVisible(true);
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -561,7 +567,7 @@ public class LeasePanel extends ContentPanel {
 
         setHeaderPanel(headerPanel);
 
-        headerPanel.setTitleText(bundle.getString("SimpleOwhershipPanel.headerPanel.titleText")); // NOI18N
+        headerPanel.setTitleText(bundle.getString("LeasePanel.headerPanel.titleText")); // NOI18N
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);

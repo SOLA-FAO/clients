@@ -176,6 +176,12 @@ public class MainContentPanel extends javax.swing.JPanel {
         // Set components orienation
         LocalizationTools.setOrientation(panel);
 
+        Component topCard = getTopCard();
+        String breadCrumbPath = null;
+        if (topCard != null && ContentPanel.class.isAssignableFrom(topCard.getClass())) {
+            breadCrumbPath = ((ContentPanel) topCard).getBreadCrumbTitle();
+        }
+
         addCard(panel, cardName);
 
         panel.addPropertyChangeListener(panelListener);
@@ -183,6 +189,7 @@ public class MainContentPanel extends javax.swing.JPanel {
         if (ContentPanel.class.isAssignableFrom(panel.getClass())) {
             ((ContentPanel) panel).setMainContentPanel(this);
             ((ContentPanel) panel).panelAdded();
+            ((ContentPanel) panel).setBreadCrumbTitle(breadCrumbPath, null);
         }
 
         if (showPanel) {

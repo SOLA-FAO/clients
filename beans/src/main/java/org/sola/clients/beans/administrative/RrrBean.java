@@ -192,8 +192,8 @@ public class RrrBean extends AbstractTransactionedBean {
     }
 
     public PartySummaryBean getFirstRightHolder() {
-        if (rightHolderList != null && rightHolderList.size() > 0) {
-            return rightHolderList.get(0);
+        if (rightHolderList != null && rightHolderList.getFilteredList().size() > 0) {
+            return rightHolderList.getFilteredList().get(0);
         } else {
             return null;
         }

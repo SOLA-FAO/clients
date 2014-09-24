@@ -1703,6 +1703,9 @@
                       <BindingParameter name="IGNORE_ADJUSTING" value="N"/>
                     </BindingProperty>
                   </BindingProperties>
+                  <Events>
+                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tableParcelsMouseClicked"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>
@@ -2723,6 +2726,9 @@
                               <BindingParameter name="IGNORE_ADJUSTING" value="N"/>
                             </BindingProperty>
                           </BindingProperties>
+                          <Events>
+                            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tableParentBaUnitsMouseClicked"/>
+                          </Events>
                         </Component>
                       </SubComponents>
                     </Container>
@@ -2876,6 +2882,9 @@
                               <BindingParameter name="IGNORE_ADJUSTING" value="N"/>
                             </BindingProperty>
                           </BindingProperties>
+                          <Events>
+                            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tableChildBaUnitsMouseClicked"/>
+                          </Events>
                         </Component>
                       </SubComponents>
                     </Container>

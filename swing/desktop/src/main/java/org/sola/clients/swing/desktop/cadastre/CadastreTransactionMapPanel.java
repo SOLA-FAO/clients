@@ -49,8 +49,8 @@ public class CadastreTransactionMapPanel extends ContentPanel {
     private ApplicationPropertyBean applicationProperty;
     private ControlsBundleForTransaction mapControl = null;
     private String targetCadastreObjectType = CadastreObjectTypeBean.CODE_PARCEL;
-    
-        /**
+
+    /**
      * Overloaded constructor for map panel
      *
      * @param applicationBean
@@ -130,18 +130,14 @@ public class CadastreTransactionMapPanel extends ContentPanel {
             if (this.applicationProperty != null) {
                 title = String.format(
                         bundle.getString("CadastreTransactionMapPanel.headerPanel.titleText.ApplicationAndProperty"),
-                        applicationService.getRequestType().getDisplayValue(),
-                        applicationProperty.getNameFirstpart(),
-                        applicationProperty.getNameLastpart(),
-                        applicationBean.getNr());
+                        applicationService.getRequestType().getDisplayValue());
             } else {
                 title = String.format(
                         bundle.getString("CadastreTransactionMapPanel.headerPanel.titleText.Application"),
-                        applicationService.getRequestType().getDisplayValue(),
-                        applicationBean.getNr());
+                        applicationService.getRequestType().getDisplayValue());
             }
         }
-        headerPanel.setTitleText(title);
+        this.setBreadCrumbTitle(this.getBreadCrumbPath(), title);
     }
 
     private String getBaUnitId() {

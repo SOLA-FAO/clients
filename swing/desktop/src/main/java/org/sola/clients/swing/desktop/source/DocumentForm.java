@@ -37,6 +37,7 @@ import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.security.SecurityClassificationDialog;
 import org.sola.common.RolesConstants;
+import org.sola.common.StringUtility;
 import org.sola.common.WindowUtility;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -76,25 +77,26 @@ public class DocumentForm extends ContentPanel {
     }
 
     private void postInit() {
-        String headerTitle;
+        String title;
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/source/Bundle");
 
         if (document == null) {
-            headerTitle = MessageUtility.getLocalizedMessageText(ClientMessage.GENERAL_LABELS_DOCUMENT)
-                    + " - " + MessageUtility.getLocalizedMessageText(ClientMessage.GENERAL_LABELS_NEW);
+            title = bundle.getString("DocumentForm.headerPanel.titleText");
         } else {
-            if (document.getLaNr() == null || document.getLaNr().equals("")) {
-                headerTitle = MessageUtility.getLocalizedMessageText(ClientMessage.GENERAL_LABELS_DOCUMENT)
-                        + " - " + document.getSourceType().getDisplayValue();
+            if (StringUtility.isEmpty(document.getReferenceNr())) {
+                title = String.format(bundle.getString("DocumentForm.headerPanel.titleText.existingDoc"),
+                        document.getSourceType().getDisplayValue());
             } else {
-                headerTitle = MessageUtility.getLocalizedMessageText(ClientMessage.GENERAL_LABELS_DOCUMENT)
-                        + " - #" + document.getLaNr();
+                title = String.format(bundle.getString("DocumentForm.headerPanel.titleText.existingDoc"),
+                        document.getReferenceNr());
             }
         }
-        headerPanel.setTitleText(headerTitle);
+        this.setBreadCrumbTitle(this.getBreadCrumbPath(), title);
+
         documentPanel.setDocument(document);
         documentPanel.setAllowEditing(allowEditing);
         btnSave.setEnabled(allowEditing);
-        btnSecurity.setVisible(btnSave.isEnabled() 
+        btnSecurity.setVisible(btnSave.isEnabled()
                 && SecurityBean.isInRole(RolesConstants.CLASSIFICATION_CHANGE_CLASS));
     }
 
@@ -150,13 +152,14 @@ public class DocumentForm extends ContentPanel {
 
         setHeaderPanel(headerPanel);
 
-        headerPanel.setTitleText("Document - %");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/source/Bundle"); // NOI18N
+        headerPanel.setTitleText(bundle.getString("DocumentForm.headerPanel.titleText")); // NOI18N
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
         btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/save.png"))); // NOI18N
-        btnSave.setText("Save & Close");
+        btnSave.setText(bundle.getString("DocumentForm.btnSave.text")); // NOI18N
         btnSave.setFocusable(false);
         btnSave.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnSave.addActionListener(new java.awt.event.ActionListener() {
@@ -167,7 +170,7 @@ public class DocumentForm extends ContentPanel {
         jToolBar1.add(btnSave);
 
         btnSecurity.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/lock.png"))); // NOI18N
-        btnSecurity.setText("Security");
+        btnSecurity.setText(bundle.getString("DocumentForm.btnSecurity.text")); // NOI18N
         btnSecurity.setFocusable(false);
         btnSecurity.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnSecurity.addActionListener(new java.awt.event.ActionListener() {

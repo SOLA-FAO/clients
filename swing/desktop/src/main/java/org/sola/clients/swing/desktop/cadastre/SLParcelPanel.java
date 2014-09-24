@@ -51,7 +51,7 @@ import org.sola.services.boundary.wsclients.WSManager;
  * @author soladev
  */
 public class SLParcelPanel extends ContentPanel {
-    
+
     public final static String SAVE_PARCEL = "saveParcel";
     private CadastreObjectBean cadastreObject;
     private boolean readOnly = true;
@@ -67,30 +67,28 @@ public class SLParcelPanel extends ContentPanel {
         initComponents();
         customizeForm();
     }
-    
+
     private void customizeForm() {
-        
+
         java.util.ResourceBundle resourceBundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/cadastre/Bundle");
+        String title = String.format(resourceBundle.getString("SLParcelPanel.TitleText.ExistingParcel"), cadastreObject.toString());
         if (cadastreObject == null) {
-            headerPanel1.setTitleText(String.format(
-                    resourceBundle.getString("SLParcelPanel.TitleText.NewParcel"),
-                    property.getDisplayName()));
+            title = resourceBundle.getString("SLParcelPanel.TitleText.NewParcel");
             btnSave.setText(MessageUtility.getLocalizedMessage(
                     ClientMessage.GENERAL_LABELS_CREATE_AND_CLOSE).getMessage());
-        } else {
-            headerPanel1.setTitleText(String.format(
-                    resourceBundle.getString("SLParcelPanel.TitleText.ExistingParcel"),
-                    property.getDisplayName(), cadastreObject.toString()));
         }
+        
+        this.setBreadCrumbTitle(this.getBreadCrumbPath(), title);
+
         btnSave.setEnabled(!readOnly);
-        btnSecurity.setVisible(!readOnly 
+        btnSecurity.setVisible(!readOnly
                 && SecurityBean.isInRole(RolesConstants.CLASSIFICATION_CHANGE_CLASS));
     }
-    
+
     private ParcelPanel createParcelPanel() {
         return new ParcelPanel(cadastreObject, readOnly);
     }
-    
+
     private void saveParcel() {
         String parcelId = parcelPanel.getCadastreObject().getId();
         String parcelName = parcelPanel.getCadastreObject().getNameFirstpart() + ' ' + parcelPanel.getCadastreObject().getNameLastpart();
@@ -110,7 +108,7 @@ public class SLParcelPanel extends ContentPanel {
             close();
         }
     }
-    
+
     private void configureSecurity() {
         SecurityClassificationDialog form = new SecurityClassificationDialog(parcelPanel.getCadastreObject(),
                 MainForm.getInstance(), true);

@@ -335,21 +335,20 @@ public class SLPropertyPanel extends ContentPanel {
         txtSLStatus.setEnabled(false);
         txtSLLandUse.setEnabled(false);
         txtPropertyManager.setEnabled(false);
+        String title;
 
         if (nameFirstPart != null && nameLastPart != null) {
-            headerPanel.setTitleText(String.format(
-                    resourceBundle.getString("SLPropertyPanel.existingProperty.Text"), baUnitBean1.getDisplayName()));
-
+            title = String.format(resourceBundle.getString("SLPropertyPanel.existingProperty.Text"), baUnitBean1.getDisplayName());
         } else {
-            headerPanel.setTitleText(resourceBundle.getString("SLPropertyPanel.newProperty.Text"));
+            title = resourceBundle.getString("SLPropertyPanel.newProperty.Text");
         }
 
         if (applicationBean != null && applicationService != null) {
-            headerPanel.setTitleText(String.format("%s, %s",
-                    headerPanel.getTitleText(),
+            title = String.format("%s > %s", title,
                     String.format(resourceBundle.getString("SLPropertyPanel.applicationInfo.Text"),
-                            applicationService.getRequestType().getDisplayValue(), applicationBean.getNr())));
+                            applicationService.getRequestType().getDisplayValue()));
         }
+        this.setBreadCrumbTitle(this.getBreadCrumbPath(), title);
 
         boolean editProperty = SecurityBean.isInRole(RolesConstants.ADMINISTRATIVE_BA_UNIT_SAVE) && !readOnly;
         btnSave.setEnabled(editProperty);
@@ -758,6 +757,22 @@ public class SLPropertyPanel extends ContentPanel {
     }
 
     /**
+     * Calculates the area for the property based on the official areas of the
+     * linked parcels
+     */
+    private void setPropertyArea() {
+        BigDecimal propertyArea = BigDecimal.ZERO;
+        for (CadastreObjectBean parcel : baUnitBean1.getCadastreObjectFilteredList()) {
+            if (parcel.getOfficialAreaSize() != null) {
+                propertyArea = propertyArea.add(parcel.getOfficialAreaSize());
+            }
+        }
+        txtSLArea.setValue(propertyArea);
+        // Force the area to be accepted by the FormattedTextField
+        txtSLArea.transferFocus();
+    }
+
+    /**
      * Open form to add new parcel or search for existing one.\
      *
      * @param isNew Opens {@link CreateParcelDialog} if true, otherwise opens
@@ -775,17 +790,7 @@ public class SLPropertyPanel extends ContentPanel {
                         addUnderlyingTitles(bean.getId());
                     }
                     // Increase the area of the property by the official area of the parcel
-                    if (bean.getOfficialAreaSize() != null) {
-                        BigDecimal area = new BigDecimal(bean.getOfficialAreaSize().doubleValue());
-                        if (baUnitAreaBean1.getSize() == null) {
-                            txtSLArea.setValue(area);
-                        } else {
-                            txtSLArea.setValue(area.add(baUnitAreaBean1.getSize()));
-                        }
-
-                        // Force the area to be accepted by the FormattedTextField
-                        txtSLArea.transferFocus();
-                    }
+                    setPropertyArea();
                 }
             }
         };
@@ -860,6 +865,7 @@ public class SLPropertyPanel extends ContentPanel {
                 && MessageUtility.displayMessage(ClientMessage.CONFIRM_DELETE_RECORD) == MessageUtility.BUTTON_ONE) {
             baUnitBean1.removeSelectedParcel();
         }
+        setPropertyArea();
     }
 
     /**
@@ -2350,6 +2356,11 @@ public class SLPropertyPanel extends ContentPanel {
         jTableBinding.bind();binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitBean1, org.jdesktop.beansbinding.ELProperty.create("${selectedParcel}"), tableParcels, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
         bindingGroup.addBinding(binding);
 
+        tableParcels.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableParcelsMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tableParcels);
         if (tableParcels.getColumnModel().getColumnCount() > 0) {
             tableParcels.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("SLPropertyPanel.tableParcels.columnModel.title0")); // NOI18N
@@ -2906,6 +2917,11 @@ public class SLPropertyPanel extends ContentPanel {
         jTableBinding.bind();binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitBean1, org.jdesktop.beansbinding.ELProperty.create("${selectedParentBaUnit}"), tableParentBaUnits, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
         bindingGroup.addBinding(binding);
 
+        tableParentBaUnits.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableParentBaUnitsMouseClicked(evt);
+            }
+        });
         jScrollPane6.setViewportView(tableParentBaUnits);
         if (tableParentBaUnits.getColumnModel().getColumnCount() > 0) {
             tableParentBaUnits.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("SLPropertyPanel.tableParentBaUnits.columnModel.title2")); // NOI18N
@@ -2990,6 +3006,11 @@ public class SLPropertyPanel extends ContentPanel {
         jTableBinding.bind();binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitBean1, org.jdesktop.beansbinding.ELProperty.create("${selectedChildBaUnit}"), tableChildBaUnits, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
         bindingGroup.addBinding(binding);
 
+        tableChildBaUnits.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableChildBaUnitsMouseClicked(evt);
+            }
+        });
         jScrollPane3.setViewportView(tableChildBaUnits);
         if (tableChildBaUnits.getColumnModel().getColumnCount() > 0) {
             tableChildBaUnits.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("SLPropertyPanel.tableChildBaUnits.columnModel.title2")); // NOI18N
@@ -3225,7 +3246,11 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
 
     private void tableRightsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableRightsMouseClicked
         if (evt.getClickCount() > 1 && baUnitBean1.getSelectedRight() != null) {
-            openRightForm(baUnitBean1.getSelectedRight(), RrrBean.RRR_ACTION.VIEW);
+            if (btnEditRight.isEnabled()) {
+                editRight();
+            } else {
+                openRightForm(baUnitBean1.getSelectedRight(), RrrBean.RRR_ACTION.VIEW);
+            }
         }
     }//GEN-LAST:event_tableRightsMouseClicked
 
@@ -3288,6 +3313,28 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private void btnSecurityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSecurityActionPerformed
         configureSecurity();
     }//GEN-LAST:event_btnSecurityActionPerformed
+
+    private void tableParentBaUnitsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableParentBaUnitsMouseClicked
+        if (evt.getClickCount() == 2 && baUnitBean1.getSelectedParentBaUnit() != null) {
+            openPropertyForm(baUnitBean1.getSelectedParentBaUnit());
+        }
+    }//GEN-LAST:event_tableParentBaUnitsMouseClicked
+
+    private void tableChildBaUnitsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableChildBaUnitsMouseClicked
+        if (evt.getClickCount() == 2 && baUnitBean1.getSelectedChildBaUnit() != null) {
+            openPropertyForm(baUnitBean1.getSelectedChildBaUnit());
+        }
+    }//GEN-LAST:event_tableChildBaUnitsMouseClicked
+
+    private void tableParcelsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableParcelsMouseClicked
+        if (evt.getClickCount() == 2 && baUnitBean1.getSelectedParcel() != null) {
+            if (btnEditParcel.isEnabled()) {
+                editParcel();
+            } else {
+                viewParcel();
+            }
+        }
+    }//GEN-LAST:event_tableParcelsMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel areaPanel;

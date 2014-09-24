@@ -36,6 +36,7 @@ import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
+import org.sola.common.StringUtility;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
@@ -123,6 +124,17 @@ public class BaUnitSearchPanel extends ContentPanel {
 
     public void clickFind() {
         baUnitSearchPanel.clickFind();
+    }
+
+    @Override
+    public void setBreadCrumbTitle(String breadCrumbPath, String panelTitle) {
+        // Ignore the BreadCrumbPath
+        if (StringUtility.isEmpty(panelTitle)) {
+            panelTitle = getBreadCrumbTitle();
+        }
+        if (getHeaderPanel() != null) {
+            getHeaderPanel().setTitleText(panelTitle);
+        }
     }
 
     @SuppressWarnings("unchecked")

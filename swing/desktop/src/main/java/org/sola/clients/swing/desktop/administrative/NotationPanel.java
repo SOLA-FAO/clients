@@ -102,15 +102,15 @@ public class NotationPanel extends ContentPanel {
 
         java.util.ResourceBundle resourceBundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle");
         if (notationBean.getReferenceNr() == null) {
-            headerPanel1.setTitleText(String.format(
-                    resourceBundle.getString("NotationPanel.TitleText.NewNote"),
-                    baUnitBean.getDisplayName()));
+            this.setBreadCrumbTitle(this.getBreadCrumbPath(),
+                    String.format(resourceBundle.getString("NotationPanel.TitleText.NewNote"),
+                            baUnitBean.getDisplayName()));
             btnSave1.setText(MessageUtility.getLocalizedMessage(
                     ClientMessage.GENERAL_LABELS_CREATE_AND_CLOSE).getMessage());
         } else {
-            headerPanel1.setTitleText(String.format(
-                    resourceBundle.getString("NotationPanel.TitleText.ExistingNote"),
-                    baUnitBean.getDisplayName(), notationBean.getReferenceNr()));
+            this.setBreadCrumbTitle(this.getBreadCrumbPath(),
+                    String.format(resourceBundle.getString("NotationPanel.TitleText.ExistingNote"),
+                            notationBean.getReferenceNr()));
         }
         if (applicationBean != null) {
             btnSave1.setText(resourceBundle.getString("NotationPanel.btnSave1.text"));

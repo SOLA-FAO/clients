@@ -1,28 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.desktop;
@@ -33,6 +35,7 @@ import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.beans.security.UserBean;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.security.UserPasswordPanel;
+import org.sola.common.StringUtility;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
@@ -40,12 +43,13 @@ import org.sola.common.messaging.MessageUtility;
  * Holds {@link UserPasswordPanel} instance.
  */
 public class UserProfileForm extends ContentPanel {
-    
-  private UserBean user;
-  public static final String LOGIN_RESULT = "loginResult";
-       
-    /** 
-     * Default constructor. 
+
+    private UserBean user;
+    public static final String LOGIN_RESULT = "loginResult";
+
+    /**
+     * Default constructor.
+     *
      * @param userName Username for which password is going to be reset.
      */
     public UserProfileForm(String userName) {
@@ -58,7 +62,18 @@ public class UserProfileForm extends ContentPanel {
         this.user = SecurityBean.getCurrentUser();
         txtFirstName.setText(this.user.getFirstName());
         txtLastName.setText(this.user.getLastName());
-        
+
+    }
+
+    @Override
+    public void setBreadCrumbTitle(String breadCrumbPath, String panelTitle) {
+        // Ignore the BreadCrumbPath
+        if (StringUtility.isEmpty(panelTitle)) {
+            panelTitle = getBreadCrumbTitle();
+        }
+        if (getHeaderPanel() != null) {
+            getHeaderPanel().setTitleText(panelTitle);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -194,47 +209,44 @@ public class UserProfileForm extends ContentPanel {
 
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
-    
-    
-    
-    
-    
+
+
     private void btnSaveUserDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveUserDetailsActionPerformed
-         
-            user.setFirstName(this.txtFirstName.getText());
-            user.setLastName(this.txtLastName.getText());
-            user.save();
-            MessageUtility.displayMessage(ClientMessage.ADMIN_USER_SAVED);
+
+        user.setFirstName(this.txtFirstName.getText());
+        user.setLastName(this.txtLastName.getText());
+        user.save();
+        MessageUtility.displayMessage(ClientMessage.ADMIN_USER_SAVED);
     }//GEN-LAST:event_btnSaveUserDetailsActionPerformed
-    
-    
+
+
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/Bundle"); // NOI18N
-        String oldPassword = new String(txtOldPassword.getPassword()); 
-        
-        if (oldPassword.isEmpty()||oldPassword==null||oldPassword=="") {
-             MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_FIELDS,
-                     new Object[]{bundle.getString("UserProfileForm.jLabel1.text")});  
-          return;
+        String oldPassword = new String(txtOldPassword.getPassword());
+
+        if (oldPassword.isEmpty() || oldPassword == null || oldPassword == "") {
+            MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_FIELDS,
+                    new Object[]{bundle.getString("UserProfileForm.jLabel1.text")});
+            return;
         }
-        
+
 //        Verify that the old password is correct encrypting it and matching it with the one retrieved by the db
-        oldPassword = SecurityBean.getPasswordHash(oldPassword); 
-        String dbPassword =  new String(SecurityBean.getCurrentUser().getPassword().toCharArray()); 
+        oldPassword = SecurityBean.getPasswordHash(oldPassword);
+        String dbPassword = new String(SecurityBean.getCurrentUser().getPassword().toCharArray());
         if (!oldPassword.equals(dbPassword)) {
-          MessageUtility.displayMessage(ClientMessage.CHECK_CURRENTPSSWD_NOTMATCH);
-          return;
-         }
-    
+            MessageUtility.displayMessage(ClientMessage.CHECK_CURRENTPSSWD_NOTMATCH);
+            return;
+        }
+
 //        Ask for confirmation since the system will be closed for getting new password set
         if (MessageUtility.displayMessage(ClientMessage.CONFIRM_SYSTEM_WILL_BE_CLOSED) != MessageUtility.BUTTON_ONE) {
-                return;
-        } 
-           
-            if (userPasswordPanel.changePassword()) {
-                MessageUtility.displayMessage(ClientMessage.ADMIN_PASSWORD_CHANGED);
-                    System.exit(0);
-            }
+            return;
+        }
+
+        if (userPasswordPanel.changePassword()) {
+            MessageUtility.displayMessage(ClientMessage.ADMIN_PASSWORD_CHANGED);
+            System.exit(0);
+        }
     }//GEN-LAST:event_btnSaveActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

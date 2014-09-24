@@ -171,7 +171,6 @@ public class ServiceListForm extends javax.swing.JDialog {
     }//GEN-LAST:event_treeTableMouseClicked
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
-        addService();
         this.dispose();
     }//GEN-LAST:event_btnCloseActionPerformed
 

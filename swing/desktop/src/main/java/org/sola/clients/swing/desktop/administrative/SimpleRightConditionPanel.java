@@ -148,12 +148,17 @@ public class SimpleRightConditionPanel extends ContentPanel {
      * the given {@link RrrBean#RRR_ACTION} and user rights.
      */
     private void customizeForm(RrrBean.RRR_ACTION rrrAction) {
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle");
+        String refNum = rrrBean.getReferenceNum() == null ? "" : rrrBean.getReferenceNum(); 
+        String title = String.format(bundle.getString("SimpleRightConditionPanel.headerPanel.titleText"),
+                rrrBean.getRrrType().getDisplayValue(), rrrBean.getFirstRightHolder() == null
+                ? refNum : rrrBean.getFirstRightHolder().getFullName());
         txtStatus.setEnabled(false);
-        headerPanel.setTitleText(String.format("%s, %s", baUnitBean.getDisplayName(),
-                rrrBean.getRrrType().getDisplayValue()));
         if (rrrAction == RrrBean.RRR_ACTION.NEW) {
             btnClose.setText(MessageUtility.getLocalizedMessage(
                     ClientMessage.GENERAL_LABELS_CREATE_AND_CLOSE).getMessage());
+            title = String.format(bundle.getString("SimpleRightConditionPanel.headerPanel.titleText.newRrr"),
+                    rrrBean.getRrrType().getDisplayValue());
         }
         if (rrrAction == RrrBean.RRR_ACTION.CANCEL) {
             btnClose.setText(MessageUtility.getLocalizedMessage(
@@ -165,6 +170,8 @@ public class SimpleRightConditionPanel extends ContentPanel {
             // Set default noation text from the selected application service
             txtNotationText.setText(appService.getRequestType().getNotationTemplate());
         }
+
+        this.setBreadCrumbTitle(this.getBreadCrumbPath(), title);
 
         if (rrrAction == RrrBean.RRR_ACTION.VIEW) {
             btnClose.setEnabled(false);
