@@ -40,8 +40,11 @@ import org.sola.clients.beans.administrative.RrrBean;
 import org.sola.clients.beans.administrative.validation.SimpleOwnershipValidationGroup;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationServiceBean;
+import org.sola.clients.beans.party.PartyBean;
 import org.sola.clients.beans.party.PartySummaryBean;
 import org.sola.clients.beans.referencedata.StatusConstants;
+import org.sola.clients.beans.source.SourceBean;
+import org.sola.clients.beans.source.SourceListBean;
 import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.common.controls.CalendarForm;
 import org.sola.clients.swing.common.tasks.SolaTask;
@@ -54,7 +57,9 @@ import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.clients.swing.common.utils.FormattersFactory;
 import org.sola.clients.swing.ui.renderers.SimpleComboBoxRenderer;
+import org.sola.clients.swing.ui.source.AddDocumentForm;
 import org.sola.clients.swing.ui.source.DocumentsManagementPanel;
+import org.sola.clients.swing.ui.source.DocumentsPanel;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
@@ -68,24 +73,23 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
 //    private ApplicationServiceBean appService;
     private RrrBean.RRR_ACTION rrrAction;
     public static final String UPDATED_RRR = "updatedRRR";
+    private AddDocumentForm applicationDocumentsForm;
+    
 
-    private DocumentsManagementExtPanel createDocumentsPanel() {
-        if (rrrBean == null) {
-            rrrBean = new RrrBean();
+   /**
+     * Creates documents table to show paper title documents.
+     */
+    private DocumentsPanel createDocumentsPanel(PartyBean partyBean) {
+        DocumentsPanel panel;
+        if (this.applicationBean.getContactPerson() != null) {
+             panel = new DocumentsPanel(partyBean.getSourceList());
+           
+        } else {
+            panel = new DocumentsPanel();
         }
-        if (applicationBean == null) {
-            applicationBean = new ApplicationBean();
-        }
-
-        boolean allowEdit = true;
-        if (rrrAction == RrrBean.RRR_ACTION.VIEW) {
-            allowEdit = false;
-        }
-
-        DocumentsManagementExtPanel panel = new DocumentsManagementExtPanel(
-                rrrBean.getSourceList(), applicationBean, allowEdit);
         return panel;
     }
+
 
     private RrrBean CreateRrrBean() {
         if (rrrBean == null) {
@@ -213,7 +217,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
 //        menuViewOwner.setEnabled(btnViewOwner.isEnabled());
     }
 
-    private boolean saveRrr() {
+    private boolean savePersonRelationship() {
 
 //        if (rrrBean.getFilteredRightHolderList().size() < 1) {
 //            java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
@@ -223,7 +227,8 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
 //        }
 //
 //        if (rrrBean.validate(true, Default.class, SimpleOwnershipValidationGroup.class).size() < 1) {
-            firePropertyChange(UPDATED_RRR, null, rrrBean);
+//            firePropertyChange(UPDATED_RRR, null, rrrBean);
+            applicationBean.getContactPerson().saveParty();
             close();
             return true;
 //        }
@@ -237,7 +242,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
     @Override
     protected boolean panelClosing() {
         if (btnSave.isEnabled() && MainForm.checkSaveBeforeClose(rrrBean)) {
-            return saveRrr();
+            return savePersonRelationship();
         }
         return true;
     }
@@ -379,8 +384,12 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
         txtEmail = new javax.swing.JTextField();
         groupPanel1 = new org.sola.clients.swing.ui.GroupPanel();
         jPanel3 = new javax.swing.JPanel();
-        groupPanel2 = new org.sola.clients.swing.ui.GroupPanel();
-        documentsManagementPanel = createDocumentsPanel();
+        groupPanel3 = new org.sola.clients.swing.ui.GroupPanel();
+        jToolBar4 = new javax.swing.JToolBar();
+        btnViewPaperTitle = new javax.swing.JButton();
+        btnLinkPaperTitle = new javax.swing.JButton();
+        docTableScrollPanel = new javax.swing.JScrollPane();
+        documentsPanel1 = createDocumentsPanel(this.applicationBean.getContactPerson());
         txtRegDatetime = new org.sola.clients.swing.common.controls.WatermarkDate();
         btnRegDate = new javax.swing.JButton();
 
@@ -477,8 +486,8 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(labName, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(80, Short.MAX_VALUE))
-            .addComponent(txtFirstName, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
+                .addContainerGap(88, Short.MAX_VALUE))
+            .addComponent(txtFirstName, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -504,8 +513,8 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addComponent(labLastName)
-                .addContainerGap(131, Short.MAX_VALUE))
-            .addComponent(txtLastName, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
+                .addContainerGap(139, Short.MAX_VALUE))
+            .addComponent(txtLastName, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -531,7 +540,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addComponent(labAddress)
-                .addContainerGap(141, Short.MAX_VALUE))
+                .addContainerGap(149, Short.MAX_VALUE))
             .addComponent(txtAddress)
         );
         jPanel7Layout.setVerticalGroup(
@@ -563,7 +572,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
             jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel19Layout.createSequentialGroup()
                 .addComponent(lblGender, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 230, Short.MAX_VALUE))
+                .addGap(0, 243, Short.MAX_VALUE))
             .addComponent(cbxGender, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel19Layout.setVerticalGroup(
@@ -593,7 +602,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addComponent(labPhone)
-                .addContainerGap(264, Short.MAX_VALUE))
+                .addContainerGap(277, Short.MAX_VALUE))
             .addComponent(txtPhone, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         jPanel8Layout.setVerticalGroup(
@@ -623,7 +632,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel10Layout.createSequentialGroup()
                 .addComponent(labEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(154, Short.MAX_VALUE))
+                .addContainerGap(167, Short.MAX_VALUE))
             .addComponent(txtEmail)
         );
         jPanel10Layout.setVerticalGroup(
@@ -643,8 +652,8 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
         jPanel12.setLayout(jPanel12Layout);
         jPanel12Layout.setHorizontalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 629, Short.MAX_VALUE)
+            .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
             .addComponent(groupPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel12Layout.setVerticalGroup(
@@ -661,7 +670,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 623, Short.MAX_VALUE)
+            .addGap(0, 649, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel2Layout.createSequentialGroup()
                     .addContainerGap()
@@ -680,21 +689,57 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
 
         jPanel1.add(jPanel2);
 
-        groupPanel2.setTitleText(bundle.getString("SimpleOwhershipPanel.groupPanel2.titleText")); // NOI18N
+        groupPanel3.setTitleText(bundle.getString("RecordPersonRelationshipPanel.groupPanel3.titleText")); // NOI18N
+
+        jToolBar4.setFloatable(false);
+        jToolBar4.setRollover(true);
+
+        btnViewPaperTitle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/view.png"))); // NOI18N
+        btnViewPaperTitle.setText(bundle.getString("RecordPersonRelationshipPanel.btnViewPaperTitle.text")); // NOI18N
+        btnViewPaperTitle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewPaperTitleActionPerformed(evt);
+            }
+        });
+        jToolBar4.add(btnViewPaperTitle);
+
+        btnLinkPaperTitle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/document-link.png"))); // NOI18N
+        btnLinkPaperTitle.setText(bundle.getString("RecordPersonRelationshipPanel.btnLinkPaperTitle.text")); // NOI18N
+        btnLinkPaperTitle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLinkPaperTitleActionPerformed(evt);
+            }
+        });
+        jToolBar4.add(btnLinkPaperTitle);
+
+        docTableScrollPanel.setViewportView(documentsPanel1);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(groupPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 623, Short.MAX_VALUE)
-            .addComponent(documentsManagementPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGap(0, 649, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel3Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jToolBar4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(groupPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 629, Short.MAX_VALUE)
+                        .addComponent(docTableScrollPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addContainerGap()))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addComponent(groupPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(documentsManagementPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE))
+            .addGap(0, 217, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel3Layout.createSequentialGroup()
+                    .addGap(26, 26, 26)
+                    .addComponent(groupPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jToolBar4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(docTableScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
+                    .addContainerGap()))
         );
 
         jPanel1.add(jPanel3);
@@ -718,7 +763,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(headerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(headerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 669, Short.MAX_VALUE)
             .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
@@ -782,7 +827,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
     }//GEN-LAST:event_menuViewOwnerActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        saveRrr();
+        savePersonRelationship();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnRegDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegDateActionPerformed
@@ -804,19 +849,78 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
             txtEmail.setText(applicationBean.getContactPerson().getEmail());
         }
     }//GEN-LAST:event_txtEmailFocusLost
+       /**
+     * Opens paper title attachment.
+     */
+    private void viewDocument() {
+        
+        if (documentsPanel1.getSourceListBean().getSelectedSource() != null) {
+            documentsPanel1.getSourceListBean().getSelectedSource().openDocument();
+        }
+    }
+    
+      /**
+     * Links document as a paper title on the BaUnit object.
+     */
+    private void linkDocument() {
+        openDocumentsForm();
+    }
+    
+     /**
+     * Opens form to select or create document to be used as a paper title
+     * document.
+     */
+    private void openDocumentsForm() {
+        if (applicationDocumentsForm != null) {
+            applicationDocumentsForm.dispose();
+        }
+        
+        PropertyChangeListener listener = new PropertyChangeListener() {
+            
+            @Override
+            public void propertyChange(PropertyChangeEvent e) {
+                SourceBean document = null;
+                if (e.getPropertyName().equals(AddDocumentForm.SELECTED_SOURCE)
+                        && e.getNewValue() != null) {
+                    document = (SourceBean) e.getNewValue();
+                    applicationBean.getContactPerson().createPaperTitle(document);
+                }
+            }
+        };
+        
+        applicationDocumentsForm = new AddDocumentForm(applicationBean, null, true);
+        applicationDocumentsForm.setLocationRelativeTo(this);
+        applicationDocumentsForm.addPropertyChangeListener(
+                SourceListBean.SELECTED_SOURCE_PROPERTY, listener);
+        applicationDocumentsForm.setVisible(true);
+        applicationDocumentsForm.removePropertyChangeListener(
+                SourceListBean.SELECTED_SOURCE_PROPERTY, listener);
+    }
+
+    
+    private void btnViewPaperTitleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewPaperTitleActionPerformed
+        viewDocument();
+    }//GEN-LAST:event_btnViewPaperTitleActionPerformed
+
+    private void btnLinkPaperTitleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLinkPaperTitleActionPerformed
+        linkDocument();
+    }//GEN-LAST:event_btnLinkPaperTitleActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.sola.clients.beans.application.ApplicationServiceBean appService;
     private org.sola.clients.beans.application.ApplicationBean applicationBean;
+    private javax.swing.JButton btnLinkPaperTitle;
     private javax.swing.JButton btnRegDate;
     private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnViewPaperTitle;
     public javax.swing.JComboBox cbxGender;
     private javax.swing.JCheckBox cbxIsPrimary;
-    private org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel documentsManagementPanel;
+    private javax.swing.JScrollPane docTableScrollPanel;
+    public org.sola.clients.swing.ui.source.DocumentsPanel documentsPanel1;
     private javax.swing.Box.Filler filler1;
     private org.sola.clients.beans.referencedata.GenderTypeListBean genderTypeListBean;
     private org.sola.clients.swing.ui.GroupPanel groupPanel1;
-    private org.sola.clients.swing.ui.GroupPanel groupPanel2;
+    private org.sola.clients.swing.ui.GroupPanel groupPanel3;
     private org.sola.clients.swing.ui.HeaderPanel headerPanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -835,6 +939,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
     private javax.swing.JPanel jPanel8;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JToolBar jToolBar4;
     private javax.swing.JLabel labAddress;
     private javax.swing.JLabel labEmail;
     private javax.swing.JLabel labLastName;

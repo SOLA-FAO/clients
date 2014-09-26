@@ -40,6 +40,7 @@ import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.beans.party.validation.PartyAddressCheck;
 import org.sola.clients.beans.party.validation.PartyIdTypeCheck;
 import org.sola.clients.beans.referencedata.*;
+import org.sola.clients.beans.source.SourceBean;
 import org.sola.clients.beans.validation.Localized;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -73,6 +74,8 @@ public class PartyBean extends PartySummaryBean {
     public static final String GRANDFATHERSNAME_PROPERTY = "fathersLastName";
     public static final String ALIAS_PROPERTY = "alias";
     public static final String BIRTHDATE_PROPERTY = "birthDate";
+    public static final String SELECTED_GROUP_PARTY_PROPERTY = "selectedGroupParty";
+//    public static final String SELECTED_PARTY_MEMBER_PROPERTY = "selectedPartyMember";
     
     @Length(max = 50, message =  ClientMessage.CHECK_FIELD_INVALID_LENGTH_MAIL, payload=Localized.class)
     @Email(message = ClientMessage.CHECK_INVALID_EMAIL, payload=Localized.class)
@@ -97,7 +100,13 @@ public class PartyBean extends PartySummaryBean {
     private CommunicationTypeBean communicationTypeBean;
     private SolaList<PartyRoleBean> roleList;
     private transient PartyRoleBean selectedRole;
-
+    private SolaList<GroupPartyBean> groupPartyList;
+    private transient GroupPartyBean selectedGroupParty;
+//    private SolaList<PartyMemberBean> partyMemberList;
+//    private transient PartyMemberBean selectedPartyMember;
+    
+    private SolaList<SourceBean> sourceList;
+   
     /** 
      * Default constructor to create party bean. Initializes 
      * {@link CommunicationTypeBean} as a part of this bean.
@@ -307,6 +316,40 @@ public class PartyBean extends PartySummaryBean {
         this.roleList = roleList;
     }
 
+    public SolaList<GroupPartyBean> getGroupPartyList() {
+        return groupPartyList;
+    }
+
+    public void setGroupPartyList(SolaList<GroupPartyBean> groupPartyList) {
+        this.groupPartyList = groupPartyList;
+    }
+
+//    public SolaList<PartyMemberBean> getPartyMemberList() {
+//        return partyMemberList;
+//    }
+//
+//    public void setPartyMemberList(SolaList<PartyMemberBean> partyMemberList) {
+//        this.partyMemberList = partyMemberList;
+//    }
+
+    public GroupPartyBean getSelectedGroupParty() {
+        return selectedGroupParty;
+    }
+
+    public void setSelectedGroupParty(GroupPartyBean selectedGroupParty) {
+        this.selectedGroupParty = selectedGroupParty;
+        propertySupport.firePropertyChange(SELECTED_GROUP_PARTY_PROPERTY, null, selectedGroupParty);
+    }
+
+//    public PartyMemberBean getSelectedPartyMember() {
+//        return selectedPartyMember;
+//    }
+//
+//    public void setSelectedPartyMember(PartyMemberBean selectedPartyMember) {
+//        this.selectedPartyMember = selectedPartyMember;
+//        propertySupport.firePropertyChange(SELECTED_PARTY_MEMBER_PROPERTY, null, selectedPartyMember);
+//    }
+    
     /** 
      * Sets preferred communication code and retrieves {@link CommunicationTypeBean} 
      * object related to the given code from the cache. 
@@ -393,4 +436,26 @@ public class PartyBean extends PartySummaryBean {
         partyTO.setEntityAction(EntityAction.DELETE);
         WSManager.getInstance().getCaseManagementService().saveParty(partyTO);
     }
+    
+      public void createPaperTitle(SourceBean source) {
+        if (source != null) {
+            for (SourceBean sourceBean : sourceList) {
+                sourceBean.setEntityAction(EntityAction.DISASSOCIATE);
+            }
+            sourceList.addAsNew(source);
+            sourceList.filter();
+        }
+    }
+    public SolaList<SourceBean> getSourceList() {
+        return sourceList;
+    }
+
+    public void setSourceList(SolaList<SourceBean> sourceList) {
+        this.sourceList = sourceList;
+    }
+
+    public ObservableList<SourceBean> getFilteredSourceList() {
+        return sourceList.getFilteredList();
+    }
+   
 }
