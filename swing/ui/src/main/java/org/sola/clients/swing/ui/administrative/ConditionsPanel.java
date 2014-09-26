@@ -279,15 +279,15 @@ public class ConditionsPanel extends javax.swing.JPanel {
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${conditionsFilteredList}");
         org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, eLProperty, jTableWithDefaultStyles1);
         org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${displayName}"));
-        columnBinding.setColumnName("Name");
+        columnBinding.setColumnName("Display Name");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${conditionText}"));
-        columnBinding.setColumnName("Text");
+        columnBinding.setColumnName("Condition Text");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${customCondition}"));
-        columnBinding.setColumnName("Custom");
+        columnBinding.setColumnName("Custom Condition");
         columnBinding.setColumnClass(Boolean.class);
         columnBinding.setEditable(false);
         bindingGroup.addBinding(jTableBinding);
@@ -296,9 +296,12 @@ public class ConditionsPanel extends javax.swing.JPanel {
 
         jScrollPane1.setViewportView(jTableWithDefaultStyles1);
         if (jTableWithDefaultStyles1.getColumnModel().getColumnCount() > 0) {
+            jTableWithDefaultStyles1.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("ConditionsPanel.jTableWithDefaultStyles1.columnModel.title0")); // NOI18N
             jTableWithDefaultStyles1.getColumnModel().getColumn(1).setPreferredWidth(400);
+            jTableWithDefaultStyles1.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("ConditionsPanel.jTableWithDefaultStyles1.columnModel.title1")); // NOI18N
             jTableWithDefaultStyles1.getColumnModel().getColumn(1).setCellRenderer(new TableCellTextAreaRenderer());
             jTableWithDefaultStyles1.getColumnModel().getColumn(2).setPreferredWidth(50);
+            jTableWithDefaultStyles1.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("ConditionsPanel.jTableWithDefaultStyles1.columnModel.title2")); // NOI18N
             jTableWithDefaultStyles1.getColumnModel().getColumn(2).setCellRenderer(new BooleanCellRenderer2());
         }
 

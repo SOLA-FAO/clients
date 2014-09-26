@@ -27,28 +27,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-package org.sola.clients.beans.system;
+package org.sola.clients.beans.referencedata;
 
 import org.sola.clients.beans.AbstractCodeBean;
 
 /**
- * Represents reference data object of the <b>panel_launcher_group</b> table.
- * Can be populated from the {@link PanelLauncherGroupTO} object.<br />
- * For more information see data dictionary <b>system</b> schema.
+ *
+ * @author soladev
  */
-public class PanelLauncherGroupBean extends AbstractCodeBean {
+public class ChecklistItemBean extends AbstractCodeBean {
 
-    public static final String CODE_NULL_CONSTRUCTOR = "nullConstructor";
-    public static final String CODE_DOCUMENT_SERVICES = "documentServices";
-    public static final String CODE_CADASTRE_SERVICES = "cadastreServices";
-    public static final String CODE_PROPERTY_SERVICES = "propertyServices";
-    public static final String CODE_NEW_PROPERTY_SERVICES = "newPropServices";
-    public static final String CODE_GENERAL_RRR = "generalRRR";
-    public static final String CODE_LEASE_RRR = "leaseRRR";
-    public static final String CODE_GENERAL_SERVICES = "generalServices";
-    public static final String CODE_STATE_LAND_PROPERTY_SERVICES = "slPropertyServices";
+    private int displayOrder;
 
-    public PanelLauncherGroupBean() {
+    public ChecklistItemBean() {
         super();
     }
+
+    public int getDisplayOrder() {
+        return displayOrder;
+    }
+
+    public void setDisplayOrder(int displayOrder) {
+        this.displayOrder = displayOrder;
+    }
+
 }

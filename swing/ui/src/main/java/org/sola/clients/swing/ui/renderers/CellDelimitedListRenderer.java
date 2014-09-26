@@ -118,7 +118,7 @@ public class CellDelimitedListRenderer extends JTextArea implements TableCellRen
 
             int height_wanted = (int) getPreferredSize().getHeight();
 
-            if (height_wanted != table.getRowHeight(row)) {
+            if (height_wanted > table.getRowHeight(row)) {
                 table.setRowHeight(row, height_wanted);
             }
 

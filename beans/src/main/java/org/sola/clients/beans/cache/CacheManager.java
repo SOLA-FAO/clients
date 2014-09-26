@@ -231,6 +231,10 @@ public final class CacheManager {
      * Cache key of the {@link RrrSubTypeBean} collection.
      */
     public static final String RRR_SUB_TYPE_GROUP_KEY = RrrSubTypeBean.class.getName() + LIST_POSTFIX;
+        /**
+     * Cache key of the {@link ChecklistGroupBean} collection.
+     */
+    public static final String GET_CHECKLIST_GROUP_KEY = ChecklistGroupBean.class.getName() + LIST_POSTFIX;
     /**
      * Cache key of the parties list by role collection.
      */
@@ -274,6 +278,7 @@ public final class CacheManager {
     private static final String GET_RRR_SUB_TYPES = "getRrrSubTypes";
     private static final String GET_PARTIES_BY_ROLE = "getPartiesByRole";
     private static final String GET_ACTIVE_USERS = "getActiveUsers";
+    private static final String GET_CHECKLIST_GROUP = "getChecklistGroups";
 
     public static List<BrValidationTargetTypeBean> getBrValidationTargetTypes() {
         return getCachedBeanList(BrValidationTargetTypeBean.class,
@@ -542,6 +547,12 @@ public final class CacheManager {
         return getCachedBeanList(UserSearchResultBean.class,
                 WSManager.getInstance().getSearchService(),
                 GET_ACTIVE_USERS, ACTIVE_USERS_GROUP_KEY);
+    }
+    
+        public static List<ChecklistGroupBean> getChecklistGroups() {
+        return getCachedBeanList(ChecklistGroupBean.class,
+                WSManager.getInstance().getReferenceDataService(),
+                GET_CHECKLIST_GROUP, GET_CHECKLIST_GROUP_KEY);
     }
 
     /**
