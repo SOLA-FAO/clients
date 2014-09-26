@@ -298,7 +298,7 @@ public class MapImageGeneratorForSelectedParcel {
     private int getProperGridCutCoordinate(int min, int max) {
         int[] gridCutIntervals = {1000, 100, 50, 10};
         int coordinate = 0;
-        for (int i = 0; i <= gridCutIntervals.length; i++){
+        for (int i = 0; i < gridCutIntervals.length; i++){
             coordinate = getProperGridCutCoordinate(min, max, gridCutIntervals[i]);
             if (coordinate >= min && coordinate <= max){
                 break;

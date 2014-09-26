@@ -248,7 +248,8 @@ public class Development {
         SecurityBean.authenticate("test", "test".toCharArray(), this.getWSConfig());
         MapImageGeneratorForSelectedParcel gen = 
                 new MapImageGeneratorForSelectedParcel(520, 300,200,200, false, 0,0);
-        MapImageInformation info = gen.getInformation("5050170");
+        //""138","174","227","231","139","232","457","737","246","233""
+        MapImageInformation info = gen.getInformation("174");
         //MapImageInformation info = gen.getInformation("1e4f0e12-1773-4f87-bec8-f84bf0115011");
         System.out.println(info);
         //info = gen.getInformation("4821936");
