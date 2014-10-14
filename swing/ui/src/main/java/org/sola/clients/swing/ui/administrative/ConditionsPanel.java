@@ -191,12 +191,12 @@ public class ConditionsPanel extends javax.swing.JPanel {
         menuEditCondition = new javax.swing.JMenuItem();
         menuRemoveCondition = new javax.swing.JMenuItem();
         jToolBar1 = new javax.swing.JToolBar();
+        jComboBox1 = new javax.swing.JComboBox();
+        btnAddStandardCond = new org.sola.clients.swing.common.buttons.BtnAdd();
+        jSeparator1 = new javax.swing.JToolBar.Separator();
         btnAddCustomCond = new org.sola.clients.swing.common.buttons.BtnAdd();
         btnEditCondition = new org.sola.clients.swing.common.buttons.BtnEdit();
         btnRemoveCondition = new org.sola.clients.swing.common.buttons.BtnRemove();
-        jSeparator1 = new javax.swing.JToolBar.Separator();
-        jComboBox1 = new javax.swing.JComboBox();
-        btnAddStandardCond = new org.sola.clients.swing.common.buttons.BtnAdd();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableWithDefaultStyles1 = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
 
@@ -231,6 +231,25 @@ public class ConditionsPanel extends javax.swing.JPanel {
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
+        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${leaseConditionList}");
+        org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, conditionTypes, eLProperty, jComboBox1);
+        bindingGroup.addBinding(jComboBoxBinding);
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, conditionTypes, org.jdesktop.beansbinding.ELProperty.create("${selectedConditionType}"), jComboBox1, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        jToolBar1.add(jComboBox1);
+
+        btnAddStandardCond.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/select.png"))); // NOI18N
+        btnAddStandardCond.setText(bundle.getString("ConditionsPanel.btnAddStandardCond.text")); // NOI18N
+        btnAddStandardCond.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAddStandardCond.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddStandardCondActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnAddStandardCond);
+        jToolBar1.add(jSeparator1);
+
         btnAddCustomCond.setText(bundle.getString("ConditionsPanel.btnAddCustomCond.text")); // NOI18N
         btnAddCustomCond.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnAddCustomCond.addActionListener(new java.awt.event.ActionListener() {
@@ -255,24 +274,6 @@ public class ConditionsPanel extends javax.swing.JPanel {
             }
         });
         jToolBar1.add(btnRemoveCondition);
-        jToolBar1.add(jSeparator1);
-
-        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${leaseConditionList}");
-        org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, conditionTypes, eLProperty, jComboBox1);
-        bindingGroup.addBinding(jComboBoxBinding);
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, conditionTypes, org.jdesktop.beansbinding.ELProperty.create("${selectedConditionType}"), jComboBox1, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
-
-        jToolBar1.add(jComboBox1);
-
-        btnAddStandardCond.setText(bundle.getString("ConditionsPanel.btnAddStandardCond.text")); // NOI18N
-        btnAddStandardCond.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnAddStandardCond.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddStandardCondActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(btnAddStandardCond);
 
         jTableWithDefaultStyles1.getTableHeader().setReorderingAllowed(false);
 

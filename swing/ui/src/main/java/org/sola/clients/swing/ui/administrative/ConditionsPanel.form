@@ -98,6 +98,28 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
       <SubComponents>
+        <Component class="javax.swing.JComboBox" name="jComboBox1">
+          <BindingProperties>
+            <BindingProperty name="elements" source="conditionTypes" sourcePath="${leaseConditionList}" target="jComboBox1" targetPath="elements" updateStrategy="0" immediately="false"/>
+            <BindingProperty name="selectedItem" source="conditionTypes" sourcePath="${selectedConditionType}" target="jComboBox1" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+          </BindingProperties>
+        </Component>
+        <Component class="org.sola.clients.swing.common.buttons.BtnAdd" name="btnAddStandardCond">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/images/common/select.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="org/sola/clients/swing/ui/administrative/Bundle.properties" key="ConditionsPanel.btnAddStandardCond.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
+            <Property name="verticalTextPosition" type="int" value="3"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddStandardCondActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JToolBar$Separator" name="jSeparator1">
+        </Component>
         <Component class="org.sola.clients.swing.common.buttons.BtnAdd" name="btnAddCustomCond">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
@@ -123,25 +145,6 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRemoveConditionActionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JToolBar$Separator" name="jSeparator1">
-        </Component>
-        <Component class="javax.swing.JComboBox" name="jComboBox1">
-          <BindingProperties>
-            <BindingProperty name="elements" source="conditionTypes" sourcePath="${leaseConditionList}" target="jComboBox1" targetPath="elements" updateStrategy="0" immediately="false"/>
-            <BindingProperty name="selectedItem" source="conditionTypes" sourcePath="${selectedConditionType}" target="jComboBox1" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
-          </BindingProperties>
-        </Component>
-        <Component class="org.sola.clients.swing.common.buttons.BtnAdd" name="btnAddStandardCond">
-          <Properties>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="org/sola/clients/swing/ui/administrative/Bundle.properties" key="ConditionsPanel.btnAddStandardCond.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-            </Property>
-            <Property name="verticalTextPosition" type="int" value="3"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddStandardCondActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

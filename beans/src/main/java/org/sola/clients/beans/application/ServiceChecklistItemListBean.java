@@ -1,28 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.beans.application;
@@ -39,7 +41,7 @@ import org.sola.clients.beans.controls.SolaList;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.beans.referencedata.ChecklistGroupBean;
 import org.sola.clients.beans.referencedata.ChecklistItemBean;
-import org.sola.clients.beans.validation.ValidatorFactory;
+import org.sola.common.StringUtility;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.EntityAction;
 import org.sola.webservices.transferobjects.casemanagement.ServiceChecklistItemTO;
@@ -51,7 +53,6 @@ import org.sola.webservices.transferobjects.casemanagement.ServiceChecklistItemT
 public class ServiceChecklistItemListBean extends AbstractBindingListBean {
 
     public static final String SELECTED_SERVICE_CHECKLIST_ITEM = "selectedServiceChecklistItem";
-    public static final String SELECTED_SERVICE_CHECKLIST_ITEM_LIST = "serviceChecklistItemList";
     private SolaList<ServiceChecklistItemBean> serviceChecklistItemList;
     private ServiceChecklistItemBean selectedServiceChecklistItem;
     private String serviceId;
@@ -67,7 +68,7 @@ public class ServiceChecklistItemListBean extends AbstractBindingListBean {
         return serviceChecklistItemList.getFilteredList();
     }
 
-    public ServiceChecklistItemBean getSelectedChecklistItem() {
+    public ServiceChecklistItemBean getSelectedServiceChecklistItem() {
         return selectedServiceChecklistItem;
     }
 
@@ -79,7 +80,7 @@ public class ServiceChecklistItemListBean extends AbstractBindingListBean {
         this.serviceId = serviceId;
     }
 
-    public void setSelectedChecklistItemBean(ServiceChecklistItemBean selectedItem) {
+    public void setSelectedServiceChecklistItem(ServiceChecklistItemBean selectedItem) {
         ServiceChecklistItemBean oldValue = this.selectedServiceChecklistItem;
         this.selectedServiceChecklistItem = selectedItem;
         propertySupport.firePropertyChange(SELECTED_SERVICE_CHECKLIST_ITEM, oldValue, this.selectedServiceChecklistItem);
@@ -94,6 +95,14 @@ public class ServiceChecklistItemListBean extends AbstractBindingListBean {
         TypeConverters.TransferObjectListToBeanList(
                 WSManager.getInstance().getCaseManagementService().saveServiceChecklistItem(checklistGroupCode, toList),
                 ServiceChecklistItemBean.class, (List) serviceChecklistItemList);
+    }
+
+    public void addItem(ServiceChecklistItemBean item) {
+        serviceChecklistItemList.addAsNew(item);
+    }
+
+    public void removeItem(ServiceChecklistItemBean item) {
+        serviceChecklistItemList.safeRemove(item, EntityAction.DELETE);
     }
 
     /**
@@ -111,21 +120,24 @@ public class ServiceChecklistItemListBean extends AbstractBindingListBean {
         boolean found;
         while (it.hasNext()) {
             ServiceChecklistItemBean serviceItem = it.next();
-            found = false;
-            if (checklistGroupBean != null) {
-                for (ChecklistItemBean item : checklistGroupBean.getChecklistItemList()) {
-                    if (serviceItem.getItemCode().equalsIgnoreCase(item.getCode())) {
-                        // Service Checklist item is also an item in the Checklist Group. 
-                        // Do not delete this item from the list. 
-                        found = true;
-                        break;
+            // Check if this is a custom checklist item. If so, skip it.
+            if (!StringUtility.isEmpty(serviceItem.getItemCode())) {
+                found = false;
+                if (checklistGroupBean != null) {
+                    for (ChecklistItemBean item : checklistGroupBean.getChecklistItemList()) {
+                        if (serviceItem.getItemCode().equalsIgnoreCase(item.getCode())) {
+                            // Service Checklist item is also an item in the Checklist Group. 
+                            // Do not delete this item from the list. 
+                            found = true;
+                            break;
+                        }
                     }
                 }
-            }
-            if (!found) {
-                // Use safeRemove to delete items from the list that have not yet
-                // been saved to the database. 
-                serviceChecklistItemList.safeRemove(serviceItem, EntityAction.DELETE);
+                if (!found) {
+                    // Use safeRemove to delete items from the list that have not yet
+                    // been saved to the database. 
+                    serviceChecklistItemList.safeRemove(serviceItem, EntityAction.DELETE);
+                }
             }
         }
 
@@ -135,7 +147,8 @@ public class ServiceChecklistItemListBean extends AbstractBindingListBean {
             for (ChecklistItemBean item : checklistGroupBean.getChecklistItemList()) {
                 found = false;
                 for (ServiceChecklistItemBean serviceItem : serviceChecklistItemList) {
-                    if (serviceItem.getItemCode().equalsIgnoreCase(item.getCode())) {
+                    if (!StringUtility.isEmpty(serviceItem.getItemCode())
+                            && serviceItem.getItemCode().equalsIgnoreCase(item.getCode())) {
                         found = true;
                         break;
                     }

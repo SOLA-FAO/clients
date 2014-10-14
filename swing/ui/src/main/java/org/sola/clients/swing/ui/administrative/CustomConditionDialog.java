@@ -83,15 +83,15 @@ public class CustomConditionDialog extends javax.swing.JDialog {
         txtConditionText = new javax.swing.JTextArea();
         jLabel2 = new javax.swing.JLabel();
 
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/administrative/Bundle"); // NOI18N
         setTitle(bundle.getString("CustomConditionDialog.title")); // NOI18N
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
-        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/save.png"))); // NOI18N
-        java.util.ResourceBundle bundle1 = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/administrative/Bundle"); // NOI18N
-        btnSave.setText(bundle1.getString("CustomConditionDialog.btnSave.text")); // NOI18N
+        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/confirm-close.png"))); // NOI18N
+        btnSave.setText(bundle.getString("CustomConditionDialog.btnSave.text")); // NOI18N
         btnSave.setFocusable(false);
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -102,7 +102,7 @@ public class CustomConditionDialog extends javax.swing.JDialog {
 
         jPanel1.setLayout(new java.awt.GridLayout(1, 2, 15, 0));
 
-        jLabel1.setText(bundle1.getString("CustomConditionDialog.jLabel1.text")); // NOI18N
+        jLabel1.setText(bundle.getString("CustomConditionDialog.jLabel1.text")); // NOI18N
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${condition.customConditionName}"), txtName, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
@@ -147,7 +147,7 @@ public class CustomConditionDialog extends javax.swing.JDialog {
 
         jScrollPane2.setViewportView(txtConditionText);
 
-        jLabel2.setText(bundle1.getString("CustomConditionDialog.jLabel2.text")); // NOI18N
+        jLabel2.setText(bundle.getString("CustomConditionDialog.jLabel2.text")); // NOI18N
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);

@@ -29,13 +29,19 @@
  */
 package org.sola.clients.swing.desktop.workflow;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationServiceBean;
+import org.sola.clients.beans.application.ServiceChecklistItemBean;
+import org.sola.clients.beans.application.ServiceChecklistItemListBean;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.renderers.TableCellTextAreaRenderer;
+import org.sola.common.StringUtility;
+import org.sola.common.WindowUtility;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
@@ -64,6 +70,15 @@ public class ChecklistPanel extends ContentPanel {
         initComponents();
         customizeForm();
         serviceChecklistItemListBean.loadList(this.applicationService.getId());
+        serviceChecklistItemListBean.addPropertyChangeListener(new PropertyChangeListener() {
+
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals(ServiceChecklistItemListBean.SELECTED_SERVICE_CHECKLIST_ITEM)) {
+                    customizeItemButtons((ServiceChecklistItemBean) evt.getNewValue());
+                }
+            }
+        });
     }
 
     private void customizeForm() {
@@ -72,17 +87,33 @@ public class ChecklistPanel extends ContentPanel {
         cbxChecklistGroup.setEnabled(!readOnly);
         btnSelect.setEnabled(!readOnly);
         tblChecklist.setEnabled(!readOnly);
+        btnAddItem.setEnabled(!readOnly);
+        btnEditItem.setEnabled(false);
+        btnRemoveItem.setEnabled(false);
         if (applicationService.getActionNotes() != null) {
             checklistGroupListBean.setSelectedChecklistGroup(CacheManager.getBeanByCode(
                     CacheManager.getChecklistGroups(), applicationService.getActionNotes()));
         }
     }
 
-    private void saveChecklist() {
+    private void customizeItemButtons(ServiceChecklistItemBean item) {
+        boolean enable = false;
+        if (item != null && StringUtility.isEmpty(item.getItemCode())) {
+            enable = true && !readOnly;
+        }
+        btnEditItem.setEnabled(enable);
+        btnRemoveItem.setEnabled(enable);
+    }
+
+    private void acceptEdits() {
         // Make sure any user edits in the table are accepted
         if (this.tblChecklist.getCellEditor() != null) {
             this.tblChecklist.getCellEditor().stopCellEditing();
         }
+    }
+
+    private void saveChecklist(final boolean showMessage) {
+        acceptEdits();
 
         if (serviceChecklistItemListBean.validate(true).size() < 1) {
             // Save the checklist items
@@ -100,10 +131,58 @@ public class ChecklistPanel extends ContentPanel {
 
                 @Override
                 public void taskDone() {
-                    MessageUtility.displayMessage(ClientMessage.APPLICATION_SUCCESSFULLY_SAVED);
+                    if (showMessage) {
+                        // Only display the Saved message if the user has choosen to explicitly save
+                        MessageUtility.displayMessage(ClientMessage.APPLICATION_CHECKLIST_SUCCESSFULLY_SAVED);
+                    }
                 }
             };
             TaskManager.getInstance().runTask(t);
+        }
+    }
+
+    private void addChecklistItem() {
+        acceptEdits();
+        ChecklistItemDialog form = new ChecklistItemDialog(null,
+                applicationService.getId(), WindowUtility.getTopFrame(), true);
+        form.addPropertyChangeListener(new PropertyChangeListener() {
+
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals(ChecklistItemDialog.ITEM_SAVED)) {
+                    serviceChecklistItemListBean.addItem((ServiceChecklistItemBean) evt.getNewValue());
+                }
+            }
+        });
+        form.setVisible(true);
+    }
+
+    private void editChecklistItem() {
+        acceptEdits();
+        if (serviceChecklistItemListBean.getSelectedServiceChecklistItem() != null) {
+            ServiceChecklistItemBean copy = (ServiceChecklistItemBean) serviceChecklistItemListBean.getSelectedServiceChecklistItem().copy();
+            ChecklistItemDialog form = new ChecklistItemDialog(copy,
+                    applicationService.getId(), WindowUtility.getTopFrame(), true);
+
+            form.addPropertyChangeListener(new PropertyChangeListener() {
+
+                @Override
+                public void propertyChange(PropertyChangeEvent evt) {
+                    if (evt.getPropertyName().equals(ChecklistItemDialog.ITEM_SAVED)) {
+                        ServiceChecklistItemBean item = (ServiceChecklistItemBean) evt.getNewValue();
+                        serviceChecklistItemListBean.getSelectedServiceChecklistItem().setItemDisplayValue(item.getItemDisplayValue());
+                        serviceChecklistItemListBean.getSelectedServiceChecklistItem().setItemDescription(item.getItemDescription());
+                    }
+                }
+            });
+            form.setVisible(true);
+        }
+    }
+
+    private void removeChecklistItem() {
+        acceptEdits();
+        if (serviceChecklistItemListBean.getSelectedServiceChecklistItem() != null) {
+            serviceChecklistItemListBean.removeItem(serviceChecklistItemListBean.getSelectedServiceChecklistItem());
         }
     }
 
@@ -123,14 +202,12 @@ public class ChecklistPanel extends ContentPanel {
         jToolBar1 = new javax.swing.JToolBar();
         btnSave = new org.sola.clients.swing.common.buttons.BtnSave();
         jSeparator1 = new javax.swing.JToolBar.Separator();
-        btnSelect = new org.sola.clients.swing.common.buttons.BtnSelect();
-        jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         cbxChecklistGroup = new javax.swing.JComboBox();
-        jPanel3 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
-        jPanel5 = new javax.swing.JPanel();
+        btnSelect = new org.sola.clients.swing.common.buttons.BtnSelect();
+        jSeparator2 = new javax.swing.JToolBar.Separator();
+        btnAddItem = new org.sola.clients.swing.common.buttons.BtnAdd();
+        btnEditItem = new org.sola.clients.swing.common.buttons.BtnEdit();
+        btnRemoveItem = new org.sola.clients.swing.common.buttons.BtnRemove();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblChecklist = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
 
@@ -151,6 +228,14 @@ public class ChecklistPanel extends ContentPanel {
         jToolBar1.add(btnSave);
         jToolBar1.add(jSeparator1);
 
+        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${checklistGroupList}");
+        org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, checklistGroupListBean, eLProperty, cbxChecklistGroup);
+        bindingGroup.addBinding(jComboBoxBinding);
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, checklistGroupListBean, org.jdesktop.beansbinding.ELProperty.create("${selectedChecklistGroup}"), cbxChecklistGroup, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        jToolBar1.add(cbxChecklistGroup);
+
         btnSelect.setText(bundle.getString("ChecklistPanel.btnSelect.text")); // NOI18N
         btnSelect.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnSelect.addActionListener(new java.awt.event.ActionListener() {
@@ -159,73 +244,32 @@ public class ChecklistPanel extends ContentPanel {
             }
         });
         jToolBar1.add(btnSelect);
+        jToolBar1.add(jSeparator2);
 
-        jPanel1.setLayout(new java.awt.GridLayout(1, 4, 15, 0));
+        btnAddItem.setText(bundle.getString("ChecklistPanel.btnAddItem.text")); // NOI18N
+        btnAddItem.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAddItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddItemActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnAddItem);
 
-        jLabel1.setText(bundle.getString("ChecklistPanel.jLabel1.text")); // NOI18N
+        btnEditItem.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnEditItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditItemActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnEditItem);
 
-        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${checklistGroupList}");
-        org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, checklistGroupListBean, eLProperty, cbxChecklistGroup);
-        bindingGroup.addBinding(jComboBoxBinding);
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, checklistGroupListBean, org.jdesktop.beansbinding.ELProperty.create("${selectedChecklistGroup}"), cbxChecklistGroup, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(cbxChecklistGroup, 0, 132, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbxChecklistGroup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jPanel1.add(jPanel2);
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 132, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 51, Short.MAX_VALUE)
-        );
-
-        jPanel1.add(jPanel3);
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 132, Short.MAX_VALUE)
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 51, Short.MAX_VALUE)
-        );
-
-        jPanel1.add(jPanel4);
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 132, Short.MAX_VALUE)
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 51, Short.MAX_VALUE)
-        );
-
-        jPanel1.add(jPanel5);
+        btnRemoveItem.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnRemoveItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveItemActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnRemoveItem);
 
         tblChecklist.getTableHeader().setReorderingAllowed(false);
 
@@ -246,7 +290,14 @@ public class ChecklistPanel extends ContentPanel {
         columnBinding.setColumnName("Comment");
         columnBinding.setColumnClass(String.class);
         bindingGroup.addBinding(jTableBinding);
-        jTableBinding.bind();
+        jTableBinding.bind();binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, serviceChecklistItemListBean, org.jdesktop.beansbinding.ELProperty.create("${selectedServiceChecklistItem}"), tblChecklist, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
+        bindingGroup.addBinding(binding);
+
+        tblChecklist.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblChecklistMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblChecklist);
         if (tblChecklist.getColumnModel().getColumnCount() > 0) {
             tblChecklist.getColumnModel().getColumn(0).setPreferredWidth(150);
@@ -255,7 +306,8 @@ public class ChecklistPanel extends ContentPanel {
             tblChecklist.getColumnModel().getColumn(1).setPreferredWidth(300);
             tblChecklist.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("ChecklistPanel.tblChecklist.columnModel.title0_1")); // NOI18N
             tblChecklist.getColumnModel().getColumn(1).setCellRenderer(new TableCellTextAreaRenderer());
-            tblChecklist.getColumnModel().getColumn(2).setPreferredWidth(40);
+            tblChecklist.getColumnModel().getColumn(2).setResizable(false);
+            tblChecklist.getColumnModel().getColumn(2).setPreferredWidth(50);
             tblChecklist.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("ChecklistPanel.tblChecklist.columnModel.title2_1")); // NOI18N
             tblChecklist.getColumnModel().getColumn(3).setPreferredWidth(300);
             tblChecklist.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("ChecklistPanel.tblChecklist.columnModel.title3_1")); // NOI18N
@@ -267,13 +319,11 @@ public class ChecklistPanel extends ContentPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(headerPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jToolBar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 576, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 654, Short.MAX_VALUE)
                 .addContainerGap())
+            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -282,9 +332,7 @@ public class ChecklistPanel extends ContentPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -292,29 +340,45 @@ public class ChecklistPanel extends ContentPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        saveChecklist();
+        saveChecklist(true);
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectActionPerformed
         serviceChecklistItemListBean.loadList(checklistGroupListBean.getSelectedChecklistGroup());
-        saveChecklist();
+        saveChecklist(false);
     }//GEN-LAST:event_btnSelectActionPerformed
+
+    private void btnAddItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddItemActionPerformed
+        addChecklistItem();
+    }//GEN-LAST:event_btnAddItemActionPerformed
+
+    private void btnRemoveItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveItemActionPerformed
+        removeChecklistItem();
+    }//GEN-LAST:event_btnRemoveItemActionPerformed
+
+    private void btnEditItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditItemActionPerformed
+        editChecklistItem();
+    }//GEN-LAST:event_btnEditItemActionPerformed
+
+    private void tblChecklistMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblChecklistMouseClicked
+        if (evt.getClickCount() == 2 && btnEditItem.isEnabled()) {
+            editChecklistItem();
+        }
+    }//GEN-LAST:event_tblChecklistMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private org.sola.clients.swing.common.buttons.BtnAdd btnAddItem;
+    private org.sola.clients.swing.common.buttons.BtnEdit btnEditItem;
+    private org.sola.clients.swing.common.buttons.BtnRemove btnRemoveItem;
     private org.sola.clients.swing.common.buttons.BtnSave btnSave;
     private org.sola.clients.swing.common.buttons.BtnSelect btnSelect;
     private javax.swing.JComboBox cbxChecklistGroup;
     private org.sola.clients.beans.referencedata.ChecklistGroupListBean checklistGroupListBean;
     private org.sola.clients.swing.ui.HeaderPanel headerPanel1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar.Separator jSeparator1;
+    private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar jToolBar1;
     private org.sola.clients.beans.application.ServiceChecklistItemListBean serviceChecklistItemListBean;
     private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tblChecklist;
