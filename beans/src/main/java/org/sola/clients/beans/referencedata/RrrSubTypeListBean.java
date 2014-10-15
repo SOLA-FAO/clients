@@ -46,6 +46,7 @@ public class RrrSubTypeListBean extends AbstractBindingListBean {
     private SolaCodeList<RrrSubTypeBean> rrrSubTypes;
     private RrrSubTypeBean selectedRrrSubType;
     private boolean createDummy = false;
+    private boolean listFiltered = false;
 
     public RrrSubTypeListBean() {
         this(false);
@@ -121,6 +122,7 @@ public class RrrSubTypeListBean extends AbstractBindingListBean {
      */
     public void setRrrTypeFilter(String rrrTypeCode, String defaultRrrSubType) {
         if (StringUtility.isEmpty(rrrTypeCode)) {
+            clearAllCodes();
             return;
         }
         List<String> codes = new ArrayList<String>();
@@ -132,7 +134,7 @@ public class RrrSubTypeListBean extends AbstractBindingListBean {
                 codes.add(bean.getCode());
             }
         }
-        setAllowedCodes(codes.toArray(new String[codes.size()]));
+        setAllowedCodes(codes.toArray(new String[codes.size()]));;
     }
 
     /**
@@ -143,6 +145,10 @@ public class RrrSubTypeListBean extends AbstractBindingListBean {
         // Determine if the list should contain a dummy entry to not
         return this.createDummy ? getRrrSubTypes().size() > 1
                 : getRrrSubTypes().size() > 0;
+    }
+
+    public void clearAllCodes() {
+        rrrSubTypes.setAllowedCodes("");
     }
 
 }

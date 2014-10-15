@@ -32,6 +32,8 @@ package org.sola.clients.beans.administrative;
 import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.referencedata.LandUseTypeBean;
+import org.sola.clients.beans.referencedata.RrrSubTypeBean;
+import org.sola.clients.beans.referencedata.RrrTypeBean;
 
 /**
  * Represents search criteria for searching BA units.
@@ -53,6 +55,10 @@ public class BaUnitSearchParamsBean extends AbstractBindingBean {
     public static final String PROPERTY_MANAGER_PROPERTY = "propertyManager";
     public static final String INTEREST_REF_NUM_PROPERTY = "interestRefNum";
     public static final String DESCRIPTION_PROPERTY = "description";
+    public static final String RRR_TYPE_PROPERTY = "rrrType";
+    public static final String RRR_TYPE_CODE_PROPERTY = "rrrTypeCode";
+    public static final String RRR_SUB_TYPE_PROPERTY = "rrrSubType";
+    public static final String RRR_SUB_TYPE_CODE_PROPERTY = "rrrSubTypeCode";
 
     private String nameFirstPart;
     private String nameLastPart;
@@ -66,6 +72,8 @@ public class BaUnitSearchParamsBean extends AbstractBindingBean {
     private String propertyManager;
     private String interestRefNum;
     private String description;
+    private RrrTypeBean rrrType;
+    private RrrSubTypeBean rrrSubType;
 
     public BaUnitSearchParamsBean() {
         super();
@@ -209,6 +217,64 @@ public class BaUnitSearchParamsBean extends AbstractBindingBean {
         String oldValue = this.description;
         this.description = description;
         propertySupport.firePropertyChange(DESCRIPTION_PROPERTY, oldValue, this.description);
+    }
+
+    public String getRrrTypeCode() {
+        if (rrrType != null) {
+            return rrrType.getCode();
+        } else {
+            return null;
+        }
+    }
+
+    public void setRrrTypeCode(String rrrTypeCode) {
+        String oldValue = null;
+        if (rrrType != null) {
+            oldValue = rrrType.getCode();
+        }
+        setRrrType(CacheManager.getBeanByCode(
+                CacheManager.getRrrTypes(), rrrTypeCode));
+        propertySupport.firePropertyChange(RRR_TYPE_CODE_PROPERTY, oldValue, rrrTypeCode);
+    }
+
+    public RrrTypeBean getRrrType() {
+        return rrrType;
+    }
+
+    public void setRrrType(RrrTypeBean rrrType) {
+        if (this.rrrType == null) {
+            this.rrrType = new RrrTypeBean();
+        }
+        this.setJointRefDataBean(this.rrrType, rrrType, RRR_TYPE_PROPERTY);
+    }
+
+    public String getRrrSubTypeCode() {
+        if (rrrSubType != null) {
+            return rrrSubType.getCode();
+        } else {
+            return null;
+        }
+    }
+
+    public void setRrrSubTypeCode(String rrrSubTypeCode) {
+        String oldValue = null;
+        if (rrrSubType != null) {
+            oldValue = rrrSubType.getCode();
+        }
+        setRrrSubType(CacheManager.getBeanByCode(
+                CacheManager.getRrrSubTypes(), rrrSubTypeCode));
+        propertySupport.firePropertyChange(RRR_SUB_TYPE_CODE_PROPERTY, oldValue, rrrSubTypeCode);
+    }
+
+    public RrrSubTypeBean getRrrSubType() {
+        return rrrSubType;
+    }
+
+    public void setRrrSubType(RrrSubTypeBean rrrSubType) {
+        if (this.rrrSubType == null) {
+            this.rrrSubType = new RrrSubTypeBean();
+        }
+        this.setJointRefDataBean(this.rrrSubType, rrrSubType, RRR_SUB_TYPE_PROPERTY);
     }
 
     /**

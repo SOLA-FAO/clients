@@ -125,8 +125,6 @@ public class ConditionsPanel extends javax.swing.JPanel {
 
     private void addCustomCondition() {
         CustomConditionDialog form = new CustomConditionDialog(null, null, true);
-        WindowUtility.centerForm(form);
-        WindowUtility.addEscapeListener(form, true);
         form.addPropertyChangeListener(new PropertyChangeListener() {
 
             @Override
@@ -147,8 +145,6 @@ public class ConditionsPanel extends javax.swing.JPanel {
             copy.setCustomConditionText(copy.getConditionType().getDescription());
         }
         CustomConditionDialog form = new CustomConditionDialog(copy, null, true);
-        WindowUtility.centerForm(form);
-        WindowUtility.addEscapeListener(form, true);
 
         form.addPropertyChangeListener(new PropertyChangeListener() {
 
