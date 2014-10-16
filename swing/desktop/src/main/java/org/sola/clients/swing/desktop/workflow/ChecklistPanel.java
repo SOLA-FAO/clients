@@ -306,8 +306,9 @@ public class ChecklistPanel extends ContentPanel {
             tblChecklist.getColumnModel().getColumn(1).setPreferredWidth(300);
             tblChecklist.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("ChecklistPanel.tblChecklist.columnModel.title0_1")); // NOI18N
             tblChecklist.getColumnModel().getColumn(1).setCellRenderer(new TableCellTextAreaRenderer());
-            tblChecklist.getColumnModel().getColumn(2).setResizable(false);
-            tblChecklist.getColumnModel().getColumn(2).setPreferredWidth(50);
+            tblChecklist.getColumnModel().getColumn(2).setMinWidth(70);
+            tblChecklist.getColumnModel().getColumn(2).setPreferredWidth(70);
+            tblChecklist.getColumnModel().getColumn(2).setMaxWidth(70);
             tblChecklist.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("ChecklistPanel.tblChecklist.columnModel.title2_1")); // NOI18N
             tblChecklist.getColumnModel().getColumn(3).setPreferredWidth(300);
             tblChecklist.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("ChecklistPanel.tblChecklist.columnModel.title3_1")); // NOI18N

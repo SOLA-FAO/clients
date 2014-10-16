@@ -152,7 +152,7 @@
                     <Connection code="new TableCellTextAreaRenderer()" type="code"/>
                   </Renderer>
                 </Column>
-                <Column maxWidth="-1" minWidth="-1" prefWidth="50" resizable="false">
+                <Column maxWidth="70" minWidth="70" prefWidth="70" resizable="true">
                   <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                     <ResourceString bundle="org/sola/clients/swing/desktop/workflow/Bundle.properties" key="ChecklistPanel.tblChecklist.columnModel.title2_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                   </Title>

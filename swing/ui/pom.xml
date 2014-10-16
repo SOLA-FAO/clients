@@ -57,10 +57,5 @@
             <artifactId>clients-beans</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>unknown.binary</groupId>
-            <artifactId>AbsoluteLayout</artifactId>
-            <version>SNAPSHOT</version>
-        </dependency>
     </dependencies>
 </project>

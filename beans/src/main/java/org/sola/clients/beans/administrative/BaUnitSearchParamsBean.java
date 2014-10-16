@@ -285,12 +285,14 @@ public class BaUnitSearchParamsBean extends AbstractBindingBean {
         setNameLastPart(null);
         setOwnerName(null);
         setLocality(null);
-        setLandUseType(null);
+        setLandUseTypeCode(null);
         setDocumentNumber(null);
         setParcelNumber(null);
         setPlanNumber(null);
         setPropertyManager(null);
         setInterestRefNum(null);
         setDescription(null);
+        setRrrTypeCode(null);
+        setRrrSubTypeCode(null);
     }
 }
