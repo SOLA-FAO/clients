@@ -29,6 +29,9 @@ package org.sola.clients.beans.party;
 
 import org.sola.clients.beans.AbstractVersionedBean;
 import org.sola.clients.beans.cache.CacheManager;
+import org.sola.clients.beans.converters.TypeConverters;
+import org.sola.services.boundary.wsclients.WSManager;
+import org.sola.webservices.transferobjects.casemanagement.PartyMemberTO;
 
 
 /** 
@@ -86,6 +89,28 @@ public class PartyMemberBean extends AbstractVersionedBean{
         this.share = share;
         propertySupport.firePropertyChange(GROUP_ID_PROPERTY, oldValue, this.share);
    
+    }
+    
+    
+      /** 
+     * Saves changes to the PartyMember into the database. 
+     * @throws Exception
+     */
+    public boolean savePartyMember() {
+        
+        System.out.println("QUI SAVE PartyMember BEAN");
+        PartyMemberTO partyMember = TypeConverters.BeanToTrasferObject(this, PartyMemberTO.class);
+        System.out.println("QUI 1 PartyMember BEAN");  
+          
+       
+        
+        System.out.println("QUI 2 PartyMember BEAN");
+        
+        partyMember = WSManager.getInstance().getCaseManagementService().savePartyMember(partyMember);
+        
+        System.out.println("QUI 3 PartyMember BEAN");
+        TypeConverters.TransferObjectToBean(partyMember, PartyMemberBean.class, this);
+        return true;
     }
 
 }

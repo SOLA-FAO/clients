@@ -65,14 +65,13 @@ public class GroupPartyTypeListBean extends AbstractBindingListBean {
         loadList(createDummy);
     }
     
-    /**  TODO   
-     * Loads list of {@link PartyRoleTypeBean}.
+    /** 
+     * Loads list of {@link GenderTypeBean}.
      * @param createDummy Indicates whether to add empty object on the list.
      */
     public final void loadList(boolean createDummy) {
-//        TODO
-//        loadCodeList(GroupPartyTypeBean.class, groupPartyTypeListBean, 
-//                CacheManager.getGroupParties(), createDummy);
+        loadCodeList(GroupPartyTypeBean.class, groupPartyTypeListBean, 
+                CacheManager.getGroupPartyTypes(), createDummy);
     }
     
     public ObservableList<GroupPartyTypeBean> getGroupPartyTypeList() {

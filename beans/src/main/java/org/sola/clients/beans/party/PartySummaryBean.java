@@ -64,10 +64,55 @@ public class PartySummaryBean extends AbstractIdBean {
     private String extId;
     private boolean rightHolder;
     private PartyTypeBean typeBean;
-
+    private String nameFirstPart;
+    private String nameLastPart;
+    private String propertyId;
+    private String properties;
+    
+    
     public PartySummaryBean() {
         super();
         typeBean = new PartyTypeBean();
+    }
+
+    public String getNameFirstPart() {
+        return nameFirstPart;
+    }
+
+    public void setNameFirstPart(String nameFirstPart) {
+        this.nameFirstPart = nameFirstPart;
+    }
+
+    public String getNameLastPart() {
+        return nameLastPart;
+    }
+
+    public void setNameLastPart(String nameLastPart) {
+        this.nameLastPart = nameLastPart;
+    }
+
+    public String getProperties() {
+        return properties;
+    }
+
+    public void setProperties(String properties) {
+        this.properties = properties;
+    }
+
+    public String getPropertyId() {
+        return propertyId;
+    }
+
+    public void setPropertyId(String propertyId) {
+        this.propertyId = propertyId;
+    }
+
+    public PartyTypeBean getTypeBean() {
+        return typeBean;
+    }
+
+    public void setTypeBean(PartyTypeBean typeBean) {
+        this.typeBean = typeBean;
     }
 
     public String getExtId() {

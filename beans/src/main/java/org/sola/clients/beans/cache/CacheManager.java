@@ -75,11 +75,22 @@ public final class CacheManager {
      * Cache key of the {@link GenderTypeBean} collection.
      */
     public static final String GENDER_TYPES_KEY = GenderTypeBean.class.getName() + LIST_POSTFIX;
+    
+    /**
+     * Cache key of the {@link GroupPartyTypeBean} collection.
+     */
+    public static final String GROUP_PARTY_TYPES_KEY = GroupPartyTypeBean.class.getName() + LIST_POSTFIX;
+    
     /**
      * Cache key of the code/displayValue map based on {@link GenderTypeBean}
      * collection.
      */
     public static final String GENDER_TYPES_MAP_KEY = GenderTypeBean.class.getName() + MAP_POSTFIX;
+    /**
+     * Cache key of the code/displayValue map based on {@link GroupPartyTypeBean}
+     * collection.
+     */
+    public static final String GROUP_PARTY_TYPES_MAP_KEY = GroupPartyTypeBean.class.getName() + MAP_POSTFIX;
     /**
      * Cache key of the {@link SourceTypeBean} collection.
      */
@@ -221,12 +232,14 @@ public final class CacheManager {
     private static final String GET_SOURCE_TYPES = "getSourceTypes";
     private static final String GET_COMMUNICATION_TYPES = "getCommunicationTypes";
     private static final String GET_GENDER_TYPES = "getGenderTypes";
+    private static final String GET_GROUP_PARTY_TYPES = "getGroupPartyTypes";
     private static final String GET_REQUEST_TYPES = "getRequestTypes";
     private static final String GET_APPLICATION_ACTION_TYPES = "getApplicationActionTypes";
     private static final String GET_SERVICE_ACTION_TYPES = "getServiceActionTypes";
     private static final String GET_SERVICE_STATUS_TYPES = "getServiceStatusTypes";
     private static final String GET_PARTY_TYPES = "getPartyTypes";
     private static final String GET_PARTY_ROLES = "getPartyRoles";
+    private static final String GET_PARTY_GROUP = "getGroupParty";
     private static final String GET_ID_TYPES = "getIdTypes";
     private static final String GET_BA_UNIT_TYPES = "getBaUnitTypes";
     private static final String GET_MORTGAGE_TYPES = "getMortgageTypes";
@@ -375,7 +388,15 @@ public final class CacheManager {
                 WSManager.getInstance().getReferenceDataService(),
                 GET_PARTY_ROLES, PARTY_ROLE_TYPE_CODES_KEY);
     }
+    
+    
+    public static List<GroupPartyTypeBean> getPartyGroups() {
+        return getCachedBeanList(GroupPartyTypeBean.class,
+                WSManager.getInstance().getReferenceDataService(),
+                GET_PARTY_GROUP, GROUP_PARTY_TYPES_KEY);
+    }
 
+    
     public static List<ServiceStatusTypeBean> getAppServiceStatusTypes() {
         return getCachedBeanList(ServiceStatusTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
@@ -448,6 +469,21 @@ public final class CacheManager {
                         WSManager.getInstance().getReferenceDataService(),
                         GET_GENDER_TYPES, GENDER_TYPES_KEY),
                 GENDER_TYPES_MAP_KEY);
+    }
+    
+    
+     public static List<GroupPartyTypeBean> getGroupPartyTypes() {
+        return getCachedBeanList(GroupPartyTypeBean.class,
+                WSManager.getInstance().getReferenceDataService(),
+                GET_GROUP_PARTY_TYPES, GROUP_PARTY_TYPES_KEY);
+    }
+
+    public static Map getGroupPartyTypesMap() {
+        return getCachedMap(
+                getCachedBeanList(GroupPartyTypeBean.class,
+                        WSManager.getInstance().getReferenceDataService(),
+                        GET_GROUP_PARTY_TYPES, GROUP_PARTY_TYPES_KEY),
+                GROUP_PARTY_TYPES_MAP_KEY);
     }
 
     public static List<RequestTypeBean> getRequestTypes() {

@@ -415,6 +415,11 @@ public class PartyPanel extends javax.swing.JPanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, partyRoleTypes, org.jdesktop.beansbinding.ELProperty.create("${selectedPartyRoleType}"), cbxPartyRoleTypes, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
+        cbxPartyRoleTypes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxPartyRoleTypesActionPerformed(evt);
+            }
+        });
         jToolBar1.add(cbxPartyRoleTypes);
 
         filler1.setName("filler1"); // NOI18N
@@ -1045,6 +1050,10 @@ public class PartyPanel extends javax.swing.JPanel {
     private void menuRemoveRoleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRemoveRoleActionPerformed
         removeRole();
     }//GEN-LAST:event_menuRemoveRoleActionPerformed
+
+    private void cbxPartyRoleTypesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxPartyRoleTypesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbxPartyRoleTypesActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel basicPanel;

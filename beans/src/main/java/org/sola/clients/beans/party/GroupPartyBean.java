@@ -27,19 +27,25 @@
  */
 package org.sola.clients.beans.party;
 
+import org.sola.clients.beans.AbstractIdBean;
 import org.sola.clients.beans.AbstractVersionedBean;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.controls.SolaList;
+import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.beans.referencedata.GroupPartyTypeBean;
+import org.sola.common.messaging.ClientMessage;
+import org.sola.common.messaging.MessageUtility;
+import org.sola.services.boundary.wsclients.WSManager;
+import org.sola.webservices.transferobjects.casemanagement.GroupPartyTO;
 
 
 /** 
- * Represents party role object in the domain model. 
+ * Represents party group object in the domain model. 
  * Could be populated from the {@link GroupPartyTO} object.<br />
  * For more information see data dictionary <b>Party</b> schema.
  * <br />This bean is used as a part of {@link PartyBean}.
  */
-public class GroupPartyBean extends AbstractVersionedBean{
+public class GroupPartyBean extends AbstractIdBean{
     public static final String GROUP_CODE_PROPERTY = "groupCode";
     public static final String GROUP_PROPERTY = "group";
     public static final String SELECTED_PARTY_MEMBER_PROPERTY = "selectedPartyMember";
@@ -52,6 +58,7 @@ public class GroupPartyBean extends AbstractVersionedBean{
     
     public GroupPartyBean(){
         super();
+        partyMemberList = new SolaList();
     }
 
     public SolaList<PartyMemberBean> getPartyMemberList() {
@@ -78,7 +85,7 @@ public class GroupPartyBean extends AbstractVersionedBean{
         return group;
     }
 
-    public void setGroup(GroupPartyTypeBean role) {
+    public void setGroup(GroupPartyTypeBean group) {
         if(this.group==null){
             this.group = new GroupPartyTypeBean();
         }
@@ -91,8 +98,34 @@ public class GroupPartyBean extends AbstractVersionedBean{
 
     public void setGroupCode(String groupCode) {
         String oldValue = getGroup().getCode();
-//  TODO
-        //        setGroup(CacheManager.getBeanByCode(CacheManager.getPartyGroups(), groupCode));
+         System.out.println("oldValue   "+  oldValue);
+         System.out.println("newValue  "+groupCode);
+        setGroup(CacheManager.getBeanByCode(CacheManager.getPartyGroups(), groupCode));
+         System.out.println("newFinalValue  "+getGroup());
+        
         propertySupport.firePropertyChange(GROUP_CODE_PROPERTY, oldValue, groupCode);
     }
+    
+    
+      /** 
+     * Saves changes to the Groupparty into the database. 
+     * @throws Exception
+     */
+    public boolean saveGroupParty() {
+        
+        System.out.println("QUI SAVE GROUP PARTY BEAN");
+        GroupPartyTO groupParty = TypeConverters.BeanToTrasferObject(this, GroupPartyTO.class);
+        System.out.println("QUI 1 GROUP PARTY BEAN");  
+          
+       
+        
+        System.out.println("QUI 2 GROUP PARTY BEAN");
+        
+        groupParty = WSManager.getInstance().getCaseManagementService().saveGroupParty(groupParty);
+        
+        System.out.println("QUI 3 GROUP PARTY BEAN");
+        TypeConverters.TransferObjectToBean(groupParty, GroupPartyBean.class, this);
+        return true;
+    }
+  
 }

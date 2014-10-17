@@ -114,6 +114,9 @@ public class PartyBean extends PartySummaryBean {
     public PartyBean() {
         super();
         roleList = new SolaList();
+        sourceList = new SolaList();
+        groupPartyList = new SolaList();
+        
     }
 
     public void clean() {
@@ -315,6 +318,9 @@ public class PartyBean extends PartySummaryBean {
     public void setRoleList(SolaList<PartyRoleBean> roleList) {
         this.roleList = roleList;
     }
+    public ObservableList<GroupPartyBean> getFilteredGroupPartyList() {
+        return groupPartyList.getFilteredList();
+    }
 
     public SolaList<GroupPartyBean> getGroupPartyList() {
         return groupPartyList;
@@ -322,6 +328,23 @@ public class PartyBean extends PartySummaryBean {
 
     public void setGroupPartyList(SolaList<GroupPartyBean> groupPartyList) {
         this.groupPartyList = groupPartyList;
+    }
+    
+    public void addGroupParty(GroupPartyTypeBean groupPartyTypeBean) {
+        
+        System.out.println("GROUP PARTY LIST   "+groupPartyList);
+        if (groupPartyList != null && groupPartyTypeBean != null) {
+            System.out.println("GROUP PARTY LIST NOT NULL  "+groupPartyList);
+             System.out.println("GROUP PARTY TYPE  "+groupPartyTypeBean.getCode());
+      
+            GroupPartyBean newGroup = new GroupPartyBean();
+            newGroup.setGroup(groupPartyTypeBean);
+            newGroup.setGroupCode(groupPartyTypeBean.getCode());
+            System.out.println("GROUP PARTY  addednewGroup  "+newGroup.getGroupCode());
+            groupPartyList.addAsNew(newGroup);
+            System.out.println("GROUP PARTY LIST addednewGroup  "+groupPartyList);
+      
+        }
     }
 
 //    public SolaList<PartyMemberBean> getPartyMemberList() {
@@ -398,13 +421,15 @@ public class PartyBean extends PartySummaryBean {
      * @throws Exception
      */
     public boolean saveParty() {
+        
+        System.out.println("QUI 0 PARTY BEAN");
         PartyTO party = TypeConverters.BeanToTrasferObject(this, PartyTO.class);
-          
+        System.out.println("QUI 1 PARTY BEAN");  
           if (getGenderCode()==null && getTypeCode().contentEquals("naturalPerson")){
             MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_GENDER);
             return false;
           }
-       
+       System.out.println("QUI 2 PARTY BEAN");
         if (getAddress() != null && getAddress().isNew() && (getAddress().getDescription() == null
                 || getAddress().getDescription().length() < 1)) {
             party.setAddress(null);
@@ -413,7 +438,11 @@ public class PartyBean extends PartySummaryBean {
             party.getAddress().setEntityAction(EntityAction.DISASSOCIATE);
         }
         
+        System.out.println("QUI 3 PARTY BEAN");
+        
         party = WSManager.getInstance().getCaseManagementService().saveParty(party);
+        
+        System.out.println("QUI 4 PARTY BEAN");
         TypeConverters.TransferObjectToBean(party, PartyBean.class, this);
         return true;
     }
@@ -437,7 +466,7 @@ public class PartyBean extends PartySummaryBean {
         WSManager.getInstance().getCaseManagementService().saveParty(partyTO);
     }
     
-      public void createPaperTitle(SourceBean source) {
+   public void createPaperTitle(SourceBean source) {
         if (source != null) {
             for (SourceBean sourceBean : sourceList) {
                 sourceBean.setEntityAction(EntityAction.DISASSOCIATE);

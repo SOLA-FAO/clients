@@ -239,6 +239,9 @@
                         <BindingProperty name="elements" source="partyRoleTypes" sourcePath="${partyRoleTypeList}" target="cbxPartyRoleTypes" targetPath="elements" updateStrategy="0" immediately="false"/>
                         <BindingProperty name="selectedItem" source="partyRoleTypes" sourcePath="${selectedPartyRoleType}" target="cbxPartyRoleTypes" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbxPartyRoleTypesActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.Box$Filler" name="filler1">
                       <Properties>
