@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="511" leftMargin="42" rightMargin="42" topMargin="56" bottomMargin="42" uuid="bee728ba-5052-4f3d-a9e1-f1bcfc9cb226">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="145"/>
+	<property name="ireport.y" value="257"/>
 	<subDataset name="Lessees" uuid="7ff962bd-051e-42e2-81d4-8d0683473b83">
 		<queryString>
 			<![CDATA[]]>
@@ -177,7 +177,7 @@
 			</staticText>
 			<componentElement>
 				<reportElement uuid="3e86722d-d58f-4354-83ab-35002396f8c6" x="49" y="66" width="462" height="20"/>
-				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
 					<datasetRun subDataset="Lessees" uuid="9f0fb318-a1fa-4dcd-bcd3-449a595f387f">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanArrayDataSource($F{rrr}.getFilteredRightHolderList().toArray())]]></dataSourceExpression>
 					</datasetRun>
@@ -243,9 +243,9 @@ Land Administration Authority]]></text>
 			</staticText>
 			<componentElement>
 				<reportElement uuid="ea0b3572-f1a3-47ba-a867-549645bd5082" positionType="Float" x="0" y="159" width="511" height="22"/>
-				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
 					<datasetRun subDataset="SpecialConditions" uuid="5e16dd26-0177-473b-9246-22d5aa14c2f2">
-						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanArrayDataSource($F{rrr}.getLeaseCustomConditions().toArray())]]></dataSourceExpression>
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanArrayDataSource($F{rrr}.getCustomConditions().toArray())]]></dataSourceExpression>
 					</datasetRun>
 					<jr:listContents height="22" width="511">
 						<textField pattern="" isBlankWhenNull="false">
@@ -320,9 +320,9 @@ $F{rrrRegDate})]]></textFieldExpression>
 			</staticText>
 			<componentElement>
 				<reportElement uuid="1ce816f4-7972-45a7-a275-05a84a4987b1" x="0" y="368" width="511" height="25"/>
-				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
 					<datasetRun subDataset="StandardConditions" uuid="27d78e95-ae12-403b-9b49-66ced125f5cb">
-						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanArrayDataSource($F{rrr}.getLeaseStandardConditions().toArray())]]></dataSourceExpression>
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanArrayDataSource($F{rrr}.getStandardConditions().toArray())]]></dataSourceExpression>
 					</datasetRun>
 					<jr:listContents height="25" width="511">
 						<textField pattern="" isBlankWhenNull="false">
