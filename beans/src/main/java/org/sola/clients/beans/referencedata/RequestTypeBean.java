@@ -65,6 +65,7 @@ public class RequestTypeBean extends AbstractCodeBean {
     public static final String CODE_SYSTEMATIC_REGISTRATION = "systematicRegn";
     public static final String CODE_LODGE_OBJECTION = "lodgeObjection";
     public static final String CODE_CHANGE_STATE_LAND_PARCELS = "changeSLParcels";
+    public static final String CODE_DISPOSE_PROPERTY = "disposeSLProperty";
 
     public static final String NR_DAYS_TO_COMPLETE_PROPERTY = "nrDaysToComplete";
     public static final String NR_PROPERTIES_REQUIRED_PROPERTY = "nrPropertiesRequired";

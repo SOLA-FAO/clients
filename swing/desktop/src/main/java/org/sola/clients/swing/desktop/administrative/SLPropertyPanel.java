@@ -536,19 +536,19 @@ public class SLPropertyPanel extends ContentPanel {
         // Check RequestType to have cancel action.
         if (applicationService == null || applicationService.getRequestType() == null
                 || applicationService.getRequestType().getTypeActionCode() == null
-                || !applicationService.getRequestTypeCode().equalsIgnoreCase(RequestTypeBean.CODE_CANCEL_PROPERTY)) {
+                || !applicationService.getRequestTypeCode().equalsIgnoreCase(RequestTypeBean.CODE_DISPOSE_PROPERTY)) {
             enabled = false;
         }
 
         // Determine what should be shown on the button, terminate or cancelling of termination.
-        if (baUnitBean1.getPendingActionCode() != null && applicationService.getRequestTypeCode().equalsIgnoreCase(RequestTypeBean.CODE_CANCEL_PROPERTY)) {
+        if (baUnitBean1.getPendingActionCode() != null && applicationService.getRequestTypeCode().equalsIgnoreCase(RequestTypeBean.CODE_DISPOSE_PROPERTY)) {
             // Show cancel
             btnTerminate.setIcon(new ImageIcon(getClass().getResource("/images/common/undo.png")));
-            btnTerminate.setText(resourceBundle.getString("PropertyPanel.btnTerminate.text2"));
+            btnTerminate.setText(resourceBundle.getString("SLPropertyPanel.btnTerminate.text2"));
         } else {
             // Show terminate
             btnTerminate.setIcon(new ImageIcon(getClass().getResource("/images/common/stop.png")));
-            btnTerminate.setText(resourceBundle.getString("PropertyPanel.btnTerminate.text"));
+            btnTerminate.setText(resourceBundle.getString("SLPropertyPanel.btnTerminate.text"));
         }
         btnTerminate.setEnabled(enabled);
     }
