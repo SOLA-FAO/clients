@@ -130,7 +130,7 @@ public abstract class ControlsBundleForTransaction extends SolaControlsBundle {
             instance = new ControlsBundleForMapExistingParcel(
                     applicationBean, transactionStarterId, baUnitId, targetCadastreObjectType);
         } else if (requestTypeCode.equals(RequestTypeBean.CODE_CHANGE_STATE_LAND_PARCELS)) {
-            instance = new ControlBundleForStateLand(
+            instance = new ControlsBundleForStateLand(
                     applicationBean, transactionStarterId, baUnitId, targetCadastreObjectType);
         }
         return instance;

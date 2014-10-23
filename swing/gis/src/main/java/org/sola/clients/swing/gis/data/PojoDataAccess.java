@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.swing.extended.util.CRSUtility;
@@ -178,7 +179,7 @@ public class PojoDataAccess {
      */
     public ResultForNavigationInfo GetQueryDataForPublicDisplay(String name,
             double west, double south, double east, double north, int srid,
-            double pixelTolerance, String nameLastPart) {
+            double pixelTolerance, Map<String, String> filterParams) {
         ConfigMapLayerTO configMapLayer = this.getMapLayerInfoList().get(name);
         QueryForPublicDisplayMap spatialQueryInfo = new QueryForPublicDisplayMap();
         spatialQueryInfo.setQueryName(configMapLayer.getPojoQueryName());
@@ -188,7 +189,10 @@ public class PojoDataAccess {
         spatialQueryInfo.setNorth(north);
         spatialQueryInfo.setSrid(srid);
         spatialQueryInfo.setPixelResolution(pixelTolerance);
-        spatialQueryInfo.setNameLastPart(nameLastPart);
+        if (filterParams != null && filterParams.size() > 0) {
+            spatialQueryInfo.getFilterParamKeys().addAll(filterParams.keySet());
+            spatialQueryInfo.getFilterParamValues().addAll(filterParams.values());
+        }
         return getSpatialService().getSpatialForPublicDisplay(spatialQueryInfo);
     }
 
@@ -307,13 +311,12 @@ public class PojoDataAccess {
     }
 
     /**
-     * Gets the extent of the public display map
-     *
-     * @param nameLastPart
+     * Returns the extent for the public display area
+     * @param filterParam The filter parameter to use for the public display (e.g. application id)
      * @return
      */
-    public ReferencedEnvelope getExtentOfPublicDisplay(String nameLastPart) {
-        byte[] e = getSearchService().getExtentOfPublicDisplayMap(nameLastPart);
+    public ReferencedEnvelope getExtentOfPublicDisplay(String filterParam) {
+        byte[] e = getSearchService().getExtentOfPublicDisplayMap(filterParam);
         if (e == null) {
             return null;
         }

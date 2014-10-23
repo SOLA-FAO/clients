@@ -1,28 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 /*
@@ -31,64 +33,55 @@
  */
 package org.sola.clients.swing.gis.ui.control;
 
-import com.vividsolutions.jts.geom.Point;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import org.geotools.geometry.jts.ReferencedEnvelope;
-import org.geotools.swing.extended.util.GeometryUtility;
 import org.geotools.swing.extended.util.MapImageGenerator;
 import org.geotools.swing.extended.util.Messaging;
 import org.geotools.swing.extended.util.ScalebarGenerator;
 import org.geotools.swing.mapaction.extended.print.PrintLayout;
 import org.sola.clients.beans.application.ApplicationServiceBean;
-import org.sola.clients.beans.referencedata.RequestTypeBean;
 import org.sola.clients.reports.ReportManager;
-import org.sola.clients.swing.gis.data.PojoDataAccess;
-import org.sola.clients.swing.gis.data.PojoPublicDisplayFeatureSource;
-import org.sola.clients.swing.gis.layer.PojoForPublicDisplayLayer;
+import org.sola.clients.swing.common.tasks.SolaTask;
+import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForPublicDisplay;
 import org.sola.clients.swing.ui.reports.ReportViewerForm;
-import org.sola.common.messaging.GisMessage;
+import org.sola.common.StringUtility;
+import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
 /**
- * This panel provides the necessary user interface to manage and start the printing
- * of the public display map.
- * Because the functionality is about printing according to a certain layout,
- * some functionality is duplicated from the print functionality.
- * 
+ * This panel provides the necessary user interface to manage and start the
+ * printing of the public display map. Because the functionality is about
+ * printing according to a certain layout, some functionality is duplicated from
+ * the print functionality.
+ *
  * @author Elton Manoku
  */
 public class PublicDisplayPrintPanel extends javax.swing.JPanel {
 
-    private static final String RESOURCE_LAYOUT =
-            "layouts_public_display.properties";
+    private static final String RESOURCE_LAYOUT
+            = "layouts_public_display.properties";
     //This is the DPI. Normally the printer has a DPI, the monitor has a DPI. 
     //Also Jasper engine should have a DPI, which is 72. With this DPI pixels and points are equal
     private static int DPI = 72;
     private List<PrintLayout> printLayoutList;
     private PrintLayout printLayout;
     private ControlsBundleForPublicDisplay mapBundle;
-    private String applicationId;
+    private ApplicationServiceBean appService;
 
     /**
      * Creates new form PublicDisplayPrintPanel
      */
-    public PublicDisplayPrintPanel(ControlsBundleForPublicDisplay mapBundle) {
+    public PublicDisplayPrintPanel(ControlsBundleForPublicDisplay mapBundle,
+            ApplicationServiceBean appService) {
+        this.appService = appService;
         initComponents();
         setPrintLayoutList();
         this.mapBundle = mapBundle;
     }
 
-    private String getFilterNameLastPart(){
-        String filter = "";
-        if (txtNameLastPart.getText() != null){
-            filter = txtNameLastPart.getText().trim();
-        }
-        return filter;
-    }
     /**
      * Sets the list of layouts.
      */
@@ -128,11 +121,6 @@ public class PublicDisplayPrintPanel extends javax.swing.JPanel {
         return layoutList;
     }
 
-    public void setApplicationId(String applicationId) {
-        this.applicationId = applicationId;
-    }
-
-
     /**
      * Gets the map image that will be embedded in the report
      *
@@ -150,7 +138,9 @@ public class PublicDisplayPrintPanel extends javax.swing.JPanel {
         String imageFormat = "png";
         MapImageGenerator mapImageGenerator = new MapImageGenerator(
                 this.mapBundle.getMap().getMapContent());
-        mapImageGenerator.setTextInTheMapCenter(this.txtMapCenterLabel.getText());
+        if (!StringUtility.isEmpty(this.txtMapCenterLabel.getText())) {
+            mapImageGenerator.setTextInTheMapCenter(this.txtMapCenterLabel.getText());
+        }
         //This gives back the absolute location of the map image. 
         String mapImageLocation = mapImageGenerator.getImageAsFileLocation(
                 mapImageWidth, mapImageHeight, scale, dpi, imageFormat);
@@ -171,38 +161,61 @@ public class PublicDisplayPrintPanel extends javax.swing.JPanel {
      * @param scale This is the scale of the map for which the print will be
      * done
      */
-    private void printPublicDisplayMap(PrintLayout layout, double scale) {
+    private void printPublicDisplayMap(final PrintLayout layout, final double scale) {
+        final String[] locations = new String[2];
+        SolaTask<Void, Void> t = new SolaTask<Void, Void>() {
 
-        //This is the image width of the map. It is given in pixels or in points.
-        Double mapImageWidth = Double.valueOf(layout.getMap().getWidth());
-        //This is the image height of the map. It is given in pixels or in points.
-        Double mapImageHeight = Double.valueOf(layout.getMap().getHeight());
+            @Override
+            public Void doTask() {
+                try {
+                    setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_GENERATE_MAP));
 
-        //This is the image width of the scalebar. It is given in pixels or in points.
-        //The real width might change from the given size because the scalebar dynamicly looks
-        //for the best width. 
-        //So in Jasper the width/height of the scalebar is not restricted 
-        Double scalebarImageWidth = Double.valueOf(layout.getScalebar().getWidth());
-        try {
-            //This gives back the absolute location of the map image. 
-            String mapImageLocation = getMapImage(mapImageWidth, mapImageHeight, scale, DPI);
+                    //This is the image width of the map. It is given in pixels or in points.
+                    Double mapImageWidth = Double.valueOf(layout.getMap().getWidth());
+                    //This is the image height of the map. It is given in pixels or in points.
+                    Double mapImageHeight = Double.valueOf(layout.getMap().getHeight());
 
-            ScalebarGenerator scalebarGenerator = new ScalebarGenerator();
-            //This gives back the absolute location of the scalebar image. 
-            String scalebarImageLocation = scalebarGenerator.getImageAsFileLocation(
-                    scale, scalebarImageWidth, DPI);
+                    //This is the image width of the scalebar. It is given in pixels or in points.
+                    //The real width might change from the given size because the scalebar dynamicly looks
+                    //for the best width. 
+                    //So in Jasper the width/height of the scalebar is not restricted 
+                    Double scalebarImageWidth = Double.valueOf(layout.getScalebar().getWidth());
 
-            //This will leave a trace in the services that a print has happened
-            ApplicationServiceBean serviceBean = new ApplicationServiceBean();
-            serviceBean.setRequestTypeCode(RequestTypeBean.CODE_CADASTRE_PRINT);
-            if (this.applicationId != null) {
-                serviceBean.setApplicationId(this.applicationId);
+                    //This gives back the absolute location of the map image. 
+                    locations[0] = getMapImage(mapImageWidth, mapImageHeight, scale, DPI);
+
+                    ScalebarGenerator scalebarGenerator = new ScalebarGenerator();
+                    //This gives back the absolute location of the scalebar image. 
+                    locations[1] = scalebarGenerator.getImageAsFileLocation(
+                            scale, scalebarImageWidth, DPI);
+
+                    // Capture the area name represented by the Public Display Map on the service
+                    // for reference in the Dashboard.
+                    if (appService != null) {
+                        String areaText = StringUtility.isEmpty(txtArea.getText()) ? "" : txtArea.getText();
+                        if (!areaText.equals(appService.getActionNotes())) {
+                            appService.setActionNotes(areaText);
+                            appService.saveService();
+                        }
+                    }
+                    return null;
+                } catch (IOException ex) {
+                    throw new RuntimeException("Failed to generate Public Display Map image", ex);
+                }
+
             }
-            serviceBean.saveInformationService();
-            generateAndShowReport(layout.getFileName(), mapImageLocation, scalebarImageLocation);
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
+
+            @Override
+            public void taskDone() {
+                try {
+                    generateAndShowReport(layout.getFileName(), locations[0], locations[1]);
+                } catch (IOException ex) {
+                    throw new RuntimeException("Failed to generate Public Display Map report", ex);
+                }
+            }
+        };
+        TaskManager.getInstance().runTask(t);
+
     }
 
     /**
@@ -221,63 +234,11 @@ public class PublicDisplayPrintPanel extends javax.swing.JPanel {
         //   This is to call the report generation         
         ReportViewerForm form = new ReportViewerForm(
                 ReportManager.getMapPublicDisplayReport(
-                fileName, this.txtArea.getText(),
-                this.txtNotificationPeriod.getText(),
-                mapImageLocation, scalebarImageLocation));
+                        fileName, this.txtArea.getText(),
+                        this.txtNotificationPeriod.getText(),
+                        mapImageLocation, scalebarImageLocation));
         // this is to visualize the generated report            
         form.setVisible(true);
-    }
-
-    /**
-     * It centers and zooms the map to the special layers of public display.
-     * 
-     */
-    private void centerMap() {
-        ReferencedEnvelope envelope = PojoDataAccess.getInstance().getExtentOfPublicDisplay(
-                getFilterNameLastPart());        
-        if (envelope == null) {
-            MessageUtility.displayMessage(GisMessage.PRINT_PUBLIC_DISPLAY_CENTER_LAST_PART_CO_NOT_FOUND);
-            return;
-        }
-        envelope.expandBy(10);
-        this.mapBundle.getMap().setDisplayArea(envelope);    
-        // Set the label that will be displayed in the middle of the map in the report.
-        
-        Point mapCenterPoint = GeometryUtility.getGeometryFactory().createPoint(
-                this.mapBundle.getMap().getDisplayArea().centre());
-        mapCenterPoint.setSRID(this.mapBundle.getMap().getSrid());
-        this.txtMapCenterLabel.setText(
-                PojoDataAccess.getInstance().getSearchService().getMapCenterLabel(
-                GeometryUtility.getWkbFromGeometry(mapCenterPoint)));
-        
-    }
-
-    /**
-     * It sets the filter for the public display layers. The filter is the name
-     * last part.
-     *
-     * @return True if the filter is set.
-     */
-    private boolean setLayerFilter() {
-        String nameLastPart = getFilterNameLastPart();
-        if ( nameLastPart.isEmpty()) {
-            Messaging.getInstance().show(GisMessage.PRINT_PUBLIC_DISPLAY_FILTER_NOT_FOUND);
-            return false;
-        }
-        boolean mapMustBeRefreshed = false;
-        for (PojoForPublicDisplayLayer layer : mapBundle.getPublicDisplayLayers()) {
-            String previousNameLastPart =
-                    ((PojoPublicDisplayFeatureSource) layer.getFeatureSource()).getNameLastPart();
-            if (!nameLastPart.equals(previousNameLastPart)) {
-                ((PojoPublicDisplayFeatureSource) layer.getFeatureSource()).setNameLastPart(nameLastPart);
-                mapMustBeRefreshed = true;
-                layer.setForceRefresh(true);
-            }
-        }
-        if (mapMustBeRefreshed) {
-            this.mapBundle.refresh(true);
-        }
-        return true;
     }
 
     /**
@@ -289,48 +250,143 @@ public class PublicDisplayPrintPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel2 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        txtNameLastPart = new javax.swing.JTextField();
-        labLocation = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
+        jPanel9 = new javax.swing.JPanel();
         cmbLayoutList = new javax.swing.JComboBox();
-        txtNotificationPeriod = new javax.swing.JTextField();
-        txtArea = new javax.swing.JTextField();
-        cmdPrint = new javax.swing.JButton();
-        labNotificationFrom = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jPanel8 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         txtScale = new javax.swing.JTextField();
-        cmdCenterMap = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        txtArea = new javax.swing.JTextField();
+        jPanel3 = new javax.swing.JPanel();
+        labNotificationFrom = new javax.swing.JLabel();
+        txtNotificationPeriod = new javax.swing.JTextField();
+        jPanel5 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         txtMapCenterLabel = new javax.swing.JTextField();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
+        cmdCenterMap = new javax.swing.JButton();
+        cmdPrint = new javax.swing.JButton();
+
+        jPanel1.setLayout(new java.awt.GridLayout(0, 1, 0, 6));
+
+        jPanel6.setLayout(new java.awt.GridLayout(1, 2, 15, 0));
+
+        cmbLayoutList.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/gis/ui/control/Bundle"); // NOI18N
         jLabel2.setText(bundle.getString("PublicDisplayPrintForm.jLabel2.text")); // NOI18N
 
-        jLabel1.setText(bundle.getString("PublicDisplayPrintForm.jLabel1.text")); // NOI18N
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(cmbLayoutList, 0, 97, Short.MAX_VALUE)
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cmbLayoutList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
-        txtNameLastPart.setText(bundle.getString("PublicDisplayPrintForm.txtNameLastPart.text")); // NOI18N
-
-        labLocation.setText(bundle.getString("PublicDisplayPrintForm.labLocation.text")); // NOI18N
-
-        cmbLayoutList.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        txtNotificationPeriod.setText(bundle.getString("PublicDisplayPrintForm.txtNotificationPeriod.text")); // NOI18N
-
-        txtArea.setText(bundle.getString("PublicDisplayPrintForm.txtArea.text")); // NOI18N
-
-        cmdPrint.setText(bundle.getString("PublicDisplayPrintForm.cmdPrint.text")); // NOI18N
-        cmdPrint.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmdPrintActionPerformed(evt);
-            }
-        });
-
-        labNotificationFrom.setText(bundle.getString("PublicDisplayPrintForm.labNotificationFrom.text")); // NOI18N
+        jPanel6.add(jPanel9);
 
         jLabel3.setText(bundle.getString("PublicDisplayPrintForm.jLabel3.text")); // NOI18N
 
         txtScale.setText(bundle.getString("PublicDisplayPrintForm.txtScale.text")); // NOI18N
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(txtScale)
+            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtScale, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 11, Short.MAX_VALUE))
+        );
+
+        jPanel6.add(jPanel8);
+
+        jPanel1.add(jPanel6);
+
+        jLabel1.setText(bundle.getString("PublicDisplayPrintForm.jLabel1.text")); // NOI18N
+
+        txtArea.setText(bundle.getString("PublicDisplayPrintForm.txtArea.text")); // NOI18N
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
+            .addComponent(txtArea)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtArea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel1.add(jPanel2);
+
+        labNotificationFrom.setText(bundle.getString("PublicDisplayPrintForm.labNotificationFrom.text")); // NOI18N
+
+        txtNotificationPeriod.setText(bundle.getString("PublicDisplayPrintForm.txtNotificationPeriod.text")); // NOI18N
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(labNotificationFrom, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
+            .addComponent(txtNotificationPeriod)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addComponent(labNotificationFrom)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtNotificationPeriod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel1.add(jPanel3);
+
+        jLabel4.setText(bundle.getString("PublicDisplayPrintPanel.jLabel4.text")); // NOI18N
+
+        txtMapCenterLabel.setText(bundle.getString("PublicDisplayPrintPanel.txtMapCenterLabel.text")); // NOI18N
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
+            .addComponent(txtMapCenterLabel)
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtMapCenterLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel1.add(jPanel5);
 
         cmdCenterMap.setText(bundle.getString("PublicDisplayPrintPanel.cmdCenterMap.text")); // NOI18N
         cmdCenterMap.addActionListener(new java.awt.event.ActionListener() {
@@ -339,84 +395,52 @@ public class PublicDisplayPrintPanel extends javax.swing.JPanel {
             }
         });
 
-        jLabel4.setText(bundle.getString("PublicDisplayPrintPanel.jLabel4.text")); // NOI18N
-
-        txtMapCenterLabel.setText(bundle.getString("PublicDisplayPrintPanel.txtMapCenterLabel.text")); // NOI18N
+        cmdPrint.setText(bundle.getString("PublicDisplayPrintForm.cmdPrint.text")); // NOI18N
+        cmdPrint.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdPrintActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtMapCenterLabel)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel2)
-                                .addComponent(labNotificationFrom)
-                                .addComponent(jLabel1)
-                                .addComponent(labLocation)
-                                .addComponent(txtArea)
-                                .addComponent(txtNotificationPeriod)
-                                .addComponent(txtNameLastPart)
-                                .addComponent(cmbLayoutList, 0, 179, Short.MAX_VALUE))
-                            .addComponent(jLabel4))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 9, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(cmdCenterMap)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cmdPrint))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel3)
-                                .addComponent(txtScale, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                        .addComponent(cmdCenterMap)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmdPrint))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(labLocation)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtNameLastPart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtArea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(labNotificationFrom)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtNotificationPeriod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cmbLayoutList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtMapCenterLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel3)
-                .addGap(3, 3, 3)
-                .addComponent(txtScale, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cmdPrint)
-                    .addComponent(cmdCenterMap))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 97, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cmdPrint)
+                            .addComponent(cmdCenterMap))))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void cmdPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdPrintActionPerformed
         if (this.cmbLayoutList.getSelectedItem() == null) {
             Messaging.getInstance().show(Messaging.Ids.PRINT_LAYOUT_NOT_SELECTED.toString());
-            return;
-        }
-        if (!this.setLayerFilter()) {
             return;
         }
         this.printLayout = (PrintLayout) this.cmbLayoutList.getSelectedItem();
@@ -429,24 +453,28 @@ public class PublicDisplayPrintPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_cmdPrintActionPerformed
 
     private void cmdCenterMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdCenterMapActionPerformed
-        if (!this.setLayerFilter()) {
-            return;
-        }
-        centerMap();
+        this.mapBundle.zoomToDisplayArea();
     }//GEN-LAST:event_cmdCenterMapActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cmbLayoutList;
     private javax.swing.JButton cmdCenterMap;
     private javax.swing.JButton cmdPrint;
+    private javax.swing.Box.Filler filler1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel labLocation;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JLabel labNotificationFrom;
     private javax.swing.JTextField txtArea;
     private javax.swing.JTextField txtMapCenterLabel;
-    private javax.swing.JTextField txtNameLastPart;
     private javax.swing.JTextField txtNotificationPeriod;
     private javax.swing.JTextField txtScale;
     // End of variables declaration//GEN-END:variables

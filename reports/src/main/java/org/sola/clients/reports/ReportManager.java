@@ -404,6 +404,7 @@ public class ReportManager {
                 DateFormat.getInstance().format(Calendar.getInstance().getTime()));
         inputParameters.put("AREA_DESCRIPTION", areaDescription);
         inputParameters.put("PERIOD_DESCRIPTION", notificationPeriod);
+        inputParameters.put("MAP_TITLE", MessageUtility.getLocalizedMessageText(ClientMessage.PUBLIC_DISPLAY_MAP_TITLE));
 
 
         //This will be the bean containing data for the report. 

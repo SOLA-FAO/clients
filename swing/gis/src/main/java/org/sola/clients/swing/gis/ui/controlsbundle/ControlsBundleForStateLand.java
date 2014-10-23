@@ -51,7 +51,7 @@ import org.sola.clients.swing.gis.tool.StateLandSelectTool;
  *
  * @author soladev
  */
-public class ControlBundleForStateLand extends ControlsBundleForTransaction {
+public class ControlsBundleForStateLand extends ControlsBundleForTransaction {
 
     private TransactionStateLandBean transactionBean;
     private String targetParcelType;
@@ -59,7 +59,7 @@ public class ControlBundleForStateLand extends ControlsBundleForTransaction {
     private StateLandEditTool editTool;
     private DisplayStateLandParcelListForm showParcelListAction;
 
-    public ControlBundleForStateLand(ApplicationBean applicationBean,
+    public ControlsBundleForStateLand(ApplicationBean applicationBean,
             String serviceId,
             String baUnitId,
             String targetParcelType) {

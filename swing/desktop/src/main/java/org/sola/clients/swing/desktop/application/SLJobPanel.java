@@ -563,7 +563,7 @@ public class SLJobPanel extends ContentPanel {
                 };
                 TaskManager.getInstance().runTask(t);
             } else if (PanelLauncher.isLaunchGroup(PanelLauncherGroupBean.CODE_GENERAL_SERVICES, servicePanelCode)) {
-                // Panels with no constructor arguments
+                // Panels with appplication and service constructor parameters. 
                 PanelLauncher.launch(servicePanelCode, getMainContentPanel(), refreshAppBeanOnClose, null,
                         appBean, service, readOnly);
             } else {

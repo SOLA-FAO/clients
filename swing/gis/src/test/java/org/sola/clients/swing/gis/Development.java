@@ -95,7 +95,7 @@ public class Development {
     public void testUIControlsBundleForPublicDisplay() throws Exception {
         System.out.println("Test ControlsBundle for public display");
         SecurityBean.authenticate("test", "test".toCharArray(), this.getWSConfig());
-        ControlsBundleForPublicDisplay ctrl = new ControlsBundleForPublicDisplay();
+        ControlsBundleForPublicDisplay ctrl = new ControlsBundleForPublicDisplay(null, null);
         this.displayControlsBundleForm(ctrl);
     }
 

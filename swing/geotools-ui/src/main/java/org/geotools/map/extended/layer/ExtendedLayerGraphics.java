@@ -52,7 +52,6 @@ import org.geotools.swing.extended.exception.InitializeLayerException;
 import org.geotools.swing.extended.util.CRSUtility;
 import org.geotools.swing.extended.util.GeometryUtility;
 import org.geotools.swing.extended.util.Messaging;
-import org.opengis.geometry.BoundingBox;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
@@ -286,12 +285,19 @@ public class ExtendedLayerGraphics extends ExtendedFeatureLayer {
     /**
      * Returns a new ReferencedEnvelope object representing the bounds of the
      * feature collection. Creates a new object to avoid any risk of updating
-     * the actual bounds for the layer via the object reference.
+     * the actual bounds for the layer via the object reference. Note that
+     * the method will only work after the layer is populated with features, 
+     * i.e. after the map has completed drawing. 
      *
-     * @return
+     * @return The Envelope for the layer or null if the layer does not contain
+     *         any features. 
      */
+    @Override
     public ReferencedEnvelope getLayerEnvelope() {
-        ReferencedEnvelope result = new ReferencedEnvelope(getFeatureCollection().getBounds());
+        ReferencedEnvelope result = null;
+        if (getFeatureCollection().size() > 0) {
+            result = new ReferencedEnvelope(getFeatureCollection().getBounds());
+        }
         return result;
     }
 }

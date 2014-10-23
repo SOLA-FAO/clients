@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="public_display_a4_portrait" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="10" bottomMargin="10" resourceBundle="org.sola.clients.reports.locale.SolaPrintReport">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="public_display_a4_portrait" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="10" bottomMargin="10" resourceBundle="org.sola.clients.reports.locale.SolaPrintReport" uuid="0a54f60a-65b6-40ce-9959-121c360dbf83">
 	<property name="ireport.zoom" value="0.6209213230591556"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -11,38 +11,39 @@
 	<parameter name="INPUT_DATE" class="java.lang.String"/>
 	<parameter name="AREA_DESCRIPTION" class="java.lang.String"/>
 	<parameter name="PERIOD_DESCRIPTION" class="java.lang.String"/>
+	<parameter name="MAP_TITLE" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
 		<band height="105" splitType="Stretch">
-			<staticText>
-				<reportElement x="0" y="0" width="555" height="31"/>
-				<textElement textAlignment="Center">
-					<font size="24"/>
-				</textElement>
-				<text><![CDATA[Systematic Registration Public Display]]></text>
-			</staticText>
 			<textField>
-				<reportElement x="0" y="39" width="555" height="31"/>
+				<reportElement uuid="6da15520-1bf5-4c07-930f-d923a01df399" x="0" y="39" width="555" height="31"/>
 				<textElement textAlignment="Center">
 					<font size="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{AREA_DESCRIPTION}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="70" width="555" height="31"/>
+				<reportElement uuid="3a7ad57a-d8e5-493a-a40c-833d8f0970ee" x="0" y="70" width="555" height="31"/>
 				<textElement textAlignment="Center">
 					<font size="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{PERIOD_DESCRIPTION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="9b31a8e1-5ae5-4023-881c-9cfed369268d" x="0" y="0" width="555" height="31"/>
+				<textElement textAlignment="Center">
+					<font size="24"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{MAP_TITLE}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
 	<detail>
 		<band height="627" splitType="Stretch">
 			<image scaleImage="RealSize" isUsingCache="false">
-				<reportElement x="0" y="0" width="555" height="624"/>
+				<reportElement uuid="d4d4201f-117f-42fc-b74b-4df7148f3b99" x="0" y="0" width="555" height="624"/>
 				<imageExpression><![CDATA[$P{MAP_IMAGE}]]></imageExpression>
 			</image>
 		</band>
@@ -50,15 +51,15 @@
 	<pageFooter>
 		<band height="50" splitType="Stretch">
 			<image scaleImage="RetainShape" hAlign="Center">
-				<reportElement x="100" y="11" width="67" height="39"/>
+				<reportElement uuid="ee45a621-f482-40a4-bb1a-7f8785e1c1ef" x="100" y="11" width="67" height="39"/>
 				<imageExpression><![CDATA[$P{NAVIGATOR_IMAGE}]]></imageExpression>
 			</image>
 			<image scaleImage="RealSize" hAlign="Left" isUsingCache="false">
-				<reportElement positionType="FixRelativeToBottom" x="167" y="11" width="388" height="29" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="0e942905-9256-4621-ab25-9d4201937462" positionType="FixRelativeToBottom" x="167" y="11" width="388" height="29" isRemoveLineWhenBlank="true"/>
 				<imageExpression><![CDATA[$P{SCALE_IMAGE}]]></imageExpression>
 			</image>
 			<textField>
-				<reportElement x="0" y="29" width="100" height="20"/>
+				<reportElement uuid="ac600346-cd73-4d12-9ce6-aa849ec644d8" x="0" y="29" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{INPUT_DATE}]]></textFieldExpression>
 			</textField>

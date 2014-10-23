@@ -1,28 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.beans.application;
@@ -41,12 +43,12 @@ import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.casemanagement.ServiceTO;
 
 /**
- * Represents application service object.
- * Could be populated from the {@link ServiceTO} object.<br />
+ * Represents application service object. Could be populated from the
+ * {@link ServiceTO} object.<br />
  * For more information see data dictionary <b>Application</b> schema.
  */
 public class ApplicationServiceBean extends ApplicationServiceSummaryBean {
-    
+
     public static final String ACTION_CODE_PROPERTY = "actionCode";
     public static final String ACTION_PROPERTY = "action";
     public static final String ACTION_NOTES_PROPERTY = "actionNotes";
@@ -57,7 +59,8 @@ public class ApplicationServiceBean extends ApplicationServiceSummaryBean {
     public static final String STATUS_CODE_PROPERTY = "statusCode";
     public static final String STATUS_PROPERTY = "status";
     public static final String VALUE_FEE_PROPERTY = "valueFee";
-    
+    public static final String APPLICATION_SERVICE_BEAN_PROPERTY = "appServiceBean";
+
     private ServiceActionTypeBean actionBean;
     private ServiceStatusTypeBean statusBean;
     private String actionNotes;
@@ -68,10 +71,9 @@ public class ApplicationServiceBean extends ApplicationServiceSummaryBean {
     private BigDecimal valueFee;
     private String concatenatedName;
 
-    /** 
-     * Creates object's instance and initializes the following beans, which are 
-     * the parts of this bean: <br />
-     * {@link ServiceActionTypeBean}<br />
+    /**
+     * Creates object's instance and initializes the following beans, which are
+     * the parts of this bean: <br /> {@link ServiceActionTypeBean}<br />
      * {@link ServiceStatusTypeBean}
      */
     public ApplicationServiceBean() {
@@ -84,9 +86,10 @@ public class ApplicationServiceBean extends ApplicationServiceSummaryBean {
         return actionBean.getCode();
     }
 
-    /** 
-     * Sets service action code and retrieves relevant {@link ServiceActionTypeBean} 
-     * from the cache. 
+    /**
+     * Sets service action code and retrieves relevant
+     * {@link ServiceActionTypeBean} from the cache.
+     *
      * @param value Application service action code.
      */
     public void setActionCode(String value) {
@@ -176,9 +179,10 @@ public class ApplicationServiceBean extends ApplicationServiceSummaryBean {
         }
     }
 
-    /** 
-     * Sets service status code and retrieves relevant {@link ServiceStatusTypeBean} 
-     * from the cache. 
+    /**
+     * Sets service status code and retrieves relevant
+     * {@link ServiceStatusTypeBean} from the cache.
+     *
      * @param value Application service status code.
      */
     public void setStatusCode(String value) {
@@ -198,7 +202,9 @@ public class ApplicationServiceBean extends ApplicationServiceSummaryBean {
         propertySupport.firePropertyChange(VALUE_FEE_PROPERTY, old, value);
     }
 
-    /** Cancels service */
+    /**
+     * Cancels service
+     */
     public List<ValidationResultBean> cancel() {
         return TypeConverters.TransferObjectListToBeanList(
                 WSManager.getInstance().getCaseManagementService().serviceActionCancel(this.getId(), this.getRowVersion()),
@@ -206,28 +212,36 @@ public class ApplicationServiceBean extends ApplicationServiceSummaryBean {
 
     }
 
-    /** Set service as completed */
+    /**
+     * Set service as completed
+     */
     public List<ValidationResultBean> complete() {
         return TypeConverters.TransferObjectListToBeanList(
                 WSManager.getInstance().getCaseManagementService().serviceActionComplete(this.getId(), this.getRowVersion()),
                 ValidationResultBean.class, null);
     }
 
-    /** Revert service back to the pending state */
+    /**
+     * Revert service back to the pending state
+     */
     public List<ValidationResultBean> revert() {
         return TypeConverters.TransferObjectListToBeanList(
                 WSManager.getInstance().getCaseManagementService().serviceActionRevert(this.getId(), this.getRowVersion()),
                 ValidationResultBean.class, null);
     }
-    
-   /** Start service and set to the pending state */
+
+    /**
+     * Start service and set to the pending state
+     */
     public List<ValidationResultBean> start() {
         return TypeConverters.TransferObjectListToBeanList(
                 WSManager.getInstance().getCaseManagementService().serviceActionStart(this.getId(), this.getRowVersion()),
                 ValidationResultBean.class, null);
     }
 
-    /** Indicates whether service can be managed */
+    /**
+     * Indicates whether service can be managed
+     */
     public boolean isManagementAllowed() {
         String serviceStatus = getStatusCode();
         boolean result = true;
@@ -244,8 +258,10 @@ public class ApplicationServiceBean extends ApplicationServiceSummaryBean {
     }
 
     /**
-     * Saves the service in the database. Used only for services of category: informationServices.
-     * If another kind of request type is supplied, it will be thrown a server side exception.
+     * Saves the service in the database. Used only for services of category:
+     * informationServices. If another kind of request type is supplied, it will
+     * be thrown a server side exception.
+     *
      * @return
      * @throws Exception t
      */
@@ -258,8 +274,10 @@ public class ApplicationServiceBean extends ApplicationServiceSummaryBean {
     }
 
     /**
-     * Creates and saves new Information service service in the database.
-     * If another kind of request type is supplied, it will be thrown a server side exception.
+     * Creates and saves new Information service service in the database. If
+     * another kind of request type is supplied, it will be thrown a server side
+     * exception.
+     *
      * @param requestTypeCode Request type code to use for creating service.
      */
     public static boolean saveInformationService(String requestTypeCode) {
@@ -275,10 +293,12 @@ public class ApplicationServiceBean extends ApplicationServiceSummaryBean {
             return false;
         }
     }
-    
-     /**
-     * Creates and saves new Information service service in the database.
-     * If another kind of request type is supplied, it will be thrown a server side exception.
+
+    /**
+     * Creates and saves new Information service service in the database. If
+     * another kind of request type is supplied, it will be thrown a server side
+     * exception.
+     *
      * @param requestTypeCode Request type code to use for creating service.
      */
     public static boolean saveInformationService(String requestTypeCode, String titleRequested) {
@@ -295,8 +315,8 @@ public class ApplicationServiceBean extends ApplicationServiceSummaryBean {
             return false;
         }
     }
-    
-     /**
+
+    /**
      * Returns collection of {@link ApplicationBean} objects. This method is
      * used by Jasper report designer to extract properties of application bean
      * to help design a report.
@@ -314,5 +334,19 @@ public class ApplicationServiceBean extends ApplicationServiceSummaryBean {
 
     public void setConcatenatedName(String concatenatedName) {
         this.concatenatedName = concatenatedName;
+    }
+
+    /**
+     * Saves the service details to the database
+     *
+     * @retun true if the serivce is successfully saved, otherwise a runtime
+     * exception.
+     */
+    public boolean saveService() {
+        ServiceTO service = TypeConverters.BeanToTrasferObject(this, ServiceTO.class);
+        service = WSManager.getInstance().getCaseManagementService().saveService(service);
+        TypeConverters.TransferObjectToBean(service, ApplicationServiceBean.class, this);
+        propertySupport.firePropertyChange(APPLICATION_SERVICE_BEAN_PROPERTY, null, this);
+        return true;
     }
 }
