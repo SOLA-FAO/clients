@@ -368,12 +368,14 @@ public class ExtendedFeatureLayer extends ExtendedLayer {
      * feature collection. Creates a new object to avoid any risk of updating
      * the actual bounds for the layer via the object reference.
      *
-     * @return
+     * @return null if the layer does not contain any features. 
      */
     public ReferencedEnvelope getLayerEnvelope() {
         ReferencedEnvelope result = null;
         try {
-            result = new ReferencedEnvelope(getFeatureSource().getFeatures().getBounds());
+            if (getFeatureSource().getFeatures().size() > 0) {
+                result = new ReferencedEnvelope(getFeatureSource().getFeatures().getBounds());
+            }
         } catch (IOException iex) {
             throw new RuntimeException("Unable to determine Layer Envelope for " + this.getLayerName(), iex);
         }

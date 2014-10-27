@@ -129,7 +129,13 @@ public final class ControlsBundleForPublicDisplay extends SolaControlsBundle {
     }
 
     public void zoomToDisplayArea() {
-        ReferencedEnvelope envelope = PojoDataAccess.getInstance().getExtentOfPublicDisplay(applicationId);
+        ReferencedEnvelope envelope = null;
+        if (publicDisplayLayers.size() > 0
+                && publicDisplayLayers.get(0).getLayerEnvelope() != null) {
+            envelope = publicDisplayLayers.get(0).getLayerEnvelope();
+        } else {
+            envelope = PojoDataAccess.getInstance().getExtentOfPublicDisplay(applicationId);
+        }
         if (envelope != null) {
             envelope.expandBy(50);
             this.getMap().setDisplayArea(envelope);

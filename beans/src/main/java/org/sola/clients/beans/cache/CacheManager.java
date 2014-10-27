@@ -231,10 +231,18 @@ public final class CacheManager {
      * Cache key of the {@link RrrSubTypeBean} collection.
      */
     public static final String RRR_SUB_TYPE_GROUP_KEY = RrrSubTypeBean.class.getName() + LIST_POSTFIX;
-        /**
+    /**
      * Cache key of the {@link ChecklistGroupBean} collection.
      */
     public static final String GET_CHECKLIST_GROUP_KEY = ChecklistGroupBean.class.getName() + LIST_POSTFIX;
+    /**
+     * Cache key of the {@link PublicDisplayItemTypeBean} collection.
+     */
+    public static final String GET_PUBLIC_DISPLAY_ITEM_TYPE_KEY = PublicDisplayItemTypeBean.class.getName() + LIST_POSTFIX;
+    /**
+     * Cache key of the {@link PublicDisplayItemStatusBean} collection.
+     */
+    public static final String GET_PUBLIC_DISPLAY_ITEM_STATUS_KEY = PublicDisplayItemStatusBean.class.getName() + LIST_POSTFIX;
     /**
      * Cache key of the parties list by role collection.
      */
@@ -279,6 +287,8 @@ public final class CacheManager {
     private static final String GET_PARTIES_BY_ROLE = "getPartiesByRole";
     private static final String GET_ACTIVE_USERS = "getActiveUsers";
     private static final String GET_CHECKLIST_GROUP = "getChecklistGroups";
+    private static final String GET_PUBLIC_DISPLAY_TYPES = "getPublicDisplayTypes";
+    private static final String GET_PUBLIC_DISPLAY_STATUS_TYPES = "getPublicDisplayStatusTypes";
 
     public static List<BrValidationTargetTypeBean> getBrValidationTargetTypes() {
         return getCachedBeanList(BrValidationTargetTypeBean.class,
@@ -548,11 +558,23 @@ public final class CacheManager {
                 WSManager.getInstance().getSearchService(),
                 GET_ACTIVE_USERS, ACTIVE_USERS_GROUP_KEY);
     }
-    
-        public static List<ChecklistGroupBean> getChecklistGroups() {
+
+    public static List<ChecklistGroupBean> getChecklistGroups() {
         return getCachedBeanList(ChecklistGroupBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_CHECKLIST_GROUP, GET_CHECKLIST_GROUP_KEY);
+    }
+
+    public static List<PublicDisplayItemTypeBean> getPublicDisplayTypes() {
+        return getCachedBeanList(PublicDisplayItemTypeBean.class,
+                WSManager.getInstance().getReferenceDataService(),
+                GET_PUBLIC_DISPLAY_TYPES, GET_PUBLIC_DISPLAY_ITEM_TYPE_KEY);
+    }
+
+    public static List<PublicDisplayItemStatusBean> getPublicDisplayStatusTypes() {
+        return getCachedBeanList(PublicDisplayItemStatusBean.class,
+                WSManager.getInstance().getReferenceDataService(),
+                GET_PUBLIC_DISPLAY_STATUS_TYPES, GET_PUBLIC_DISPLAY_ITEM_STATUS_KEY);
     }
 
     /**
