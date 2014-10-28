@@ -30,6 +30,7 @@
 package org.sola.clients.beans.application;
 
 import java.util.Date;
+import javax.validation.constraints.NotNull;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractVersionedBean;
 import org.sola.clients.beans.cache.CacheManager;
@@ -38,6 +39,8 @@ import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.beans.referencedata.PublicDisplayItemStatusBean;
 import org.sola.clients.beans.referencedata.PublicDisplayItemTypeBean;
 import org.sola.clients.beans.source.SourceBean;
+import org.sola.clients.beans.validation.Localized;
+import org.sola.common.messaging.ClientMessage;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.EntityAction;
 import org.sola.webservices.transferobjects.casemanagement.PublicDisplayItemTO;
@@ -61,9 +64,11 @@ public class PublicDisplayItemBean extends AbstractVersionedBean {
     public static final String PUBLIC_DISPLAY_ITEM_BEAN_PROPERTY = "publicDisplayItemBean";
     private String id;
     private String serviceId;
+    @NotNull(message = ClientMessage.CHECK_FIELD_DISPLAY_ITEM_TYPE, payload = Localized.class)
     private PublicDisplayItemTypeBean type;
     private String referenceNr;
     private String description;
+    @NotNull(message = ClientMessage.CHECK_FIELD_DISPLAY_ITEM_STATUS, payload = Localized.class)
     private PublicDisplayItemStatusBean status;
     private Date displayFrom;
     private Date displayTo;

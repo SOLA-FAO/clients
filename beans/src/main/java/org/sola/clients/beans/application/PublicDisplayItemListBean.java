@@ -31,7 +31,6 @@ package org.sola.clients.beans.application;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
 import org.jdesktop.observablecollections.ObservableList;
@@ -39,25 +38,22 @@ import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.clients.beans.AbstractBindingListBean;
 import org.sola.clients.beans.controls.SolaList;
 import org.sola.clients.beans.converters.TypeConverters;
-import org.sola.clients.beans.referencedata.ChecklistGroupBean;
-import org.sola.clients.beans.referencedata.ChecklistItemBean;
-import org.sola.common.StringUtility;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.EntityAction;
-import org.sola.webservices.transferobjects.casemanagement.ServiceChecklistItemTO;
+import org.sola.webservices.transferobjects.casemanagement.PublicDisplayItemTO;
 
 /**
  *
  * @author soladev
  */
-public class PubilcDisplayItemListBean extends AbstractBindingListBean {
+public class PublicDisplayItemListBean extends AbstractBindingListBean {
 
     public static final String SELECTED_PUBLIC_DISPLAY_ITEM = "selectedPublicDisplayItem";
     private SolaList<PublicDisplayItemBean> publicDisplayItemList;
     private PublicDisplayItemBean selectedPublicDisplayItem;
     private String serviceId;
 
-    public PubilcDisplayItemListBean() {
+    public PublicDisplayItemListBean() {
         super();
         publicDisplayItemList = new SolaList<PublicDisplayItemBean>();
     }
@@ -108,6 +104,20 @@ public class PubilcDisplayItemListBean extends AbstractBindingListBean {
     }
 
     /**
+     * Saves the list of Public Display Items
+     */
+    public void saveList() {
+        List<PublicDisplayItemTO> toList = new ArrayList<PublicDisplayItemTO>();
+        // Translate list of beans to a list of TO's 
+        TypeConverters.BeanListToTransferObjectList((List) publicDisplayItemList, toList, PublicDisplayItemTO.class);
+        publicDisplayItemList.clear();
+        // Translate the TO's with the saved data to Beans and replace the original bean list
+        TypeConverters.TransferObjectListToBeanList(
+                WSManager.getInstance().getCaseManagementService().savePublicDisplayItems(toList),
+                PublicDisplayItemBean.class, (List) publicDisplayItemList);
+    }
+
+    /**
      * Overrides the default validate method to ensure all
      * PublicDisplayItemBeans are validated as well
      *
@@ -129,5 +139,21 @@ public class PubilcDisplayItemListBean extends AbstractBindingListBean {
             showMessage(warningsList);
         }
         return warningsList;
+    }
+
+    /**
+     * Determines whether a public display item should be added to the list of
+     * display items or replace an existing item in the list.
+     *
+     * @param item The item to add or update.
+     */
+    public void addOrUpdateItem(PublicDisplayItemBean item) {
+        if (item != null && publicDisplayItemList != null) {
+            if (publicDisplayItemList.contains(item)) {
+                publicDisplayItemList.set(publicDisplayItemList.indexOf(item), item);
+            } else {
+                publicDisplayItemList.addAsNew(item);
+            }
+        }
     }
 }
