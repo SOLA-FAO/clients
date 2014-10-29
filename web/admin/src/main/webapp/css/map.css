@@ -1,0 +1,200 @@
+img.olTileImage {
+    max-width: none;
+}
+
+#tags {
+    display: none;
+}
+
+/* mobile specific */
+@media only screen and (max-width: 600px) {
+    #mapCtrl {
+        background : #7391ad;
+        width      : 100%;
+    }
+    #mapCtrl {
+        border : 0;
+        height : 250px;
+    }
+}
+@media only screen and (orientation: landscape) and (max-width: 600px) {
+    #mapCtrl {
+        width: 70%;
+    }
+}
+div.olControlMousePosition{
+    color: white;
+    font-size: 11px;
+    text-shadow:
+        -1px -1px 0 #000,
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000;
+}
+
+.olControlScaleBar {
+    bottom: 10px;
+    left: 10px;
+    font-family: sans-serif;
+    color: white;
+    color:#000;
+}
+
+.olControlScaleBarBar {
+    height: 1px;
+    top: 14px;
+    background: #333;
+}
+
+.olControlScaleBarBarAlt {
+    height: 1px;
+    top: 14px;
+    background: #333;
+}
+
+.olControlScaleBarMarkerMajor {
+    height: 7px;
+    width: 1px;
+    top: 11px;
+    background: #333;
+}
+
+.olControlScaleBarMarkerMinor {
+    height: 5px;
+    width: 1px;
+    top: 12px;
+    background: #333;
+}
+
+.olControlScaleBarNumbersBox {
+    width: 40px;
+    height: 13px;
+    top: 21px;
+    font-size: 0.7em;
+}
+
+.olControlScaleBarLabelBox {
+    top: -2px;
+    height: 15px;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    font-size: 0.7em;
+    font-variant: small-caps;
+}
+
+.olControlScaleBarLabelBoxSingleLine {
+    height: 15px;
+    width: 35px;
+    top: 5px;
+    left: 10px;
+    font-size: 0.7em;
+    font-variant: small-caps;
+}
+
+.mapClaimInfoDiv, .mapWaitDiv, .mapNoResultsDiv{
+    width: 200px;
+    height: 170px;
+    padding-left: 5px;
+}
+.mapWaitDiv, .mapNoResultsDiv{
+    cursor: wait;
+    padding-left: 20px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 170px;
+}
+.mapNoResultsDiv{
+    color: #cc0000;
+    cursor: auto;
+}
+.line{
+    padding: 2px 1px;
+}
+
+.legend {
+    padding-left: 28px;
+}
+.x-tree-node-el {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 3px;
+    padding-right: 22px;
+    padding-top: 2px;
+}
+.x-tree-ec-icon {
+    width: 3px;
+}
+.gx-tree-layer-icon {
+    display: none;
+}
+.legend .x-panel-body, .legend .x-grid3-row-selected{
+    background-color: transparent !important;
+}
+.zoomToExtentIcon {
+    background-image: url(images/zoom_extend.png) !important;
+}
+.zoomInIcon {
+    background-image: url(images/zoom_in.png) !important;
+}
+.zoomOutIcon {
+    background-image: url(images/zoom_out.png) !important;
+}
+
+.editMapIcon{
+    background-image: url(images/map_edit.png) !important;
+}
+.informationIcon{
+    background-image: url(images/information.png) !important;
+}
+.panIcon{
+    background-image: url(images/hand.png) !important;
+}
+.polygonIcon{
+    background-image: url(images/polygon.png) !important;
+}
+.polylineIcon{
+    background-image: url(images/linestring.png) !important;
+}
+.snapIcon{
+    background-image: url(images/magnet.png) !important;
+}
+.pointIcon{
+    background-image: url(images/point.png) !important;
+}
+.shapeEditIcon{
+    background-image: url(images/shape_edit.png) !important;
+}
+.featureEditIcon{
+    background-image: url(images/document_edit.png) !important;
+}
+.pointAddIcon{
+    background-image: url(images/point_add.png) !important;
+}
+.pointDeleteIcon{
+    background-image: url(images/point_delete.png) !important;
+}
+.featureDeleteIcon{
+    background-image: url(images/shape_delete.png) !important;
+}
+.editingNode{
+    background-image: url(images/edit2.png) !important;
+    background-repeat: no-repeat;
+    background-position: right top;
+}
+.deleteCursor {
+    cursor: url(images/delete.png), auto;
+}
+
+.maximizeIcon {
+    background-image: url(images/application-resize.png) !important;
+}
+
+.fullScreen {
+    position: absolute;
+    z-index: 1000;
+    left: 0px;
+    top: 0px;
+}
+
+#mapCtrlWrapper * div{
+    box-sizing: content-box !important;
+}

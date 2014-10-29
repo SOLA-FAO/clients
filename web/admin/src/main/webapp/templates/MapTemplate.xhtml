@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:body>
+        <ui:composition template="../templates/BasicTemplate.xhtml">
+            <ui:define name="title">
+                <ui:insert name="title"></ui:insert>
+            </ui:define>
+            <ui:define name="head">
+                <link rel="stylesheet" href="#{request.contextPath}/js/ol/theme/default/style.css" type="text/css"></link>
+                <link rel="stylesheet" href="#{request.contextPath}/css/map.css" type="text/css"></link>
+                <link rel="stylesheet" type="text/css" href="#{request.contextPath}/css/ext/css/ext-all.css" />
+                
+                <script src="#{request.contextPath}/js/ol/OpenLayers.js"></script>
+		<script src="#{request.contextPath}/js/ol/ScaleBar.js"></script>
+                <script src="https://maps.google.com/maps/api/js?v=3&amp;sensor=false"></script>
+                <script type="text/javascript" src="#{request.contextPath}/js/ext/ext-base.js"></script>
+                <script type="text/javascript" src="#{request.contextPath}/js/ext/ext-all.js"></script>
+                <script src="#{request.contextPath}/js/geoext/GeoExt.js"></script>
+                <script src="#{request.contextPath}/js/ot_map.js"></script>
+                <style>
+                    .x-tree-node .x-tree-node-over{
+                        background-color: transparent;
+                    }
+                    .x-tree-node .x-tree-selected {
+                        background-color: #D9E8FB;
+                    }
+                </style>
+                <ui:insert name="head2"></ui:insert>
+            </ui:define>
+            <ui:define name="content">
+                <ui:insert name="content"></ui:insert>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

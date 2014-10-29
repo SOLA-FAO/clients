@@ -1,0 +1,192 @@
+/*
+DarkBlue #217c95
+LightGrey #e6e7dd
+Green #87a968
+LightGreen #e6eddf
+Earth #754c29
+*/
+
+@import url(fonts/fontawesome/css/font-awesome.min.css);
+
+body{
+    background-color: #e6eddf;
+}
+
+#PageHeader, #PageHeaderCaption, #PageHeaderLogo, #PageHeaderLogin {
+    height: 60px;
+    background-color: #217c95;
+    font-family: Arial, sans-serif;
+    line-height: 60px;
+    color: #fff;
+    vertical-align: middle;
+}
+
+#PageHeader{
+    font: large arial;
+}
+
+#PageHeaderCaption{
+    float: left;
+    font-size: large;
+    padding-left: 10px;
+}
+
+#PageHeaderLogo{
+    float: left; 
+    width: 120px;
+    background-color: white; 
+    text-align: center;    
+}
+
+#PageHeaderLogin{
+    float: right; 
+    padding-right: 10px;
+    text-align: right;
+    font-size: small;
+}
+
+.MainLogo{
+    width: 79px;
+    height: 58px;
+    vertical-align: top;
+    background-color: #fff;
+}
+
+#LoginBox{
+    background-color: #fff;
+    border: 1px solid #aaa;
+    width: 350px;
+    padding: 20px 40px;
+    margin: 50px auto 0px auto;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+}
+
+.DateField{
+
+}
+
+.ui-datepicker
+{
+    z-index: 2000 !important;
+}
+
+.PageName{
+    padding: 7px 15px 0px 15px;
+    margin-top: 5px;
+    font-size: 36px;
+    /*background-color: #87a968;
+    color: #fff;*/
+}
+
+.LineSpace{
+    height: 10px;
+}
+
+.splitter{
+    height: 10px; 
+    margin-bottom: 10px; 
+    border-bottom: #ccc 2px dotted;
+}
+
+.glyphicon-required{
+    color: #c00;
+    font-family: arial;
+    font-style: normal;
+    font-weight: bold;
+}
+
+.glyphicon-required:before{
+    content: "*";
+}
+
+.content{
+    padding: 5px 15px 20px 20px;
+}
+
+.SectionHeader{
+    margin: 10px 0px;
+    font-size: 24px;
+    border-bottom: 2px dotted #87a968;
+}
+
+.HiddenItem{
+    display: none;
+}
+
+#languageBarWrapper{
+    padding-right: 20px;
+    color: #000;
+}
+/*---------------------------------
+        MESSAGES
+-----------------------------------*/
+#PageError, #PageSuccessMessage, #PageErrorMessage, #PageWarningMessage{
+    border-radius: 0px;
+}
+
+.waitMessage{
+    display:none;
+    line-height:30px;
+    padding:20px 0px;
+    font-size:x-large;
+    text-align:center;
+}
+/*---------------------------------
+        LINKS
+-----------------------------------*/
+
+a.WhiteLink {
+    color: #fff;
+}
+a.BlueLink {
+    color: #428BCA;
+}
+
+/*---------------------------------
+        LISTS
+-----------------------------------*/
+
+ul{
+    list-style: square;
+}
+
+/*---------------------------------
+        TABLES
+-----------------------------------*/
+.table-header{
+    background-color:#87a968;
+    color:#fff;
+    vertical-align: top !important;
+}
+
+.table-cell{
+    padding-right: 10px;
+}
+/*---------------------------------
+        BOOTSTRAP AND OPENLAYERS OVERLOADS
+-----------------------------------*/
+.navbar{
+    margin-bottom: 0px;
+    border-radius: 0px;
+}
+
+.alert{
+    margin-bottom: 0px;
+}
+
+.dropdown-menu {
+    padding: 0px;
+}
+
+.dropdown-menu > li > a{
+    padding: 10px 20px;
+}
+
+div.tooltip-inner {
+    max-width: 400px;
+}
+
+img .olTileImage{max-width:none;}
+.olImageLoadError{display: none !important;}

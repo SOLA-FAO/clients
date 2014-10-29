@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <body>
+        <ui:composition>
+            <ui:repeat value="#{localizedValues}" var="v" varStatus="s">
+                <ui:fragment>
+                    <ui:fragment rendered="#{s.index mod columnsNumber eq 0}">
+                        <h:outputText escape="false" value="&lt;div class='row'&gt;" />
+                    </ui:fragment>
+                    <div class="col-md-#{v.calculateColumnSpanNumber(12, columnsNumber)}" style="padding-bottom: 10px;">
+                        <label>
+                            #{label} (#{v.language.code}) 
+                            <ui:fragment rendered="#{required}">
+                                <i class="glyphicon glyphicon-required"></i>
+                            </ui:fragment>
+                        </label>
+                        <h:inputTextarea value="#{v.localizedValue}"
+                                     rendered="#{textarea}"
+                                     class="form-control"
+                                     rows="#{textareaRows}" />
+                        <h:inputText value="#{v.localizedValue}"
+                                     rendered="#{not textarea}"
+                                     class="form-control"
+                                     maxlength="1000"
+                                     autocomplete="off" />
+                    </div>
+                    <ui:fragment rendered="#{s.last or ((s.index+1) mod columnsNumber eq 0)}">
+                        <h:outputText escape="false" value="&lt;/div&gt;" />
+                    </ui:fragment>
+                </ui:fragment>
+            </ui:repeat>
+        </ui:composition>
+    </body>
+</html>
+

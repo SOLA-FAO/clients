@@ -1,0 +1,239 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <body>
+        <ui:composition>
+            <ui:repeat var = "sec" value = "#{dynaFormBean.sections}" id="sections" varStatus="secStatus">
+                <ui:fragment>
+                    <div class="tab-pane" id="_#{sec.name}">
+                        <div style="padding: 10px;width:700px;">
+                            <ui:fragment rendered="#{sec.maxOccurrences gt 1}">
+                                <ui:fragment rendered="#{allowEdit}">
+                                    <h:commandLink class="BlueLink">
+                                        <f:ajax event="click" 
+                                                render= ":mainForm:sections:#{secStatus.index}:pnlRecord"
+                                                onevent="onOpenEditRecord#{secStatus.index}"
+                                                onerror="onOpenEditRecordError"
+                                                listener="#{dynaFormBean.createSectionElementPayload(sec)}" />
+                                        <i class="glyphicon glyphicon-plus"></i> #{msg.GENERAL_LABEL_ADD}
+                                    </h:commandLink>
+                                </ui:fragment>
+
+                                <h:panelGroup layout="block" id="sectionTable">
+                                    <table id="table_#{secStatus.index}" class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <ui:repeat var = "col" value = "#{sec.fieldTemplateArray}">
+                                                    <ui:fragment>
+                                                        <th class="table-header">
+                                                            #{col.displayName}
+                                                        </th>
+                                                    </ui:fragment>
+                                                </ui:repeat>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <ui:repeat var = "row" value = "#{dynaFormBean.getSectionElementPayloads(sec.name)}">
+                                                <ui:fragment>
+                                                    <tr>
+                                                        <ui:repeat var="col" value="#{sec.fieldTemplateArray}" varStatus="colStatus">
+                                                            <ui:fragment>
+                                                                <td>
+                                                                    <ui:fragment rendered="#{allowEdit and colStatus.index eq 0}">
+                                                                        <h:commandLink class="BlueLink" style="margin-right: 5px;">
+                                                                            <f:ajax event="click" 
+                                                                                    render= ":mainForm:sections:#{secStatus.index}:pnlRecord"
+                                                                                    onevent="onOpenEditRecord#{secStatus.index}"
+                                                                                    onerror="onOpenEditRecordError"
+                                                                                    listener="#{dynaFormBean.loadSectionElementPayload(sec.name, row)}" />
+                                                                            <i class="glyphicon glyphicon-pencil"></i>
+                                                                        </h:commandLink>
+                                                                        <h:commandLink style="margin-right: 7px;"
+                                                                                       title="#{msg.GENERAL_LABEL_DELETE}"
+                                                                                       onclick="return confirm('#{msg.GENERAL_CONFIRM_DELETE}')">
+                                                                            <f:ajax listener="#{dynaFormBean.deleteSectionElement(sec.name, row)}" 
+                                                                                    event="click" 
+                                                                                    onevent="onDeleteRecord#{secStatus.index}" onerror="handleAjaxError"
+                                                                                    render=":mainForm:sections:#{secStatus.index}:sectionTable" /><i class="glyphicon glyphicon-remove"></i>
+                                                                        </h:commandLink>
+                                                                    </ui:fragment>
+                                                                    <ui:include src="/controls/DynaFormControl.xhtml">
+                                                                        <ui:param name="allowEdit" value="false" rendererType="java.lang.Boolean" />
+                                                                        <ui:param name="showLabel" value="false" rendererType="java.lang.Boolean" />
+                                                                        <ui:param name="fieldTemplate" value="#{col}" rendererType="org.sola.test.dynaforms.FieldTemplate" />
+                                                                        <ui:param name="fieldPayload" value="#{dynaFormBean.getFieldPayload(sec.name, row.id, col.name)}" rendererType="org.sola.test.dynaforms.FieldPayload" />
+                                                                    </ui:include>
+                                                                </td>
+                                                            </ui:fragment>
+                                                        </ui:repeat>
+                                                    </tr>
+                                                </ui:fragment>
+                                            </ui:repeat>
+                                        </tbody>
+                                    </table>
+                                </h:panelGroup>
+
+                                <div style="display: none;" class="modal fade" id="#{secStatus.index}Dialog" tabindex="-1" role="dialog" aria-hidden="true">
+                                    <div class="modal-dialog" style="width:700px;">
+                                        <div class="modal-content">
+
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">#{msg.GENERAL_LABEL_CLOSE}</span></button>
+                                                <h4 class="modal-title" id="myModalLabel">#{sec.elementDisplayName}</h4>
+                                            </div>
+
+                                            <div class="modal-body" id="#{secStatus.index}Body">
+                                                <div id="pnlWrapper_#{secStatus.index}" class="HiddenItem">
+                                                    <h:panelGroup id="pnlRecord" layout="block">
+
+                                                        <ui:repeat var = "f" value = "#{sec.fieldTemplateArray}" varStatus="fs">
+                                                            <ui:fragment>
+                                                                <ui:fragment rendered="#{fs.index mod popupColumnsNumber eq 0}">
+                                                                    <h:outputText escape="false" value="&lt;div class='row'&gt;" />
+                                                                </ui:fragment>
+                                                                <div class="col-md-#{dynaFormBean.calculateColumnSpanNumber(12, popupColumnsNumber)}">
+                                                                    <ui:include src="/controls/DynaFormControl.xhtml">
+                                                                        <ui:param name="allowEdit" value="true" rendererType="java.lang.Boolean" />
+                                                                        <ui:param name="showLabel" value="true" rendererType="java.lang.Boolean" />
+                                                                        <ui:param name="fieldTemplate" value="#{f}" rendererType="org.sola.test.dynaforms.FieldTemplate" />
+                                                                        <ui:param name="fieldPayload" value="#{dynaFormBean.getTempFieldPayload(sec.name, f.name)}" rendererType="org.sola.test.dynaforms.FieldPayload" />
+                                                                    </ui:include>
+                                                                </div>
+                                                                <ui:fragment rendered="#{fs.last or ((fs.index+1) mod popupColumnsNumber eq 0)}">
+                                                                    <h:outputText escape="false" value="&lt;/div&gt;" />
+                                                                    <h:panelGroup layout="block" rendered="#{not fs.last}" class="splitter"></h:panelGroup>
+                                                                </ui:fragment>
+                                                            </ui:fragment>
+                                                        </ui:repeat>
+                                                    </h:panelGroup>
+                                                </div>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">#{msg.GENERAL_LABEL_CLOSE}</button>
+                                                <h:commandButton class="btn btn-primary" value="#{msg.GENERAL_LABEL_SAVE}">
+                                                    <f:ajax event="click" execute=":mainForm:sections:#{secStatus.index}:pnlRecord" 
+                                                            render=":mainForm:sections:#{secStatus.index}:sectionTable"
+                                                            onevent="onSaveRecord#{secStatus.index}"
+                                                            onerror="handleAjaxError#{secStatus.index}"
+                                                            listener="#{dynaFormBean.saveSectionElement(sec.name)}" />
+                                                </h:commandButton>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <script language="javascript">
+                                    var exception_#{secStatus.index};
+                                    
+                                    function onOpenEditRecord#{secStatus.index}(data) {
+                                        onOpenEditRecord(data, '#{secStatus.index}');
+                                    }
+
+                                    function onSaveRecord#{secStatus.index}(data) {
+                                        handleAjax(data);
+                                        var status = data.status;
+                                        switch (status) {
+                                            case "begin":
+                                                exception_#{secStatus.index} = "";
+                                                break;
+                                            case "success":
+                                                if (exception_#{secStatus.index} === "") {
+                                                    $('##{secStatus.index}Dialog').modal('hide');
+                                                    animateComponent('#{secStatus.index}\\:sectionTable');
+                                                }
+                                                break;
+                                        }
+                                    }
+
+                                    function onDeleteRecord#{secStatus.index}(data) {
+                                        onDeleteRecord(data, '#{secStatus.index}');
+                                    }
+                                    
+                                    function handleAjaxError#{secStatus.index}(data) {
+                                        if (data.type !== "event") {
+                                            exception_#{secStatus.index} = data.errorMessage;
+                                            alert(data.errorMessage);
+                                        }
+                                    }
+                                </script>
+                            </ui:fragment>
+
+                            <ui:fragment rendered="#{sec.maxOccurrences le 1}">
+                                <ui:repeat var = "f" value = "#{sec.fieldTemplateArray}" varStatus="fs">
+                                    <ui:fragment>
+                                        <ui:fragment rendered="#{fs.index mod columnsNumber eq 0}">
+                                            <h:outputText escape="false" value="&lt;div class='row'&gt;" />
+                                        </ui:fragment>
+                                        <div class="col-md-#{dynaFormBean.calculateColumnSpanNumber(12, columnsNumber)}">
+                                            <ui:include src="/controls/DynaFormControl.xhtml">
+                                                <ui:param name="allowEdit" value="#{allowEdit}" rendererType="java.lang.Boolean" />
+                                                <ui:param name="showLabel" value="true" rendererType="java.lang.Boolean" />
+                                                <ui:param name="fieldTemplate" value="#{f}" rendererType="org.sola.test.dynaforms.FieldTemplate" />
+                                                <ui:param name="fieldPayload" value="#{dynaFormBean.getFieldPayload(sec.name, null, f.name)}" rendererType="org.sola.test.dynaforms.FieldPayload" />
+                                            </ui:include>
+                                        </div>
+                                        <ui:fragment rendered="#{fs.last or ((fs.index+1) mod columnsNumber eq 0)}">
+                                            <h:outputText escape="false" value="&lt;/div&gt;" />
+                                            <div class="splitter"></div>
+                                        </ui:fragment>
+                                    </ui:fragment>
+                                </ui:repeat>
+                            </ui:fragment>
+                        </div>
+                    </div>
+                </ui:fragment>
+            </ui:repeat>      
+
+            <script language="javascript">
+                $(function() {
+                    bindDateFields('#{dateBean.datePattern.toLowerCase()}');
+                });
+
+                function onOpenEditRecord(data, sectionId) {
+                    var status = data.status;
+                    switch (status) {
+                        case "begin":
+                            $('#pnlWrapper_' + sectionId).hide();
+                            $('#' + sectionId + 'Dialog').modal('show');
+                            $('#waitMessage').detach().appendTo('#' + sectionId + 'Body');
+                            $('#waitMessage').show();
+                            break;
+                        case "success":
+                            $('#waitMessage').hide();
+                            $('#pnlWrapper_' + sectionId).show();
+                            bindDateFields('#{dateBean.datePattern.toLowerCase()}');
+                            break;
+                    }
+                }
+
+                function onOpenEditRecordError(data) {
+                    if (data.type !== "event") {
+                        $('#waitMessage').hide();
+                        alert(data.name);
+                    }
+                }
+
+                function animateComponent(comp) {
+                    $('#mainForm\\:sections\\:' + comp).hide();
+                    $('#mainForm\\:sections\\:' + comp).fadeIn('slow');
+                }
+
+                function onDeleteRecord(data, sectionIndex) {
+                    handleAjax(data);
+                    var status = data.status;
+                    switch (status) {
+                        case "success":
+                            animateComponent(sectionIndex + '\\:sectionTable');
+                            break;
+                    }
+                }
+            </script>
+        </ui:composition>
+    </body>
+</html>
+

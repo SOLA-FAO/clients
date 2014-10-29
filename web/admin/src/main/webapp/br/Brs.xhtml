@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:body>
+        <ui:composition template="../templates/BasicTemplate.xhtml">
+            <ui:define name="title">
+                #{msg.MAIN_MENU_BRS}
+            </ui:define>
+            <ui:define name="content">
+                <div class="PageName">
+                    <i class="icon-book"></i> #{msg.MAIN_MENU_BRS}
+                </div>
+                <div class="content">
+                    <div class="row" style="width: 800px;padding-bottom: 10px;">
+                        <div class="col-md-11">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>
+                                        #{msg.BR_PAGE_DISPLAY_NAME}
+                                    </label>
+                                    <h:inputText id="txtDisplayParam" class="form-control"
+                                                 value="#{brListPageBean.searchParams.displayName}"
+                                                 autocomplete="off" />
+                                </div>
+                                <div class="col-md-4">
+                                    <label>
+                                        #{msg.BR_PAGE_TECH_TYPE}
+                                    </label>
+                                    <h:selectOneListbox id="cbxTechTypeParam" value="#{brListPageBean.searchParams.technicalTypeCode}" 
+                                                        size="1" class="form-control">
+                                        <f:selectItems value="#{brListPageBean.technicalTypes}" var="g" 
+                                                       itemValue="#{g.code}" itemLabel="#{g.displayValue}" />
+                                    </h:selectOneListbox>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>
+                                        #{msg.BR_PAGE_VALIDATION_TARGET}
+                                    </label>
+                                    <h:selectOneListbox id="cbxValidationTargetParam" value="#{brListPageBean.searchParams.targetCode}" 
+                                                        size="1" class="form-control">
+                                        <f:selectItems value="#{brListPageBean.targetTypes}" var="g" 
+                                                       itemValue="#{g.code}" itemLabel="#{g.displayValue}" />
+                                    </h:selectOneListbox>
+                                </div>
+                            </div>        
+                        </div>
+                        <div class="col-md-1">
+                            <label>&nbsp;</label><br />
+                            <h:commandButton class="btn btn-default" value="#{msg.GENERAL_LABEL_SEARCH}">
+                                <f:ajax event="click" execute=":mainForm:txtDisplayParam :mainForm:cbxTechTypeParam :mainForm:cbxValidationTargetParam" 
+                                        render=":mainForm:pnlCodes"
+                                        onerror="handleAjaxError"
+                                        listener="#{brListPageBean.search()}" />
+                            </h:commandButton>
+                        </div>
+                    </div>
+                    
+                    <h:panelGroup id="pnlCodes">
+                        <h:outputLink value="#{request.contextPath}/br/Br.xhtml">
+                            <i class="glyphicon glyphicon-plus"></i> #{msg.GENERAL_LABEL_ADD}
+                        </h:outputLink>
+                        <h:dataTable value="#{brListPageBean.searchResults}" var="br"
+                                     class="table table-striped"
+                                     headerClass="table-header">
+                            <h:column>
+                                <f:facet name="header">#{msg.BR_PAGE_DISPLAY_NAME}</f:facet>
+                                <span style="white-space: nowrap;">
+                                    <h:commandLink style="padding-right: 5px;"
+                                                   title="#{msg.GENERAL_LABEL_DELETE}"
+                                                   onclick="return confirm('#{msg.GENERAL_CONFIRM_DELETE}')">
+                                        <f:ajax listener="#{brListPageBean.delete(br.id)}" 
+                                                event="click" onevent="handleAjax" onerror="handleAjaxError"
+                                                render=":mainForm:pnlCodes" />
+                                        <i class="glyphicon glyphicon-remove"></i>
+                                    </h:commandLink>
+                                    <h:outputLink value="#{request.contextPath}/br/Br.xhtml?id=#{br.id}">
+                                        <i class="glyphicon glyphicon-pencil" style="padding-right: 7px;"></i>
+                                    </h:outputLink>
+                                    #{br.displayName}
+                                </span>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{msg.BR_PAGE_TECH_TYPE}</f:facet>
+                                    #{br.technicalTypeCode}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{msg.BR_PAGE_FEEDBACK}</f:facet>
+                                    #{br.feedback}
+                            </h:column>
+                        </h:dataTable>
+                    </h:panelGroup>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

@@ -1,0 +1,884 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:body>
+        <ui:composition template="../templates/BasicTemplate.xhtml">
+            <ui:define name="title">
+                #{msg.FORMS_PAGE_FORM_TITLE}
+            </ui:define>
+            <ui:define name="head">
+                <script type="text/javascript" src="#{request.contextPath}/js/ot_dynamic_forms.js"></script>
+                <style>
+                    .sectionHeader{
+                        padding: 8px;
+                        color: #fff;
+                        background-color: #87A968;
+                        font-weight: bold;
+                    }
+
+                    .elementCaption{
+                        color: #87A968;
+                        font-weight: bold;
+                        font-style: italic;
+                        font-size: 13px;
+                        margin-right: 15px;
+                    }
+
+                    .sectionHeaderCaption {
+                        width: 350px;
+                        float: left;
+                        font-size: 13px;
+                    }
+                    .sectionHeaderControls {
+                        width: 300px;
+                        float: right;
+                        text-align: right;
+                        line-height: 20px;
+                        font-size: 12px;
+                    }
+
+                    .innerPanel, .innerPanelWithBorder{
+                        padding: 10px 3px 3px 5px;
+                    }
+
+                    .innerPanelWithBorder{
+                        border: #ccc solid 1px;
+                        margin-bottom: 4px;
+                    }
+
+                    .panelTools{
+                        font-size: 12px;
+                        padding: 3px 7px 3px 5px;
+                        background-color: #fff;
+                    }
+                    .tableItem td, .tableItem th{
+                        padding: 3px 10px;
+                        font-size: 12px;
+                    }
+                </style>
+            </ui:define>
+            <ui:define name="content">
+                <h:panelGroup rendered="#{not empty formsPageBean.message}">
+                    <div class="alert alert-success" id="PageSuccessMessage">
+                        <h:outputText value="#{formsPageBean.message}" escape="false" />
+                    </div>
+                </h:panelGroup>
+                <div class="PageName">
+                    <i class="glyphicon glyphicon-tasks"></i> #{msg.FORMS_PAGE_FORM_TITLE}
+                    <br />
+                    <div class="btn-group">
+                        <h:outputLink value="#{request.contextPath}/forms/Forms.xhtml" class="btn btn-default">
+                            #{msg.GENERAL_LABEL_BACK}
+                        </h:outputLink>
+                        <h:commandButton class="btn btn-default" value="#{msg.GENERAL_LABEL_SAVE}"
+                                         action="#{formsPageBean.saveForm()}"
+                                         onclick="blockUI()" />
+                    </div>
+                </div>
+                <div class="content">
+                    <table>
+                        <tr>
+                            <td>
+                                <div class="sectionHeader">
+                                    <div class="sectionHeaderCaption">
+                                        #{msg.FORMS_PAGE_FORM}
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="innerPanelWithBorder">
+                                    <div class="panelTools">
+                                        <h:link class="BlueLink" onclick="return showFormHeaderDialog()">
+                                            <i class="glyphicon glyphicon-pencil" style="margin-right: 5px;"></i>#{msg.GENERAL_LABEL_EDIT}
+                                        </h:link>
+                                    </div>
+                                    <h:panelGroup id="formHeader">
+                                        <table class="tableItem" width="500">
+                                            <tr>
+                                                <th>
+                                                    #{msg.FORMS_PAGE_NAME}
+                                                </th>
+                                                <th>
+                                                    #{msg.FORMS_PAGE_DISPLAY_NAME}
+                                                </th>
+                                                <th>
+                                                    #{msg.FORMS_PAGE_DEFAULT}
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    #{formsPageBean.formTemplate.name}
+                                                </td>
+                                                <td>
+                                                    #{languageBean.getLocalizedString(formsPageBean.formTemplate.displayName)}
+                                                </td>
+                                                <td>
+                                                    <ui:fragment rendered="#{formsPageBean.formTemplate.isDefault}">
+                                                        <i class="glyphicon glyphicon-ok"></i>
+                                                    </ui:fragment>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </h:panelGroup>
+
+                                    <div class="innerPanel">
+
+                                        <div class="sectionHeader">
+                                            <div class="sectionHeaderCaption">
+                                                #{msg.FORMS_PAGE_SECTIONS}
+                                            </div>
+                                            <div class="sectionHeaderControls">
+                                                <h:commandLink class="WhiteLink">
+                                                    <f:ajax event="click" 
+                                                            render= ":mainForm:pnlSectionRecord"
+                                                            onevent="onOpenEditSection"
+                                                            onerror="onOpenEditRecordError"
+                                                            listener="#{formsPageBean.editSection(null)}" />
+                                                    <i class="glyphicon glyphicon-plus"></i> #{msg.FORMS_PAGE_ADD_SECTION}
+                                                </h:commandLink>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        <h:panelGroup id="pnlSections">
+                                            <ui:repeat value="#{formsPageBean.sections}" var="s">
+                                                <div class="innerPanelWithBorder">
+                                                    <div class="panelTools">
+                                                        <span class="elementCaption">
+                                                            #{msg.FORMS_PAGE_SECTION} "#{languageBean.getLocalizedString(s.displayName)}"
+                                                        </span>
+                                                        <h:commandLink class="BlueLink">
+                                                            <f:ajax event="click" 
+                                                                    render= ":mainForm:pnlSectionRecord"
+                                                                    onevent="onOpenEditSection"
+                                                                    onerror="onOpenEditRecordError"
+                                                                    listener="#{formsPageBean.editSection(s)}" />
+                                                            <i class="glyphicon glyphicon-pencil"></i> #{msg.GENERAL_LABEL_EDIT}
+                                                        </h:commandLink>
+                                                        &nbsp;
+                                                        <h:commandLink onclick="return confirm('#{msg.GENERAL_CONFIRM_DELETE}')">
+                                                            <f:ajax listener="#{formsPageBean.deleteSection(s)}" 
+                                                                    event="click" 
+                                                                    onevent="handleAjax" onerror="handleAjaxError"
+                                                                    render=":mainForm:pnlSections" /><i class="glyphicon glyphicon-remove"></i> #{msg.GENERAL_LABEL_DELETE}
+                                                        </h:commandLink>
+                                                    </div>
+                                                    <table class="tableItem">
+                                                        <tr>
+                                                            <th>
+                                                                #{msg.FORMS_PAGE_NAME}
+                                                            </th>
+                                                            <th>
+                                                                #{msg.FORMS_PAGE_DISPLAY_NAME}
+                                                            </th>
+                                                            <th>
+                                                                #{msg.FORMS_PAGE_ELEMENT_NAME}
+                                                            </th>
+                                                            <th>
+                                                                #{msg.FORMS_PAGE_ELEMENT_DISPLAY_NAME}
+                                                            </th>
+                                                            <th>
+                                                                #{msg.FORMS_PAGE_MIN_OCCURRENCE}
+                                                            </th>
+                                                            <th>
+                                                                #{msg.FORMS_PAGE_MAX_OCCURRENCE}
+                                                            </th>
+                                                            <th>
+                                                                #{msg.FORMS_PAGE_ERROR_MSG}
+                                                            </th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                #{s.name}
+                                                            </td>
+                                                            <td>
+                                                                #{languageBean.getLocalizedString(s.displayName)}
+                                                            </td>
+                                                            <td>
+                                                                #{s.elementName}
+                                                            </td>
+                                                            <td>
+                                                                #{languageBean.getLocalizedString(s.elementDisplayName)}
+                                                            </td>
+                                                            <td>
+                                                                #{s.minOccurrences}
+                                                            </td>
+                                                            <td>
+                                                                #{s.maxOccurrences}
+                                                            </td>
+                                                            <td>
+                                                                #{languageBean.getLocalizedString(s.errorMsg)}
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+
+                                                    <div class="innerPanel">
+                                                        <div class="sectionHeader">
+                                                            <div class="sectionHeaderCaption">
+                                                                #{msg.FORMS_PAGE_FIELDS}
+                                                            </div>
+                                                            <div class="sectionHeaderControls">
+                                                                <h:commandLink class="WhiteLink">
+                                                                    <f:ajax event="click" 
+                                                                            render= ":mainForm:pnlFieldRecord"
+                                                                            onevent="onOpenEditField"
+                                                                            onerror="onOpenEditRecordError"
+                                                                            listener="#{formsPageBean.editField(null, s.id)}" />
+                                                                    <i class="glyphicon glyphicon-plus"></i> #{msg.FORMS_PAGE_ADD_FIELD}
+                                                                </h:commandLink>
+                                                            </div>
+                                                            <div class="clearfix"></div>
+                                                        </div>
+
+                                                        <ui:repeat value="#{formsPageBean.getFields(s)}" var="f">
+                                                            <div class="innerPanelWithBorder">
+                                                                <div class="panelTools">
+                                                                    <span class="elementCaption">
+                                                                        #{msg.FORMS_PAGE_FIELD} "#{languageBean.getLocalizedString(f.displayName)}"
+                                                                    </span>
+                                                                    <h:commandLink class="BlueLink">
+                                                                        <f:ajax event="click" 
+                                                                                render= ":mainForm:pnlFieldRecord"
+                                                                                onevent="onOpenEditField"
+                                                                                onerror="onOpenEditRecordError"
+                                                                                listener="#{formsPageBean.editField(f, s.id)}" />
+                                                                        <i class="glyphicon glyphicon-pencil"></i> #{msg.GENERAL_LABEL_EDIT}
+                                                                    </h:commandLink>
+                                                                    &nbsp;
+                                                                    <h:commandLink onclick="return confirm('#{msg.GENERAL_CONFIRM_DELETE}')">
+                                                                        <f:ajax listener="#{formsPageBean.deleteField(f, s)}" 
+                                                                                event="click" 
+                                                                                onevent="handleAjax" onerror="handleAjaxError"
+                                                                                render=":mainForm:pnlSections" /><i class="glyphicon glyphicon-remove"></i> #{msg.GENERAL_LABEL_DELETE}
+                                                                    </h:commandLink>
+                                                                </div>
+                                                                <table class="tableItem">
+                                                                    <tr>
+                                                                        <th>
+                                                                            #{msg.FORMS_PAGE_NAME}
+                                                                        </th>
+                                                                        <th>
+                                                                            #{msg.FORMS_PAGE_DISPLAY_NAME}
+                                                                        </th>
+                                                                        <th>
+                                                                            #{msg.FORMS_PAGE_HINT}
+                                                                        </th>
+                                                                        <th>
+                                                                            #{msg.FORMS_PAGE_FIELD_TYPE}
+                                                                        </th>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>
+                                                                            #{f.name}
+                                                                        </td>
+                                                                        <td>
+                                                                            #{languageBean.getLocalizedString(f.displayName)}
+                                                                        </td>
+                                                                        <td>
+                                                                            #{f.hint}
+                                                                        </td>
+                                                                        <td>
+                                                                            #{f.fieldType}
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+
+                                                                <div class="innerPanel">
+                                                                    <div class="sectionHeader">
+                                                                        <div class="sectionHeaderCaption">
+                                                                            #{msg.FORMS_PAGE_CONSTRAINTS}
+                                                                        </div>
+                                                                        <div class="sectionHeaderControls">
+                                                                            <h:commandLink class="WhiteLink">
+                                                                                <f:ajax event="click" 
+                                                                                        render= ":mainForm:pnlConstraintRecord"
+                                                                                        onevent="onOpenEditConstraint"
+                                                                                        onerror="onOpenEditRecordError"
+                                                                                        listener="#{formsPageBean.editConstraint(null, f.id)}" />
+                                                                                <i class="glyphicon glyphicon-plus"></i> #{msg.FORMS_PAGE_ADD_CONSTRINT}
+                                                                            </h:commandLink>
+                                                                        </div>
+                                                                        <div class="clearfix"></div>
+                                                                    </div>
+
+                                                                    <ui:repeat value="#{formsPageBean.getConstraints(f)}" var="fc">
+                                                                        <div class="innerPanelWithBorder">
+                                                                            <div class="panelTools">
+                                                                                <span class="elementCaption">
+                                                                                    #{msg.FORMS_PAGE_CONSTRAINT} "#{languageBean.getLocalizedString(fc.displayName)}"
+                                                                                </span>
+                                                                                <h:commandLink class="BlueLink">
+                                                                                    <f:ajax event="click" 
+                                                                                            render= ":mainForm:pnlConstraintRecord"
+                                                                                            onevent="onOpenEditConstraint"
+                                                                                            onerror="onOpenEditRecordError"
+                                                                                            listener="#{formsPageBean.editConstraint(fc, f.id)}" />
+                                                                                    <i class="glyphicon glyphicon-pencil"></i> #{msg.GENERAL_LABEL_EDIT}
+                                                                                </h:commandLink>
+                                                                                &nbsp;
+                                                                                <h:commandLink onclick="return confirm('#{msg.GENERAL_CONFIRM_DELETE}')">
+                                                                                    <f:ajax listener="#{formsPageBean.deleteConstraint(fc, f)}" 
+                                                                                            event="click" 
+                                                                                            onevent="handleAjax" onerror="handleAjaxError"
+                                                                                            render=":mainForm:pnlSections" /><i class="glyphicon glyphicon-remove"></i> #{msg.GENERAL_LABEL_DELETE}
+                                                                                </h:commandLink>
+                                                                            </div>
+                                                                            <table class="tableItem">
+                                                                                <tr>
+                                                                                    <th>
+                                                                                        #{msg.FORMS_PAGE_NAME}
+                                                                                    </th>
+                                                                                    <th>
+                                                                                        #{msg.FORMS_PAGE_DISPLAY_NAME}
+                                                                                    </th>
+                                                                                    <th>
+                                                                                        #{msg.FORMS_PAGE_CONSTRAINT_TYPE}
+                                                                                    </th>
+                                                                                    <th>
+                                                                                        #{msg.FORMS_PAGE_FORMAT}
+                                                                                    </th>
+                                                                                    <th>
+                                                                                        #{msg.FORMS_PAGE_MIN_VAL}
+                                                                                    </th>
+                                                                                    <th>
+                                                                                        #{msg.FORMS_PAGE_MAX_VAL}
+                                                                                    </th>
+                                                                                    <th>
+                                                                                        #{msg.FORMS_PAGE_ERROR_MSG}
+                                                                                    </th>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        #{fc.name}
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        #{languageBean.getLocalizedString(fc.displayName)}
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        #{fc.fieldConstraintType}
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        #{fc.format}
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        #{fc.minValue}
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        #{fc.maxValue}
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        #{languageBean.getLocalizedString(fc.errorMsg)}
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </table>
+
+                                                                            <div class="innerPanel">
+                                                                                <ui:fragment rendered="#{fc.fieldConstraintType eq 'OPTION'}">
+                                                                                    <div class="sectionHeader">
+                                                                                        <div class="sectionHeaderCaption">
+                                                                                            #{msg.FORMS_PAGE_CONSTRAINT_OPTIONS}
+                                                                                        </div>
+                                                                                        <div class="sectionHeaderControls">
+                                                                                            <h:commandLink class="WhiteLink">
+                                                                                                <f:ajax event="click" 
+                                                                                                        render= ":mainForm:pnlOptionRecord"
+                                                                                                        onevent="onOpenEditOption"
+                                                                                                        onerror="onOpenEditRecordError"
+                                                                                                        listener="#{formsPageBean.editOption(null, fc.id)}" />
+                                                                                                <i class="glyphicon glyphicon-plus"></i> #{msg.FORMS_PAGE_ADD_OPTION}
+                                                                                            </h:commandLink>
+                                                                                        </div>
+                                                                                        <div class="clearfix"></div>
+                                                                                    </div>
+
+
+                                                                                    <ui:fragment rendered="#{fn:length(formsPageBean.getOptions(fc)) gt 0}">
+                                                                                        <div class="innerPanelWithBorder">
+                                                                                            <table class="tableItem">
+                                                                                                <tr>
+                                                                                                    <th>
+                                                                                                        #{msg.FORMS_PAGE_NAME}
+                                                                                                    </th>
+                                                                                                    <th>
+                                                                                                        #{msg.FORMS_PAGE_DISPLAY_NAME}
+                                                                                                    </th>
+                                                                                                    <th>
+                                                                                                    </th>
+                                                                                                </tr>
+                                                                                                <ui:repeat value="#{formsPageBean.getOptions(fc)}" var="fco">
+                                                                                                    <tr>
+                                                                                                        <td>
+                                                                                                            #{fco.name}
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            #{languageBean.getLocalizedString(fco.displayName)}
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <h:commandLink class="BlueLink" title="#{msg.GENERAL_LABEL_EDIT}">
+                                                                                                                <f:ajax event="click" 
+                                                                                                                        render= ":mainForm:pnlOptionRecord"
+                                                                                                                        onevent="onOpenEditOption"
+                                                                                                                        onerror="onOpenEditRecordError"
+                                                                                                                        listener="#{formsPageBean.editOption(fco, fc.id)}" />
+                                                                                                                <i class="glyphicon glyphicon-pencil"></i>
+                                                                                                            </h:commandLink>
+                                                                                                            &nbsp;
+                                                                                                            <h:commandLink onclick="return confirm('#{msg.GENERAL_CONFIRM_DELETE}')" title="#{msg.GENERAL_LABEL_DELETE}">
+                                                                                                                <f:ajax listener="#{formsPageBean.deleteOption(fco, fc)}" 
+                                                                                                                        event="click" 
+                                                                                                                        onevent="handleAjax" onerror="handleAjaxError"
+                                                                                                                        render=":mainForm:pnlSections" /><i class="glyphicon glyphicon-remove"></i>
+                                                                                                            </h:commandLink>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                </ui:repeat>
+                                                                                            </table>
+                                                                                        </div>
+                                                                                    </ui:fragment>
+                                                                                </ui:fragment>
+                                                                            </div>
+                                                                        </div>
+                                                                    </ui:repeat>
+                                                                </div>
+
+                                                            </div>
+                                                        </ui:repeat>
+                                                    </div>
+
+                                                </div>    
+                                            </ui:repeat>
+                                        </h:panelGroup>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="modal fade" id="formDialog" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">#{msg.GENERAL_LABEL_CLOSE}</span></button>
+                                <h4 class="modal-title" id="myModalLabel">#{msg.FORMS_PAGE_FORM}</h4>
+                            </div>
+                            <div class="modal-body" id="formBody">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>
+                                            #{msg.FORMS_PAGE_NAME} <i class="glyphicon glyphicon-required"></i>
+                                        </label>
+                                        <br />
+                                        <h:inputText value="#{formsPageBean.formTemplate.name}" 
+                                                     id="txtFormName"
+                                                     maxlength="255"
+                                                     disabled="#{not formsPageBean.formTemplate.isNew()}"
+                                                     class="form-control" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>
+                                            #{msg.FORMS_PAGE_DISPLAY_NAME} <i class="glyphicon glyphicon-required"></i>
+                                        </label>
+                                        <br />
+                                        <h:inputText value="#{formsPageBean.formTemplate.displayName}" 
+                                                     id="txtFormDisplayName"
+                                                     maxlength="255"
+                                                     class="form-control" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>
+                                            #{msg.FORMS_PAGE_DEFAULT}
+                                        </label>
+                                        <br />
+                                        <h:selectBooleanCheckbox id="chbxFormDefault" value="#{formsPageBean.formTemplate.isDefault}" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">#{msg.GENERAL_LABEL_CLOSE}</button>
+                                <h:commandButton class="btn btn-primary" value="#{msg.GENERAL_LABEL_SAVE}">
+                                    <f:ajax event="click" execute="txtFormName txtFormDisplayName chbxFormDefault" 
+                                            render=":mainForm:formHeader"
+                                            onevent="onSaveFormHeader"
+                                            onerror="handleFormHeaderSaveError"
+                                            listener="#{formsPageBean.saveFormHeader()}" />
+                                </h:commandButton>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: none;" class="modal fade" id="sectionDialog" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog" style="width:700px;">
+                        <div class="modal-content">
+
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">#{msg.GENERAL_LABEL_CLOSE}</span></button>
+                                <h4 class="modal-title" id="myModalLabel">#{msg.FORMS_PAGE_SECTION}</h4>
+                            </div>
+
+                            <div class="modal-body" id="sectionBody">
+                                <div id="pnlWrapper_section" class="HiddenItem">
+                                    <h:panelGroup id="pnlSectionRecord" layout="block">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label>
+                                                    #{msg.FORMS_PAGE_NAME} <i class="glyphicon glyphicon-required"></i>
+                                                </label>
+                                                <br />
+                                                <h:inputText value="#{formsPageBean.tmpSection.name}" 
+                                                             id="txtSectionName"
+                                                             maxlength="255"
+                                                             class="form-control" />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label>
+                                                    #{msg.FORMS_PAGE_DISPLAY_NAME} <i class="glyphicon glyphicon-required"></i>
+                                                </label>
+                                                <br />
+                                                <h:inputText value="#{formsPageBean.tmpSection.displayName}" 
+                                                             id="txtSectionDisplayName"
+                                                             maxlength="255"
+                                                             class="form-control" />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label>
+                                                    #{msg.FORMS_PAGE_ELEMENT_NAME} <i class="glyphicon glyphicon-required"></i>
+                                                </label>
+                                                <br />
+                                                <h:inputText value="#{formsPageBean.tmpSection.elementName}" 
+                                                             id="txtElementName"
+                                                             maxlength="255"
+                                                             class="form-control" />
+                                            </div>
+                                        </div>
+
+                                        <div class="splitter"></div>
+
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label>
+                                                    #{msg.FORMS_PAGE_ELEMENT_DISPLAY_NAME} <i class="glyphicon glyphicon-required"></i>
+                                                </label>
+                                                <br />
+                                                <h:inputText value="#{formsPageBean.tmpSection.elementDisplayName}" 
+                                                             id="txtElementDisplayName"
+                                                             maxlength="255"
+                                                             class="form-control" />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label>
+                                                    #{msg.FORMS_PAGE_MIN_OCCURRENCE} <i class="glyphicon glyphicon-required"></i>
+                                                </label>
+                                                <br />
+                                                <h:inputText value="#{formsPageBean.tmpSection.minOccurrences}" 
+                                                             id="txtSectionMinOccurrence"
+                                                             maxlength="255"
+                                                             class="form-control" />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label>
+                                                    #{msg.FORMS_PAGE_MAX_OCCURRENCE} <i class="glyphicon glyphicon-required"></i>
+                                                </label>
+                                                <br />
+                                                <h:inputText value="#{formsPageBean.tmpSection.maxOccurrences}" 
+                                                             id="txtSectionMaxOccurrence"
+                                                             maxlength="255"
+                                                             class="form-control" />
+                                            </div>
+                                        </div>
+
+                                        <div class="splitter"></div>
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <label>
+                                                    #{msg.FORMS_PAGE_ERROR_MSG} <i class="glyphicon glyphicon-required"></i>
+                                                </label>
+                                                <br />
+                                                <h:inputTextarea value="#{formsPageBean.tmpSection.errorMsg}" 
+                                                                 id="txtSectionErrorMsg"
+                                                                 rows="2"
+                                                                 class="form-control" />
+                                            </div>
+                                        </div>
+                                    </h:panelGroup>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">#{msg.GENERAL_LABEL_CLOSE}</button>
+                                <h:commandButton class="btn btn-primary" value="#{msg.GENERAL_LABEL_SAVE}">
+                                    <f:ajax event="click" execute=":mainForm:pnlSectionRecord" 
+                                            render=":mainForm:pnlSections"
+                                            onevent="onSaveSection"
+                                            onerror="handleSectionSaveError"
+                                            listener="#{formsPageBean.saveSection()}" />
+                                </h:commandButton>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: none;" class="modal fade" id="fieldDialog" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog" style="width:700px;">
+                        <div class="modal-content">
+
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">#{msg.GENERAL_LABEL_CLOSE}</span></button>
+                                <h4 class="modal-title" id="myModalLabel">#{msg.FORMS_PAGE_FIELD}</h4>
+                            </div>
+
+                            <div class="modal-body" id="fieldBody">
+                                <div id="pnlWrapper_field" class="HiddenItem">
+                                    <h:panelGroup id="pnlFieldRecord" layout="block">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>
+                                                    #{msg.FORMS_PAGE_NAME} <i class="glyphicon glyphicon-required"></i>
+                                                </label>
+                                                <br />
+                                                <h:inputText value="#{formsPageBean.tmpField.name}" 
+                                                             id="txtFieldName"
+                                                             maxlength="255"
+                                                             class="form-control" />
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>
+                                                    #{msg.FORMS_PAGE_DISPLAY_NAME} <i class="glyphicon glyphicon-required"></i>
+                                                </label>
+                                                <br />
+                                                <h:inputText value="#{formsPageBean.tmpField.displayName}" 
+                                                             id="txtFieldDisplayName"
+                                                             maxlength="255"
+                                                             class="form-control" />
+                                            </div>
+                                        </div>
+
+                                        <div class="splitter"></div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>
+                                                    #{msg.FORMS_PAGE_HINT} <i class="glyphicon glyphicon-required"></i>
+                                                </label>
+                                                <br />
+                                                <h:inputText value="#{formsPageBean.tmpField.hint}" 
+                                                             id="txtFieldHint"
+                                                             maxlength="255"
+                                                             class="form-control" />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label>
+                                                    #{msg.FORMS_PAGE_FIELD_TYPE} <i class="glyphicon glyphicon-required"></i>
+                                                </label>
+                                                <br />
+                                                <h:selectOneListbox
+                                                    id="cbxFieldType" 
+                                                    size="1"
+                                                    value="#{formsPageBean.tmpField.fieldType}"
+                                                    class="form-control">
+                                                    <f:selectItems value="#{formsPageBean.fieldTypes}" var="ft"
+                                                                   itemLabel="#{ft.displayValue}" 
+                                                                   itemValue="#{ft.code}" />
+                                                </h:selectOneListbox>
+                                            </div>
+                                        </div>
+                                    </h:panelGroup>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">#{msg.GENERAL_LABEL_CLOSE}</button>
+                                <h:commandButton class="btn btn-primary" value="#{msg.GENERAL_LABEL_SAVE}">
+                                    <f:ajax event="click" execute=":mainForm:pnlFieldRecord" 
+                                            render=":mainForm:pnlSections"
+                                            onevent="onSaveField"
+                                            onerror="handleFieldSaveError"
+                                            listener="#{formsPageBean.saveField()}" />
+                                </h:commandButton>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: none;" class="modal fade" id="constraintDialog" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog" style="width:700px;">
+                        <div class="modal-content">
+
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">#{msg.GENERAL_LABEL_CLOSE}</span></button>
+                                <h4 class="modal-title" id="myModalLabel">#{msg.FORMS_PAGE_CONSTRAINT}</h4>
+                            </div>
+
+                            <div class="modal-body" id="constraintBody">
+                                <div id="pnlWrapper_constraint" class="HiddenItem">
+                                    <h:panelGroup id="pnlConstraintRecord" layout="block">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label>
+                                                    #{msg.FORMS_PAGE_NAME} <i class="glyphicon glyphicon-required"></i>
+                                                </label>
+                                                <br />
+                                                <h:inputText value="#{formsPageBean.tmpConstraint.name}" 
+                                                             id="txtConstraintName"
+                                                             maxlength="255"
+                                                             class="form-control" />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label>
+                                                    #{msg.FORMS_PAGE_DISPLAY_NAME} <i class="glyphicon glyphicon-required"></i>
+                                                </label>
+                                                <br />
+                                                <h:inputText value="#{formsPageBean.tmpConstraint.displayName}" 
+                                                             id="txtConstraintDisplayName"
+                                                             maxlength="255"
+                                                             class="form-control" />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label>
+                                                    #{msg.FORMS_PAGE_CONSTRAINT_TYPE} <i class="glyphicon glyphicon-required"></i>
+                                                </label>
+                                                <br />
+                                                <h:selectOneListbox
+                                                    id="cbxConstraintType" 
+                                                    size="1"
+                                                    value="#{formsPageBean.tmpConstraint.fieldConstraintType}"
+                                                    class="form-control">
+                                                    <f:selectItems value="#{formsPageBean.constraintTypes}" var="ct"
+                                                                   itemLabel="#{ct.displayValue}" 
+                                                                   itemValue="#{ct.code}" />
+                                                </h:selectOneListbox>
+                                            </div>
+                                        </div>
+
+                                        <div class="splitter"></div>
+
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label>
+                                                    #{msg.FORMS_PAGE_FORMAT}
+                                                </label>
+                                                <br />
+                                                <h:inputText value="#{formsPageBean.tmpConstraint.format}" 
+                                                             id="txtConstraintFormat"
+                                                             maxlength="255"
+                                                             class="form-control" />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label>
+                                                    #{msg.FORMS_PAGE_MIN_VAL}
+                                                </label>
+                                                <br />
+                                                <h:inputText value="#{formsPageBean.tmpConstraint.minValue}" 
+                                                             id="txtConstraintMinValue"
+                                                             maxlength="10"
+                                                             class="form-control" />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label>
+                                                    #{msg.FORMS_PAGE_MAX_VAL}
+                                                </label>
+                                                <br />
+                                                <h:inputText value="#{formsPageBean.tmpConstraint.maxValue}" 
+                                                             id="txtConstraintMaxValue"
+                                                             maxlength="10"
+                                                             class="form-control" />
+                                            </div>
+                                        </div>
+
+                                        <div class="splitter"></div>
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <label>
+                                                    #{msg.FORMS_PAGE_ERROR_MSG} <i class="glyphicon glyphicon-required"></i>
+                                                </label>
+                                                <br />
+                                                <h:inputTextarea value="#{formsPageBean.tmpConstraint.errorMsg}" 
+                                                                 id="txtConstraintErrorMsg"
+                                                                 rows="2"
+                                                                 class="form-control" />
+                                            </div>
+                                        </div>
+                                    </h:panelGroup>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">#{msg.GENERAL_LABEL_CLOSE}</button>
+                                <h:commandButton class="btn btn-primary" value="#{msg.GENERAL_LABEL_SAVE}">
+                                    <f:ajax event="click" execute=":mainForm:pnlConstraintRecord" 
+                                            render=":mainForm:pnlSections"
+                                            onevent="onSaveConstraint"
+                                            onerror="handleConstraintSaveError"
+                                            listener="#{formsPageBean.saveConstraint()}" />
+                                </h:commandButton>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: none;" class="modal fade" id="optionDialog" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog" style="width:500px;">
+                        <div class="modal-content">
+
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">#{msg.GENERAL_LABEL_CLOSE}</span></button>
+                                <h4 class="modal-title" id="myModalLabel">#{msg.FORMS_PAGE_CONSTRAINT_OPTION}</h4>
+                            </div>
+
+                            <div class="modal-body" id="optionBody">
+                                <div id="pnlWrapper_option" class="HiddenItem">
+                                    <h:panelGroup id="pnlOptionRecord" layout="block">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <label>
+                                                    #{msg.FORMS_PAGE_NAME} <i class="glyphicon glyphicon-required"></i>
+                                                </label>
+                                                <br />
+                                                <h:inputText value="#{formsPageBean.tmpOption.name}" 
+                                                             id="txtOptionName"
+                                                             maxlength="255"
+                                                             class="form-control" />
+                                            </div>
+                                        </div>
+
+                                        <div class="splitter"></div>
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <label>
+                                                    #{msg.FORMS_PAGE_DISPLAY_NAME} <i class="glyphicon glyphicon-required"></i>
+                                                </label>
+                                                <br />
+                                                <h:inputText value="#{formsPageBean.tmpOption.displayName}" 
+                                                             id="txtOptionDisplayName"
+                                                             maxlength="255"
+                                                             class="form-control" />
+                                            </div>
+                                        </div>
+                                    </h:panelGroup>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">#{msg.GENERAL_LABEL_CLOSE}</button>
+                                <h:commandButton class="btn btn-primary" value="#{msg.GENERAL_LABEL_SAVE}">
+                                    <f:ajax event="click" execute=":mainForm:pnlOptionRecord" 
+                                            render=":mainForm:pnlSections"
+                                            onevent="onSaveOption"
+                                            onerror="handleOptionSaveError"
+                                            listener="#{formsPageBean.saveOption()}" />
+                                </h:commandButton>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:uc="http://xmlns.jcp.org/jsf/composite/uc"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:body>
+        <ui:composition template="../templates/MapTemplate.xhtml">
+            <ui:define name="title">
+                #{msg.MAIN_MENU_COMMUNITY_AREA}
+            </ui:define>
+            <ui:define name="content">
+                
+                <f:metadata>
+                    <f:viewAction action="#{communityAreaPageBean.init()}" />
+                </f:metadata>
+                
+                <script type="text/javascript" src="#{request.contextPath}/js/communityArea.js"></script>
+                <div class="PageName">
+                    <i class="icon-map-marker"></i> #{msg.MAIN_MENU_COMMUNITY_AREA}
+                </div>
+                <div class="content">
+                    <div class="btn-group" style="padding-bottom: 10px;">
+                        <h:commandButton class="btn btn-default" value="#{msg.GENERAL_LABEL_SAVE}"
+                                         action="#{communityAreaPageBean.save()}"
+                                         onclick="return saveCommunityArea() ? blockUI() : false" />
+                    </div>
+                    <uc:Map></uc:Map>
+                </div>
+                
+                <h:inputHidden id="hCommunityArea" value="#{communityAreaPageBean.communityArea.value}" />
+                
+                <script type="text/javascript">
+                    var mapControl;
+                    mapControlId = "";
+
+                    Ext.onReady(function() {
+                        var wkt = new OpenLayers.Format.WKT();
+                        var communityArea = wkt.read($("#mainForm\\:hCommunityArea").val());
+                        communityArea.geometry.transform(sourceCrs, destCrs);
+
+                        var maxExtentBounds = communityArea.geometry.getBounds();
+                        var initialZoomBounds = maxExtentBounds;
+                        var layers = [];
+                        var snappingLayers = [];
+
+                        <ui:repeat var = "l" value="#{communityAreaPageBean.layersArray}" varStatus="r">
+                            <ui:fragment rendered = "#{l.typeCode eq 'wms' and l.useForOpenTenure}">
+                                // Add WMS layers
+                                layers.push(new OpenLayers.Layer.WMS("#{l.title}", "#{l.url}",
+                                {layers: '#{l.wmsLayers}', transparent: 'true'}));
+                            </ui:fragment>
+                        </ui:repeat>
+
+                        // Add community area
+                        var layerCommunityArea = new OT.Map.Layer.VectorLayer(
+                                OT.Map.LAYER_IDS.COMMUNITY_AREA,
+                                "#{msg.MAP_CONTROL_COMMUNITY_LAYER_NAME}",
+                                {
+                                    isEditable: true,
+                                    styleMap: OT.Map.Styles.styleMapCommunityLayer,
+                                    virtualNodeStyle: OT.Map.Styles.styleVirtualNode
+                                });
+                        layerCommunityArea.addFeatures([communityArea]);
+
+                        layers.push(layerCommunityArea);
+                        snappingLayers.push(layerCommunityArea);
+
+                        mapControl = new OT.Map({
+                            isMapEditable: true,
+                            mapHeight: 500,
+                            maxExtentBounds: maxExtentBounds,
+                            initialZoomBounds: initialZoomBounds,
+                            applicationUrl: "#{communityAreaPageBean.applicationUrl}",
+                            languageCode: "#{languageBean.locale}",
+                            layers: layers,
+                            snappingLayers: snappingLayers
+                        });
+
+                        renderMap();
+                    });
+
+                    function renderMap() {
+                        mapControl.renderMap();
+                    }
+                </script>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

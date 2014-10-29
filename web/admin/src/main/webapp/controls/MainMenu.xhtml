@@ -1,0 +1,254 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <body>
+        <ui:composition>
+            <link type="text/css" rel="stylesheet" href="#{request.contextPath}/css/jquery.smartmenus.bootstrap.css"></link>
+            <script type="text/javascript" src="#{request.contextPath}/js/jquery.smartmenus.min.js"></script>
+            <script type="text/javascript" src="#{request.contextPath}/js/jquery.smartmenus.bootstrap.min.js"></script>
+
+            <div class="navbar navbar-default" role="navigation">
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <c:if test="#{activeUserBean.hasAdminRights}">
+                            <li><a href="#"><i class="icon-eye-open"></i> #{msg.MAIN_MENU_SECURITY}</a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#{request.contextPath}/refdata/RefData.xhtml?type=role">
+                                            <i class="icon-check"></i> #{msg.MAIN_MENU_ROLES}
+                                        </a>
+                                    </li>
+                                    <li><a href="#{request.contextPath}/security/Groups.xhtml">
+                                            <i class="icon-group"></i> #{msg.MAIN_MENU_GROUPS}
+                                        </a>
+                                    </li>
+                                    <li><a href="#{request.contextPath}/security/Users.xhtml">
+                                            <i class="icon-user"></i> #{msg.MAIN_MENU_USERS}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li><a href="#"><i class="icon-th-list"></i> #{msg.MAIN_MENU_REFDATA}</a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">#{msg.MAIN_MENU_APPLICATION}</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#{request.contextPath}/refdata/RequestType.xhtml">
+                                                    #{msg.REFDATA_PAGE_REQUEST_TYPE}
+                                                </a>
+                                            </li>
+                                            <li><a href="#{request.contextPath}/refdata/AppActionType.xhtml">
+                                                    #{msg.REFDATA_PAGE_APP_ACTION_TYPES}
+                                                </a>
+                                            </li>
+                                            <li><a href="#{request.contextPath}/refdata/RefData.xhtml?type=app_status_type">
+                                                    #{msg.REFDATA_PAGE_APP_STATUS_TYPES}
+                                                </a>
+                                            </li>
+                                            <li><a href="#{request.contextPath}/refdata/RefData.xhtml?type=REQUEST_CATEGORY_TYPE">
+                                                    #{msg.REFDATA_PAGE_REQUEST_CATEGORY_TYPES}
+                                                </a>
+                                            </li>
+                                            <li><a href="#{request.contextPath}/refdata/RefData.xhtml?type=SERVICE_ACTION_TYPE">
+                                                    #{msg.REFDATA_PAGE_SERVICE_ACTION_TYPES}
+                                                </a>
+                                            </li>
+                                            <li><a href="#{request.contextPath}/refdata/RefData.xhtml?type=SERVICE_STATUS_TYPE">
+                                                    #{msg.REFDATA_PAGE_SERVICE_STATUS_TYPES}
+                                                </a>
+                                            </li>
+                                            <li><a href="#{request.contextPath}/refdata/RefData.xhtml?type=TYPE_ACTION">
+                                                    #{msg.REFDATA_PAGE_TYPE_ACTIONS}
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="#">#{msg.MAIN_MENU_ADMINISTRATIVE}</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#{request.contextPath}/refdata/RefData.xhtml?type=ba_unit_type">
+                                                    #{msg.REFDATA_PAGE_BA_UNIT_TYPES}
+                                                </a>
+                                            </li>
+                                            <li><a href="#{request.contextPath}/refdata/RefData.xhtml?type=ba_unit_relation_type">
+                                                    #{msg.REFDATA_PAGE_BA_UNIT_RELATION_TYPES}
+                                                </a>
+                                            </li>
+                                            <li><a href="#{request.contextPath}/refdata/RefData.xhtml?type=condition_type">
+                                                    #{msg.REFDATA_PAGE_CONDITION_TYPES}
+                                                </a>
+                                            </li>
+                                            <li><a href="#{request.contextPath}/refdata/RefData.xhtml?type=MORTGAGE_TYPE">
+                                                    #{msg.REFDATA_PAGE_MORTGAGE_TYPES}
+                                                </a>
+                                            </li>
+                                            <li><a href="#{request.contextPath}/refdata/RefData.xhtml?type=RRR_GROUP_TYPE">
+                                                    #{msg.REFDATA_PAGE_RRR_GROUP_TYPES}
+                                                </a>
+                                            </li>
+                                            <li><a href="#{request.contextPath}/refdata/RrrType.xhtml">
+                                                    #{msg.REFDATA_PAGE_RRR_TYPES}
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="#">#{msg.MAIN_MENU_SOURCE}</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#{request.contextPath}/refdata/SourceType.xhtml">
+                                                    #{msg.REFDATA_PAGE_SOURCE_TYPES}
+                                                </a>
+                                            </li>
+                                            <li><a href="#{request.contextPath}/refdata/RefData.xhtml?type=availability_status">
+                                                    #{msg.REFDATA_PAGE_AVAILABILITY_STATUSS}
+                                                </a>
+                                            </li>
+                                            <li><a href="#{request.contextPath}/refdata/RefData.xhtml?type=PRESENTATION_FORM_TYPE">
+                                                    #{msg.REFDATA_PAGE_PRESENTATION_FORM_TYPES}
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="#">#{msg.MAIN_MENU_CADASTRE}</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#{request.contextPath}/refdata/RefData.xhtml?type=cadastre_object_type">
+                                                    #{msg.REFDATA_PAGE_CADASTRE_OBJECT_TYPES}
+                                                </a>
+                                            </li>
+                                            <li><a href="#{request.contextPath}/refdata/RefData.xhtml?type=LAND_USE_TYPE">
+                                                    #{msg.REFDATA_PAGE_LAND_USE_TYPES}
+                                                </a>
+                                            </li>
+                                            <li><a href="#{request.contextPath}/refdata/RefData.xhtml?type=HIERARCHY_LEVEL">
+                                                    #{msg.REFDATA_PAGE_HIERARCHY_LEVELS}
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="#">#{msg.MAIN_MENU_PARTY}</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#{request.contextPath}/refdata/RefData.xhtml?type=communication_type">
+                                                    #{msg.REFDATA_PAGE_COMMUNICATION_TYPES}
+                                                </a>
+                                            </li>
+                                            <li><a href="#{request.contextPath}/refdata/RefData.xhtml?type=gender_type">
+                                                    #{msg.REFDATA_PAGE_GENDER_TYPES}
+                                                </a>
+                                            </li>
+                                            <li><a href="#{request.contextPath}/refdata/RefData.xhtml?type=ID_TYPE">
+                                                    #{msg.REFDATA_PAGE_ID_TYPES}
+                                                </a>
+                                            </li>
+                                            <li><a href="#{request.contextPath}/refdata/RefData.xhtml?type=PARTY_ROLE_TYPE">
+                                                    #{msg.REFDATA_PAGE_PARTY_ROLE_TYPES}
+                                                </a>
+                                            </li>
+                                            <li><a href="#{request.contextPath}/refdata/RefData.xhtml?type=PARTY_TYPE">
+                                                    #{msg.REFDATA_PAGE_PARTY_TYPES}
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="#">#{msg.MAIN_MENU_TRANSACTION}</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#{request.contextPath}/refdata/RefData.xhtml?type=REG_STATUS_TYPE">
+                                                    #{msg.REFDATA_PAGE_REG_STATUS_TYPES}
+                                                </a>
+                                            </li>
+                                            <li><a href="#{request.contextPath}/refdata/RefData.xhtml?type=TRANSACTION_STATUS_TYPE">
+                                                    #{msg.REFDATA_PAGE_TRANSACTION_STATUS_TYPES}
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="#">#{msg.MAIN_MENU_SYSTEM}</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#{request.contextPath}/refdata/RefData.xhtml?type=PANEL_LAUNCHER_GROUP">
+                                                    #{msg.REFDATA_PAGE_PANEL_LAUNCHER_GROUPS}
+                                                </a>
+                                            </li>
+                                            <li><a href="#{request.contextPath}/refdata/PanelLauncher.xhtml">
+                                                    #{msg.REFDATA_PAGE_CONFIG_PANEL_LAUNCHERS}
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="#">#{msg.MAIN_MENU_BRS}</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#{request.contextPath}/refdata/RefData.xhtml?type=br_technical_type">
+                                                    #{msg.REFDATA_PAGE_BR_TECHNICAL_TYPES}
+                                                </a>
+                                            </li>
+                                            <li><a href="#{request.contextPath}/refdata/RefData.xhtml?type=br_severity_type">
+                                                    #{msg.REFDATA_PAGE_BR_SEVERITY_TYPES}
+                                                </a>
+                                            </li>
+                                            <li><a href="#{request.contextPath}/refdata/RefData.xhtml?type=br_validation_target_type">
+                                                    #{msg.REFDATA_PAGE_BR_VALIDATION_TARGET_TYPES}
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="#">#{msg.MAIN_MENU_OPEN_TENURE}</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#{request.contextPath}/refdata/RefData.xhtml?type=claim_status">
+                                                    #{msg.REFDATA_PAGE_CLAIM_STATUSS}
+                                                </a>
+                                            </li>
+                                            <li><a href="#{request.contextPath}/refdata/RefData.xhtml?type=field_constraint_type">
+                                                    #{msg.REFDATA_PAGE_FIELD_CONSTRAINT_TYPES}
+                                                </a>
+                                            </li>
+                                            <li><a href="#{request.contextPath}/refdata/RefData.xhtml?type=field_type">
+                                                    #{msg.REFDATA_PAGE_FIELD_TYPES}
+                                                </a>
+                                            </li>
+                                            <li><a href="#{request.contextPath}/refdata/RefData.xhtml?type=field_value_type">
+                                                    #{msg.REFDATA_PAGE_FIELD_VALUE_TYPES}
+                                                </a>
+                                            </li>
+                                            <li><a href="#{request.contextPath}/refdata/RefData.xhtml?type=REJECTION_REASON">
+                                                    #{msg.REFDATA_PAGE_REJECTION_REASONS}
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="icon-cogs"></i> #{msg.MAIN_MENU_SETTINGS}
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#{request.contextPath}/settings/Settings.xhtml">
+                                            <i class="icon-wrench"></i> #{msg.MAIN_MENU_SYSTEM_SETTINGS}
+                                        </a>
+                                    </li>
+                                    <li><a href="#{request.contextPath}/settings/CommunityArea.xhtml">
+                                            <i class="icon-map-marker"></i> #{msg.MAIN_MENU_COMMUNITY_AREA}
+                                        </a>
+                                    </li>
+                                    <li><a href="#{request.contextPath}/forms/Forms.xhtml">
+                                            <i class="icon-tasks"></i> #{msg.FORMS_PAGE_TITLE}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#{request.contextPath}/br/Brs.xhtml">
+                                    <i class="icon-book"></i> #{msg.MAIN_MENU_BRS}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#{request.contextPath}/language/Language.xhtml">
+                                    <i class="icon-globe"></i> #{msg.MAIN_MENU_LANGUAGES}
+                                </a>
+                            </li>
+                        </c:if>
+                        <c:if test="#{not activeUserBean.hasAdminRights}">
+                            <li><a href="#"> </a></li>
+                        </c:if>
+                    </ul>
+                </div>
+            </div>
+        </ui:composition>
+    </body>
+</html>

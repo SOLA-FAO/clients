@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <body>
+        <ui:composition>
+            <ui:param name="errorMessages" value="#{facesContext.getMessageList()}" />
+            <h:panelGroup rendered="#{not empty errorMessages}">
+                <div class="alert alert-danger" id="PageError">
+                    <h:outputText value="#{err.GENERAL_ERROR_LIST_HEADER}" escape="false" style="color:#000;" />
+                    <div class="LineSpace"></div>
+                    <h:messages id="errorMessages"/>
+                </div>
+            </h:panelGroup>
+        </ui:composition>
+    </body>
+</html>

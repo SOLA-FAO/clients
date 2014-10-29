@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:body>
+        <ui:composition template="templates/BasicTemplate.xhtml">
+            <ui:define name="title">
+                #{msg.LOGINPAGE_TITLE}
+            </ui:define>
+            <ui:define name="content">
+                <div class="PageName"><i class="glyphicon glyphicon-user"></i> #{msg.LOGINPAGE_TITLE}</div>
+                <h:panelGroup layout="block" rendered="#{not loginBean.activeUserBean.authenticated}">
+                    <div id="LoginBox">
+                        <div class="form-group">
+                            <h:outputLabel for="txtUserName">
+                                #{msg.LOGINPAGE_USERNAME}
+                            </h:outputLabel>
+                            <h:inputText id="txtUserName" 
+                                         value="#{loginBean.activeUserBean.userName}" 
+                                         class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <h:outputLabel for="txtPassword">
+                                #{msg.LOGINPAGE_PASSWORD}
+                            </h:outputLabel>
+                            <h:inputSecret id="txtPassword" 
+                                           value="#{loginBean.activeUserBean.password}" 
+                                           class="form-control" />
+                        </div>
+                        <div style="text-align: right;float: right;">
+                            <h:commandButton value="#{msg.LOGINPAGE_LOGIN}" action="#{loginBean.login}" class="btn btn-default" />
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </h:panelGroup>
+                <h:panelGroup layout="block" rendered="#{loginBean.activeUserBean.authenticated}">
+                    <div id="LoginBox">
+                        #{msg.LOGINPAGE_USER_ALREADY_LOGGED}
+                        <div class="LineSpace"></div>
+                        <h:commandButton value="#{msg.LOGINPAGE_LOGOUT}" action="#{loginBean.logout()}" class="btn btn-default" />
+                    </div>
+                </h:panelGroup>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

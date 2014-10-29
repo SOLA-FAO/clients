@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <body>
+        <ui:composition>
+            <h:selectOneMenu value="#{languageBean.locale}" 
+                             rendered="#{fn:length(languageBean.languages) gt 1}"
+                             valueChangeListener="#{languageBean.changeLocale}"
+                             onchange="submit()">
+                <f:selectItems value="#{languageBean.languages}" 
+                               var="l" itemLabel="#{l.displayValue}" itemValue="#{l.code}" />
+            </h:selectOneMenu>
+        </ui:composition>
+    </body>
+</html>
+

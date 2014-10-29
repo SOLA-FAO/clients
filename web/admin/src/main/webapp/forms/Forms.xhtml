@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:body>
+        <ui:composition template="../templates/BasicTemplate.xhtml">
+            <ui:define name="title">
+                #{msg.FORMS_PAGE_TITLE}
+            </ui:define>
+            <ui:define name="content">
+                <div class="PageName">
+                    <i class="glyphicon glyphicon-tasks"></i> #{msg.FORMS_PAGE_TITLE}
+                </div>
+                <div class="content" style="width: 600px;">
+                    <h:outputLink value="#{request.contextPath}/forms/Form.xhtml" 
+                                  onclick="blockUI()">
+                        <i class="glyphicon glyphicon-plus"></i> #{msg.FORMS_PAGE_NEW_FORM}
+                    </h:outputLink>
+                    <h:panelGroup id="pnlForms" layout="block">
+                        <h:dataTable value="#{formsListBean.forms}" var="f"
+                                     id="tableForms"
+                                     class="table table-striped"
+                                     headerClass="table-header">
+                            <h:column>
+                                <f:facet name="header">#{msg.FORMS_PAGE_NAME}</f:facet>
+                                <h:commandLink style="padding-right: 5px;"
+                                               rendered="#{not formsListBean.canBeDeleted(f.name)}"
+                                               title="#{msg.GENERAL_LABEL_DELETE}"
+                                               onclick="return confirm('#{msg.FORMS_PAGE_FORM_DELETE_CONFIRM}')">
+                                    <f:ajax listener="#{formsListBean.delete(f)}" 
+                                            event="click" onevent="handleAjax" onerror="handleAjaxError"
+                                            render=":mainForm:pnlForms" />
+                                    <i class="glyphicon glyphicon-remove"></i>
+                                </h:commandLink>
+                                <h:outputLink value="#{request.contextPath}/forms/Form.xhtml?id=#{f.name}" 
+                                              onclick="blockUI()" title="#{msg.GENERAL_LABEL_EDIT}">
+                                    <i class="glyphicon glyphicon-pencil" style="padding-right: 7px;"></i>
+                                </h:outputLink>
+                                #{f.name}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{msg.FORMS_PAGE_DISPLAY_NAME}</f:facet>
+                                    #{languageBean.getLocalizedString(f.displayName)}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{msg.FORMS_PAGE_DEFAULT}</f:facet>
+                                <ui:fragment rendered="#{f.isDefault}">
+                                    <i class="glyphicon glyphicon-ok"></i>
+                                </ui:fragment>
+                            </h:column>
+                        </h:dataTable>
+                    </h:panelGroup>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

@@ -13,6 +13,7 @@
     <name>Clients POM</name>
     <modules>
         <module>swing</module>
+        <module>web</module>
         <module>../common/help</module>
         <module>../common/messaging</module>
         <module>beans</module>

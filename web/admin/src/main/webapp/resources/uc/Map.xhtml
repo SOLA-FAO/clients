@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <cc:interface>
+
+    </cc:interface>
+    <cc:implementation>
+        <script type="text/javascript">
+            // Init localized messages
+            MSG.MAP_CONTROL_LAYERS = "#{msg.MAP_CONTROL_LAYERS}";
+            MSG.MAP_CONTROL_ZOOM_TO_EXTENT = "#{msg.MAP_CONTROL_ZOOM_TO_EXTENT}";
+            MSG.MAP_CONTROL_ZOOM_IN = "#{msg.MAP_CONTROL_ZOOM_IN}";
+            MSG.MAP_CONTROL_ZOOM_OUT = "#{msg.MAP_CONTROL_ZOOM_OUT}";
+            MSG.MAP_CONTROL_PAN = "#{msg.MAP_CONTROL_PAN}";
+            MSG.MAP_CONTROL_LOADING = "#{msg.MAP_CONTROL_LOADING}";
+            MSG.MAP_CONTROL_EDIT_MAP = "#{msg.MAP_CONTROL_EDIT_MAP}";
+            MSG.MAP_CONTROL_DRAW_POLYGON = "#{msg.MAP_CONTROL_DRAW_POLYGON}";
+            MSG.MAP_CONTROL_DRAW_LINE = "#{msg.MAP_CONTROL_DRAW_LINE}";
+            MSG.MAP_CONTROL_DRAW_POINT = "#{msg.MAP_CONTROL_DRAW_POINT}";
+            MSG.MAP_CONTROL_EDIT_SHAPE = "#{msg.MAP_CONTROL_EDIT_SHAPE}";
+            MSG.MAP_CONTROL_DELETE_SHAPE = "#{msg.MAP_CONTROL_DELETE_SHAPE}";
+            MSG.MAP_CONTROL_EDIT_PROPERTIES = "#{msg.MAP_CONTROL_EDIT_PROPERTIES}";
+            MSG.MAP_CONTROL_SNAP = "#{msg.MAP_CONTROL_SNAP}";
+            MSG.MAP_CONTROL_CONFIRM_FEATURE_DELETE = "#{msg.MAP_CONTROL_CONFIRM_FEATURE_DELETE}";
+            MSG.MAP_CONTROL_MAXIMIZE = "#{msg.MAP_CONTROL_MAXIMIZE}";
+            MSG.MAP_CONTROL_MAXIMIZE_TITLE = "#{msg.MAP_CONTROL_MAXIMIZE_TITLE}";
+
+            sourceCrs = "EPSG:4326";
+            destCrs = "EPSG:3857";
+
+        </script>
+
+        <div id="mapCtrlWrapper">
+            <div id="mapCtrl"></div>
+        </div>
+        
+    </cc:implementation>
+</html>

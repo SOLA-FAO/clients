@@ -715,11 +715,13 @@ public class BrPanelForm extends ContentPanel {
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();
         jScrollPane7.setViewportView(jTableWithDefaultStyles1);
-        jTableWithDefaultStyles1.getColumnModel().getColumn(0).setPreferredWidth(120);
-        jTableWithDefaultStyles1.getColumnModel().getColumn(0).setMaxWidth(120);
-        jTableWithDefaultStyles1.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("BrPanelForm.jTableWithDefaultStyles1.columnModel.title0_2")); // NOI18N
-        jTableWithDefaultStyles1.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("BrPanelForm.jTableWithDefaultStyles1.columnModel.title1_2")); // NOI18N
-        jTableWithDefaultStyles1.getColumnModel().getColumn(1).setCellRenderer(new TableCellTextAreaRenderer());
+        if (jTableWithDefaultStyles1.getColumnModel().getColumnCount() > 0) {
+            jTableWithDefaultStyles1.getColumnModel().getColumn(0).setPreferredWidth(120);
+            jTableWithDefaultStyles1.getColumnModel().getColumn(0).setMaxWidth(120);
+            jTableWithDefaultStyles1.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("BrPanelForm.jTableWithDefaultStyles1.columnModel.title0_2")); // NOI18N
+            jTableWithDefaultStyles1.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("BrPanelForm.jTableWithDefaultStyles1.columnModel.title1_2")); // NOI18N
+            jTableWithDefaultStyles1.getColumnModel().getColumn(1).setCellRenderer(new TableCellTextAreaRenderer());
+        }
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -771,8 +773,10 @@ public class BrPanelForm extends ContentPanel {
         bindingGroup.addBinding(binding);
 
         jScrollPane4.setViewportView(tableDefinitions);
-        tableDefinitions.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("BrPanelForm.tableDefinitions.columnModel.title0_1")); // NOI18N
-        tableDefinitions.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("BrPanelForm.tableDefinitions.columnModel.title1_1")); // NOI18N
+        if (tableDefinitions.getColumnModel().getColumnCount() > 0) {
+            tableDefinitions.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("BrPanelForm.tableDefinitions.columnModel.title0_1")); // NOI18N
+            tableDefinitions.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("BrPanelForm.tableDefinitions.columnModel.title1_1")); // NOI18N
+        }
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
@@ -907,8 +911,10 @@ public class BrPanelForm extends ContentPanel {
         bindingGroup.addBinding(binding);
 
         jScrollPane6.setViewportView(tableValidations);
-        tableValidations.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("BrPanelForm.tableValidations.columnModel.title0_1")); // NOI18N
-        tableValidations.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("BrPanelForm.tableValidations.columnModel.title1")); // NOI18N
+        if (tableValidations.getColumnModel().getColumnCount() > 0) {
+            tableValidations.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("BrPanelForm.tableValidations.columnModel.title0_1")); // NOI18N
+            tableValidations.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("BrPanelForm.tableValidations.columnModel.title1")); // NOI18N
+        }
 
         javax.swing.GroupLayout jPanel21Layout = new javax.swing.GroupLayout(jPanel21);
         jPanel21.setLayout(jPanel21Layout);

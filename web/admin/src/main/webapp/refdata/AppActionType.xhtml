@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:body>
+        <ui:composition template="../templates/BasicTemplate.xhtml">
+            <ui:define name="title">
+                #{msg.REFDATA_PAGE_APP_ACTION_TYPES}
+            </ui:define>
+            <ui:define name="content">
+                <div class="PageName">
+                    <i class="glyphicon glyphicon-th-list"></i> #{msg.REFDATA_PAGE_APP_ACTION_TYPES}
+                </div>
+                <div class="content">
+                    <h:panelGroup id="pnlCodes">
+                        <h:commandLink class="BlueLink">
+                            <f:ajax event="click" 
+                                    render= ":mainForm:pnlCode"
+                                    onevent="onOpenEditCode"
+                                    onerror="onOpenEditCodeError"
+                                    listener="#{appActionTypePageBean.loadEntity(null)}" />
+                            <i class="glyphicon glyphicon-plus"></i> #{msg.GENERAL_LABEL_ADD}
+                        </h:commandLink>
+                        <h:dataTable value="#{appActionTypePageBean.appActionTypeList}" var="r"
+                                     class="table table-striped"
+                                     headerClass="table-header">
+                            <h:column>
+                                <f:facet name="header">#{msg.REFDATA_PAGE_CODE}</f:facet>
+                                <span style="white-space: nowrap;">
+                                    <h:commandLink style="padding-right: 5px;"
+                                                   title="#{msg.GENERAL_LABEL_DELETE}"
+                                                   onclick="return confirm('#{msg.GENERAL_CONFIRM_DELETE}')">
+                                        <f:ajax listener="#{appActionTypePageBean.deleteEntity(r)}" 
+                                                event="click" onevent="onDeleteCode" onerror="handleAjaxError"
+                                                render=":mainForm:pnlCodes" />
+                                        <i class="glyphicon glyphicon-remove"></i>
+                                    </h:commandLink>
+                                    <h:commandLink class="BlueLink" title="#{msg.GENERAL_LABEL_EDIT}">
+                                        <f:ajax event="click" 
+                                                render= ":mainForm:pnlCode"
+                                                onevent="onOpenEditCode"
+                                                onerror="onOpenEditCodeError"
+                                                listener="#{appActionTypePageBean.loadEntity(r.code)}" />
+                                        <i class="glyphicon glyphicon-pencil" style="padding-right: 7px;"></i>
+                                    </h:commandLink>
+                                    #{r.code}
+                                </span>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{msg.REFDATA_PAGE_DISPLAY_VALUE}</f:facet>
+                                    #{r.displayValue}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{msg.REFDATA_PAGE_DESCRIPTION}</f:facet>
+                                    #{r.description}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{msg.REFDATA_PAGE_APP_ACTION_TYPE_STATUS_TO_SET}</f:facet>
+                                    #{appActionTypePageBean.getAppStatus(r.statusToSet)}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{msg.REFDATA_PAGE_STATUS}</f:facet>
+                                <ui:fragment rendered="#{r.status eq 'c'}">
+                                    #{msg.REFDATA_PAGE_STATUS_ACTIVE}
+                                </ui:fragment>
+                                <ui:fragment rendered="#{r.status ne 'c'}">
+                                    #{msg.REFDATA_PAGE_STATUS_NOT_ACTIVE}
+                                </ui:fragment>
+                            </h:column>
+                        </h:dataTable>
+                    </h:panelGroup>
+                </div>
+
+                <div style="display: none;" class="modal fade" id="codeDialog" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog" style="width:800px;">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">#{msg.GENERAL_LABEL_CLOSE}</span></button>
+                                <h4 class="modal-title">#{msg.REFDATA_PAGE_APP_ACTION_TYPE}</h4>
+                            </div>
+                            <div id="codeBody" class="modal-body" style="padding: 0px 5px 0px 5px;">
+                                <div id="pnlWrapper" class="HiddenItem">
+                                    <h:panelGroup id="pnlCode" layout="block" style="font-size: 12px;">
+                                        <div class="content">
+                                            <ul class="nav nav-tabs">
+                                                <li class="active"><a href="#general" data-toggle="tab">#{msg.GENERAL_LABEL_GENERAL}</a></li>
+                                                <li><a href="#description" data-toggle="tab">#{msg.REFDATA_PAGE_DESCRIPTION}</a></li>
+                                            </ul>
+
+                                            <!-- Tab panes -->
+                                            <div class="tab-content">
+                                                <div class="tab-pane active" id="general" style="padding-top: 10px;">
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <label>
+                                                                #{msg.REFDATA_PAGE_CODE} <i class="glyphicon glyphicon-required"></i>
+                                                            </label>
+                                                            <h:inputText id="txtCode" 
+                                                                         value="#{appActionTypePageBean.appActionType.code}"  
+                                                                         class="form-control"
+                                                                         disabled="#{not appActionTypePageBean.appActionType.isNew()}"
+                                                                         maxlength="20"
+                                                                         autocomplete="off" />
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label>
+                                                                #{msg.REFDATA_PAGE_APP_ACTION_TYPE_STATUS_TO_SET}
+                                                            </label>
+                                                            <h:selectOneListbox id="lstStatusToSet" size="1"
+                                                                                class="form-control"
+                                                                                value="#{appActionTypePageBean.appActionType.statusToSet}">
+                                                                <f:selectItems value="#{appActionTypePageBean.appStatuses}" var="st" itemValue="#{st.code}" itemLabel="#{st.displayValue}" />
+                                                            </h:selectOneListbox>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label>
+                                                                #{msg.REFDATA_PAGE_STATUS} <i class="glyphicon glyphicon-required"></i>
+                                                            </label>
+                                                            <h:selectOneListbox id="lstStatus" size="1"
+                                                                                class="form-control"
+                                                                                value="#{appActionTypePageBean.appActionType.status}">
+                                                                <f:selectItem itemValue="" itemLabel=" " />
+                                                                <f:selectItem itemValue="c" itemLabel="#{msg.REFDATA_PAGE_STATUS_ACTIVE}" />
+                                                                <f:selectItem itemValue="x" itemLabel="#{msg.REFDATA_PAGE_STATUS_NOT_ACTIVE}" />
+                                                            </h:selectOneListbox>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="splitter"></div>
+
+                                                    <ui:include src="/controls/LocalizedTextBoxControl.xhtml">
+                                                        <ui:param name="required" value="true" rendererType="java.lang.Boolean" />
+                                                        <ui:param name="label" value="#{msg.REFDATA_PAGE_DISPLAY_VALUE}" rendererType="java.lang.String" />
+                                                        <ui:param name="localizedValues" value="#{appActionTypePageBean.localizedDisplayValues.localizedValuesArray}" rendererType="org.sola.clients.web.admin.beans.localization.LocalizedValueBean[]" />
+                                                        <ui:param name="columnsNumber" value="2" rendererType="java.lang.Integer" />
+                                                    </ui:include>
+                                                </div>
+                                                <div class="tab-pane" id="description" style="padding-top: 10px;">
+                                                    <ui:include src="/controls/LocalizedTextBoxControl.xhtml">
+                                                        <ui:param name="required" value="false" rendererType="java.lang.Boolean" />
+                                                        <ui:param name="label" value="#{msg.REFDATA_PAGE_DESCRIPTION}" rendererType="java.lang.String" />
+                                                        <ui:param name="localizedValues" value="#{appActionTypePageBean.localizedDescriptionValues.localizedValuesArray}" rendererType="org.sola.clients.web.admin.beans.localization.LocalizedValueBean[]" />
+                                                        <ui:param name="columnsNumber" value="1" rendererType="java.lang.Integer" />
+                                                    </ui:include>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </h:panelGroup>
+                                </div>
+                            </div>
+                            <div class="modal-footer" style="margin-top: 0px;padding: 15px 20px 15px 20px;">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">#{msg.GENERAL_LABEL_CLOSE}</button>
+                                <h:commandButton class="btn btn-primary" value="#{msg.GENERAL_LABEL_SAVE}">
+                                    <f:ajax event="click" execute=":mainForm:pnlCode" 
+                                            render=":mainForm:pnlCodes"
+                                            onevent="onSaveCode"
+                                            onerror="handleAjaxCodeError"
+                                            listener="#{appActionTypePageBean.saveEntity()}" />
+                                </h:commandButton>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script type="text/javascript" src="#{request.contextPath}/js/entityPopUp.js"></script>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

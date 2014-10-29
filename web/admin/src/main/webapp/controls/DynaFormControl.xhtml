@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <body>
+        <ui:composition>
+            <ui:fragment rendered="#{not empty fieldTemplate}">
+                <ui:fragment rendered="#{showLabel}">
+                    <label>
+                        #{fieldTemplate.displayName} 
+                        <ui:fragment rendered="#{allowEdit and fieldTemplate.isRequired}">
+                            <i class="glyphicon glyphicon-required"></i>
+                        </ui:fragment>
+                    </label>
+                    <br />
+                </ui:fragment>
+
+                <ui:fragment rendered="#{allowEdit}">
+                    <ui:fragment rendered="#{not empty fieldPayload}">
+                        <ui:fragment rendered="#{not empty fieldTemplate.fieldOptions}">
+                            <h:selectOneMenu value="#{fieldPayload.stringPayload}" title="#{fieldTemplate.hint}" class="form-control">
+                                <f:selectItems value="#{fieldTemplate.fieldOptions}" var="o"
+                                               itemLabel="#{o.displayName}" itemValue="#{o.name}" />
+                            </h:selectOneMenu>
+                        </ui:fragment>
+
+                        <ui:fragment rendered="#{empty fieldTemplate.fieldOptions}">
+                            <h:inputText value="#{fieldPayload.stringPayload}"  
+                                         rendered="#{fieldTemplate.fieldType == 'TEXT' 
+                                                     or fieldTemplate.fieldType == 'DOCUMENT'
+                                                     or fieldTemplate.fieldType == 'SNAPSHOT'
+                                                     or fieldTemplate.fieldType == 'GEOMETRY'}"
+                                         class="form-control" title="#{fieldTemplate.hint}"
+                                         autocomplete="off" />
+
+                            <h:inputText value="#{fieldPayload.bigDecimalPayload}"  
+                                         rendered="#{fieldTemplate.fieldType == 'DECIMAL' 
+                                                     or fieldPayload.fieldType == 'INTEGER'}"
+                                         class="form-control"  title="#{fieldTemplate.hint}"
+                                         autocomplete="off" />
+
+                            <h:panelGroup class="input-group" layout="block" 
+                                          rendered="#{fieldTemplate.fieldType == 'DATE' or
+                                                      fieldTemplate.fieldType == 'TIME'}">
+                                <span class="input-group-addon">
+                                    <i class="glyphicon glyphicon-calendar"></i>
+                                </span>
+                                <h:inputText value="#{fieldPayload.stringPayload}"  
+                                             class="form-control DateField"
+                                             title="#{fieldTemplate.hint}"
+                                             maxlength="10"
+                                             autocomplete="off" />
+                            </h:panelGroup>
+
+                            <h:selectBooleanCheckbox value="#{fieldPayload.booleanPayload}"
+                                                     title="#{fieldTemplate.hint}"
+                                                     rendered="#{fieldTemplate.fieldType == 'BOOL'}" />
+                        </ui:fragment>
+                    </ui:fragment>
+                </ui:fragment>
+
+                <ui:fragment rendered="#{not allowEdit}">
+                    <ui:fragment rendered="#{not empty fieldPayload}">
+                        <ui:fragment 
+                            rendered="#{fieldPayload.fieldType == 'TEXT' 
+                                        or fieldPayload.fieldType == 'DOCUMENT'
+                                        or fieldPayload.fieldType == 'SNAPSHOT'
+                                        or fieldPayload.fieldType == 'GEOMETRY'
+                                        or fieldPayload.fieldType == 'DATE' 
+                                        or fieldPayload.fieldType == 'TIME'}">
+                            #{dynaFormBean.getFieldValue(fieldTemplate, fieldPayload.stringPayload)}
+                        </ui:fragment>
+                        <ui:fragment rendered="#{fieldPayload.fieldType == 'DECIMAL' 
+                                                 or fieldPayload.fieldType == 'INTEGER'}">
+                                     #{fieldPayload.bigDecimalPayload}
+                        </ui:fragment>
+                        <ui:fragment rendered="#{fieldPayload.fieldType == 'BOOL'}">
+                            <ui:fragment rendered="#{fieldPayload.booleanPayload}">
+                                <i class="glyphicon glyphicon-ok"></i>
+                            </ui:fragment>
+                        </ui:fragment>
+                    </ui:fragment>
+                </ui:fragment>
+            </ui:fragment>
+        </ui:composition>
+    </body>
+</html>
+

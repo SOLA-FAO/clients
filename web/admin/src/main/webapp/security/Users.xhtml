@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:body>
+        <ui:composition template="../templates/BasicTemplate.xhtml">
+            <ui:define name="title">
+                #{msg.MAIN_MENU_USERS}
+            </ui:define>
+            <ui:define name="content">
+                <style>
+                    .groupsList {
+                        height: 260px; 
+                        overflow: auto;
+                    }
+                    .groupsList label {
+                        padding-left: 10px;
+                    }
+                </style>
+                <div class="PageName">
+                    <i class="icon-user"></i> #{msg.MAIN_MENU_USERS}
+                </div>
+                <div class="content">
+                    <div class="row" style="width: 850px;padding-bottom: 10px;">
+                        <div class="col-md-11">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label>
+                                        #{msg.USER_PAGE_USER_NAME}
+                                    </label>
+                                    <h:inputText id="txtUserNameParam" class="form-control"
+                                                 value="#{userPageBean.searchParams.userName}"
+                                                 autocomplete="off" />
+                                </div>
+                                <div class="col-md-3">
+                                    <label>
+                                        #{msg.USER_PAGE_FIRST_NAME}
+                                    </label>
+                                    <h:inputText id="txtFirstNameParam" class="form-control"
+                                                 value="#{userPageBean.searchParams.firstName}"
+                                                 autocomplete="off" />
+                                </div>
+                                <div class="col-md-3">
+                                    <label>
+                                        #{msg.USER_PAGE_LAST_NAME}
+                                    </label>
+                                    <h:inputText id="txtLastNameParam" class="form-control"
+                                                 value="#{userPageBean.searchParams.lastName}"
+                                                 autocomplete="off" />
+                                </div>
+                                <div class="col-md-3">
+                                    <label>
+                                        #{msg.GROUP_PAGE_GROUP}
+                                    </label>
+                                    <h:selectOneListbox id="cbxGroups" value="#{userPageBean.searchParams.groupId}" 
+                                                        size="1" class="form-control">
+                                        <f:selectItems value="#{userPageBean.mapGroups}" var="g" />
+                                    </h:selectOneListbox>
+                                </div>
+                            </div>        
+                        </div>
+                        <div class="col-md-1">
+                            <label>&nbsp;</label><br />
+                            <h:commandButton class="btn btn-default" value="#{msg.GENERAL_LABEL_SEARCH}">
+                                <f:ajax event="click" execute=":mainForm:txtUserNameParam :mainForm:txtFirstNameParam :mainForm:txtLastNameParam :mainForm:cbxGroups" 
+                                        render=":mainForm:pnlCodes"
+                                        onerror="handleAjaxError"
+                                        listener="#{userPageBean.search()}" />
+                            </h:commandButton>
+                        </div>
+                    </div>
+
+                    <h:panelGroup id="pnlCodes">
+                        <h:commandLink class="BlueLink">
+                            <f:ajax event="click" 
+                                    render= ":mainForm:pnlCode"
+                                    onevent="openUserPopUp"
+                                    onerror="onOpenEditCodeError"
+                                    listener="#{userPageBean.loadUser(null)}" />
+                            <i class="glyphicon glyphicon-plus"></i> #{msg.GENERAL_LABEL_ADD}
+                        </h:commandLink>
+                        <h:dataTable value="#{userPageBean.searchResults}" var="r"
+                                     class="table table-striped"
+                                     headerClass="table-header">
+                            <h:column>
+                                <f:facet name="header">#{msg.USER_PAGE_USER_NAME}</f:facet>
+                                <span style="white-space: nowrap;">
+                                    <h:commandLink style="padding-right: 5px;"
+                                                   title="#{msg.GENERAL_LABEL_DELETE}"
+                                                   onclick="return confirm('#{msg.GENERAL_CONFIRM_DELETE}')">
+                                        <f:ajax listener="#{userPageBean.deleteUser(r.userName)}" 
+                                                event="click" onevent="onDeleteCode" onerror="handleAjaxError"
+                                                render=":mainForm:pnlCodes" />
+                                        <i class="glyphicon glyphicon-remove"></i>
+                                    </h:commandLink>
+                                    <h:commandLink class="BlueLink" title="#{msg.GENERAL_LABEL_EDIT}">
+                                        <f:ajax event="click" 
+                                                render= ":mainForm:pnlCode"
+                                                onevent="openUserPopUp"
+                                                onerror="onOpenEditCodeError"
+                                                listener="#{userPageBean.loadUser(r.userName)}" />
+                                        <i class="glyphicon glyphicon-pencil" style="padding-right: 7px;"></i>
+                                    </h:commandLink>
+                                    #{r.userName}
+                                </span>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{msg.USER_PAGE_FULL_NAME}</f:facet>
+                                    #{r.firstName} #{r.lastName}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{msg.REFDATA_PAGE_DESCRIPTION}</f:facet>
+                                    #{r.description}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{msg.MAIN_MENU_GROUPS}</f:facet>
+                                    #{r.groupsList}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{msg.USER_PAGE_ACTIVE}</f:facet>
+                                <ui:fragment rendered="#{r.active}">
+                                    <i class="glyphicon glyphicon-ok"></i>
+                                </ui:fragment>
+                            </h:column>
+                        </h:dataTable>
+                    </h:panelGroup>
+                </div>
+
+                <div style="display: none;" class="modal fade" id="codeDialog" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog" style="width:800px;">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">#{msg.GENERAL_LABEL_CLOSE}</span></button>
+                                <h4 class="modal-title">#{msg.USER_PAGE_USER}</h4>
+                            </div>
+                            <div id="codeBody" class="modal-body" style="padding: 0px 5px 0px 5px;">
+                                <div id="pnlWrapper" class="HiddenItem">
+                                    <h:panelGroup id="pnlCode" layout="block" style="font-size: 12px;">
+                                        <div class="content">
+                                            <ul class="nav nav-tabs">
+                                                <li class="active"><a href="#general" data-toggle="tab">#{msg.GENERAL_LABEL_GENERAL}</a></li>
+                                                <li><a href="#groups" data-toggle="tab">#{msg.MAIN_MENU_GROUPS}</a></li>
+                                            </ul>
+
+                                            <div class="tab-content">
+                                                <div class="tab-pane active" id="general" style="padding-top: 10px;">
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <label>
+                                                                #{msg.USER_PAGE_USER_NAME} <i class="glyphicon glyphicon-required"></i>
+                                                            </label>
+                                                            <h:inputText id="txtName" 
+                                                                         value="#{userPageBean.user.userName}"  
+                                                                         disabled="#{not userPageBean.user.isNew()}"
+                                                                         class="form-control"
+                                                                         maxlength="40"
+                                                                         autocomplete="off" />
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label>
+                                                                #{msg.USER_PAGE_FIRST_NAME} <i class="glyphicon glyphicon-required"></i>
+                                                            </label>
+                                                            <h:inputText value="#{userPageBean.user.firstName}"  
+                                                                         class="form-control"
+                                                                         maxlength="30"
+                                                                         autocomplete="off" />
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label>
+                                                                #{msg.USER_PAGE_LAST_NAME} <i class="glyphicon glyphicon-required"></i>
+                                                            </label>
+                                                            <h:inputText value="#{userPageBean.user.lastName}"  
+                                                                         class="form-control"
+                                                                         maxlength="30"
+                                                                         autocomplete="off" />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="splitter"></div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <label>
+                                                                #{msg.USER_PAGE_EMAIL}
+                                                            </label>
+                                                            <h:inputText value="#{userPageBean.user.email}"  
+                                                                         class="form-control"
+                                                                         maxlength="40"
+                                                                         autocomplete="off" />
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label>
+                                                                #{msg.USER_PAGE_MOBILE_NUMBER}
+                                                            </label>
+                                                            <h:inputText value="#{userPageBean.user.mobileNumber}"  
+                                                                         class="form-control"
+                                                                         maxlength="20"
+                                                                         autocomplete="off" />
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label>
+                                                                #{msg.REFDATA_PAGE_DESCRIPTION}
+                                                            </label>
+                                                            <h:inputText value="#{userPageBean.user.description}"  
+                                                                         class="form-control"
+                                                                         maxlength="255"
+                                                                         autocomplete="off" />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="splitter"></div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <label>
+                                                                #{msg.USER_PAGE_ACTIVATION_CODE}
+                                                            </label>
+                                                            <h:inputText value="#{userPageBean.user.activationCode}"  
+                                                                         class="form-control"
+                                                                         maxlength="40"
+                                                                         autocomplete="off" />
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label>
+                                                                #{msg.USER_PAGE_ACTIVATION_EXPIRATION}
+                                                            </label>
+                                                            <h:inputText id="txtActivationExpiration"
+                                                                         value="#{userPageBean.user.activationExpiration}"  
+                                                                         class="form-control"
+                                                                         maxlength="20"
+                                                                         autocomplete="off">
+                                                                <f:convertDateTime pattern="dd-MM-yyyy HH:mm"/>
+                                                            </h:inputText>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label>
+                                                                #{msg.USER_PAGE_ACTIVE}
+                                                            </label>
+                                                            <br />
+                                                            <h:selectBooleanCheckbox value="#{userPageBean.user.active}" />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="splitter"></div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <label>
+                                                                #{msg.USER_PAGE_PASSWORD} <i class="glyphicon glyphicon-required"></i>
+                                                            </label>
+                                                            <h:inputSecret value="#{userPageBean.user.password}"  
+                                                                           redisplay="true"
+                                                                           class="form-control"
+                                                                           maxlength="100" />
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label>
+                                                                #{msg.USER_PAGE_PASSWORD_CONFIRMATION} <i class="glyphicon glyphicon-required"></i>
+                                                            </label>
+                                                            <h:inputSecret value="#{userPageBean.passwordConfirmation}" 
+                                                                           redisplay="true"
+                                                                           class="form-control"
+                                                                           maxlength="100" />
+                                                        </div>
+                                                        <div class="col-md-4">
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="tab-pane" id="groups" style="padding-top: 10px;">
+                                                    <label>
+                                                        #{msg.MAIN_MENU_GROUPS} <i class="glyphicon glyphicon-required"></i>
+                                                    </label>
+                                                    <div class="groupsList">
+                                                        <h:selectManyCheckbox value="#{userPageBean.selectedGroupCodes}"
+                                                                              layout="pageDirection">
+                                                            <f:selectItems value="#{userPageBean.groups}" var="g" 
+                                                                           itemLabel="#{g.name}" itemValue="#{g.id}" />
+                                                        </h:selectManyCheckbox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </h:panelGroup>
+                                </div>
+                            </div>
+                            <div class="modal-footer" style="margin-top: 0px;padding: 15px 20px 15px 20px;">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">#{msg.GENERAL_LABEL_CLOSE}</button>
+                                <h:commandButton class="btn btn-primary" value="#{msg.GENERAL_LABEL_SAVE}">
+                                    <f:ajax event="click" execute=":mainForm:pnlCode :mainForm:txtUserNameParam :mainForm:txtFirstNameParam :mainForm:txtLastNameParam :mainForm:cbxGroups" 
+                                            render=":mainForm:pnlCodes"
+                                            onevent="onSaveCode"
+                                            onerror="handleAjaxCodeError"
+                                            listener="#{userPageBean.saveUser()}" />
+                                </h:commandButton>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script type="text/javascript" src="#{request.contextPath}/js/entityPopUp.js"></script>
+                <script type="text/javascript">
+                    function openUserPopUp(data) {
+                        $('#mainForm\\:txtActivationExpiration').attr("placeholder", "dd-mm-yyyy hh:mm");
+                        onOpenEditCode(data);
+                    }
+                </script>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+
