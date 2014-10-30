@@ -31,13 +31,13 @@
             <groupId>${sola.services.group.id}</groupId>
             <artifactId>sola-services-common</artifactId>
             <version>${project.version}</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>${sola.services.group.id}.ejbs</groupId>
             <artifactId>sola-search</artifactId>
             <version>${project.version}</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
             <exclusions>
                 <exclusion>
                     <artifactId>servlet-api</artifactId>
@@ -50,7 +50,7 @@
             <groupId>${sola.services.group.id}.ejbs</groupId>
             <artifactId>sola-admin</artifactId>
             <version>${project.version}</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
             <exclusions>
                 <exclusion>
                     <artifactId>servlet-api</artifactId>
@@ -70,13 +70,13 @@
                 </exclusion>
             </exclusions>
             <type>ejb</type>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>${sola.services.group.id}.ejbs</groupId>
             <artifactId>sola-refdata</artifactId>
             <version>${project.version}</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
             <exclusions>
                 <exclusion>
                     <artifactId>servlet-api</artifactId>
