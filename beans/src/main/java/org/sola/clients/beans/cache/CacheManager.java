@@ -243,6 +243,10 @@ public final class CacheManager {
      * Cache key of the {@link PublicDisplayItemStatusBean} collection.
      */
     public static final String GET_PUBLIC_DISPLAY_ITEM_STATUS_KEY = PublicDisplayItemStatusBean.class.getName() + LIST_POSTFIX;
+     /**
+     * Cache key of the {@link ValuationTypeBean} collection.
+     */
+    public static final String GET_VALUATION_TYPE_KEY = ValuationTypeBean.class.getName() + LIST_POSTFIX;
     /**
      * Cache key of the parties list by role collection.
      */
@@ -289,6 +293,7 @@ public final class CacheManager {
     private static final String GET_CHECKLIST_GROUP = "getChecklistGroups";
     private static final String GET_PUBLIC_DISPLAY_TYPES = "getPublicDisplayTypes";
     private static final String GET_PUBLIC_DISPLAY_STATUS_TYPES = "getPublicDisplayStatusTypes";
+     private static final String GET_VALUATION_TYPES = "getValuationTypes";
 
     public static List<BrValidationTargetTypeBean> getBrValidationTargetTypes() {
         return getCachedBeanList(BrValidationTargetTypeBean.class,
@@ -575,6 +580,11 @@ public final class CacheManager {
         return getCachedBeanList(PublicDisplayItemStatusBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_PUBLIC_DISPLAY_STATUS_TYPES, GET_PUBLIC_DISPLAY_ITEM_STATUS_KEY);
+    }
+    public static List<ValuationTypeBean> getValuationTypes() {
+        return getCachedBeanList(ValuationTypeBean.class,
+                WSManager.getInstance().getReferenceDataService(),
+                GET_VALUATION_TYPES, GET_VALUATION_TYPE_KEY);
     }
 
     /**
