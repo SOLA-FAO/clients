@@ -49,16 +49,17 @@ import org.sola.webservices.transferobjects.administrative.ValuationTO;
 public class ValuationBean extends AbstractVersionedBean {
 
     public static final String NR_PROPERTY = "nr";
-     public static final String BA_UNIT_ID_PROPERTY = "baUnitId";
-     public static final String AMOUNT_PROPERTY = "amount";
+    public static final String BA_UNIT_ID_PROPERTY = "baUnitId";
+    public static final String AMOUNT_PROPERTY = "amount";
     public static final String VALUATION_DATE_PROPERTY = "valuationDate";
     public static final String TYPE_PROPERTY = "type";
-     public static final String DESCRIPTION_PROPERTY = "description";
+    public static final String DESCRIPTION_PROPERTY = "description";
     public static final String TYPE_CODE_PROPERTY = "typeCode";
+    public static final String SOURCE_PROPERTY = "source";
     public static final String SELECTED_SOURCE_PROPERTY = "selectedSource";
     public static final String VALUATION_BEAN_PROPERTY = "valuationBean";
     public static final String SERVICE_ID_PROPERTY = "serviceId";
-    
+
     private String id;
     private String nr;
     private String baUnitId;
@@ -71,7 +72,7 @@ public class ValuationBean extends AbstractVersionedBean {
     private String transactionId;
     private SourceBean selectedSource;
     private String serviceId;
-   
+
     ; 
 
     public ValuationBean() {
@@ -97,7 +98,9 @@ public class ValuationBean extends AbstractVersionedBean {
      * @param nr the nr to set
      */
     public void setNr(String nr) {
+        String oldValue = this.nr;
         this.nr = nr;
+        propertySupport.firePropertyChange(NR_PROPERTY, oldValue, nr);
     }
 
     /**
@@ -125,7 +128,9 @@ public class ValuationBean extends AbstractVersionedBean {
      * @param amount the amount to set
      */
     public void setAmount(BigDecimal amount) {
+        BigDecimal oldValue = this.amount;
         this.amount = amount;
+        propertySupport.firePropertyChange(AMOUNT_PROPERTY, oldValue, amount);
     }
 
     /**
@@ -139,7 +144,9 @@ public class ValuationBean extends AbstractVersionedBean {
      * @param valuationDate the valuationDate to set
      */
     public void setValuationDate(Date valuationDate) {
+        Date oldValue = this.valuationDate;
         this.valuationDate = valuationDate;
+        propertySupport.firePropertyChange(VALUATION_DATE_PROPERTY, oldValue, valuationDate);
     }
 
     /**
@@ -157,11 +164,12 @@ public class ValuationBean extends AbstractVersionedBean {
         if (type != null) {
             oldValue = type.getCode();
         }
-        
+
         setType(CacheManager.getBeanByCode(
                 CacheManager.getValuationTypes(), typeCode));
         propertySupport.firePropertyChange(TYPE_CODE_PROPERTY, oldValue, typeCode);
     }
+
     public ValuationTypeBean getType() {
         return type;
     }
@@ -198,7 +206,9 @@ public class ValuationBean extends AbstractVersionedBean {
      * @param source the source to set
      */
     public void setSource(String source) {
+        String oldValue = this.source;
         this.source = source;
+        propertySupport.firePropertyChange(SOURCE_PROPERTY, oldValue, source);
     }
 
     /**
@@ -212,7 +222,9 @@ public class ValuationBean extends AbstractVersionedBean {
      * @param description the description to set
      */
     public void setDescription(String description) {
+        String oldValue = this.description;
         this.description = description;
+        propertySupport.firePropertyChange(DESCRIPTION_PROPERTY, oldValue, description);
     }
 
     /**
@@ -228,11 +240,11 @@ public class ValuationBean extends AbstractVersionedBean {
     public void setTransactionId(String transcationId) {
         this.transactionId = transcationId;
     }
-    
+
     public SourceBean getSelectedSource() {
         return selectedSource;
     }
-    
+
     public ObservableList<SourceBean> getSourceFilteredList() {
         return sourceList.getFilteredList();
     }
@@ -241,6 +253,7 @@ public class ValuationBean extends AbstractVersionedBean {
         selectedSource = value;
         propertySupport.firePropertyChange(SELECTED_SOURCE_PROPERTY, null, value);
     }
+
     /**
      * Removes selected document from the list of documents.
      */
@@ -249,7 +262,8 @@ public class ValuationBean extends AbstractVersionedBean {
             sourceList.safeRemove(selectedSource, EntityAction.DISASSOCIATE);
         }
     }
-     public String getServiceId() {
+
+    public String getServiceId() {
         return serviceId;
     }
 
@@ -258,7 +272,7 @@ public class ValuationBean extends AbstractVersionedBean {
         serviceId = value;
         propertySupport.firePropertyChange(SERVICE_ID_PROPERTY, oldValue, value);
     }
-    
+
     /**
      * Saves the item details to the database
      *
@@ -272,7 +286,5 @@ public class ValuationBean extends AbstractVersionedBean {
         propertySupport.firePropertyChange(VALUATION_BEAN_PROPERTY, null, this);
         return true;
     }
-
-    
 
 }
