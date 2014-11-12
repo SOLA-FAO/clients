@@ -93,7 +93,7 @@ public class ValuationListBean extends AbstractBindingListBean {
     }
 
     /**
-     * Retrieves the list of public display items from the database using the
+     * Retrieves the list of valuation items from the database using the
      * service id.
      *
      * @param serviceId
