@@ -33,14 +33,15 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationServiceBean;
-import org.sola.clients.beans.application.PublicDisplayItemListBean;
-import org.sola.clients.beans.application.PublicDisplayItemBean;
+import org.sola.clients.beans.application.ObjectionBean;
+import org.sola.clients.beans.application.ObjectionListBean;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.clients.swing.ui.renderers.DateTimeRenderer;
+import org.sola.clients.swing.ui.renderers.TableCellTextAreaRenderer;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
@@ -48,20 +49,20 @@ import org.sola.common.messaging.MessageUtility;
  *
  * @author soladev
  */
-public class PublicDisplayPanel extends ContentPanel {
+public class ObjectionListPanel extends ContentPanel {
 
     private ApplicationBean applicationBean;
     private ApplicationServiceBean applicationService;
     private boolean readOnly = false;
 
     /**
-     * Creates new form PublicDisplayPanel
+     * Creates new form ObjectionListPanel
      */
-    public PublicDisplayPanel() {
+    public ObjectionListPanel() {
         initComponents();
     }
 
-    public PublicDisplayPanel(ApplicationBean applicationBean, ApplicationServiceBean applicationService,
+    public ObjectionListPanel(ApplicationBean applicationBean, ApplicationServiceBean applicationService,
             Boolean readOnly) {
         this.applicationBean = applicationBean;
         this.applicationService = applicationService;
@@ -73,8 +74,8 @@ public class PublicDisplayPanel extends ContentPanel {
 
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                if (evt.getPropertyName().equals(PublicDisplayItemListBean.SELECTED_PUBLIC_DISPLAY_ITEM)) {
-                    customizeButtons((PublicDisplayItemBean) evt.getNewValue());
+                if (evt.getPropertyName().equals(ObjectionListBean.SELECTED_OBJECTION)) {
+                    customizeButtons((ObjectionBean) evt.getNewValue());
                 }
             }
         });
@@ -84,58 +85,56 @@ public class PublicDisplayPanel extends ContentPanel {
 
     private void customizeForm() {
         // Disable the edit buttons if the form is in read only mode
-        btnSave.setEnabled(true);
+        btnSave.setEnabled(!readOnly);
         btnAdd.setEnabled(!readOnly);
         customizeButtons(null);
     }
 
-    private void customizeButtons(PublicDisplayItemBean item) {
+    private void customizeButtons(ObjectionBean item) {
         boolean enable = item != null && !readOnly;
         btnView.setEnabled(item != null);
         btnEdit.setEnabled(enable);
         btnRemove.setEnabled(enable);
     }
 
-    private void openPublicDisplayItem(final PublicDisplayItemBean publicDisplayItem,
+    private void openObjection(final ObjectionBean objection,
             final boolean viewItem) {
 
         SolaTask t = new SolaTask<Void, Void>() {
             @Override
             public Void doTask() {
-                PublicDisplayItemBean item = null;
-                if (publicDisplayItem != null) {
-                    // Create a copy of the item so that if the user decides to cancel thier changes
-                    // the data on the original item is unchanged. 
-                    item = publicDisplayItem.copy();
+                ObjectionBean obj = null;
+                if (objection != null) {
+                    // Create a copy of the objection so that if the user decides to cancel thier changes
+                    // the data on the original objection is unchanged. 
+                    obj = objection.copy();
                 }
-                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PERSON));
-                PublicDisplayItemPanel panel = new PublicDisplayItemPanel(item,
-                        applicationBean, applicationService, viewItem);
-
+                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_OBJECTION));
+                ObjectionPanel panel = new ObjectionPanel(obj, applicationBean, applicationService, viewItem);
                 panel.addPropertyChangeListener(new PropertyChangeListener() {
 
                     @Override
                     public void propertyChange(PropertyChangeEvent evt) {
-                        if (evt.getPropertyName().equals(PublicDisplayItemPanel.DISPLAY_ITEM_SAVED)) {
-                            listBean.addOrUpdateItem((PublicDisplayItemBean) evt.getNewValue());
-                            tblDisplayItems.clearSelection();
+                        if (evt.getPropertyName().equals(ObjectionPanel.OBJECTION_SAVED)) {
+                            listBean.addOrUpdateItem((ObjectionBean) evt.getNewValue());
+                            tblObjections.clearSelection();
                         }
                     }
                 });
-                getMainContentPanel().addPanel(panel, MainContentPanel.CARD_PUBLIC_DISPLAY_ITEM, true);
+                getMainContentPanel().addPanel(panel, MainContentPanel.CARD_OBJECTION_PANEL, true);
                 return null;
             }
         };
         TaskManager.getInstance().runTask(t);
     }
 
-    private void removePublicDisplayItem(PublicDisplayItemBean item) {
+    private void removeObjection(ObjectionBean item) {
         if (item != null) {
             listBean.removeItem(item);
         }
     }
 
-    private boolean saveDisplayList(final boolean showMessage) {
+    private boolean saveObjectionList(final boolean showMessage) {
         final boolean[] result = {listBean.validate(true).size() < 1};
         if (result[0]) {
             // Save the checklist items
@@ -152,7 +151,7 @@ public class PublicDisplayPanel extends ContentPanel {
                     saveListBeanState();
                     if (showMessage) {
                         // Only display the Saved message if the user has choosen to explicitly save
-                        MessageUtility.displayMessage(ClientMessage.DISPLAY_ITEM_SUCCESSFULLY_SAVED);
+                        MessageUtility.displayMessage(ClientMessage.OBJECTION_SUCCESSFULLY_SAVED);
                     }
                 }
 
@@ -170,15 +169,15 @@ public class PublicDisplayPanel extends ContentPanel {
     }
 
     private void saveListBeanState() {
-        tblDisplayItems.clearSelection();
+        tblObjections.clearSelection();
         MainForm.saveBeanState(listBean);
     }
 
     @Override
     protected boolean panelClosing() {
-        tblDisplayItems.clearSelection();
+        tblObjections.clearSelection();
         if (btnSave.isEnabled() && MainForm.checkSaveBeforeClose(listBean)) {
-            return saveDisplayList(true);
+            return saveObjectionList(true);
         }
         return true;
     }
@@ -193,29 +192,26 @@ public class PublicDisplayPanel extends ContentPanel {
     private void initComponents() {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        listBean = new org.sola.clients.beans.application.PublicDisplayItemListBean();
+        listBean = new org.sola.clients.beans.application.ObjectionListBean();
         headerPanel1 = new org.sola.clients.swing.ui.HeaderPanel();
         jToolBar1 = new javax.swing.JToolBar();
-        btnSave = new javax.swing.JButton();
+        btnSave = new org.sola.clients.swing.common.buttons.BtnSave();
         btnView = new org.sola.clients.swing.common.buttons.BtnView();
         jSeparator1 = new javax.swing.JToolBar.Separator();
         btnAdd = new org.sola.clients.swing.common.buttons.BtnAdd();
         btnEdit = new org.sola.clients.swing.common.buttons.BtnEdit();
         btnRemove = new org.sola.clients.swing.common.buttons.BtnRemove();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblDisplayItems = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
+        tblObjections = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
 
         setHeaderPanel(headerPanel1);
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/workflow/Bundle"); // NOI18N
-        headerPanel1.setTitleText(bundle.getString("PublicDisplayPanel.headerPanel1.titleText")); // NOI18N
+        headerPanel1.setTitleText(bundle.getString("ObjectionListPanel.headerPanel1.titleText")); // NOI18N
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
-        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/save.png"))); // NOI18N
-        btnSave.setText(bundle.getString("PublicDisplayPanel.btnSave.text")); // NOI18N
-        btnSave.setFocusable(false);
         btnSave.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -257,65 +253,73 @@ public class PublicDisplayPanel extends ContentPanel {
         });
         jToolBar1.add(btnRemove);
 
-        tblDisplayItems.getTableHeader().setReorderingAllowed(false);
+        tblObjections.getTableHeader().setReorderingAllowed(false);
 
-        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${publicDisplayItemList}");
-        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, listBean, eLProperty, tblDisplayItems);
-        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${referenceNr}"));
-        columnBinding.setColumnName("Reference Nr");
+        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${filteredObjectionList}");
+        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, listBean, eLProperty, tblObjections);
+        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${nr}"));
+        columnBinding.setColumnName("Nr");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${type.displayValue}"));
-        columnBinding.setColumnName("Type.display Value");
-        columnBinding.setColumnClass(String.class);
-        columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${displayFrom}"));
-        columnBinding.setColumnName("Display From");
-        columnBinding.setColumnClass(java.util.Date.class);
-        columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${displayTo}"));
-        columnBinding.setColumnName("Display To");
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${lodgedDate}"));
+        columnBinding.setColumnName("Lodged Date");
         columnBinding.setColumnClass(java.util.Date.class);
         columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${description}"));
         columnBinding.setColumnName("Description");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${authority.displayValue}"));
+        columnBinding.setColumnName("Authority.display Value");
+        columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${resolution}"));
+        columnBinding.setColumnName("Resolution");
+        columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${resolutionDate}"));
+        columnBinding.setColumnName("Resolution Date");
+        columnBinding.setColumnClass(java.util.Date.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${status.displayValue}"));
         columnBinding.setColumnName("Status.display Value");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
         bindingGroup.addBinding(jTableBinding);
-        jTableBinding.bind();org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, listBean, org.jdesktop.beansbinding.ELProperty.create("${selectedPublicDisplayItem}"), tblDisplayItems, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
+        jTableBinding.bind();org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, listBean, org.jdesktop.beansbinding.ELProperty.create("${selectedObjection}"), tblObjections, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
         bindingGroup.addBinding(binding);
 
-        tblDisplayItems.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblObjections.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblDisplayItemsMouseClicked(evt);
+                tblObjectionsMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tblDisplayItems);
-        if (tblDisplayItems.getColumnModel().getColumnCount() > 0) {
-            tblDisplayItems.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("PublicDisplayPanel.tblDisplayItems.columnModel.title0_1")); // NOI18N
-            tblDisplayItems.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("PublicDisplayPanel.tblDisplayItems.columnModel.title1_1")); // NOI18N
-            tblDisplayItems.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PublicDisplayPanel.tblDisplayItems.columnModel.title2_1")); // NOI18N
-            tblDisplayItems.getColumnModel().getColumn(2).setCellRenderer(new DateTimeRenderer(false));
-            tblDisplayItems.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("PublicDisplayPanel.tblDisplayItems.columnModel.title3_1")); // NOI18N
-            tblDisplayItems.getColumnModel().getColumn(3).setCellRenderer(new DateTimeRenderer(false));
-            tblDisplayItems.getColumnModel().getColumn(4).setPreferredWidth(300);
-            tblDisplayItems.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("PublicDisplayPanel.tblDisplayItems.columnModel.title4")); // NOI18N
-            tblDisplayItems.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("PublicDisplayPanel.tblDisplayItems.columnModel.title5")); // NOI18N
+        jScrollPane1.setViewportView(tblObjections);
+        if (tblObjections.getColumnModel().getColumnCount() > 0) {
+            tblObjections.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("ObjectionListPanel.tblObjections.columnModel.title0")); // NOI18N
+            tblObjections.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("ObjectionListPanel.tblObjections.columnModel.title1")); // NOI18N
+            tblObjections.getColumnModel().getColumn(1).setCellRenderer(new DateTimeRenderer());
+            tblObjections.getColumnModel().getColumn(2).setPreferredWidth(250);
+            tblObjections.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("ObjectionListPanel.tblObjections.columnModel.title2")); // NOI18N
+            tblObjections.getColumnModel().getColumn(2).setCellRenderer(new TableCellTextAreaRenderer());
+            tblObjections.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("ObjectionListPanel.tblObjections.columnModel.title3")); // NOI18N
+            tblObjections.getColumnModel().getColumn(4).setPreferredWidth(250);
+            tblObjections.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("ObjectionListPanel.tblObjections.columnModel.title4")); // NOI18N
+            tblObjections.getColumnModel().getColumn(4).setCellRenderer(new TableCellTextAreaRenderer());
+            tblObjections.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("ObjectionListPanel.tblObjections.columnModel.title5")); // NOI18N
+            tblObjections.getColumnModel().getColumn(5).setCellRenderer(new DateTimeRenderer());
+            tblObjections.getColumnModel().getColumn(6).setHeaderValue(bundle.getString("ObjectionListPanel.tblObjections.columnModel.title6")); // NOI18N
         }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(headerPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(headerPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 630, Short.MAX_VALUE)
             .addComponent(jToolBar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE)
+                .addComponent(jScrollPane1)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -324,8 +328,8 @@ public class PublicDisplayPanel extends ContentPanel {
                 .addComponent(headerPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 298, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -333,52 +337,52 @@ public class PublicDisplayPanel extends ContentPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        saveDisplayList(true);
+        saveObjectionList(true);
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewActionPerformed
-        if (listBean.getSelectedPublicDisplayItem() != null) {
-            openPublicDisplayItem(listBean.getSelectedPublicDisplayItem(), true);
+        if (listBean.getSelectedObjection() != null) {
+            openObjection(listBean.getSelectedObjection(), true);
         }
     }//GEN-LAST:event_btnViewActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        openPublicDisplayItem(null, readOnly);
+        openObjection(null, readOnly);
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-        if (listBean.getSelectedPublicDisplayItem() != null) {
-            openPublicDisplayItem(listBean.getSelectedPublicDisplayItem(), readOnly);
+        if (listBean.getSelectedObjection() != null) {
+            openObjection(listBean.getSelectedObjection(), readOnly);
         }
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
-        removePublicDisplayItem(listBean.getSelectedPublicDisplayItem());
+        removeObjection(listBean.getSelectedObjection());
     }//GEN-LAST:event_btnRemoveActionPerformed
 
-    private void tblDisplayItemsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDisplayItemsMouseClicked
+    private void tblObjectionsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblObjectionsMouseClicked
         if (evt.getClickCount() == 2) {
             if (btnEdit.isEnabled()) {
-                openPublicDisplayItem(listBean.getSelectedPublicDisplayItem(), readOnly);
+                openObjection(listBean.getSelectedObjection(), readOnly);
             } else if (btnView.isEnabled()) {
-                openPublicDisplayItem(listBean.getSelectedPublicDisplayItem(), true);
+                openObjection(listBean.getSelectedObjection(), true);
             }
         }
-    }//GEN-LAST:event_tblDisplayItemsMouseClicked
+    }//GEN-LAST:event_tblObjectionsMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.sola.clients.swing.common.buttons.BtnAdd btnAdd;
     private org.sola.clients.swing.common.buttons.BtnEdit btnEdit;
     private org.sola.clients.swing.common.buttons.BtnRemove btnRemove;
-    private javax.swing.JButton btnSave;
+    private org.sola.clients.swing.common.buttons.BtnSave btnSave;
     private org.sola.clients.swing.common.buttons.BtnView btnView;
     private org.sola.clients.swing.ui.HeaderPanel headerPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar jToolBar1;
-    private org.sola.clients.beans.application.PublicDisplayItemListBean listBean;
-    private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tblDisplayItems;
+    private org.sola.clients.beans.application.ObjectionListBean listBean;
+    private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tblObjections;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }

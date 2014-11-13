@@ -31,8 +31,6 @@ package org.sola.clients.beans.cache;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.clients.beans.AbstractCodeBean;
 import org.sola.clients.beans.AbstractIdBean;
@@ -44,6 +42,7 @@ import org.sola.clients.beans.security.UserSearchResultBean;
 import org.sola.clients.beans.system.ConfigPanelLauncherBean;
 import org.sola.clients.beans.system.LanguageBean;
 import org.sola.clients.beans.system.PanelLauncherGroupBean;
+import org.sola.common.logging.LogUtility;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 import org.sola.services.boundary.wsclients.AbstractWSClient;
@@ -52,7 +51,7 @@ import org.sola.webservices.transferobjects.AbstractTO;
 import org.sola.webservices.transferobjects.casemanagement.PartySummaryTO;
 
 public final class CacheManager {
-
+    
     private static Cache cache = new Cache();
     private static final String LIST_POSTFIX = "_LIST";
     private static final String MAP_POSTFIX = "_MAP";
@@ -244,11 +243,23 @@ public final class CacheManager {
      */
     public static final String GET_PUBLIC_DISPLAY_ITEM_STATUS_KEY = PublicDisplayItemStatusBean.class.getName() + LIST_POSTFIX;
     /**
+     * Cache key of the {@link AuthorityBean} collection.
+     */
+    public static final String GET_AUTHORITY_TYPE_KEY = AuthorityBean.class.getName() + LIST_POSTFIX;
+    /**
+     * Cache key of the {@link ObjectionStatusBean} collection.
+     */
+    public static final String GET_OBJECTION_STATUS_TYPE_KEY = ObjectionStatusBean.class.getName() + LIST_POSTFIX;
+    /**
+     * Cache key of the {@link NotifyRelationshipTypeBean} collection.
+     */
+    public static final String GET_NOTIFY_RELATIONSHIP_TYPE_KEY = NotifyRelationshipTypeBean.class.getName() + LIST_POSTFIX;
+    /**
      * Cache key of the parties list by role collection.
      */
     public static final String PARTIES_BY_ROLE_GROUP_KEY = PartySummaryBean.class.getName() + LIST_POSTFIX;
     public static final String ACTIVE_USERS_GROUP_KEY = UserSearchResultBean.class.getName() + LIST_POSTFIX;
-
+    
     private static final String GET_APPLICATION_STATUS_TYPES = "getApplicationStatusTypes";
     private static final String GET_SOURCE_TYPES = "getSourceTypes";
     private static final String GET_COMMUNICATION_TYPES = "getCommunicationTypes";
@@ -289,157 +300,160 @@ public final class CacheManager {
     private static final String GET_CHECKLIST_GROUP = "getChecklistGroups";
     private static final String GET_PUBLIC_DISPLAY_TYPES = "getPublicDisplayTypes";
     private static final String GET_PUBLIC_DISPLAY_STATUS_TYPES = "getPublicDisplayStatusTypes";
-
+    private static final String GET_AUTHORITY_TYPES = "getAuthorityTypes";
+    private static final String GET_OBJECTION_STATUS_TYPES = "getObjectionStatusTypes";
+    private static final String GET_NOTIFY_RELATIONSHIP_TYPES = "getNotifyRelationshipTypes";
+    
     public static List<BrValidationTargetTypeBean> getBrValidationTargetTypes() {
         return getCachedBeanList(BrValidationTargetTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_BR_VALIDATION_TARGET_TYPES, BR_VALIDATION_TARGET_TYPE_KEY);
     }
-
+    
     public static List<BaUnitRelTypeBean> getBaUnitRelTypes() {
         return getCachedBeanList(BaUnitRelTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_BA_UNIT_REL_TYPES, BA_UNIT_REL_TYPE_KEY);
     }
-
+    
     public static List<BrTechnicalTypeBean> getBrTechnicalTypes() {
         return getCachedBeanList(BrTechnicalTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_BR_TECHNICAL_TYPES, BR_TECHNICAL_TYPE_KEY);
     }
-
+    
     public static List<BrSeverityTypeBean> getBrSeverityTypes() {
         return getCachedBeanList(BrSeverityTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_BR_SEVERITY_TYPES, BR_SEVERITY_TYPE_KEY);
     }
-
+    
     public static List<RequestCategoryTypeBean> getRequestCategoryTypes() {
         return getCachedBeanList(RequestCategoryTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_REQUEST_CATEGORY_TYPES, REQUEST_CATEGORY_TYPE_KEY);
     }
-
+    
     public static List<LanguageBean> getLanguages() {
         return getCachedBeanList(LanguageBean.class,
                 WSManager.getInstance().getAdminService(),
                 GET_LANGUAGES, LANGUAGE_KEY);
     }
-
+    
     public static List<RoleBean> getRoles() {
         return getCachedBeanList(RoleBean.class,
                 WSManager.getInstance().getAdminService(),
                 GET_ROLES, ROLES_KEY);
     }
-
+    
     public static List<TypeActionBean> getTypeActions() {
         return getCachedBeanList(TypeActionBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_TYPE_ACTIONS, TYPE_ACTIONS_KEY);
     }
-
+    
     public static List<ChangeStatusTypeBean> getChangeStatusTypes() {
         return getCachedBeanList(ChangeStatusTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_CHANGE_STATUS_TYPES, CHANGE_STATUS_TYPE_CODES_KEY);
     }
-
+    
     public static List<CadastreObjectTypeBean> getCadastreObjectTypes() {
         return getCachedBeanList(CadastreObjectTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_CADASTRE_OBJECT_TYPES, CADASTRE_OBJECT_TYPE_CODES_KEY);
     }
-
+    
     public static List<LandUseTypeBean> getLandUseTypes() {
         return getCachedBeanList(LandUseTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_LAND_USE_TYPES, LAND_USE_TYPE_CODES_KEY);
     }
-
+    
     public static List<SourceBaUnitRelationTypeBean> getSourceBaUnitRelationTypes() {
         return getCachedBeanList(SourceBaUnitRelationTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_SOURCE_BA_UNIT_RELATION_TYPES, SOURCE_BA_UNIT_RELATION_TYPE_CODES_KEY);
     }
-
+    
     public static List<RegistrationStatusTypeBean> getRegistrationStatusTypes() {
         return getCachedBeanList(RegistrationStatusTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_REGISTRATION_STATUS_TYPES, REGISTRATION_STATUS_TYPE_CODES_KEY);
     }
-
+    
     public static List<RrrTypeBean> getRrrTypes() {
         return getCachedBeanList(RrrTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_RRR_TYPES, RRR_TYPE_CODES_KEY);
     }
-
+    
     public static List<RrrGroupTypeBean> getRrrGroupTypes() {
         return getCachedBeanList(RrrGroupTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_RRR_GROUP_TYPES, RRR_GROUP_TYPE_CODES_KEY);
     }
-
+    
     public static List<MortgageTypeBean> getMortgageTypes() {
         return getCachedBeanList(MortgageTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_MORTGAGE_TYPES, MORTGAGE_TYPE_CODES_KEY);
     }
-
+    
     public static List<BaUnitTypeBean> getBaUnitTypes() {
         return getCachedBeanList(BaUnitTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_BA_UNIT_TYPES, BA_UNIT_TYPE_CODES_KEY);
     }
-
+    
     public static List<IdTypeBean> getIdTypes() {
         return getCachedBeanList(IdTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_ID_TYPES, ID_TYPE_CODES_KEY);
     }
-
+    
     public static List<ConditionTypeBean> getConditionTypes() {
         return getCachedBeanList(ConditionTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_CONDITION_TYPES, CONDITION_TYPE_CODES_KEY);
     }
-
+    
     public static List<PartyTypeBean> getPartyTypes() {
         return getCachedBeanList(PartyTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_PARTY_TYPES, PARTY_TYPE_CODES_KEY);
     }
-
+    
     public static List<PartyRoleTypeBean> getPartyRoles() {
         return getCachedBeanList(PartyRoleTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_PARTY_ROLES, PARTY_ROLE_TYPE_CODES_KEY);
     }
-
+    
     public static List<ServiceStatusTypeBean> getAppServiceStatusTypes() {
         return getCachedBeanList(ServiceStatusTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_SERVICE_STATUS_TYPES, SERVICE_STATUS_TYPE_CODES_KEY);
     }
-
+    
     public static List<ServiceActionTypeBean> getAppServiceActionTypes() {
         return getCachedBeanList(ServiceActionTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_SERVICE_ACTION_TYPES, SERVICE_ACTION_TYPE_CODES_KEY);
     }
-
+    
     public static List<ApplicationActionTypeBean> getApplicationActionTypes() {
         return getCachedBeanList(ApplicationActionTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_APPLICATION_ACTION_TYPES, APP_ACTION_TYPE_CODES_KEY);
     }
-
+    
     public static List<ApplicationStatusTypeBean> getApplicationStatusTypes() {
         return getCachedBeanList(ApplicationStatusTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_APPLICATION_STATUS_TYPES, APP_STATUS_TYPE_CODES_KEY);
     }
-
+    
     public static Map getApplicationStatusTypesMap() {
         return getCachedMap(
                 getCachedBeanList(ApplicationStatusTypeBean.class,
@@ -447,13 +461,13 @@ public final class CacheManager {
                         GET_APPLICATION_STATUS_TYPES, APP_STATUS_TYPE_CODES_KEY),
                 APP_STATUS_TYPE_CODES_MAP_KEY);
     }
-
+    
     public static List<SourceTypeBean> getSourceTypes() {
         return getCachedBeanList(SourceTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_SOURCE_TYPES, SOURCE_TYPES_KEY);
     }
-
+    
     public static Map getSourceTypesMap() {
         return getCachedMap(
                 getCachedBeanList(SourceTypeBean.class,
@@ -461,13 +475,13 @@ public final class CacheManager {
                         GET_SOURCE_TYPES, SOURCE_TYPES_KEY),
                 SOURCE_TYPES_MAP_KEY);
     }
-
+    
     public static List<CommunicationTypeBean> getCommunicationTypes() {
         return getCachedBeanList(CommunicationTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_COMMUNICATION_TYPES, COMMUNICATION_TYPES_KEY);
     }
-
+    
     public static Map getCommunicationTypesMap() {
         return getCachedMap(
                 getCachedBeanList(CommunicationTypeBean.class,
@@ -475,13 +489,13 @@ public final class CacheManager {
                         GET_COMMUNICATION_TYPES, COMMUNICATION_TYPES_KEY),
                 COMMUNICATION_TYPES_MAP_KEY);
     }
-
+    
     public static List<GenderTypeBean> getGenderTypes() {
         return getCachedBeanList(GenderTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_GENDER_TYPES, GENDER_TYPES_KEY);
     }
-
+    
     public static Map getGenderTypesMap() {
         return getCachedMap(
                 getCachedBeanList(GenderTypeBean.class,
@@ -489,13 +503,13 @@ public final class CacheManager {
                         GET_GENDER_TYPES, GENDER_TYPES_KEY),
                 GENDER_TYPES_MAP_KEY);
     }
-
+    
     public static List<RequestTypeBean> getRequestTypes() {
         return getCachedBeanList(RequestTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_REQUEST_TYPES, REQUEST_TYPES_KEY);
     }
-
+    
     public static Map getRequestTypesMap() {
         return getCachedMap(
                 getCachedBeanList(RequestTypeBean.class,
@@ -503,43 +517,43 @@ public final class CacheManager {
                         GET_REQUEST_TYPES, REQUEST_TYPES_KEY),
                 REQUEST_TYPES_MAP_KEY);
     }
-
+    
     public static List<HierarchyLevelBean> getHierarchyLevels() {
         return getCachedBeanList(HierarchyLevelBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_HIERARCHY_LEVELS, HIERARCHY_LEVEL_KEY);
     }
-
+    
     public static List<ConfigPanelLauncherBean> getPanelLauncherConfiguration() {
         return getCachedBeanList(ConfigPanelLauncherBean.class,
                 WSManager.getInstance().getAdminService(),
                 GET_PANEL_LAUNCHER_CONFIG, CONFIG_PANEL_LAUNCHER_KEY);
     }
-
+    
     public static List<PanelLauncherGroupBean> getPanelLauncherGroups() {
         return getCachedBeanList(PanelLauncherGroupBean.class,
                 WSManager.getInstance().getAdminService(),
                 GET_PANEL_LAUNCHER_GROUPS, CONFIG_PANEL_LAUNCHER_GROUP_KEY);
     }
-
+    
     public static List<NotationStatusTypeBean> getNotationStatusTypes() {
         return getCachedBeanList(NotationStatusTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_NOTATION_STATUS_TYPES, NOTATION_STATUS_TYPE_GROUP_KEY);
     }
-
+    
     public static List<StateLandStatusTypeBean> getStateLandStatusTypes() {
         return getCachedBeanList(StateLandStatusTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_STATE_LAND_STATUS_TYPES, STATE_LAND_STATUS_TYPE_GROUP_KEY);
     }
-
+    
     public static List<RrrSubTypeBean> getRrrSubTypes() {
         return getCachedBeanList(RrrSubTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_RRR_SUB_TYPES, RRR_SUB_TYPE_GROUP_KEY);
     }
-
+    
     public static List<PartySummaryBean> getPartiesByRole(String partyRoleCode) {
         String key = partyRoleCode + PARTIES_BY_ROLE_GROUP_KEY;
         List<PartySummaryBean> result = new ArrayList<PartySummaryBean>();
@@ -552,29 +566,47 @@ public final class CacheManager {
         }
         return Collections.unmodifiableList(result);
     }
-
+    
     public static List<UserSearchResultBean> getActiveUsers() {
         return getCachedBeanList(UserSearchResultBean.class,
                 WSManager.getInstance().getSearchService(),
                 GET_ACTIVE_USERS, ACTIVE_USERS_GROUP_KEY);
     }
-
+    
     public static List<ChecklistGroupBean> getChecklistGroups() {
         return getCachedBeanList(ChecklistGroupBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_CHECKLIST_GROUP, GET_CHECKLIST_GROUP_KEY);
     }
-
+    
     public static List<PublicDisplayItemTypeBean> getPublicDisplayTypes() {
         return getCachedBeanList(PublicDisplayItemTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_PUBLIC_DISPLAY_TYPES, GET_PUBLIC_DISPLAY_ITEM_TYPE_KEY);
     }
-
+    
     public static List<PublicDisplayItemStatusBean> getPublicDisplayStatusTypes() {
         return getCachedBeanList(PublicDisplayItemStatusBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_PUBLIC_DISPLAY_STATUS_TYPES, GET_PUBLIC_DISPLAY_ITEM_STATUS_KEY);
+    }
+    
+    public static List<AuthorityBean> getAuthorityTypes() {
+        return getCachedBeanList(AuthorityBean.class,
+                WSManager.getInstance().getReferenceDataService(),
+                GET_AUTHORITY_TYPES, GET_AUTHORITY_TYPE_KEY);
+    }
+    
+    public static List<ObjectionStatusBean> getObjectionStatusTypes() {
+        return getCachedBeanList(ObjectionStatusBean.class,
+                WSManager.getInstance().getReferenceDataService(),
+                GET_OBJECTION_STATUS_TYPES, GET_OBJECTION_STATUS_TYPE_KEY);
+    }
+    
+    public static List<NotifyRelationshipTypeBean> getNotifyRelationshipTypes() {
+        return getCachedBeanList(NotifyRelationshipTypeBean.class,
+                WSManager.getInstance().getReferenceDataService(),
+                GET_NOTIFY_RELATIONSHIP_TYPES, GET_NOTIFY_RELATIONSHIP_TYPE_KEY);
     }
 
     /**
@@ -590,9 +622,9 @@ public final class CacheManager {
      */
     private static <T extends AbstractBindingBean, S extends AbstractTO, W extends AbstractWSClient> List<T> getCachedBeanList(
             Class<T> beanClass, W wsClient, String methodName, String key) {
-
+        
         List<T> result = new ArrayList<T>();
-
+        
         if (cache.contains(key)) {
             result = (List<T>) cache.get(key);
         } else {
@@ -603,17 +635,21 @@ public final class CacheManager {
                     TypeConverters.TransferObjectListToBeanList(toList, beanClass, (List) result);
                     cache.put(key, result);
                 } catch (IllegalAccessException ex) {
+                    LogUtility.log("IllegalAccessException in CacheManager.getCachedBeanList", ex);
                     MessageUtility.displayMessage(ClientMessage.GENERAL_UNEXPECTED,
                             new Object[]{ex.getLocalizedMessage()});
                 } catch (IllegalArgumentException ex) {
-                    Logger.getLogger(CacheManager.class.getName()).log(Level.SEVERE, null, ex);
+                    LogUtility.log("IllegalArgumentException in CacheManager.getCachedBeanList", ex);
                 } catch (InvocationTargetException ex) {
+                    LogUtility.log("InvocationTargetException in CacheManager.getCachedBeanList", ex);
                     MessageUtility.displayMessage(ClientMessage.GENERAL_UNEXPECTED,
                             new Object[]{ex.getLocalizedMessage()});
                 } catch (NoSuchMethodException ex) {
+                    LogUtility.log("NoSuchMethodException in CacheManager.getCachedBeanList", ex);
                     MessageUtility.displayMessage(ClientMessage.ERR_NO_SUCH_METHOD,
                             new Object[]{methodName, ex.getLocalizedMessage()});
                 } catch (SecurityException ex) {
+                    LogUtility.log("SecurityException in CacheManager.getCachedBeanList", ex);
                     MessageUtility.displayMessage(ClientMessage.GENERAL_UNEXPECTED,
                             new Object[]{ex.getLocalizedMessage()});
                 }
@@ -634,7 +670,7 @@ public final class CacheManager {
     private static <T extends AbstractCodeBean> Map getCachedMap(
             List<T> beanList, String key) {
         Map map = new HashMap();
-
+        
         if (cache.contains(key)) {
             map = (HashMap) cache.get(key);
         } else {

@@ -35,16 +35,12 @@ import org.sola.clients.beans.application.ApplicationServiceBean;
 import org.sola.clients.beans.application.PublicDisplayItemBean;
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.swing.common.controls.CalendarForm;
-import org.sola.clients.swing.common.tasks.SolaTask;
-import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.security.SecurityClassificationDialog;
 import org.sola.common.RolesConstants;
 import org.sola.common.WindowUtility;
-import org.sola.common.messaging.ClientMessage;
-import org.sola.common.messaging.MessageUtility;
 
 /**
  *

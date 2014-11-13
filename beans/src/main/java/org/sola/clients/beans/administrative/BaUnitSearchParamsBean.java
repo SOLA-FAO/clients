@@ -59,6 +59,8 @@ public class BaUnitSearchParamsBean extends AbstractBindingBean {
     public static final String RRR_TYPE_CODE_PROPERTY = "rrrTypeCode";
     public static final String RRR_SUB_TYPE_PROPERTY = "rrrSubType";
     public static final String RRR_SUB_TYPE_CODE_PROPERTY = "rrrSubTypeCode";
+    public static final String APPLICATION_NR_PROPERTY = "applicationNr";
+    public static final String APPLICATION_ID_PROPERTY = "applicationId";
 
     private String nameFirstPart;
     private String nameLastPart;
@@ -74,6 +76,8 @@ public class BaUnitSearchParamsBean extends AbstractBindingBean {
     private String description;
     private RrrTypeBean rrrType;
     private RrrSubTypeBean rrrSubType;
+    private String applicationNr;
+    private String applicationId;
 
     public BaUnitSearchParamsBean() {
         super();
@@ -275,6 +279,26 @@ public class BaUnitSearchParamsBean extends AbstractBindingBean {
             this.rrrSubType = new RrrSubTypeBean();
         }
         this.setJointRefDataBean(this.rrrSubType, rrrSubType, RRR_SUB_TYPE_PROPERTY);
+    }
+
+    public String getApplicationNr() {
+        return applicationNr;
+    }
+
+    public void setApplicationNr(String applicationNr) {
+        String oldValue = this.applicationNr;
+        this.applicationNr = applicationNr;
+        propertySupport.firePropertyChange(APPLICATION_NR_PROPERTY, oldValue, this.applicationNr);
+    }
+
+    public String getApplicationId() {
+        return applicationId;
+    }
+
+    public void setApplicationId(String applicationId) {
+        String oldValue = this.applicationId;
+        this.applicationId = applicationId;
+        propertySupport.firePropertyChange(APPLICATION_ID_PROPERTY, oldValue, this.applicationId);
     }
 
     /**

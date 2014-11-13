@@ -2,7 +2,7 @@
 
 <Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <NonVisualComponents>
-    <Component class="org.sola.clients.beans.application.PublicDisplayItemListBean" name="listBean">
+    <Component class="org.sola.clients.beans.application.ObjectionListBean" name="listBean">
     </Component>
   </NonVisualComponents>
   <Properties>
@@ -25,11 +25,11 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="headerPanel1" max="32767" attributes="0"/>
+          <Component id="headerPanel1" pref="630" max="32767" attributes="0"/>
           <Component id="jToolBar1" alignment="1" max="32767" attributes="0"/>
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jScrollPane1" pref="586" max="32767" attributes="0"/>
+              <Component id="jScrollPane1" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -38,11 +38,11 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <Component id="headerPanel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="jToolBar1" min="-2" pref="25" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="jScrollPane1" pref="298" max="32767" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Component id="jScrollPane1" pref="324" max="32767" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -51,7 +51,7 @@
     <Component class="org.sola.clients.swing.ui.HeaderPanel" name="headerPanel1">
       <Properties>
         <Property name="titleText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="org/sola/clients/swing/desktop/workflow/Bundle.properties" key="PublicDisplayPanel.headerPanel1.titleText" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+          <ResourceString bundle="org/sola/clients/swing/desktop/workflow/Bundle.properties" key="ObjectionListPanel.headerPanel1.titleText" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
         </Property>
       </Properties>
     </Component>
@@ -63,15 +63,8 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
       <SubComponents>
-        <Component class="javax.swing.JButton" name="btnSave">
+        <Component class="org.sola.clients.swing.common.buttons.BtnSave" name="btnSave">
           <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/images/common/save.png"/>
-            </Property>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="org/sola/clients/swing/desktop/workflow/Bundle.properties" key="PublicDisplayPanel.btnSave.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-            </Property>
-            <Property name="focusable" type="boolean" value="false"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
           <Events>
@@ -121,52 +114,63 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Component class="org.sola.clients.swing.common.controls.JTableWithDefaultStyles" name="tblDisplayItems">
+        <Component class="org.sola.clients.swing.common.controls.JTableWithDefaultStyles" name="tblObjections">
           <Properties>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
               <TableColumnModel selectionModel="0">
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                   <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                    <ResourceString bundle="org/sola/clients/swing/desktop/workflow/Bundle.properties" key="PublicDisplayPanel.tblDisplayItems.columnModel.title0_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                    <ResourceString bundle="org/sola/clients/swing/desktop/workflow/Bundle.properties" key="ObjectionListPanel.tblObjections.columnModel.title0" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                   </Title>
                   <Editor/>
                   <Renderer/>
                 </Column>
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                   <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                    <ResourceString bundle="org/sola/clients/swing/desktop/workflow/Bundle.properties" key="PublicDisplayPanel.tblDisplayItems.columnModel.title1_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                  </Title>
-                  <Editor/>
-                  <Renderer/>
-                </Column>
-                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                  <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                    <ResourceString bundle="org/sola/clients/swing/desktop/workflow/Bundle.properties" key="PublicDisplayPanel.tblDisplayItems.columnModel.title2_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                    <ResourceString bundle="org/sola/clients/swing/desktop/workflow/Bundle.properties" key="ObjectionListPanel.tblObjections.columnModel.title1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                   </Title>
                   <Editor/>
                   <Renderer editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                    <Connection code="new DateTimeRenderer(false)" type="code"/>
+                    <Connection code="new DateTimeRenderer()" type="code"/>
+                  </Renderer>
+                </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="250" resizable="true">
+                  <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                    <ResourceString bundle="org/sola/clients/swing/desktop/workflow/Bundle.properties" key="ObjectionListPanel.tblObjections.columnModel.title2" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                  </Title>
+                  <Editor/>
+                  <Renderer editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                    <Connection code="new TableCellTextAreaRenderer()" type="code"/>
                   </Renderer>
                 </Column>
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                   <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                    <ResourceString bundle="org/sola/clients/swing/desktop/workflow/Bundle.properties" key="PublicDisplayPanel.tblDisplayItems.columnModel.title3_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                  </Title>
-                  <Editor/>
-                  <Renderer editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                    <Connection code="new DateTimeRenderer(false)" type="code"/>
-                  </Renderer>
-                </Column>
-                <Column maxWidth="-1" minWidth="-1" prefWidth="300" resizable="true">
-                  <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                    <ResourceString bundle="org/sola/clients/swing/desktop/workflow/Bundle.properties" key="PublicDisplayPanel.tblDisplayItems.columnModel.title4" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                    <ResourceString bundle="org/sola/clients/swing/desktop/workflow/Bundle.properties" key="ObjectionListPanel.tblObjections.columnModel.title3" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                   </Title>
                   <Editor/>
                   <Renderer/>
                 </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="250" resizable="true">
+                  <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                    <ResourceString bundle="org/sola/clients/swing/desktop/workflow/Bundle.properties" key="ObjectionListPanel.tblObjections.columnModel.title4" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                  </Title>
+                  <Editor/>
+                  <Renderer editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                    <Connection code="new TableCellTextAreaRenderer()" type="code"/>
+                  </Renderer>
+                </Column>
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                   <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                    <ResourceString bundle="org/sola/clients/swing/desktop/workflow/Bundle.properties" key="PublicDisplayPanel.tblDisplayItems.columnModel.title5" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                    <ResourceString bundle="org/sola/clients/swing/desktop/workflow/Bundle.properties" key="ObjectionListPanel.tblObjections.columnModel.title5" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                  </Title>
+                  <Editor/>
+                  <Renderer editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                    <Connection code="new DateTimeRenderer()" type="code"/>
+                  </Renderer>
+                </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                    <ResourceString bundle="org/sola/clients/swing/desktop/workflow/Bundle.properties" key="ObjectionListPanel.tblObjections.columnModel.title6" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                   </Title>
                   <Editor/>
                   <Renderer/>
@@ -178,20 +182,12 @@
             </Property>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="elements" source="listBean" sourcePath="${publicDisplayItemList}" target="tblDisplayItems" targetPath="elements" updateStrategy="0" immediately="true">
-              <Subbinding sourcePath="${referenceNr}">
+            <BindingProperty name="elements" source="listBean" sourcePath="${filteredObjectionList}" target="tblObjections" targetPath="elements" updateStrategy="0" immediately="true">
+              <Subbinding sourcePath="${nr}">
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
               </Subbinding>
-              <Subbinding sourcePath="${type.displayValue}">
-                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
-                <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
-              </Subbinding>
-              <Subbinding sourcePath="${displayFrom}">
-                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="java.util.Date.class"/>
-                <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
-              </Subbinding>
-              <Subbinding sourcePath="${displayTo}">
+              <Subbinding sourcePath="${lodgedDate}">
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="java.util.Date.class"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
               </Subbinding>
@@ -199,17 +195,29 @@
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
               </Subbinding>
+              <Subbinding sourcePath="${authority.displayValue}">
+                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
+                <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
+              </Subbinding>
+              <Subbinding sourcePath="${resolution}">
+                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
+                <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
+              </Subbinding>
+              <Subbinding sourcePath="${resolutionDate}">
+                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="java.util.Date.class"/>
+                <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
+              </Subbinding>
               <Subbinding sourcePath="${status.displayValue}">
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
               </Subbinding>
             </BindingProperty>
-            <BindingProperty name="selectedElement" source="listBean" sourcePath="${selectedPublicDisplayItem}" target="tblDisplayItems" targetPath="selectedElement" updateStrategy="0" immediately="false">
+            <BindingProperty name="selectedElement" source="listBean" sourcePath="${selectedObjection}" target="tblObjections" targetPath="selectedElement" updateStrategy="0" immediately="false">
               <BindingParameter name="IGNORE_ADJUSTING" value="N"/>
             </BindingProperty>
           </BindingProperties>
           <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblDisplayItemsMouseClicked"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblObjectionsMouseClicked"/>
           </Events>
         </Component>
       </SubComponents>

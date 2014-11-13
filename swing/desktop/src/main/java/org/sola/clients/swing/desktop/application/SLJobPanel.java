@@ -2151,7 +2151,6 @@ public class SLJobPanel extends ContentPanel {
             tabPropertyDetails.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("SLJobPanel.tabPropertyDetails.columnModel.title6")); // NOI18N
             tabPropertyDetails.getColumnModel().getColumn(4).setCellRenderer(new CellDelimitedListRenderer("; ", false));
             tabPropertyDetails.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("SLJobPanel.tabPropertyDetails.columnModel.title4")); // NOI18N
-            tabPropertyDetails.getColumnModel().getColumn(5).setCellRenderer(null);
         }
 
         tbPropertyDetails.setFloatable(false);

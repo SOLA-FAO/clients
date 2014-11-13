@@ -37,6 +37,7 @@ import javax.swing.JLabel;
 import org.sola.clients.beans.administrative.BaUnitSearchParamsBean;
 import org.sola.clients.beans.administrative.BaUnitSearchResultBean;
 import org.sola.clients.beans.administrative.BaUnitSearchResultListBean;
+import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.referencedata.RrrTypeBean;
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.swing.common.LafManager;
@@ -69,12 +70,17 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
     public static final String SELECT_BAUNIT_SEARCH_RESULT = "selectBaUnit";
     public static final String TAB_STATE_LAND = "tabStateLand";
     public static final String TAB_PROPERTY = "tabProperty";
+    public static final String TAB_APPLICATION = "tabApplication";
     private boolean defaultActionOpen = true;
 
     /**
      * Default constructor.
      */
     public BaUnitSearchPanel() {
+        this(null);
+    }
+
+    public BaUnitSearchPanel(ApplicationBean appBean) {
         initComponents();
         searchParamsSL.setSearchType(BaUnitSearchParamsBean.SEARCH_TYPE_STATE_LAND);
 
@@ -109,10 +115,38 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
             }
         });
 
+        applicationResults.addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals(BaUnitSearchResultListBean.SELECTED_BAUNIT_SEARCH_RESULT_PROPERTY)) {
+                    btnAppSelect.setEnabled(evt.getNewValue() != null);
+                    menuAppSelect.setEnabled(evt.getNewValue() != null);
+                }
+            }
+        });
+
         // Clear the RrrSubType combo box
         rrrSubTypeListBean.clearAllCodes();
-
+        setupAppTab(appBean);
         customizeButtons();
+    }
+
+    /**
+     * Configure the Application Tab for display if an applicationBean has been
+     * provided otherwise hide the tab.
+     *
+     * @param appBean
+     */
+    private void setupAppTab(ApplicationBean appBean) {
+        if (appBean == null) {
+            hideTabs(TAB_APPLICATION);
+        } else {
+            tabMain.setTitleAt(0, tabMain.getTitleAt(0) + appBean.getNr());
+            BaUnitSearchParamsBean appParams = new BaUnitSearchParamsBean();
+            appParams.setSearchType(BaUnitSearchParamsBean.SEARCH_TYPE_STATE_LAND);
+            appParams.setApplicationId(appBean.getId());
+            applicationResults.search(appParams);
+        }
     }
 
     private void customizeButtons() {
@@ -126,6 +160,8 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
         menuSLOpen.setEnabled(false);
         menuSLSelect.setEnabled(false);
         menuSLAssign.setEnabled(false);
+        btnAppSelect.setEnabled(false);
+        menuAppSelect.setEnabled(false);
 
         showSelectButtons(false);
         showOpenButtons(true);
@@ -188,6 +224,8 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
             tabMain.setSelectedComponent(tabStateLand);
         } else if (TAB_PROPERTY.equals(tab)) {
             tabMain.setSelectedComponent(tabProperty);
+        } else if (TAB_APPLICATION.equals(tab)) {
+            tabMain.setSelectedComponent(tabApplication);
         }
     }
 
@@ -205,6 +243,8 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
                 tabMain.removeTabAt(tabMain.indexOfComponent(tabStateLand));
             } else if (TAB_PROPERTY.equals(tab) && tabMain.indexOfComponent(tabProperty) >= 0) {
                 tabMain.removeTabAt(tabMain.indexOfComponent(tabProperty));
+            } else if (TAB_APPLICATION.equals(tab) && tabMain.indexOfComponent(tabApplication) >= 0) {
+                tabMain.removeTabAt(tabMain.indexOfComponent(tabApplication));
             }
         }
     }
@@ -229,11 +269,13 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
 
             @Override
             public void taskDone() {
-                lblResultCount.setText(Integer.toString(results.getBaUnitSearchResults().size()));
-                if (results.getBaUnitSearchResults().size() < 1) {
-                    MessageUtility.displayMessage(ClientMessage.SEARCH_NO_RESULTS);
-                } else if (results.getBaUnitSearchResults().size() > 100) {
-                    MessageUtility.displayMessage(ClientMessage.SEARCH_TOO_MANY_RESULTS, new String[]{"100"});
+                if (lblResultCount != null) {
+                    lblResultCount.setText(Integer.toString(results.getBaUnitSearchResults().size()));
+                    if (results.getBaUnitSearchResults().size() < 1) {
+                        MessageUtility.displayMessage(ClientMessage.SEARCH_NO_RESULTS);
+                    } else if (results.getBaUnitSearchResults().size() > 100) {
+                        MessageUtility.displayMessage(ClientMessage.SEARCH_TOO_MANY_RESULTS, new String[]{"100"});
+                    }
                 }
             }
         };
@@ -292,7 +334,15 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
         rrrSubTypeListBean = new org.sola.clients.beans.referencedata.RrrSubTypeListBean(true);
         jPanel24 = new javax.swing.JPanel();
         jPanel25 = new javax.swing.JPanel();
+        applicationResults = new org.sola.clients.beans.administrative.BaUnitSearchResultListBean();
+        popUpAppResults = new javax.swing.JPopupMenu();
+        menuAppSelect = new javax.swing.JMenuItem();
         tabMain = new javax.swing.JTabbedPane();
+        tabApplication = new javax.swing.JPanel();
+        jToolBar3 = new javax.swing.JToolBar();
+        btnAppSelect = new org.sola.clients.swing.common.buttons.BtnSelect();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tblApplicationProperty = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
         tabStateLand = new javax.swing.JPanel();
         jPanel10 = new javax.swing.JPanel();
         jPanel11 = new javax.swing.JPanel();
@@ -344,7 +394,7 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
         jLabel15 = new javax.swing.JLabel();
         lblSLSearchResultCount = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTableWithDefaultStyles1 = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
+        tblSLProperty = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
         tabProperty = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
@@ -377,7 +427,7 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
         lblSearchResult = new javax.swing.JLabel();
         lblSearchResultCount = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tableSearchResults = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
+        tblSearchResults = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
 
         popUpSearchResults.setName("popUpSearchResults"); // NOI18N
 
@@ -460,7 +510,123 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
             .addGap(0, 100, Short.MAX_VALUE)
         );
 
+        popUpAppResults.setName("popUpAppResults"); // NOI18N
+
+        menuAppSelect.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/select.png"))); // NOI18N
+        menuAppSelect.setText(bundle.getString("BaUnitSearchPanel.menuAppSelect.text")); // NOI18N
+        menuAppSelect.setName("menuAppSelect"); // NOI18N
+        menuAppSelect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuAppSelectActionPerformed(evt);
+            }
+        });
+        popUpAppResults.add(menuAppSelect);
+
         tabMain.setName("tabMain"); // NOI18N
+
+        tabApplication.setName("tabApplication"); // NOI18N
+
+        jToolBar3.setFloatable(false);
+        jToolBar3.setRollover(true);
+        jToolBar3.setName("jToolBar3"); // NOI18N
+
+        btnAppSelect.setName("btnAppSelect"); // NOI18N
+        btnAppSelect.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAppSelect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAppSelectActionPerformed(evt);
+            }
+        });
+        jToolBar3.add(btnAppSelect);
+
+        jScrollPane3.setName("jScrollPane3"); // NOI18N
+
+        tblApplicationProperty.setName("tblApplicationProperty"); // NOI18N
+        tblApplicationProperty.getTableHeader().setReorderingAllowed(false);
+
+        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${baUnitSearchResults}");
+        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, applicationResults, eLProperty, tblApplicationProperty);
+        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${stateLandName}"));
+        columnBinding.setColumnName("State Land Name");
+        columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${landUseType.displayValue}"));
+        columnBinding.setColumnName("Land Use Type.display Value");
+        columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${propertyManager}"));
+        columnBinding.setColumnName("Property Manager");
+        columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${rightholders}"));
+        columnBinding.setColumnName("Rightholders");
+        columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${parcels}"));
+        columnBinding.setColumnName("Parcels");
+        columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${locality}"));
+        columnBinding.setColumnName("Locality");
+        columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${description}"));
+        columnBinding.setColumnName("Description");
+        columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${stateLandStatus.displayValue}"));
+        columnBinding.setColumnName("State Land Status.display Value");
+        columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
+        bindingGroup.addBinding(jTableBinding);
+        jTableBinding.bind();org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, applicationResults, org.jdesktop.beansbinding.ELProperty.create("${selectedBaUnitSearchResult}"), tblApplicationProperty, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
+        bindingGroup.addBinding(binding);
+
+        tblApplicationProperty.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblApplicationPropertyMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(tblApplicationProperty);
+        if (tblApplicationProperty.getColumnModel().getColumnCount() > 0) {
+            tblApplicationProperty.getColumnModel().getColumn(0).setPreferredWidth(30);
+            tblApplicationProperty.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("BaUnitSearchPanel.tblApplicationProperty.columnModel.title0")); // NOI18N
+            tblApplicationProperty.getColumnModel().getColumn(1).setPreferredWidth(30);
+            tblApplicationProperty.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("BaUnitSearchPanel.tblApplicationProperty.columnModel.title1")); // NOI18N
+            tblApplicationProperty.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("BaUnitSearchPanel.tblApplicationProperty.columnModel.title2")); // NOI18N
+            tblApplicationProperty.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("BaUnitSearchPanel.tblApplicationProperty.columnModel.title3")); // NOI18N
+            tblApplicationProperty.getColumnModel().getColumn(3).setCellRenderer(new CellDelimitedListRenderer("::::"));
+            tblApplicationProperty.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("BaUnitSearchPanel.tblApplicationProperty.columnModel.title4")); // NOI18N
+            tblApplicationProperty.getColumnModel().getColumn(4).setCellRenderer(new CellDelimitedListRenderer("::::"));
+            tblApplicationProperty.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("BaUnitSearchPanel.tblApplicationProperty.columnModel.title5")); // NOI18N
+            tblApplicationProperty.getColumnModel().getColumn(5).setCellRenderer(new CellDelimitedListRenderer("::::"));
+            tblApplicationProperty.getColumnModel().getColumn(6).setHeaderValue(bundle.getString("BaUnitSearchPanel.tblApplicationProperty.columnModel.title6")); // NOI18N
+            tblApplicationProperty.getColumnModel().getColumn(7).setPreferredWidth(30);
+            tblApplicationProperty.getColumnModel().getColumn(7).setHeaderValue(bundle.getString("BaUnitSearchPanel.tblApplicationProperty.columnModel.title7")); // NOI18N
+        }
+
+        javax.swing.GroupLayout tabApplicationLayout = new javax.swing.GroupLayout(tabApplication);
+        tabApplication.setLayout(tabApplicationLayout);
+        tabApplicationLayout.setHorizontalGroup(
+            tabApplicationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tabApplicationLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(tabApplicationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 602, Short.MAX_VALUE)
+                    .addComponent(jToolBar3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        tabApplicationLayout.setVerticalGroup(
+            tabApplicationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tabApplicationLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jToolBar3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3)
+                .addContainerGap())
+        );
+
+        tabMain.addTab(bundle.getString("BaUnitSearchPanel.tabApplication.TabConstraints.tabTitle"), tabApplication); // NOI18N
 
         tabStateLand.setName("tabStateLand"); // NOI18N
 
@@ -477,7 +643,7 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
 
         txtSLRefNum.setName("txtSLRefNum"); // NOI18N
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, searchParamsSL, org.jdesktop.beansbinding.ELProperty.create("${nameLastPart}"), txtSLRefNum, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, searchParamsSL, org.jdesktop.beansbinding.ELProperty.create("${nameLastPart}"), txtSLRefNum, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
@@ -617,7 +783,7 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
 
         cbxRrrType.setName("cbxRrrType"); // NOI18N
 
-        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${rrrTypeBeanList}");
+        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${rrrTypeBeanList}");
         org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrTypeListBean, eLProperty, cbxRrrType);
         bindingGroup.addBinding(jComboBoxBinding);
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, searchParamsSL, org.jdesktop.beansbinding.ELProperty.create("${rrrType}"), cbxRrrType, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
@@ -895,13 +1061,13 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
-        jTableWithDefaultStyles1.setComponentPopupMenu(popUpSLSearchResults);
-        jTableWithDefaultStyles1.setName("jTableWithDefaultStyles1"); // NOI18N
-        jTableWithDefaultStyles1.getTableHeader().setReorderingAllowed(false);
+        tblSLProperty.setComponentPopupMenu(popUpSLSearchResults);
+        tblSLProperty.setName("tblSLProperty"); // NOI18N
+        tblSLProperty.getTableHeader().setReorderingAllowed(false);
 
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${baUnitSearchResults}");
-        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, searchResultsSL, eLProperty, jTableWithDefaultStyles1);
-        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${checked}"));
+        jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, searchResultsSL, eLProperty, tblSLProperty);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${checked}"));
         columnBinding.setColumnName("Checked");
         columnBinding.setColumnClass(Boolean.class);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${stateLandName}"));
@@ -937,34 +1103,34 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
         bindingGroup.addBinding(jTableBinding);
-        jTableBinding.bind();binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, searchResultsSL, org.jdesktop.beansbinding.ELProperty.create("${selectedBaUnitSearchResult}"), jTableWithDefaultStyles1, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
+        jTableBinding.bind();binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, searchResultsSL, org.jdesktop.beansbinding.ELProperty.create("${selectedBaUnitSearchResult}"), tblSLProperty, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
         bindingGroup.addBinding(binding);
 
-        jTableWithDefaultStyles1.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblSLProperty.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTableWithDefaultStyles1MouseClicked(evt);
+                tblSLPropertyMouseClicked(evt);
             }
         });
-        jScrollPane2.setViewportView(jTableWithDefaultStyles1);
-        if (jTableWithDefaultStyles1.getColumnModel().getColumnCount() > 0) {
-            jTableWithDefaultStyles1.getColumnModel().getColumn(0).setMinWidth(25);
-            jTableWithDefaultStyles1.getColumnModel().getColumn(0).setPreferredWidth(25);
-            jTableWithDefaultStyles1.getColumnModel().getColumn(0).setMaxWidth(25);
-            jTableWithDefaultStyles1.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("BaUnitSearchPanel.jTableWithDefaultStyles1.columnModel.title7_1")); // NOI18N
-            jTableWithDefaultStyles1.getColumnModel().getColumn(1).setPreferredWidth(30);
-            jTableWithDefaultStyles1.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("BaUnitSearchPanel.jTableWithDefaultStyles1.columnModel.title0_2")); // NOI18N
-            jTableWithDefaultStyles1.getColumnModel().getColumn(2).setPreferredWidth(30);
-            jTableWithDefaultStyles1.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("BaUnitSearchPanel.jTableWithDefaultStyles1.columnModel.title6_1")); // NOI18N
-            jTableWithDefaultStyles1.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("BaUnitSearchPanel.jTableWithDefaultStyles1.columnModel.title8")); // NOI18N
-            jTableWithDefaultStyles1.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("BaUnitSearchPanel.jTableWithDefaultStyles1.columnModel.title3_1")); // NOI18N
-            jTableWithDefaultStyles1.getColumnModel().getColumn(4).setCellRenderer(new CellDelimitedListRenderer("::::"));
-            jTableWithDefaultStyles1.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("BaUnitSearchPanel.jTableWithDefaultStyles1.columnModel.title4")); // NOI18N
-            jTableWithDefaultStyles1.getColumnModel().getColumn(5).setCellRenderer(new CellDelimitedListRenderer("::::"));
-            jTableWithDefaultStyles1.getColumnModel().getColumn(6).setHeaderValue(bundle.getString("BaUnitSearchPanel.jTableWithDefaultStyles1.columnModel.title5")); // NOI18N
-            jTableWithDefaultStyles1.getColumnModel().getColumn(6).setCellRenderer(new CellDelimitedListRenderer("::::"));
-            jTableWithDefaultStyles1.getColumnModel().getColumn(7).setHeaderValue(bundle.getString("BaUnitSearchPanel.jTableWithDefaultStyles1.columnModel.title6")); // NOI18N
-            jTableWithDefaultStyles1.getColumnModel().getColumn(8).setPreferredWidth(30);
-            jTableWithDefaultStyles1.getColumnModel().getColumn(8).setHeaderValue(bundle.getString("BaUnitSearchPanel.jTableWithDefaultStyles1.columnModel.title7")); // NOI18N
+        jScrollPane2.setViewportView(tblSLProperty);
+        if (tblSLProperty.getColumnModel().getColumnCount() > 0) {
+            tblSLProperty.getColumnModel().getColumn(0).setMinWidth(25);
+            tblSLProperty.getColumnModel().getColumn(0).setPreferredWidth(25);
+            tblSLProperty.getColumnModel().getColumn(0).setMaxWidth(25);
+            tblSLProperty.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("BaUnitSearchPanel.jTableWithDefaultStyles1.columnModel.title7_1")); // NOI18N
+            tblSLProperty.getColumnModel().getColumn(1).setPreferredWidth(30);
+            tblSLProperty.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("BaUnitSearchPanel.jTableWithDefaultStyles1.columnModel.title0_2")); // NOI18N
+            tblSLProperty.getColumnModel().getColumn(2).setPreferredWidth(30);
+            tblSLProperty.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("BaUnitSearchPanel.jTableWithDefaultStyles1.columnModel.title6_1")); // NOI18N
+            tblSLProperty.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("BaUnitSearchPanel.jTableWithDefaultStyles1.columnModel.title8")); // NOI18N
+            tblSLProperty.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("BaUnitSearchPanel.jTableWithDefaultStyles1.columnModel.title3_1")); // NOI18N
+            tblSLProperty.getColumnModel().getColumn(4).setCellRenderer(new CellDelimitedListRenderer("::::"));
+            tblSLProperty.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("BaUnitSearchPanel.jTableWithDefaultStyles1.columnModel.title4")); // NOI18N
+            tblSLProperty.getColumnModel().getColumn(5).setCellRenderer(new CellDelimitedListRenderer("::::"));
+            tblSLProperty.getColumnModel().getColumn(6).setHeaderValue(bundle.getString("BaUnitSearchPanel.jTableWithDefaultStyles1.columnModel.title5")); // NOI18N
+            tblSLProperty.getColumnModel().getColumn(6).setCellRenderer(new CellDelimitedListRenderer("::::"));
+            tblSLProperty.getColumnModel().getColumn(7).setHeaderValue(bundle.getString("BaUnitSearchPanel.jTableWithDefaultStyles1.columnModel.title6")); // NOI18N
+            tblSLProperty.getColumnModel().getColumn(8).setPreferredWidth(30);
+            tblSLProperty.getColumnModel().getColumn(8).setHeaderValue(bundle.getString("BaUnitSearchPanel.jTableWithDefaultStyles1.columnModel.title7")); // NOI18N
         }
 
         javax.swing.GroupLayout tabStateLandLayout = new javax.swing.GroupLayout(tabStateLand);
@@ -987,7 +1153,7 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1259,12 +1425,12 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
-        tableSearchResults.setComponentPopupMenu(popUpSearchResults);
-        tableSearchResults.setName("tableSearchResults"); // NOI18N
-        tableSearchResults.getTableHeader().setReorderingAllowed(false);
+        tblSearchResults.setComponentPopupMenu(popUpSearchResults);
+        tblSearchResults.setName("tblSearchResults"); // NOI18N
+        tblSearchResults.getTableHeader().setReorderingAllowed(false);
 
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${baUnitSearchResults}");
-        jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitSearchResults, eLProperty, tableSearchResults);
+        jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitSearchResults, eLProperty, tblSearchResults);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${name}"));
         columnBinding.setColumnName("Name");
         columnBinding.setColumnClass(String.class);
@@ -1290,27 +1456,27 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
         bindingGroup.addBinding(jTableBinding);
-        jTableBinding.bind();binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitSearchResults, org.jdesktop.beansbinding.ELProperty.create("${selectedBaUnitSearchResult}"), tableSearchResults, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
+        jTableBinding.bind();binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitSearchResults, org.jdesktop.beansbinding.ELProperty.create("${selectedBaUnitSearchResult}"), tblSearchResults, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
         bindingGroup.addBinding(binding);
 
-        tableSearchResults.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblSearchResults.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tableSearchResultsMouseClicked(evt);
+                tblSearchResultsMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tableSearchResults);
-        if (tableSearchResults.getColumnModel().getColumnCount() > 0) {
-            tableSearchResults.getColumnModel().getColumn(0).setPreferredWidth(30);
-            tableSearchResults.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("BaUnitSearchPanel.tableSearchResults.columnModel.title0")); // NOI18N
-            tableSearchResults.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("BaUnitSearchPanel.tableSearchResults.columnModel.title3")); // NOI18N
-            tableSearchResults.getColumnModel().getColumn(1).setCellRenderer(new CellDelimitedListRenderer("::::"));
-            tableSearchResults.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("BaUnitSearchPanel.tableSearchResults.columnModel.title5")); // NOI18N
-            tableSearchResults.getColumnModel().getColumn(2).setCellRenderer(new CellDelimitedListRenderer("::::"));
-            tableSearchResults.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("BaUnitSearchPanel.tableSearchResults.columnModel.title5_1")); // NOI18N
-            tableSearchResults.getColumnModel().getColumn(3).setCellRenderer(new CellDelimitedListRenderer("::::"));
-            tableSearchResults.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("BaUnitSearchPanel.tableSearchResults.columnModel.title6")); // NOI18N
-            tableSearchResults.getColumnModel().getColumn(5).setPreferredWidth(30);
-            tableSearchResults.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("BaUnitSearchPanel.tableSearchResults.columnModel.title4")); // NOI18N
+        jScrollPane1.setViewportView(tblSearchResults);
+        if (tblSearchResults.getColumnModel().getColumnCount() > 0) {
+            tblSearchResults.getColumnModel().getColumn(0).setPreferredWidth(30);
+            tblSearchResults.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("BaUnitSearchPanel.tblSearchResults.columnModel.title0")); // NOI18N
+            tblSearchResults.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("BaUnitSearchPanel.tableSearchResults.columnModel.title3")); // NOI18N
+            tblSearchResults.getColumnModel().getColumn(1).setCellRenderer(new CellDelimitedListRenderer("::::"));
+            tblSearchResults.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("BaUnitSearchPanel.tableSearchResults.columnModel.title5")); // NOI18N
+            tblSearchResults.getColumnModel().getColumn(2).setCellRenderer(new CellDelimitedListRenderer("::::"));
+            tblSearchResults.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("BaUnitSearchPanel.tableSearchResults.columnModel.title5_1")); // NOI18N
+            tblSearchResults.getColumnModel().getColumn(3).setCellRenderer(new CellDelimitedListRenderer("::::"));
+            tblSearchResults.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("BaUnitSearchPanel.tableSearchResults.columnModel.title6")); // NOI18N
+            tblSearchResults.getColumnModel().getColumn(5).setPreferredWidth(30);
+            tblSearchResults.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("BaUnitSearchPanel.tableSearchResults.columnModel.title4")); // NOI18N
         }
 
         javax.swing.GroupLayout tabPropertyLayout = new javax.swing.GroupLayout(tabProperty);
@@ -1333,7 +1499,7 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1357,7 +1523,7 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
         executeSearch(baUnitSearchParams, lblSearchResultCount, baUnitSearchResults);
     }//GEN-LAST:event_btnSearchActionPerformed
 
-    private void tableSearchResultsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableSearchResultsMouseClicked
+    private void tblSearchResultsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSearchResultsMouseClicked
         if (evt.getClickCount() == 2) {
             if (defaultActionOpen) {
                 openBaUnit(baUnitSearchResults.getSelectedBaUnitSearchResult());
@@ -1365,7 +1531,7 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
                 selectBaUnit(baUnitSearchResults.getSelectedBaUnitSearchResult());
             }
         }
-    }//GEN-LAST:event_tableSearchResultsMouseClicked
+    }//GEN-LAST:event_tblSearchResultsMouseClicked
 
     private void btnOpenBaUnitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenBaUnitActionPerformed
         openBaUnit(baUnitSearchResults.getSelectedBaUnitSearchResult());
@@ -1399,7 +1565,7 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
         selectBaUnit(baUnitSearchResults.getSelectedBaUnitSearchResult());
     }//GEN-LAST:event_btnSelectBaUnitActionPerformed
 
-    private void jTableWithDefaultStyles1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableWithDefaultStyles1MouseClicked
+    private void tblSLPropertyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSLPropertyMouseClicked
         if (evt.getClickCount() == 2) {
             if (defaultActionOpen) {
                 openBaUnit(searchResultsSL.getSelectedBaUnitSearchResult());
@@ -1407,7 +1573,7 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
                 selectBaUnit(searchResultsSL.getSelectedBaUnitSearchResult());
             }
         }
-    }//GEN-LAST:event_jTableWithDefaultStyles1MouseClicked
+    }//GEN-LAST:event_tblSLPropertyMouseClicked
 
     private void menuSelectBaUnitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSelectBaUnitActionPerformed
         selectBaUnit(baUnitSearchResults.getSelectedBaUnitSearchResult());
@@ -1429,9 +1595,29 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
         assignProperty(searchResultsSL.getChecked(true));
     }//GEN-LAST:event_menuSLAssignActionPerformed
 
+    private void btnAppSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAppSelectActionPerformed
+        selectBaUnit(applicationResults.getSelectedBaUnitSearchResult());
+    }//GEN-LAST:event_btnAppSelectActionPerformed
+
+    private void menuAppSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAppSelectActionPerformed
+        selectBaUnit(applicationResults.getSelectedBaUnitSearchResult());
+    }//GEN-LAST:event_menuAppSelectActionPerformed
+
+    private void tblApplicationPropertyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblApplicationPropertyMouseClicked
+        if (evt.getClickCount() == 2) {
+            if (defaultActionOpen) {
+                openBaUnit(applicationResults.getSelectedBaUnitSearchResult());
+            } else {
+                selectBaUnit(applicationResults.getSelectedBaUnitSearchResult());
+            }
+        }
+    }//GEN-LAST:event_tblApplicationPropertyMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private org.sola.clients.beans.administrative.BaUnitSearchResultListBean applicationResults;
     private org.sola.clients.beans.administrative.BaUnitSearchParamsBean baUnitSearchParams;
     private org.sola.clients.beans.administrative.BaUnitSearchResultListBean baUnitSearchResults;
+    private org.sola.clients.swing.common.buttons.BtnSelect btnAppSelect;
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnOpenBaUnit;
     private javax.swing.JButton btnSLAssign;
@@ -1491,21 +1677,24 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
-    private org.sola.clients.swing.common.controls.JTableWithDefaultStyles jTableWithDefaultStyles1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
+    private javax.swing.JToolBar jToolBar3;
     private org.sola.clients.beans.referencedata.LandUseTypeListBean landUseTypeListBean;
     private javax.swing.JLabel lblSLSearchResultCount;
     private javax.swing.JLabel lblSearchResult;
     private javax.swing.JLabel lblSearchResultCount;
+    private javax.swing.JMenuItem menuAppSelect;
     private javax.swing.JMenuItem menuOpenBaUnit;
     private javax.swing.JMenuItem menuSLAssign;
     private javax.swing.JMenuItem menuSLOpen;
     private javax.swing.JMenuItem menuSLSelect;
     private javax.swing.JMenuItem menuSelectBaUnit;
+    private javax.swing.JPopupMenu popUpAppResults;
     private javax.swing.JPopupMenu popUpSLSearchResults;
     private javax.swing.JPopupMenu popUpSearchResults;
     private org.sola.clients.beans.referencedata.RrrSubTypeListBean rrrSubTypeListBean;
@@ -1513,10 +1702,13 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
     private org.sola.clients.beans.administrative.BaUnitSearchParamsBean searchParamsSL;
     private org.sola.clients.beans.administrative.BaUnitSearchResultListBean searchResultsSL;
     private javax.swing.JToolBar.Separator separator1;
+    private javax.swing.JPanel tabApplication;
     private javax.swing.JTabbedPane tabMain;
     private javax.swing.JPanel tabProperty;
     private javax.swing.JPanel tabStateLand;
-    private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tableSearchResults;
+    private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tblApplicationProperty;
+    private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tblSLProperty;
+    private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tblSearchResults;
     private javax.swing.JTextField txtDescription;
     private javax.swing.JTextField txtLocality;
     private javax.swing.JTextField txtNameFirstPart;

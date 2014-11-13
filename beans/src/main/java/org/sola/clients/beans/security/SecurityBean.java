@@ -31,7 +31,9 @@ package org.sola.clients.beans.security;
 
 import java.security.MessageDigest;
 import java.util.HashMap;
+import java.util.Iterator;
 import org.sola.clients.beans.AbstractBindingBean;
+import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.common.RolesConstants;
 import org.sola.common.SOLAException;
