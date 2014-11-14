@@ -30,11 +30,8 @@ package org.sola.clients.swing.desktop.administrative;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationServiceBean;
 import org.sola.clients.beans.security.SecurityBean;
-import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.common.RolesConstants;
-import org.sola.common.messaging.ClientMessage;
-import org.sola.common.messaging.MessageUtility;
 
 /**
  *
@@ -242,9 +239,9 @@ public class ValuationListPanel extends ContentPanel {
     // End of variables declaration//GEN-END:variables
 
     private void addValuation() {
-        ValuationForm serviceListForm = new ValuationForm(applicationBean);
-        serviceListForm.setLocationRelativeTo(this);
-        serviceListForm.setVisible(true);
+     //   ValuationForm serviceListForm = new ValuationForm(applicationBean);
+       // serviceListForm.setLocationRelativeTo(this);
+       // serviceListForm.setVisible(true);
     }
         
     
