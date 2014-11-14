@@ -38,6 +38,7 @@ import org.sola.clients.beans.application.ServiceChecklistItemListBean;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
+import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.renderers.TableCellTextAreaRenderer;
 import org.sola.common.StringUtility;
@@ -79,6 +80,7 @@ public class ChecklistPanel extends ContentPanel {
                 }
             }
         });
+        saveListBeanState(); 
     }
 
     private void customizeForm() {
@@ -112,10 +114,10 @@ public class ChecklistPanel extends ContentPanel {
         }
     }
 
-    private void saveChecklist(final boolean showMessage) {
+    private boolean saveChecklist(final boolean showMessage) {
         acceptEdits();
-
-        if (serviceChecklistItemListBean.validate(true).size() < 1) {
+        final boolean[] result = {serviceChecklistItemListBean.validate(true).size() < 1};
+        if (result[0]) {
             // Save the checklist items
             SolaTask<Void, Void> t = new SolaTask<Void, Void>() {
                 @Override
@@ -131,14 +133,24 @@ public class ChecklistPanel extends ContentPanel {
 
                 @Override
                 public void taskDone() {
+                    saveListBeanState(); 
                     if (showMessage) {
                         // Only display the Saved message if the user has choosen to explicitly save
                         MessageUtility.displayMessage(ClientMessage.APPLICATION_CHECKLIST_SUCCESSFULLY_SAVED);
                     }
                 }
+
+                @Override
+                protected void taskFailed(Throwable e) {
+                    // If the fail saves due to a database or connection exception, 
+                    // capture the result for the save. 
+                    result[0] = false; 
+                    super.taskFailed(e);
+                }
             };
             TaskManager.getInstance().runTask(t);
         }
+        return result[0];
     }
 
     private void addChecklistItem() {
@@ -184,6 +196,20 @@ public class ChecklistPanel extends ContentPanel {
         if (serviceChecklistItemListBean.getSelectedServiceChecklistItem() != null) {
             serviceChecklistItemListBean.removeItem(serviceChecklistItemListBean.getSelectedServiceChecklistItem());
         }
+    }
+
+    private void saveListBeanState() {
+        tblChecklist.clearSelection();
+        MainForm.saveBeanState(serviceChecklistItemListBean);
+    }
+
+    @Override
+    protected boolean panelClosing() {
+        tblChecklist.clearSelection();
+        if (btnSave.isEnabled() && MainForm.checkSaveBeforeClose(serviceChecklistItemListBean)) {
+            return saveChecklist(true);
+        }
+        return true;
     }
 
     /**

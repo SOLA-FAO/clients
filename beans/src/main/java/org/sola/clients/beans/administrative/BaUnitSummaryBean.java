@@ -67,6 +67,26 @@ public class BaUnitSummaryBean extends AbstractTransactionedBean {
         super();
     }
 
+    /**
+     * Constructor that can be used to create an BaUnitSummaryBean from a BaUnit
+     * search result.
+     *
+     * @param searchResult
+     */
+    public BaUnitSummaryBean(BaUnitSearchResultBean searchResult) {
+        super();
+        if (searchResult != null) {
+            setId(searchResult.getId());
+            nameFirstpart = searchResult.getNameFirstpart();
+            nameLastpart = searchResult.getNameLastpart();
+            description = searchResult.getDescription();
+            stateLandStatus = searchResult.getStateLandStatus();
+            baUnitType = searchResult.getBaUnitType(); 
+            setStatus(searchResult.getRegistrationStatus()); 
+            setRowVersion(searchResult.getRowVersion()); 
+        }
+    }
+
     public String getTypeCode() {
         if (baUnitType != null) {
             return baUnitType.getCode();

@@ -33,7 +33,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import org.sola.clients.beans.administrative.RrrBean;
 import org.sola.clients.beans.administrative.RrrShareBean;
+import org.sola.clients.beans.application.ObjectionBean;
 import org.sola.clients.beans.party.PartyBean;
+import org.sola.clients.beans.party.PartyListBean;
 import org.sola.clients.beans.party.PartySummaryBean;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
@@ -50,9 +52,16 @@ import org.sola.common.messaging.MessageUtility;
  */
 public class PartySearchPanelForm extends ContentPanel {
 
+    private static final String ELEMENT_TYPE_RRR = "rrrBean";
+    private static final String ELEMENT_TYPE_RRR_SHARE = "rrrShareBean";
+    private static final String ELEMENT_TYPE_OBJECTION = "objection";
+    private static final String ELEMENT_TYPE_PARTY = "party";
+
     private boolean selectParty = false;
     private RrrBean rrrBean;
     private RrrShareBean rrrShareBean;
+    private ObjectionBean objectionBean;
+    private PartyListBean partyList;
 
     /**
      * Default constructor.
@@ -72,31 +81,36 @@ public class PartySearchPanelForm extends ContentPanel {
         });
     }
 
-    public PartySearchPanelForm(boolean selectParty, RrrBean rrrBean) {
-        this.selectParty = selectParty;
+    /**
+     * Sets the party chosen by the user as the SelectedParty on the
+     * PartyListBean *
+     */
+    public PartySearchPanelForm(boolean selectParty, PartyListBean partyList) {
+        this.partyList = partyList;
+        initComponents();
+        postInit(selectParty, ELEMENT_TYPE_PARTY);
+    }
+
+    public PartySearchPanelForm(boolean selectParty, RrrBean rrrShareBean) {
         this.rrrBean = rrrBean;
         initComponents();
-        partySearchPanel.setShowAddButton(false);
-        partySearchPanel.setShowEditButton(false);
-        partySearchPanel.setShowRemoveButton(false);
-        partySearchPanel.setShowViewButton(false);
-        partySearchPanel.setShowSelectButton(selectParty);
-        partySearchPanel.addPropertyChangeListener(new PropertyChangeListener() {
-
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                if (evt.getPropertyName().equals(partySearchPanel.SELECT_PARTY_PROPERTY)) {
-                    addElementList("rrrBean");
-                }
-            }
-        });
-
+        postInit(selectParty, ELEMENT_TYPE_RRR);
     }
 
     public PartySearchPanelForm(boolean selectParty, RrrShareBean rrrShareBean) {
-        this.selectParty = selectParty;
         this.rrrShareBean = rrrShareBean;
         initComponents();
+        postInit(selectParty, ELEMENT_TYPE_RRR_SHARE);
+    }
+
+    public PartySearchPanelForm(boolean selectParty, ObjectionBean objection) {
+        this.objectionBean = objection;
+        initComponents();
+        postInit(selectParty, ELEMENT_TYPE_OBJECTION);
+    }
+
+    private void postInit(boolean selectParty, final String elementType) {
+        this.selectParty = selectParty;
         partySearchPanel.setShowAddButton(false);
         partySearchPanel.setShowEditButton(false);
         partySearchPanel.setShowRemoveButton(false);
@@ -107,21 +121,26 @@ public class PartySearchPanelForm extends ContentPanel {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(partySearchPanel.SELECT_PARTY_PROPERTY)) {
-                    addElementList("rrrShareBean");
+                    addElementList(elementType);
                 }
             }
         });
-
     }
 
     private void addElementList(String bean) {
         if (this.partySearchPanel.partySearchResuls.getSelectedPartySearchResult() != null) {
             PartySummaryBean partySummary = this.partySearchPanel.partySearchResuls.getSelectedPartySearchResult();
-            if (bean.contentEquals("rrrBean")) {
+            if (bean.contentEquals(ELEMENT_TYPE_RRR)) {
                 this.rrrBean.getFilteredRightHolderList().add(partySummary);
             }
-            if (bean.contentEquals("rrrShareBean")) {
+            if (bean.contentEquals(ELEMENT_TYPE_RRR_SHARE)) {
                 this.rrrShareBean.getFilteredRightHolderList().add(partySummary);
+            }
+            if (bean.contentEquals(ELEMENT_TYPE_OBJECTION)) {
+                this.objectionBean.getFilteredPartyList().add(partySummary);
+            }
+            if (bean.contentEquals(ELEMENT_TYPE_PARTY)) {
+                this.partyList.setSelectedParty(partySummary.getPartyBean());
             }
             this.headerPanel.firePropertyChange(headerPanel.CLOSE_BUTTON_CLICKED, false, true);
         }

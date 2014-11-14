@@ -31,7 +31,6 @@ package org.sola.clients.beans.application;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
 import org.jdesktop.observablecollections.ObservableList;
@@ -39,41 +38,38 @@ import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.clients.beans.AbstractBindingListBean;
 import org.sola.clients.beans.controls.SolaList;
 import org.sola.clients.beans.converters.TypeConverters;
-import org.sola.clients.beans.referencedata.ChecklistGroupBean;
-import org.sola.clients.beans.referencedata.ChecklistItemBean;
-import org.sola.common.StringUtility;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.EntityAction;
-import org.sola.webservices.transferobjects.casemanagement.ServiceChecklistItemTO;
+import org.sola.webservices.transferobjects.casemanagement.NotifyTO;
 
 /**
  *
  * @author soladev
  */
-public class PubilcDisplayItemListBean extends AbstractBindingListBean {
+public class NotifyListBean extends AbstractBindingListBean {
 
-    public static final String SELECTED_PUBLIC_DISPLAY_ITEM = "selectedPublicDisplayItem";
-    private SolaList<PublicDisplayItemBean> publicDisplayItemList;
-    private PublicDisplayItemBean selectedPublicDisplayItem;
+    public static final String SELECTED_NOTIFY = "selectedNotify";
+    private SolaList<NotifyBean> notifyList;
+    private NotifyBean selectedNotify;
     private String serviceId;
 
-    public PubilcDisplayItemListBean() {
+    public NotifyListBean() {
         super();
-        publicDisplayItemList = new SolaList<PublicDisplayItemBean>();
+        notifyList = new SolaList<NotifyBean>();
     }
 
-    public ObservableList<PublicDisplayItemBean> getPublicDisplayItemList() {
-        return publicDisplayItemList.getFilteredList();
+    public ObservableList<NotifyBean> getFilteredNotifyList() {
+        return notifyList.getFilteredList();
     }
 
-    public PublicDisplayItemBean getSelectedPublicDisplayItem() {
-        return selectedPublicDisplayItem;
+    public NotifyBean getSelectedNotify() {
+        return selectedNotify;
     }
 
-    public void setSelectedPublicDisplayItem(PublicDisplayItemBean selectedItem) {
-        PublicDisplayItemBean oldValue = this.selectedPublicDisplayItem;
-        this.selectedPublicDisplayItem = selectedItem;
-        propertySupport.firePropertyChange(SELECTED_PUBLIC_DISPLAY_ITEM, oldValue, this.selectedPublicDisplayItem);
+    public void setSelectedNotify(NotifyBean selected) {
+        NotifyBean oldValue = this.selectedNotify;
+        this.selectedNotify = selected;
+        propertySupport.firePropertyChange(SELECTED_NOTIFY, oldValue, this.selectedNotify);
     }
 
     public String getServiceId() {
@@ -84,27 +80,41 @@ public class PubilcDisplayItemListBean extends AbstractBindingListBean {
         this.serviceId = serviceId;
     }
 
-    public void addItem(PublicDisplayItemBean item) {
-        publicDisplayItemList.addAsNew(item);
+    public void addItem(NotifyBean item) {
+        notifyList.addAsNew(item);
     }
 
-    public void removeItem(PublicDisplayItemBean item) {
-        publicDisplayItemList.safeRemove(item, EntityAction.DELETE);
+    public void removeItem(NotifyBean item) {
+        notifyList.safeRemove(item, EntityAction.DELETE);
     }
 
     /**
-     * Retrieves the list of public display items from the database using the
-     * service id.
+     * Retrieves the list of notify parties from the database using the service
+     * id.
      *
      * @param serviceId
      */
     public void loadList(String serviceId) {
         setServiceId(serviceId);
-        publicDisplayItemList.clear();
+        notifyList.clear();
         // Translate the TO's with the saved data to Beans and replace the original bean list
         TypeConverters.TransferObjectListToBeanList(
-                WSManager.getInstance().getCaseManagementService().getPublicDisplayItems(serviceId),
-                PublicDisplayItemBean.class, (List) publicDisplayItemList);
+                WSManager.getInstance().getCaseManagementService().getNotifyParties(serviceId),
+                NotifyBean.class, (List) notifyList);
+    }
+
+    /**
+     * Saves the list of Notify Parties
+     */
+    public void saveList() {
+        List<NotifyTO> toList = new ArrayList<NotifyTO>();
+        // Translate list of beans to a list of TO's 
+        TypeConverters.BeanListToTransferObjectList((List) notifyList, toList, NotifyTO.class);
+        notifyList.clear();
+        // Translate the TO's with the saved data to Beans and replace the original bean list
+        TypeConverters.TransferObjectListToBeanList(
+                WSManager.getInstance().getCaseManagementService().saveNotifyParties(toList),
+                NotifyBean.class, (List) notifyList);
     }
 
     /**
@@ -120,7 +130,7 @@ public class PubilcDisplayItemListBean extends AbstractBindingListBean {
     public <T extends AbstractBindingBean> Set<ConstraintViolation<T>> validate(boolean showMessage, Class<?>... group) {
 
         Set<ConstraintViolation<T>> warningsList = super.validate(false, group);
-        for (PublicDisplayItemBean bean : publicDisplayItemList) {
+        for (NotifyBean bean : notifyList) {
             Set<ConstraintViolation<T>> beanWarningsList = bean.validate(false, group);
             warningsList.addAll(beanWarningsList);
         }
@@ -129,5 +139,40 @@ public class PubilcDisplayItemListBean extends AbstractBindingListBean {
             showMessage(warningsList);
         }
         return warningsList;
+    }
+
+    /**
+     * Determines whether a notify party should be added to the list of items or
+     * replace an existing item in the list.
+     *
+     * @param item The item to add or update.
+     */
+    public void addOrUpdateItem(NotifyBean item) {
+        if (item != null && notifyList != null) {
+            if (notifyList.contains(item)) {
+                notifyList.set(notifyList.indexOf(item), item);
+            } else {
+                notifyList.addAsNew(item);
+            }
+        }
+    }
+
+    /**
+     * Returns list of checked notify parties.
+     *
+     * @param includeSelected Indicates whether to include in the list selected
+     * notify party if there no notify parties checked.
+     */
+    public List<NotifyBean> getChecked(boolean includeSelected) {
+        List<NotifyBean> checked = new ArrayList<NotifyBean>();
+        for (NotifyBean bean : getFilteredNotifyList()) {
+            if (bean.isChecked()) {
+                checked.add(bean);
+            }
+        }
+        if (includeSelected && checked.size() < 1 && getSelectedNotify() != null) {
+            checked.add(getSelectedNotify());
+        }
+        return checked;
     }
 }

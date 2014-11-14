@@ -32,6 +32,7 @@ package org.sola.clients.swing.desktop.administrative;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import org.sola.clients.beans.administrative.BaUnitSearchResultBean;
+import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.ui.ContentPanel;
@@ -47,11 +48,17 @@ public class BaUnitSearchPanel extends ContentPanel {
 
     public static final String SELECTED_RESULT_PROPERTY = "selectedResult";
     private boolean closeOnSelect = true;
+    ApplicationBean applicationBean = null;
 
     /**
      * Default constructor.
      */
     public BaUnitSearchPanel() {
+        this(null);
+    }
+
+    public BaUnitSearchPanel(ApplicationBean appBean) {
+        this.applicationBean = appBean;
         initComponents();
         setHeaderPanel(headerPanel1);
         baUnitSearchPanel.addPropertyChangeListener(new PropertyChangeListener() {
@@ -79,6 +86,15 @@ public class BaUnitSearchPanel extends ContentPanel {
                 }
             }
         });
+    }
+
+    /**
+     * Initializes the baUnitSearchPanel
+     *
+     * @return
+     */
+    private org.sola.clients.swing.ui.administrative.BaUnitSearchPanel initSearchPanel() {
+        return new org.sola.clients.swing.ui.administrative.BaUnitSearchPanel(applicationBean);
     }
 
     private void openPropertyForm(final String nameFirstPart, final String nameLastPart, final String typeCode) {
@@ -142,7 +158,7 @@ public class BaUnitSearchPanel extends ContentPanel {
     private void initComponents() {
 
         headerPanel1 = new org.sola.clients.swing.ui.HeaderPanel();
-        baUnitSearchPanel = new org.sola.clients.swing.ui.administrative.BaUnitSearchPanel();
+        baUnitSearchPanel = initSearchPanel(); ;
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
         setHelpTopic(bundle.getString("BaUnitSearchPanel.helpTopic")); // NOI18N
