@@ -57,6 +57,7 @@ public class ValuationBean extends AbstractVersionedBean {
     public static final String TYPE_CODE_PROPERTY = "typeCode";
     public static final String SOURCE_PROPERTY = "source";
     public static final String SELECTED_SOURCE_PROPERTY = "selectedSource";
+    public static final String SELECTED_PROPERTY_PROPERTY = "selectedProperty";
     public static final String VALUATION_BEAN_PROPERTY = "valuationBean";
     public static final String SERVICE_ID_PROPERTY = "serviceId";
 
@@ -67,6 +68,8 @@ public class ValuationBean extends AbstractVersionedBean {
     private Date valuationDate;
     private ValuationTypeBean type;
     private SolaList<SourceBean> sourceList;
+    private SolaList<BaUnitSummaryBean> propertyList;
+    private BaUnitSummaryBean selectedProperty;
     private String source;
     private String description;
     private String transactionId;
@@ -114,7 +117,9 @@ public class ValuationBean extends AbstractVersionedBean {
      * @param baUnitId the baUnitId to set
      */
     public void setBaUnitId(String baUnitId) {
+        String oldValue = this.baUnitId;
         this.baUnitId = baUnitId;
+        propertySupport.firePropertyChange(BA_UNIT_ID_PROPERTY, oldValue, baUnitId);
     }
 
     /**
@@ -273,9 +278,27 @@ public class ValuationBean extends AbstractVersionedBean {
         propertySupport.firePropertyChange(SERVICE_ID_PROPERTY, oldValue, value);
     }
 
+    public SolaList<BaUnitSummaryBean> getPropertyList() {
+        return propertyList;
+    }
+
+    public void setPropertyList(SolaList<BaUnitSummaryBean> propertyList) {
+        this.propertyList = propertyList;
+    }
+
+    public BaUnitSummaryBean getSelectedProperty() {
+        return selectedProperty;
+    }
+
+    public void setSelectedProperty(BaUnitSummaryBean selectedProperty) {
+        this.selectedProperty = selectedProperty;
+    }
+    
+
     /**
      * Saves the item details to the database
      *
+     * @return 
      * @retun true if the item is successfully saved, otherwise a runtime
      * exception.
      */

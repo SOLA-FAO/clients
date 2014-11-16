@@ -29,6 +29,7 @@
  */
 package org.sola.clients.beans.administrative;
 
+import java.math.BigDecimal;
 import org.sola.clients.beans.AbstractTransactionedBean;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.referencedata.BaUnitTypeBean;
@@ -52,6 +53,7 @@ public class BaUnitSummaryBean extends AbstractTransactionedBean {
     public static final String STATE_LAND_STATUS_PROPERTY = "stateLandStatus";
     public static final String STATE_LAND_STATUS_CODE_PROPERTY = "stateLandStatusCode";
     public static final String TYPE_STATE_LAND = "stateLand";
+    public static final String AREA_PROPERTY = "area";
 
     private String name;
     //@NotEmpty(message = ClientMessage.CHECK_NOTNULL_FIRSTPART, payload=Localized.class)
@@ -62,6 +64,7 @@ public class BaUnitSummaryBean extends AbstractTransactionedBean {
     private transient String displayName;
     private String description;
     private StateLandStatusTypeBean stateLandStatus;
+    private BigDecimal area;
 
     public BaUnitSummaryBean() {
         super();
@@ -84,6 +87,7 @@ public class BaUnitSummaryBean extends AbstractTransactionedBean {
             baUnitType = searchResult.getBaUnitType(); 
             setStatus(searchResult.getRegistrationStatus()); 
             setRowVersion(searchResult.getRowVersion()); 
+            area = searchResult.getArea();
         }
     }
 
@@ -204,4 +208,15 @@ public class BaUnitSummaryBean extends AbstractTransactionedBean {
         }
         this.setJointRefDataBean(this.stateLandStatus, stateLandStatus, STATE_LAND_STATUS_PROPERTY);
     }
+
+    public BigDecimal getArea() {
+        return area;
+    }
+
+    public void setArea(BigDecimal area) {
+        BigDecimal oldValue = area;
+        this.area = area;
+        propertySupport.firePropertyChange(AREA_PROPERTY, oldValue, area);
+    }
+    
 }
