@@ -34,6 +34,7 @@ import org.sola.clients.beans.administrative.BaUnitSummaryBean;
 import org.sola.clients.beans.administrative.ValuationBean;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationServiceBean;
+import org.sola.clients.beans.controls.SolaList;
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
@@ -269,6 +270,7 @@ public class ValuationListPanel extends ContentPanel {
                                 ValuationBean vBean = vPanel.getCurrentValuation();
                                 vBean.setBaUnitId(bean.getId());
                                 vBean.setSelectedProperty(prop);
+                                vBean.setBaUnitBasic(prop);
                                 getMainContentPanel().addPanel(vPanel, MainContentPanel.CARD_VALUATION_PANEL, true);
                             }
                         }

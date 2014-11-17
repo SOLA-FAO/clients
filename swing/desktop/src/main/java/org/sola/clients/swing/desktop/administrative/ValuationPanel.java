@@ -31,13 +31,17 @@ package org.sola.clients.swing.desktop.administrative;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import javax.swing.JFormattedTextField;
+import javax.validation.groups.Default;
 import org.sola.clients.beans.administrative.BaUnitSearchResultBean;
 import org.sola.clients.beans.administrative.BaUnitSummaryBean;
 import org.sola.clients.beans.administrative.ValuationBean;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationServiceBean;
+import org.sola.clients.swing.common.controls.CalendarForm;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
+import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.desktop.administrative.BaUnitSearchPanel;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
@@ -48,8 +52,8 @@ import org.sola.common.messaging.MessageUtility;
  *
  * @author Troy
  */
-public class ValuationPanel extends ContentPanel{
-    
+public class ValuationPanel extends ContentPanel {
+
     private ApplicationBean applicationBean;
     private ApplicationServiceBean applicationService;
     private boolean readOnly = false;
@@ -61,7 +65,8 @@ public class ValuationPanel extends ContentPanel{
     public ValuationPanel() {
         initComponents();
     }
-     public ValuationPanel(ApplicationBean appBean,
+
+    public ValuationPanel(ApplicationBean appBean,
             ApplicationServiceBean serviceBean, boolean readOnly) {
         this.applicationBean = appBean;
         this.applicationService = serviceBean;
@@ -100,7 +105,8 @@ public class ValuationPanel extends ContentPanel{
         txtAmount = new javax.swing.JTextField();
         jPanel14 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        txtDate = new javax.swing.JTextField();
+        btnDate = new javax.swing.JButton();
+        txtDate = new org.sola.clients.swing.common.controls.WatermarkDate();
         jPanel16 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         cbxType = new javax.swing.JComboBox();
@@ -127,6 +133,11 @@ public class ValuationPanel extends ContentPanel{
         btnSave.setText(bundle.getString("ValuationPanel.btnSave.text")); // NOI18N
         btnSave.setFocusable(false);
         btnSave.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnSave);
 
         btnSearchProperty.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/search.png"))); // NOI18N
@@ -139,11 +150,6 @@ public class ValuationPanel extends ContentPanel{
         btnOpenProperty.setText(bundle.getString("ValuationPanel.btnOpenProperty.text")); // NOI18N
         btnOpenProperty.setFocusable(false);
         btnOpenProperty.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnOpenProperty.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOpenPropertyActionPerformed(evt);
-            }
-        });
         jToolBar1.add(btnOpenProperty);
 
         btnSecurity.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/lock.png"))); // NOI18N
@@ -225,22 +231,36 @@ public class ValuationPanel extends ContentPanel{
 
         jLabel4.setText(bundle.getString("ValuationPanel.jLabel4.text")); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, currentValuation, org.jdesktop.beansbinding.ELProperty.create("${valuationDate}"), txtDate, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
+        btnDate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/calendar.png"))); // NOI18N
+        btnDate.setText(bundle.getString("ValuationPanel.btnDate.text")); // NOI18N
+        btnDate.setMaximumSize(new java.awt.Dimension(17, 17));
+        btnDate.setMinimumSize(new java.awt.Dimension(17, 17));
+        btnDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDateActionPerformed(evt);
+            }
+        });
+
+        txtDate.setText(bundle.getString("ValuationPanel.txtDate.text")); // NOI18N
 
         javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
         jPanel14.setLayout(jPanel14Layout);
         jPanel14Layout.setHorizontalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)
-            .addComponent(txtDate)
+            .addGroup(jPanel14Layout.createSequentialGroup()
+                .addComponent(txtDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnDate, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel14Layout.setVerticalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel14Layout.createSequentialGroup()
                 .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(txtDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnDate, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -391,12 +411,17 @@ public class ValuationPanel extends ContentPanel{
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnOpenPropertyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenPropertyActionPerformed
-        displayPropertySearchPanel();
-    }//GEN-LAST:event_btnOpenPropertyActionPerformed
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        saveValuation(true);
+    }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void btnDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDateActionPerformed
+        showCalendar(txtDate);
+    }//GEN-LAST:event_btnDateActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDate;
     private javax.swing.JButton btnOpenProperty;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSearchProperty;
@@ -428,7 +453,7 @@ public class ValuationPanel extends ContentPanel{
     private javax.swing.JPanel pnlCenter;
     private javax.swing.JPanel pnlTop;
     private javax.swing.JTextField txtAmount;
-    private javax.swing.JTextField txtDate;
+    private org.sola.clients.swing.common.controls.WatermarkDate txtDate;
     private javax.swing.JTextArea txtDescription;
     private javax.swing.JTextField txtPropertyRef;
     private javax.swing.JTextField txtValuationRef;
@@ -436,14 +461,61 @@ public class ValuationPanel extends ContentPanel{
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
-    public void displayPropertySearchPanel(){
-        //TODO 
-    }
-
     public ValuationBean getCurrentValuation() {
         return currentValuation;
     }
 
- 
+    public boolean saveValuation(final boolean showMessage) {
+
+        final boolean[] result = {currentValuation.validate(true).size() < 1};
+        if (result[0]) {
+            // Save the checklist items
+            SolaTask<Void, Void> t = new SolaTask<Void, Void>() {
+                @Override
+                public Void doTask() {
+                    setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_SAVING));
+                    if (currentValuation.validate(true, Default.class).size() < 1) {
+                        currentValuation.saveItem();
+                    }
+                    
+                    return null;
+                }
+
+                @Override
+                public void taskDone() {
+                    saveBeanState();
+                    if (showMessage) {
+                        // Only display the Saved message if the user has choosen to explicitly save
+                        MessageUtility.displayMessage(ClientMessage.DISPLAY_ITEM_SUCCESSFULLY_SAVED);
+                    }
+                }
+
+                @Override
+                protected void taskFailed(Throwable e) {
+                    // If the fail saves due to a database or connection exception, 
+                    // capture the result for the save. 
+                    result[0] = false;
+                    super.taskFailed(e);
+                }
+            };
+            TaskManager.getInstance().runTask(t);
+        }
+        return result[0];
+
+    }
+
+    private void saveBeanState() {
+        clearSelection();
+        MainForm.saveBeanState(currentValuation);
+    }
+
+    private void clearSelection() {
+
+    }
+
+    private void showCalendar(JFormattedTextField dateField) {
+        CalendarForm calendar = new CalendarForm(null, true, dateField);
+        calendar.setVisible(true);
+    }
 
 }

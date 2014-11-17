@@ -31,6 +31,9 @@ package org.sola.clients.beans.administrative;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import javax.validation.constraints.NotNull;
+import javax.validation.groups.Default;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractVersionedBean;
 import org.sola.clients.beans.cache.CacheManager;
@@ -67,8 +70,10 @@ public class ValuationBean extends AbstractVersionedBean {
     private BigDecimal amount;
     private Date valuationDate;
     private ValuationTypeBean type;
+    @NotNull
+    @NotEmpty
     private SolaList<SourceBean> sourceList;
-    private SolaList<BaUnitSummaryBean> propertyList;
+    private BaUnitSummaryBean baUnitBasic;
     private BaUnitSummaryBean selectedProperty;
     private String source;
     private String description;
@@ -278,13 +283,15 @@ public class ValuationBean extends AbstractVersionedBean {
         propertySupport.firePropertyChange(SERVICE_ID_PROPERTY, oldValue, value);
     }
 
-    public SolaList<BaUnitSummaryBean> getPropertyList() {
-        return propertyList;
+    public BaUnitSummaryBean getBaUnitBasic() {
+        return baUnitBasic;
     }
 
-    public void setPropertyList(SolaList<BaUnitSummaryBean> propertyList) {
-        this.propertyList = propertyList;
+    public void setBaUnitBasic(BaUnitSummaryBean baUnitBasic) {
+        this.baUnitBasic = baUnitBasic;
     }
+
+    
 
     public BaUnitSummaryBean getSelectedProperty() {
         return selectedProperty;

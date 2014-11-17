@@ -31,20 +31,18 @@ package org.sola.clients.beans.administrative;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.clients.beans.AbstractBindingListBean;
+import org.sola.clients.beans.application.PublicDisplayItemBean;
 import org.sola.clients.beans.controls.SolaList;
 import org.sola.clients.beans.converters.TypeConverters;
-import org.sola.clients.beans.referencedata.ChecklistGroupBean;
-import org.sola.clients.beans.referencedata.ChecklistItemBean;
-import org.sola.common.StringUtility;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.EntityAction;
-import org.sola.webservices.transferobjects.casemanagement.ServiceChecklistItemTO;
+
+import org.sola.webservices.transferobjects.administrative.ValuationTO;
 
 /**
  *
@@ -129,5 +127,18 @@ public class ValuationListBean extends AbstractBindingListBean {
             showMessage(warningsList);
         }
         return warningsList;
+    }
+    /**
+     * Saves the list of Public Display Items
+     */
+    public void saveList() {
+        List<ValuationTO> toList = new ArrayList<ValuationTO>();
+        // Translate list of beans to a list of TO's 
+        TypeConverters.BeanListToTransferObjectList((List) valuationList, toList, ValuationTO.class);
+        valuationList.clear();
+        // Translate the TO's with the saved data to Beans and replace the original bean list
+        TypeConverters.TransferObjectListToBeanList(
+                WSManager.getInstance().getAdministrative().saveValuations(toList, serviceId),
+                ValuationBean.class, (List) valuationList);
     }
 }
