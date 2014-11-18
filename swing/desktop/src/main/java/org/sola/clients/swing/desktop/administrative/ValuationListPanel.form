@@ -2,7 +2,7 @@
 
 <Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <NonVisualComponents>
-    <Component class="org.sola.clients.beans.administrative.ValuationListBean" name="valuationList">
+    <Component class="org.sola.clients.beans.administrative.ValuationListBean" name="listBean">
     </Component>
   </NonVisualComponents>
   <Properties>
@@ -169,48 +169,48 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Component class="org.sola.clients.swing.common.controls.JTableWithDefaultStyles" name="jTableWithDefaultStyles1">
+        <Component class="org.sola.clients.swing.common.controls.JTableWithDefaultStyles" name="tblValuations">
           <Properties>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
               <TableColumnModel selectionModel="0">
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                   <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                    <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="ValuationListPanel.jTableWithDefaultStyles1.columnModel.title0_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                    <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="ValuationListPanel.tblValuations.columnModel.title0_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                   </Title>
                   <Editor/>
                   <Renderer/>
                 </Column>
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                   <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                    <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="ValuationListPanel.jTableWithDefaultStyles1.columnModel.title1_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                    <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="ValuationListPanel.tblValuations.columnModel.title1_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                   </Title>
                   <Editor/>
                   <Renderer/>
                 </Column>
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                   <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                    <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="ValuationListPanel.jTableWithDefaultStyles1.columnModel.title2_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                    <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="ValuationListPanel.tblValuations.columnModel.title2_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                   </Title>
                   <Editor/>
                   <Renderer/>
                 </Column>
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                   <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                    <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="ValuationListPanel.jTableWithDefaultStyles1.columnModel.title3_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                    <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="ValuationListPanel.tblValuations.columnModel.title3_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                   </Title>
                   <Editor/>
                   <Renderer/>
                 </Column>
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                   <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                    <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="ValuationListPanel.jTableWithDefaultStyles1.columnModel.title4_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                    <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="ValuationListPanel.tblValuations.columnModel.title4_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                   </Title>
                   <Editor/>
                   <Renderer/>
                 </Column>
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                   <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                    <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="ValuationListPanel.jTableWithDefaultStyles1.columnModel.title5" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                    <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="ValuationListPanel.tblValuations.columnModel.title5" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                   </Title>
                   <Editor/>
                   <Renderer/>
@@ -222,7 +222,7 @@
             </Property>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="elements" source="valuationList" sourcePath="${valuationList}" target="jTableWithDefaultStyles1" targetPath="elements" updateStrategy="0" immediately="true">
+            <BindingProperty name="elements" source="listBean" sourcePath="${valuationList}" target="tblValuations" targetPath="elements" updateStrategy="0" immediately="true">
               <Subbinding sourcePath="${nr}">
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
@@ -248,7 +248,7 @@
                 <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
               </Subbinding>
             </BindingProperty>
-            <BindingProperty name="selectedElement" source="valuationList" sourcePath="${selectedValuation}" target="jTableWithDefaultStyles1" targetPath="selectedElement" updateStrategy="0" immediately="false">
+            <BindingProperty name="selectedElement" source="listBean" sourcePath="${selectedValuation}" target="tblValuations" targetPath="selectedElement" updateStrategy="0" immediately="false">
               <BindingParameter name="IGNORE_ADJUSTING" value="N"/>
             </BindingProperty>
           </BindingProperties>

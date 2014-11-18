@@ -1,28 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.desktop.administrative;
@@ -32,12 +34,14 @@ import java.beans.PropertyChangeListener;
 import org.sola.clients.beans.administrative.BaUnitSearchResultBean;
 import org.sola.clients.beans.administrative.BaUnitSummaryBean;
 import org.sola.clients.beans.administrative.ValuationBean;
+import org.sola.clients.beans.administrative.ValuationListBean;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationServiceBean;
 import org.sola.clients.beans.controls.SolaList;
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
+import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.common.RolesConstants;
@@ -52,9 +56,10 @@ public class ValuationListPanel extends ContentPanel {
 
     /**
      * Creates new form ValuationListPanel
+     *
      * @param applicationBean
      * @param applicationService
-     * @param readOnly 
+     * @param readOnly
      */
     public ValuationListPanel(ApplicationBean applicationBean,
             ApplicationServiceBean applicationService,
@@ -63,6 +68,23 @@ public class ValuationListPanel extends ContentPanel {
         this.applicationBean = applicationBean;
         this.applicationService = applicationService;
         resourceBundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle");
+        initComponents();
+        customizeForm();
+        listBean.loadList(this.applicationService.getId());
+        listBean.addPropertyChangeListener(new PropertyChangeListener() {
+
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals(ValuationListBean.SELECTED_VALUATION_ITEM)) {
+                    customizeButtons((ValuationBean) evt.getNewValue());
+                }
+            }
+        });
+
+        saveListBeanState();
+
+    }
+    public ValuationListPanel(){
         initComponents();
     }
 
@@ -76,7 +98,7 @@ public class ValuationListPanel extends ContentPanel {
     private void initComponents() {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        valuationList = new org.sola.clients.beans.administrative.ValuationListBean();
+        listBean = new org.sola.clients.beans.administrative.ValuationListBean();
         headerPanel1 = new org.sola.clients.swing.ui.HeaderPanel();
         jToolBar1 = new javax.swing.JToolBar();
         btnSave = new javax.swing.JButton();
@@ -89,7 +111,7 @@ public class ValuationListPanel extends ContentPanel {
         btnOpen = new javax.swing.JButton();
         btnPrint = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTableWithDefaultStyles1 = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
+        tblValuations = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
 
         setCloseOnHide(true);
         setHeaderPanel(headerPanel1);
@@ -156,7 +178,7 @@ public class ValuationListPanel extends ContentPanel {
         jToolBar1.add(btnPrint);
 
         org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${valuationList}");
-        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, valuationList, eLProperty, jTableWithDefaultStyles1);
+        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, listBean, eLProperty, tblValuations);
         org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${nr}"));
         columnBinding.setColumnName("Nr");
         columnBinding.setColumnClass(String.class);
@@ -182,17 +204,17 @@ public class ValuationListPanel extends ContentPanel {
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
         bindingGroup.addBinding(jTableBinding);
-        jTableBinding.bind();org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, valuationList, org.jdesktop.beansbinding.ELProperty.create("${selectedValuation}"), jTableWithDefaultStyles1, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
+        jTableBinding.bind();org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, listBean, org.jdesktop.beansbinding.ELProperty.create("${selectedValuation}"), tblValuations, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
         bindingGroup.addBinding(binding);
 
-        jScrollPane2.setViewportView(jTableWithDefaultStyles1);
-        if (jTableWithDefaultStyles1.getColumnModel().getColumnCount() > 0) {
-            jTableWithDefaultStyles1.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("ValuationListPanel.jTableWithDefaultStyles1.columnModel.title0_1")); // NOI18N
-            jTableWithDefaultStyles1.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("ValuationListPanel.jTableWithDefaultStyles1.columnModel.title1_1")); // NOI18N
-            jTableWithDefaultStyles1.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("ValuationListPanel.jTableWithDefaultStyles1.columnModel.title2_1")); // NOI18N
-            jTableWithDefaultStyles1.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("ValuationListPanel.jTableWithDefaultStyles1.columnModel.title3_1")); // NOI18N
-            jTableWithDefaultStyles1.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("ValuationListPanel.jTableWithDefaultStyles1.columnModel.title4_1")); // NOI18N
-            jTableWithDefaultStyles1.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("ValuationListPanel.jTableWithDefaultStyles1.columnModel.title5")); // NOI18N
+        jScrollPane2.setViewportView(tblValuations);
+        if (tblValuations.getColumnModel().getColumnCount() > 0) {
+            tblValuations.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("ValuationListPanel.tblValuations.columnModel.title0_1")); // NOI18N
+            tblValuations.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("ValuationListPanel.tblValuations.columnModel.title1_1")); // NOI18N
+            tblValuations.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("ValuationListPanel.tblValuations.columnModel.title2_1")); // NOI18N
+            tblValuations.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("ValuationListPanel.tblValuations.columnModel.title3_1")); // NOI18N
+            tblValuations.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("ValuationListPanel.tblValuations.columnModel.title4_1")); // NOI18N
+            tblValuations.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("ValuationListPanel.tblValuations.columnModel.title5")); // NOI18N
         }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -221,11 +243,11 @@ public class ValuationListPanel extends ContentPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        
+
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        addValuation();
+        addValuation(null, false);
     }//GEN-LAST:event_btnAddActionPerformed
 
 
@@ -241,14 +263,14 @@ public class ValuationListPanel extends ContentPanel {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
-    private org.sola.clients.swing.common.controls.JTableWithDefaultStyles jTableWithDefaultStyles1;
     private javax.swing.JToolBar jToolBar1;
-    private org.sola.clients.beans.administrative.ValuationListBean valuationList;
+    private org.sola.clients.beans.administrative.ValuationListBean listBean;
+    private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tblValuations;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
-    private void addValuation() {
-     SolaTask t = new SolaTask<Void, Void>() {
+    private void addValuation(final ValuationBean valuation, final boolean viewItem) {
+        SolaTask t = new SolaTask<Void, Void>() {
             @Override
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PROPERTYSEARCH));
@@ -257,7 +279,7 @@ public class ValuationListPanel extends ContentPanel {
                 propSearchPanel.getSearchPanel().showSelectButtons(true);
                 propSearchPanel.getSearchPanel().showOpenButtons(true);
                 propSearchPanel.getSearchPanel().setDefaultActionOpen(false);
-                propSearchPanel.setCloseOnSelect(false);
+                propSearchPanel.setCloseOnSelect(true);
                 propSearchPanel.addPropertyChangeListener(new PropertyChangeListener() {
                     @Override
                     public void propertyChange(PropertyChangeEvent evt) {
@@ -265,8 +287,8 @@ public class ValuationListPanel extends ContentPanel {
                             BaUnitSearchResultBean bean = (BaUnitSearchResultBean) evt.getNewValue();
                             if (bean != null) {
                                 BaUnitSummaryBean prop = new BaUnitSummaryBean(bean);
-                                
-                                ValuationPanel vPanel = new ValuationPanel(applicationBean, applicationService, false);
+
+                                ValuationPanel vPanel = new ValuationPanel(valuation, applicationBean, applicationService, viewItem);
                                 ValuationBean vBean = vPanel.getCurrentValuation();
                                 vBean.setBaUnitId(bean.getId());
                                 vBean.setSelectedProperty(prop);
@@ -282,8 +304,26 @@ public class ValuationListPanel extends ContentPanel {
         };
         TaskManager.getInstance().runTask(t);
     }
-        
-    
+
+    private void customizeForm() {
+        // Disable the edit buttons if the form is in read only mode
+        btnSave.setEnabled(!readOnly);
+        btnAdd.setEnabled(!readOnly);
+        customizeButtons(null);
+    }
+
+    private void customizeButtons(ValuationBean item) {
+        boolean enable = item != null && !readOnly;
+        btnView.setEnabled(item != null);
+        btnEdit.setEnabled(enable);
+        btnRemove.setEnabled(enable);
+    }
+
+    private void saveListBeanState() {
+        tblValuations.clearSelection();
+        MainForm.saveBeanState(listBean);
+    }
+
     private boolean readOnly = false;
     private ApplicationBean applicationBean;
     private ApplicationServiceBean applicationService;

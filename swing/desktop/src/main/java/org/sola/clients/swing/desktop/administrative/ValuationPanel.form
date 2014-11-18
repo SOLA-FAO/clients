@@ -2,7 +2,7 @@
 
 <Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <NonVisualComponents>
-    <Component class="org.sola.clients.beans.administrative.ValuationBean" name="currentValuation">
+    <Component class="org.sola.clients.beans.administrative.ValuationBean" name="valuation">
     </Component>
     <Component class="org.sola.clients.beans.referencedata.ValuationTypeListBean" name="valuationTypeListBean">
     </Component>
@@ -158,7 +158,7 @@
             </Component>
             <Component class="javax.swing.JTextField" name="txtValuationRef">
               <BindingProperties>
-                <BindingProperty name="text" source="currentValuation" sourcePath="${nr}" target="txtValuationRef" targetPath="text" updateStrategy="0" immediately="false">
+                <BindingProperty name="text" source="valuation" sourcePath="${nr}" target="txtValuationRef" targetPath="text" updateStrategy="0" immediately="false">
                   <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
                 </BindingProperty>
               </BindingProperties>
@@ -195,7 +195,7 @@
             </Component>
             <Component class="javax.swing.JTextField" name="txtPropertyRef">
               <BindingProperties>
-                <BindingProperty name="text" source="currentValuation" sourcePath="${baUnitId}" target="txtPropertyRef" targetPath="text" updateStrategy="0" immediately="false">
+                <BindingProperty name="text" source="valuation" sourcePath="${baUnitId}" target="txtPropertyRef" targetPath="text" updateStrategy="0" immediately="false">
                   <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
                 </BindingProperty>
               </BindingProperties>
@@ -232,7 +232,7 @@
             </Component>
             <Component class="javax.swing.JTextField" name="txtAmount">
               <BindingProperties>
-                <BindingProperty name="text" source="currentValuation" sourcePath="${amount}" target="txtAmount" targetPath="text" updateStrategy="0" immediately="false">
+                <BindingProperty name="text" source="valuation" sourcePath="${amount}" target="txtAmount" targetPath="text" updateStrategy="0" immediately="false">
                   <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
                 </BindingProperty>
               </BindingProperties>
@@ -333,7 +333,7 @@
             <Component class="javax.swing.JComboBox" name="cbxType">
               <BindingProperties>
                 <BindingProperty name="elements" source="valuationTypeListBean" sourcePath="${valuationTypeList}" target="cbxType" targetPath="elements" updateStrategy="0" immediately="false"/>
-                <BindingProperty name="selectedItem" source="currentValuation" sourcePath="${type.code}" target="cbxType" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="selectedItem" source="valuation" sourcePath="${type.code}" target="cbxType" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
               </BindingProperties>
             </Component>
           </SubComponents>
@@ -418,7 +418,7 @@
                     <Property name="rows" type="int" value="5"/>
                   </Properties>
                   <BindingProperties>
-                    <BindingProperty name="text" source="currentValuation" sourcePath="${description}" target="txtDescription" targetPath="text" updateStrategy="0" immediately="false">
+                    <BindingProperty name="text" source="valuation" sourcePath="${description}" target="txtDescription" targetPath="text" updateStrategy="0" immediately="false">
                       <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
                     </BindingProperty>
                   </BindingProperties>
@@ -441,20 +441,20 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="documentsManagementExtPanel2" alignment="1" max="32767" attributes="0"/>
+                  <Component id="documentsMangementExtPanel" alignment="1" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="documentsManagementExtPanel2" min="-2" pref="181" max="-2" attributes="0"/>
+                      <Component id="documentsMangementExtPanel" min="-2" pref="181" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel" name="documentsManagementExtPanel2">
+            <Component class="org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel" name="documentsMangementExtPanel">
             </Component>
           </SubComponents>
         </Container>

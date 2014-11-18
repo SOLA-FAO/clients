@@ -38,6 +38,9 @@ import org.sola.clients.beans.administrative.BaUnitSummaryBean;
 import org.sola.clients.beans.administrative.ValuationBean;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationServiceBean;
+import org.sola.clients.beans.controls.SolaList;
+import org.sola.clients.beans.security.SecurityBean;
+import org.sola.clients.beans.source.SourceBean;
 import org.sola.clients.swing.common.controls.CalendarForm;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
@@ -45,6 +48,7 @@ import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.desktop.administrative.BaUnitSearchPanel;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
+import org.sola.common.RolesConstants;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
@@ -66,13 +70,65 @@ public class ValuationPanel extends ContentPanel {
         initComponents();
     }
 
-    public ValuationPanel(ApplicationBean appBean,
+    public ValuationPanel(ValuationBean valuation, ApplicationBean appBean,
             ApplicationServiceBean serviceBean, boolean readOnly) {
+        this.valuation = valuation;
         this.applicationBean = appBean;
         this.applicationService = serviceBean;
         this.readOnly = readOnly;
         initComponents();
-        //postInit();
+        postInit();
+    }
+
+    private void postInit() {
+        customizeForm();
+        
+        
+        /**
+        this.valuation.addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals(ValuationBean.SELECTED_PROPERTY_PROPERTY)) {
+                    customizeCommentButtons((ObjectionCommentBean) evt.getNewValue());
+                }
+            }
+        });
+        **/
+    }
+
+    private void customizeForm() {
+        this.setHeaderPanel(headerPanel1);
+        this.setBreadCrumbTitle(this.getBreadCrumbPath(), getPanelTitle());
+        
+        btnSave.setEnabled(!readOnly);
+        btnDate.setEnabled(!readOnly);
+        txtAmount.setEnabled(!readOnly);
+        txtDate.setEnabled(!readOnly);
+        txtDescription.setEnabled(!readOnly);
+        txtPropertyRef.setEnabled(!readOnly);
+        txtValuationRef.setEnabled(!readOnly);
+        txtDescription.setEnabled(!readOnly);
+        
+        documentsMangementExtPanel.setAllowEdit(!readOnly);
+        
+
+        // Configure Security button - hide if if the user does not 
+        // have permission to change security. 
+        btnSecurity.setVisible(btnSave.isEnabled()
+                && SecurityBean.isInRole(RolesConstants.CLASSIFICATION_CHANGE_CLASS));
+    }
+    
+    
+
+    private String getPanelTitle() {
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle");
+        String title = bundle.getString("ValuationPanel.headerPanel1.titleText");
+        if (valuation.isNew()) {
+            title = bundle.getString("ValuationPanel.headerPanel1.newTitleText");
+        } else {
+            title += " " + valuation.getNr();
+        }
+        return title;
     }
 
     /**
@@ -85,7 +141,7 @@ public class ValuationPanel extends ContentPanel {
     private void initComponents() {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        currentValuation = new org.sola.clients.beans.administrative.ValuationBean();
+        valuation = new org.sola.clients.beans.administrative.ValuationBean();
         valuationTypeListBean = new org.sola.clients.beans.referencedata.ValuationTypeListBean();
         headerPanel1 = new org.sola.clients.swing.ui.HeaderPanel();
         jToolBar1 = new javax.swing.JToolBar();
@@ -119,7 +175,7 @@ public class ValuationPanel extends ContentPanel {
         txtDescription = new javax.swing.JTextArea();
         jPanel8 = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
-        documentsManagementExtPanel2 = new org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel();
+        documentsMangementExtPanel = new org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel();
         jPanel10 = new javax.swing.JPanel();
         groupPanel1 = new org.sola.clients.swing.ui.GroupPanel();
 
@@ -162,7 +218,7 @@ public class ValuationPanel extends ContentPanel {
 
         jLabel1.setText(bundle.getString("ValuationPanel.jLabel1.text")); // NOI18N
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, currentValuation, org.jdesktop.beansbinding.ELProperty.create("${nr}"), txtValuationRef, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, valuation, org.jdesktop.beansbinding.ELProperty.create("${nr}"), txtValuationRef, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
@@ -185,7 +241,7 @@ public class ValuationPanel extends ContentPanel {
 
         jLabel2.setText(bundle.getString("ValuationPanel.jLabel2.text")); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, currentValuation, org.jdesktop.beansbinding.ELProperty.create("${baUnitId}"), txtPropertyRef, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, valuation, org.jdesktop.beansbinding.ELProperty.create("${baUnitId}"), txtPropertyRef, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
@@ -208,7 +264,7 @@ public class ValuationPanel extends ContentPanel {
 
         jLabel3.setText(bundle.getString("ValuationPanel.jLabel3.text")); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, currentValuation, org.jdesktop.beansbinding.ELProperty.create("${amount}"), txtAmount, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, valuation, org.jdesktop.beansbinding.ELProperty.create("${amount}"), txtAmount, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
@@ -271,7 +327,7 @@ public class ValuationPanel extends ContentPanel {
         org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${valuationTypeList}");
         org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, valuationTypeListBean, eLProperty, cbxType);
         bindingGroup.addBinding(jComboBoxBinding);
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, currentValuation, org.jdesktop.beansbinding.ELProperty.create("${type.code}"), cbxType, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, valuation, org.jdesktop.beansbinding.ELProperty.create("${type.code}"), cbxType, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
@@ -325,7 +381,7 @@ public class ValuationPanel extends ContentPanel {
         txtDescription.setColumns(20);
         txtDescription.setRows(5);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, currentValuation, org.jdesktop.beansbinding.ELProperty.create("${description}"), txtDescription, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, valuation, org.jdesktop.beansbinding.ELProperty.create("${description}"), txtDescription, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         jScrollPane1.setViewportView(txtDescription);
@@ -354,12 +410,12 @@ public class ValuationPanel extends ContentPanel {
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(documentsManagementExtPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(documentsMangementExtPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
-                .addComponent(documentsManagementExtPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(documentsMangementExtPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -427,8 +483,7 @@ public class ValuationPanel extends ContentPanel {
     private javax.swing.JButton btnSearchProperty;
     private javax.swing.JButton btnSecurity;
     private javax.swing.JComboBox cbxType;
-    private org.sola.clients.beans.administrative.ValuationBean currentValuation;
-    private org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel documentsManagementExtPanel2;
+    private org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel documentsMangementExtPanel;
     private org.sola.clients.swing.ui.GroupPanel groupPanel1;
     private org.sola.clients.swing.ui.HeaderPanel headerPanel1;
     private javax.swing.JLabel jLabel1;
@@ -457,27 +512,26 @@ public class ValuationPanel extends ContentPanel {
     private javax.swing.JTextArea txtDescription;
     private javax.swing.JTextField txtPropertyRef;
     private javax.swing.JTextField txtValuationRef;
+    private org.sola.clients.beans.administrative.ValuationBean valuation;
     private org.sola.clients.beans.referencedata.ValuationTypeListBean valuationTypeListBean;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
     public ValuationBean getCurrentValuation() {
-        return currentValuation;
+        return valuation;
     }
 
     public boolean saveValuation(final boolean showMessage) {
 
-        final boolean[] result = {currentValuation.validate(true).size() < 1};
+        bindCurrentSourceListToValuationBean();
+        final boolean[] result = {valuation.validate(true, Default.class).size() < 1};
         if (result[0]) {
             // Save the checklist items
             SolaTask<Void, Void> t = new SolaTask<Void, Void>() {
                 @Override
                 public Void doTask() {
                     setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_SAVING));
-                    if (currentValuation.validate(true, Default.class).size() < 1) {
-                        currentValuation.saveItem();
-                    }
-                    
+                    valuation.saveItem();
                     return null;
                 }
 
@@ -497,6 +551,7 @@ public class ValuationPanel extends ContentPanel {
                     result[0] = false;
                     super.taskFailed(e);
                 }
+
             };
             TaskManager.getInstance().runTask(t);
         }
@@ -504,9 +559,16 @@ public class ValuationPanel extends ContentPanel {
 
     }
 
+    private void bindCurrentSourceListToValuationBean() {
+        SolaList<SourceBean> sourceList = documentsMangementExtPanel.getSourceListBean().getSourceBeanList();
+        if (sourceList != null && !sourceList.isEmpty()) {
+            valuation.setSourceList(sourceList);
+        }
+    }
+
     private void saveBeanState() {
         clearSelection();
-        MainForm.saveBeanState(currentValuation);
+        MainForm.saveBeanState(valuation);
     }
 
     private void clearSelection() {
