@@ -48,7 +48,9 @@ import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.desktop.administrative.BaUnitSearchPanel;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
+import org.sola.clients.swing.ui.security.SecurityClassificationDialog;
 import org.sola.common.RolesConstants;
+import org.sola.common.WindowUtility;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
@@ -200,6 +202,11 @@ public class ValuationPanel extends ContentPanel {
         btnSearchProperty.setText(bundle.getString("ValuationPanel.btnSearchProperty.text")); // NOI18N
         btnSearchProperty.setFocusable(false);
         btnSearchProperty.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSearchProperty.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchPropertyActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnSearchProperty);
 
         btnOpenProperty.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/folder-open-document.png"))); // NOI18N
@@ -212,6 +219,11 @@ public class ValuationPanel extends ContentPanel {
         btnSecurity.setText(bundle.getString("ValuationPanel.btnSecurity.text")); // NOI18N
         btnSecurity.setFocusable(false);
         btnSecurity.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSecurity.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSecurityActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnSecurity);
 
         pnlTop.setLayout(new java.awt.GridLayout(2, 4, 15, 0));
@@ -475,6 +487,14 @@ public class ValuationPanel extends ContentPanel {
         showCalendar(txtDate);
     }//GEN-LAST:event_btnDateActionPerformed
 
+    private void btnSearchPropertyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchPropertyActionPerformed
+        searchForProperty(this.valuation, readOnly);
+    }//GEN-LAST:event_btnSearchPropertyActionPerformed
+
+    private void btnSecurityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSecurityActionPerformed
+        configureSecurity();
+    }//GEN-LAST:event_btnSecurityActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDate;
@@ -578,6 +598,66 @@ public class ValuationPanel extends ContentPanel {
     private void showCalendar(JFormattedTextField dateField) {
         CalendarForm calendar = new CalendarForm(null, true, dateField);
         calendar.setVisible(true);
+    }
+    
+     private void searchForProperty(final ValuationBean valuation, final boolean viewItem) {
+        SolaTask t = new SolaTask<Void, Void>() {
+            @Override
+            public Void doTask() {
+                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PROPERTYSEARCH));
+                BaUnitSearchPanel propSearchPanel = new BaUnitSearchPanel(applicationBean);
+                // Configure the panel for display
+                propSearchPanel.getSearchPanel().showSelectButtons(true);
+                propSearchPanel.getSearchPanel().showOpenButtons(true);
+                propSearchPanel.getSearchPanel().setDefaultActionOpen(false);
+                propSearchPanel.setCloseOnSelect(true);
+                propSearchPanel.addPropertyChangeListener(new PropertyChangeListener() {
+                    @Override
+                    public void propertyChange(PropertyChangeEvent evt) {
+                        if (evt.getPropertyName().equals(BaUnitSearchPanel.SELECTED_RESULT_PROPERTY)) {
+                            BaUnitSearchResultBean bean = (BaUnitSearchResultBean) evt.getNewValue();
+                            if (bean != null) {
+                                BaUnitSummaryBean prop = new BaUnitSummaryBean(bean);
+                              valuation.setSelectedProperty(prop);
+                             }
+                        }
+                    }
+                });
+                getMainContentPanel().addPanel(propSearchPanel, MainContentPanel.CARD_BAUNIT_SEARCH, true);
+                return null;
+            }
+        };
+        TaskManager.getInstance().runTask(t);
+    }
+     
+     private void configureSecurity() {
+        SecurityClassificationDialog form = new SecurityClassificationDialog(
+                valuation, MainForm.getInstance(), true);
+        WindowUtility.centerForm(form);
+        form.setVisible(true);
+    }
+     /**
+     * Validates the valuation before closing the form.
+     *
+     * @return
+     */
+    private boolean confirmClose() {
+        boolean result = true;
+        if (valuation.validate(true).size() < 1) {
+            saveValuationState();
+            firePropertyChange(VALUATION_SAVED, null, valuation);
+            close();
+        } else {
+            result = false;
+        }
+        return result;
+    }
+    /**
+     * Saves a hash of the valuation object so that any data changes can be
+     * detected on save.
+     */
+    private void saveValuationState() {
+         MainForm.saveBeanState(valuation);
     }
 
 }

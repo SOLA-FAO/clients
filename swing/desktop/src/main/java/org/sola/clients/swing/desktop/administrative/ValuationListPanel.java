@@ -108,7 +108,6 @@ public class ValuationListPanel extends ContentPanel {
         btnEdit = new javax.swing.JButton();
         btnRemove = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JToolBar.Separator();
-        btnOpen = new javax.swing.JButton();
         btnPrint = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblValuations = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
@@ -138,6 +137,11 @@ public class ValuationListPanel extends ContentPanel {
         btnView.setText(bundle.getString("ValuationListPanel.btnView.text")); // NOI18N
         btnView.setFocusable(false);
         btnView.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnView.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnView);
         jToolBar1.add(jSeparator1);
 
@@ -156,20 +160,24 @@ public class ValuationListPanel extends ContentPanel {
         btnEdit.setText(bundle.getString("ValuationListPanel.btnEdit.text")); // NOI18N
         btnEdit.setFocusable(false);
         btnEdit.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnEdit);
 
         btnRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/remove.png"))); // NOI18N
         btnRemove.setText(bundle.getString("ValuationListPanel.btnRemove.text")); // NOI18N
         btnRemove.setFocusable(false);
         btnRemove.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnRemove);
         jToolBar1.add(jSeparator2);
-
-        btnOpen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/folder-open-document.png"))); // NOI18N
-        btnOpen.setText(bundle.getString("ValuationListPanel.btnOpen.text")); // NOI18N
-        btnOpen.setFocusable(false);
-        btnOpen.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(btnOpen);
 
         btnPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/print.png"))); // NOI18N
         btnPrint.setText(bundle.getString("ValuationListPanel.btnPrint.text")); // NOI18N
@@ -243,18 +251,33 @@ public class ValuationListPanel extends ContentPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-
+        saveValuationList(true);
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         addValuation(null, false);
     }//GEN-LAST:event_btnAddActionPerformed
 
+    private void btnViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewActionPerformed
+        if(listBean.getSelectedValuation() != null) {
+            openValuation(listBean.getSelectedValuation(), true);
+        }
+    }//GEN-LAST:event_btnViewActionPerformed
+
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+         if (listBean.getSelectedValuation() != null) {
+            openValuation(listBean.getSelectedValuation(), readOnly);
+        }
+    }//GEN-LAST:event_btnEditActionPerformed
+
+    private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
+       removeValuation(listBean.getSelectedValuation());
+    }//GEN-LAST:event_btnRemoveActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnEdit;
-    private javax.swing.JButton btnOpen;
     private javax.swing.JButton btnPrint;
     private javax.swing.JButton btnRemove;
     private javax.swing.JButton btnSave;
@@ -322,6 +345,75 @@ public class ValuationListPanel extends ContentPanel {
     private void saveListBeanState() {
         tblValuations.clearSelection();
         MainForm.saveBeanState(listBean);
+    }
+    private boolean saveValuationList(final boolean showMessage) {
+        final boolean[] result = {listBean.validate(true).size() < 1};
+        if (result[0]) {
+            // Save the checklist items
+            SolaTask<Void, Void> t = new SolaTask<Void, Void>() {
+                @Override
+                public Void doTask() {
+                    setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_SAVING));
+                    listBean.saveList();
+                    return null;
+                }
+
+                @Override
+                public void taskDone() {
+                    saveListBeanState();
+                    if (showMessage) {
+                        // Only display the Saved message if the user has choosen to explicitly save
+                        MessageUtility.displayMessage(ClientMessage.VALUATION_SUCCESSFULLY_SAVED);
+                    }
+                }
+
+                @Override
+                protected void taskFailed(Throwable e) {
+                    // If the fail saves due to a database or connection exception, 
+                    // capture the result for the save. 
+                    result[0] = false;
+                    super.taskFailed(e);
+                }
+            };
+            TaskManager.getInstance().runTask(t);
+        }
+        return result[0];
+    }
+    
+    private void openValuation(final ValuationBean valuation,
+            final boolean viewItem) {
+
+        SolaTask t = new SolaTask<Void, Void>() {
+            @Override
+            public Void doTask() {
+                ValuationBean obj = null;
+                if (valuation != null) {
+                    // Create a copy of the objection so that if the user decides to cancel thier changes
+                    // the data on the original objection is unchanged. 
+                    obj = valuation.copy();
+                }
+                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_OBJECTION));
+                ValuationPanel panel = new ValuationPanel(obj, applicationBean, applicationService, viewItem);
+                panel.addPropertyChangeListener(new PropertyChangeListener() {
+
+                    @Override
+                    public void propertyChange(PropertyChangeEvent evt) {
+                        if (evt.getPropertyName().equals(ValuationPanel.VALUATION_SAVED)) {
+                            listBean.addOrUpdateItem((ValuationBean) evt.getNewValue());
+                            tblValuations.clearSelection();
+                        }
+                    }
+                });
+                getMainContentPanel().addPanel(panel, MainContentPanel.CARD_OBJECTION_PANEL, true);
+                return null;
+            }
+        };
+        TaskManager.getInstance().runTask(t);
+    }
+     private void removeValuation(ValuationBean item) {
+        if (item != null) {
+            listBean.removeItem(item);
+        }
     }
 
     private boolean readOnly = false;

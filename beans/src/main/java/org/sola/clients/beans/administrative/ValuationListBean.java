@@ -141,4 +141,19 @@ public class ValuationListBean extends AbstractBindingListBean {
                 WSManager.getInstance().getAdministrative().saveValuations(toList, serviceId),
                 ValuationBean.class, (List) valuationList);
     }
+    /**
+     * Determines whether a objection should be added to the list of items or
+     * replace an existing item in the list.
+     *
+     * @param item The item to add or update.
+     */
+    public void addOrUpdateItem(ValuationBean item) {
+        if (item != null && valuationList != null) {
+            if (valuationList.contains(item)) {
+                valuationList.set(valuationList.indexOf(item), item);
+            } else {
+                valuationList.addAsNew(item);
+            }
+        }
+    }
 }
