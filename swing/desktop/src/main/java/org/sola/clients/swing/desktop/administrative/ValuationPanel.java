@@ -74,35 +74,36 @@ public class ValuationPanel extends ContentPanel {
 
     public ValuationPanel(ValuationBean valuation, ApplicationBean appBean,
             ApplicationServiceBean serviceBean, boolean readOnly) {
-        this.valuation = valuation;
+
         this.applicationBean = appBean;
         this.applicationService = serviceBean;
         this.readOnly = readOnly;
+        this.valuation = valuation;
         initComponents();
+
         postInit();
     }
 
     private void postInit() {
         customizeForm();
-        
-        
+
         /**
-        this.valuation.addPropertyChangeListener(new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                if (evt.getPropertyName().equals(ValuationBean.SELECTED_PROPERTY_PROPERTY)) {
-                    customizeCommentButtons((ObjectionCommentBean) evt.getNewValue());
-                }
-            }
-        });
-        **/
+         * this.valuation.addPropertyChangeListener(new PropertyChangeListener()
+         * {
+         *
+         * @Override public void propertyChange(PropertyChangeEvent evt) { if
+         * (evt.getPropertyName().equals(ValuationBean.SELECTED_PROPERTY_PROPERTY))
+         * { customizeCommentButtons((ObjectionCommentBean) evt.getNewValue());
+         * } } });
+         *
+         */
     }
 
     private void customizeForm() {
         this.setHeaderPanel(headerPanel1);
         this.setBreadCrumbTitle(this.getBreadCrumbPath(), getPanelTitle());
-        
-        btnSave.setEnabled(!readOnly);
+
+        btnClose.setEnabled(!readOnly);
         btnDate.setEnabled(!readOnly);
         txtAmount.setEnabled(!readOnly);
         txtDate.setEnabled(!readOnly);
@@ -110,17 +111,14 @@ public class ValuationPanel extends ContentPanel {
         txtPropertyRef.setEnabled(!readOnly);
         txtValuationRef.setEnabled(!readOnly);
         txtDescription.setEnabled(!readOnly);
-        
+
         documentsMangementExtPanel.setAllowEdit(!readOnly);
-        
 
         // Configure Security button - hide if if the user does not 
         // have permission to change security. 
-        btnSecurity.setVisible(btnSave.isEnabled()
+        btnSecurity.setVisible(btnClose.isEnabled()
                 && SecurityBean.isInRole(RolesConstants.CLASSIFICATION_CHANGE_CLASS));
     }
-    
-    
 
     private String getPanelTitle() {
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle");
@@ -143,11 +141,11 @@ public class ValuationPanel extends ContentPanel {
     private void initComponents() {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        valuation = new org.sola.clients.beans.administrative.ValuationBean();
+        valuation = initValuation();
         valuationTypeListBean = new org.sola.clients.beans.referencedata.ValuationTypeListBean();
         headerPanel1 = new org.sola.clients.swing.ui.HeaderPanel();
         jToolBar1 = new javax.swing.JToolBar();
-        btnSave = new javax.swing.JButton();
+        btnClose = new javax.swing.JButton();
         btnSearchProperty = new javax.swing.JButton();
         btnOpenProperty = new javax.swing.JButton();
         btnSecurity = new javax.swing.JButton();
@@ -178,7 +176,6 @@ public class ValuationPanel extends ContentPanel {
         jPanel8 = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
         documentsMangementExtPanel = new org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel();
-        jPanel10 = new javax.swing.JPanel();
         groupPanel1 = new org.sola.clients.swing.ui.GroupPanel();
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
@@ -187,16 +184,16 @@ public class ValuationPanel extends ContentPanel {
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
-        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/save.png"))); // NOI18N
-        btnSave.setText(bundle.getString("ValuationPanel.btnSave.text")); // NOI18N
-        btnSave.setFocusable(false);
-        btnSave.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnSave.addActionListener(new java.awt.event.ActionListener() {
+        btnClose.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/confirm-close.png"))); // NOI18N
+        btnClose.setText(bundle.getString("ValuationPanel.btnClose.text")); // NOI18N
+        btnClose.setFocusable(false);
+        btnClose.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnClose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveActionPerformed(evt);
+                btnCloseActionPerformed(evt);
             }
         });
-        jToolBar1.add(btnSave);
+        jToolBar1.add(btnClose);
 
         btnSearchProperty.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/search.png"))); // NOI18N
         btnSearchProperty.setText(bundle.getString("ValuationPanel.btnSearchProperty.text")); // NOI18N
@@ -237,7 +234,7 @@ public class ValuationPanel extends ContentPanel {
         jPanel11.setLayout(jPanel11Layout);
         jPanel11Layout.setHorizontalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
             .addComponent(txtValuationRef)
         );
         jPanel11Layout.setVerticalGroup(
@@ -253,7 +250,7 @@ public class ValuationPanel extends ContentPanel {
 
         jLabel2.setText(bundle.getString("ValuationPanel.jLabel2.text")); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, valuation, org.jdesktop.beansbinding.ELProperty.create("${baUnitId}"), txtPropertyRef, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, valuation, org.jdesktop.beansbinding.ELProperty.create("${selectedProperty.displayName}"), txtPropertyRef, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
@@ -261,7 +258,7 @@ public class ValuationPanel extends ContentPanel {
         jPanel12Layout.setHorizontalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(txtPropertyRef)
-            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
         );
         jPanel12Layout.setVerticalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -283,7 +280,7 @@ public class ValuationPanel extends ContentPanel {
         jPanel13.setLayout(jPanel13Layout);
         jPanel13Layout.setHorizontalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)
+            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
             .addComponent(txtAmount)
         );
         jPanel13Layout.setVerticalGroup(
@@ -315,7 +312,7 @@ public class ValuationPanel extends ContentPanel {
         jPanel14.setLayout(jPanel14Layout);
         jPanel14Layout.setHorizontalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)
+            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
             .addGroup(jPanel14Layout.createSequentialGroup()
                 .addComponent(txtDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -347,7 +344,7 @@ public class ValuationPanel extends ContentPanel {
         jPanel16Layout.setHorizontalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(cbxType, 0, 159, Short.MAX_VALUE)
+            .addComponent(cbxType, 0, 154, Short.MAX_VALUE)
         );
         jPanel16Layout.setVerticalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -364,7 +361,7 @@ public class ValuationPanel extends ContentPanel {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 159, Short.MAX_VALUE)
+            .addGap(0, 154, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -377,7 +374,7 @@ public class ValuationPanel extends ContentPanel {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 159, Short.MAX_VALUE)
+            .addGap(0, 154, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -402,8 +399,8 @@ public class ValuationPanel extends ContentPanel {
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 681, Short.MAX_VALUE)
             .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 661, Short.MAX_VALUE)
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -433,17 +430,6 @@ public class ValuationPanel extends ContentPanel {
 
         jPanel8.add(jPanel9);
 
-        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
-        jPanel10.setLayout(jPanel10Layout);
-        jPanel10Layout.setHorizontalGroup(
-            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel10Layout.setVerticalGroup(
-            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 271, Short.MAX_VALUE)
-        );
-
         groupPanel1.setTitleText(bundle.getString("ValuationPanel.groupPanel1.titleText")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -451,12 +437,15 @@ public class ValuationPanel extends ContentPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(headerPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(pnlTop, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addComponent(pnlCenter, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(groupPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(groupPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnlCenter, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnlTop, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -472,16 +461,15 @@ public class ValuationPanel extends ContentPanel {
                 .addComponent(groupPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37)
-                .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        saveValuation(true);
-    }//GEN-LAST:event_btnSaveActionPerformed
+    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
+        confirmClose();
+    }//GEN-LAST:event_btnCloseActionPerformed
 
     private void btnDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDateActionPerformed
         showCalendar(txtDate);
@@ -497,9 +485,9 @@ public class ValuationPanel extends ContentPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnClose;
     private javax.swing.JButton btnDate;
     private javax.swing.JButton btnOpenProperty;
-    private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSearchProperty;
     private javax.swing.JButton btnSecurity;
     private javax.swing.JComboBox cbxType;
@@ -513,7 +501,6 @@ public class ValuationPanel extends ContentPanel {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
@@ -599,8 +586,8 @@ public class ValuationPanel extends ContentPanel {
         CalendarForm calendar = new CalendarForm(null, true, dateField);
         calendar.setVisible(true);
     }
-    
-     private void searchForProperty(final ValuationBean valuation, final boolean viewItem) {
+
+    private void searchForProperty(final ValuationBean valuation, final boolean viewItem) {
         SolaTask t = new SolaTask<Void, Void>() {
             @Override
             public Void doTask() {
@@ -618,8 +605,8 @@ public class ValuationPanel extends ContentPanel {
                             BaUnitSearchResultBean bean = (BaUnitSearchResultBean) evt.getNewValue();
                             if (bean != null) {
                                 BaUnitSummaryBean prop = new BaUnitSummaryBean(bean);
-                              valuation.setSelectedProperty(prop);
-                             }
+                                valuation.setSelectedProperty(prop);
+                            }
                         }
                     }
                 });
@@ -629,19 +616,21 @@ public class ValuationPanel extends ContentPanel {
         };
         TaskManager.getInstance().runTask(t);
     }
-     
-     private void configureSecurity() {
+
+    private void configureSecurity() {
         SecurityClassificationDialog form = new SecurityClassificationDialog(
                 valuation, MainForm.getInstance(), true);
         WindowUtility.centerForm(form);
         form.setVisible(true);
     }
-     /**
+
+    /**
      * Validates the valuation before closing the form.
      *
      * @return
      */
     private boolean confirmClose() {
+        bindCurrentSourceListToValuationBean();
         boolean result = true;
         if (valuation.validate(true).size() < 1) {
             saveValuationState();
@@ -652,12 +641,22 @@ public class ValuationPanel extends ContentPanel {
         }
         return result;
     }
+
     /**
      * Saves a hash of the valuation object so that any data changes can be
      * detected on save.
      */
     private void saveValuationState() {
-         MainForm.saveBeanState(valuation);
+        MainForm.saveBeanState(valuation);
     }
+
+    private ValuationBean initValuation() {
+        if (valuation == null) {
+            valuation = new ValuationBean();
+            valuation.setServiceId(applicationService.getId());
+        }
+        return valuation;
+    }
+;
 
 }

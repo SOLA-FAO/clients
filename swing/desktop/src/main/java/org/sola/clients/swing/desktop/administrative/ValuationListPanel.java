@@ -84,7 +84,8 @@ public class ValuationListPanel extends ContentPanel {
         saveListBeanState();
 
     }
-    public ValuationListPanel(){
+
+    public ValuationListPanel() {
         initComponents();
     }
 
@@ -231,10 +232,10 @@ public class ValuationListPanel extends ContentPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(headerPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 792, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2))
+                .addContainerGap()
+                .addComponent(jScrollPane2)
                 .addContainerGap())
+            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -243,8 +244,8 @@ public class ValuationListPanel extends ContentPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 156, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 368, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         bindingGroup.bind();
@@ -255,23 +256,23 @@ public class ValuationListPanel extends ContentPanel {
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        addValuation(null, false);
+        addValuation(new ValuationBean(), false);
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewActionPerformed
-        if(listBean.getSelectedValuation() != null) {
+        if (listBean.getSelectedValuation() != null) {
             openValuation(listBean.getSelectedValuation(), true);
         }
     }//GEN-LAST:event_btnViewActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-         if (listBean.getSelectedValuation() != null) {
+        if (listBean.getSelectedValuation() != null) {
             openValuation(listBean.getSelectedValuation(), readOnly);
         }
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
-       removeValuation(listBean.getSelectedValuation());
+        removeValuation(listBean.getSelectedValuation());
     }//GEN-LAST:event_btnRemoveActionPerformed
 
 
@@ -310,12 +311,12 @@ public class ValuationListPanel extends ContentPanel {
                             BaUnitSearchResultBean bean = (BaUnitSearchResultBean) evt.getNewValue();
                             if (bean != null) {
                                 BaUnitSummaryBean prop = new BaUnitSummaryBean(bean);
-
+                                valuation.setBaUnitId(bean.getId());
+                                valuation.setSelectedProperty(prop);
+                                valuation.setBaUnitBasic(prop);
                                 ValuationPanel vPanel = new ValuationPanel(valuation, applicationBean, applicationService, viewItem);
-                                ValuationBean vBean = vPanel.getCurrentValuation();
-                                vBean.setBaUnitId(bean.getId());
-                                vBean.setSelectedProperty(prop);
-                                vBean.setBaUnitBasic(prop);
+                                //ValuationBean vBean = vPanel.getCurrentValuation();
+
                                 getMainContentPanel().addPanel(vPanel, MainContentPanel.CARD_VALUATION_PANEL, true);
                             }
                         }
@@ -346,6 +347,7 @@ public class ValuationListPanel extends ContentPanel {
         tblValuations.clearSelection();
         MainForm.saveBeanState(listBean);
     }
+
     private boolean saveValuationList(final boolean showMessage) {
         final boolean[] result = {listBean.validate(true).size() < 1};
         if (result[0]) {
@@ -379,7 +381,7 @@ public class ValuationListPanel extends ContentPanel {
         }
         return result[0];
     }
-    
+
     private void openValuation(final ValuationBean valuation,
             final boolean viewItem) {
 
@@ -410,7 +412,8 @@ public class ValuationListPanel extends ContentPanel {
         };
         TaskManager.getInstance().runTask(t);
     }
-     private void removeValuation(ValuationBean item) {
+
+    private void removeValuation(ValuationBean item) {
         if (item != null) {
             listBean.removeItem(item);
         }

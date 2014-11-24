@@ -70,8 +70,7 @@ public class ValuationBean extends AbstractVersionedBean {
     private BigDecimal amount;
     private Date valuationDate;
     private ValuationTypeBean type;
-    @NotNull
-    @NotEmpty
+    @NotEmpty(message = "Source document needs to be attached")
     private SolaList<SourceBean> sourceList;
     private BaUnitSummaryBean baUnitBasic;
     private BaUnitSummaryBean selectedProperty;

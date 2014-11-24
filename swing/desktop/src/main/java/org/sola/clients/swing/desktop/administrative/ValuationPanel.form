@@ -3,6 +3,9 @@
 <Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <NonVisualComponents>
     <Component class="org.sola.clients.beans.administrative.ValuationBean" name="valuation">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="initValuation()"/>
+      </AuxValues>
     </Component>
     <Component class="org.sola.clients.beans.referencedata.ValuationTypeListBean" name="valuationTypeListBean">
     </Component>
@@ -23,12 +26,17 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Component id="headerPanel1" max="32767" attributes="0"/>
-          <Component id="jToolBar1" alignment="0" max="32767" attributes="0"/>
-          <Component id="pnlTop" alignment="0" pref="0" max="32767" attributes="0"/>
-          <Component id="pnlCenter" alignment="0" max="32767" attributes="0"/>
-          <Component id="jPanel8" alignment="0" max="32767" attributes="0"/>
-          <Component id="jPanel10" alignment="0" max="32767" attributes="0"/>
-          <Component id="groupPanel1" alignment="0" max="32767" attributes="0"/>
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="groupPanel1" max="32767" attributes="0"/>
+                  <Component id="jPanel8" alignment="0" max="32767" attributes="0"/>
+                  <Component id="pnlCenter" alignment="0" max="32767" attributes="0"/>
+                  <Component id="pnlTop" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jToolBar1" alignment="1" max="32767" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -45,8 +53,7 @@
               <Component id="groupPanel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel8" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
-              <Component id="jPanel10" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -67,19 +74,19 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
       <SubComponents>
-        <Component class="javax.swing.JButton" name="btnSave">
+        <Component class="javax.swing.JButton" name="btnClose">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/images/common/save.png"/>
+              <Image iconType="3" name="/images/common/confirm-close.png"/>
             </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="ValuationPanel.btnSave.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+              <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="ValuationPanel.btnClose.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
             </Property>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSaveActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCloseActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnSearchProperty">
@@ -139,7 +146,7 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jLabel1" pref="159" max="32767" attributes="0"/>
+                  <Component id="jLabel1" pref="154" max="32767" attributes="0"/>
                   <Component id="txtValuationRef" alignment="0" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
@@ -177,7 +184,7 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="txtPropertyRef" alignment="0" max="32767" attributes="0"/>
-                  <Component id="jLabel2" alignment="0" pref="159" max="32767" attributes="0"/>
+                  <Component id="jLabel2" alignment="0" pref="154" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -201,7 +208,7 @@
             </Component>
             <Component class="javax.swing.JTextField" name="txtPropertyRef">
               <BindingProperties>
-                <BindingProperty name="text" source="valuation" sourcePath="${baUnitId}" target="txtPropertyRef" targetPath="text" updateStrategy="0" immediately="false">
+                <BindingProperty name="text" source="valuation" sourcePath="${selectedProperty.displayName}" target="txtPropertyRef" targetPath="text" updateStrategy="0" immediately="false">
                   <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
                 </BindingProperty>
               </BindingProperties>
@@ -213,7 +220,7 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jLabel3" pref="159" max="32767" attributes="0"/>
+                  <Component id="jLabel3" pref="154" max="32767" attributes="0"/>
                   <Component id="txtAmount" alignment="0" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
@@ -250,7 +257,7 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jLabel4" pref="159" max="32767" attributes="0"/>
+                  <Component id="jLabel4" pref="154" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Component id="txtDate" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -314,7 +321,7 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jLabel7" max="32767" attributes="0"/>
-                  <Component id="cbxType" alignment="0" pref="159" max="32767" attributes="0"/>
+                  <Component id="cbxType" alignment="0" pref="154" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -349,7 +356,7 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="159" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="154" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -364,7 +371,7 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="159" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="154" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -388,8 +395,8 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jScrollPane1" pref="681" max="32767" attributes="0"/>
-                  <Component id="jLabel6" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jLabel6" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" alignment="1" pref="661" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -465,21 +472,6 @@
           </SubComponents>
         </Container>
       </SubComponents>
-    </Container>
-    <Container class="javax.swing.JPanel" name="jPanel10">
-
-      <Layout>
-        <DimensionLayout dim="0">
-          <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-          </Group>
-        </DimensionLayout>
-        <DimensionLayout dim="1">
-          <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="271" max="32767" attributes="0"/>
-          </Group>
-        </DimensionLayout>
-      </Layout>
     </Container>
     <Component class="org.sola.clients.swing.ui.GroupPanel" name="groupPanel1">
       <Properties>
