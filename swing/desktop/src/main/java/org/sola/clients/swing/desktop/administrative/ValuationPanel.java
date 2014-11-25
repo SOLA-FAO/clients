@@ -210,6 +210,11 @@ public class ValuationPanel extends ContentPanel {
         btnOpenProperty.setText(bundle.getString("ValuationPanel.btnOpenProperty.text")); // NOI18N
         btnOpenProperty.setFocusable(false);
         btnOpenProperty.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnOpenProperty.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOpenPropertyActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnOpenProperty);
 
         btnSecurity.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/lock.png"))); // NOI18N
@@ -483,6 +488,10 @@ public class ValuationPanel extends ContentPanel {
         configureSecurity();
     }//GEN-LAST:event_btnSecurityActionPerformed
 
+    private void btnOpenPropertyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenPropertyActionPerformed
+      openPropertyForm();
+    }//GEN-LAST:event_btnOpenPropertyActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;
@@ -656,6 +665,26 @@ public class ValuationPanel extends ContentPanel {
             valuation.setServiceId(applicationService.getId());
         }
         return valuation;
+    }
+
+    private void openPropertyForm() {
+        if (valuation != null) {
+            final BaUnitSummaryBean baUnitSummaryBean = valuation.getBaUnitBasic();
+            if(baUnitSummaryBean != null){
+            SolaTask t = new SolaTask<Void, Void>() {
+                @Override
+                public Void doTask() {
+                    setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PROPERTY));
+                    SLPropertyPanel propertyPanel = new SLPropertyPanel(applicationBean,
+                            applicationService, baUnitSummaryBean.getNameFirstpart(),
+                            baUnitSummaryBean.getNameLastpart(), readOnly);
+                    getMainContentPanel().addPanel(propertyPanel, MainContentPanel.CARD_PROPERTY_PANEL, true);
+                    return null;
+                }
+            };
+            TaskManager.getInstance().runTask(t);
+            }
+        }
     }
 ;
 

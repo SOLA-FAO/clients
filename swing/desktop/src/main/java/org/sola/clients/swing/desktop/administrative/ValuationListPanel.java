@@ -69,7 +69,7 @@ public class ValuationListPanel extends ContentPanel {
         resourceBundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle");
         initComponents();
         customizeForm();
-        listBean.loadList(this.applicationService.getId());
+
         listBean.addPropertyChangeListener(new PropertyChangeListener() {
 
             @Override
@@ -107,7 +107,7 @@ public class ValuationListPanel extends ContentPanel {
     private void initComponents() {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        listBean = new org.sola.clients.beans.administrative.ValuationListBean();
+        listBean = initValuationListBean(applicationService.getId());
         headerPanel1 = new org.sola.clients.swing.ui.HeaderPanel();
         jToolBar1 = new javax.swing.JToolBar();
         btnSave = new javax.swing.JButton();
@@ -198,27 +198,21 @@ public class ValuationListPanel extends ContentPanel {
         org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${nr}"));
         columnBinding.setColumnName("Nr");
         columnBinding.setColumnClass(String.class);
-        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${baUnitId}"));
         columnBinding.setColumnName("Ba Unit Id");
         columnBinding.setColumnClass(String.class);
-        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${classificationCode}"));
         columnBinding.setColumnName("Classification Code");
         columnBinding.setColumnClass(String.class);
-        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${amount}"));
         columnBinding.setColumnName("Amount");
         columnBinding.setColumnClass(java.math.BigDecimal.class);
-        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${typeCode}"));
         columnBinding.setColumnName("Type Code");
         columnBinding.setColumnClass(String.class);
-        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${description}"));
         columnBinding.setColumnName("Description");
         columnBinding.setColumnClass(String.class);
-        columnBinding.setEditable(false);
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, listBean, org.jdesktop.beansbinding.ELProperty.create("${selectedValuation}"), tblValuations, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
         bindingGroup.addBinding(binding);
@@ -421,6 +415,17 @@ public class ValuationListPanel extends ContentPanel {
         if (item != null) {
             listBean.removeItem(item);
         }
+    }
+
+    /**
+     * Initializes a new ValuationListBean with default values.
+     *
+     * @return
+     */
+    private ValuationListBean initValuationListBean(String serviceId) {
+        ValuationListBean valuationListBean = new ValuationListBean();
+        valuationListBean.loadList(serviceId);
+        return valuationListBean;
     }
 
     private boolean readOnly = false;
