@@ -31,8 +31,6 @@ package org.sola.clients.beans.administrative;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import javax.validation.constraints.NotNull;
-import javax.validation.groups.Default;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractVersionedBean;
@@ -84,6 +82,7 @@ public class ValuationBean extends AbstractVersionedBean {
 
     public ValuationBean() {
         super();
+        sourceList = new SolaList();
     }
 
     public String getId() {

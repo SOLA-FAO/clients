@@ -37,7 +37,6 @@ import org.sola.clients.beans.administrative.ValuationBean;
 import org.sola.clients.beans.administrative.ValuationListBean;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationServiceBean;
-import org.sola.clients.beans.controls.SolaList;
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
@@ -89,6 +88,15 @@ public class ValuationListPanel extends ContentPanel {
         initComponents();
     }
 
+    @Override
+    protected boolean panelClosing() {
+        tblValuations.clearSelection();
+        if (btnSave.isEnabled() && MainForm.checkSaveBeforeClose(listBean)) {
+            return saveValuationList(true);
+        }
+        return true;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -113,7 +121,6 @@ public class ValuationListPanel extends ContentPanel {
         jScrollPane2 = new javax.swing.JScrollPane();
         tblValuations = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
 
-        setCloseOnHide(true);
         setHeaderPanel(headerPanel1);
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
@@ -314,10 +321,7 @@ public class ValuationListPanel extends ContentPanel {
                                 valuation.setBaUnitId(bean.getId());
                                 valuation.setSelectedProperty(prop);
                                 valuation.setBaUnitBasic(prop);
-                                ValuationPanel vPanel = new ValuationPanel(valuation, applicationBean, applicationService, viewItem);
-                                //ValuationBean vBean = vPanel.getCurrentValuation();
-
-                                getMainContentPanel().addPanel(vPanel, MainContentPanel.CARD_VALUATION_PANEL, true);
+                                openValuation(valuation, viewItem);
                             }
                         }
                     }
@@ -406,7 +410,7 @@ public class ValuationListPanel extends ContentPanel {
                         }
                     }
                 });
-                getMainContentPanel().addPanel(panel, MainContentPanel.CARD_OBJECTION_PANEL, true);
+                getMainContentPanel().addPanel(panel, MainContentPanel.CARD_VALUATION_PANEL, true);
                 return null;
             }
         };
