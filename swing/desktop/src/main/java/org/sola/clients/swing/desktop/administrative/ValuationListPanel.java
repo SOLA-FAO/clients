@@ -43,6 +43,8 @@ import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
+import org.sola.clients.swing.ui.renderers.AreaCellRenderer;
+import org.sola.clients.swing.ui.renderers.MoneyCellRenderer;
 import org.sola.common.RolesConstants;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -198,21 +200,27 @@ public class ValuationListPanel extends ContentPanel {
         org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${nr}"));
         columnBinding.setColumnName("Nr");
         columnBinding.setColumnClass(String.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${baUnitId}"));
-        columnBinding.setColumnName("Ba Unit Id");
+        columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${baUnitBasic.displayName}"));
+        columnBinding.setColumnName("Ba Unit Basic.display Name");
         columnBinding.setColumnClass(String.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${classificationCode}"));
-        columnBinding.setColumnName("Classification Code");
-        columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${baUnitBasic.area}"));
+        columnBinding.setColumnName("Ba Unit Basic.area");
+        columnBinding.setColumnClass(java.math.BigDecimal.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${amount}"));
         columnBinding.setColumnName("Amount");
         columnBinding.setColumnClass(java.math.BigDecimal.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${typeCode}"));
-        columnBinding.setColumnName("Type Code");
+        columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${type.code}"));
+        columnBinding.setColumnName("Type.code");
         columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${description}"));
         columnBinding.setColumnName("Description");
         columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, listBean, org.jdesktop.beansbinding.ELProperty.create("${selectedValuation}"), tblValuations, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
         bindingGroup.addBinding(binding);
@@ -222,7 +230,9 @@ public class ValuationListPanel extends ContentPanel {
             tblValuations.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("ValuationListPanel.tblValuations.columnModel.title0_1")); // NOI18N
             tblValuations.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("ValuationListPanel.tblValuations.columnModel.title1_1")); // NOI18N
             tblValuations.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("ValuationListPanel.tblValuations.columnModel.title2_1")); // NOI18N
+            tblValuations.getColumnModel().getColumn(2).setCellRenderer( new org.sola.clients.swing.ui.renderers.AreaCellRenderer());
             tblValuations.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("ValuationListPanel.tblValuations.columnModel.title3_1")); // NOI18N
+            tblValuations.getColumnModel().getColumn(3).setCellRenderer(new org.sola.clients.swing.ui.renderers.MoneyCellRenderer());
             tblValuations.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("ValuationListPanel.tblValuations.columnModel.title4_1")); // NOI18N
             tblValuations.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("ValuationListPanel.tblValuations.columnModel.title5")); // NOI18N
         }
@@ -334,7 +344,7 @@ public class ValuationListPanel extends ContentPanel {
         customizeButtons(null);
     }
 
-    private void customizeButtons(ValuationBean item) {
+        private void customizeButtons(ValuationBean item) {
         boolean enable = item != null && !readOnly;
         btnView.setEnabled(item != null);
         btnEdit.setEnabled(enable);

@@ -26,14 +26,22 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Component id="headerPanel1" max="32767" attributes="0"/>
-          <Group type="102" alignment="1" attributes="0">
-              <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="groupPanel1" max="32767" attributes="0"/>
-                  <Component id="jPanel8" alignment="0" max="32767" attributes="0"/>
-                  <Component id="pnlCenter" alignment="0" max="32767" attributes="0"/>
-                  <Component id="pnlTop" alignment="0" max="32767" attributes="0"/>
-                  <Component id="jToolBar1" alignment="1" max="32767" attributes="0"/>
+          <Group type="102" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="groupPanel1" max="32767" attributes="0"/>
+                          <Component id="jPanel8" alignment="0" pref="0" max="32767" attributes="0"/>
+                          <Component id="pnlCenter" alignment="0" max="32767" attributes="0"/>
+                          <Component id="pnlTop" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jToolBar1" alignment="1" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="documentsMangementExtPanel" max="32767" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -53,7 +61,9 @@
               <Component id="groupPanel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel8" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="documentsMangementExtPanel" pref="204" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -87,21 +97,6 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCloseActionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JButton" name="btnSearchProperty">
-          <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/images/common/search.png"/>
-            </Property>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="ValuationPanel.btnSearchProperty.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-            </Property>
-            <Property name="focusable" type="boolean" value="false"/>
-            <Property name="verticalTextPosition" type="int" value="3"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSearchPropertyActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnOpenProperty">
@@ -211,7 +206,7 @@
             </Component>
             <Component class="javax.swing.JTextField" name="txtPropertyRef">
               <BindingProperties>
-                <BindingProperty name="text" source="valuation" sourcePath="${selectedProperty.displayName}" target="txtPropertyRef" targetPath="text" updateStrategy="0" immediately="false">
+                <BindingProperty name="text" source="valuation" sourcePath="${baUnitBasic.displayName}" target="txtPropertyRef" targetPath="text" updateStrategy="0" immediately="false">
                   <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
                 </BindingProperty>
               </BindingProperties>
@@ -246,11 +241,17 @@
                 </Property>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="txtAmount">
+            <Component class="javax.swing.JFormattedTextField" name="txtAmount">
+              <Properties>
+                <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="FormattersFactory.getInstance().getMoneyFormatterFactory()" type="code"/>
+                </Property>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="ValuationPanel.txtAmount.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
+              </Properties>
               <BindingProperties>
-                <BindingProperty name="text" source="valuation" sourcePath="${amount}" target="txtAmount" targetPath="text" updateStrategy="0" immediately="false">
-                  <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-                </BindingProperty>
+                <BindingProperty name="value" source="valuation" sourcePath="${amount}" target="txtAmount" targetPath="value" updateStrategy="0" immediately="false"/>
               </BindingProperties>
             </Component>
           </SubComponents>
@@ -315,6 +316,9 @@
                   <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="ValuationPanel.txtDate.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                 </Property>
               </Properties>
+              <BindingProperties>
+                <BindingProperty name="value" source="valuation" sourcePath="${valuationDate}" target="txtDate" targetPath="value" updateStrategy="0" immediately="false"/>
+              </BindingProperties>
             </Component>
           </SubComponents>
         </Container>
@@ -349,7 +353,7 @@
             <Component class="javax.swing.JComboBox" name="cbxType">
               <BindingProperties>
                 <BindingProperty name="elements" source="valuationTypeListBean" sourcePath="${valuationTypeList}" target="cbxType" targetPath="elements" updateStrategy="0" immediately="false"/>
-                <BindingProperty name="selectedItem" source="valuation" sourcePath="${type.code}" target="cbxType" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="selectedItem" source="valuation" sourcePath="${type}" target="cbxType" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
               </BindingProperties>
             </Component>
           </SubComponents>
@@ -451,30 +455,6 @@
         <Property name="columns" type="int" value="1"/>
         <Property name="rows" type="int" value="1"/>
       </Layout>
-      <SubComponents>
-        <Container class="javax.swing.JPanel" name="jPanel9">
-
-          <Layout>
-            <DimensionLayout dim="0">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="documentsMangementExtPanel" alignment="1" max="32767" attributes="0"/>
-              </Group>
-            </DimensionLayout>
-            <DimensionLayout dim="1">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="documentsMangementExtPanel" min="-2" pref="181" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                  </Group>
-              </Group>
-            </DimensionLayout>
-          </Layout>
-          <SubComponents>
-            <Component class="org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel" name="documentsMangementExtPanel">
-            </Component>
-          </SubComponents>
-        </Container>
-      </SubComponents>
     </Container>
     <Component class="org.sola.clients.swing.ui.GroupPanel" name="groupPanel1">
       <Properties>
@@ -482,6 +462,8 @@
           <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="ValuationPanel.groupPanel1.titleText" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
         </Property>
       </Properties>
+    </Component>
+    <Component class="org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel" name="documentsMangementExtPanel">
     </Component>
   </SubComponents>
 </Form>

@@ -188,7 +188,7 @@ public class ValuationBean extends AbstractVersionedBean {
         }
         this.setJointRefDataBean(this.type, type, TYPE_PROPERTY);
     }
-
+    
     /**
      * @return the sourceList
      */
@@ -289,8 +289,6 @@ public class ValuationBean extends AbstractVersionedBean {
         this.baUnitBasic = baUnitBasic;
     }
 
-    
-
     public BaUnitSummaryBean getSelectedProperty() {
         return selectedProperty;
     }
@@ -298,12 +296,11 @@ public class ValuationBean extends AbstractVersionedBean {
     public void setSelectedProperty(BaUnitSummaryBean selectedProperty) {
         this.selectedProperty = selectedProperty;
     }
-    
 
     /**
      * Saves the item details to the database
      *
-     * @return 
+     * @return
      * @retun true if the item is successfully saved, otherwise a runtime
      * exception.
      */

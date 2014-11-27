@@ -103,6 +103,7 @@ public class ValuationListBean extends AbstractBindingListBean {
         TypeConverters.TransferObjectListToBeanList(
                 WSManager.getInstance().getAdministrative().getValuations(serviceId),
                 ValuationBean.class, (List) valuationList);
+         
     }
 
     /**
