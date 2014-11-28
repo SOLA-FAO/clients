@@ -104,9 +104,15 @@ public class PublicDisplayPanel extends ContentPanel {
             public Void doTask() {
                 PublicDisplayItemBean item = null;
                 if (publicDisplayItem != null) {
+                    boolean hasChanges = MainForm.checkBeanState(listBean);
                     // Create a copy of the item so that if the user decides to cancel thier changes
                     // the data on the original item is unchanged. 
                     item = publicDisplayItem.copy();
+                    if (!hasChanges) {
+                        // The copy will change the state of the listBean, so reset the bean state
+                        // if no changes had been made. 
+                        saveListBeanState();
+                    }
                 }
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PERSON));
                 PublicDisplayItemPanel panel = new PublicDisplayItemPanel(item,

@@ -242,6 +242,10 @@ public final class CacheManager {
      * Cache key of the {@link PublicDisplayItemStatusBean} collection.
      */
     public static final String GET_PUBLIC_DISPLAY_ITEM_STATUS_KEY = PublicDisplayItemStatusBean.class.getName() + LIST_POSTFIX;
+     /**
+     * Cache key of the {@link ValuationTypeBean} collection.
+     */
+    public static final String GET_VALUATION_TYPE_KEY = ValuationTypeBean.class.getName() + LIST_POSTFIX;
     /**
      * Cache key of the {@link AuthorityBean} collection.
      */
@@ -300,6 +304,7 @@ public final class CacheManager {
     private static final String GET_CHECKLIST_GROUP = "getChecklistGroups";
     private static final String GET_PUBLIC_DISPLAY_TYPES = "getPublicDisplayTypes";
     private static final String GET_PUBLIC_DISPLAY_STATUS_TYPES = "getPublicDisplayStatusTypes";
+    private static final String GET_VALUATION_TYPES = "getValuationTypes";
     private static final String GET_AUTHORITY_TYPES = "getAuthorityTypes";
     private static final String GET_OBJECTION_STATUS_TYPES = "getObjectionStatusTypes";
     private static final String GET_NOTIFY_RELATIONSHIP_TYPES = "getNotifyRelationshipTypes";
@@ -590,7 +595,12 @@ public final class CacheManager {
                 WSManager.getInstance().getReferenceDataService(),
                 GET_PUBLIC_DISPLAY_STATUS_TYPES, GET_PUBLIC_DISPLAY_ITEM_STATUS_KEY);
     }
-    
+    public static List<ValuationTypeBean> getValuationTypes() {
+        return getCachedBeanList(ValuationTypeBean.class,
+                WSManager.getInstance().getReferenceDataService(),
+                GET_VALUATION_TYPES, GET_VALUATION_TYPE_KEY);
+    }
+ 
     public static List<AuthorityBean> getAuthorityTypes() {
         return getCachedBeanList(AuthorityBean.class,
                 WSManager.getInstance().getReferenceDataService(),
