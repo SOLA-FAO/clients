@@ -29,27 +29,18 @@
  */
 package org.sola.clients.swing.desktop.administrative;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import javax.swing.JFormattedTextField;
-import javax.validation.groups.Default;
-import org.sola.clients.beans.administrative.BaUnitSearchResultBean;
 import org.sola.clients.beans.administrative.BaUnitSummaryBean;
 import org.sola.clients.beans.administrative.ValuationBean;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationServiceBean;
-import org.sola.clients.beans.controls.SolaList;
-import org.sola.clients.beans.referencedata.ValuationTypeBean;
-import org.sola.clients.beans.referencedata.ValuationTypeListBean;
-import static org.sola.clients.beans.referencedata.ValuationTypeListBean.SELECTED_VALUATION_TYPE_PROPERTY;
 import org.sola.clients.beans.security.SecurityBean;
-import org.sola.clients.beans.source.SourceBean;
 import org.sola.clients.swing.common.controls.CalendarForm;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.common.utils.FormattersFactory;
 import org.sola.clients.swing.desktop.MainForm;
-import org.sola.clients.swing.desktop.administrative.BaUnitSearchPanel;
+import org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.clients.swing.ui.security.SecurityClassificationDialog;
@@ -89,25 +80,25 @@ public class ValuationPanel extends ContentPanel {
 
     private void postInit() {
         customizeForm();
-        this.valuationTypeListBean.addPropertyChangeListener(new PropertyChangeListener() {
+        saveValuationState(); 
+    }
 
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-               if(evt.getPropertyName().equalsIgnoreCase(ValuationTypeListBean.SELECTED_VALUATION_TYPE_PROPERTY)){
-                   valuation.setType((ValuationTypeBean)evt.getNewValue());
-               }
-            }
-        });
-        /**
-         * this.valuation.addPropertyChangeListener(new PropertyChangeListener()
-         * {
-         *
-         * @Override public void propertyChange(PropertyChangeEvent evt) { if
-         * (evt.getPropertyName().equals(ValuationBean.SELECTED_PROPERTY_PROPERTY))
-         * { customizeCommentButtons((ObjectionCommentBean) evt.getNewValue());
-         * } } });
-         *
-         */
+    private ValuationBean initValuation() {
+        if (valuation == null) {
+            valuation = new ValuationBean();
+            valuation.setServiceId(applicationService.getId());
+        }
+        return valuation;
+    }
+
+    private DocumentsManagementExtPanel initDocumentsPanel() {
+        valuation = initValuation();
+        if (applicationBean == null) {
+            applicationBean = new ApplicationBean();
+        }
+        DocumentsManagementExtPanel panel = new DocumentsManagementExtPanel(
+                valuation.getSourceList(), applicationBean, !readOnly);
+        return panel;
     }
 
     private void customizeForm() {
@@ -140,6 +131,73 @@ public class ValuationPanel extends ContentPanel {
             title += " " + valuation.getNr();
         }
         return title;
+    }
+
+    private void openPropertyForm() {
+        if (valuation != null) {
+            final BaUnitSummaryBean baUnitSummaryBean = valuation.getBaUnitBasic();
+            if (baUnitSummaryBean != null) {
+                SolaTask t = new SolaTask<Void, Void>() {
+                    @Override
+                    public Void doTask() {
+                        setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PROPERTY));
+                        SLPropertyPanel propertyPanel = new SLPropertyPanel(applicationBean,
+                                applicationService, baUnitSummaryBean.getNameFirstpart(),
+                                baUnitSummaryBean.getNameLastpart(), true);
+                        getMainContentPanel().addPanel(propertyPanel, MainContentPanel.CARD_PROPERTY_PANEL, true);
+                        return null;
+                    }
+                };
+                TaskManager.getInstance().runTask(t);
+            }
+        }
+    }
+
+    private void showCalendar(JFormattedTextField dateField) {
+        CalendarForm calendar = new CalendarForm(null, true, dateField);
+        calendar.setVisible(true);
+    }
+
+    private void configureSecurity() {
+        SecurityClassificationDialog form = new SecurityClassificationDialog(
+                valuation, MainForm.getInstance(), true);
+        WindowUtility.centerForm(form);
+        form.setVisible(true);
+    }
+
+    /**
+     * Saves a hash of the valuation object so that any data changes can be
+     * detected on save.
+     */
+    private void saveValuationState() {
+        MainForm.saveBeanState(valuation);
+    }
+
+    /**
+     * Validates the valuation before closing the form.
+     *
+     * @return
+     */
+    private boolean confirmClose() {
+        boolean result = true;
+        if (valuation.validate(true).size() < 1) {
+            saveValuationState();
+            firePropertyChange(VALUATION_SAVED, null, valuation);
+            close();
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    @Override
+    protected boolean panelClosing() {
+        if (btnClose.isEnabled()
+                && MainForm.checkSaveBeforeClose(valuation)) {
+            return confirmClose();
+        }
+
+        return true;
     }
 
     /**
@@ -185,7 +243,7 @@ public class ValuationPanel extends ContentPanel {
         txtDescription = new javax.swing.JTextArea();
         jPanel8 = new javax.swing.JPanel();
         groupPanel1 = new org.sola.clients.swing.ui.GroupPanel();
-        documentsMangementExtPanel = new org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel();
+        documentsMangementExtPanel = initDocumentsPanel();
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
         headerPanel1.setTitleText(bundle.getString("ValuationPanel.headerPanel1.titleText")); // NOI18N
@@ -244,9 +302,9 @@ public class ValuationPanel extends ContentPanel {
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel11Layout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtValuationRef, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pnlTop.add(jPanel11);
@@ -267,9 +325,9 @@ public class ValuationPanel extends ContentPanel {
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel12Layout.createSequentialGroup()
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtPropertyRef, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pnlTop.add(jPanel12);
@@ -293,9 +351,9 @@ public class ValuationPanel extends ContentPanel {
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel13Layout.createSequentialGroup()
                 .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pnlTop.add(jPanel13);
@@ -325,17 +383,17 @@ public class ValuationPanel extends ContentPanel {
             .addGroup(jPanel14Layout.createSequentialGroup()
                 .addComponent(txtDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnDate, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btnDate, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel14Layout.setVerticalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel14Layout.createSequentialGroup()
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnDate, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnDate, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pnlTop.add(jPanel14);
@@ -361,7 +419,7 @@ public class ValuationPanel extends ContentPanel {
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(cbxType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pnlTop.add(jPanel16);
@@ -374,7 +432,7 @@ public class ValuationPanel extends ContentPanel {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 50, Short.MAX_VALUE)
+            .addGap(0, 51, Short.MAX_VALUE)
         );
 
         pnlTop.add(jPanel1);
@@ -387,7 +445,7 @@ public class ValuationPanel extends ContentPanel {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 50, Short.MAX_VALUE)
+            .addGap(0, 51, Short.MAX_VALUE)
         );
 
         pnlTop.add(jPanel2);
@@ -431,20 +489,20 @@ public class ValuationPanel extends ContentPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(headerPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(groupPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
                             .addComponent(pnlCenter, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(pnlTop, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
+                            .addComponent(pnlTop, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(documentsMangementExtPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -453,7 +511,7 @@ public class ValuationPanel extends ContentPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlTop, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnlTop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnlCenter, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -461,7 +519,7 @@ public class ValuationPanel extends ContentPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(documentsMangementExtPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
+                .addComponent(documentsMangementExtPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -481,9 +539,8 @@ public class ValuationPanel extends ContentPanel {
     }//GEN-LAST:event_btnSecurityActionPerformed
 
     private void btnOpenPropertyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenPropertyActionPerformed
-      openPropertyForm();
+        openPropertyForm();
     }//GEN-LAST:event_btnOpenPropertyActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;
@@ -522,160 +579,5 @@ public class ValuationPanel extends ContentPanel {
     private org.sola.clients.beans.referencedata.ValuationTypeListBean valuationTypeListBean;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
-
-    public ValuationBean getCurrentValuation() {
-        return valuation;
-    }
-
-    public boolean saveValuation(final boolean showMessage) {
-
-        bindCurrentSourceListToValuationBean();
-        final boolean[] result = {valuation.validate(true, Default.class).size() < 1};
-        if (result[0]) {
-            // Save the checklist items
-            SolaTask<Void, Void> t = new SolaTask<Void, Void>() {
-                @Override
-                public Void doTask() {
-                    setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_SAVING));
-                    valuation.saveItem();
-                    return null;
-                }
-
-                @Override
-                public void taskDone() {
-                    saveBeanState();
-                    if (showMessage) {
-                        // Only display the Saved message if the user has choosen to explicitly save
-                        MessageUtility.displayMessage(ClientMessage.DISPLAY_ITEM_SUCCESSFULLY_SAVED);
-                    }
-                }
-
-                @Override
-                protected void taskFailed(Throwable e) {
-                    // If the fail saves due to a database or connection exception, 
-                    // capture the result for the save. 
-                    result[0] = false;
-                    super.taskFailed(e);
-                }
-
-            };
-            TaskManager.getInstance().runTask(t);
-        }
-        return result[0];
-
-    }
-
-    private void bindCurrentSourceListToValuationBean() {
-        SolaList<SourceBean> sourceList = documentsMangementExtPanel.getSourceListBean().getSourceBeanList();
-        if (sourceList != null && !sourceList.isEmpty()) {
-            valuation.setSourceList(sourceList);
-        }
-    }
-
-    private void saveBeanState() {
-        clearSelection();
-        MainForm.saveBeanState(valuation);
-    }
-
-    private void clearSelection() {
-
-    }
-
-    private void showCalendar(JFormattedTextField dateField) {
-        CalendarForm calendar = new CalendarForm(null, true, dateField);
-        calendar.setVisible(true);
-    }
-
-    private void searchForProperty(final ValuationBean valuation, final boolean viewItem) {
-        SolaTask t = new SolaTask<Void, Void>() {
-            @Override
-            public Void doTask() {
-                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PROPERTYSEARCH));
-                BaUnitSearchPanel propSearchPanel = new BaUnitSearchPanel(applicationBean);
-                // Configure the panel for display
-                propSearchPanel.getSearchPanel().showSelectButtons(true);
-                propSearchPanel.getSearchPanel().showOpenButtons(true);
-                propSearchPanel.getSearchPanel().setDefaultActionOpen(false);
-                propSearchPanel.setCloseOnSelect(true);
-                propSearchPanel.addPropertyChangeListener(new PropertyChangeListener() {
-                    @Override
-                    public void propertyChange(PropertyChangeEvent evt) {
-                        if (evt.getPropertyName().equals(BaUnitSearchPanel.SELECTED_RESULT_PROPERTY)) {
-                            BaUnitSearchResultBean bean = (BaUnitSearchResultBean) evt.getNewValue();
-                            if (bean != null) {
-                                BaUnitSummaryBean prop = new BaUnitSummaryBean(bean);
-                                valuation.setSelectedProperty(prop);
-                            }
-                        }
-                    }
-                });
-                getMainContentPanel().addPanel(propSearchPanel, MainContentPanel.CARD_BAUNIT_SEARCH, true);
-                return null;
-            }
-        };
-        TaskManager.getInstance().runTask(t);
-    }
-
-    private void configureSecurity() {
-        SecurityClassificationDialog form = new SecurityClassificationDialog(
-                valuation, MainForm.getInstance(), true);
-        WindowUtility.centerForm(form);
-        form.setVisible(true);
-    }
-
-    /**
-     * Validates the valuation before closing the form.
-     *
-     * @return
-     */
-    private boolean confirmClose() {
-        bindCurrentSourceListToValuationBean();
-        boolean result = true;
-        if (valuation.validate(true).size() < 1) {
-            saveValuationState();
-            firePropertyChange(VALUATION_SAVED, null, valuation);
-            close();
-        } else {
-            result = false;
-        }
-        return result;
-    }
-
-    /**
-     * Saves a hash of the valuation object so that any data changes can be
-     * detected on save.
-     */
-    private void saveValuationState() {
-        MainForm.saveBeanState(valuation);
-    }
-
-    private ValuationBean initValuation() {
-        if (valuation == null) {
-            valuation = new ValuationBean();
-            valuation.setServiceId(applicationService.getId());
-        }
-        return valuation;
-    }
-
-    private void openPropertyForm() {
-        if (valuation != null) {
-            final BaUnitSummaryBean baUnitSummaryBean = valuation.getBaUnitBasic();
-            if(baUnitSummaryBean != null){
-            SolaTask t = new SolaTask<Void, Void>() {
-                @Override
-                public Void doTask() {
-                    setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PROPERTY));
-                    SLPropertyPanel propertyPanel = new SLPropertyPanel(applicationBean,
-                            applicationService, baUnitSummaryBean.getNameFirstpart(),
-                            baUnitSummaryBean.getNameLastpart(), true);
-                    getMainContentPanel().addPanel(propertyPanel, MainContentPanel.CARD_PROPERTY_PANEL, true);
-                    return null;
-                }
-            };
-            TaskManager.getInstance().runTask(t);
-            }
-        }
-    }
-;
 
 }

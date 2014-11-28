@@ -105,9 +105,15 @@ public class ObjectionListPanel extends ContentPanel {
             public Void doTask() {
                 ObjectionBean obj = null;
                 if (objection != null) {
+                    boolean hasChanges = MainForm.checkBeanState(listBean);
                     // Create a copy of the objection so that if the user decides to cancel thier changes
                     // the data on the original objection is unchanged. 
                     obj = objection.copy();
+                    if (!hasChanges) {
+                        // The copy will change the state of the listBean, so reset the bean state
+                        // if no changes had been made. 
+                        saveListBeanState();
+                    }
                 }
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_OBJECTION));
                 ObjectionPanel panel = new ObjectionPanel(obj, applicationBean, applicationService, viewItem);

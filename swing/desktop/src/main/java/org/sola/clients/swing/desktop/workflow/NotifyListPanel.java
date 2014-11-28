@@ -108,9 +108,15 @@ public class NotifyListPanel extends ContentPanel {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_NOTIFY_PARTY));
                 NotifyPanel panel = null;
                 if (notifyParty != null) {
+                    boolean hasChanges = MainForm.checkBeanState(listBean);
                     // Create a copy of the Notify Party so that if the user decides to cancel thier changes
                     // the data on the original Notify Party is unchanged. 
-                    NotifyBean np = notifyParty.copy();
+                    NotifyBean np = notifyParty.copy();                           
+                    if (!hasChanges) {
+                        // The copy will change the state of the listBean, so reset the bean state
+                        // if no changes had been made. 
+                        saveListBeanState();
+                    }
                     panel = new NotifyPanel(np, applicationBean, applicationService, viewItem);
                 } else if (party != null) {
                     panel = new NotifyPanel(party, applicationBean, applicationService, viewItem);

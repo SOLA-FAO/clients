@@ -43,8 +43,6 @@ import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
-import org.sola.clients.swing.ui.renderers.AreaCellRenderer;
-import org.sola.clients.swing.ui.renderers.MoneyCellRenderer;
 import org.sola.common.RolesConstants;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -68,7 +66,6 @@ public class ValuationListPanel extends ContentPanel {
         this.readOnly = readOnly || !SecurityBean.isInRole(RolesConstants.APPLICATION_EDIT_APPS);
         this.applicationBean = applicationBean;
         this.applicationService = applicationService;
-        resourceBundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle");
         initComponents();
         customizeForm();
 
@@ -118,8 +115,6 @@ public class ValuationListPanel extends ContentPanel {
         btnAdd = new javax.swing.JButton();
         btnEdit = new javax.swing.JButton();
         btnRemove = new javax.swing.JButton();
-        jSeparator2 = new javax.swing.JToolBar.Separator();
-        btnPrint = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblValuations = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
 
@@ -187,13 +182,8 @@ public class ValuationListPanel extends ContentPanel {
             }
         });
         jToolBar1.add(btnRemove);
-        jToolBar1.add(jSeparator2);
 
-        btnPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/print.png"))); // NOI18N
-        btnPrint.setText(bundle.getString("ValuationListPanel.btnPrint.text")); // NOI18N
-        btnPrint.setFocusable(false);
-        btnPrint.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(btnPrint);
+        tblValuations.getTableHeader().setReorderingAllowed(false);
 
         org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${valuationList}");
         org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, listBean, eLProperty, tblValuations);
@@ -213,8 +203,8 @@ public class ValuationListPanel extends ContentPanel {
         columnBinding.setColumnName("Amount");
         columnBinding.setColumnClass(java.math.BigDecimal.class);
         columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${type.code}"));
-        columnBinding.setColumnName("Type.code");
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${type.displayValue}"));
+        columnBinding.setColumnName("Type.display Value");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${description}"));
@@ -225,6 +215,11 @@ public class ValuationListPanel extends ContentPanel {
         jTableBinding.bind();org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, listBean, org.jdesktop.beansbinding.ELProperty.create("${selectedValuation}"), tblValuations, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
         bindingGroup.addBinding(binding);
 
+        tblValuations.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblValuationsMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tblValuations);
         if (tblValuations.getColumnModel().getColumnCount() > 0) {
             tblValuations.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("ValuationListPanel.tblValuations.columnModel.title0_1")); // NOI18N
@@ -286,18 +281,26 @@ public class ValuationListPanel extends ContentPanel {
         removeValuation(listBean.getSelectedValuation());
     }//GEN-LAST:event_btnRemoveActionPerformed
 
+    private void tblValuationsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblValuationsMouseClicked
+        if (evt.getClickCount() == 2) {
+            if (btnEdit.isEnabled()) {
+                openValuation(listBean.getSelectedValuation(), readOnly);
+            } else if (btnView.isEnabled()) {
+                openValuation(listBean.getSelectedValuation(), true);
+            }
+        }
+    }//GEN-LAST:event_tblValuationsMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnEdit;
-    private javax.swing.JButton btnPrint;
     private javax.swing.JButton btnRemove;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnView;
     private org.sola.clients.swing.ui.HeaderPanel headerPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JToolBar.Separator jSeparator1;
-    private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar jToolBar1;
     private org.sola.clients.beans.administrative.ValuationListBean listBean;
     private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tblValuations;
@@ -344,7 +347,7 @@ public class ValuationListPanel extends ContentPanel {
         customizeButtons(null);
     }
 
-        private void customizeButtons(ValuationBean item) {
+    private void customizeButtons(ValuationBean item) {
         boolean enable = item != null && !readOnly;
         btnView.setEnabled(item != null);
         btnEdit.setEnabled(enable);
@@ -398,9 +401,15 @@ public class ValuationListPanel extends ContentPanel {
             public Void doTask() {
                 ValuationBean obj = null;
                 if (valuation != null) {
+                    boolean hasChanges = MainForm.checkBeanState(listBean);
                     // Create a copy of the objection so that if the user decides to cancel thier changes
                     // the data on the original objection is unchanged. 
                     obj = valuation.copy();
+                    if (!hasChanges) {
+                        // The copy will change the state of the listBean, so reset the bean state
+                        // if no changes had been made. 
+                        saveListBeanState();
+                    }
                 }
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_OBJECTION));
                 ValuationPanel panel = new ValuationPanel(obj, applicationBean, applicationService, viewItem);
@@ -441,6 +450,4 @@ public class ValuationListPanel extends ContentPanel {
     private boolean readOnly = false;
     private ApplicationBean applicationBean;
     private ApplicationServiceBean applicationService;
-    boolean saveInProgress = false;
-    java.util.ResourceBundle resourceBundle;
 }
