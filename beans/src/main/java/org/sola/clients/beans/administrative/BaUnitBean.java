@@ -180,6 +180,7 @@ public class BaUnitBean extends BaUnitSummaryBean {
     public static final String SELECTED_BA_UNIT_NOTATION_PROPERTY = "selectedBaUnitNotation";
     public static final String SELECTED_PARENT_BA_UNIT_PROPERTY = "selectedParentBaUnit";
     public static final String SELECTED_CHILD_BA_UNIT_PROPERTY = "selectedChildBaUnit";
+    public static final String SELECTED_VALUATION_PROPERTY = "selectedValuation";
     public static final String ESTATE_TYPE_PROPERTY = "estateType";
     public static final String PENDING_ACTION_CODE_PROPERTY = "pendingActionCode";
     public static final String PENDING_ACTION_PROPERTY = "pendingTypeAction";
@@ -198,6 +199,7 @@ public class BaUnitBean extends BaUnitSummaryBean {
     private SolaList<RelatedBaUnitInfoBean> childBaUnits;
     private SolaList<RelatedBaUnitInfoBean> parentBaUnits;
     private SolaList<PartySummaryBean> partyList;
+    private SolaList<ValuationBean> valuationList;
 
     private transient CadastreObjectBean selectedParcel;
     private transient SolaList<RrrBean> rrrHistoricList;
@@ -207,6 +209,7 @@ public class BaUnitBean extends BaUnitSummaryBean {
     private transient RelatedBaUnitInfoBean selectedParentBaUnit;
     private transient RelatedBaUnitInfoBean selectedChildBaUnit;
     private transient PartySummaryBean propertyManager;
+    private transient ValuationBean selectedValuation;
 
     private String estateType;
     private LandUseTypeBean landUseType;
@@ -231,6 +234,7 @@ public class BaUnitBean extends BaUnitSummaryBean {
         parentBaUnits = new SolaList();
         sourceList = new SolaList();
         partyList = new SolaList();
+        valuationList = new SolaList();
         allBaUnitNotationList = new SolaObservableList<BaUnitNotationBean>();
         rrrSharesList = new SolaObservableList<RrrShareWithStatus>();
         rrrList.getFilteredList().addObservableListListener(new RrrListListener());
@@ -448,6 +452,17 @@ public class BaUnitBean extends BaUnitSummaryBean {
                 null, selectedHistoricRight);
     }
 
+    public ValuationBean getSelectedValuation() {
+        return selectedValuation;
+    }
+
+    public void setSelectedValuation(ValuationBean selectedValuation) {
+        this.selectedValuation = selectedValuation;
+        propertySupport.firePropertyChange(SELECTED_VALUATION_PROPERTY,
+                null, selectedValuation);
+    }
+    
+
     public SolaList<BaUnitNotationBean> getBaUnitNotationList() {
         return baUnitNotationList;
     }
@@ -663,6 +678,15 @@ public class BaUnitBean extends BaUnitSummaryBean {
     public void setPartyList(SolaList<PartySummaryBean> partyList) {
         this.partyList = partyList;
     }
+
+    public SolaList<ValuationBean> getValuationList() {
+        return valuationList;
+    }
+
+    public void setValuationList(SolaList<ValuationBean> valuationList) {
+        this.valuationList = valuationList;
+    }
+    
 
     public PartySummaryBean getPropertyManager() {
         if (getPartyList().getFilteredList().size() > 0) {
