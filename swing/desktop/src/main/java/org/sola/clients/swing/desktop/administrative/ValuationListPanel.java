@@ -259,6 +259,7 @@ public class ValuationListPanel extends ContentPanel {
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         saveValuationList(true);
+        btnSave.setEnabled(false);
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
@@ -342,7 +343,7 @@ public class ValuationListPanel extends ContentPanel {
 
     private void customizeForm() {
         // Disable the edit buttons if the form is in read only mode
-        btnSave.setEnabled(!readOnly);
+        btnSave.setEnabled(false);
         btnAdd.setEnabled(!readOnly);
         customizeButtons(null);
     }
@@ -420,6 +421,7 @@ public class ValuationListPanel extends ContentPanel {
                         if (evt.getPropertyName().equals(ValuationPanel.VALUATION_SAVED)) {
                             listBean.addOrUpdateItem((ValuationBean) evt.getNewValue());
                             tblValuations.clearSelection();
+                            btnSave.setEnabled(true);
                         }
                     }
                 });

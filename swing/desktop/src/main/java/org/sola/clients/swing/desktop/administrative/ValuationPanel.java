@@ -105,7 +105,7 @@ public class ValuationPanel extends ContentPanel {
         this.setHeaderPanel(headerPanel1);
         this.setBreadCrumbTitle(this.getBreadCrumbPath(), getPanelTitle());
 
-        btnClose.setEnabled(!readOnly);
+        //btnClose.setEnabled(!readOnly);
         btnDate.setEnabled(!readOnly);
         txtAmount.setEnabled(!readOnly);
         txtDate.setEnabled(!readOnly);
@@ -113,13 +113,13 @@ public class ValuationPanel extends ContentPanel {
         txtPropertyRef.setEnabled(!readOnly);
         txtValuationRef.setEnabled(!readOnly);
         txtDescription.setEnabled(!readOnly);
+        cbxType.setEnabled(!readOnly);
 
         documentsMangementExtPanel.setAllowEdit(!readOnly);
 
         // Configure Security button - hide if if the user does not 
         // have permission to change security. 
-        btnSecurity.setVisible(btnClose.isEnabled()
-                && SecurityBean.isInRole(RolesConstants.CLASSIFICATION_CHANGE_CLASS));
+        btnSecurity.setVisible(SecurityBean.isInRole(RolesConstants.CLASSIFICATION_CHANGE_CLASS));
     }
 
     private String getPanelTitle() {
@@ -192,9 +192,11 @@ public class ValuationPanel extends ContentPanel {
 
     @Override
     protected boolean panelClosing() {
-        if (btnClose.isEnabled()
-                && MainForm.checkSaveBeforeClose(valuation)) {
+        if (btnClose.isEnabled() && MainForm.checkBeanState(valuation)) {
             return confirmClose();
+        }else{
+            //Nothing to save so just close
+            close();
         }
 
         return true;
@@ -527,7 +529,7 @@ public class ValuationPanel extends ContentPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
-        confirmClose();
+       panelClosing();
     }//GEN-LAST:event_btnCloseActionPerformed
 
     private void btnDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDateActionPerformed
