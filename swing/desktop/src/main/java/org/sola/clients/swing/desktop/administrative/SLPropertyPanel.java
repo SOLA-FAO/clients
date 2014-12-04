@@ -377,8 +377,6 @@ public class SLPropertyPanel extends ContentPanel {
         customizeTerminationButton();
         customizeHistoricRightsViewButton();
         customizePaperTitleButtons(null);
-        customizeValuationButtons();
-
     }
 
     /**
@@ -667,10 +665,7 @@ public class SLPropertyPanel extends ContentPanel {
             menuViewPropertyDocument.setEnabled(false);
         }
     }
-    private void customizeValuationButtons(){
-        btnSaveValuation.setEnabled(false);
-    }
-
+  
     /**
      * Checks if certain action is allowed on the form.
      */
@@ -1419,7 +1414,6 @@ public class SLPropertyPanel extends ContentPanel {
         pnlValuations = new javax.swing.JPanel();
         jPanel12 = new javax.swing.JPanel();
         jToolBar10 = new javax.swing.JToolBar();
-        btnSaveValuation = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jScrollPane11 = new javax.swing.JScrollPane();
         tblValuations = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
@@ -3081,13 +3075,6 @@ public class SLPropertyPanel extends ContentPanel {
         jToolBar10.setRollover(true);
         jToolBar10.setName("jToolBar10"); // NOI18N
 
-        btnSaveValuation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/save.png"))); // NOI18N
-        btnSaveValuation.setText(bundle.getString("SLPropertyPanel.btnSaveValuation.text")); // NOI18N
-        btnSaveValuation.setFocusable(false);
-        btnSaveValuation.setName("btnSaveValuation"); // NOI18N
-        btnSaveValuation.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar10.add(btnSaveValuation);
-
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/view.png"))); // NOI18N
         jButton2.setText(bundle.getString("SLPropertyPanel.jButton2.text")); // NOI18N
         jButton2.setFocusable(false);
@@ -3483,7 +3470,6 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private javax.swing.JButton btnRemoveParent;
     private javax.swing.JButton btnRemoveRight;
     private javax.swing.JButton btnSave;
-    private javax.swing.JButton btnSaveValuation;
     private javax.swing.JButton btnSecurity;
     private javax.swing.JButton btnTerminate;
     private javax.swing.JButton btnViewChild;
@@ -3641,7 +3627,7 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
             public Void doTask() {
                 if (selectedValuation != null) {
                     setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_OBJECTION));
-                    ValuationPanel panel = new ValuationPanel(selectedValuation, applicationBean, applicationService, b);
+                    ValuationPanel panel = new ValuationPanel(selectedValuation, applicationBean, applicationService, readOnly, true);
                     panel.addPropertyChangeListener(new PropertyChangeListener() {
 
                         @Override
@@ -3649,7 +3635,6 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
                             if (evt.getPropertyName().equals(ValuationPanel.VALUATION_SAVED)) {
                                 ((ValuationBean) evt.getNewValue()).saveItem();
                                 tblValuations.clearSelection();
-                                btnSaveValuation.setEnabled(true);
                             }
                         }
                     });

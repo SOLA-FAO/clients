@@ -29,6 +29,7 @@
  */
 package org.sola.clients.swing.desktop.administrative;
 
+import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import org.sola.clients.beans.administrative.BaUnitSummaryBean;
 import org.sola.clients.beans.administrative.ValuationBean;
@@ -59,6 +60,7 @@ public class ValuationPanel extends ContentPanel {
     private ApplicationServiceBean applicationService;
     private boolean readOnly = false;
     public static final String VALUATION_SAVED = "valuationSaved";
+    private boolean showSave;
 
     /**
      * Creates new form ValuationPanel
@@ -67,12 +69,21 @@ public class ValuationPanel extends ContentPanel {
         initComponents();
     }
 
+    /**
+     *
+     * @param valuation
+     * @param appBean
+     * @param serviceBean
+     * @param readOnly
+     * @param showSave Enables this panel to offer save functionality
+     */
     public ValuationPanel(ValuationBean valuation, ApplicationBean appBean,
-            ApplicationServiceBean serviceBean, boolean readOnly) {
+            ApplicationServiceBean serviceBean, boolean readOnly, boolean showSave) {
 
         this.applicationBean = appBean;
         this.applicationService = serviceBean;
         this.readOnly = readOnly;
+        this.showSave = showSave;
         this.valuation = valuation;
         initComponents();
         postInit();
@@ -80,7 +91,7 @@ public class ValuationPanel extends ContentPanel {
 
     private void postInit() {
         customizeForm();
-        saveValuationState(); 
+        saveValuationState();
     }
 
     private ValuationBean initValuation() {
@@ -114,12 +125,20 @@ public class ValuationPanel extends ContentPanel {
         txtValuationRef.setEnabled(!readOnly);
         txtDescription.setEnabled(!readOnly);
         cbxType.setEnabled(!readOnly);
+        
 
         documentsMangementExtPanel.setAllowEdit(!readOnly);
 
         // Configure Security button - hide if if the user does not 
         // have permission to change security. 
-        btnSecurity.setVisible(SecurityBean.isInRole(RolesConstants.CLASSIFICATION_CHANGE_CLASS));
+        if (showSave && SecurityBean.isInRole(RolesConstants.CLASSIFICATION_CHANGE_CLASS)) {
+            btnClose.setVisible(false);
+            btnSave.setVisible(true);
+            btnSecurity.setVisible(true);
+        } else {
+            btnSave.setVisible(false);
+            btnSecurity.setVisible(false);
+        }
     }
 
     private String getPanelTitle() {
@@ -192,9 +211,13 @@ public class ValuationPanel extends ContentPanel {
 
     @Override
     protected boolean panelClosing() {
-        if (btnClose.isEnabled() && MainForm.checkBeanState(valuation)) {
+        if ( (btnClose.isEnabled() || btnSave.isVisible() ) 
+                && MainForm.checkBeanState(valuation)) {
+            if(btnSave.isVisible() && MainForm.checkSaveBeforeClose(valuation)){
+                valuation.saveItem();
+            }
             return confirmClose();
-        }else{
+        } else {
             //Nothing to save so just close
             close();
         }
@@ -217,6 +240,7 @@ public class ValuationPanel extends ContentPanel {
         headerPanel1 = new org.sola.clients.swing.ui.HeaderPanel();
         jToolBar1 = new javax.swing.JToolBar();
         btnClose = new javax.swing.JButton();
+        btnSave = new javax.swing.JButton();
         btnOpenProperty = new javax.swing.JButton();
         btnSecurity = new javax.swing.JButton();
         pnlTop = new javax.swing.JPanel();
@@ -263,6 +287,17 @@ public class ValuationPanel extends ContentPanel {
             }
         });
         jToolBar1.add(btnClose);
+
+        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/save.png"))); // NOI18N
+        btnSave.setText(bundle.getString("ValuationPanel.btnSave.text")); // NOI18N
+        btnSave.setFocusable(false);
+        btnSave.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnSave);
 
         btnOpenProperty.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/folder-open-document.png"))); // NOI18N
         btnOpenProperty.setText(bundle.getString("ValuationPanel.btnOpenProperty.text")); // NOI18N
@@ -529,7 +564,7 @@ public class ValuationPanel extends ContentPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
-       panelClosing();
+        panelClosing();
     }//GEN-LAST:event_btnCloseActionPerformed
 
     private void btnDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDateActionPerformed
@@ -544,10 +579,15 @@ public class ValuationPanel extends ContentPanel {
         openPropertyForm();
     }//GEN-LAST:event_btnOpenPropertyActionPerformed
 
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+       saveValuation(true);
+    }//GEN-LAST:event_btnSaveActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;
     private javax.swing.JButton btnDate;
     private javax.swing.JButton btnOpenProperty;
+    private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSecurity;
     private javax.swing.JComboBox cbxType;
     private org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel documentsMangementExtPanel;
@@ -581,5 +621,39 @@ public class ValuationPanel extends ContentPanel {
     private org.sola.clients.beans.referencedata.ValuationTypeListBean valuationTypeListBean;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
+
+    private boolean saveValuation(final boolean displaySaveMesage) {
+        final boolean[] result = {valuation.validate(true).size() < 1};
+        if (result[0]) {
+            // Save the checklist items
+            SolaTask<Void, Void> t = new SolaTask<Void, Void>() {
+                @Override
+                public Void doTask() {
+                    setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_SAVING));
+                    valuation.saveItem();
+                    return null;
+                }
+
+                @Override
+                public void taskDone() {
+                    MainForm.saveBeanState(valuation);
+                    if (displaySaveMesage) {
+                        // Only display the Saved message if the user has choosen to explicitly save
+                        MessageUtility.displayMessage(ClientMessage.VALUATION_SUCCESSFULLY_SAVED);
+                    }
+                }
+
+                @Override
+                protected void taskFailed(Throwable e) {
+                    // If the fail saves due to a database or connection exception, 
+                    // capture the result for the save. 
+                    result[0] = false;
+                    super.taskFailed(e);
+                }
+            };
+            TaskManager.getInstance().runTask(t);
+        }
+        return result[0];
+    }
 
 }
