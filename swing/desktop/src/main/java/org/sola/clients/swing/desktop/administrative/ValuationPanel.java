@@ -215,6 +215,7 @@ public class ValuationPanel extends ContentPanel {
         if (MainForm.checkSaveBeforeClose(valuation)) {
             if (valuation.validate(true).size() < 1) {
                 valuation.saveItem();
+                firePropertyChange(VALUATION_SAVED, null, valuation);
                 MainForm.saveBeanState(valuation);
                 close();
             } else {

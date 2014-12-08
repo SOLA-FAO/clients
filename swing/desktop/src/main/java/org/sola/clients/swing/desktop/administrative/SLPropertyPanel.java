@@ -3639,9 +3639,22 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
         SolaTask t = new SolaTask<Void, Void>() {
             @Override
             public Void doTask() {
+                
                 if (selectedValuation != null) {
+                    
+                    boolean hasChanges = MainForm.checkBeanState(selectedValuation);
+                    // Create a copy of the objection so that if the user decides to cancel thier changes
+                    // the data on the original objection is unchanged. 
+                    final ValuationBean valCopy = selectedValuation.copy();
+                    if (!hasChanges) {
+                        // The copy will change the state of the listBean, so reset the bean state
+                        // if no changes had been made. 
+                        MainForm.saveBeanState(selectedValuation);
+                    }
+                    
+                    
                     setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_OBJECTION));
-                    ValuationPanel panel = new ValuationPanel(selectedValuation, applicationBean, applicationService, true, true);
+                    ValuationPanel panel = new ValuationPanel(valCopy, applicationBean, applicationService, true, true);
                     panel.hideOpenButton(true);
                     panel.addPropertyChangeListener(new PropertyChangeListener() {
 
@@ -3651,6 +3664,8 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
                                 //((ValuationBean) evt.getNewValue()).saveItem();
                                 //tblValuations.clearSelection();
                                 //MainForm.saveBeanState(baUnitBean1);
+                                baUnitBean1.getValuationList().remove(valCopy);
+                                baUnitBean1.getValuationList().add((ValuationBean)evt.getNewValue());
                             }
                         }
                     });
