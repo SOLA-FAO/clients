@@ -665,7 +665,7 @@ public class SLPropertyPanel extends ContentPanel {
             menuViewPropertyDocument.setEnabled(false);
         }
     }
-  
+
     /**
      * Checks if certain action is allowed on the form.
      */
@@ -1414,7 +1414,7 @@ public class SLPropertyPanel extends ContentPanel {
         pnlValuations = new javax.swing.JPanel();
         jPanel12 = new javax.swing.JPanel();
         jToolBar10 = new javax.swing.JToolBar();
-        jButton2 = new javax.swing.JButton();
+        btnViewValuation = new javax.swing.JButton();
         jScrollPane11 = new javax.swing.JScrollPane();
         tblValuations = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
         pnlMap = new javax.swing.JPanel();
@@ -3075,17 +3075,17 @@ public class SLPropertyPanel extends ContentPanel {
         jToolBar10.setRollover(true);
         jToolBar10.setName("jToolBar10"); // NOI18N
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/view.png"))); // NOI18N
-        jButton2.setText(bundle.getString("SLPropertyPanel.jButton2.text")); // NOI18N
-        jButton2.setFocusable(false);
-        jButton2.setName("jButton2"); // NOI18N
-        jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnViewValuation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/view.png"))); // NOI18N
+        btnViewValuation.setText(bundle.getString("SLPropertyPanel.btnViewValuation.text")); // NOI18N
+        btnViewValuation.setFocusable(false);
+        btnViewValuation.setName("btnViewValuation"); // NOI18N
+        btnViewValuation.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnViewValuation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnViewValuationActionPerformed(evt);
             }
         });
-        jToolBar10.add(jButton2);
+        jToolBar10.add(btnViewValuation);
 
         jScrollPane11.setName("jScrollPane11"); // NOI18N
 
@@ -3121,6 +3121,11 @@ public class SLPropertyPanel extends ContentPanel {
         jTableBinding.bind();binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitBean1, org.jdesktop.beansbinding.ELProperty.create("${selectedValuation}"), tblValuations, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
         bindingGroup.addBinding(binding);
 
+        tblValuations.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblValuationsMouseClicked(evt);
+            }
+        });
         jScrollPane11.setViewportView(tblValuations);
         if (tblValuations.getColumnModel().getColumnCount() > 0) {
             tblValuations.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("SLPropertyPanel.tblValuations.columnModel.title0")); // NOI18N
@@ -3443,11 +3448,20 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
         }
     }//GEN-LAST:event_tableParcelsMouseClicked
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnViewValuationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewValuationActionPerformed
         if (baUnitBean1.getSelectedValuation() != null) {
             openValuation(baUnitBean1.getSelectedValuation(), true);
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnViewValuationActionPerformed
+
+    private void tblValuationsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblValuationsMouseClicked
+         if (evt.getClickCount() == 2) {
+            if (btnViewValuation.isEnabled()) {
+                openValuation(baUnitBean1.getSelectedValuation(), true);
+            
+            }
+         }
+    }//GEN-LAST:event_tblValuationsMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel areaPanel;
@@ -3479,6 +3493,7 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private javax.swing.JButton btnViewParent;
     private org.sola.clients.swing.common.buttons.BtnView btnViewPropDoc;
     private javax.swing.JButton btnViewRight;
+    private javax.swing.JButton btnViewValuation;
     private javax.swing.JComboBox cbxRightType;
     private org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel documentsPanel1;
     private javax.swing.Box.Filler filler1;
@@ -3489,7 +3504,6 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private org.sola.clients.swing.ui.GroupPanel groupPanel4;
     private org.sola.clients.swing.ui.GroupPanel groupPanel5;
     private org.sola.clients.swing.ui.HeaderPanel headerPanel;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel16;
@@ -3627,14 +3641,16 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
             public Void doTask() {
                 if (selectedValuation != null) {
                     setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_OBJECTION));
-                    ValuationPanel panel = new ValuationPanel(selectedValuation, applicationBean, applicationService, readOnly, true);
+                    ValuationPanel panel = new ValuationPanel(selectedValuation, applicationBean, applicationService, true, true);
+                    panel.hideOpenButton(true);
                     panel.addPropertyChangeListener(new PropertyChangeListener() {
 
                         @Override
                         public void propertyChange(PropertyChangeEvent evt) {
                             if (evt.getPropertyName().equals(ValuationPanel.VALUATION_SAVED)) {
-                                ((ValuationBean) evt.getNewValue()).saveItem();
-                                tblValuations.clearSelection();
+                                //((ValuationBean) evt.getNewValue()).saveItem();
+                                //tblValuations.clearSelection();
+                                //MainForm.saveBeanState(baUnitBean1);
                             }
                         }
                     });

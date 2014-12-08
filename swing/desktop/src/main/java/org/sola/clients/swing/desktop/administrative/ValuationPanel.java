@@ -125,19 +125,20 @@ public class ValuationPanel extends ContentPanel {
         txtValuationRef.setEnabled(!readOnly);
         txtDescription.setEnabled(!readOnly);
         cbxType.setEnabled(!readOnly);
-        
 
         documentsMangementExtPanel.setAllowEdit(!readOnly);
+        if (SecurityBean.isInRole(RolesConstants.CLASSIFICATION_CHANGE_CLASS)) {
+            btnSecurity.setVisible(true);
+        }
 
         // Configure Security button - hide if if the user does not 
         // have permission to change security. 
-        if (showSave && SecurityBean.isInRole(RolesConstants.CLASSIFICATION_CHANGE_CLASS)) {
+        if (showSave) {
             btnClose.setVisible(false);
             btnSave.setVisible(true);
-            btnSecurity.setVisible(true);
+
         } else {
             btnSave.setVisible(false);
-            btnSecurity.setVisible(false);
         }
     }
 
@@ -199,30 +200,49 @@ public class ValuationPanel extends ContentPanel {
      */
     private boolean confirmClose() {
         boolean result = true;
-        if (valuation.validate(true).size() < 1) {
+        if (valuation.validate(true).size() < 1 && MainForm.checkBeanState(valuation)) {
             saveValuationState();
             firePropertyChange(VALUATION_SAVED, null, valuation);
-            close();
         } else {
             result = false;
         }
+        close();
         return result;
+    }
+
+    private void confirmCloseWhenButtonSaveIsVisible() {
+
+        if (MainForm.checkSaveBeforeClose(valuation)) {
+            if (valuation.validate(true).size() < 1) {
+                valuation.saveItem();
+                MainForm.saveBeanState(valuation);
+                close();
+            } else {
+                close();
+            }
+        }
     }
 
     @Override
     protected boolean panelClosing() {
-        if ( (btnClose.isEnabled() || btnSave.isVisible() ) 
-                && MainForm.checkBeanState(valuation)) {
-            if(btnSave.isVisible() && MainForm.checkSaveBeforeClose(valuation)){
-                valuation.saveItem();
-            }
-            return confirmClose();
+        if (btnSave.isVisible()) {
+            confirmCloseWhenButtonSaveIsVisible();
         } else {
-            //Nothing to save so just close
-            close();
+            confirmClose();
         }
 
         return true;
+
+        /**
+         * if ( (btnClose.isEnabled() || btnSave.isVisible() ) &&
+         * MainForm.checkBeanState(valuation)) { if(btnSave.isVisible() &&
+         * MainForm.checkSaveBeforeClose(valuation)){ valuation.saveItem(); }
+         * return confirmClose(); } else { //Nothing to save so just close
+         * close(); }
+         *
+         * return true;
+         *
+         */
     }
 
     /**
@@ -332,7 +352,7 @@ public class ValuationPanel extends ContentPanel {
         jPanel11.setLayout(jPanel11Layout);
         jPanel11Layout.setHorizontalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
             .addComponent(txtValuationRef)
         );
         jPanel11Layout.setVerticalGroup(
@@ -356,7 +376,7 @@ public class ValuationPanel extends ContentPanel {
         jPanel12Layout.setHorizontalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(txtPropertyRef)
-            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
         );
         jPanel12Layout.setVerticalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -381,7 +401,7 @@ public class ValuationPanel extends ContentPanel {
         jPanel13.setLayout(jPanel13Layout);
         jPanel13Layout.setHorizontalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
+            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
             .addComponent(txtAmount)
         );
         jPanel13Layout.setVerticalGroup(
@@ -399,8 +419,10 @@ public class ValuationPanel extends ContentPanel {
 
         btnDate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/calendar.png"))); // NOI18N
         btnDate.setText(bundle.getString("ValuationPanel.btnDate.text")); // NOI18N
+        btnDate.setBorder(null);
         btnDate.setMaximumSize(new java.awt.Dimension(17, 17));
         btnDate.setMinimumSize(new java.awt.Dimension(17, 17));
+        btnDate.setPreferredSize(new java.awt.Dimension(17, 17));
         btnDate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDateActionPerformed(evt);
@@ -416,11 +438,12 @@ public class ValuationPanel extends ContentPanel {
         jPanel14.setLayout(jPanel14Layout);
         jPanel14Layout.setHorizontalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
+            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
             .addGroup(jPanel14Layout.createSequentialGroup()
                 .addComponent(txtDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnDate, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btnDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(6, 6, 6))
         );
         jPanel14Layout.setVerticalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -428,8 +451,8 @@ public class ValuationPanel extends ContentPanel {
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnDate, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(txtDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -448,7 +471,7 @@ public class ValuationPanel extends ContentPanel {
         jPanel16Layout.setHorizontalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(cbxType, 0, 154, Short.MAX_VALUE)
+            .addComponent(cbxType, 0, 164, Short.MAX_VALUE)
         );
         jPanel16Layout.setVerticalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -465,11 +488,11 @@ public class ValuationPanel extends ContentPanel {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 154, Short.MAX_VALUE)
+            .addGap(0, 164, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 51, Short.MAX_VALUE)
+            .addGap(0, 56, Short.MAX_VALUE)
         );
 
         pnlTop.add(jPanel1);
@@ -478,11 +501,11 @@ public class ValuationPanel extends ContentPanel {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 154, Short.MAX_VALUE)
+            .addGap(0, 164, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 51, Short.MAX_VALUE)
+            .addGap(0, 56, Short.MAX_VALUE)
         );
 
         pnlTop.add(jPanel2);
@@ -504,7 +527,7 @@ public class ValuationPanel extends ContentPanel {
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 661, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 701, Short.MAX_VALUE)
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -580,7 +603,7 @@ public class ValuationPanel extends ContentPanel {
     }//GEN-LAST:event_btnOpenPropertyActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-       saveValuation(true);
+        saveValuation(true);
     }//GEN-LAST:event_btnSaveActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -654,6 +677,10 @@ public class ValuationPanel extends ContentPanel {
             TaskManager.getInstance().runTask(t);
         }
         return result[0];
+    }
+
+    public void hideOpenButton(boolean hide) {
+        btnOpenProperty.setVisible(!hide);
     }
 
 }
