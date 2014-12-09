@@ -113,6 +113,8 @@ public class MainContentPanel extends javax.swing.JPanel {
     public final static String CARD_NOTIFY_PANEL = "slNotifyPanel";
     public final static String CARD_VALUATION_PANEL = "slValuationPanel";
     public final static String CARD_VALUATION_LIST_PANEL = "slValuationListPanel";
+    public final static String CARD_NEGOTIATION_LIST_PANEL = "slNegotiationListPanel";
+    public final static String CARD_NEGOTIATION_PANEL = "slNegotiationPanel";
 
     private HashMap<String, Component> cards;
     private ArrayList<String> cardsIndex;
