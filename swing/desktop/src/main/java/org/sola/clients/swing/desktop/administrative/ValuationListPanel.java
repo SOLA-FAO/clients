@@ -411,7 +411,7 @@ public class ValuationListPanel extends ContentPanel {
                         saveListBeanState();
                     }
                 }
-                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_OBJECTION));
+                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_VALUATION));
                 ValuationPanel panel = new ValuationPanel(obj, applicationBean, applicationService, viewItem);
                 panel.addPropertyChangeListener(new PropertyChangeListener() {
 
