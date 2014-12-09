@@ -200,50 +200,28 @@ public class ValuationPanel extends ContentPanel {
      */
     private boolean confirmClose() {
         boolean result = true;
-        if (valuation.validate(true).size() < 1 && MainForm.checkBeanState(valuation)) {
+        if (valuation.validate(true).size() < 1) {
             saveValuationState();
             firePropertyChange(VALUATION_SAVED, null, valuation);
+            close();
         } else {
             result = false;
         }
-        close();
         return result;
-    }
-
-    private void confirmCloseWhenButtonSaveIsVisible() {
-
-        if (MainForm.checkSaveBeforeClose(valuation)) {
-            if (valuation.validate(true).size() < 1) {
-                valuation.saveItem();
-                firePropertyChange(VALUATION_SAVED, null, valuation);
-                MainForm.saveBeanState(valuation);
-                close();
-            } else {
-                close();
-            }
-        }
     }
 
     @Override
     protected boolean panelClosing() {
-        if (btnSave.isVisible()) {
-            confirmCloseWhenButtonSaveIsVisible();
-        } else {
-            confirmClose();
+        boolean result = true;
+        if (!readOnly && MainForm.checkSaveBeforeClose(valuation)) {
+            if (btnSave.isVisible()) {
+                result = saveValuation(true);
+            }
+            if (result) {
+                result = confirmClose();
+            }
         }
-
-        return true;
-
-        /**
-         * if ( (btnClose.isEnabled() || btnSave.isVisible() ) &&
-         * MainForm.checkBeanState(valuation)) { if(btnSave.isVisible() &&
-         * MainForm.checkSaveBeforeClose(valuation)){ valuation.saveItem(); }
-         * return confirmClose(); } else { //Nothing to save so just close
-         * close(); }
-         *
-         * return true;
-         *
-         */
+        return result;
     }
 
     /**
