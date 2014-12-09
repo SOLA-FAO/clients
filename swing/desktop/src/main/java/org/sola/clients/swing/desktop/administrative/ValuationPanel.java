@@ -121,7 +121,7 @@ public class ValuationPanel extends ContentPanel {
         txtAmount.setEnabled(!readOnly);
         txtDate.setEnabled(!readOnly);
         txtDescription.setEnabled(!readOnly);
-        txtPropertyRef.setEnabled(!readOnly);
+        txtPropertyRef.setEnabled(false); // Never editable. 
         txtValuationRef.setEnabled(!readOnly);
         txtDescription.setEnabled(!readOnly);
         cbxType.setEnabled(!readOnly);
@@ -566,7 +566,7 @@ public class ValuationPanel extends ContentPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
-        panelClosing();
+        confirmClose();
     }//GEN-LAST:event_btnCloseActionPerformed
 
     private void btnDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDateActionPerformed

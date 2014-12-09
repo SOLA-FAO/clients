@@ -287,6 +287,9 @@ public class NegotiationPanel extends ContentPanel {
 
         jLabel2.setText(bundle.getString("NegotiationPanel.jLabel2.text")); // NOI18N
 
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, negotiateBean, org.jdesktop.beansbinding.ELProperty.create("${baUnit.displayName}"), txtPropertyRef, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -310,7 +313,7 @@ public class NegotiationPanel extends ContentPanel {
         org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${filteredNegotiateStatusList}");
         org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, typeListBean, eLProperty, cbxType);
         bindingGroup.addBinding(jComboBoxBinding);
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, negotiateBean, org.jdesktop.beansbinding.ELProperty.create("${type}"), cbxType, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, negotiateBean, org.jdesktop.beansbinding.ELProperty.create("${type}"), cbxType, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
