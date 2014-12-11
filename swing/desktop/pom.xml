@@ -4,12 +4,12 @@
     <parent>
         <artifactId>sola-clients-swing</artifactId>
         <groupId>org.sola.clients</groupId>
-        <version>sl-017</version>
+        <version>sl-018</version>
     </parent>
     <groupId>org.sola.clients.swing</groupId>
     <artifactId>sola-desktop</artifactId>
     <packaging>jar</packaging>
-    <version>sl-017</version>
+    <version>sl-018</version>
     <name>Clients Desktop</name>
     <build>
         <finalName>${project.artifactId}</finalName>
