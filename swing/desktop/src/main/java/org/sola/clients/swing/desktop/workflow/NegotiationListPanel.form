@@ -129,6 +129,15 @@
                   <Editor/>
                   <Renderer/>
                 </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                    <ResourceString bundle="org/sola/clients/swing/desktop/workflow/Bundle.properties" key="NegotiationListPanel.tblNegotiations.columnModel.title3_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                  </Title>
+                  <Editor/>
+                  <Renderer editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                    <Connection code="new DateTimeRenderer(false)" type="code"/>
+                  </Renderer>
+                </Column>
                 <Column maxWidth="-1" minWidth="-1" prefWidth="30" resizable="true">
                   <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                     <ResourceString bundle="org/sola/clients/swing/desktop/workflow/Bundle.properties" key="NegotiationListPanel.tblNegotiations.columnModel.title6" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
@@ -141,15 +150,6 @@
                 <Column maxWidth="-1" minWidth="-1" prefWidth="30" resizable="true">
                   <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                     <ResourceString bundle="org/sola/clients/swing/desktop/workflow/Bundle.properties" key="NegotiationListPanel.tblNegotiations.columnModel.title2_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                  </Title>
-                  <Editor/>
-                  <Renderer editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                    <Connection code="new MoneyCellRenderer()" type="code"/>
-                  </Renderer>
-                </Column>
-                <Column maxWidth="-1" minWidth="-1" prefWidth="30" resizable="true">
-                  <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                    <ResourceString bundle="org/sola/clients/swing/desktop/workflow/Bundle.properties" key="NegotiationListPanel.tblNegotiations.columnModel.title3_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                   </Title>
                   <Editor/>
                   <Renderer editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -188,19 +188,19 @@
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
               </Subbinding>
+              <Subbinding sourcePath="${notificationDate}">
+                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="java.util.Date.class"/>
+                <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
+              </Subbinding>
               <Subbinding sourcePath="${baUnit.area}">
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="java.math.BigDecimal.class"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
               </Subbinding>
-              <Subbinding sourcePath="${valuationAmount}">
+              <Subbinding sourcePath="${initialAmount}">
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="java.math.BigDecimal.class"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
               </Subbinding>
-              <Subbinding sourcePath="${offerAmount}">
-                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="java.math.BigDecimal.class"/>
-                <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
-              </Subbinding>
-              <Subbinding sourcePath="${agreedAmount}">
+              <Subbinding sourcePath="${finalAmount}">
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="java.math.BigDecimal.class"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
               </Subbinding>

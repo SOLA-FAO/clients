@@ -45,6 +45,7 @@ import org.sola.clients.swing.desktop.administrative.BaUnitSearchPanel;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.clients.swing.ui.renderers.AreaCellRenderer;
+import org.sola.clients.swing.ui.renderers.DateTimeRenderer;
 import org.sola.clients.swing.ui.renderers.MoneyCellRenderer;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -335,20 +336,20 @@ public class NegotiationListPanel extends ContentPanel {
         columnBinding.setColumnName("Type.display Value");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${notificationDate}"));
+        columnBinding.setColumnName("Notification Date");
+        columnBinding.setColumnClass(java.util.Date.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${baUnit.area}"));
         columnBinding.setColumnName("Ba Unit.area");
         columnBinding.setColumnClass(java.math.BigDecimal.class);
         columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${valuationAmount}"));
-        columnBinding.setColumnName("Valuation Amount");
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${initialAmount}"));
+        columnBinding.setColumnName("Initial Amount");
         columnBinding.setColumnClass(java.math.BigDecimal.class);
         columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${offerAmount}"));
-        columnBinding.setColumnName("Offer Amount");
-        columnBinding.setColumnClass(java.math.BigDecimal.class);
-        columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${agreedAmount}"));
-        columnBinding.setColumnName("Agreed Amount");
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${finalAmount}"));
+        columnBinding.setColumnName("Final Amount");
         columnBinding.setColumnClass(java.math.BigDecimal.class);
         columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${status.displayValue}"));
@@ -368,14 +369,13 @@ public class NegotiationListPanel extends ContentPanel {
         if (tblNegotiations.getColumnModel().getColumnCount() > 0) {
             tblNegotiations.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("NegotiationListPanel.tblNegotiations.columnModel.title0_1")); // NOI18N
             tblNegotiations.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("NegotiationListPanel.tblNegotiations.columnModel.title1_1")); // NOI18N
-            tblNegotiations.getColumnModel().getColumn(2).setPreferredWidth(30);
-            tblNegotiations.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("NegotiationListPanel.tblNegotiations.columnModel.title6")); // NOI18N
-            tblNegotiations.getColumnModel().getColumn(2).setCellRenderer(new AreaCellRenderer());
+            tblNegotiations.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("NegotiationListPanel.tblNegotiations.columnModel.title3_1")); // NOI18N
+            tblNegotiations.getColumnModel().getColumn(2).setCellRenderer(new DateTimeRenderer(false));
             tblNegotiations.getColumnModel().getColumn(3).setPreferredWidth(30);
-            tblNegotiations.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("NegotiationListPanel.tblNegotiations.columnModel.title2_1")); // NOI18N
-            tblNegotiations.getColumnModel().getColumn(3).setCellRenderer(new MoneyCellRenderer());
+            tblNegotiations.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("NegotiationListPanel.tblNegotiations.columnModel.title6")); // NOI18N
+            tblNegotiations.getColumnModel().getColumn(3).setCellRenderer(new AreaCellRenderer());
             tblNegotiations.getColumnModel().getColumn(4).setPreferredWidth(30);
-            tblNegotiations.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("NegotiationListPanel.tblNegotiations.columnModel.title3_1")); // NOI18N
+            tblNegotiations.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("NegotiationListPanel.tblNegotiations.columnModel.title2_1")); // NOI18N
             tblNegotiations.getColumnModel().getColumn(4).setCellRenderer(new MoneyCellRenderer());
             tblNegotiations.getColumnModel().getColumn(5).setPreferredWidth(30);
             tblNegotiations.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("NegotiationListPanel.tblNegotiations.columnModel.title4")); // NOI18N

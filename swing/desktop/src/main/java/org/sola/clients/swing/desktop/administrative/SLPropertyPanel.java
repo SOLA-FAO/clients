@@ -35,7 +35,6 @@ import java.awt.BorderLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.ImageIcon;
@@ -3090,6 +3089,7 @@ public class SLPropertyPanel extends ContentPanel {
         jScrollPane11.setName("jScrollPane11"); // NOI18N
 
         tblValuations.setName("tblValuations"); // NOI18N
+        tblValuations.getTableHeader().setReorderingAllowed(false);
 
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${valuationList}");
         jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitBean1, eLProperty, tblValuations);
@@ -3109,12 +3109,16 @@ public class SLPropertyPanel extends ContentPanel {
         columnBinding.setColumnName("Amount");
         columnBinding.setColumnClass(java.math.BigDecimal.class);
         columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${valuationDate}"));
+        columnBinding.setColumnName("Valuation Date");
+        columnBinding.setColumnClass(java.util.Date.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${type.displayValue}"));
         columnBinding.setColumnName("Type.display Value");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${type.description}"));
-        columnBinding.setColumnName("Type.description");
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${description}"));
+        columnBinding.setColumnName("Description");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
         bindingGroup.addBinding(jTableBinding);
@@ -3134,8 +3138,11 @@ public class SLPropertyPanel extends ContentPanel {
             tblValuations.getColumnModel().getColumn(2).setCellRenderer(new AreaCellRenderer());
             tblValuations.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("SLPropertyPanel.tblValuations.columnModel.title1")); // NOI18N
             tblValuations.getColumnModel().getColumn(3).setCellRenderer(new MoneyCellRenderer());
-            tblValuations.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("SLPropertyPanel.tblValuations.columnModel.title2")); // NOI18N
-            tblValuations.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("SLPropertyPanel.tblValuations.columnModel.title3")); // NOI18N
+            tblValuations.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("SLPropertyPanel.tblValuations.columnModel.title6")); // NOI18N
+            tblValuations.getColumnModel().getColumn(4).setCellRenderer(new DateTimeRenderer(false));
+            tblValuations.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("SLPropertyPanel.tblValuations.columnModel.title2")); // NOI18N
+            tblValuations.getColumnModel().getColumn(6).setPreferredWidth(200);
+            tblValuations.getColumnModel().getColumn(6).setHeaderValue(bundle.getString("SLPropertyPanel.tblValuations.columnModel.title3")); // NOI18N
         }
 
         org.jdesktop.layout.GroupLayout jPanel12Layout = new org.jdesktop.layout.GroupLayout(jPanel12);

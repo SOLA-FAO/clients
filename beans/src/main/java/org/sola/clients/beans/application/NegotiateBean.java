@@ -30,6 +30,7 @@
 package org.sola.clients.beans.application;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractIdBean;
 import org.sola.clients.beans.administrative.BaUnitSummaryBean;
@@ -50,9 +51,9 @@ public class NegotiateBean extends AbstractIdBean {
 
     public static final String SERVICE_ID_PROPERTY = "serviceId";
     public static final String DESCRIPTION_PROPERTY = "description";
-    public static final String VALUATION_AMOUNT_PROPERTY = "valuationAmount";
-    public static final String OFFER_AMOUNT_PROPERTY = "offerAmount";
-    public static final String AGREED_AMOUNT_PROPERTY = "agreedAmount";
+    public static final String NOTIFICATION_DATE_PROPERTY = "notificationDate";
+    public static final String INITIAL_AMOUNT_PROPERTY = "initialAmount";
+    public static final String FINAL_AMOUNT_PROPERTY = "finalAmount";
     public static final String TYPE_PROPERTY = "type";
     public static final String TYPE_CODE_PROPERTY = "typeCode";
     public static final String STATUS_CODE_PROPERTY = "statusCode";
@@ -62,9 +63,9 @@ public class NegotiateBean extends AbstractIdBean {
     public static final String OBJECTION_BEAN_PROPERTY = "NegotiateBean";
     private String serviceId;
     private String baUnitId;
-    private BigDecimal valuationAmount;
-    private BigDecimal offerAmount;
-    private BigDecimal agreedAmount;
+    private Date notificationDate;
+    private BigDecimal initialAmount;
+    private BigDecimal finalAmount;
     private String description;
     private NegotiateTypeBean type;
     private NegotiateStatusBean status;
@@ -120,34 +121,34 @@ public class NegotiateBean extends AbstractIdBean {
         this.baUnitId = baUnitId;
     }
 
-    public BigDecimal getValuationAmount() {
-        return valuationAmount;
+    public Date getNotificationDate() {
+        return notificationDate;
     }
 
-    public void setValuationAmount(BigDecimal value) {
-        BigDecimal oldValue = this.valuationAmount;
-        this.valuationAmount = value;
-        propertySupport.firePropertyChange(VALUATION_AMOUNT_PROPERTY, oldValue, value);
+    public void setNotificationDate(Date value) {
+        Date oldValue = this.notificationDate;
+        this.notificationDate = value;
+        propertySupport.firePropertyChange(NOTIFICATION_DATE_PROPERTY, oldValue, value);
     }
 
-    public BigDecimal getOfferAmount() {
-        return offerAmount;
+    public BigDecimal getInitialAmount() {
+        return initialAmount;
     }
 
-    public void setOfferAmount(BigDecimal value) {
-        BigDecimal oldValue = this.offerAmount;
-        this.offerAmount = value;
-        propertySupport.firePropertyChange(OFFER_AMOUNT_PROPERTY, oldValue, value);
+    public void setInitialAmount(BigDecimal value) {
+        BigDecimal oldValue = this.initialAmount;
+        this.initialAmount = value;
+        propertySupport.firePropertyChange(INITIAL_AMOUNT_PROPERTY, oldValue, value);
     }
 
-    public BigDecimal getAgreedAmount() {
-        return agreedAmount;
+    public BigDecimal getFinalAmount() {
+        return finalAmount;
     }
 
-    public void setAgreedAmount(BigDecimal value) {
-        BigDecimal oldValue = this.agreedAmount;
-        this.agreedAmount = value;
-        propertySupport.firePropertyChange(AGREED_AMOUNT_PROPERTY, oldValue, value);
+    public void setFinalAmount(BigDecimal value) {
+        BigDecimal oldValue = this.finalAmount;
+        this.finalAmount = value;
+        propertySupport.firePropertyChange(FINAL_AMOUNT_PROPERTY, oldValue, value);
     }
 
     public String getDescription() {

@@ -36,7 +36,7 @@
           <Component id="jToolBar1" alignment="0" max="32767" attributes="0"/>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="pnlMain" max="32767" attributes="0"/>
+              <Component id="pnlMain" pref="533" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -125,7 +125,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="groupPanel1" max="32767" attributes="0"/>
                   <Component id="jPanel3" alignment="0" max="32767" attributes="0"/>
-                  <Component id="pnlTop" alignment="0" pref="558" max="32767" attributes="0"/>
+                  <Component id="pnlTop" alignment="0" pref="533" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -161,7 +161,7 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabel2" pref="128" max="32767" attributes="0"/>
+                          <Component id="jLabel2" pref="122" max="32767" attributes="0"/>
                           <Component id="txtPropertyRef" alignment="0" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
@@ -199,7 +199,7 @@
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jLabel3" max="32767" attributes="0"/>
-                          <Component id="cbxType" alignment="0" pref="128" max="32767" attributes="0"/>
+                          <Component id="cbxType" alignment="0" pref="122" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
@@ -234,8 +234,8 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabel4" alignment="0" pref="128" max="32767" attributes="0"/>
-                          <Component id="txtValuation" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jLabel4" alignment="0" pref="122" max="32767" attributes="0"/>
+                          <Component id="txtInitial" alignment="0" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
@@ -243,7 +243,7 @@
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="txtValuation" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtInitial" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
                           </Group>
                       </Group>
@@ -257,14 +257,14 @@
                         </Property>
                       </Properties>
                     </Component>
-                    <Component class="javax.swing.JFormattedTextField" name="txtValuation">
+                    <Component class="javax.swing.JFormattedTextField" name="txtInitial">
                       <Properties>
                         <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                           <Connection code="FormattersFactory.getInstance().getMoneyFormatterFactory()" type="code"/>
                         </Property>
                       </Properties>
                       <BindingProperties>
-                        <BindingProperty name="value" source="negotiateBean" sourcePath="${valuationAmount}" target="txtValuation" targetPath="value" updateStrategy="0" immediately="false"/>
+                        <BindingProperty name="value" source="negotiateBean" sourcePath="${initialAmount}" target="txtInitial" targetPath="value" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
                     </Component>
                   </SubComponents>
@@ -274,8 +274,12 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabel5" pref="128" max="32767" attributes="0"/>
-                          <Component id="txtOffer" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jLabel5" pref="122" max="32767" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Component id="txtNotificationDate" max="32767" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="btnNotificationDate" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
@@ -283,7 +287,10 @@
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="txtOffer" min="-2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="txtNotificationDate" min="-2" max="-2" attributes="0"/>
+                                  <Component id="btnNotificationDate" min="-2" max="-2" attributes="0"/>
+                              </Group>
                               <EmptySpace max="32767" attributes="0"/>
                           </Group>
                       </Group>
@@ -297,15 +304,34 @@
                         </Property>
                       </Properties>
                     </Component>
-                    <Component class="javax.swing.JFormattedTextField" name="txtOffer">
+                    <Component class="javax.swing.JFormattedTextField" name="txtNotificationDate">
                       <Properties>
                         <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="FormattersFactory.getInstance().getMoneyFormatterFactory()" type="code"/>
+                          <Connection code="FormattersFactory.getInstance().getDateFormatterFactory()" type="code"/>
                         </Property>
                       </Properties>
                       <BindingProperties>
-                        <BindingProperty name="value" source="negotiateBean" sourcePath="${offerAmount}" target="txtOffer" targetPath="value" updateStrategy="0" immediately="false"/>
+                        <BindingProperty name="value" source="negotiateBean" sourcePath="${notificationDate}" target="txtNotificationDate" targetPath="value" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
+                    </Component>
+                    <Component class="javax.swing.JButton" name="btnNotificationDate">
+                      <Properties>
+                        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                          <Image iconType="3" name="/images/common/calendar.png"/>
+                        </Property>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/sola/clients/swing/desktop/workflow/Bundle.properties" key="NegotiationPanel.btnNotificationDate.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
+                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                          <Border info="null"/>
+                        </Property>
+                        <Property name="focusable" type="boolean" value="false"/>
+                        <Property name="horizontalTextPosition" type="int" value="0"/>
+                        <Property name="verticalTextPosition" type="int" value="3"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnNotificationDateActionPerformed"/>
+                      </Events>
                     </Component>
                   </SubComponents>
                 </Container>
@@ -314,8 +340,8 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabel6" pref="128" max="32767" attributes="0"/>
-                          <Component id="txtAgreed" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jLabel6" pref="122" max="32767" attributes="0"/>
+                          <Component id="txtFinal" alignment="0" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
@@ -323,7 +349,7 @@
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="txtAgreed" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtFinal" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
                           </Group>
                       </Group>
@@ -337,14 +363,14 @@
                         </Property>
                       </Properties>
                     </Component>
-                    <Component class="javax.swing.JFormattedTextField" name="txtAgreed">
+                    <Component class="javax.swing.JFormattedTextField" name="txtFinal">
                       <Properties>
                         <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                           <Connection code="FormattersFactory.getInstance().getMoneyFormatterFactory()" type="code"/>
                         </Property>
                       </Properties>
                       <BindingProperties>
-                        <BindingProperty name="value" source="negotiateBean" sourcePath="${agreedAmount}" target="txtAgreed" targetPath="value" updateStrategy="0" immediately="false"/>
+                        <BindingProperty name="value" source="negotiateBean" sourcePath="${finalAmount}" target="txtFinal" targetPath="value" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
                     </Component>
                   </SubComponents>
@@ -354,7 +380,7 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabel7" pref="128" max="32767" attributes="0"/>
+                          <Component id="jLabel7" pref="122" max="32767" attributes="0"/>
                           <Component id="cbxStatus" alignment="0" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
@@ -390,7 +416,7 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="128" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="122" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
@@ -405,7 +431,7 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="128" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="122" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
@@ -476,7 +502,7 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="documentsManagementExtPanel" alignment="0" pref="558" max="32767" attributes="0"/>
+                  <Component id="documentsManagementExtPanel" alignment="0" pref="533" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">

@@ -99,9 +99,8 @@ public class NegotiateListBean extends AbstractBindingListBean {
         if (negotiateList.size() > 0) {
             NegotiateBean total = new NegotiateBean();
             total.setId(TOTAL_BEAN_ID);
-            total.setValuationAmount(BigDecimal.ZERO);
-            total.setOfferAmount(BigDecimal.ZERO);
-            total.setAgreedAmount(BigDecimal.ZERO);
+            total.setInitialAmount(BigDecimal.ZERO);
+            total.setFinalAmount(BigDecimal.ZERO);
             total.setBaUnit(new BaUnitSummaryBean());
             total.getBaUnit().setArea(BigDecimal.ZERO);
             total.getBaUnit().setTypeCode(BaUnitTypeBean.CODE_STATE_LAND);
@@ -110,12 +109,10 @@ public class NegotiateListBean extends AbstractBindingListBean {
             while (it.hasNext()) {
                 NegotiateBean bean = it.next();
                 if (!isTotalBean(bean)) {
-                    total.setValuationAmount(total.getValuationAmount().add(bean.getValuationAmount() == null
-                            ? BigDecimal.ZERO : bean.getValuationAmount()));
-                    total.setOfferAmount(total.getOfferAmount().add(bean.getOfferAmount() == null
-                            ? BigDecimal.ZERO : bean.getOfferAmount()));
-                    total.setAgreedAmount(total.getAgreedAmount().add(bean.getAgreedAmount() == null
-                            ? BigDecimal.ZERO : bean.getAgreedAmount()));
+                    total.setInitialAmount(total.getInitialAmount().add(bean.getInitialAmount() == null
+                            ? BigDecimal.ZERO : bean.getInitialAmount()));
+                    total.setFinalAmount(total.getFinalAmount().add(bean.getFinalAmount() == null
+                            ? BigDecimal.ZERO : bean.getFinalAmount()));
                     total.getBaUnit().setArea(total.getBaUnit().getArea().add(bean.getBaUnit().getArea() == null
                             ? BigDecimal.ZERO : bean.getBaUnit().getArea()));
                 }

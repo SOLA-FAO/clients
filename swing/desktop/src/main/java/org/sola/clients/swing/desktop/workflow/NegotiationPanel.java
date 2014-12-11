@@ -29,11 +29,13 @@
  */
 package org.sola.clients.swing.desktop.workflow;
 
+import javax.swing.JFormattedTextField;
 import org.sola.clients.beans.administrative.BaUnitSummaryBean;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationServiceBean;
 import org.sola.clients.beans.application.NegotiateBean;
 import org.sola.clients.beans.security.SecurityBean;
+import org.sola.clients.swing.common.controls.CalendarForm;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.common.utils.FormattersFactory;
@@ -106,9 +108,9 @@ public class NegotiationPanel extends ContentPanel {
 
         btnClose.setEnabled(!readOnly);
         txtPropertyRef.setEnabled(false);
-        txtValuation.setEnabled(!readOnly);
-        txtOffer.setEnabled(!readOnly);
-        txtAgreed.setEnabled(!readOnly);
+        txtInitial.setEnabled(!readOnly);
+        txtNotificationDate.setEnabled(!readOnly);
+        txtFinal.setEnabled(!readOnly);
         txtComment.setEnabled(!readOnly);
         cbxStatus.setEnabled(!readOnly);
         cbxType.setEnabled(!readOnly);
@@ -148,6 +150,11 @@ public class NegotiationPanel extends ContentPanel {
                 TaskManager.getInstance().runTask(t);
             }
         }
+    }
+
+    private void showCalendar(JFormattedTextField dateField) {
+        CalendarForm calendar = new CalendarForm(null, true, dateField);
+        calendar.setVisible(true);
     }
 
     private void configureSecurity() {
@@ -222,13 +229,14 @@ public class NegotiationPanel extends ContentPanel {
         cbxType = new javax.swing.JComboBox();
         jPanel6 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        txtValuation = new javax.swing.JFormattedTextField();
+        txtInitial = new javax.swing.JFormattedTextField();
         jPanel7 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
-        txtOffer = new javax.swing.JFormattedTextField();
+        txtNotificationDate = new javax.swing.JFormattedTextField();
+        btnNotificationDate = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
-        txtAgreed = new javax.swing.JFormattedTextField();
+        txtFinal = new javax.swing.JFormattedTextField();
         jPanel10 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         cbxStatus = new javax.swing.JComboBox();
@@ -294,7 +302,7 @@ public class NegotiationPanel extends ContentPanel {
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
             .addComponent(txtPropertyRef)
         );
         jPanel4Layout.setVerticalGroup(
@@ -321,7 +329,7 @@ public class NegotiationPanel extends ContentPanel {
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(cbxType, 0, 128, Short.MAX_VALUE)
+            .addComponent(cbxType, 0, 122, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -336,24 +344,24 @@ public class NegotiationPanel extends ContentPanel {
 
         jLabel4.setText(bundle.getString("NegotiationPanel.jLabel4.text")); // NOI18N
 
-        txtValuation.setFormatterFactory(FormattersFactory.getInstance().getMoneyFormatterFactory());
+        txtInitial.setFormatterFactory(FormattersFactory.getInstance().getMoneyFormatterFactory());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, negotiateBean, org.jdesktop.beansbinding.ELProperty.create("${valuationAmount}"), txtValuation, org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, negotiateBean, org.jdesktop.beansbinding.ELProperty.create("${initialAmount}"), txtInitial, org.jdesktop.beansbinding.BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
-            .addComponent(txtValuation)
+            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+            .addComponent(txtInitial)
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtValuation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtInitial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -361,24 +369,41 @@ public class NegotiationPanel extends ContentPanel {
 
         jLabel5.setText(bundle.getString("NegotiationPanel.jLabel5.text")); // NOI18N
 
-        txtOffer.setFormatterFactory(FormattersFactory.getInstance().getMoneyFormatterFactory());
+        txtNotificationDate.setFormatterFactory(FormattersFactory.getInstance().getDateFormatterFactory());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, negotiateBean, org.jdesktop.beansbinding.ELProperty.create("${offerAmount}"), txtOffer, org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, negotiateBean, org.jdesktop.beansbinding.ELProperty.create("${notificationDate}"), txtNotificationDate, org.jdesktop.beansbinding.BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
+
+        btnNotificationDate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/calendar.png"))); // NOI18N
+        btnNotificationDate.setText(bundle.getString("NegotiationPanel.btnNotificationDate.text")); // NOI18N
+        btnNotificationDate.setBorder(null);
+        btnNotificationDate.setFocusable(false);
+        btnNotificationDate.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnNotificationDate.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnNotificationDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNotificationDateActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
-            .addComponent(txtOffer)
+            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addComponent(txtNotificationDate)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnNotificationDate))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtOffer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtNotificationDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnNotificationDate))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -386,24 +411,24 @@ public class NegotiationPanel extends ContentPanel {
 
         jLabel6.setText(bundle.getString("NegotiationPanel.jLabel6.text")); // NOI18N
 
-        txtAgreed.setFormatterFactory(FormattersFactory.getInstance().getMoneyFormatterFactory());
+        txtFinal.setFormatterFactory(FormattersFactory.getInstance().getMoneyFormatterFactory());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, negotiateBean, org.jdesktop.beansbinding.ELProperty.create("${agreedAmount}"), txtAgreed, org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, negotiateBean, org.jdesktop.beansbinding.ELProperty.create("${finalAmount}"), txtFinal, org.jdesktop.beansbinding.BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
-            .addComponent(txtAgreed)
+            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+            .addComponent(txtFinal)
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtAgreed, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtFinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -421,7 +446,7 @@ public class NegotiationPanel extends ContentPanel {
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
+            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
             .addComponent(cbxStatus, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel10Layout.setVerticalGroup(
@@ -439,7 +464,7 @@ public class NegotiationPanel extends ContentPanel {
         jPanel11.setLayout(jPanel11Layout);
         jPanel11Layout.setHorizontalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 128, Short.MAX_VALUE)
+            .addGap(0, 122, Short.MAX_VALUE)
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -452,7 +477,7 @@ public class NegotiationPanel extends ContentPanel {
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 128, Short.MAX_VALUE)
+            .addGap(0, 122, Short.MAX_VALUE)
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -494,7 +519,7 @@ public class NegotiationPanel extends ContentPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(groupPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(pnlTop, javax.swing.GroupLayout.DEFAULT_SIZE, 558, Short.MAX_VALUE)
+            .addComponent(pnlTop, javax.swing.GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -512,7 +537,7 @@ public class NegotiationPanel extends ContentPanel {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(documentsManagementExtPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 558, Short.MAX_VALUE)
+            .addComponent(documentsManagementExtPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -529,7 +554,7 @@ public class NegotiationPanel extends ContentPanel {
             .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -558,9 +583,14 @@ public class NegotiationPanel extends ContentPanel {
         configureSecurity();
     }//GEN-LAST:event_btnSecurityActionPerformed
 
+    private void btnNotificationDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNotificationDateActionPerformed
+        showCalendar(txtNotificationDate);
+    }//GEN-LAST:event_btnNotificationDateActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;
+    private javax.swing.JButton btnNotificationDate;
     private org.sola.clients.swing.common.buttons.BtnOpen btnOpen;
     private javax.swing.JButton btnSecurity;
     private javax.swing.JComboBox cbxStatus;
@@ -592,11 +622,11 @@ public class NegotiationPanel extends ContentPanel {
     private javax.swing.JPanel pnlMain;
     private javax.swing.JPanel pnlTop;
     private org.sola.clients.beans.referencedata.NegotiateStatusListBean statusListBean;
-    private javax.swing.JFormattedTextField txtAgreed;
     private javax.swing.JTextArea txtComment;
-    private javax.swing.JFormattedTextField txtOffer;
+    private javax.swing.JFormattedTextField txtFinal;
+    private javax.swing.JFormattedTextField txtInitial;
+    private javax.swing.JFormattedTextField txtNotificationDate;
     private javax.swing.JTextField txtPropertyRef;
-    private javax.swing.JFormattedTextField txtValuation;
     private org.sola.clients.beans.referencedata.NegotiateTypeListBean typeListBean;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
