@@ -80,9 +80,11 @@ public class RequestTypeBean extends AbstractCodeBean {
     public static final String AREA_BASE_FEE_PROPERTY = "areaBaseFee";
     public static final String VALUE_BASE_FEE_PROPERTY = "valueBaseFee";
     public static final String CODE_MAP_EXISTINGPARCEL = "mapExistingParcel";
-    public static final String DISPLAY_GROUP_NAME_PROPERTY = "displayGroupName";
     public static final String SERVICE_PANEL_PROPERTY = "servicePanel";
     public static final String SERVICE_PANEL_CODE_PROPERTY = "servicePanelCode";
+    public static final String DISPLAY_GROUP_CODE_PROPERTY = "displayGroupCode";
+    public static final String DISPLAY_GROUP_PROPERTY = "displayGroup";
+    public static final String DISPLAY_ORDER_PROPERTY = "displayOrder";
 
     private int nrDaysToComplete;
     private int nrPropertiesRequired;
@@ -99,7 +101,8 @@ public class RequestTypeBean extends AbstractCodeBean {
     private BigDecimal areaBaseFee;
     @NotNull(message = "Enter value base fee.")
     private BigDecimal valueBaseFee;
-    private String displayGroupName;
+    private int displayOrder;
+    private RequestDisplayGroupBean displayGroup;
     private ConfigPanelLauncherBean servicePanel;
 
     public RequestTypeBean() {
@@ -263,19 +266,14 @@ public class RequestTypeBean extends AbstractCodeBean {
         propertySupport.firePropertyChange(VALUE_BASE_FEE_PROPERTY, oldValue, this.valueBaseFee);
     }
 
-    public String getDisplayGroupName() {
-        return displayGroupName;
+    public int getDisplayOrder() {
+        return displayOrder;
     }
 
-    public void setDisplayGroupName(String displayGroupName) {
-        String oldValue = this.displayGroupName;
-        this.displayGroupName = displayGroupName;
-        propertySupport.firePropertyChange(DISPLAY_GROUP_NAME_PROPERTY, oldValue, this.displayGroupName);
-    }
-
-    public String getCategoryDisplayValue() {
-        return getDisplayGroupName() == null
-                ? getRequestCategory().getDisplayValue() : getDisplayGroupName();
+    public void setDisplayOrder(int value) {
+        int oldValue = this.displayOrder;
+        this.displayOrder = value;
+        propertySupport.firePropertyChange(DISPLAY_ORDER_PROPERTY, oldValue, value);
     }
 
     public String getServicePanelCode() {
@@ -307,5 +305,45 @@ public class RequestTypeBean extends AbstractCodeBean {
             this.servicePanel = new ConfigPanelLauncherBean();
         }
         this.setJointRefDataBean(this.servicePanel, panelType, SERVICE_PANEL_PROPERTY);
+    }
+
+    public String getDisplayGroupCode() {
+        if (displayGroup != null) {
+            return displayGroup.getCode();
+        } else {
+            return null;
+        }
+    }
+
+    public void setDisplayGroupCode(String groupCode) {
+        String oldValue = null;
+        if (displayGroup != null) {
+            oldValue = displayGroup.getCode();
+        }
+        setDisplayGroup(CacheManager.getBeanByCode(CacheManager.getRequestDisplayGroups(), groupCode));
+        propertySupport.firePropertyChange(DISPLAY_GROUP_CODE_PROPERTY, oldValue, groupCode);
+    }
+
+    public RequestDisplayGroupBean getDisplayGroup() {
+        if (displayGroup == null) {
+            displayGroup = new RequestDisplayGroupBean();
+        }
+        return displayGroup;
+    }
+
+    public void setDisplayGroup(RequestDisplayGroupBean group) {
+        if (this.displayGroup == null) {
+            this.displayGroup = new RequestDisplayGroupBean();
+        }
+        this.setJointRefDataBean(this.displayGroup, group, DISPLAY_GROUP_PROPERTY);
+    }
+
+    public String getDisplayGroupName() {
+        return getDisplayGroup().getDisplayValue();
+    }
+
+    public String getCategoryDisplayValue() {
+        return getDisplayGroupName() == null
+                ? getRequestCategory().getDisplayValue() : getDisplayGroupName();
     }
 }

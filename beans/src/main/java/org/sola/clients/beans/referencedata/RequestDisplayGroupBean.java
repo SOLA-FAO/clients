@@ -32,26 +32,14 @@ package org.sola.clients.beans.referencedata;
 import org.sola.clients.beans.AbstractCodeBean;
 
 /**
- *
- * @author soladev
+ * Represents reference data object of the <b>request_display_group</b> table.
+ * Could be populated from the {@link RequestDisplayGroupTO} object.<br />
+ * For more information see data dictionary
+ * <b>Application</b> schema.
  */
-public class ChecklistItemBean extends AbstractCodeBean {
+public class RequestDisplayGroupBean extends AbstractCodeBean {
 
-    public static final String DISPLAY_ORDER_PROPERTY = "displayOrder";
-    private int displayOrder;
-
-    public ChecklistItemBean() {
+    public RequestDisplayGroupBean() {
         super();
     }
-
-    public int getDisplayOrder() {
-        return displayOrder;
-    }
-
-    public void setDisplayOrder(int value) {
-        int oldValue = this.displayOrder;
-        this.displayOrder = value;
-        propertySupport.firePropertyChange(DISPLAY_ORDER_PROPERTY, oldValue, value);
-    }
-
 }

@@ -258,7 +258,17 @@ public class MainForm extends javax.swing.JFrame {
         menuUsers = new javax.swing.JMenuItem();
         menuRefData = new javax.swing.JMenu();
         menuApplications = new javax.swing.JMenu();
+        menuAuthorities = new javax.swing.JMenuItem();
+        menuChecklistGroup = new javax.swing.JMenuItem();
+        menuChecklistItem = new javax.swing.JMenuItem();
+        menuNegotiationStatus = new javax.swing.JMenuItem();
+        menuNegotiationTypes = new javax.swing.JMenuItem();
+        menuNotifyRelationshipTypes = new javax.swing.JMenuItem();
+        menuObjectionStatus = new javax.swing.JMenuItem();
+        menuPublicDisplayStatus = new javax.swing.JMenuItem();
+        menuPublicDisplayTypes = new javax.swing.JMenuItem();
         menuRequestCategory = new javax.swing.JMenuItem();
+        menuDisplayGroups = new javax.swing.JMenuItem();
         menuRequestTypes = new javax.swing.JMenuItem();
         menuTypeActions = new javax.swing.JMenuItem();
         menuServiceActionTypes = new javax.swing.JMenuItem();
@@ -269,6 +279,7 @@ public class MainForm extends javax.swing.JFrame {
         menuMortgageTypes = new javax.swing.JMenuItem();
         menuRrrGroupTypes = new javax.swing.JMenuItem();
         menuRrrTypes = new javax.swing.JMenuItem();
+        menuValuationTypes = new javax.swing.JMenuItem();
         menuSources = new javax.swing.JMenu();
         menuSourceTypes = new javax.swing.JMenuItem();
         menuParty = new javax.swing.JMenu();
@@ -527,6 +538,96 @@ public class MainForm extends javax.swing.JFrame {
         menuApplications.setText(bundle.getString("MainForm.menuApplications.text")); // NOI18N
         menuApplications.setName("menuApplications"); // NOI18N
 
+        menuAuthorities.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/book-open.png"))); // NOI18N
+        menuAuthorities.setText(bundle.getString("MainForm.menuAuthorities.text")); // NOI18N
+        menuAuthorities.setName("menuAuthorities"); // NOI18N
+        menuAuthorities.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuAuthoritiesActionPerformed(evt);
+            }
+        });
+        menuApplications.add(menuAuthorities);
+
+        menuChecklistGroup.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/book-open.png"))); // NOI18N
+        menuChecklistGroup.setText(bundle.getString("MainForm.menuChecklistGroup.text")); // NOI18N
+        menuChecklistGroup.setName("menuChecklistGroup"); // NOI18N
+        menuChecklistGroup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuChecklistGroupActionPerformed(evt);
+            }
+        });
+        menuApplications.add(menuChecklistGroup);
+
+        menuChecklistItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/book-open.png"))); // NOI18N
+        menuChecklistItem.setText(bundle.getString("MainForm.menuChecklistItem.text")); // NOI18N
+        menuChecklistItem.setName("menuChecklistItem"); // NOI18N
+        menuChecklistItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuChecklistItemActionPerformed(evt);
+            }
+        });
+        menuApplications.add(menuChecklistItem);
+
+        menuNegotiationStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/book-open.png"))); // NOI18N
+        menuNegotiationStatus.setText(bundle.getString("MainForm.menuNegotiationStatus.text")); // NOI18N
+        menuNegotiationStatus.setName("menuNegotiationStatus"); // NOI18N
+        menuNegotiationStatus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuNegotiationStatusActionPerformed(evt);
+            }
+        });
+        menuApplications.add(menuNegotiationStatus);
+
+        menuNegotiationTypes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/book-open.png"))); // NOI18N
+        menuNegotiationTypes.setText(bundle.getString("MainForm.menuNegotiationTypes.text")); // NOI18N
+        menuNegotiationTypes.setName("menuNegotiationTypes"); // NOI18N
+        menuNegotiationTypes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuNegotiationTypesActionPerformed(evt);
+            }
+        });
+        menuApplications.add(menuNegotiationTypes);
+
+        menuNotifyRelationshipTypes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/book-open.png"))); // NOI18N
+        menuNotifyRelationshipTypes.setText(bundle.getString("MainForm.menuNotifyRelationshipTypes.text")); // NOI18N
+        menuNotifyRelationshipTypes.setName("menuNotifyRelationshipTypes"); // NOI18N
+        menuNotifyRelationshipTypes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuNotifyRelationshipTypesActionPerformed(evt);
+            }
+        });
+        menuApplications.add(menuNotifyRelationshipTypes);
+
+        menuObjectionStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/book-open.png"))); // NOI18N
+        menuObjectionStatus.setText(bundle.getString("MainForm.menuObjectionStatus.text")); // NOI18N
+        menuObjectionStatus.setName("menuObjectionStatus"); // NOI18N
+        menuObjectionStatus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuObjectionStatusActionPerformed(evt);
+            }
+        });
+        menuApplications.add(menuObjectionStatus);
+
+        menuPublicDisplayStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/book-open.png"))); // NOI18N
+        menuPublicDisplayStatus.setText(bundle.getString("MainForm.menuPublicDisplayStatus.text")); // NOI18N
+        menuPublicDisplayStatus.setName("menuPublicDisplayStatus"); // NOI18N
+        menuPublicDisplayStatus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuPublicDisplayStatusActionPerformed(evt);
+            }
+        });
+        menuApplications.add(menuPublicDisplayStatus);
+
+        menuPublicDisplayTypes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/book-open.png"))); // NOI18N
+        menuPublicDisplayTypes.setText(bundle.getString("MainForm.menuPublicDisplayTypes.text")); // NOI18N
+        menuPublicDisplayTypes.setName("menuPublicDisplayTypes"); // NOI18N
+        menuPublicDisplayTypes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuPublicDisplayTypesActionPerformed(evt);
+            }
+        });
+        menuApplications.add(menuPublicDisplayTypes);
+
         menuRequestCategory.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/book-open.png"))); // NOI18N
         menuRequestCategory.setText(bundle.getString("MainForm.menuRequestCategory.text")); // NOI18N
         menuRequestCategory.setName("menuRequestCategory"); // NOI18N
@@ -536,6 +637,16 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         menuApplications.add(menuRequestCategory);
+
+        menuDisplayGroups.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/book-open.png"))); // NOI18N
+        menuDisplayGroups.setText(bundle.getString("MainForm.menuDisplayGroups.text")); // NOI18N
+        menuDisplayGroups.setName("menuDisplayGroups"); // NOI18N
+        menuDisplayGroups.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuDisplayGroupsActionPerformed(evt);
+            }
+        });
+        menuApplications.add(menuDisplayGroups);
 
         menuRequestTypes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/book-open.png"))); // NOI18N
         menuRequestTypes.setText(bundle.getString("MainForm.menuRequestTypes.text")); // NOI18N
@@ -631,6 +742,16 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         menuAdministrative.add(menuRrrTypes);
+
+        menuValuationTypes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/book-open.png"))); // NOI18N
+        menuValuationTypes.setText(bundle.getString("MainForm.menuValuationTypes.text")); // NOI18N
+        menuValuationTypes.setName("menuValuationTypes"); // NOI18N
+        menuValuationTypes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuValuationTypesActionPerformed(evt);
+            }
+        });
+        menuAdministrative.add(menuValuationTypes);
 
         menuRefData.add(menuAdministrative);
 
@@ -984,6 +1105,50 @@ public class MainForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_menuFlushCacheActionPerformed
 
+    private void menuDisplayGroupsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuDisplayGroupsActionPerformed
+        manageDisplayGroups();
+    }//GEN-LAST:event_menuDisplayGroupsActionPerformed
+
+    private void menuValuationTypesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuValuationTypesActionPerformed
+        openReferenceDataPanel(ValuationTypeBean.class, menuValuationTypes.getText());
+    }//GEN-LAST:event_menuValuationTypesActionPerformed
+
+    private void menuAuthoritiesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAuthoritiesActionPerformed
+        openReferenceDataPanel(AuthorityBean.class, menuAuthorities.getText());
+    }//GEN-LAST:event_menuAuthoritiesActionPerformed
+
+    private void menuNegotiationStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuNegotiationStatusActionPerformed
+        openReferenceDataPanel(NegotiateStatusBean.class, menuNegotiationStatus.getText());
+    }//GEN-LAST:event_menuNegotiationStatusActionPerformed
+
+    private void menuNegotiationTypesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuNegotiationTypesActionPerformed
+        openReferenceDataPanel(NegotiateTypeBean.class, menuNegotiationTypes.getText());
+    }//GEN-LAST:event_menuNegotiationTypesActionPerformed
+
+    private void menuNotifyRelationshipTypesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuNotifyRelationshipTypesActionPerformed
+        openReferenceDataPanel(NotifyRelationshipTypeBean.class, menuNotifyRelationshipTypes.getText());
+    }//GEN-LAST:event_menuNotifyRelationshipTypesActionPerformed
+
+    private void menuObjectionStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuObjectionStatusActionPerformed
+        openReferenceDataPanel(ObjectionStatusBean.class, menuObjectionStatus.getText());
+    }//GEN-LAST:event_menuObjectionStatusActionPerformed
+
+    private void menuPublicDisplayStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuPublicDisplayStatusActionPerformed
+        openReferenceDataPanel(PublicDisplayItemStatusBean.class, menuPublicDisplayStatus.getText());
+    }//GEN-LAST:event_menuPublicDisplayStatusActionPerformed
+
+    private void menuPublicDisplayTypesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuPublicDisplayTypesActionPerformed
+         openReferenceDataPanel(PublicDisplayItemTypeBean.class, menuPublicDisplayTypes.getText());
+    }//GEN-LAST:event_menuPublicDisplayTypesActionPerformed
+
+    private void menuChecklistGroupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuChecklistGroupActionPerformed
+        openReferenceDataPanel(ChecklistGroupBean.class, menuChecklistGroup.getText());
+    }//GEN-LAST:event_menuChecklistGroupActionPerformed
+
+    private void menuChecklistItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuChecklistItemActionPerformed
+        openReferenceDataPanel(ChecklistItemBean.class, menuChecklistItem.getText());
+    }//GEN-LAST:event_menuChecklistItemActionPerformed
+
     /**
      * Opens roles management panel.
      */
@@ -1093,6 +1258,10 @@ public class MainForm extends javax.swing.JFrame {
         openReferenceDataPanel(RequestCategoryTypeBean.class, menuRequestCategory.getText());
     }
 
+    private void manageDisplayGroups() {
+        openReferenceDataPanel(RequestDisplayGroupBean.class, menuDisplayGroups.getText());
+    }
+
     private void manageRegistrationStatusTypes() {
         openReferenceDataPanel(RegistrationStatusTypeBean.class, menuRegistrationStatusType.getText());
     }
@@ -1158,12 +1327,16 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JToolBar mainToolbar;
     private javax.swing.JMenu menuAdministrative;
     private javax.swing.JMenu menuApplications;
+    private javax.swing.JMenuItem menuAuthorities;
     private javax.swing.JMenuItem menuBRSeverityType;
     private javax.swing.JMenuItem menuBRTechnicalType;
     private javax.swing.JMenuItem menuBRValidationTargetType;
     private javax.swing.JMenuItem menuBaUnitRelationTypes;
     private javax.swing.JMenuItem menuBaUnitType;
+    private javax.swing.JMenuItem menuChecklistGroup;
+    private javax.swing.JMenuItem menuChecklistItem;
     private javax.swing.JMenuItem menuCommunicationType;
+    private javax.swing.JMenuItem menuDisplayGroups;
     private javax.swing.JMenuItem menuExit;
     private javax.swing.JMenu menuFile;
     private javax.swing.JMenuItem menuFlushCache;
@@ -1173,9 +1346,15 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuIdTypes;
     private javax.swing.JMenuItem menuLodgementReport;
     private javax.swing.JMenuItem menuMortgageTypes;
+    private javax.swing.JMenuItem menuNegotiationStatus;
+    private javax.swing.JMenuItem menuNegotiationTypes;
+    private javax.swing.JMenuItem menuNotifyRelationshipTypes;
+    private javax.swing.JMenuItem menuObjectionStatus;
     private javax.swing.JMenu menuParty;
     private javax.swing.JMenuItem menuPartyRoleType;
     private javax.swing.JMenuItem menuPartyType;
+    private javax.swing.JMenuItem menuPublicDisplayStatus;
+    private javax.swing.JMenuItem menuPublicDisplayTypes;
     private javax.swing.JMenu menuRefData;
     private javax.swing.JMenuItem menuRegistrationStatusType;
     private javax.swing.JMenu menuReports;
@@ -1194,6 +1373,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenu menuTransaction;
     private javax.swing.JMenuItem menuTypeActions;
     private javax.swing.JMenuItem menuUsers;
+    private javax.swing.JMenuItem menuValuationTypes;
     private javax.swing.JPanel statusPanel;
     private org.sola.clients.swing.common.tasks.TaskPanel taskPanel1;
     // End of variables declaration//GEN-END:variables

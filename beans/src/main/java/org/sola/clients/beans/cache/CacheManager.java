@@ -235,6 +235,10 @@ public final class CacheManager {
      */
     public static final String GET_CHECKLIST_GROUP_KEY = ChecklistGroupBean.class.getName() + LIST_POSTFIX;
     /**
+     * Cache key of the {@link ChecklistItemBean} collection.
+     */
+    public static final String GET_CHECKLIST_ITEM_KEY = ChecklistItemBean.class.getName() + LIST_POSTFIX;
+    /**
      * Cache key of the {@link PublicDisplayItemTypeBean} collection.
      */
     public static final String GET_PUBLIC_DISPLAY_ITEM_TYPE_KEY = PublicDisplayItemTypeBean.class.getName() + LIST_POSTFIX;
@@ -266,6 +270,10 @@ public final class CacheManager {
      * Cache key of the {@link NegotiateStatusBean} collection.
      */
     public static final String GET_NEGOTIATE_STATUS_TYPE_KEY = NegotiateStatusBean.class.getName() + LIST_POSTFIX;
+    /**
+     * Cache key of the {@link RequestDisplayGroupBean} collection.
+     */
+    public static final String GET_REQUEST_DISPLAY_GROUP_KEY = RequestDisplayGroupBean.class.getName() + LIST_POSTFIX;
     /**
      * Cache key of the parties list by role collection.
      */
@@ -310,6 +318,7 @@ public final class CacheManager {
     private static final String GET_PARTIES_BY_ROLE = "getPartiesByRole";
     private static final String GET_ACTIVE_USERS = "getActiveUsers";
     private static final String GET_CHECKLIST_GROUP = "getChecklistGroups";
+    private static final String GET_CHECKLIST_ITEMS = "getChecklistItems";
     private static final String GET_PUBLIC_DISPLAY_TYPES = "getPublicDisplayTypes";
     private static final String GET_PUBLIC_DISPLAY_STATUS_TYPES = "getPublicDisplayStatusTypes";
     private static final String GET_VALUATION_TYPES = "getValuationTypes";
@@ -318,6 +327,7 @@ public final class CacheManager {
     private static final String GET_NOTIFY_RELATIONSHIP_TYPES = "getNotifyRelationshipTypes";
     private static final String GET_NEGOTIATE_STATUS_TYPES = "getNegotiateStatusTypes";
     private static final String GET_NEGOTIATE_TYPES = "getNegotiateTypes";
+    private static final String GET_REQUEST_DISPLAY_GROUPS = "getRequestDisplayGroups";
 
     public static List<BrValidationTargetTypeBean> getBrValidationTargetTypes() {
         return getCachedBeanList(BrValidationTargetTypeBean.class,
@@ -594,6 +604,12 @@ public final class CacheManager {
                 GET_CHECKLIST_GROUP, GET_CHECKLIST_GROUP_KEY);
     }
 
+    public static List<ChecklistItemBean> getChecklistItems() {
+        return getCachedBeanList(ChecklistItemBean.class,
+                WSManager.getInstance().getReferenceDataService(),
+                GET_CHECKLIST_ITEMS, GET_CHECKLIST_ITEM_KEY);
+    }
+
     public static List<PublicDisplayItemTypeBean> getPublicDisplayTypes() {
         return getCachedBeanList(PublicDisplayItemTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
@@ -640,6 +656,12 @@ public final class CacheManager {
         return getCachedBeanList(NegotiateTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_NEGOTIATE_TYPES, GET_NEGOTIATE_TYPE_KEY);
+    }
+
+    public static List<RequestDisplayGroupBean> getRequestDisplayGroups() {
+        return getCachedBeanList(RequestDisplayGroupBean.class,
+                WSManager.getInstance().getReferenceDataService(),
+                GET_REQUEST_DISPLAY_GROUPS, GET_REQUEST_DISPLAY_GROUP_KEY);
     }
 
     /**
