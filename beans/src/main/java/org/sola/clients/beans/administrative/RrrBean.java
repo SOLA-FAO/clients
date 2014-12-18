@@ -121,7 +121,8 @@ public class RrrBean extends AbstractTransactionedBean {
     @Future(message = ClientMessage.CHECK_FUTURE_EXPIRATION, payload = Localized.class,
             groups = {MortgageValidationGroup.class})
     private Date expirationDate;
-    @NotNull(message = ClientMessage.CHECK_NOTNULL_MORTGAGEAMOUNT, payload = Localized.class, groups = {MortgageValidationGroup.class})
+    @NotNull(message = ClientMessage.CHECK_NOTNULL_MORTGAGEAMOUNT, payload = Localized.class, 
+            groups = {MortgageValidationGroup.class, LeaseValidationGroup.class})
     private BigDecimal amount;
     private Date dueDate;
     @NotNull(message = ClientMessage.CHECK_NOTNULL_MORTAGAETYPE, payload = Localized.class, groups = {MortgageValidationGroup.class})

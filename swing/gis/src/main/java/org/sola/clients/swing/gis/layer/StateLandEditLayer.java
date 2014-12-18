@@ -221,6 +221,9 @@ public class StateLandEditLayer extends AbstractSpatialObjectLayer {
         StateLandParcelBean slBean = this.getBean(result);
         if (sourceCadObj != null) {
             if (CadastreObjectTypeBean.CODE_STATE_LAND.equals(sourceCadObj.getTypeCode())) {
+                // The source cadastral object is a state land parcel, so add it to the
+                // Target Parcels list so that this earlier version of the parcel is 
+                // made historic when the job is approved. 
                 addTargetParcel(sourceCadObj);
             }
             // Copy the Address and Description details from the
