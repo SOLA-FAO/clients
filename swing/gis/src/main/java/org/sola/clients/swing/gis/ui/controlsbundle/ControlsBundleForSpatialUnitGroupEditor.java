@@ -32,7 +32,6 @@
 package org.sola.clients.swing.gis.ui.controlsbundle;
 
 import java.util.ArrayList;
-import java.util.List;
 import javax.swing.JComboBox;
 import org.geotools.feature.SchemaException;
 import org.geotools.geometry.jts.Geometries;
@@ -43,7 +42,9 @@ import org.sola.clients.swing.gis.layer.PojoBaseLayer;
 import org.sola.clients.swing.gis.layer.SpatialUnitGroupLayer;
 import org.sola.clients.swing.gis.mapaction.SaveSpatialUnitGeneric;
 import org.sola.clients.swing.gis.mapaction.SaveSpatialUnitGroup;
+import org.sola.clients.swing.gis.mapaction.SpatialUnitGroupMerge;
 import org.sola.clients.swing.gis.tool.SpatialUnitGroupSelect;
+import org.sola.clients.swing.gis.tool.SpatialUnitGroupSelectSubHierarchy;
 import org.sola.clients.swing.gis.ui.control.SpatialUnitGroupOptionControl;
 
 /**
@@ -71,6 +72,15 @@ public final class ControlsBundleForSpatialUnitGroupEditor extends ControlsBundl
     @Override
     public void Setup(PojoDataAccess pojoDataAccess) {
         super.Setup(pojoDataAccess); 
+        //Add tool to select sub-hierachy spatial unit group
+        this.getMap().addTool(
+                new SpatialUnitGroupSelectSubHierarchy((SpatialUnitGroupLayer)getLayer()), 
+                this.getToolbar(), true);
+
+        this.getMap().addMapAction(new SpatialUnitGroupMerge(this),
+                this.getToolbar(),
+                true);
+        
         getEditTool().setGeometryType(Geometries.POLYGON);
 
         ArrayList<PojoBaseLayer> list = new ArrayList<PojoBaseLayer>();
@@ -114,4 +124,5 @@ public final class ControlsBundleForSpatialUnitGroupEditor extends ControlsBundl
         setLayer(new SpatialUnitGroupLayer());
         super.addLayers();
     }
+
 }

@@ -221,7 +221,7 @@ public class Development {
         this.displayControlsBundleForm(ctrl);
     }
 
-    @Ignore
+    //@Ignore
     @Test
     public void testUIControlsBundleForSpatialUnitManagement() throws Exception {
         System.out.println("Test ControlsBundle for Spatial unit");
@@ -241,7 +241,7 @@ public class Development {
         this.displayControlsBundleForm(ctrl);
     }
 
-    //@Ignore
+    @Ignore
     @Test
     public void TestTitlePlan() throws Exception {
         System.out.println("Test title plan");

@@ -53,9 +53,7 @@ package org.sola.clients.swing.gis.mapaction;
 
 import java.awt.Component;
 import org.geotools.swing.extended.Map;
-import org.sola.clients.swing.gis.ui.control.SpatialUnitGroupListPanel;
-import org.sola.common.messaging.GisMessage;
-import org.sola.common.messaging.MessageUtility;
+import org.sola.clients.swing.gis.Messaging;
 
 /**
  * This map action shows the form of spatial unit groups selected for edit.
@@ -68,8 +66,6 @@ public final class SpatialUnitGroupListShow extends ComponentShow {
      * The name of the map action
      */
     public final static String MAPACTION_NAME = "SpatialUnitGroupListShow";
-    private static java.util.ResourceBundle resource =
-            java.util.ResourceBundle.getBundle("org/sola/clients/swing/gis/mapaction/resources/strings");
 
     /**
      * Constructor of the map action that is used to show the component 
@@ -80,7 +76,7 @@ public final class SpatialUnitGroupListShow extends ComponentShow {
      */
     public SpatialUnitGroupListShow(Map mapObj, Component formToShow) {
         super(mapObj, formToShow, MAPACTION_NAME,
-                resource.getString(
+                ((Messaging)Messaging.getInstance()).getMapActionString(
                 String.format("%s.tooltip",MAPACTION_NAME)),
                 "resources/spatial-unit-group-open.png");
     }

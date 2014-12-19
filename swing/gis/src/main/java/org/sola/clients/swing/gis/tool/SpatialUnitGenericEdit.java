@@ -36,6 +36,7 @@ import java.util.List;
 import org.geotools.geometry.jts.Geometries;
 import org.geotools.swing.extended.Map;
 import org.geotools.swing.tool.extended.ExtendedEditGeometryTool;
+import org.sola.clients.swing.gis.Messaging;
 import org.sola.clients.swing.gis.layer.AbstractSpatialObjectLayer;
 import org.sola.clients.swing.gis.layer.PojoBaseLayer;
 
@@ -47,13 +48,12 @@ import org.sola.clients.swing.gis.layer.PojoBaseLayer;
 public class SpatialUnitGenericEdit extends ExtendedEditGeometryTool {
 
     private String toolName = "SpatialUnitGenericEdit";
-    private static java.util.ResourceBundle resource =
-            java.util.ResourceBundle.getBundle("org/sola/clients/swing/gis/tool/resources/strings");
     private List<PojoBaseLayer> extraTargetSnappingLayers = new ArrayList<PojoBaseLayer>();
 
     public SpatialUnitGenericEdit(AbstractSpatialObjectLayer layer) {
         this.setToolName(toolName);
-        this.setToolTip(resource.getString("SpatialUnitGenericEdit.tooltip"));
+        this.setToolTip(((Messaging)Messaging.getInstance()).getMapToolString(
+                "SpatialUnitGenericEdit.tooltip"));
         this.layer = layer;
     }
 

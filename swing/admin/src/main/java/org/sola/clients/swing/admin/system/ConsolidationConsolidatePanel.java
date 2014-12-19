@@ -193,7 +193,6 @@ public class ConsolidationConsolidatePanel extends ContentPanel {
         pnlHeader = new org.sola.clients.swing.ui.HeaderPanel();
         btnStart = new javax.swing.JButton();
         txtExtractionFilePath = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         btnBrowse = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -205,6 +204,9 @@ public class ConsolidationConsolidatePanel extends ContentPanel {
         cmdShowLog = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         txtStatus = new javax.swing.JTextField();
+        txtSourceInServer = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
 
         setHeaderPanel(pnlHeader);
 
@@ -220,8 +222,6 @@ public class ConsolidationConsolidatePanel extends ContentPanel {
 
         txtExtractionFilePath.setEditable(false);
         txtExtractionFilePath.setText(bundle.getString("ConsolidationConsolidatePanel.txtExtractionFilePath.text")); // NOI18N
-
-        jLabel1.setText(bundle.getString("ConsolidationConsolidatePanel.jLabel1.text")); // NOI18N
 
         jLabel2.setText(bundle.getString("ConsolidationConsolidatePanel.jLabel2.text")); // NOI18N
 
@@ -256,56 +256,75 @@ public class ConsolidationConsolidatePanel extends ContentPanel {
         txtStatus.setEditable(false);
         txtStatus.setText(bundle.getString("ConsolidationConsolidatePanel.txtStatus.text")); // NOI18N
 
+        txtSourceInServer.setText(bundle.getString("ConsolidationConsolidatePanel.txtSourceInServer.text")); // NOI18N
+
+        jLabel3.setText(bundle.getString("ConsolidationConsolidatePanel.jLabel3.text")); // NOI18N
+
+        jLabel7.setText(bundle.getString("ConsolidationConsolidatePanel.jLabel7.text")); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlHeader, javax.swing.GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
+            .addComponent(pnlHeader, javax.swing.GroupLayout.DEFAULT_SIZE, 695, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(txtExtractionFilePath, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnBrowse)
-                                .addGap(0, 294, Short.MAX_VALUE))
-                            .addComponent(jScrollPane1)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(24, 24, 24)
+                        .addComponent(jScrollPane1))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(cmdShowLog))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel6)
+                                .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtStatus))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel6)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(txtStatus))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(btnStart)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(progressBarProcess, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnStart)
+                                .addComponent(jLabel4)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(progressBarProcess, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel7)
+                                        .addGap(37, 37, 37))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(jLabel3)
+                                        .addGap(18, 18, 18)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(txtExtractionFilePath)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnBrowse))
+                                    .addComponent(txtSourceInServer))))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(pnlHeader, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(23, 23, 23)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtSourceInServer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtExtractionFilePath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1)
-                    .addComponent(btnBrowse))
+                    .addComponent(btnBrowse)
+                    .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -321,10 +340,10 @@ public class ConsolidationConsolidatePanel extends ContentPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cmdShowLog)
-                .addGap(8, 8, 8)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -352,17 +371,19 @@ public class ConsolidationConsolidatePanel extends ContentPanel {
     private javax.swing.JButton btnBrowse;
     private javax.swing.JButton btnStart;
     private javax.swing.JButton cmdShowLog;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private org.sola.clients.swing.ui.HeaderPanel pnlHeader;
     private javax.swing.JProgressBar progressBarProcess;
     private javax.swing.JTextField txtExtractionFilePath;
     private javax.swing.JTextArea txtLog;
     private javax.swing.JTextField txtPassword;
+    private javax.swing.JTextField txtSourceInServer;
     private javax.swing.JTextField txtStatus;
     // End of variables declaration//GEN-END:variables
 }

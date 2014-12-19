@@ -26,58 +26,60 @@
  * *********************************************************************************************
  */
 /*
- *  Food and Agriculture Orgainsation (FAO) of the United Nations
- *  Solutions for Open Land Administration - Sola.
- * 
- * 
- *  Copyright 2011, FAO and UN, and individual contributors as indicated
- *  by the @authors. See the copyright text in the distribution for a
- *  full listing of individual contributors.
- * 
- *  This is free software; you can redistribute it and/or modify it
- *  under the terms of the GNU Lesser General Public License as
- *  published by the Free Software Foundation; either version 2.1 of
- *  the License, or (at your option) any later version.
- * 
- *  This software is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- *  Lesser General Public License for more details.
- * 
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this software; if not, write to the Free
- *  Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- *  02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
  */
 package org.sola.clients.swing.gis.mapaction;
 
-import java.awt.Component;
-import org.geotools.swing.extended.Map;
+import com.vividsolutions.jts.geom.Geometry;
+import org.geotools.swing.mapaction.extended.ExtendedAction;
 import org.sola.clients.swing.gis.Messaging;
+import org.sola.clients.swing.gis.beans.SpatialUnitBean;
+import org.sola.clients.swing.gis.beans.SpatialUnitGroupBean;
+import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForSpatialUnitGroupEditor;
 
 /**
- * This map action shows the form of the attributes.
- * 
+ * This map action is used in the control bundle used in the application form. It is used to reset
+ * the application location.
+ *
  * @author Elton Manoku
  */
-public final class AttributeFormShow extends ComponentShow {
+public final class SpatialUnitGroupMerge extends ExtendedAction {
+
+    private final static String MAPACTION_NAME = "SpatialUnitGroupMerge";
+    private ControlsBundleForSpatialUnitGroupEditor controlsBundle;
+
 
     /**
-     * The name of the map action
-     */
-    private final static String MAPACTION_NAME = "AttributeFormShow";
-
-    /**
-     * Constructor of the map action that is used to show the component 
-     * where the spatial unit groups that are selected for edit can be shown.
+     * Constructor of the map action that is used to remove the application location geometry.
      * 
-     * @param mapObj The map control that will be interacting with the map action
-     * @param formToShow The component to show
+     * @param mapControl  The map control with which the map action will interact 
      */
-    public AttributeFormShow(Map mapObj, Component formToShow) {
-        super(mapObj, formToShow, MAPACTION_NAME,
+    public SpatialUnitGroupMerge(ControlsBundleForSpatialUnitGroupEditor mapControl) {
+        super(mapControl.getMap(), MAPACTION_NAME,
                 ((Messaging)Messaging.getInstance()).getMapActionString(
                 String.format("%s.tooltip",MAPACTION_NAME)),
-                "resources/open-attribute-form.png");
+                "resources/spatial-unit-group-merge.png");
+        this.controlsBundle = mapControl;
+    }
+
+    @Override
+    public void onClick() {
+        if (this.controlsBundle.getLayer().getBeanList().size()<2){
+            return;
+        }
+        Geometry mergedGeometry = null;
+        for(Object objectBean:
+                this.controlsBundle.getLayer().getBeanList()){
+            Geometry geom = ((SpatialUnitGroupBean)objectBean).getFeatureGeom();
+            if (mergedGeometry == null){
+                mergedGeometry = geom;
+            }else{
+                mergedGeometry = mergedGeometry.union(geom);
+            }
+        }
+        
+        this.controlsBundle.getLayer().removeAllBeans();
+        this.controlsBundle.getLayer().addFeature(null, mergedGeometry, null, true);
     }
 }
