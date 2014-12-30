@@ -29,14 +29,10 @@
  */
 package org.sola.clients.swing.admin.system;
 
-import java.io.File;
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.ui.ContentPanel;
-import org.sola.clients.swing.ui.FileBrowser;
-import org.sola.common.DateUtility;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 import org.sola.services.boundary.wsclients.WSManager;
@@ -49,8 +45,7 @@ import org.sola.services.boundary.wsclients.exception.WebServiceClientException;
 public class ConsolidationConsolidatePanel extends ContentPanel {
 
     public static final String PANEL_NAME = "ConsolidationConsolidatePanel";
-    private static final String PROCESS_NAME = "consolidate";
-    private static final String BR_NAME_TO_GET_MAXVALUE = "generate-process-progress-consolidate-max";
+    private String processName = "consolidate";
     private static final int PROGRESS_CHECK_INTERVAL_SECONDS = 1;
 
     /**
@@ -62,12 +57,8 @@ public class ConsolidationConsolidatePanel extends ContentPanel {
 
     private void run() {
 
-        //It initiates the progress of the process in the server.
-        WSManager.getInstance().getAdminService().startProcessProgressUsingBr(
-                PROCESS_NAME, BR_NAME_TO_GET_MAXVALUE);
         txtStatus.setText(MessageUtility.getLocalizedMessageText(
                 ClientMessage.ADMIN_CONSOLIDATION_RUNNING));
-        final String fileToUpload = txtExtractionFilePath.getText();
 
         SolaTask taskConsolidate = new SolaTask<Void, Void>() {
             boolean failed = false;
@@ -76,16 +67,16 @@ public class ConsolidationConsolidatePanel extends ContentPanel {
             public Void doTask() {
                 txtLog.setText("");
                 try {
-                    setMessage(MessageUtility.getLocalizedMessageText(
-                            ClientMessage.ADMIN_CONSOLIDATION_CONSOLIDATE_UPLOADING_FILE));
-                    String uploadedFile = WSManager.getInstance().getFileStreamingService().upload(
-                            fileToUpload);
                     WSManager.getInstance().getAdminService().setProcessProgress(
-                            PROCESS_NAME, WSManager.getInstance().getAdminService().getProcessProgress(
-                            PROCESS_NAME, false) + 10);
+                            processName, WSManager.getInstance().getAdminService().getProcessProgress(
+                            processName, false) + 10);
+                    String extractedFile = "";
+                    if (chkRestoreExtractedFile.isSelected()){
+                        extractedFile = txtSourceInServer.getText();                        
+                    }
                     setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.ADMIN_CONSOLIDATION_RUNNING));
                     WSManager.getInstance().getAdminService().consolidationConsolidate(
-                            PROCESS_NAME, uploadedFile, txtPassword.getText());
+                            extractedFile, chkMergeConsolidationSchema.isSelected());
                 } catch (WebServiceClientException ex) {
                     failed = true;
                     txtStatus.setText(ex.getMessage());
@@ -106,7 +97,7 @@ public class ConsolidationConsolidatePanel extends ContentPanel {
                 // It can be that even the process if finished, still the progress bar is not yet 100 percent.
                 // This makes sure. The number 10000 is a number which is the infinite max the 
                 // progress can have
-                WSManager.getInstance().getAdminService().setProcessProgress(PROCESS_NAME, 10000);
+                WSManager.getInstance().getAdminService().setProcessProgress(processName, 10000);
             }
         };
         TaskManager.getInstance().runTask(taskConsolidate);
@@ -118,7 +109,7 @@ public class ConsolidationConsolidatePanel extends ContentPanel {
             public Void doTask() {
                 while (progressValue < 100) {
                     progressValue = WSManager.getInstance().getAdminService().getProcessProgress(
-                            PROCESS_NAME, true);
+                            processName, true);
                     progressBarProcess.setValue(progressValue);
                     try {
                         TimeUnit.SECONDS.sleep(PROGRESS_CHECK_INTERVAL_SECONDS);
@@ -141,14 +132,6 @@ public class ConsolidationConsolidatePanel extends ContentPanel {
         TaskManager.getInstance().setMaximumAllowedNumberOfTasks(maximumAllowedNumberOfTasks);
     }
 
-    private void findAndSetExtractionFile() {
-        File sourceFile = FileBrowser.showFileChooser(this, "zip");
-        if (sourceFile == null) {
-            return;
-        }
-        txtExtractionFilePath.setText(sourceFile.getAbsolutePath());
-    }
-
     /**
      * It retrieves the log of the process.
      * 
@@ -161,7 +144,7 @@ public class ConsolidationConsolidatePanel extends ContentPanel {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.ADMIN_CONSOLIDATION_CONSOLIDATE));
 
                 txtLog.setText(
-                        WSManager.getInstance().getAdminService().getProcessLog(PROCESS_NAME));
+                        WSManager.getInstance().getAdminService().getProcessLog(processName));
                 return null;
             }
 
@@ -192,21 +175,19 @@ public class ConsolidationConsolidatePanel extends ContentPanel {
 
         pnlHeader = new org.sola.clients.swing.ui.HeaderPanel();
         btnStart = new javax.swing.JButton();
-        txtExtractionFilePath = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        btnBrowse = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtLog = new javax.swing.JTextArea();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        txtPassword = new javax.swing.JTextField();
         progressBarProcess = new javax.swing.JProgressBar();
         cmdShowLog = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         txtStatus = new javax.swing.JTextField();
         txtSourceInServer = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        chkRestoreExtractedFile = new javax.swing.JCheckBox();
+        chkMergeConsolidationSchema = new javax.swing.JCheckBox();
 
         setHeaderPanel(pnlHeader);
 
@@ -220,17 +201,7 @@ public class ConsolidationConsolidatePanel extends ContentPanel {
             }
         });
 
-        txtExtractionFilePath.setEditable(false);
-        txtExtractionFilePath.setText(bundle.getString("ConsolidationConsolidatePanel.txtExtractionFilePath.text")); // NOI18N
-
         jLabel2.setText(bundle.getString("ConsolidationConsolidatePanel.jLabel2.text")); // NOI18N
-
-        btnBrowse.setText(bundle.getString("ConsolidationConsolidatePanel.btnBrowse.text")); // NOI18N
-        btnBrowse.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBrowseActionPerformed(evt);
-            }
-        });
 
         txtLog.setEditable(false);
         txtLog.setColumns(20);
@@ -239,10 +210,6 @@ public class ConsolidationConsolidatePanel extends ContentPanel {
         jScrollPane1.setViewportView(txtLog);
 
         jLabel4.setText(bundle.getString("ConsolidationConsolidatePanel.jLabel4.text")); // NOI18N
-
-        jLabel5.setText(bundle.getString("ConsolidationConsolidatePanel.jLabel5.text")); // NOI18N
-
-        txtPassword.setText(bundle.getString("ConsolidationConsolidatePanel.txtPassword.text")); // NOI18N
 
         cmdShowLog.setText(bundle.getString("ConsolidationConsolidatePanel.cmdShowLog.text")); // NOI18N
         cmdShowLog.addActionListener(new java.awt.event.ActionListener() {
@@ -258,79 +225,77 @@ public class ConsolidationConsolidatePanel extends ContentPanel {
 
         txtSourceInServer.setText(bundle.getString("ConsolidationConsolidatePanel.txtSourceInServer.text")); // NOI18N
 
-        jLabel3.setText(bundle.getString("ConsolidationConsolidatePanel.jLabel3.text")); // NOI18N
-
         jLabel7.setText(bundle.getString("ConsolidationConsolidatePanel.jLabel7.text")); // NOI18N
+
+        jLabel1.setText(bundle.getString("ConsolidationConsolidatePanel.jLabel1.text")); // NOI18N
+
+        chkRestoreExtractedFile.setSelected(true);
+        chkRestoreExtractedFile.setText(bundle.getString("ConsolidationConsolidatePanel.chkRestoreExtractedFile.text")); // NOI18N
+        chkRestoreExtractedFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkRestoreExtractedFileActionPerformed(evt);
+            }
+        });
+
+        chkMergeConsolidationSchema.setSelected(true);
+        chkMergeConsolidationSchema.setText(bundle.getString("ConsolidationConsolidatePanel.chkMergeConsolidationSchema.text")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlHeader, javax.swing.GroupLayout.DEFAULT_SIZE, 695, Short.MAX_VALUE)
+            .addComponent(pnlHeader, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(24, 24, 24)
                         .addComponent(jScrollPane1))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(cmdShowLog))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel6)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtStatus))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(btnStart)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(progressBarProcess, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addComponent(btnStart)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(progressBarProcess, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel4)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(chkMergeConsolidationSchema)
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel7)
-                                        .addGap(37, 37, 37))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addGap(18, 18, 18)))
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(txtExtractionFilePath)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(btnBrowse))
-                                    .addComponent(txtSourceInServer))))))
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(chkRestoreExtractedFile)
+                                .addGap(12, 12, 12)
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtSourceInServer, javax.swing.GroupLayout.PREFERRED_SIZE, 373, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(546, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cmdShowLog))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtStatus)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(pnlHeader, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(17, 17, 17)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtSourceInServer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7))
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel1)
+                    .addComponent(chkRestoreExtractedFile))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtExtractionFilePath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnBrowse)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jLabel5)
-                    .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(11, 11, 11)
+                    .addComponent(chkMergeConsolidationSchema))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnStart)
@@ -343,46 +308,48 @@ public class ConsolidationConsolidatePanel extends ContentPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cmdShowLog)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
-        if (txtExtractionFilePath.getText().isEmpty()) {
-            MessageUtility.displayMessage(ClientMessage.ADMIN_CONSOLIDATION_CONSOLIDATE_FILE_MISSING);
+        if (!chkRestoreExtractedFile.isSelected() && !chkMergeConsolidationSchema.isSelected()) {
+            MessageUtility.displayMessage(ClientMessage.ADMIN_CONSOLIDATION_NO_ACTION_SELECTED);
             return;
         }
-        if (txtPassword.getText().isEmpty()) {
-            MessageUtility.displayMessage(ClientMessage.ADMIN_CONSOLIDATION_PASSWORD_MISSING);
+        if (chkRestoreExtractedFile.isSelected() && txtSourceInServer.getText().isEmpty()) {
+            MessageUtility.displayMessage(ClientMessage.ADMIN_CONSOLIDATION_CONSOLIDATE_FILE_MISSING);
             return;
         }
         run();
     }//GEN-LAST:event_btnStartActionPerformed
 
-    private void btnBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseActionPerformed
-        findAndSetExtractionFile();
-    }//GEN-LAST:event_btnBrowseActionPerformed
-
     private void cmdShowLogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdShowLogActionPerformed
         showLog();
     }//GEN-LAST:event_cmdShowLogActionPerformed
+
+    private void chkRestoreExtractedFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkRestoreExtractedFileActionPerformed
+        txtSourceInServer.setEnabled(chkRestoreExtractedFile.isSelected());
+        if (!txtSourceInServer.isEnabled()){
+            txtSourceInServer.setText("");
+        }
+    }//GEN-LAST:event_chkRestoreExtractedFileActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnBrowse;
     private javax.swing.JButton btnStart;
+    private javax.swing.JCheckBox chkMergeConsolidationSchema;
+    private javax.swing.JCheckBox chkRestoreExtractedFile;
     private javax.swing.JButton cmdShowLog;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private org.sola.clients.swing.ui.HeaderPanel pnlHeader;
     private javax.swing.JProgressBar progressBarProcess;
-    private javax.swing.JTextField txtExtractionFilePath;
     private javax.swing.JTextArea txtLog;
-    private javax.swing.JTextField txtPassword;
     private javax.swing.JTextField txtSourceInServer;
     private javax.swing.JTextField txtStatus;
     // End of variables declaration//GEN-END:variables
