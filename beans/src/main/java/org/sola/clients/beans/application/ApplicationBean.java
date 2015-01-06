@@ -559,9 +559,10 @@ public class ApplicationBean extends ApplicationSummaryBean {
         if (requestTypeBean != null && serviceList != null) {
             int order = 0;
 
-            if (this.isFeePaid()) {
-                MessageUtility.displayMessage(ClientMessage.APPLICATION_WARNING_ADDEDSERVICE);
-            }
+           // Soladev - check not required for State Land
+            // if (this.isFeePaid()) {
+            //     MessageUtility.displayMessage(ClientMessage.APPLICATION_WARNING_ADDEDSERVICE);
+            // }
             for (Iterator<ApplicationServiceBean> it = serviceList.iterator(); it.hasNext();) {
                 ApplicationServiceBean applicationServiceBean = it.next();
                 if (applicationServiceBean.getServiceOrder() > order) {

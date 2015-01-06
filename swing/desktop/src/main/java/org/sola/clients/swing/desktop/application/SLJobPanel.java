@@ -284,7 +284,7 @@ public class SLJobPanel extends ContentPanel {
 
         menuApprove.setEnabled(appBean.canApprove()
                 && SecurityBean.isInRole(RolesConstants.APPLICATION_APPROVE));
-        menuCancel.setEnabled(appBean.canCancel()
+        menuCancel.setEnabled((appBean.canCancel() || appBean.canLapse())
                 && SecurityBean.isInRole(RolesConstants.APPLICATION_REJECT));
         menuArchive.setEnabled(appBean.canArchive()
                 && SecurityBean.isInRole(RolesConstants.APPLICATION_ARCHIVE));
@@ -294,10 +294,10 @@ public class SLJobPanel extends ContentPanel {
                 && SecurityBean.isInRole(RolesConstants.APPLICATION_REQUISITE));
         menuResubmit.setEnabled(appBean.canResubmit()
                 && SecurityBean.isInRole(RolesConstants.APPLICATION_RESUBMIT));
-        menuLapse.setEnabled(appBean.canLapse()
-                && SecurityBean.isInRole(RolesConstants.APPLICATION_WITHDRAW));
-        menuWithdraw.setEnabled(appBean.canWithdraw()
-                && SecurityBean.isInRole(RolesConstants.APPLICATION_WITHDRAW));
+//        menuLapse.setEnabled(appBean.canLapse()
+//                && SecurityBean.isInRole(RolesConstants.APPLICATION_WITHDRAW));
+//        menuWithdraw.setEnabled(appBean.canWithdraw()
+//                && SecurityBean.isInRole(RolesConstants.APPLICATION_WITHDRAW));
         btnPrintStatusReport.setEnabled(appBean.getRowVersion() > 0
                 && SecurityBean.isInRole(RolesConstants.APPLICATION_PRINT_STATUS_REPORT));
 
@@ -1202,8 +1202,6 @@ public class SLJobPanel extends ContentPanel {
         popupApplicationActions = new javax.swing.JPopupMenu();
         menuApprove = new javax.swing.JMenuItem();
         menuCancel = new javax.swing.JMenuItem();
-        menuWithdraw = new javax.swing.JMenuItem();
-        menuLapse = new javax.swing.JMenuItem();
         menuRequisition = new javax.swing.JMenuItem();
         menuResubmit = new javax.swing.JMenuItem();
         menuDispatch = new javax.swing.JMenuItem();
@@ -1401,26 +1399,6 @@ public class SLJobPanel extends ContentPanel {
             }
         });
         popupApplicationActions.add(menuCancel);
-
-        menuWithdraw.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/withdraw.png"))); // NOI18N
-        menuWithdraw.setText(bundle.getString("SLJobPanel.menuWithdraw.text")); // NOI18N
-        menuWithdraw.setName("menuWithdraw"); // NOI18N
-        menuWithdraw.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuWithdrawActionPerformed(evt);
-            }
-        });
-        popupApplicationActions.add(menuWithdraw);
-
-        menuLapse.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/lapse.png"))); // NOI18N
-        menuLapse.setText(bundle.getString("SLJobPanel.menuLapse.text")); // NOI18N
-        menuLapse.setName("menuLapse"); // NOI18N
-        menuLapse.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuLapseActionPerformed(evt);
-            }
-        });
-        popupApplicationActions.add(menuLapse);
 
         menuRequisition.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/requisition.png"))); // NOI18N
         menuRequisition.setText(bundle.getString("SLJobPanel.menuRequisition.text")); // NOI18N
@@ -2408,14 +2386,6 @@ public class SLJobPanel extends ContentPanel {
         rejectApplication();
     }//GEN-LAST:event_menuCancelActionPerformed
 
-    private void menuWithdrawActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuWithdrawActionPerformed
-        withdrawApplication();
-    }//GEN-LAST:event_menuWithdrawActionPerformed
-
-    private void menuLapseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuLapseActionPerformed
-        lapseApplication();
-    }//GEN-LAST:event_menuLapseActionPerformed
-
     private void menuRequisitionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRequisitionActionPerformed
         requisitionApplication();
     }//GEN-LAST:event_menuRequisitionActionPerformed
@@ -2617,7 +2587,6 @@ public class SLJobPanel extends ContentPanel {
     private javax.swing.JMenuItem menuCancelService;
     private javax.swing.JMenuItem menuCompleteService;
     private javax.swing.JMenuItem menuDispatch;
-    private javax.swing.JMenuItem menuLapse;
     private javax.swing.JMenuItem menuMoveServiceDown;
     private javax.swing.JMenuItem menuMoveServiceUp;
     private org.sola.clients.swing.common.menuitems.MenuRemove menuRemoveParcel;
@@ -2627,7 +2596,6 @@ public class SLJobPanel extends ContentPanel {
     private javax.swing.JMenuItem menuRevertService;
     private javax.swing.JMenuItem menuStartService;
     private javax.swing.JMenuItem menuViewService;
-    private javax.swing.JMenuItem menuWithdraw;
     private org.sola.clients.beans.party.PartySummaryListBean partySummaryList;
     private org.sola.clients.swing.ui.HeaderPanel pnlHeader;
     private javax.swing.JPopupMenu popUpParcels;
