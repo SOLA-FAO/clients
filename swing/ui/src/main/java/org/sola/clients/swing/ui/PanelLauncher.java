@@ -57,12 +57,12 @@ import org.sola.common.messaging.MessageUtility;
  * @author soladev
  */
 public final class PanelLauncher {
-    
+
     private PanelLauncher() {
     }
-    
+
     private static class PanelLauncherHolder {
-        
+
         private static final PanelLauncher INSTANCE = new PanelLauncher();
     }
 
@@ -103,7 +103,7 @@ public final class PanelLauncher {
                 Class<?> panelClass = Class.forName(bean.getPanelClass());
                 if (constructorArgs != null && constructorArgs.length > 0) {
                     List<Class<?>> constructorClasses = new ArrayList<Class<?>>();
-                    List<Object> arguments = new ArrayList<Object>();                    
+                    List<Object> arguments = new ArrayList<Object>();
                     for (Object arg : constructorArgs) {
                         // Determine the class of each constructor argument. Note that primitive
                         // types are boxed, so boolean becomes Boolean. If the arg is null then
@@ -170,22 +170,17 @@ public final class PanelLauncher {
                     if (bean.getMessageCode() != null) {
                         setMessage(MessageUtility.getLocalizedMessageText(bean.getMessageCode()));
                     }
-                    if (mainPanel.isPanelOpened(bean.getCardName())) {
-                        mainPanel.showPanel(bean.getCardName());
-                        result[0] = true;
-                    } else {
-                        ContentPanel panel = getInstance().createPanel(panelLauncherCode, constructorArgs);
-                        if (panel != null) {
-                            if (panelListener != null) {
-                                panel.addPropertyChangeListener(panelListener);
-                            }
-                            mainPanel.addPanel(panel, bean.getCardName(), true);
-                            result[0] = true;
+                    ContentPanel panel = getInstance().createPanel(panelLauncherCode, constructorArgs);
+                    if (panel != null) {
+                        if (panelListener != null) {
+                            panel.addPropertyChangeListener(panelListener);
                         }
+                        mainPanel.addPanel(panel, bean.getCardName(), true);
+                        result[0] = true;
                     }
                     return null;
                 }
-                
+
                 @Override
                 protected void taskDone() {
                     if (result[0]) {
