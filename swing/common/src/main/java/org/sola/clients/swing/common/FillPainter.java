@@ -39,16 +39,13 @@ class FillPainter implements Painter<JComponent> {
 
     FillPainter(Color c) {
         color = c;
-        System.out.println("COLOR OUTSIDE PAINT" + color);
-
+   
     }
 
     @Override
     public void paint(Graphics2D g, JComponent object, int width, int height) {
         g.setColor(color);
         g.fillRect(0, 0, width - 1, height - 1);
-        
-        System.out.println("COLOR INSIDE PAINT" + color);
     }
     
     

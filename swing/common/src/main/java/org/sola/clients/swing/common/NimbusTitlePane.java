@@ -73,7 +73,10 @@ public class NimbusTitlePane extends JComponent {
     /**
      * Button used to trigger popup menu display.
      */
-    private JButton menuButton;
+//    private JButton menuButton;
+    
+     private JLabel menuButton;
+    
     
     /**
      * Action used to close the Window.
@@ -316,7 +319,11 @@ public class NimbusTitlePane extends JComponent {
      */
     private void installDefaults() {
         setFont(UIManager.getFont("InternalFrame.titleFont", getLocale()));
-        setPreferredSize(UIManager.getDimension("FrameTitlePane.dimension"));
+//        setPreferredSize(UIManager.getDimension("FrameTitlePane.dimension"));
+        UIManager.getDimension("FrameTitlePane.dimension").setSize(63, 36);
+         setPreferredSize(UIManager.getDimension("FrameTitlePane.dimension"));
+       
+        
     }
 
     /**
@@ -432,6 +439,15 @@ public class NimbusTitlePane extends JComponent {
         button.setOpaque(false);
         return button;
     }
+    
+    private JLabel createTitleLabel() {
+        JLabel label = new JLabel();
+
+//        label.setFocusPainted(false);
+        label.setFocusable(false);
+        label.setOpaque(false);
+        return label;
+    }
 
     /**
      * Creates the Buttons that will be placed on the TitlePane.
@@ -448,7 +464,7 @@ public class NimbusTitlePane extends JComponent {
         
         if (getWindowDecorationStyle() == JRootPane.FRAME) {
             maximizeIcon = new NimbusTitlePaneIcon("InternalFrame:InternalFrameTitlePane:\"InternalFrameTitlePane.maximizeButton\"", "backgroundPainter", this, 19, 18);
-            menuIcon = new NimbusTitlePaneIcon("InternalFrame:InternalFrameTitlePane:\"InternalFrameTitlePane.menuButton\"", "iconPainter", this, 19, 18);
+            menuIcon = new NimbusTitlePaneIcon("InternalFrame:InternalFrameTitlePane:\"InternalFrameTitlePane.menuButton\"", "iconPainter", this, 63,36);
         
             iconifyButton = createTitleButton();
             iconifyButton.setAction(iconifyAction);
@@ -467,18 +483,20 @@ public class NimbusTitlePane extends JComponent {
                                            "Maximize");
             toggleButton.setIcon(maximizeIcon);
             
-            menuButton = createTitleButton();
-            menuButton.setAction(new AbstractAction() {
-
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    popupMenu.show(menuButton, 0, menuButton.getHeight());
-                }
-            });
+            menuButton = createTitleLabel();
+//            menuButton.setAction(new AbstractAction() {
+//
+//                @Override
+//                public void actionPerformed(ActionEvent e) {
+//                    popupMenu.show(menuButton, 0, menuButton.getHeight());
+//                }
+//            });
             menuButton.putClientProperty("paintActive", Boolean.TRUE);
-            menuButton.setBorder(handyEmptyBorder);
-            menuButton.putClientProperty(AccessibleContext.ACCESSIBLE_NAME_PROPERTY,
-                                           "Menu");
+//            menuButton.setBorder(handyEmptyBorder);
+//             menuButton.setBorderPainted(false);
+//            menuButton.putClientProperty(AccessibleContext.ACCESSIBLE_NAME_PROPERTY,
+//                                           "Menu");
+            menuButton.setBackground(new Color (33,90,100));
             
             
             URL imgURL = this.getClass().getResource("/images/common/sola_icon.png");
@@ -873,9 +891,11 @@ public class NimbusTitlePane extends JComponent {
             // these dimensions include the borders
 
             spacing = 5;
-            x = leftToRight ? spacing : w - buttonWidth - spacing;
+//            x = leftToRight ? spacing : w - buttonWidth - spacing;
+            x = leftToRight ? spacing : w - 63 - spacing;
             if (menuButton != null) {
-                menuButton.setBounds(x, y, buttonWidth, buttonHeight);
+//                menuButton.setBounds(x, y, buttonWidth, buttonHeight);
+                menuButton.setBounds(x, y, 63, 36);
             }
 
             x = leftToRight ? w : 0;

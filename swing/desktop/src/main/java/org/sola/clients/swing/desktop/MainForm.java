@@ -297,7 +297,10 @@ public class MainForm extends javax.swing.JFrame {
         int w = z / yT ;
         String pad = "";
         pad = String.format("%" + w + "s", pad);
-        this.setTitle(" Registry"+pad + this.getTitle());
+        String pre = "";
+        pre = String.format("%" + 15 + "s", pre);
+        
+        this.setTitle(pre+"Registry"+pad + this.getTitle());
 
     }
 

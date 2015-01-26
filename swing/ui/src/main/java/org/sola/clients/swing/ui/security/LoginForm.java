@@ -56,8 +56,10 @@ public class LoginForm extends javax.swing.JFrame {
         this.setIconImage(new ImageIcon(LoginForm.class.getResource("/images/common/key.png")).getImage());
         
         
-        
-        this.setTitle(this.getTitle());
+        String pre = "";
+        pre = String.format("%" + 15 + "s", pre);
+        this.setTitle(pre+this.getTitle());
+//        this.setTitle(this.getTitle());
         loginPanel.addPropertyChangeListener(new PropertyChangeListener() {
 
             @Override
