@@ -109,7 +109,6 @@ public class SysRegManagementParamsForm extends javax.swing.JDialog {
         sysRegStatusBean = new org.sola.clients.beans.systematicregistration.SysRegStatusBean();
         sysRegProgressBean = new org.sola.clients.beans.systematicregistration.SysRegProgressBean();
         sysRegGenderBean = new org.sola.clients.beans.systematicregistration.SysRegGenderBean();
-        labHeader = new javax.swing.JLabel();
         txtFromDate = new javax.swing.JFormattedTextField();
         btnShowCalendarFrom = new javax.swing.JButton();
         labFromDate = new javax.swing.JLabel();
@@ -121,18 +120,13 @@ public class SysRegManagementParamsForm extends javax.swing.JDialog {
         viewReport = new javax.swing.JButton();
         statusPanel = new javax.swing.JPanel();
         taskPanel1 = new org.sola.clients.swing.common.tasks.TaskPanel();
+        labHeader = new org.sola.clients.swing.ui.GroupPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        labHeader.setBackground(new java.awt.Color(255, 153, 0));
-        labHeader.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        labHeader.setForeground(new java.awt.Color(255, 255, 255));
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/reports/Bundle"); // NOI18N
-        labHeader.setText(bundle.getString("SysRegManagementParamsForm.labHeader.text")); // NOI18N
-        labHeader.setOpaque(true);
-
         txtFromDate.setFont(new java.awt.Font("Tahoma", 0, 12));
         txtFromDate.setFormatterFactory(FormattersFactory.getInstance().getDateFormatterFactory());
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/reports/Bundle"); // NOI18N
         txtFromDate.setToolTipText(bundle.getString("SysRegManagementParamsForm.txtFromDate.toolTipText")); // NOI18N
         txtFromDate.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
         txtFromDate.setHorizontalAlignment(JTextField.LEADING);
@@ -190,42 +184,51 @@ public class SysRegManagementParamsForm extends javax.swing.JDialog {
             statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(statusPanelLayout.createSequentialGroup()
                 .addGap(248, 248, 248)
-                .addComponent(taskPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE))
+                .addComponent(taskPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE))
         );
         statusPanelLayout.setVerticalGroup(
             statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(taskPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 20, Short.MAX_VALUE)
         );
 
+        labHeader.setTitleText(bundle.getString("SysRegManagementParamsForm.labHeader.titleText")); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(labHeader, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
+            .addComponent(statusPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 520, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(labFromDate, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(98, 98, 98)
-                .addComponent(labToDate))
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(txtFromDate, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnShowCalendarFrom)
-                .addGap(40, 40, 40)
-                .addComponent(txtToDate, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnShowCalendarTo))
-            .addComponent(labSearchArea)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(cadastreObjectSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(viewReport))
-            .addComponent(statusPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(labFromDate, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(98, 98, 98)
+                        .addComponent(labToDate))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(txtFromDate, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnShowCalendarFrom)
+                        .addGap(40, 40, 40)
+                        .addComponent(txtToDate, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnShowCalendarTo))
+                    .addComponent(labSearchArea)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(cadastreObjectSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(viewReport)))
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(labHeader, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(labHeader)
-                .addGap(19, 19, 19)
+                .addGap(9, 9, 9)
+                .addComponent(labHeader, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -243,7 +246,7 @@ public class SysRegManagementParamsForm extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cadastreObjectSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(viewReport))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 143, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 136, Short.MAX_VALUE)
                 .addComponent(statusPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -343,7 +346,7 @@ public class SysRegManagementParamsForm extends javax.swing.JDialog {
     private javax.swing.JButton btnShowCalendarTo;
     private org.sola.clients.swing.ui.cadastre.LocationSearch cadastreObjectSearch;
     private javax.swing.JLabel labFromDate;
-    private javax.swing.JLabel labHeader;
+    private org.sola.clients.swing.ui.GroupPanel labHeader;
     private javax.swing.JLabel labSearchArea;
     private javax.swing.JLabel labToDate;
     private org.sola.clients.beans.systematicregistration.SysRegManagementParamsBean searchParams;

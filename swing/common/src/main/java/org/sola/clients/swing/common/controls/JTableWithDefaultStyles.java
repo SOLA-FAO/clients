@@ -61,33 +61,28 @@ public class JTableWithDefaultStyles extends JTable {
     public JTableWithDefaultStyles() {
         this.setAutoCreateRowSorter(true);
 
-//        defaultBackground = new Color(226, 244, 224);
-//        oddRowColor=new Color(236,247,235);
-//        this.setSelectionBackground(new java.awt.Color(185, 227, 185));
-//        this.setSelectionForeground(new java.awt.Color(0, 102, 51));
-//        this.setGridColor(new java.awt.Color(166, 212, 150));
         Object newFirstRow = "Table.alternateRowColor";
         Color newFRColor = UIManager.getColor(newFirstRow);
         defaultBackground = newFRColor;
 
-//        Object newSecondRow = "Table.background";
-        Object newSecondRow = "PasswordField.background";
+        Object newSecondRow = "Table.alternateRowColor";
         Color newSRColor = UIManager.getColor(newSecondRow);
         oddRowColor = newSRColor;
-//        
-//        
-////        Object newSelectedRow = "Table[Enabled+Selected].textBackground";
-        Object newSelectedRow = "List.background";
+
+        Object newSelectedRow = "paleSolaGrey";
         Color newSelColor = UIManager.getColor(newSelectedRow);
-//        this.setSelectionBackground( UIManager.getColor(newSelectedRow));
         this.setSelectionBackground(newSelColor);
 //        
 ////        Object newSelForecolor = "TableSelForeColor";
         Object newSelForecolor = "List.foreground";
         Color newSelFore = UIManager.getColor(newSelForecolor);
-////        this.setSelectionForeground( UIManager.getColor(newSelForecolor));
         this.setSelectionForeground(newSelFore);
         this.setGridColor(newSelFore);
+        this.tableHeader.setForeground(UIManager.getColor(newSecondRow));
+        
+//        Object newHeaderBackcolor = "nimbusGreen";
+//        this.tableHeader.setBackground(UIManager.getColor(newHeaderBackcolor));
+    
 //
 //        
 //        
@@ -141,7 +136,7 @@ public class JTableWithDefaultStyles extends JTable {
                     comp.setBackground(oddRowColor);
                 } else {
                     if (!isCellSelected(Index_row, Index_col)) {
-                        comp.setBackground(defaultBackground);
+                        comp.setBackground(oddRowColor);
                     }
                 }
             }

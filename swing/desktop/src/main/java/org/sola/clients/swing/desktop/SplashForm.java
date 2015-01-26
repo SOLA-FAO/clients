@@ -43,8 +43,12 @@ public class SplashForm extends javax.swing.JWindow {
         setName("Form"); // NOI18N
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/sola/2splash_desktop_client.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/sola/sola_icon.jpg"))); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/Bundle"); // NOI18N
+        jLabel1.setText(bundle.getString("SplashForm.jLabel1.text")); // NOI18N
+        jLabel1.setToolTipText(bundle.getString("SplashForm.jLabel1.toolTipText")); // NOI18N
         jLabel1.setAlignmentY(0.0F);
+        jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(33, 124, 149), 5));
         jLabel1.setIconTextGap(0);
         jLabel1.setName("jLabel1"); // NOI18N
 

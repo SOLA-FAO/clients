@@ -172,7 +172,6 @@ public class SysRegListingParamsForm extends javax.swing.JDialog {
         stateLandListingListBean = new org.sola.clients.beans.systematicregistration.StateLandListingListBean();
         sourceBean = new org.sola.clients.beans.source.SourceBean();
         documentPanel = new org.sola.clients.swing.ui.source.DocumentPanel();
-        labHeader = new javax.swing.JLabel();
         labNotificationFrom = new javax.swing.JLabel();
         txtFromDate = new javax.swing.JFormattedTextField();
         labNotificationTo = new javax.swing.JLabel();
@@ -181,16 +180,11 @@ public class SysRegListingParamsForm extends javax.swing.JDialog {
         labLocation = new javax.swing.JLabel();
         btnShowCalendarFrom = new javax.swing.JButton();
         cadastreObjectSearch = new org.sola.clients.swing.ui.cadastre.LocationSearch();
+        labHeader = new org.sola.clients.swing.ui.GroupPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        labHeader.setBackground(new java.awt.Color(255, 153, 0));
-        labHeader.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        labHeader.setForeground(new java.awt.Color(255, 255, 255));
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/reports/Bundle"); // NOI18N
-        labHeader.setText(bundle.getString("SysRegListingParamsForm.labHeader.text")); // NOI18N
-        labHeader.setOpaque(true);
-
         labNotificationFrom.setText(bundle.getString("SysRegListingParamsForm.labNotificationFrom.text")); // NOI18N
 
         txtFromDate.setFont(new java.awt.Font("Tahoma", 0, 12));
@@ -234,15 +228,17 @@ public class SysRegListingParamsForm extends javax.swing.JDialog {
 
         cadastreObjectSearch.setText(bundle.getString("SysRegListingParamsForm.cadastreObjectSearch.text")); // NOI18N
 
+        labHeader.setTitleText(bundle.getString("SysRegListingParamsForm.labHeader.titleText")); // NOI18N
+        labHeader.setVerifyInputWhenFocusTarget(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(labHeader, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(114, 114, 114)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(labLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -262,15 +258,19 @@ public class SysRegListingParamsForm extends javax.swing.JDialog {
                                             .addComponent(txtToDate, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                             .addComponent(cadastreObjectSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(viewReport)))
-                .addContainerGap(11, Short.MAX_VALUE))
+                        .addComponent(viewReport)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(labHeader, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(labHeader)
-                .addGap(28, 28, 28)
+                .addComponent(labHeader, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(labNotificationFrom)
                     .addComponent(labNotificationTo))
@@ -289,7 +289,6 @@ public class SysRegListingParamsForm extends javax.swing.JDialog {
                 .addContainerGap(152, Short.MAX_VALUE))
         );
 
-        labHeader.getAccessibleContext().setAccessibleName(bundle.getString("SysRegListingParamsForm.labHeader.text")); // NOI18N
         labNotificationFrom.getAccessibleContext().setAccessibleName(bundle.getString("SysRegListingParamsForm.labNotificationFrom.text")); // NOI18N
         labNotificationTo.getAccessibleContext().setAccessibleName(bundle.getString("SysRegListingParamsForm.labNotificationTo.text")); // NOI18N
         viewReport.getAccessibleContext().setAccessibleName(bundle.getString("SysRegListingParamsForm.viewReport.text")); // NOI18N
@@ -448,7 +447,7 @@ public class SysRegListingParamsForm extends javax.swing.JDialog {
     private org.sola.clients.beans.cadastre.CadastreObjectBean cadastreObjectBean;
     private org.sola.clients.swing.ui.cadastre.LocationSearch cadastreObjectSearch;
     private org.sola.clients.swing.ui.source.DocumentPanel documentPanel;
-    private javax.swing.JLabel labHeader;
+    private org.sola.clients.swing.ui.GroupPanel labHeader;
     private javax.swing.JLabel labLocation;
     private javax.swing.JLabel labNotificationFrom;
     private javax.swing.JLabel labNotificationTo;
