@@ -298,7 +298,7 @@ public class MainForm extends javax.swing.JFrame {
         String pad = "";
         pad = String.format("%" + w + "s", pad);
         String pre = "";
-        pre = String.format("%" + 15 + "s", pre);
+        pre = String.format("%" + 8 + "s", pre);
         
         this.setTitle(pre+"Registry"+pad + this.getTitle());
 

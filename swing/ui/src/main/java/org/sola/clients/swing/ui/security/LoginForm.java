@@ -57,9 +57,8 @@ public class LoginForm extends javax.swing.JFrame {
         
         
         String pre = "";
-        pre = String.format("%" + 15 + "s", pre);
+        pre = String.format("%" + 8 + "s", pre);
         this.setTitle(pre+this.getTitle());
-//        this.setTitle(this.getTitle());
         loginPanel.addPropertyChangeListener(new PropertyChangeListener() {
 
             @Override
