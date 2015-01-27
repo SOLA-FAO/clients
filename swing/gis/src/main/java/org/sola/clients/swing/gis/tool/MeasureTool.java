@@ -28,6 +28,7 @@
 package org.sola.clients.swing.gis.tool;
 
 import com.vividsolutions.jts.geom.Geometry;
+import java.awt.Color;
 import java.text.DecimalFormat;
 import org.geotools.geometry.jts.Geometries;
 import org.geotools.swing.extended.util.Messaging;
@@ -52,6 +53,7 @@ public class MeasureTool extends ExtendedDrawTool {
         this.setToolName(NAME);
         this.setToolTip(toolTip);
         this.setIconImage("resources/ruler.png");
+        this.setStyleTemporaryLinesColor(Color.YELLOW);
     }
 
     /** Triggered when the user double clicks to complete the measure

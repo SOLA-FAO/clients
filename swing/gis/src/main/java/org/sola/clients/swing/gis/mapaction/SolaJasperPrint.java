@@ -40,7 +40,7 @@ import org.geotools.swing.mapaction.extended.print.PrintLayout;
 import org.sola.clients.beans.application.ApplicationServiceBean;
 import org.sola.clients.beans.referencedata.RequestTypeBean;
 import org.sola.clients.reports.ReportManager;
-import org.sola.clients.swing.ui.reports.ReportViewerPanel;
+import org.sola.clients.swing.ui.reports.ReportViewerForm;
 import org.sola.clients.swing.ui.reports.SaveFormat;
 
 /**
@@ -177,7 +177,7 @@ public class SolaJasperPrint extends Print {
         Object dataBean = new Object();
 
         //   This is to call the report generation         
-        ReportViewerPanel form = new ReportViewerPanel(
+        ReportViewerForm form = new ReportViewerForm(
                 ReportManager.getSolaPrintReport(
                 fileName, dataBean, mapImageLocation, scalebarImageLocation));
         form.setSaveFormats(SaveFormat.Pdf, SaveFormat.Docx, SaveFormat.Odt, SaveFormat.Html);

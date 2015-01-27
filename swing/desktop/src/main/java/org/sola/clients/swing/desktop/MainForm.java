@@ -806,7 +806,6 @@ public class MainForm extends javax.swing.JFrame {
         fileMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem menuExitItem = new javax.swing.JMenuItem();
         menuFlushCache = new javax.swing.JMenuItem();
-        menuSpatialEditMap = new javax.swing.JMenuItem();
         menuView = new javax.swing.JMenu();
         menuLanguage = new javax.swing.JMenu();
         menuLogLevel = new javax.swing.JMenu();
@@ -985,14 +984,6 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         fileMenu.add(menuFlushCache);
-
-        menuSpatialEditMap.setText(bundle.getString("MainForm.menuSpatialEditMap.text")); // NOI18N
-        menuSpatialEditMap.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuSpatialEditMapActionPerformed(evt);
-            }
-        });
-        fileMenu.add(menuSpatialEditMap);
 
         menuBar.add(fileMenu);
 
@@ -1251,10 +1242,6 @@ public class MainForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_menuFlushCacheActionPerformed
 
-    private void menuSpatialEditMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSpatialEditMapActionPerformed
-       openMapSpatialUnitEditor();
-    }//GEN-LAST:event_menuSpatialEditMapActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToolBar applicationsMain;
     private javax.swing.JButton btnDocumentSearch;
@@ -1289,7 +1276,6 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenu menuSearch;
     private javax.swing.JMenuItem menuSearchApplication;
     private javax.swing.JMenuItem menuShowMap;
-    private javax.swing.JMenuItem menuSpatialEditMap;
     private javax.swing.JMenu menuView;
     private org.sola.clients.swing.ui.MainContentPanel pnlContent;
     private javax.swing.JPanel statusPanel;
