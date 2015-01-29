@@ -27,17 +27,20 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-package org.sola.clients.swing.common;
+package org.sola.clients.swing.common.laf;
 
+import org.sola.clients.swing.common.laf.NimbusFrameBorder;
+import org.sola.clients.swing.common.laf.NimbusRootPaneUI;
 import java.awt.Dimension;
 import javax.swing.UIDefaults;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
 /**
- *
- * 
- */
+* Sourced from https://weblogs.java.net/blogs/Anthra
+* @author Brennenraedts Benjamin
+*/
+
 public class AdvancedNimbusLookAndFeel extends NimbusLookAndFeel{
      
     private UIDefaults uiDefaults;

@@ -27,7 +27,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-package org.sola.clients.swing.common;
+package org.sola.clients.swing.common.laf;
 
 import java.awt.Button;
 import java.awt.Color;

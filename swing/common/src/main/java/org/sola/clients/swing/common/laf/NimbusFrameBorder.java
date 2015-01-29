@@ -27,7 +27,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-package org.sola.clients.swing.common;
+package org.sola.clients.swing.common.laf;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -47,6 +47,11 @@ import javax.swing.plaf.UIResource;
  * Border for Nimbus Frame
  * 
  */
+/**
+* Sourced from https://weblogs.java.net/blogs/Anthra
+* @author Brennenraedts Benjamin
+*/
+
 public class NimbusFrameBorder extends AbstractBorder implements UIResource {
 
     private static final Insets defaultInsets = new Insets(2, 5, 5, 5);

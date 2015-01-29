@@ -27,7 +27,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-package org.sola.clients.swing.common;
+package org.sola.clients.swing.common.laf;
 
 import javax.swing.Painter;
 import sun.swing.plaf.synth.SynthIcon;
@@ -46,6 +46,12 @@ import javax.swing.plaf.synth.SynthConstants;
  * Extracted from nimbus look and feel then transformed to load InternalFrame 
  * icon's with partial Synth Context
  */
+
+/**
+* Sourced from https://weblogs.java.net/blogs/Anthra
+* @author Brennenraedts Benjamin
+*/
+
 public class NimbusTitlePaneIcon extends SynthIcon {
     private final int width;
     private final int height;

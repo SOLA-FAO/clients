@@ -27,7 +27,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-package org.sola.clients.swing.common;
+package org.sola.clients.swing.common.laf;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -55,6 +55,11 @@ import sun.swing.SwingUtilities2;
  *
  * 
  */
+/**
+* Sourced from https://weblogs.java.net/blogs/Anthra
+* @author Brennenraedts Benjamin
+*/
+
 public class NimbusTitlePane extends JComponent {
     private static final Border handyEmptyBorder = new EmptyBorder(0,0,0,0);
     private static final int IMAGE_HEIGHT = 18;

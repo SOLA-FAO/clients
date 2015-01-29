@@ -49,7 +49,7 @@ import org.sola.clients.beans.source.PowerOfAttorneyBean;
 import org.sola.clients.beans.system.LanguageBean;
 import org.sola.clients.beans.system.LanguageListBean;
 import org.sola.clients.swing.common.DefaultExceptionHandler;
-import org.sola.clients.swing.common.LafManager;
+import org.sola.clients.swing.common.laf.LafManager;
 import org.sola.clients.swing.ui.localization.LocalizationManager;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
@@ -184,7 +184,7 @@ public class MainForm extends javax.swing.JFrame {
 
         initComponents();
         LocalizationTools.setOrientation(this);
-        this.setTitle("SOLA Registry Desktop - " + LocalizationManager.getVersionNumber());
+        this.setTitle(this.getTitle() + LocalizationManager.getVersionNumber());
         
         this.addWindowListener(new java.awt.event.WindowAdapter() {
 
@@ -288,19 +288,12 @@ public class MainForm extends javax.swing.JFrame {
 
         this.applicationsMain.setBackground(Color.white);
         this.applicationsMain.setUI((ToolBarUI)UIManager.getUI(this.applicationsMain));
-        
-        Font f = this.getFont();
-        FontMetrics fm = this.getFontMetrics(f);
-        int xT = fm.stringWidth(this.getTitle());
-        int yT = fm.stringWidth(" ");
-        int z = this.getWidth() / 2 - (xT / 2);
-        int w = z / yT ;
-        String pad = "";
-        pad = String.format("%" + w + "s", pad);
+         
+        // shift the title text on the right of the Registry Icon Image
         String pre = "";
         pre = String.format("%" + 8 + "s", pre);
-        
-        this.setTitle(pre+"Registry"+pad + this.getTitle());
+       //  put the obtained number of blanks before the title text
+        this.setTitle(pre+this.getTitle());
 
     }
 

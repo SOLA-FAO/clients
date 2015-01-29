@@ -56,9 +56,12 @@ public class LoginForm extends javax.swing.JFrame {
         this.setIconImage(new ImageIcon(LoginForm.class.getResource("/images/common/key.png")).getImage());
         
         
+         // shift the title text on the right of the Registry Icon Image
         String pre = "";
         pre = String.format("%" + 8 + "s", pre);
+       //  put the obtained number of blanks before the title text
         this.setTitle(pre+this.getTitle());
+
         loginPanel.addPropertyChangeListener(new PropertyChangeListener() {
 
             @Override

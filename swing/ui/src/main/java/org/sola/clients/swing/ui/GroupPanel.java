@@ -31,7 +31,7 @@ package org.sola.clients.swing.ui;
 
 import java.awt.Color;
 import javax.swing.UIManager;
-import org.sola.clients.swing.common.LafManager;
+import org.sola.clients.swing.common.laf.LafManager;
 
 /**
  * Decorative groups separation panel
@@ -63,7 +63,9 @@ public class GroupPanel extends javax.swing.JPanel {
     private void customizeComponents() {
 //    LABELS    
         LafManager.getInstance().setLabProperties(lblGroupTitle);
-        lblGroupTitle.setForeground(new java.awt.Color(255, 255, 255));
+        Object newForeground = "textHighlight";
+        Color newForegroundColor = UIManager.getColor(newForeground);
+        lblGroupTitle.setForeground(newForegroundColor);
         lblGroupTitle.setFont(lblGroupTitle.getFont().deriveFont(lblGroupTitle.getFont().getStyle() | java.awt.Font.BOLD, lblGroupTitle.getFont().getSize()));
         Object newSelectedRow = "SolaGrey";
         Color newSelColor = UIManager.getColor(newSelectedRow);

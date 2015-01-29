@@ -27,7 +27,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-package org.sola.clients.swing.common;
+package org.sola.clients.swing.common.laf;
 
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
@@ -68,6 +68,11 @@ import java.security.*;
  * 
  * 
  */
+/**
+* Sourced from https://weblogs.java.net/blogs/Anthra
+* @author Brennenraedts Benjamin
+*/
+
 public class NimbusRootPaneUI extends BasicRootPaneUI
 {
     /**

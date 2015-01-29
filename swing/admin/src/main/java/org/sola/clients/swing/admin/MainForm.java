@@ -50,7 +50,7 @@ import org.sola.clients.swing.admin.system.BrManagementPanel;
 import org.sola.clients.swing.admin.system.ConsolidationConsolidatePanel;
 import org.sola.clients.swing.admin.system.ConsolidationExtractPanel;
 import org.sola.clients.swing.common.DefaultExceptionHandler;
-import org.sola.clients.swing.common.LafManager;
+import org.sola.clients.swing.common.laf.LafManager;
 import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.clients.swing.ui.localization.LocalizationManager;
 import org.sola.clients.swing.ui.reports.ReportViewerForm;
@@ -74,9 +74,8 @@ public class MainForm extends javax.swing.JFrame {
      */
     public MainForm() {
         initComponents();
-
-        this.setTitle("SOLA Admin - " + LocalizationManager.getVersionNumber());
-
+        this.setTitle(this.getTitle() + LocalizationManager.getVersionNumber());
+       
         URL imgURL = this.getClass().getResource("/images/common/admin.png");
         this.setIconImage(new ImageIcon(imgURL).getImage());
         lblUserName.setText(SecurityBean.getCurrentUser().getUserName());
@@ -198,6 +197,11 @@ public class MainForm extends javax.swing.JFrame {
             this.setSize(width, height);
         }
         this.setLocation(x, y);
+          // shift the title text on the right of the Registry Icon Image
+        String pre = "";
+        pre = String.format("%" + 8 + "s", pre);
+       //  put the obtained number of blanks before the title text
+        this.setTitle(pre+this.getTitle());
     }
 
     /**
@@ -1130,7 +1134,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
-    private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JToolBar.Separator jSeparator4;
     private javax.swing.JLabel lblUserName;
     private org.sola.clients.swing.ui.MainContentPanel mainContentPanel;
     private javax.swing.JMenuBar mainMenu;
