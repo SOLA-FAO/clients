@@ -67,7 +67,7 @@ public class GroupPanel extends javax.swing.JPanel {
         Color newForegroundColor = UIManager.getColor(newForeground);
         lblGroupTitle.setForeground(newForegroundColor);
         lblGroupTitle.setFont(lblGroupTitle.getFont().deriveFont(lblGroupTitle.getFont().getStyle() | java.awt.Font.BOLD, lblGroupTitle.getFont().getSize()));
-        Object newSelectedRow = "SolaGrey";
+        Object newSelectedRow = "SolaGroup";
         Color newSelColor = UIManager.getColor(newSelectedRow);
         this.setBackground(newSelColor);
     }
@@ -92,7 +92,6 @@ public class GroupPanel extends javax.swing.JPanel {
 
         lblGroupTitle = new javax.swing.JLabel();
 
-        setBackground(new java.awt.Color(181, 181, 150));
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/Bundle"); // NOI18N
         setToolTipText(bundle.getString("GroupPanel.toolTipText")); // NOI18N
 

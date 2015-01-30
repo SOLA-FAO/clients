@@ -55,7 +55,7 @@ public class HeaderPanel extends javax.swing.JPanel {
     public HeaderPanel(String title) {
         initComponents();
         lblHeaderTitle.setText(title);
-        Object newSelectedRow = "nimbusGreen";
+        Object newSelectedRow = "SolaHeader";
         Color newSelColor = UIManager.getColor(newSelectedRow);
         this.setBackground(newSelColor);
     }
@@ -85,7 +85,6 @@ public class HeaderPanel extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
         btnClose = new javax.swing.JButton();
 
-        setBackground(new java.awt.Color(181, 181, 150));
         setForeground(new java.awt.Color(255, 255, 255));
 
         lblHeaderTitle.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
