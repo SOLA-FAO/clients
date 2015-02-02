@@ -58,7 +58,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import org.sola.clients.swing.common.LafManager;
+import org.sola.clients.swing.common.laf.LafManager;
 import org.sola.clients.swing.ui.localization.LocalizationManager;
 import org.sola.clients.swing.ui.security.LoginPanel;
 import org.sola.common.WindowUtility;
@@ -111,9 +111,9 @@ public class AdminApplication {
                 // Select the Look and Feel Theme based on whether this is 
                 // the production version or the test version of SOLA. 
                 if (LocalizationManager.isProductionHost()) {
-                    LafManager.getInstance().setProperties("green");
+                    LafManager.getInstance().setProperties("registry");
                 } else {
-                    LafManager.getInstance().setProperties("autumn");
+                    LafManager.getInstance().setProperties("registry");
                 }
 
                 final LoginForm loginForm = new LoginForm();

@@ -29,12 +29,10 @@
  */
 package org.sola.clients.swing.admin.system;
 
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.ui.ContentPanel;
-import org.sola.common.DateUtility;
 import org.sola.common.FileUtility;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -49,8 +47,7 @@ import org.sola.services.boundary.wsclients.exception.WebServiceClientException;
 public class ConsolidationExtractPanel extends ContentPanel {
 
     public static final String PANEL_NAME = "ConsolidationExtractPanel";
-    private static final String PROCESS_NAME = "extract";
-    private static final String BR_NAME_TO_GET_MAXVALUE = "generate-process-progress-extract-max";
+    private String processName = "extract";
     private static final int PROGRESS_CHECK_INTERVAL_SECONDS = 1;
 
     /**
@@ -62,9 +59,6 @@ public class ConsolidationExtractPanel extends ContentPanel {
 
     private void run() {
 
-        //It initiates the progress of the process in the server.
-        WSManager.getInstance().getAdminService().startProcessProgressUsingBr(
-                PROCESS_NAME, BR_NAME_TO_GET_MAXVALUE);
         txtStatus.setText(MessageUtility.getLocalizedMessageText(
                 ClientMessage.ADMIN_CONSOLIDATION_RUNNING));
 
@@ -80,8 +74,8 @@ public class ConsolidationExtractPanel extends ContentPanel {
                 try {
                     setMessage(MessageUtility.getLocalizedMessageText(
                             ClientMessage.ADMIN_CONSOLIDATION_EXTRACT));
-                    fileOfExtract = WSManager.getInstance().getAdminService().consolidationExtract(
-                            PROCESS_NAME, chkEverything.isSelected(), txtPassword.getText());
+                    processName = WSManager.getInstance().getAdminService().consolidationExtract(
+                            chkGenerateConsolidationSchema.isSelected(), chkEverything.isSelected(), chkDumpToFile.isSelected());
                 } catch (WebServiceClientException ex) {
                     failed = true;
                     txtStatus.setText(ex.getMessage());
@@ -103,7 +97,7 @@ public class ConsolidationExtractPanel extends ContentPanel {
                 // It can be that even the process if finished, still the progress bar is not yet 100 percent.
                 // This makes sure. The number 10000 is a number which is the infinite max the 
                 // progress can have
-                WSManager.getInstance().getAdminService().setProcessProgress(PROCESS_NAME, 10000);
+                WSManager.getInstance().getAdminService().setProcessProgress(processName, 10000);
             }
         };
         TaskManager.getInstance().runTask(taskExtract);
@@ -116,7 +110,7 @@ public class ConsolidationExtractPanel extends ContentPanel {
             public Void doTask() {
                 while (progressValue < 100) {
                     progressValue = WSManager.getInstance().getAdminService().getProcessProgress(
-                            PROCESS_NAME, true);
+                            processName, true);
                     progressBarProcess.setValue(progressValue);
                     try {
                         TimeUnit.SECONDS.sleep(PROGRESS_CHECK_INTERVAL_SECONDS);
@@ -151,7 +145,7 @@ public class ConsolidationExtractPanel extends ContentPanel {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.ADMIN_CONSOLIDATION_EXTRACT));
 
                 txtLog.setText(
-                        WSManager.getInstance().getAdminService().getProcessLog(PROCESS_NAME));
+                        WSManager.getInstance().getAdminService().getProcessLog(processName));
                 return null;
             }
 
@@ -184,8 +178,6 @@ public class ConsolidationExtractPanel extends ContentPanel {
         btnStart = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtLog = new javax.swing.JTextArea();
-        jLabel2 = new javax.swing.JLabel();
-        txtPassword = new javax.swing.JTextField();
         chkEverything = new javax.swing.JCheckBox();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -194,6 +186,8 @@ public class ConsolidationExtractPanel extends ContentPanel {
         cmdShowLog = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         txtStatus = new javax.swing.JTextField();
+        chkGenerateConsolidationSchema = new javax.swing.JCheckBox();
+        chkDumpToFile = new javax.swing.JCheckBox();
 
         setHeaderPanel(pnlHeader);
 
@@ -212,12 +206,7 @@ public class ConsolidationExtractPanel extends ContentPanel {
         txtLog.setRows(5);
         jScrollPane1.setViewportView(txtLog);
 
-        jLabel2.setText(bundle.getString("ConsolidationExtractPanel.jLabel2.text")); // NOI18N
-        jLabel2.setToolTipText(bundle.getString("ConsolidationExtractPanel.jLabel2.toolTipText")); // NOI18N
-
-        txtPassword.setText(bundle.getString("ConsolidationExtractPanel.txtPassword.text")); // NOI18N
-
-        chkEverything.setLabel(bundle.getString("ConsolidationExtractPanel.chkEverything.label")); // NOI18N
+        chkEverything.setText(bundle.getString("ConsolidationExtractPanel.chkEverything.text_1")); // NOI18N
 
         jLabel3.setText(bundle.getString("ConsolidationExtractPanel.jLabel3.text")); // NOI18N
 
@@ -237,6 +226,18 @@ public class ConsolidationExtractPanel extends ContentPanel {
         txtStatus.setEditable(false);
         txtStatus.setText(bundle.getString("ConsolidationExtractPanel.txtStatus.text")); // NOI18N
 
+        chkGenerateConsolidationSchema.setSelected(true);
+        chkGenerateConsolidationSchema.setText(bundle.getString("ConsolidationExtractPanel.chkGenerateConsolidationSchema.text")); // NOI18N
+        chkGenerateConsolidationSchema.setToolTipText(bundle.getString("ConsolidationExtractPanel.chkGenerateConsolidationSchema.toolTipText")); // NOI18N
+        chkGenerateConsolidationSchema.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkGenerateConsolidationSchemaActionPerformed(evt);
+            }
+        });
+
+        chkDumpToFile.setSelected(true);
+        chkDumpToFile.setText(bundle.getString("ConsolidationExtractPanel.chkDumpToFile.text")); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -249,7 +250,10 @@ public class ConsolidationExtractPanel extends ContentPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(chkEverything))
+                        .addComponent(chkGenerateConsolidationSchema)
+                        .addGap(18, 18, 18)
+                        .addComponent(chkEverything)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(cmdShowLog))
@@ -257,21 +261,22 @@ public class ConsolidationExtractPanel extends ContentPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
                             .addComponent(jLabel5))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnStart)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(progressBarProcess, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(btnStart)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(progressBarProcess, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel1)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(txtStatus))))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtStatus)))))
+                                .addGap(6, 6, 6)
+                                .addComponent(chkDumpToFile)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -281,13 +286,13 @@ public class ConsolidationExtractPanel extends ContentPanel {
                 .addGap(13, 13, 13)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(chkEverything)
-                    .addComponent(jLabel3))
+                    .addComponent(jLabel3)
+                    .addComponent(chkGenerateConsolidationSchema))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
-                .addGap(15, 15, 15)
+                    .addComponent(jLabel4)
+                    .addComponent(chkDumpToFile))
+                .addGap(13, 13, 13)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnStart)
@@ -300,14 +305,15 @@ public class ConsolidationExtractPanel extends ContentPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cmdShowLog)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
-        if (txtPassword.getText().isEmpty()) {
-            MessageUtility.displayMessage(ClientMessage.ADMIN_CONSOLIDATION_PASSWORD_MISSING);
+        if (!chkGenerateConsolidationSchema.isSelected() 
+                && !chkDumpToFile.isSelected()) {
+            MessageUtility.displayMessage(ClientMessage.ADMIN_CONSOLIDATION_NO_ACTION_SELECTED);
             return;
         }
         run();
@@ -316,12 +322,21 @@ public class ConsolidationExtractPanel extends ContentPanel {
     private void cmdShowLogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdShowLogActionPerformed
         showLog();
     }//GEN-LAST:event_cmdShowLogActionPerformed
+
+    private void chkGenerateConsolidationSchemaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkGenerateConsolidationSchemaActionPerformed
+                chkEverything.setEnabled(chkGenerateConsolidationSchema.isSelected());
+                if (!chkEverything.isEnabled()){
+                    chkEverything.setSelected(false);
+                }
+    }//GEN-LAST:event_chkGenerateConsolidationSchemaActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnStart;
+    private javax.swing.JCheckBox chkDumpToFile;
     private javax.swing.JCheckBox chkEverything;
+    private javax.swing.JCheckBox chkGenerateConsolidationSchema;
     private javax.swing.JButton cmdShowLog;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -329,7 +344,6 @@ public class ConsolidationExtractPanel extends ContentPanel {
     private org.sola.clients.swing.ui.HeaderPanel pnlHeader;
     private javax.swing.JProgressBar progressBarProcess;
     private javax.swing.JTextArea txtLog;
-    private javax.swing.JTextField txtPassword;
     private javax.swing.JTextField txtStatus;
     // End of variables declaration//GEN-END:variables
 }

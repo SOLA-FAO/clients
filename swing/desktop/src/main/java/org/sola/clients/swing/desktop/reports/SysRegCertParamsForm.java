@@ -182,7 +182,7 @@ public class SysRegCertParamsForm extends javax.swing.JDialog {
         documentPanel = new org.sola.clients.swing.ui.source.DocumentPanel();
         cadastreObjectSearch = new org.sola.clients.swing.ui.cadastre.LocationSearch();
         btnGenCertificate = new javax.swing.JButton();
-        labHeader = new javax.swing.JLabel();
+        labHeader = new org.sola.clients.swing.ui.GroupPanel();
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/reports/Bundle"); // NOI18N
         cadastreObjectSearch.setText(bundle.getString("SysRegListingParamsForm.cadastreObjectSearch.text")); // NOI18N
@@ -194,11 +194,8 @@ public class SysRegCertParamsForm extends javax.swing.JDialog {
             }
         });
 
-        labHeader.setBackground(new java.awt.Color(255, 153, 0));
-        labHeader.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        labHeader.setForeground(new java.awt.Color(255, 255, 255));
-        labHeader.setText(bundle.getString("SysRegCertParamsForm.labHeader.text")); // NOI18N
-        labHeader.setOpaque(true);
+        labHeader.setTitleText(bundle.getString("SysRegCertParamsForm.labHeader.titleText")); // NOI18N
+        labHeader.setVerifyInputWhenFocusTarget(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -207,25 +204,26 @@ public class SysRegCertParamsForm extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cadastreObjectSearch, javax.swing.GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE)
-                    .addComponent(labHeader, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnGenCertificate)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(cadastreObjectSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnGenCertificate))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 3, Short.MAX_VALUE)
+                        .addComponent(labHeader, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(labHeader)
-                .addGap(34, 34, 34)
+                .addContainerGap()
+                .addComponent(labHeader, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(49, 49, 49)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cadastreObjectSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnGenCertificate))
                 .addContainerGap(203, Short.MAX_VALUE))
         );
-
-        labHeader.getAccessibleContext().setAccessibleName(bundle.getString("SysRegCertParamsForm.labHeader.text")); // NOI18N
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -284,7 +282,7 @@ public class SysRegCertParamsForm extends javax.swing.JDialog {
     private org.sola.clients.beans.cadastre.CadastreObjectBean cadastreObjectBean;
     private org.sola.clients.swing.ui.cadastre.LocationSearch cadastreObjectSearch;
     private org.sola.clients.swing.ui.source.DocumentPanel documentPanel;
-    private javax.swing.JLabel labHeader;
+    private org.sola.clients.swing.ui.GroupPanel labHeader;
     private org.sola.clients.beans.systematicregistration.SysRegCertificatesBean sysRegCertificatesBean;
     private org.sola.clients.beans.systematicregistration.SysRegCertificatesListBean sysRegCertificatesListBean;
     // End of variables declaration//GEN-END:variables

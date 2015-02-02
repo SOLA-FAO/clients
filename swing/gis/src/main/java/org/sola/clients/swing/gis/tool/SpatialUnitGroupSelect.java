@@ -50,7 +50,7 @@ public class SpatialUnitGroupSelect extends SpatialUnitGenericSelect {
     /**
      */
     public SpatialUnitGroupSelect(SpatialUnitGroupLayer targetLayer) {
-        super(targetLayer, MAP_ACTION_NAME);
+        super(targetLayer, MAP_ACTION_NAME, false);
     }
 
     @Override

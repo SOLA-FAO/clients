@@ -1,34 +1,35 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.desktop;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
@@ -39,6 +40,8 @@ import java.util.logging.Level;
 import java.util.prefs.Preferences;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.UIManager;
+import javax.swing.plaf.ToolBarUI;
 import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.security.SecurityBean;
@@ -46,7 +49,7 @@ import org.sola.clients.beans.source.PowerOfAttorneyBean;
 import org.sola.clients.beans.system.LanguageBean;
 import org.sola.clients.beans.system.LanguageListBean;
 import org.sola.clients.swing.common.DefaultExceptionHandler;
-import org.sola.clients.swing.common.LafManager;
+import org.sola.clients.swing.common.laf.LafManager;
 import org.sola.clients.swing.ui.localization.LocalizationManager;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
@@ -175,12 +178,14 @@ public class MainForm extends javax.swing.JFrame {
      * Default constructor.
      */
     private MainForm() {
-        URL imgURL = this.getClass().getResource("/images/sola/logo_icon.jpg");
+         URL imgURL = this.getClass().getResource("/images/sola/sola_icon.png");
         this.setIconImage(new ImageIcon(imgURL).getImage());
+ 
 
         initComponents();
         LocalizationTools.setOrientation(this);
-        this.setTitle("SOLA Desktop - " + LocalizationManager.getVersionNumber());
+        this.setTitle(this.getTitle() + LocalizationManager.getVersionNumber());
+        
         this.addWindowListener(new java.awt.event.WindowAdapter() {
 
             @Override
@@ -193,6 +198,7 @@ public class MainForm extends javax.swing.JFrame {
                 preClose();
             }
         });
+     
     }
 
     /**
@@ -236,6 +242,9 @@ public class MainForm extends javax.swing.JFrame {
         }
 
         txtUserName.setText(SecurityBean.getCurrentUser().getUserName());
+        
+        this.applicationsMain.setBackground(Color.white);
+        
     }
 
     /**
@@ -275,6 +284,17 @@ public class MainForm extends javax.swing.JFrame {
             this.setSize(width, height);
         }
         this.setLocation(x, y);
+
+
+        this.applicationsMain.setBackground(Color.white);
+        this.applicationsMain.setUI((ToolBarUI)UIManager.getUI(this.applicationsMain));
+         
+        // shift the title text on the right of the Registry Icon Image
+        String pre = "";
+        pre = String.format("%" + 8 + "s", pre);
+       //  put the obtained number of blanks before the title text
+        this.setTitle(pre+this.getTitle());
+
     }
 
     /**
@@ -442,7 +462,7 @@ public class MainForm extends javax.swing.JFrame {
         };
         TaskManager.getInstance().runTask(t);
     }
-    
+
     private void openSearchParties() {
         SolaTask t = new SolaTask<Void, Void>() {
 
@@ -746,7 +766,6 @@ public class MainForm extends javax.swing.JFrame {
         for (LanguageBean lang : langs.getLanguages()) {
             final String langCode = lang.getLanguageCode();
             final String localeCode = lang.getCode();
-
             JCheckBoxMenuItem menuLang = new JCheckBoxMenuItem();
             menuLang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/flags/" + langCode + ".png")));
             menuLang.setText(lang.getDisplayValue());
@@ -757,7 +776,7 @@ public class MainForm extends javax.swing.JFrame {
             menuLang.addActionListener(new java.awt.event.ActionListener() {
 
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    ((JCheckBoxMenuItem)evt.getSource()).setSelected(true);
+                    ((JCheckBoxMenuItem) evt.getSource()).setSelected(true);
                     selectLanguage(localeCode);
                 }
             });
@@ -766,10 +785,10 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     private void selectLanguage(String locale) {
-        if(LocalizationManager.getLocaleCode().equals(locale)){
+        if (LocalizationManager.getLocaleCode().equals(locale)) {
             return;
         }
-        
+
         if (MessageUtility.displayMessage(ClientMessage.CONFIRM_CHANGE_LANGUAGE) == MessageUtility.BUTTON_ONE) {
             LocalizationManager.setLanguage(LocalizationManager.getLangCode(locale),
                     LocalizationManager.getCountryCode(locale));
@@ -839,7 +858,11 @@ public class MainForm extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/Bundle"); // NOI18N
         setTitle(bundle.getString("MainForm.title")); // NOI18N
+        setBackground(new java.awt.Color(33, 124, 149));
+        setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        setForeground(java.awt.Color.white);
 
+        applicationsMain.setBackground(new java.awt.Color(255, 255, 255));
         applicationsMain.setFloatable(false);
         applicationsMain.setRollover(true);
         applicationsMain.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -847,6 +870,7 @@ public class MainForm extends javax.swing.JFrame {
         applicationsMain.setMinimumSize(new java.awt.Dimension(90, 45));
         applicationsMain.setPreferredSize(new java.awt.Dimension(980, 45));
 
+        btnShowDashboard.setBackground(new java.awt.Color(255, 255, 255));
         btnShowDashboard.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/home.png"))); // NOI18N
         btnShowDashboard.setText(bundle.getString("MainForm.btnShowDashboard.text")); // NOI18N
         btnShowDashboard.setFocusable(false);
@@ -860,6 +884,7 @@ public class MainForm extends javax.swing.JFrame {
         applicationsMain.add(btnShowDashboard);
         applicationsMain.add(jSeparator2);
 
+        btnNewApplication.setBackground(new java.awt.Color(255, 255, 255));
         btnNewApplication.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/new.png"))); // NOI18N
         btnNewApplication.setText(bundle.getString("MainForm.btnNewApplication.text")); // NOI18N
         btnNewApplication.setFocusable(false);
@@ -873,6 +898,7 @@ public class MainForm extends javax.swing.JFrame {
         applicationsMain.add(btnNewApplication);
         applicationsMain.add(jSeparator4);
 
+        btnSearchApplications.setBackground(new java.awt.Color(255, 255, 255));
         btnSearchApplications.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/search.png"))); // NOI18N
         btnSearchApplications.setText(bundle.getString("MainForm.btnSearchApplications.text")); // NOI18N
         btnSearchApplications.setFocusable(false);
@@ -885,6 +911,7 @@ public class MainForm extends javax.swing.JFrame {
         });
         applicationsMain.add(btnSearchApplications);
 
+        btnOpenBaUnitSearch.setBackground(new java.awt.Color(255, 255, 255));
         btnOpenBaUnitSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/search.png"))); // NOI18N
         btnOpenBaUnitSearch.setText(bundle.getString("MainForm.btnOpenBaUnitSearch.text")); // NOI18N
         btnOpenBaUnitSearch.setFocusable(false);
@@ -897,6 +924,7 @@ public class MainForm extends javax.swing.JFrame {
         });
         applicationsMain.add(btnOpenBaUnitSearch);
 
+        btnDocumentSearch.setBackground(new java.awt.Color(255, 255, 255));
         btnDocumentSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/search.png"))); // NOI18N
         btnDocumentSearch.setText(bundle.getString("MainForm.btnDocumentSearch.text")); // NOI18N
         btnDocumentSearch.setFocusable(false);
@@ -909,6 +937,7 @@ public class MainForm extends javax.swing.JFrame {
         });
         applicationsMain.add(btnDocumentSearch);
 
+        btnManageParties.setBackground(new java.awt.Color(255, 255, 255));
         btnManageParties.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/search.png"))); // NOI18N
         btnManageParties.setText(bundle.getString("MainForm.btnManageParties.text")); // NOI18N
         btnManageParties.setFocusable(false);
@@ -922,6 +951,7 @@ public class MainForm extends javax.swing.JFrame {
         applicationsMain.add(btnManageParties);
         applicationsMain.add(jSeparator1);
 
+        btnOpenMap.setBackground(new java.awt.Color(255, 255, 255));
         btnOpenMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/network.png"))); // NOI18N
         btnOpenMap.setText(bundle.getString("MainForm.btnOpenMap.text")); // NOI18N
         btnOpenMap.setFocusable(false);
@@ -934,6 +964,7 @@ public class MainForm extends javax.swing.JFrame {
         });
         applicationsMain.add(btnOpenMap);
 
+        btnSetPassword.setBackground(new java.awt.Color(255, 255, 255));
         btnSetPassword.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/lock--pencil.png"))); // NOI18N
         btnSetPassword.setText(bundle.getString("MainForm.btnSetPassword.text")); // NOI18N
         btnSetPassword.setFocusable(false);
@@ -973,7 +1004,10 @@ public class MainForm extends javax.swing.JFrame {
             .addComponent(taskPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 20, Short.MAX_VALUE)
         );
 
-        menuBar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        menuBar.setBackground(new java.awt.Color(255, 51, 51));
+        menuBar.setForeground(new java.awt.Color(255, 255, 255));
+        menuBar.setToolTipText(bundle.getString("MainForm.menuBar.toolTipText")); // NOI18N
+        menuBar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
         fileMenu.setText(bundle.getString("MainForm.fileMenu.text")); // NOI18N
 
@@ -1306,12 +1340,12 @@ public class MainForm extends javax.swing.JFrame {
     private void btnManagePartiesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManagePartiesActionPerformed
         openSearchParties();
     }//GEN-LAST:event_btnManagePartiesActionPerformed
-    
+
     private void openSysRegGenderReport(java.awt.event.ActionEvent evt) {
-       SysRegManagementParamsForm managementGenerator = new SysRegManagementParamsForm(this, true, "sysRegGenderBean");
+        SysRegManagementParamsForm managementGenerator = new SysRegManagementParamsForm(this, true, "sysRegGenderBean");
         managementGenerator.clickView(evt);
     }
-    
+
     private void btnOpenMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenMapActionPerformed
         openMap();
     }//GEN-LAST:event_btnOpenMapActionPerformed
@@ -1377,9 +1411,8 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuSpatialUnitEditorActionPerformed
 
     private void manuGenderReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manuGenderReportActionPerformed
-        openSysRegGenderReport (evt);
+        openSysRegGenderReport(evt);
     }//GEN-LAST:event_manuGenderReportActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToolBar applicationsMain;
     private javax.swing.JButton btnDocumentSearch;

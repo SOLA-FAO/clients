@@ -53,6 +53,7 @@ package org.sola.clients.swing.gis.mapaction;
 
 import java.awt.Component;
 import org.geotools.swing.extended.Map;
+import org.sola.clients.swing.gis.Messaging;
 
 /**
  * This map action shows the form of the attributes.
@@ -65,8 +66,6 @@ public final class AttributeFormShow extends ComponentShow {
      * The name of the map action
      */
     private final static String MAPACTION_NAME = "AttributeFormShow";
-    private static java.util.ResourceBundle resource =
-            java.util.ResourceBundle.getBundle("org/sola/clients/swing/gis/mapaction/resources/strings");
 
     /**
      * Constructor of the map action that is used to show the component 
@@ -77,7 +76,7 @@ public final class AttributeFormShow extends ComponentShow {
      */
     public AttributeFormShow(Map mapObj, Component formToShow) {
         super(mapObj, formToShow, MAPACTION_NAME,
-                resource.getString(
+                ((Messaging)Messaging.getInstance()).getMapActionString(
                 String.format("%s.tooltip",MAPACTION_NAME)),
                 "resources/open-attribute-form.png");
     }

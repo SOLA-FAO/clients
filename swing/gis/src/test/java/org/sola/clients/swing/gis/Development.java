@@ -221,7 +221,7 @@ public class Development {
         this.displayControlsBundleForm(ctrl);
     }
 
-    @Ignore
+    //@Ignore
     @Test
     public void testUIControlsBundleForSpatialUnitManagement() throws Exception {
         System.out.println("Test ControlsBundle for Spatial unit");
@@ -241,15 +241,15 @@ public class Development {
         this.displayControlsBundleForm(ctrl);
     }
 
-    //@Ignore
+    @Ignore
     @Test
     public void TestTitlePlan() throws Exception {
         System.out.println("Test title plan");
         SecurityBean.authenticate("test", "test".toCharArray(), this.getWSConfig());
         MapImageGeneratorForSelectedParcel gen = 
-                new MapImageGeneratorForSelectedParcel(520, 300,200,200, false, 0,0);
+                new MapImageGeneratorForSelectedParcel(520, 300,200,200, true, 100,20);
         //""138","174","227","231","139","232","457","737","246","233""
-        MapImageInformation info = gen.getInformation("174");
+        MapImageInformation info = gen.getInformation("4695222");
         //MapImageInformation info = gen.getInformation("1e4f0e12-1773-4f87-bec8-f84bf0115011");
         System.out.println(info);
         //info = gen.getInformation("4821936");

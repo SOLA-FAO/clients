@@ -314,11 +314,15 @@ public abstract class AbstractSpatialObjectLayer extends ExtendedLayerEditor {
      * @param beanList
      */
     public <T extends SpatialBean> void setBeanList(List<T> beanList) {
-        this.listBean.getBeanList().clear();
-        this.removedItems.clear();
+        this.removeAllBeans();;
         this.listBean.getBeanList().addAll((Collection) beanList);
     }
 
+    public final void removeAllBeans(){
+        this.listBean.getBeanList().clear();
+        this.removedItems.clear();        
+    }
+    
     /**
      * It adds a feature. If fid is missing it is generated from a GUID generator.
      *

@@ -38,7 +38,7 @@
 package org.sola.clients.swing.gis.ui.control;
 
 import org.geotools.swing.extended.Map;
-import org.sola.clients.swing.common.LafManager;
+import org.sola.clients.swing.common.laf.LafManager;
 import org.sola.clients.swing.gis.beans.SpatialSearchOptionBean;
 
 /**

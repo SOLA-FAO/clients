@@ -142,7 +142,7 @@ public class PropertyHelper {
         PartyBean owner = new PartyBean();
         owner.setId(appBean.getContactPerson().getId() + "_cp");
         owner = owner.getPartyBean();
-        if (owner.isNew()) {
+        if (owner == null || owner.isNew()) {
             // Owner has not been created yet, so duplicate the contact person 
             // details from the application and remove any roles they have. 
             owner = appBean.getContactPerson().copy();

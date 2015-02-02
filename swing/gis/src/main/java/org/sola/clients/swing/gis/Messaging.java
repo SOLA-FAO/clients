@@ -45,6 +45,14 @@ public class Messaging extends org.geotools.swing.extended.util.Messaging {
                 java.util.ResourceBundle.getBundle(
                 "org/sola/clients/swing/gis/layer/resources/LayerTitles");
 
+    private static java.util.ResourceBundle bundleForMapActionStrings = 
+                java.util.ResourceBundle.getBundle(
+            "org/sola/clients/swing/gis/mapaction/resources/strings");
+
+    private static java.util.ResourceBundle bundleForMapToolStrings = 
+                java.util.ResourceBundle.getBundle(
+            "org/sola/clients/swing/gis/tool/resources/strings");
+
     public Messaging() {
     }
     
@@ -89,6 +97,22 @@ public class Messaging extends org.geotools.swing.extended.util.Messaging {
         return layerTitle;
     }
     
+    public String getMapActionString(String stringCode){
+        String stringResult = stringCode;
+        if (bundleForMapActionStrings.containsKey(stringCode)){
+            stringResult = bundleForMapActionStrings.getString(stringCode);
+        }
+        return stringResult;        
+    }
+    
+    public String getMapToolString(String stringCode){
+        String stringResult = stringCode;
+        if (bundleForMapToolStrings.containsKey(stringCode)){
+            stringResult = bundleForMapToolStrings.getString(stringCode);
+        }
+        return stringResult;        
+    }
+
     private String getSolaMessageCode(String messageId) {
         String solaMsgCode = messageId;
         try {

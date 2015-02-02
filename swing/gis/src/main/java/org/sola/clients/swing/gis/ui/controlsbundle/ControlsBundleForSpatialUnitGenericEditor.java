@@ -44,6 +44,7 @@ import org.sola.clients.swing.gis.layer.AbstractSpatialObjectLayer;
 import org.sola.clients.swing.gis.mapaction.AttributeFormShow;
 import org.sola.clients.swing.gis.mapaction.SaveSpatialUnit;
 import org.sola.clients.swing.gis.mapaction.SaveSpatialUnitGeneric;
+import org.sola.clients.swing.gis.mapaction.SpatialUnitResetGeneric;
 import org.sola.clients.swing.gis.tool.SpatialUnitGenericEdit;
 
 /**
@@ -82,6 +83,9 @@ public abstract class ControlsBundleForSpatialUnitGenericEditor extends SolaCont
         this.getToolbar().add(label);
         JComboBox optionControl = this.getOptionControl();
         this.getToolbar().add(optionControl);
+        this.getMap().addMapAction(new SpatialUnitResetGeneric(this),
+                this.getToolbar(),
+                true);
         this.addSelectTool();
         this.editTool = new SpatialUnitGenericEdit(this.getLayer());
         this.getMap().addTool(this.editTool, this.getToolbar(), true);
@@ -95,7 +99,7 @@ public abstract class ControlsBundleForSpatialUnitGenericEditor extends SolaCont
         }
     }
     
-    protected final AbstractSpatialObjectLayer getLayer(){
+    public final AbstractSpatialObjectLayer getLayer(){
         return this.layer;
     }
 

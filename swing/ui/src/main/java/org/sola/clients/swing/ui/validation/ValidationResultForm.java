@@ -34,7 +34,7 @@ import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.swing.ui.renderers.TableCellTextAreaRenderer;
 import org.sola.clients.swing.ui.renderers.ViolationCellRenderer;
 import org.sola.clients.beans.validation.ValidationResultBean;
-import org.sola.clients.swing.common.LafManager;
+import org.sola.clients.swing.common.laf.LafManager;
 
 /**
  * Display result of changing status of application or service.

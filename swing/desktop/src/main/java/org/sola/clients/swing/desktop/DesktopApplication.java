@@ -29,7 +29,10 @@ package org.sola.clients.swing.desktop;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import org.sola.clients.swing.common.LafManager;
+import java.lang.reflect.InvocationTargetException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.sola.clients.swing.common.laf.LafManager;
 import org.sola.clients.swing.ui.localization.LocalizationManager;
 import org.sola.clients.swing.ui.DesktopClientExceptionHandler;
 import org.sola.clients.swing.ui.security.LoginForm;
@@ -61,37 +64,45 @@ public class DesktopApplication {
 
         splash.setVisible(false);
         splash.dispose();
-
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                Thread.setDefaultUncaughtExceptionHandler(new DesktopClientExceptionHandler());
-                LocalizationManager.loadLanguage();
-                LogUtility.initialize(DesktopApplication.class);
-                
-                // Select the Look and Feel Theme based on whether this is 
-                // the production version or the test version of SOLA. 
-                if (LocalizationManager.isProductionHost()) {
-                    LafManager.getInstance().setProperties("green");
-                } else {
-                    LafManager.getInstance().setProperties("autumn");
-                }
-
-                final LoginForm loginForm = new LoginForm();
-                loginForm.addPropertyChangeListener(new PropertyChangeListener() {
-                    @Override
-                    public void propertyChange(PropertyChangeEvent evt) {
-                        if (evt.getPropertyName().equals(LoginPanel.LOGIN_RESULT)) {
-                            if (((Boolean) evt.getNewValue())) {
-                                loginForm.dispose();
-                                MainForm.getInstance().setVisible(true);
+        try {
+            //        java.awt.EventQueue.invokeLater(new Runnable() {
+                    java.awt.EventQueue.invokeAndWait(new Runnable() {
+                        
+                        @Override
+                        public void run() {
+                            Thread.setDefaultUncaughtExceptionHandler(new DesktopClientExceptionHandler());
+                            LocalizationManager.loadLanguage();
+                            LogUtility.initialize(DesktopApplication.class);
+                            
+                            // Select the Look and Feel Theme based on whether this is 
+                            // the production version or the test version of SOLA. 
+                            if (LocalizationManager.isProductionHost()) {
+            //                    TO BE CHANGED IF ANY DIFFERENT THEME IS USED IN PRODUCTION;
+                                LafManager.getInstance().setProperties("registry");
+                            } else {
+                                LafManager.getInstance().setProperties("registry");
                             }
+
+                            final LoginForm loginForm = new LoginForm();
+                            loginForm.addPropertyChangeListener(new PropertyChangeListener() {
+                                @Override
+                                public void propertyChange(PropertyChangeEvent evt) {
+                                    if (evt.getPropertyName().equals(LoginPanel.LOGIN_RESULT)) {
+                                        if (((Boolean) evt.getNewValue())) {
+                                            loginForm.dispose();
+                                            MainForm.getInstance().setVisible(true);
+                                        }
+                                    }
+                                }
+                            });
+                            WindowUtility.centerForm(loginForm);
+                            loginForm.setVisible(true);
                         }
-                    }
-                });
-                WindowUtility.centerForm(loginForm);
-                loginForm.setVisible(true);
-            }
-        });
+                    });
+        } catch (InterruptedException ex) {
+            Logger.getLogger(DesktopApplication.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvocationTargetException ex) {
+            Logger.getLogger(DesktopApplication.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
