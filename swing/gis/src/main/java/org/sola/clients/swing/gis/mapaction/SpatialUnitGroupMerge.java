@@ -37,6 +37,7 @@ import org.sola.clients.swing.gis.Messaging;
 import org.sola.clients.swing.gis.beans.SpatialUnitBean;
 import org.sola.clients.swing.gis.beans.SpatialUnitGroupBean;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForSpatialUnitGroupEditor;
+import org.sola.common.messaging.GisMessage;
 
 /**
  * This map action is used in the control bundle used in the application form. It is used to reset
@@ -78,7 +79,14 @@ public final class SpatialUnitGroupMerge extends ExtendedAction {
                 mergedGeometry = mergedGeometry.union(geom);
             }
         }
-        
+        if (!mergedGeometry.getGeometryType().equalsIgnoreCase("polygon")){
+            ((Messaging)Messaging.getInstance()).show(GisMessage.SPATIAL_UNIT_GROUP_MERGED_GEOMETRY_NOT_POLYGON);
+            return;
+        }
+        if (!mergedGeometry.isSimple() && mergedGeometry.isValid()){
+            ((Messaging)Messaging.getInstance()).show(GisMessage.GEOTOOL_GEOMETRY_NOT_VALID_ERROR);
+            return;
+        }
         this.controlsBundle.getLayer().removeAllBeans();
         this.controlsBundle.getLayer().addFeature(null, mergedGeometry, null, true);
     }
