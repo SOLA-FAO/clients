@@ -302,7 +302,7 @@ public class SharePanel extends ContentPanel {
         popupOwners.add(menuViewOwner);
 
         setHeaderPanel(headerPanel);
-        setHelpTopic(bundle.getString("SharePanel.helpTopic")); // NOI18N
+        setHelpTopic("ownership_interest"); // NOI18N
         setName("Form"); // NOI18N
 
         headerPanel.setName("headerPanel"); // NOI18N

@@ -274,7 +274,7 @@ public class ApplicationSearchPanel extends ContentPanel {
         });
         popupSearchResults.add(menuAssignApplication);
 
-        setHelpTopic(bundle.getString("ApplicationSearchPanel.helpTopic")); // NOI18N
+        setHelpTopic("application_search"); // NOI18N
         setMinimumSize(new java.awt.Dimension(512, 351));
         setName("Form"); // NOI18N
 

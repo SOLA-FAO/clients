@@ -149,6 +149,7 @@ public class SLPropertyRelationshipPanel extends ContentPanel {
         searchPanel = new org.sola.clients.swing.ui.administrative.BaUnitSearchPanel();
 
         setHeaderPanel(headerPanel1);
+        setHelpTopic("property_relationship"); // NOI18N
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
         headerPanel1.setTitleText(bundle.getString("SLPropertyRelationshipPanel.headerPanel1.titleText")); // NOI18N

@@ -128,6 +128,15 @@ public final class ControlsBundleForPublicDisplay extends SolaControlsBundle {
                 GisMessage.LEFT_PANEL_TAB_PUBLIC_DISPLAY_MAP_TITLE), printPanel);
     }
 
+    /**
+     * Enables or disables the print panel controls based on the readonly value.
+     *
+     * @param readOnly
+     */
+    public void setReadOnly(boolean readOnly) {
+        this.printPanel.setReadOnly(readOnly);
+    }
+
     public void zoomToDisplayArea() {
         ReferencedEnvelope envelope = null;
         if (publicDisplayLayers.size() > 0

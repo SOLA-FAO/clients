@@ -202,10 +202,10 @@ public class PartySearchPanelForm extends ContentPanel {
         partySearchPanel = new org.sola.clients.swing.ui.party.PartySearchPanel();
 
         setHeaderPanel(headerPanel);
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/party/Bundle"); // NOI18N
-        setHelpTopic(bundle.getString("PartySearchPanelForm.helpTopic")); // NOI18N
+        setHelpTopic("party_search"); // NOI18N
 
         headerPanel.setName("headerPanel"); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/party/Bundle"); // NOI18N
         headerPanel.setTitleText(bundle.getString("PartySearchPanelForm.headerPanel.titleText")); // NOI18N
 
         partySearchPanel.setName("partySearchPanel"); // NOI18N

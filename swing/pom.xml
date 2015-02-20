@@ -4,12 +4,12 @@
     <parent>
         <artifactId>sola-clients</artifactId>
         <groupId>org.sola</groupId>
-        <version>sl-018</version>
+        <version>v1502a</version>
     </parent>
     <groupId>org.sola.clients</groupId>
     <artifactId>sola-clients-swing</artifactId>
     <packaging>pom</packaging>
-    <version>sl-018</version>
+    <version>v1502a</version>
     <name>Clients SWING POM</name>
     <modules>
         <module>common</module>

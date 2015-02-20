@@ -151,6 +151,7 @@ public class DocumentForm extends ContentPanel {
         btnSecurity = new javax.swing.JButton();
 
         setHeaderPanel(headerPanel);
+        setHelpTopic("document_details"); // NOI18N
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/source/Bundle"); // NOI18N
         headerPanel.setTitleText(bundle.getString("DocumentForm.headerPanel.titleText")); // NOI18N

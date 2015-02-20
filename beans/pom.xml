@@ -5,11 +5,11 @@
     <parent>
         <artifactId>sola-clients</artifactId>
         <groupId>org.sola</groupId>
-        <version>sl-018</version>
+        <version>v1502a</version>
     </parent>
     <groupId>org.sola.clients</groupId>
     <artifactId>clients-beans</artifactId>
-    <version>sl-018</version>
+    <version>v1502a</version>
     <name>Clients Beans</name>
     
     <properties>

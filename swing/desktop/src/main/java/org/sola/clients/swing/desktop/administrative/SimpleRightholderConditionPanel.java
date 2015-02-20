@@ -441,6 +441,7 @@ public class SimpleRightholderConditionPanel extends ContentPanel {
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         setHeaderPanel(headerPanel);
+        setHelpTopic("conditional_interest"); // NOI18N
 
         headerPanel.setTitleText(bundle.getString("SimpleRightholderConditionPanel.headerPanel.titleText")); // NOI18N
 

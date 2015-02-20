@@ -212,6 +212,7 @@ public class PublicDisplayPanel extends ContentPanel {
         tblDisplayItems = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
 
         setHeaderPanel(headerPanel1);
+        setHelpTopic("public_display"); // NOI18N
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/workflow/Bundle"); // NOI18N
         headerPanel1.setTitleText(bundle.getString("PublicDisplayPanel.headerPanel1.titleText")); // NOI18N

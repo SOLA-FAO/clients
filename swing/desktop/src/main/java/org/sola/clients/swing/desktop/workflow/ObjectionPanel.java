@@ -503,6 +503,7 @@ public class ObjectionPanel extends ContentPanel {
         documentsManagementExtPanel1 = initDocumentsPanel();
 
         setHeaderPanel(headerPanel1);
+        setHelpTopic("objections"); // NOI18N
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/workflow/Bundle"); // NOI18N
         headerPanel1.setTitleText(bundle.getString("ObjectionPanel.headerPanel1.titleText")); // NOI18N

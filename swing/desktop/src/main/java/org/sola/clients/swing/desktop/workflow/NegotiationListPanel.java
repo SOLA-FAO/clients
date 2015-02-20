@@ -277,8 +277,9 @@ public class NegotiationListPanel extends ContentPanel {
         tblNegotiations = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
 
         setHeaderPanel(headerPanel1);
-
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/workflow/Bundle"); // NOI18N
+        setHelpTopic(bundle.getString("NegotiationListPanel.helpTopic")); // NOI18N
+
         headerPanel1.setTitleText(bundle.getString("NegotiationListPanel.headerPanel1.titleText")); // NOI18N
 
         jToolBar1.setFloatable(false);

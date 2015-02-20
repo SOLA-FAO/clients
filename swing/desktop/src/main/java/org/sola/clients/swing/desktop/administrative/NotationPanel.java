@@ -195,6 +195,7 @@ public class NotationPanel extends ContentPanel {
         documentsPanel = createDocumentsPanel();
 
         setHeaderPanel(headerPanel1);
+        setHelpTopic("note_details"); // NOI18N
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
         headerPanel1.setTitleText(bundle.getString("NotationPanel.headerPanel1.titleText")); // NOI18N

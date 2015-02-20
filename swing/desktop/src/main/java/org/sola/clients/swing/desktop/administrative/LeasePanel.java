@@ -566,6 +566,7 @@ public class LeasePanel extends ContentPanel {
         popUpOwners.add(menuViewOwner);
 
         setHeaderPanel(headerPanel);
+        setHelpTopic("lease_interest"); // NOI18N
 
         headerPanel.setTitleText(bundle.getString("LeasePanel.headerPanel.titleText")); // NOI18N
 

@@ -132,6 +132,7 @@ public class SLParcelPanel extends ContentPanel {
         btnSecurity = new javax.swing.JButton();
 
         setHeaderPanel(headerPanel1);
+        setHelpTopic("parcel_details"); // NOI18N
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);

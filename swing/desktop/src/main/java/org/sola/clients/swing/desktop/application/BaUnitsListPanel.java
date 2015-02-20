@@ -83,6 +83,7 @@ public class BaUnitsListPanel extends ContentPanel {
 
         setCloseOnHide(true);
         setHeaderPanel(headerPanel);
+        setHelpTopic("maintain_property"); // NOI18N
 
         headerPanel.setName("headerPanel"); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/application/Bundle"); // NOI18N

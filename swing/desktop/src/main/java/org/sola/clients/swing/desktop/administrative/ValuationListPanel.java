@@ -119,6 +119,7 @@ public class ValuationListPanel extends ContentPanel {
         tblValuations = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
 
         setHeaderPanel(headerPanel1);
+        setHelpTopic("valuations"); // NOI18N
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
         headerPanel1.setTitleText(bundle.getString("ValuationListPanel.headerPanel1.titleText")); // NOI18N

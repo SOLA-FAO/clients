@@ -10,6 +10,9 @@
     <Component class="org.sola.clients.beans.referencedata.ValuationTypeListBean" name="valuationTypeListBean">
     </Component>
   </NonVisualComponents>
+  <Properties>
+    <Property name="helpTopic" type="java.lang.String" value="valuations" noResource="true"/>
+  </Properties>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="1"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>

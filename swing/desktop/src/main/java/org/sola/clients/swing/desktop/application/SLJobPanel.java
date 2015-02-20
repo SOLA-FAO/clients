@@ -393,9 +393,9 @@ public class SLJobPanel extends ContentPanel {
         btnViewService.setEnabled(false);
         btnRevertService.setEnabled(false);
 
-        if (servicesManagementAllowed) {
-            if (selectedService != null) {
-                btnViewService.setEnabled(!selectedService.isNew());
+        if (selectedService != null) {
+            btnViewService.setEnabled(!selectedService.isNew());
+            if (servicesManagementAllowed) {
                 btnCancelService.setEnabled(selectedService.isManagementAllowed()
                         && SecurityBean.isInRole(RolesConstants.APPLICATION_SERVICE_CANCEL));
                 btnStartService.setEnabled(selectedService.isManagementAllowed()
@@ -1452,7 +1452,7 @@ public class SLJobPanel extends ContentPanel {
         popUpParcels.add(menuRemoveParcel);
 
         setHeaderPanel(pnlHeader);
-        setHelpTopic(bundle.getString("SLJobPanel.helpTopic")); // NOI18N
+        setHelpTopic("application_details"); // NOI18N
         setMinimumSize(new java.awt.Dimension(660, 458));
         setName("Form"); // NOI18N
         setPreferredSize(new java.awt.Dimension(660, 458));

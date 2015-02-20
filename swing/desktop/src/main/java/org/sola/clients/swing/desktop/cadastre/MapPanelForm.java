@@ -71,10 +71,10 @@ public class MapPanelForm extends ContentPanel {
         scrollMap = new javax.swing.JScrollPane();
 
         setHeaderPanel(headerPanel);
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/cadastre/Bundle"); // NOI18N
-        setHelpTopic(bundle.getString("MapPanelForm.helpTopic")); // NOI18N
+        setHelpTopic("map_viewer"); // NOI18N
 
         headerPanel.setName("headerPanel"); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/cadastre/Bundle"); // NOI18N
         headerPanel.setTitleText(bundle.getString("MapPanelForm.headerPanel.titleText")); // NOI18N
 
         scrollMap.setBorder(null);

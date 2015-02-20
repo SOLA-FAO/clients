@@ -47,6 +47,7 @@ import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForPublicDisplay;
 import org.sola.clients.swing.ui.reports.ReportViewerForm;
+import org.sola.clients.swing.ui.reports.SaveFormat;
 import org.sola.common.StringUtility;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -80,6 +81,20 @@ public class PublicDisplayPrintPanel extends javax.swing.JPanel {
         initComponents();
         setPrintLayoutList();
         this.mapBundle = mapBundle;
+    }
+    
+    /**
+     * Enables or disables the print panel controls based on the readonly value. 
+     * @param readOnly 
+     */
+    public void setReadOnly(boolean readOnly) {
+        boolean enabled = !readOnly;
+        cmbLayoutList.setEnabled(enabled);
+        txtScale.setEnabled(enabled);
+        txtArea.setEnabled(enabled);
+        txtNotificationPeriod.setEnabled(enabled);
+        txtMapCenterLabel.setEnabled(enabled);
+        cmdPrint.setEnabled(enabled);
     }
 
     /**
@@ -237,6 +252,7 @@ public class PublicDisplayPrintPanel extends javax.swing.JPanel {
                         fileName, this.txtArea.getText(),
                         this.txtNotificationPeriod.getText(),
                         mapImageLocation, scalebarImageLocation));
+        form.setSaveFormats(SaveFormat.Pdf, SaveFormat.Docx, SaveFormat.Odt, SaveFormat.Html);
         // this is to visualize the generated report            
         form.setVisible(true);
     }

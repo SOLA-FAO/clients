@@ -71,11 +71,11 @@ public class DocumentSearchForm extends ContentPanel {
         documentSearchPanel = new org.sola.clients.swing.desktop.source.DocumentSearchPanel();
 
         setHeaderPanel(headerPanel1);
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/source/Bundle"); // NOI18N
-        setHelpTopic(bundle.getString("DocumentSearchForm.helpTopic")); // NOI18N
+        setHelpTopic("document_search"); // NOI18N
         setName("Form"); // NOI18N
 
         headerPanel1.setName("headerPanel1"); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/source/Bundle"); // NOI18N
         headerPanel1.setTitleText(bundle.getString("DocumentSearchForm.headerPanel1.titleText")); // NOI18N
 
         documentSearchPanel.setName(bundle.getString("DocumentSearchForm.documentSearchPanel.name")); // NOI18N

@@ -404,7 +404,7 @@ public class SLDashBoardPanel extends ContentPanel {
         });
         popUpPropertiesToAction.add(menuRefreshProperty);
 
-        setHelpTopic("dashboard_and_main_menu");
+        setHelpTopic("dashboard"); // NOI18N
         setMinimumSize(new java.awt.Dimension(354, 249));
         setName("Form"); // NOI18N
         addComponentListener(new java.awt.event.ComponentAdapter() {

@@ -355,7 +355,7 @@ public class OwnershipPanel extends ContentPanel {
         popUpShares.add(menuViewShare);
 
         setHeaderPanel(headerPanel);
-        setHelpTopic(bundle.getString("OwnershipPanel.helpTopic")); // NOI18N
+        setHelpTopic("ownership_interest"); // NOI18N
         setName("Form"); // NOI18N
 
         headerPanel.setName("headerPanel"); // NOI18N

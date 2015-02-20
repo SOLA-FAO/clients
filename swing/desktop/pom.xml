@@ -4,12 +4,12 @@
     <parent>
         <artifactId>sola-clients-swing</artifactId>
         <groupId>org.sola.clients</groupId>
-        <version>sl-018</version>
+        <version>v1502a</version>
     </parent>
     <groupId>org.sola.clients.swing</groupId>
     <artifactId>sola-desktop</artifactId>
     <packaging>jar</packaging>
-    <version>sl-018</version>
+    <version>v1502a</version>
     <name>Clients Desktop</name>
     <build>
         <finalName>${project.artifactId}</finalName>
@@ -95,6 +95,11 @@
             <groupId>ognl</groupId>
             <artifactId>ognl</artifactId>
             <version>3.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jdesktop</groupId>
+            <artifactId>beansbinding</artifactId>
+            <version>1.2.1</version>
         </dependency>
     </dependencies>
     <profiles>

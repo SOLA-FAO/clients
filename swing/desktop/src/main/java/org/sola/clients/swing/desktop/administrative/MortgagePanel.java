@@ -285,11 +285,11 @@ public class MortgagePanel extends ContentPanel {
 
         setCloseOnHide(true);
         setHeaderPanel(headerPanel);
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
-        setHelpTopic(bundle.getString("MortgagePanel.helpTopic")); // NOI18N
+        setHelpTopic("property_interest_tab"); // NOI18N
         setName("Form"); // NOI18N
 
         headerPanel.setName("headerPanel"); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
         headerPanel.setTitleText(bundle.getString("MortgagePanel.headerPanel.titleText")); // NOI18N
 
         jToolBar1.setFloatable(false);

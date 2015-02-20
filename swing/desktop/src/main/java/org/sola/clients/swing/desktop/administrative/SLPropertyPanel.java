@@ -1622,7 +1622,7 @@ public class SLPropertyPanel extends ContentPanel {
         popupPropertyDocuments.add(menuViewPropertyDocument);
 
         setHeaderPanel(headerPanel);
-        setHelpTopic(bundle.getString("SLPropertyPanel.helpTopic")); // NOI18N
+        setHelpTopic("property_details"); // NOI18N
         setName("Form"); // NOI18N
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
