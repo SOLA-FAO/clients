@@ -65,6 +65,20 @@ public class CadastreTransactionMapPanel extends ContentPanel {
                 applicationProperty, CadastreObjectTypeBean.CODE_PARCEL);
         saveTransactionState();
     }
+    
+    /**
+     * It initiates the panel with the target cadastre object type as being parcel.
+     * 
+     * @param applicationBean
+     * @param applicationService
+     */
+    public CadastreTransactionMapPanel(
+            ApplicationBean applicationBean,
+            ApplicationServiceBean applicationService) {
+        this(applicationBean, applicationService, 
+                null, CadastreObjectTypeBean.CODE_PARCEL);
+        saveTransactionState();
+    }
 
     /**
      * It initiates the panel with the target cadastre object type as parameter.
