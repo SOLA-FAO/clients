@@ -239,7 +239,7 @@ public final class CacheManager {
     private static final String GET_SERVICE_STATUS_TYPES = "getServiceStatusTypes";
     private static final String GET_PARTY_TYPES = "getPartyTypes";
     private static final String GET_PARTY_ROLES = "getPartyRoles";
-    private static final String GET_PARTY_GROUP = "getGroupParty";
+//    private static final String GET_PARTY_GROUP = "getGroupParty";
     private static final String GET_ID_TYPES = "getIdTypes";
     private static final String GET_BA_UNIT_TYPES = "getBaUnitTypes";
     private static final String GET_MORTGAGE_TYPES = "getMortgageTypes";
@@ -390,11 +390,11 @@ public final class CacheManager {
     }
     
     
-    public static List<GroupPartyTypeBean> getPartyGroups() {
-        return getCachedBeanList(GroupPartyTypeBean.class,
-                WSManager.getInstance().getReferenceDataService(),
-                GET_PARTY_GROUP, GROUP_PARTY_TYPES_KEY);
-    }
+//    public static List<GroupPartyTypeBean> getPartyGroups() {
+//        return getCachedBeanList(GroupPartyTypeBean.class,
+//                WSManager.getInstance().getReferenceDataService(),
+//                GET_PARTY_GROUP, GROUP_PARTY_TYPES_KEY);
+//    }
 
     
     public static List<ServiceStatusTypeBean> getAppServiceStatusTypes() {

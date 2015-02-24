@@ -31,6 +31,7 @@ import org.sola.clients.beans.AbstractVersionedBean;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.services.boundary.wsclients.WSManager;
+import org.sola.webservices.transferobjects.EntityAction;
 import org.sola.webservices.transferobjects.casemanagement.PartyMemberTO;
 
 
@@ -96,21 +97,23 @@ public class PartyMemberBean extends AbstractVersionedBean{
      * Saves changes to the PartyMember into the database. 
      * @throws Exception
      */
-    public boolean savePartyMember() {
+    public boolean savePartyMember(String serviceId) {
         
-        System.out.println("QUI SAVE PartyMember BEAN");
         PartyMemberTO partyMember = TypeConverters.BeanToTrasferObject(this, PartyMemberTO.class);
-        System.out.println("QUI 1 PartyMember BEAN");  
-          
-       
-        
-        System.out.println("QUI 2 PartyMember BEAN");
-        
-        partyMember = WSManager.getInstance().getCaseManagementService().savePartyMember(partyMember);
-        
-        System.out.println("QUI 3 PartyMember BEAN");
+        partyMember = WSManager.getInstance().getCaseManagementService().savePartyMember(partyMember, serviceId);
         TypeConverters.TransferObjectToBean(partyMember, PartyMemberBean.class, this);
         return true;
+    }
+    
+    
+     /** Removes party. */
+    public static void remove(String partyId, String groupId, String serviceId){
+        if(partyId == null || partyId.length()<1){
+            return;
+        }
+        PartyMemberTO partyMember = WSManager.getInstance().getCaseManagementService().getPartyMember(partyId, groupId);
+        partyMember.setEntityAction(EntityAction.DELETE);
+        WSManager.getInstance().getCaseManagementService().savePartyMember(partyMember, serviceId);
     }
 
 }

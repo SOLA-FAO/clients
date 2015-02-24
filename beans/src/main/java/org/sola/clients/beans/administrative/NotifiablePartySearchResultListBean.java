@@ -25,13 +25,14 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-package org.sola.clients.beans.party;
+package org.sola.clients.beans.administrative;
 
 import java.util.List;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingListBean;
 import org.sola.clients.beans.controls.SolaObservableList;
 import org.sola.clients.beans.converters.TypeConverters;
+import org.sola.clients.beans.party.PartySearchParamsBean;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.search.PartySearchParamsTO;
 
@@ -39,34 +40,34 @@ import org.sola.webservices.transferobjects.search.PartySearchParamsTO;
  * Holds the list of {@link PartySearchResultBean} objects and used to bound 
  * party search results on the form.
  */
-public class PartyPropertySearchResultListBean extends AbstractBindingListBean {
+public class NotifiablePartySearchResultListBean extends AbstractBindingListBean {
     
     public static final String SELECTED_PARTY_SEARCH_RESULT = "selectedPartySearchResult";
-    private SolaObservableList<PartyPropertySearchResultBean> partySearchResults;
-    private PartyPropertySearchResultBean selectedPartySearchResult;
+    private SolaObservableList<NotifiablePartySearchResultBean> partySearchResults;
+    private NotifiablePartySearchResultBean selectedPartySearchResult;
     
-    public PartyPropertySearchResultListBean(){
+    public NotifiablePartySearchResultListBean(){
         super();
     }
 
-    public ObservableList<PartyPropertySearchResultBean> getPartySearchResults() {
+    public ObservableList<NotifiablePartySearchResultBean> getPartySearchResults() {
         if(partySearchResults == null){
-            partySearchResults = new SolaObservableList<PartyPropertySearchResultBean>();
+            partySearchResults = new SolaObservableList<NotifiablePartySearchResultBean>();
         }
         return partySearchResults;
     }
 
-    public PartyPropertySearchResultBean getSelectedPartySearchResult() {
+    public NotifiablePartySearchResultBean getSelectedPartySearchResult() {
         return selectedPartySearchResult;
     }
 
-    public void setSelectedPartySearchResult(PartyPropertySearchResultBean selectedPartySearchResult) {
+    public void setSelectedPartySearchResult(NotifiablePartySearchResultBean selectedPartySearchResult) {
         this.selectedPartySearchResult = selectedPartySearchResult;
         propertySupport.firePropertyChange(SELECTED_PARTY_SEARCH_RESULT, null, this.selectedPartySearchResult);
     }
     
     /** Searches parties with given criteria. */
-    public void search(PartySearchParamsBean searchParams, String partyId){
+    public void search(PartySearchParamsBean searchParams, String service){
         if(searchParams == null){
             return;
         }
@@ -74,7 +75,7 @@ public class PartyPropertySearchResultListBean extends AbstractBindingListBean {
         getPartySearchResults().clear();
         PartySearchParamsTO searchParamsTO = TypeConverters.BeanToTrasferObject(searchParams, PartySearchParamsTO.class);
         TypeConverters.TransferObjectListToBeanList(
-                WSManager.getInstance().getSearchService().searchPartiesProperty(searchParamsTO,partyId),
-                PartyPropertySearchResultBean.class, (List)getPartySearchResults());
+                WSManager.getInstance().getSearchService().searchNotifiableParties(searchParamsTO, service),
+                NotifiablePartySearchResultBean.class, (List)getPartySearchResults());
     }
 }

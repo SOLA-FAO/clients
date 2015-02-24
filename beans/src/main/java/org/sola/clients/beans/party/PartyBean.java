@@ -337,11 +337,11 @@ public class PartyBean extends PartySummaryBean {
             System.out.println("GROUP PARTY LIST NOT NULL  "+groupPartyList);
              System.out.println("GROUP PARTY TYPE  "+groupPartyTypeBean.getCode());
       
-            GroupPartyBean newGroup = new GroupPartyBean();
-            newGroup.setGroup(groupPartyTypeBean);
-            newGroup.setGroupCode(groupPartyTypeBean.getCode());
-            System.out.println("GROUP PARTY  addednewGroup  "+newGroup.getGroupCode());
-            groupPartyList.addAsNew(newGroup);
+            GroupPartyBean newGroupType = new GroupPartyBean();
+            newGroupType.setGroupType(groupPartyTypeBean);
+            newGroupType.setGroupCode(groupPartyTypeBean.getCode());
+            System.out.println("GROUP PARTY  addednewGroup  "+newGroupType.getGroupCode());
+            groupPartyList.addAsNew(newGroupType);
             System.out.println("GROUP PARTY LIST addednewGroup  "+groupPartyList);
       
         }
@@ -467,14 +467,23 @@ public class PartyBean extends PartySummaryBean {
     }
     
    public void createPaperTitle(SourceBean source) {
-        if (source != null) {
-            for (SourceBean sourceBean : sourceList) {
-                sourceBean.setEntityAction(EntityAction.DISASSOCIATE);
-            }
+       if (source != null) {
             sourceList.addAsNew(source);
             sourceList.filter();
         }
     }
+   
+    public void removePaperTitle(SourceBean source) {
+       if (source != null) {
+            for (SourceBean sourceBean : sourceList) {
+                if (sourceBean.getId().equals(source.getId())){
+                    sourceBean.setEntityAction(EntityAction.DISASSOCIATE);
+                }
+            }
+            sourceList.filter();
+        }
+    }
+   
     public SolaList<SourceBean> getSourceList() {
         return sourceList;
     }

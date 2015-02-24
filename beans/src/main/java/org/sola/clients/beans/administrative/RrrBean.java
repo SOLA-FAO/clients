@@ -596,11 +596,14 @@ public class RrrBean extends AbstractTransactionedBean {
             for (ConditionForRrrBean leaseCondition : getConditionsList()) {
                 leaseCondition.resetVersion();
             }
+            
+           if (getNotation()!= null) { 
             getNotation().generateId();
             getNotation().resetVersion();
             if (removeBaUnitId) {
                 getNotation().setBaUnitId(null);
             }
+           }  
         }
     }
 }

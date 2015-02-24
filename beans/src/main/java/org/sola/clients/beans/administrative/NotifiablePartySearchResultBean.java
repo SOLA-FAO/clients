@@ -25,13 +25,15 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-package org.sola.clients.beans.party;
+package org.sola.clients.beans.administrative;
+
+import org.sola.clients.beans.party.PartySummaryBean;
 
 /**
  * Represents search result of parties. Could be populated 
  * from the {@link PartySearchResultTO} object.<br /> 
  */
-public class PartyPropertySearchResultBean extends PartySummaryBean {
+public class NotifiablePartySearchResultBean extends PartySummaryBean {
     public static final String SELECTED_PROPERTY_PROPERTY = "selProperties";
         
     private String roles;
@@ -39,8 +41,17 @@ public class PartyPropertySearchResultBean extends PartySummaryBean {
     private String properties;
     private boolean selProperties;
     private Long total;
+    private String name;
+    private String lastName;
+    private String targetPartyName;
+    private String targetPartyLastName;
+    private String targetPartyId;
+    private String groupPartyName;
+    private String groupPartyLastName;
+    private String groupPartyId;
+    
    
-    public PartyPropertySearchResultBean(){
+    public NotifiablePartySearchResultBean(){
         super();
     }
 
@@ -85,4 +96,53 @@ public class PartyPropertySearchResultBean extends PartySummaryBean {
     public void setTotal(Long total) {
         this.total = total;
     }
+
+    public String getTargetPartyId() {
+        return targetPartyId;
+    }
+
+    public void setTargetPartyId(String targetPartyId) {
+        this.targetPartyId = targetPartyId;
+    }
+
+    public String getTargetPartyLastName() {
+        return targetPartyLastName;
+    }
+
+    public void setTargetPartyLastName(String targetPartyLastName) {
+        this.targetPartyLastName = targetPartyLastName;
+    }
+
+    public String getTargetPartyName() {
+        return targetPartyName;
+    }
+
+    public void setTargetPartyName(String targetPartyName) {
+        this.targetPartyName = targetPartyName;
+    }
+
+    public String getGroupPartyId() {
+        return groupPartyId;
+    }
+
+    public void setGroupPartyId(String groupPartyId) {
+        this.groupPartyId = groupPartyId;
+    }
+
+    public String getGroupPartyLastName() {
+        return groupPartyLastName;
+    }
+
+    public void setGroupPartyLastName(String groupPartyLastName) {
+        this.groupPartyLastName = groupPartyLastName;
+    }
+
+    public String getGroupPartyName() {
+        return groupPartyName;
+    }
+
+    public void setGroupPartyName(String groupPartyName) {
+        this.groupPartyName = groupPartyName;
+    }
+    
 }

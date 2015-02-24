@@ -47,6 +47,7 @@ import org.sola.clients.beans.administrative.validation.SimpleOwnershipValidatio
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationPropertyBean;
 import org.sola.clients.beans.application.ApplicationServiceBean;
+import org.sola.clients.beans.application.CancelNotificationBean;
 import org.sola.clients.beans.party.*;
 import org.sola.clients.beans.referencedata.*;
 import org.sola.clients.beans.source.SourceBean;
@@ -63,6 +64,7 @@ import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.clients.swing.common.utils.FormattersFactory;
 import org.sola.clients.swing.desktop.source.DocumentForm;
+import org.sola.clients.swing.ui.party.PartySearchPanel;
 import org.sola.clients.swing.ui.renderers.BooleanCellRenderer;
 import org.sola.clients.swing.ui.renderers.SimpleComboBoxRenderer;
 import org.sola.clients.swing.ui.source.AddDocumentForm;
@@ -77,7 +79,7 @@ import org.sola.services.boundary.wsclients.WSManager;
  * Form for managing simple ownership right. {@link RrrBean} is used to bind the
  * data on the form.
  */
-public class RecordPersonRelationshipPanel extends ContentPanel {
+public class CancelPersonRelationshipPanel extends ContentPanel {
 
     private AddDocumentForm applicationDocumentsForm;
     public static final String LODGED_ROLE = "notifiablePerson";
@@ -155,41 +157,44 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
         return applicationBean;
     }
 
-    public RecordPersonRelationshipPanel() {
+    public CancelPersonRelationshipPanel() {
         initComponents();
     }
 
     /**
      * Creates new form RecordRelationshipPanel
      */
-    public RecordPersonRelationshipPanel(ApplicationBean applicationBean,
-            ApplicationServiceBean applicationService) {
+    public CancelPersonRelationshipPanel(ApplicationBean applicationBean,
+        ApplicationServiceBean applicationService) {
         this.applicationBean = applicationBean;
         this.appBean = applicationBean;
         this.appService = applicationService;
         this.serviceId = applicationService.getId();
+//        TODO VERIFY THIS WHEN THERE IS MORE THAN ONE TARGET PARTY FOR THE NOTIFIABLE PERSON APPLICATION 
+//        notifiablePartyForBaUnitBean = NotifiablePartyForBaUnitBean.getNotifiableParty("", "", "", applicationBean.getId(),this.serviceId);
 
-        notifiablePartyForBaUnitBean = NotifiablePartyForBaUnitBean.getNotifiableParty("", "", "", applicationBean.getId(), this.serviceId);
+        notifiablePartyForBaUnitBean = CancelNotificationBean.getCancelNotification(applicationBean.getContactPersonId(), applicationBean.getContactPersonId(), "", applicationBean.getId(), this.serviceId);
+
 
         if (notifiablePartyForBaUnitBean == null) {
-            if (MessageUtility.displayMessage(ClientMessage.APPLICATION_APPLICANT_DETAILS)
-                    == MessageUtility.BUTTON_ONE) {
-                isContactPerson = true;
-                partyBean = applicationBean.getContactPerson();
-                this.partyAppBean = partyBean;
-
-
-                partyBean.setName(applicationBean.getContactPerson().getName());
-                partyBean.setLastName(applicationBean.getContactPerson().getLastName());
-                partyBean.setAddress(applicationBean.getContactPerson().getAddress());
-                partyBean.setMobile(applicationBean.getContactPerson().getMobile());
-                partyBean.setEmail(applicationBean.getContactPerson().getEmail());
-                partyBean.setGenderType(applicationBean.getContactPerson().getGenderType());
-
-            } else {
-                isContactPerson = false;
-                partyBean = new PartyBean();
-            }
+//            if (MessageUtility.displayMessage(ClientMessage.APPLICATION_APPLICANT_DETAILS)
+//                    == MessageUtility.BUTTON_ONE) {
+//                isContactPerson = true;
+//                partyBean = applicationBean.getContactPerson();
+//                this.partyAppBean = partyBean;
+//
+//
+//                partyBean.setName(applicationBean.getContactPerson().getName());
+//                partyBean.setLastName(applicationBean.getContactPerson().getLastName());
+//                partyBean.setAddress(applicationBean.getContactPerson().getAddress());
+//                partyBean.setMobile(applicationBean.getContactPerson().getMobile());
+//                partyBean.setEmail(applicationBean.getContactPerson().getEmail());
+//                partyBean.setGenderType(applicationBean.getContactPerson().getGenderType());
+//
+//            } else {
+            isContactPerson = false;
+            partyBean = new PartyBean();
+//            }
             this.partyBeanforGroup = new PartyBean();
             this.partyMemberBean = new PartyMemberBean();
             this.groupPartyBean = new GroupPartyBean();
@@ -210,7 +215,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
 
         if (notifiablePartyForBaUnitBean
                 == null) {
-            notifiablePartyForBaUnitBean = new NotifiablePartyForBaUnitBean();
+            notifiablePartyForBaUnitBean = new CancelNotificationBean();
         }
 
         if (notifiablePartyForBaUnitBean.getTargetPartyId()
@@ -220,11 +225,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
             partyBean = PartyBean.getParty(notifiablePartyForBaUnitBean.getPartyId());
             partyAppBean = partyBean;
 
-            partyBeanforGroup = PartyBean.getParty(notifiablePartyForBaUnitBean.getGroupId());
             partyAppBeanForGroup = partyBeanforGroup;
-
-            groupPartyBean = (GroupPartyBean.getGroupParty(notifiablePartyForBaUnitBean.getGroupId()));
-
             groupAppPartyBean = groupPartyBean;
         }
 
@@ -296,10 +297,10 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
 
     private void customizeForm() {
 
+        this.jTabbedPane1.remove(this.jTabbedPane1.getComponentAt(0));
+        this.btnSelectExisting.setVisible(false);
         if (isContactPerson) {
             partyBean = applicationBean.getContactPerson();
-
-
             partyBean.setName(applicationBean.getContactPerson().getName());
             partyBean.setLastName(applicationBean.getContactPerson().getLastName());
             partyBean.setAddress(applicationBean.getContactPerson().getAddress());
@@ -331,21 +332,15 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
 
         if (targetName != null) {
             this.txtName.setText(targetName);
-            this.jPanel17.setVisible(false);
-            this.jLabel5.setVisible(false);
+            partySearchResuls.search(partySearchParams, this.serviceId);
+//            this.jPanel17.setVisible(false);
+//            this.jLabel5.setVisible(false);
             this.txtName.setEnabled(false);
             this.txtName.setEditable(false);
             partyBean = partyAppBean;
-            partySearchResuls.search(partySearchParams, partyBean.getId());
             partyBeanforGroup = partyAppBeanForGroup;
-
             groupPartyBean = groupAppPartyBean;
             groupPartyTypeListBean1.setSelectedGroupPartyType(groupPartyBean.getGroupType());
-            this.cbxGroupType.setSelectedItem(groupPartyBean.getGroupType());
-            this.cbxGroupType.setEditable(false);
-            this.cbxGroupType.setEnabled(false);
-            this.txtGroup.setEditable(false);
-            this.txtGroup.setEnabled(false);
             this.txtAddress.setEditable(false);
             this.txtAddress.setEnabled(false);
             this.txtPhone.setEditable(false);
@@ -358,6 +353,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
             this.txtLastName.setEnabled(false);
             this.cbxGender.setEditable(false);
             this.cbxGender.setEnabled(false);
+            this.btnSelectExisting.setVisible(false);
         }
     }
 
@@ -376,10 +372,6 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
 
     @Override
     protected boolean panelClosing() {
-
-        if (btnSave.isEnabled() && MainForm.checkSaveBeforeClose(partyBean)) {
-            return savePersonRelationship();
-        }
         return true;
     }
 
@@ -399,16 +391,19 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
         groupPartyTypeListBean1 = new org.sola.clients.beans.referencedata.GroupPartyTypeListBean();
         partyBeanforGroup = CreatePartyBeanForGroup();
         partySearchParams = new org.sola.clients.beans.party.PartySearchParamsBean();
-        partySearchResuls = new org.sola.clients.beans.party.PartyPropertySearchResultListBean();
         applicationPropertyBean = new org.sola.clients.beans.application.ApplicationPropertyBean();
         applicationBean = CreateApplicationBean();
         partyBean = CreatePartyBean();
-        notifiablePartyForBaUnitBean = new org.sola.clients.beans.administrative.NotifiablePartyForBaUnitBean();
+        notifiablePartyForBaUnitBeanOLD = new org.sola.clients.beans.administrative.NotifiablePartyForBaUnitBean();
+        notifiablePartySearchResultBean1 = new org.sola.clients.beans.administrative.NotifiablePartySearchResultBean();
+        partySearchResuls = new org.sola.clients.beans.administrative.NotifiablePartySearchResultListBean();
+        notifiablePartyForBaUnitBean = new org.sola.clients.beans.application.CancelNotificationBean();
         headerPanel = new org.sola.clients.swing.ui.HeaderPanel();
         jToolBar1 = new javax.swing.JToolBar();
-        btnSave = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JToolBar.Separator();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
+        btnRemove1 = new org.sola.clients.swing.common.buttons.BtnRemove();
+        btnSelectExisting = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel12 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
@@ -446,10 +441,9 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
         pnlSearch = new javax.swing.JPanel();
         jToolBar2 = new javax.swing.JToolBar();
         btnView = new javax.swing.JButton();
-        btnSelect = new javax.swing.JButton();
         separator1 = new javax.swing.JToolBar.Separator();
+        btnRemove2 = new org.sola.clients.swing.common.buttons.BtnRemove();
         jSeparator2 = new javax.swing.JToolBar.Separator();
-        btnRemove1 = new org.sola.clients.swing.common.buttons.BtnRemove();
         jLabel5 = new javax.swing.JLabel();
         lblSearchResultNumber = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -459,32 +453,40 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
         btnSearch = new javax.swing.JButton();
         btnClear = new javax.swing.JButton();
         groupPanel4 = new org.sola.clients.swing.ui.GroupPanel();
-        groupChoicePanel = new javax.swing.JPanel();
-        cbxGroupType = new javax.swing.JComboBox();
-        txtGroup = new javax.swing.JTextField();
-        labGroupType = new javax.swing.JLabel();
-        labGroupName = new javax.swing.JLabel();
 
         setHeaderPanel(headerPanel);
         setPreferredSize(new java.awt.Dimension(679, 800));
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
-        headerPanel.setTitleText(bundle.getString("RecordPersonRelationshipPanel.headerPanel.titleText")); // NOI18N
+        headerPanel.setTitleText(bundle.getString("CancelPersonRelationshipPanel.headerPanel.titleText")); // NOI18N
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
-
-        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/save.png"))); // NOI18N
-        btnSave.setText(bundle.getString("SimpleOwhershipPanel.btnSave.text")); // NOI18N
-        btnSave.setFocusable(false);
-        btnSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(btnSave);
         jToolBar1.add(jSeparator1);
         jToolBar1.add(filler1);
+
+        btnRemove1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/eraser.png"))); // NOI18N
+        btnRemove1.setText(bundle.getString("CancelPersonRelationshipPanel.btnRemove1.text")); // NOI18N
+        btnRemove1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnRemove1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemove1ActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnRemove1);
+
+        btnSelectExisting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/search.png"))); // NOI18N
+        btnSelectExisting.setText(bundle.getString("CancelPersonRelationshipPanel.btnSelectExisting.text")); // NOI18N
+        btnSelectExisting.setFocusable(false);
+        btnSelectExisting.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSelectExisting.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSelectExistingActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnSelectExisting);
+
+        jPanel12.setEnabled(false);
 
         jPanel6.setLayout(new java.awt.GridLayout(1, 2, 15, 0));
 
@@ -494,7 +496,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
         LafManager.getInstance().setTxtProperties(txtFirstName);
 
         labName.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
-        labName.setText(bundle.getString("RecordPersonRelationshipPanel.labName.text")); // NOI18N
+        labName.setText(bundle.getString("CancelPersonRelationshipPanel.labName.text")); // NOI18N
         labName.setIconTextGap(1);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -503,8 +505,8 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(labName, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(398, Short.MAX_VALUE))
-            .addComponent(txtFirstName, javax.swing.GroupLayout.DEFAULT_SIZE, 509, Short.MAX_VALUE)
+                .addContainerGap(391, Short.MAX_VALUE))
+            .addComponent(txtFirstName, javax.swing.GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -518,7 +520,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
         jPanel6.add(jPanel4);
 
         labLastName.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
-        labLastName.setText(bundle.getString("RecordPersonRelationshipPanel.labLastName.text")); // NOI18N
+        labLastName.setText(bundle.getString("CancelPersonRelationshipPanel.labLastName.text")); // NOI18N
         labLastName.setIconTextGap(1);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, partyBean, org.jdesktop.beansbinding.ELProperty.create("${lastName}"), txtLastName, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -533,8 +535,8 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addComponent(labLastName)
-                .addContainerGap(449, Short.MAX_VALUE))
-            .addComponent(txtLastName, javax.swing.GroupLayout.DEFAULT_SIZE, 509, Short.MAX_VALUE)
+                .addContainerGap(442, Short.MAX_VALUE))
+            .addComponent(txtLastName, javax.swing.GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -554,7 +556,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
         txtAddress.setHorizontalAlignment(JTextField.LEADING);
 
         labAddress.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
-        labAddress.setText(bundle.getString("RecordPersonRelationshipPanel.labAddress.text")); // NOI18N
+        labAddress.setText(bundle.getString("CancelPersonRelationshipPanel.labAddress.text")); // NOI18N
         labAddress.setIconTextGap(1);
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
@@ -563,7 +565,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addComponent(labAddress)
-                .addContainerGap(459, Short.MAX_VALUE))
+                .addContainerGap(452, Short.MAX_VALUE))
             .addComponent(txtAddress)
         );
         jPanel7Layout.setVerticalGroup(
@@ -580,7 +582,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
         jPanel11.setLayout(new java.awt.GridLayout(2, 3, 15, 5));
 
         lblGender.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
-        lblGender.setText(bundle.getString("RecordPersonRelationshipPanel.lblGender.text")); // NOI18N
+        lblGender.setText(bundle.getString("CancelPersonRelationshipPanel.lblGender.text")); // NOI18N
 
         cbxGender.setBackground(new java.awt.Color(226, 244, 224));
         cbxGender.setRenderer(new SimpleComboBoxRenderer("getDisplayValue"));
@@ -597,7 +599,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
             jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel19Layout.createSequentialGroup()
                 .addComponent(lblGender, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 707, Short.MAX_VALUE))
+                .addGap(0, 697, Short.MAX_VALUE))
             .addComponent(cbxGender, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel19Layout.setVerticalGroup(
@@ -611,7 +613,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
 
         jPanel11.add(jPanel19);
 
-        labPhone.setText(bundle.getString("RecordPersonRelationshipPanel.labPhone.text")); // NOI18N
+        labPhone.setText(bundle.getString("CancelPersonRelationshipPanel.labPhone.text")); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, partyBean, org.jdesktop.beansbinding.ELProperty.create("${mobile}"), txtPhone, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
@@ -630,7 +632,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addComponent(labPhone)
-                .addContainerGap(741, Short.MAX_VALUE))
+                .addContainerGap(731, Short.MAX_VALUE))
             .addComponent(txtPhone, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         jPanel8Layout.setVerticalGroup(
@@ -645,7 +647,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
         jPanel11.add(jPanel8);
 
         labEmail.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
-        labEmail.setText(bundle.getString("RecordPersonRelationshipPanel.labEmail.text")); // NOI18N
+        labEmail.setText(bundle.getString("CancelPersonRelationshipPanel.labEmail.text")); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, partyBean, org.jdesktop.beansbinding.ELProperty.create("${email}"), txtEmail, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
@@ -664,7 +666,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel10Layout.createSequentialGroup()
                 .addComponent(labEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(631, Short.MAX_VALUE))
+                .addContainerGap(621, Short.MAX_VALUE))
             .addComponent(txtEmail)
         );
         jPanel10Layout.setVerticalGroup(
@@ -678,13 +680,13 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
 
         jPanel11.add(jPanel10);
 
-        groupPanel3.setTitleText(bundle.getString("RecordPersonRelationshipPanel.groupPanel3.titleText")); // NOI18N
+        groupPanel3.setTitleText(bundle.getString("CancelPersonRelationshipPanel.groupPanel3.titleText")); // NOI18N
 
         jToolBar4.setFloatable(false);
         jToolBar4.setRollover(true);
 
         btnViewPaperTitle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/view.png"))); // NOI18N
-        btnViewPaperTitle.setText(bundle.getString("RecordPersonRelationshipPanel.btnViewPaperTitle.text")); // NOI18N
+        btnViewPaperTitle.setText(bundle.getString("CancelPersonRelationshipPanel.btnViewPaperTitle.text")); // NOI18N
         btnViewPaperTitle.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnViewPaperTitleActionPerformed(evt);
@@ -693,7 +695,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
         jToolBar4.add(btnViewPaperTitle);
 
         btnLinkPaperTitle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/document-link.png"))); // NOI18N
-        btnLinkPaperTitle.setText(bundle.getString("RecordPersonRelationshipPanel.btnLinkPaperTitle.text")); // NOI18N
+        btnLinkPaperTitle.setText(bundle.getString("CancelPersonRelationshipPanel.btnLinkPaperTitle.text")); // NOI18N
         btnLinkPaperTitle.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLinkPaperTitleActionPerformed(evt);
@@ -702,7 +704,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
         jToolBar4.add(btnLinkPaperTitle);
 
         btnRemovePaperTitle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/document-remove.png"))); // NOI18N
-        btnRemovePaperTitle.setText(bundle.getString("RecordPersonRelationshipPanel.btnRemovePaperTitle.text")); // NOI18N
+        btnRemovePaperTitle.setText(bundle.getString("CancelPersonRelationshipPanel.btnRemovePaperTitle.text")); // NOI18N
         btnRemovePaperTitle.setFocusable(false);
         btnRemovePaperTitle.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnRemovePaperTitle.addActionListener(new java.awt.event.ActionListener() {
@@ -718,20 +720,20 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1538, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel3Layout.createSequentialGroup()
                     .addContainerGap()
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(groupPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 1528, Short.MAX_VALUE)
+                        .addComponent(groupPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)
                         .addGroup(jPanel3Layout.createSequentialGroup()
                             .addComponent(jToolBar4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addContainerGap())
-                        .addComponent(docTableScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 1528, Short.MAX_VALUE))))
+                        .addComponent(docTableScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE))))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 830, Short.MAX_VALUE)
+            .addGap(0, 223, Short.MAX_VALUE)
             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel3Layout.createSequentialGroup()
                     .addGap(26, 26, 26)
@@ -739,19 +741,17 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(jToolBar4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(docTableScrollPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(621, Short.MAX_VALUE)))
+                    .addComponent(docTableScrollPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(44, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
         jPanel12.setLayout(jPanel12Layout);
         jPanel12Layout.setHorizontalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 1558, Short.MAX_VALUE)
+            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 1538, Short.MAX_VALUE)
             .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel12Layout.createSequentialGroup()
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel12Layout.setVerticalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -760,16 +760,16 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(49, 49, 49)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(455, Short.MAX_VALUE))
+                .addContainerGap(345, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab(bundle.getString("RecordPersonRelationshipPanel.jPanel12.TabConstraints.tabTitle"), jPanel12); // NOI18N
+        jTabbedPane1.addTab(bundle.getString("CancelPersonRelationshipPanel.jPanel12.TabConstraints.tabTitle"), jPanel12); // NOI18N
 
         jPanel1.setPreferredSize(new java.awt.Dimension(659, 800));
 
-        jLabel4.setText(bundle.getString("RecordPersonRelationshipPanel.jLabel4.text")); // NOI18N
+        jLabel4.setText(bundle.getString("CancelPersonRelationshipPanel.jLabel4.text")); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, partySearchParams, org.jdesktop.beansbinding.ELProperty.create("${name}"), txtName, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
@@ -780,7 +780,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
         jToolBar2.setRollover(true);
 
         btnView.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/view.png"))); // NOI18N
-        btnView.setText(bundle.getString("RecordPersonRelationshipPanel.btnView.text")); // NOI18N
+        btnView.setText(bundle.getString("CancelPersonRelationshipPanel.btnView.text")); // NOI18N
         btnView.setFocusable(false);
         btnView.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnView.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -790,41 +790,36 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
             }
         });
         jToolBar2.add(btnView);
+        jToolBar2.add(separator1);
 
-        btnSelect.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/select.png"))); // NOI18N
-        btnSelect.setText(bundle.getString("RecordPersonRelationshipPanel.btnSelect.text")); // NOI18N
-        btnSelect.setFocusable(false);
-        btnSelect.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnSelect.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnSelect.addActionListener(new java.awt.event.ActionListener() {
+        btnRemove2.setLabel(bundle.getString("CancelPersonRelationshipPanel.btnRemove2.label")); // NOI18N
+        btnRemove2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnRemove2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSelectActionPerformed(evt);
+                btnRemove2ActionPerformed(evt);
             }
         });
-        jToolBar2.add(btnSelect);
-        jToolBar2.add(separator1);
+        jToolBar2.add(btnRemove2);
         jToolBar2.add(jSeparator2);
 
-        btnRemove1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnRemove1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRemove1ActionPerformed(evt);
-            }
-        });
-        jToolBar2.add(btnRemove1);
-
-        jLabel5.setText(bundle.getString("RecordPersonRelationshipPanel.jLabel5.text")); // NOI18N
+        jLabel5.setText(bundle.getString("CancelPersonRelationshipPanel.jLabel5.text")); // NOI18N
         jToolBar2.add(jLabel5);
 
         lblSearchResultNumber.setFont(LafManager.getInstance().getLabFontBold());
-        lblSearchResultNumber.setText(bundle.getString("RecordPersonRelationshipPanel.lblSearchResultNumber.text")); // NOI18N
+        lblSearchResultNumber.setText(bundle.getString("CancelPersonRelationshipPanel.lblSearchResultNumber.text")); // NOI18N
         jToolBar2.add(lblSearchResultNumber);
 
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${partySearchResults}");
         org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, partySearchResuls, eLProperty, tableSearchResults);
-        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${fullName}"));
+        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${groupPartyName}  ${groupPartyLastName}"));
+        columnBinding.setColumnName("Group Party Name}  ${group Party Last Name");
+        columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${fullName}"));
         columnBinding.setColumnName("Full Name");
         columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${targetPartyName}   ${targetPartyLastName}"));
+        columnBinding.setColumnName("Target Party Name}   ${target Party Last Name");
         columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${properties}"));
         columnBinding.setColumnName("Properties");
@@ -844,10 +839,12 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
             }
         });
         jScrollPane2.setViewportView(tableSearchResults);
-        tableSearchResults.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("RecordPersonRelationshipPanel.tableSearchResults.columnModel.title0")); // NOI18N
-        tableSearchResults.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("RecordPersonRelationshipPanel.tableSearchResults.columnModel.title1")); // NOI18N
-        tableSearchResults.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("RecordPersonRelationshipPanel.tableSearchResults.columnModel.title2")); // NOI18N
-        tableSearchResults.getColumnModel().getColumn(2).setCellRenderer(new BooleanCellRenderer());
+        tableSearchResults.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("CancelPersonRelationshipPanel.tableSearchResults.columnModel.title4")); // NOI18N
+        tableSearchResults.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("CancelPersonRelationshipPanel.tableSearchResults.columnModel.title0")); // NOI18N
+        tableSearchResults.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("CancelPersonRelationshipPanel.tableSearchResults.columnModel.title3")); // NOI18N
+        tableSearchResults.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("CancelPersonRelationshipPanel.tableSearchResults.columnModel.title1")); // NOI18N
+        tableSearchResults.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("CancelPersonRelationshipPanel.tableSearchResults.columnModel.title2")); // NOI18N
+        tableSearchResults.getColumnModel().getColumn(4).setCellRenderer(new BooleanCellRenderer());
 
         javax.swing.GroupLayout pnlSearchLayout = new javax.swing.GroupLayout(pnlSearch);
         pnlSearch.setLayout(pnlSearchLayout);
@@ -888,16 +885,16 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
                 .addContainerGap())
         );
 
-        jLabel6.setText(bundle.getString("RecordPersonRelationshipPanel.jLabel6.text")); // NOI18N
+        jLabel6.setText(bundle.getString("CancelPersonRelationshipPanel.jLabel6.text")); // NOI18N
 
-        btnSearch.setText(bundle.getString("RecordPersonRelationshipPanel.btnSearch.text")); // NOI18N
+        btnSearch.setText(bundle.getString("CancelPersonRelationshipPanel.btnSearch.text")); // NOI18N
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSearchActionPerformed(evt);
             }
         });
 
-        btnClear.setText(bundle.getString("RecordPersonRelationshipPanel.btnClear.text")); // NOI18N
+        btnClear.setText(bundle.getString("CancelPersonRelationshipPanel.btnClear.text")); // NOI18N
         btnClear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnClearActionPerformed(evt);
@@ -927,53 +924,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        groupPanel4.setTitleText(bundle.getString("RecordPersonRelationshipPanel.groupPanel4.titleText")); // NOI18N
-
-        cbxGroupType.setRenderer(new SimpleComboBoxRenderer("getDisplayValue"));
-
-        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${groupPartyTypeList}");
-        jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, groupPartyTypeListBean1, eLProperty, cbxGroupType);
-        bindingGroup.addBinding(jComboBoxBinding);
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, groupPartyTypeListBean1, org.jdesktop.beansbinding.ELProperty.create("${selectedGroupPartyType}"), cbxGroupType, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, partyBeanforGroup, org.jdesktop.beansbinding.ELProperty.create("${name}"), txtGroup, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        labGroupType.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
-        labGroupType.setText(bundle.getString("RecordPersonRelationshipPanel.labGroupType.text")); // NOI18N
-
-        labGroupName.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
-        labGroupName.setText(bundle.getString("RecordPersonRelationshipPanel.labGroupName.text")); // NOI18N
-
-        javax.swing.GroupLayout groupChoicePanelLayout = new javax.swing.GroupLayout(groupChoicePanel);
-        groupChoicePanel.setLayout(groupChoicePanelLayout);
-        groupChoicePanelLayout.setHorizontalGroup(
-            groupChoicePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(groupChoicePanelLayout.createSequentialGroup()
-                .addGroup(groupChoicePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cbxGroupType, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(labGroupType, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(groupChoicePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(groupChoicePanelLayout.createSequentialGroup()
-                        .addComponent(labGroupName, javax.swing.GroupLayout.DEFAULT_SIZE, 1211, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addComponent(txtGroup)))
-        );
-        groupChoicePanelLayout.setVerticalGroup(
-            groupChoicePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(groupChoicePanelLayout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addGroup(groupChoicePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(labGroupType)
-                    .addComponent(labGroupName))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(groupChoicePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cbxGroupType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtGroup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        groupPanel4.setTitleText(bundle.getString("CancelPersonRelationshipPanel.groupPanel4.titleText")); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -986,26 +937,23 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
                         .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 45, Short.MAX_VALUE))
-                    .addComponent(groupPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(groupChoicePanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 25, Short.MAX_VALUE))
+                    .addComponent(groupPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(groupChoicePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(24, 24, 24)
                 .addComponent(groupPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(1010, Short.MAX_VALUE))
+                .addContainerGap(395, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab(bundle.getString("RecordPersonRelationshipPanel.jPanel1.TabConstraints.tabTitle"), jPanel1); // NOI18N
+        jTabbedPane1.addTab(bundle.getString("CancelPersonRelationshipPanel.jPanel1.TabConstraints.tabTitle"), jPanel1); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -1028,36 +976,11 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        savePersonRelationship();
-    }//GEN-LAST:event_btnSaveActionPerformed
-
-    private void txtPhoneFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPhoneFocusLost
-        // Verify the phone number is valid
-        if (partyBean.getPhone() == null
-                || !partyBean.getPhone().equals(txtPhone.getText())) {
-            txtPhone.setText(partyBean.getPhone());
-        }
-    }//GEN-LAST:event_txtPhoneFocusLost
-
-    private void txtEmailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtEmailFocusLost
-        // Verify the email address is valid
-        if (partyBean.getEmail() == null
-                || !partyBean.getEmail().equals(txtEmail.getText())) {
-            txtEmail.setText(partyBean.getEmail());
-        }
-    }//GEN-LAST:event_txtEmailFocusLost
-
-//    TODO VERIFICARE FUNZIONI TUTTE  DEI DOCUMENTI 
     /**
      * Opens paper title attachment.
      */
     private void viewDocument() {
         firePropertyChange(VIEW_DOCUMENT, null, documentsPanel1.getSourceListBean().getSelectedSource());
-
-//        if (documentsPanel1.getSourceListBean().getSelectedSource() != null) {
-//            documentsPanel1.getSourceListBean().getSelectedSource().openDocument();
-//        }
     }
 
     /**
@@ -1106,7 +1029,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
     private void firePartyEvent(String propertyName) {
         if (partySearchResuls.getSelectedPartySearchResult() != null) {
             firePropertyChange(propertyName, null,
-                    PartyBean.getParty(partySearchResuls.getSelectedPartySearchResult().getId()));
+                    PartyBean.getParty(partySearchResuls.getSelectedPartySearchResult().getTargetPartyId()));
         }
     }
 
@@ -1124,195 +1047,6 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
         return notifiablePartyExist;
     }
 
-    private boolean savePersonRelationship() {
-
-        if ((this.partySearchResuls.getSelectedPartySearchResult() == null && targetName == null)) {
-            java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
-            MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_FIELDS,
-                    new Object[]{bundle.getString("RecordPersonRelationshipPanel.groupPanel4.titleText")});
-            return false;
-        }
-
-
-        if (partyTargetSummary.getLastName() == null && jLabel5.isVisible()) {
-            java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
-            MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_FIELDS,
-                    new Object[]{bundle.getString("RecordPersonRelationshipPanel.groupPanel4.titleText")});
-            return false;
-        }
-        if (this.txtGroup.getText().contentEquals("")
-                || this.cbxGroupType.getSelectedIndex() == -1) {
-
-            java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
-            MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_FIELDS,
-                    new Object[]{bundle.getString("RecordPersonRelationshipPanel.groupPanel2.titleText")});
-            return false;
-        }
-
-        if (this.txtEmail.getText().contentEquals("")
-                || this.cbxGroupType.getSelectedIndex() == -1) {
-
-            java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
-            MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_FIELDS,
-                    new Object[]{bundle.getString("RecordPersonRelationshipPanel.labEmail.text")});
-            return false;
-        }
-
-        for (Iterator<ApplicationPropertyBean> it = applicationBean.getPropertyList().iterator(); it.hasNext();) {
-            ApplicationPropertyBean appProperty = it.next();
-            if ((appProperty.getNameFirstpart() + appProperty.getNameLastpart()).equals(applicationPropertyBean.getNameFirstpart() + applicationPropertyBean.getNameLastpart())) {
-                MessageUtility.displayMessage(ClientMessage.APPLICATION_PROPERTY_ALREADY_SELECTED);
-                return false;
-            }
-        }
-
-        SolaTask t = new SolaTask<Void, Void>() {
-
-            @Override
-            public Void doTask() {
-                try {
-
-                    try {
-
-                        if (targetName == null) {
-                            if (!isContactPerson) {
-                                partyBean.setTypeCode("naturalPerson");
-                            }
-
-
-
-                            for (Iterator<PartyRoleBean> it = partyBean.getRoleList().iterator(); it.hasNext();) {
-                                PartyRoleBean approle = it.next();
-                                if (approle.getRole().getCode().contains(LODGED_ROLE)) {
-                                    setRole = false;
-                                }
-                            }
-
-                            if (setRole) {
-                                setApplicantRole();
-                            }
-                            partyBean.saveParty();
-                        } else {
-                            partyBean.saveParty();
-                        }
-
-                    } catch (Exception e) {
-                        LogUtility.log("Error saving PARTY BEAN 1: "
-                                + e);
-                        return null;
-
-                    }
-                    try {
-                        if (targetName == null) {
-
-                            partyBeanforGroup.setTypeCode("naturalPerson");
-                            partyBeanforGroup.setGenderCode("na");
-                            partyBeanforGroup.saveParty();
-                        }
-                    } catch (Exception e) {
-                        LogUtility.log("Error saving PARTY FOR GROUP 2: "
-                                + e);
-                        return null;
-
-                    }
-                    try {
-                        if (targetName == null) {
-                            groupPartyBean.setId(partyBeanforGroup.getId());
-                            groupPartyBean.setGroupCode(groupPartyTypeListBean1.getSelectedGroupPartyType().getCode());
-                            groupPartyBean.saveGroupParty();
-                        }
-                    } catch (Exception e) {
-                        LogUtility.log("Error saving GROUP 3 "
-                                + e);
-                        return null;
-                    }
-
-                    try {
-                        if (partySearchResuls.getSelectedPartySearchResult() != null) {
-                            if (targetName == null && getnotifiablePartyExists() == null) {
-                                partyMemberBean.setGroupId(groupPartyBean.getId());
-                                partyMemberBean.setPartyId(partyBean.getId());
-                                partyMemberBean.savePartyMember(serviceId);
-                                partyMemberTargetBean.setPartyId(partyTargetSummary.getId());
-                                partyMemberTargetBean.setGroupId(groupPartyBean.getId());
-                                partyMemberTargetBean.savePartyMember(serviceId);
-                            }
-                            if (targetName != null && getnotifiablePartyExists() == null) {
-                                partyMemberBean.setGroupId(groupPartyBean.getId());
-                                partyMemberBean.setPartyId(partyBean.getId());
-                                partyMemberBean.savePartyMember(serviceId);
-                                partyMemberTargetBean.setPartyId(partyTargetSummary.getId());
-                                partyMemberTargetBean.setGroupId(groupPartyBean.getId());
-                                partyMemberTargetBean.savePartyMember(serviceId);
-                            }
-
-                            if (targetName != null && getnotifiablePartyExists(partyBean.getId(), partyTargetSummary.getId(), notifiablePartyForBaUnitBean.getBaunitName()) == null) {
-                                partyMemberTargetBean.setPartyId(partyTargetSummary.getId());
-                                partyMemberTargetBean.setGroupId(groupPartyBean.getId());
-                                partyMemberTargetBean.savePartyMember(serviceId);
-                            }
-                        }
-                    } catch (Exception e) {
-                        LogUtility.log("Error saving PARTY MEMBER 4 "
-                                + e);
-                        return null;
-                    }
-
-
-                    try {
-                        if (partySearchResuls.getSelectedPartySearchResult() != null) {
-                            if (notifiablePartyForBaUnitBean == null) {
-                                notifiablePartyForBaUnitBean = new NotifiablePartyForBaUnitBean();
-                            }
-                            if (targetName == null || getnotifiablePartyExists() == null) {
-
-                                notifiablePartyForBaUnitBean.setApplicationId(applicationBean.getId());
-                                notifiablePartyForBaUnitBean.setServiceId(appService.getId());
-                                notifiablePartyForBaUnitBean.setPartyId(partyBean.getId());
-                                notifiablePartyForBaUnitBean.setTargetPartyId(partyTargetSummary.getId());
-                                notifiablePartyForBaUnitBean.saveNotifiableParty();
-                            }
-                            if (getnotifiablePartyExists(partyBean.getId(), partyTargetSummary.getId(), notifiablePartyForBaUnitBean.getBaunitName()) == null) {
-
-                                notifiablePartyForBaUnitBean.setApplicationId(applicationBean.getId());
-                                notifiablePartyForBaUnitBean.setServiceId(appService.getId());
-                                notifiablePartyForBaUnitBean.setPartyId(partyBean.getId());
-                                notifiablePartyForBaUnitBean.setTargetPartyId(partyTargetSummary.getId());
-                                notifiablePartyForBaUnitBean.saveNotifiableParty();
-                            }
-                        }
-                    } catch (Exception e) {
-                        LogUtility.log("Error saving NOTIFIABLE PARTY FOR BAUNIT 6 "
-                                + e);
-                        return null;
-                    }
-//   TODO VERIFY IF NOTIFICATION NEEDED IN THIS CASE   
-//                    String recepientFullName = partyBean.getName();
-//                    String emailAddress = partyBean.getEmail();
-//                    String messageText = "SCRIVO BLA BLA BLA";
-//                    String messageSubject = "NOTIFIABLE NOTIFICATION";
-//                    WSManager.getInstance().getCaseManagementService().sendEmail(recepientFullName, emailAddress, messageText, messageSubject);
-////          systemEjb.sendEmail(recepientFullName, emailAddress, messageText, messageSubject) 
-
-                } catch (Exception e) {
-                    LogUtility.log("Error saving notifiable party at the end 7: "
-                            + e);
-                    return null;
-
-                }
-
-                return null;
-            }
-
-            @Override
-            public void taskDone() {
-                close();
-            }
-        };
-        TaskManager.getInstance().runTask(t);
-
-        return true;
-    }
 
     /**
      * Searches parties with given criteria.
@@ -1323,7 +1057,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
             @Override
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_PERSON_SEARCHING));
-                partySearchResuls.search(partySearchParams, partyBean.getId());
+                partySearchResuls.search(partySearchParams, serviceId);
                 return null;
             }
 
@@ -1339,53 +1073,39 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
         TaskManager.getInstance().runTask(t);
     }
 
-    private void selectParty() {
-        if (this.partySearchResuls.getSelectedPartySearchResult() != null) {
-            this.partyTargetSummary = this.partySearchResuls.getSelectedPartySearchResult();
-            this.txtName.setText(this.partySearchResuls.getSelectedPartySearchResult().getFullName());
-            notifiablePartyForBaUnitBean.setBaunitName(this.partySearchResuls.getSelectedPartySearchResult().getNameFirstPart() + "/" + this.partySearchResuls.getSelectedPartySearchResult().getNameLastPart());
-
-            //            TODO QUI VEDERE IN CASO LASCIARE POSSIBILITA SEARCH
-            this.txtName.setEditable(false);
-            this.txtName.setEnabled(false);
-            this.btnSearch.setEnabled(false);
-        }
-    }
-
     private void viewParty() {
         firePartyEvent(VIEW_PARTY_PROPERTY);
     }
 
-    private void removeParty() {
+    private void removeNotification() {
         if (partySearchResuls.getSelectedPartySearchResult() != null
                 && MessageUtility.displayMessage(ClientMessage.CONFIRM_DELETE_RECORD) == MessageUtility.BUTTON_ONE) {
 
             firePropertyChange(REMOVE_PARTY_PROPERTY, false, true);
-            NotifiablePartyForBaUnitBean.remove(partyBean.getId(), partySearchResuls.getSelectedPartySearchResult().getId(), partySearchResuls.getSelectedPartySearchResult().getProperties(), applicationBean.getId(), this.serviceId);
+            NotifiablePartyForBaUnitBean.cancelNotification(partySearchResuls.getSelectedPartySearchResult().getId(), partySearchResuls.getSelectedPartySearchResult().getTargetPartyId(), partySearchResuls.getSelectedPartySearchResult().getProperties(), applicationBean.getId(), this.serviceId);
 
-            String groupId = groupPartyBean.getId();
-            String targetId = partySearchResuls.getSelectedPartySearchResult().getId();
-            if (this.partySearchResuls.getSelectedPartySearchResult().getTotal() == 1) {
-                PartyMemberBean.remove(targetId, groupId, serviceId);
-            }
             search();
+            
+            MessageUtility.displayMessage(ClientMessage.GENERAL_RECORD_SAVED);
+            
+        }
+        close();
+    }
+    
+    
+    private void removeCancelNotification() {
+        if (partySearchResuls.getSelectedPartySearchResult() != null) {
 
-            NotifiablePartyForBaUnitBean notifiablePartyExist = NotifiablePartyForBaUnitBean.getNotifiableParty("", "", "", applicationBean.getId(), this.serviceId);
-
-            if (notifiablePartyExist == null) {
-                PartyMemberBean.remove(partyBean.getId(), groupId, serviceId);
-                txtName.setText(null);
-                txtName.setEditable(true);
-                txtName.setEnabled(true);
-                jPanel17.setVisible(true);
-                btnSearch.setEnabled(true);
-                btnSearch.setVisible(true);
-                btnClear.setEnabled(true);
-                btnClear.setVisible(true);
-            }
+            firePropertyChange(REMOVE_PARTY_PROPERTY, false, true);
+            NotifiablePartyForBaUnitBean.removeCancelNotification(partySearchResuls.getSelectedPartySearchResult().getId(), partySearchResuls.getSelectedPartySearchResult().getTargetPartyId(), partySearchResuls.getSelectedPartySearchResult().getProperties(), applicationBean.getId(), this.serviceId);
+            
+            search();
+            
+            partySearchResuls.setSelectedPartySearchResult(null);
 
         }
     }
+
 
     private void clearForm() {
         txtName.setText(null);
@@ -1395,14 +1115,25 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
         partyTargetSummary = new PartySummaryBean();
     }
 
+    private void btnRemove1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemove1ActionPerformed
+        removeNotification();
+    }//GEN-LAST:event_btnRemove1ActionPerformed
+
+    private void btnLinkPaperTitleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLinkPaperTitleActionPerformed
+        linkDocument();
+    }//GEN-LAST:event_btnLinkPaperTitleActionPerformed
+
     private void btnViewPaperTitleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewPaperTitleActionPerformed
         viewDocument();
     }//GEN-LAST:event_btnViewPaperTitleActionPerformed
 
-    private void btnLinkPaperTitleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLinkPaperTitleActionPerformed
-        linkDocument();
-//        removeDocument();
-    }//GEN-LAST:event_btnLinkPaperTitleActionPerformed
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+        clearForm();
+    }//GEN-LAST:event_btnClearActionPerformed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        search();
+    }//GEN-LAST:event_btnSearchActionPerformed
 
     private void tableSearchResultsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableSearchResultsMouseClicked
         if (evt.getClickCount() > 1 && evt.getButton() == MouseEvent.BUTTON1) {
@@ -1414,44 +1145,107 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
         viewParty();
     }//GEN-LAST:event_btnViewActionPerformed
 
-    private void btnSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectActionPerformed
-        selectParty();
-    }//GEN-LAST:event_btnSelectActionPerformed
+    private void txtEmailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtEmailFocusLost
+        // Verify the email address is valid
+        if (partyBean.getEmail() == null
+                || !partyBean.getEmail().equals(txtEmail.getText())) {
+            txtEmail.setText(partyBean.getEmail());
+        }
+    }//GEN-LAST:event_txtEmailFocusLost
 
-    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-        search();
-    }//GEN-LAST:event_btnSearchActionPerformed
+    private void txtPhoneFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPhoneFocusLost
+        // Verify the phone number is valid
+        if (partyBean.getPhone() == null
+                || !partyBean.getPhone().equals(txtPhone.getText())) {
+            txtPhone.setText(partyBean.getPhone());
+        }
+    }//GEN-LAST:event_txtPhoneFocusLost
+    private class ThisPanelListener implements PropertyChangeListener {
 
-    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
-        clearForm();
-    }//GEN-LAST:event_btnClearActionPerformed
+        @Override
+        public void propertyChange(PropertyChangeEvent evt) {
 
-    private void btnRemove1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemove1ActionPerformed
-        removeParty();
-    }//GEN-LAST:event_btnRemove1ActionPerformed
+            if (evt.getPropertyName().equals(PartySearchPanelForm.CONTENT_PANEL_CLOSED)) {
+
+                partyBean = ((PartyBean) ((PartySearchPanelForm) evt.getSource()).getParty());
+
+                txtFirstName.setText(partyBean.getName());
+                txtLastName.setText(partyBean.getLastName());
+                txtAddress.setText(partyBean.getAddress().getDescription());
+                txtPhone.setText(partyBean.getPhone());
+                txtEmail.setText(partyBean.getEmail());
+                cbxGender.setSelectedItem(partyBean.getGenderType());
+                txtAddress.setEditable(false);
+                txtAddress.setEnabled(false);
+                txtPhone.setEditable(false);
+                txtPhone.setEnabled(false);
+                txtEmail.setEditable(false);
+                txtEmail.setEnabled(false);
+                txtFirstName.setEditable(false);
+                txtFirstName.setEnabled(false);
+                txtLastName.setEditable(false);
+                txtLastName.setEnabled(false);
+                cbxGender.setEditable(false);
+                cbxGender.setEnabled(false);
+            }
+        }
+    }
+
+    private void openSelectPartyForm() {
+        final ThisPanelListener listener = new ThisPanelListener();
+
+        SolaTask t = new SolaTask<Void, Void>() {
+
+            @Override
+            public Void doTask() {
+                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PERSON));
+                PartySearchPanelForm partySearchForm = null;
+
+                partySearchForm = initializePartySearchForm(partySearchForm);
+
+                partySearchForm.addPropertyChangeListener(listener);
+                getMainContentPanel().addPanel(partySearchForm, MainContentPanel.CARD_SEARCH_PERSONS, true);
+                return null;
+            }
+        };
+        TaskManager.getInstance().runTask(t);
+    }
+
+    private PartySearchPanelForm initializePartySearchForm(PartySearchPanelForm partySearchForm) {
+        partySearchForm = new PartySearchPanelForm(true, partyBean);
+        return partySearchForm;
+
+    }
 
     private void btnRemovePaperTitleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemovePaperTitleActionPerformed
         removeDocument();
     }//GEN-LAST:event_btnRemovePaperTitleActionPerformed
+
+    private void btnSelectExistingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectExistingActionPerformed
+        openSelectPartyForm();
+    }//GEN-LAST:event_btnSelectExistingActionPerformed
+
+    private void btnRemove2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemove2ActionPerformed
+        removeCancelNotification();
+    }//GEN-LAST:event_btnRemove2ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.sola.clients.beans.application.ApplicationBean applicationBean;
     private org.sola.clients.beans.application.ApplicationPropertyBean applicationPropertyBean;
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnLinkPaperTitle;
     private org.sola.clients.swing.common.buttons.BtnRemove btnRemove1;
+    private org.sola.clients.swing.common.buttons.BtnRemove btnRemove2;
     private javax.swing.JButton btnRemovePaperTitle;
-    private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSearch;
-    private javax.swing.JButton btnSelect;
+    private javax.swing.JButton btnSelectExisting;
     private javax.swing.JButton btnView;
     private javax.swing.JButton btnViewPaperTitle;
     public javax.swing.JComboBox cbxGender;
-    private javax.swing.JComboBox cbxGroupType;
     private javax.swing.JScrollPane docTableScrollPanel;
     public org.sola.clients.swing.ui.source.DocumentsPanel documentsPanel1;
     private javax.swing.Box.Filler filler1;
     private org.sola.clients.beans.referencedata.GenderTypeListBean genderTypeListBean;
-    private javax.swing.JPanel groupChoicePanel;
     private org.sola.clients.swing.ui.GroupPanel groupPanel3;
     private org.sola.clients.swing.ui.GroupPanel groupPanel4;
     private org.sola.clients.beans.party.GroupPartyBean groupPartyBean;
@@ -1482,26 +1276,25 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
     private javax.swing.JToolBar jToolBar4;
     private javax.swing.JLabel labAddress;
     private javax.swing.JLabel labEmail;
-    private javax.swing.JLabel labGroupName;
-    private javax.swing.JLabel labGroupType;
     private javax.swing.JLabel labLastName;
     private javax.swing.JLabel labName;
     private javax.swing.JLabel labPhone;
     private javax.swing.JLabel lblGender;
     private javax.swing.JLabel lblSearchResultNumber;
-    private org.sola.clients.beans.administrative.NotifiablePartyForBaUnitBean notifiablePartyForBaUnitBean;
+    private org.sola.clients.beans.application.CancelNotificationBean notifiablePartyForBaUnitBean;
+    private org.sola.clients.beans.administrative.NotifiablePartyForBaUnitBean notifiablePartyForBaUnitBeanOLD;
+    private org.sola.clients.beans.administrative.NotifiablePartySearchResultBean notifiablePartySearchResultBean1;
     private org.sola.clients.beans.party.PartyBean partyBean;
     private org.sola.clients.beans.party.PartyBean partyBeanforGroup;
     private org.sola.clients.beans.party.PartyMemberBean partyMemberBean;
     private org.sola.clients.beans.party.PartySearchParamsBean partySearchParams;
-    private org.sola.clients.beans.party.PartyPropertySearchResultListBean partySearchResuls;
+    private org.sola.clients.beans.administrative.NotifiablePartySearchResultListBean partySearchResuls;
     private javax.swing.JPanel pnlSearch;
     private javax.swing.JToolBar.Separator separator1;
     private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tableSearchResults;
     public javax.swing.JTextField txtAddress;
     public javax.swing.JTextField txtEmail;
     public javax.swing.JTextField txtFirstName;
-    private javax.swing.JTextField txtGroup;
     public javax.swing.JTextField txtLastName;
     private javax.swing.JTextField txtName;
     public javax.swing.JTextField txtPhone;

@@ -46,6 +46,7 @@ public class PanelLauncherGroupBean extends AbstractCodeBean {
     public static final String CODE_GENERAL_RRR = "generalRRR";
     public static final String CODE_LEASE_RRR = "leaseRRR";
     public static final String CODE_RECORD_RELATIONSHIP = "recordRelationship";
+    public static final String CODE_CANCEL_RELATIONSHIP = "cancelRelationship";
     
     public PanelLauncherGroupBean() {
         super();

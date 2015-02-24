@@ -973,6 +973,13 @@ public class ApplicationBean extends ApplicationSummaryBean {
         app = WSManager.getInstance().getCaseManagementService().createApplication(app);
         TypeConverters.TransferObjectToBean(app, ApplicationBean.class, this);
         propertySupport.firePropertyChange(APPLICATION_PROPERTY, null, this);
+//                    String recepientFullName = partyBean.getName();
+//                    String emailAddress = partyBean.getEmail();
+//                    String messageText = "SCRIVO BLA BLA BLA";
+//                    String messageSubject = "NOTIFIABLE NOTIFICATION";
+//                    WSManager.getInstance().getCaseManagementService().sendEmail(recepientFullName, emailAddress, messageText, messageSubject);
+////                  systemEjb.sendEmail(recepientFullName, emailAddress, messageText, messageSubject) 
+        
         return true;
     }
 

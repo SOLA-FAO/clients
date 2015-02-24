@@ -27,6 +27,7 @@
  */
 package org.sola.clients.beans.party;
 
+import java.math.BigDecimal;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.sola.clients.beans.AbstractIdBean;
@@ -55,6 +56,7 @@ public class PartySummaryBean extends AbstractIdBean {
     public static final String TYPE_PROPERTY = "type";
     public static final String IS_RIGHTHOLDER_PROPERTY = "rightHolder";
     public static final String ROLE_CODE_PROPERTY = "roleCode";
+    
     @NotEmpty(message = ClientMessage.CHECK_NOTNULL_NAME, payload = Localized.class)
     @Length(max = 255, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH_NAME, payload = Localized.class)
     private String name;
@@ -66,15 +68,13 @@ public class PartySummaryBean extends AbstractIdBean {
     private PartyTypeBean typeBean;
     private String nameFirstPart;
     private String nameLastPart;
-    private String propertyId;
-    private String properties;
     
     
     public PartySummaryBean() {
         super();
         typeBean = new PartyTypeBean();
     }
-
+    
     public String getNameFirstPart() {
         return nameFirstPart;
     }
@@ -91,22 +91,7 @@ public class PartySummaryBean extends AbstractIdBean {
         this.nameLastPart = nameLastPart;
     }
 
-    public String getProperties() {
-        return properties;
-    }
-
-    public void setProperties(String properties) {
-        this.properties = properties;
-    }
-
-    public String getPropertyId() {
-        return propertyId;
-    }
-
-    public void setPropertyId(String propertyId) {
-        this.propertyId = propertyId;
-    }
-
+    
     public PartyTypeBean getTypeBean() {
         return typeBean;
     }

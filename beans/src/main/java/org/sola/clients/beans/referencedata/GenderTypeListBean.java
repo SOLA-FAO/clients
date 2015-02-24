@@ -51,6 +51,10 @@ public class GenderTypeListBean extends AbstractBindingListBean {
      */
     public GenderTypeListBean(boolean createDummy) {
         this(createDummy, (String) null);
+            GenderTypeBean dummy = new GenderTypeBean();
+            dummy.setDisplayValue(" ");
+//            dummy.setEntityAction(EntityAction.DISASSOCIATE);
+            genderTypeListBean.add(0, dummy);
     }
     
     /** 

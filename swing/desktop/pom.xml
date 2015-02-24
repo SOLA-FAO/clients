@@ -96,6 +96,12 @@
             <artifactId>ognl</artifactId>
             <version>3.0.3</version>
         </dependency>
+        <dependency>
+            <groupId>org.sola.services.ejbs</groupId>
+            <artifactId>sola-system</artifactId>
+            <version>1402a-SNAPSHOT</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
     <profiles>
         <profile>

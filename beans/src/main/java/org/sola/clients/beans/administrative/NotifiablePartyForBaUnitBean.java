@@ -42,6 +42,7 @@ import org.sola.webservices.transferobjects.EntityAction;
 public class NotifiablePartyForBaUnitBean extends AbstractTransactionedBean {
 
     public static final String APPLICATION_ID_PROPERTY = "applicationId";
+    public static final String SERVICE_ID_PROPERTY = "serviceId";
     public static final String BAUNIT_ID_PROPERTY = "baunitId";
     public static final String BAUNIT_NAME_PROPERTY = "baunitName";
     public static final String STATUS_PROPERTY = "statusParty";
@@ -55,12 +56,15 @@ public class NotifiablePartyForBaUnitBean extends AbstractTransactionedBean {
     private String baunitId;
     private String applicationId;
     private String groupId;
+    private String serviceId;
+    private String cancelServiceId;
+
 
     /**
      * Returns notifiable party by parameters.
      */
-    public static NotifiablePartyForBaUnitBean getNotifiableParty(String partyId, String targetPartyId, String banunitName, String application) {
-        NotifiablePartyForBaUnitTO partyTO = WSManager.getInstance().getAdministrative().getNotifiableParty(partyId, targetPartyId, banunitName, application);
+    public static NotifiablePartyForBaUnitBean getNotifiableParty(String partyId, String targetPartyId, String banunitName, String application, String service) {
+        NotifiablePartyForBaUnitTO partyTO = WSManager.getInstance().getAdministrative().getNotifiableParty(partyId, targetPartyId, banunitName, application, service);
         return TypeConverters.TransferObjectToBean(partyTO, NotifiablePartyForBaUnitBean.class, null);
     }
 
@@ -77,17 +81,37 @@ public class NotifiablePartyForBaUnitBean extends AbstractTransactionedBean {
     }
     
     
-    /** Removes party. */
-    public static void remove(String partyId, String targetPartyId, String banunitName, String application) {
+    /** Removes notifiable row. */
+    public static void remove(String partyId, String targetPartyId, String banunitName, String application, String service) {
         if(partyId == null || partyId.length()<1){
             return;
         }
-        NotifiablePartyForBaUnitTO notifiableParty = WSManager.getInstance().getAdministrative().getNotifiableParty(partyId, targetPartyId, banunitName, application);
+        NotifiablePartyForBaUnitTO notifiableParty = WSManager.getInstance().getAdministrative().getNotifiableParty(partyId, targetPartyId, banunitName, application,service);
         notifiableParty.setEntityAction(EntityAction.DELETE);
         WSManager.getInstance().getAdministrative().saveNotifiableParty(notifiableParty);
     }
-
-
+    
+       /** Removes notifiable row. */
+    public static void removeCancelNotification(String partyId, String targetPartyId, String banunitName, String application, String service) {
+        if(partyId == null || partyId.length()<1){
+            return;
+        }
+        NotifiablePartyForBaUnitTO notifiableParty = WSManager.getInstance().getAdministrative().getNotifiableParty(partyId, targetPartyId, banunitName, "","");
+        notifiableParty.setCancelServiceId(null);
+        WSManager.getInstance().getAdministrative().saveNotifiableParty(notifiableParty);
+    }
+    
+    
+    /** Cancels notification. */
+    public static void cancelNotification(String partyId, String targetPartyId, String banunitName, String application, String service) {
+        if(partyId == null || partyId.length()<1){
+            return;
+        }
+        NotifiablePartyForBaUnitTO notifiableParty = WSManager.getInstance().getAdministrative().getNotifiableParty(partyId, targetPartyId, banunitName, "","");
+        notifiableParty.setCancelServiceId(service);
+        
+        WSManager.getInstance().getAdministrative().saveNotifiableParty(notifiableParty);
+    }
     public String getApplicationId() {
         return applicationId;
     }
@@ -156,4 +180,23 @@ public class NotifiablePartyForBaUnitBean extends AbstractTransactionedBean {
     public void setGroupId(String groupId) {
         this.groupId = groupId;
     }
+
+    public String getServiceId() {
+        return serviceId;
+    }
+
+    public void setServiceId(String serviceId) {
+        String oldValue = this.serviceId;
+        this.serviceId = serviceId;
+        propertySupport.firePropertyChange(SERVICE_ID_PROPERTY, oldValue, serviceId);
+    }
+
+    public String getCancelServiceId() {
+        return cancelServiceId;
+    }
+
+    public void setCancelServiceId(String cancelServiceId) {
+        this.cancelServiceId = cancelServiceId;
+    }
+     
 }

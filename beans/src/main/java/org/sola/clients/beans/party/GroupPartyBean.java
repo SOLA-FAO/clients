@@ -47,14 +47,15 @@ import org.sola.webservices.transferobjects.casemanagement.GroupPartyTO;
  */
 public class GroupPartyBean extends AbstractIdBean{
     public static final String GROUP_CODE_PROPERTY = "groupCode";
-    public static final String GROUP_PROPERTY = "group";
+//    public static final String GROUP_PROPERTY = "group";
+    public static final String GROUP_TYPE_PROPERTY = "group";
     public static final String SELECTED_PARTY_MEMBER_PROPERTY = "selectedPartyMember";
     
     private SolaList<PartyMemberBean> partyMemberList;
     private transient PartyMemberBean selectedPartyMember;
     
     
-    private GroupPartyTypeBean group;
+    private GroupPartyTypeBean groupType;
     
     public GroupPartyBean(){
         super();
@@ -78,34 +79,54 @@ public class GroupPartyBean extends AbstractIdBean{
         propertySupport.firePropertyChange(SELECTED_PARTY_MEMBER_PROPERTY, null, selectedPartyMember);
     }
     
-    public GroupPartyTypeBean getGroup() {
-        if (group == null) {
-            group = new GroupPartyTypeBean();
+//    public GroupPartyTypeBean getGroupType() {
+//        if (groupType == null) {
+//            groupType = new GroupPartyTypeBean();
+//        }
+//        return groupType;
+//    }
+//
+//    public void setGroupType(GroupPartyTypeBean group) {
+//        if(this.groupType==null){
+//            this.groupType = new GroupPartyTypeBean();
+//        }
+//        this.setJointRefDataBean(this.groupType, groupType, GROUP_TYPE_PROPERTY);
+//    }
+//
+//    public String getGroupCode() {
+//        return groupType.getCode();
+//    }
+//
+//    public void setGroupCode(String groupCode) {
+//        String oldValue = getGroupType().getCode();
+//         System.out.println("oldValue   "+  oldValue);
+//         System.out.println("newValue  "+groupCode);
+//        setGroupType(CacheManager.getBeanByCode(CacheManager.getGroupPartyTypes(), groupCode));
+////                .getPartyGroups(), groupCode));
+//         System.out.println("newFinalValue  "+getGroupType().getCode());
+//        
+//        propertySupport.firePropertyChange(GROUP_CODE_PROPERTY, oldValue, groupCode);
+//    }
+    public GroupPartyTypeBean getGroupType() {
+        if (groupType == null) {
+            groupType = new GroupPartyTypeBean();
         }
-        return group;
+        return groupType;
     }
 
-    public void setGroup(GroupPartyTypeBean group) {
-        if(this.group==null){
-            this.group = new GroupPartyTypeBean();
-        }
-        this.setJointRefDataBean(this.group, group, GROUP_PROPERTY);
+    public void setGroupType(GroupPartyTypeBean groupType) {
+        this.setJointRefDataBean(getGroupType(), groupType, GROUP_TYPE_PROPERTY);
     }
 
     public String getGroupCode() {
-        return group.getCode();
+        return getGroupType().getCode();
     }
 
-    public void setGroupCode(String groupCode) {
-        String oldValue = getGroup().getCode();
-         System.out.println("oldValue   "+  oldValue);
-         System.out.println("newValue  "+groupCode);
-        setGroup(CacheManager.getBeanByCode(CacheManager.getPartyGroups(), groupCode));
-         System.out.println("newFinalValue  "+getGroup());
-        
-        propertySupport.firePropertyChange(GROUP_CODE_PROPERTY, oldValue, groupCode);
+    public void setGroupCode(String value) {
+        String oldValue = getGroupType().getCode();
+        setGroupType(CacheManager.getBeanByCode(CacheManager.getGroupPartyTypes(), value));
+        propertySupport.firePropertyChange(GROUP_CODE_PROPERTY, oldValue, value);
     }
-    
     
       /** 
      * Saves changes to the Groupparty into the database. 
@@ -113,19 +134,19 @@ public class GroupPartyBean extends AbstractIdBean{
      */
     public boolean saveGroupParty() {
         
-        System.out.println("QUI SAVE GROUP PARTY BEAN");
-        GroupPartyTO groupParty = TypeConverters.BeanToTrasferObject(this, GroupPartyTO.class);
-        System.out.println("QUI 1 GROUP PARTY BEAN");  
-          
-       
-        
-        System.out.println("QUI 2 GROUP PARTY BEAN");
-        
-        groupParty = WSManager.getInstance().getCaseManagementService().saveGroupParty(groupParty);
-        
-        System.out.println("QUI 3 GROUP PARTY BEAN");
-        TypeConverters.TransferObjectToBean(groupParty, GroupPartyBean.class, this);
-        return true;
+         GroupPartyTO groupParty = TypeConverters.BeanToTrasferObject(this, GroupPartyTO.class);
+         groupParty = WSManager.getInstance().getCaseManagementService().saveGroupParty(groupParty);
+         TypeConverters.TransferObjectToBean(groupParty, GroupPartyBean.class, this);
+         return true;
+    }
+    
+     /** Returns party by ID. */
+    public static GroupPartyBean getGroupParty(String partyId){
+        if(partyId == null || partyId.length()<1){
+            return null;
+        }
+        GroupPartyTO groupPartyTO = WSManager.getInstance().getCaseManagementService().getGroupParty(partyId);
+        return TypeConverters.TransferObjectToBean(groupPartyTO, GroupPartyBean.class, null);
     }
   
 }

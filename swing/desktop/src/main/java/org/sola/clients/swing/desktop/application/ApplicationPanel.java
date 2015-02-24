@@ -578,6 +578,9 @@ System.err.println("SERVICE PANEL CODE   "+servicePanelCode);
              } else if (PanelLauncher.isLaunchGroup(PanelLauncherGroupBean.CODE_RECORD_RELATIONSHIP, servicePanelCode)) {
                 // Transactioned Document Services
                 PanelLauncher.launch(servicePanelCode, getMainContentPanel(), null, null, appBean, service);
+            } else if (PanelLauncher.isLaunchGroup(PanelLauncherGroupBean.CODE_CANCEL_RELATIONSHIP, servicePanelCode)) {
+                // Transactioned Document Services
+                PanelLauncher.launch(servicePanelCode, getMainContentPanel(), null, null, appBean, service);
             } else if (PanelLauncher.isLaunchGroup(PanelLauncherGroupBean.CODE_CADASTRE_SERVICES, servicePanelCode)) {
                 // Cadastre Transaction Services
                 ApplicationPropertyBean propertyBean = null;
