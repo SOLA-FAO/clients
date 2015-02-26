@@ -332,28 +332,15 @@ public class PartyBean extends PartySummaryBean {
     
     public void addGroupParty(GroupPartyTypeBean groupPartyTypeBean) {
         
-        System.out.println("GROUP PARTY LIST   "+groupPartyList);
-        if (groupPartyList != null && groupPartyTypeBean != null) {
-            System.out.println("GROUP PARTY LIST NOT NULL  "+groupPartyList);
-             System.out.println("GROUP PARTY TYPE  "+groupPartyTypeBean.getCode());
-      
+       if (groupPartyList != null && groupPartyTypeBean != null) {
             GroupPartyBean newGroupType = new GroupPartyBean();
             newGroupType.setGroupType(groupPartyTypeBean);
             newGroupType.setGroupCode(groupPartyTypeBean.getCode());
-            System.out.println("GROUP PARTY  addednewGroup  "+newGroupType.getGroupCode());
             groupPartyList.addAsNew(newGroupType);
-            System.out.println("GROUP PARTY LIST addednewGroup  "+groupPartyList);
-      
+       
         }
     }
 
-//    public SolaList<PartyMemberBean> getPartyMemberList() {
-//        return partyMemberList;
-//    }
-//
-//    public void setPartyMemberList(SolaList<PartyMemberBean> partyMemberList) {
-//        this.partyMemberList = partyMemberList;
-//    }
 
     public GroupPartyBean getSelectedGroupParty() {
         return selectedGroupParty;
@@ -364,14 +351,6 @@ public class PartyBean extends PartySummaryBean {
         propertySupport.firePropertyChange(SELECTED_GROUP_PARTY_PROPERTY, null, selectedGroupParty);
     }
 
-//    public PartyMemberBean getSelectedPartyMember() {
-//        return selectedPartyMember;
-//    }
-//
-//    public void setSelectedPartyMember(PartyMemberBean selectedPartyMember) {
-//        this.selectedPartyMember = selectedPartyMember;
-//        propertySupport.firePropertyChange(SELECTED_PARTY_MEMBER_PROPERTY, null, selectedPartyMember);
-//    }
     
     /** 
      * Sets preferred communication code and retrieves {@link CommunicationTypeBean} 
@@ -422,14 +401,11 @@ public class PartyBean extends PartySummaryBean {
      */
     public boolean saveParty() {
         
-        System.out.println("QUI 0 PARTY BEAN");
         PartyTO party = TypeConverters.BeanToTrasferObject(this, PartyTO.class);
-        System.out.println("QUI 1 PARTY BEAN");  
           if (getGenderCode()==null && getTypeCode().contentEquals("naturalPerson")){
             MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_GENDER);
             return false;
           }
-       System.out.println("QUI 2 PARTY BEAN");
         if (getAddress() != null && getAddress().isNew() && (getAddress().getDescription() == null
                 || getAddress().getDescription().length() < 1)) {
             party.setAddress(null);
@@ -438,11 +414,9 @@ public class PartyBean extends PartySummaryBean {
             party.getAddress().setEntityAction(EntityAction.DISASSOCIATE);
         }
         
-        System.out.println("QUI 3 PARTY BEAN");
         
         party = WSManager.getInstance().getCaseManagementService().saveParty(party);
         
-        System.out.println("QUI 4 PARTY BEAN");
         TypeConverters.TransferObjectToBean(party, PartyBean.class, this);
         return true;
     }

@@ -27,8 +27,11 @@
  */
 package org.sola.clients.beans.security;
 
+import java.util.Collections;
+import java.util.Comparator;
 import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.beans.AbstractBindingBean;
+import org.sola.clients.beans.AbstractBindingListBean;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.controls.SolaList;
 import org.sola.webservices.transferobjects.EntityAction;
@@ -36,7 +39,7 @@ import org.sola.webservices.transferobjects.EntityAction;
 /**
  * Holds list of {@link RoleBean} objects for binding on the form.
  */
-public class RoleListBean extends AbstractBindingBean {
+public class RoleListBean extends AbstractBindingListBean {
     public static final String SELECTED_ROLE_PROPERTY = "selectedRole";
     
     private SolaList<RoleBean> roleList;
@@ -80,5 +83,39 @@ public class RoleListBean extends AbstractBindingBean {
             selectedRole.save();
             loadRoles();
         }
+    }
+    /**
+     * Loads the security classification roles
+     *
+     * @param filterByClearance If true, only include security roles that the
+     * user has clearance for
+     */
+    public final void loadSecurityRoles(boolean filterByClearance) {
+        roleList.clear();
+        for (RoleBean role : CacheManager.getRoles()) {
+            if (role.isSecurityRole()) {
+                if (!filterByClearance || SecurityBean.hasSecurityClearance(role.getCode())) {
+                    roleList.addAsNew(role);
+                }    
+            }
+        }
+        // Sort the security roles into a logical order using the first 
+        // 2 numeric digits in the code. 
+        Collections.sort(roleList, new Comparator<RoleBean>() {
+            @Override
+            public int compare(RoleBean c1, RoleBean c2) {
+                if (c1.getCode() == null) {
+                    return c2.getCode() == null ? 0 : -1;
+                } else {
+                    return c1.getCode().compareTo(c2.getCode());
+                }
+            }
+        });
+
+        // Add Blank entry to the top of the list
+        RoleBean dummy = new RoleBean();
+        dummy.setDisplayValue(" ");
+        dummy.setEntityAction(EntityAction.DISASSOCIATE);
+        roleList.add(0, dummy);
     }
 }
