@@ -58,6 +58,14 @@ public abstract class AbstractBindingBean implements Serializable {
     protected transient final PropertyChangeSupport propertySupport;
     private EntityAction entityAction;
     private transient String stateHash;
+     /**
+     * The security classification assigned to the bean
+     */
+    private String classificationCode;
+    /**
+     * The redact code assigned to the bean.
+     */
+    private String redactCode;
 
     public AbstractBindingBean() {
         propertySupport = new PropertyChangeSupport(this);
@@ -71,6 +79,22 @@ public abstract class AbstractBindingBean implements Serializable {
         EntityAction oldValue = this.entityAction;
         this.entityAction = entityAction;
         propertySupport.firePropertyChange(ENTITY_ACTION_PROPERTY, oldValue, entityAction);
+    }
+    
+    public String getClassificationCode() {
+        return classificationCode;
+    }
+
+    public void setClassificationCode(String classificationCode) {
+        this.classificationCode = classificationCode;
+    }
+
+    public String getRedactCode() {
+        return redactCode;
+    }
+
+    public void setRedactCode(String redactCode) {
+        this.redactCode = redactCode;
     }
 
     /**

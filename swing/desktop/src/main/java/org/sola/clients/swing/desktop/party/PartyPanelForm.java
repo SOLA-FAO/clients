@@ -37,9 +37,12 @@ import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.ui.ContentPanel;
+import org.sola.clients.swing.ui.security.SecurityClassificationDialog;
 import org.sola.common.RolesConstants;
+import org.sola.common.WindowUtility;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
+import org.sola.webservices.transferobjects.EntityTable;
 
 /**
  * Used to create or edit party object.
@@ -63,10 +66,11 @@ public class PartyPanelForm extends ContentPanel {
     /**
      * Form constructor.
      *
-     * @param savePartyOnAction If <code>true</code>, party will be saved into
-     * database. If <code>false</code>, party will be validated and validation
-     * result returned as a value of {@link PartyPanel.PARTY_SAVED} property
-     * change event.
+     * @param savePartyOnAction If
+     * <code>true</code>, party will be saved into database. If
+     * <code>false</code>, party will be validated and validation result
+     * returned as a value of {@link PartyPanel.PARTY_SAVED} property change
+     * event.
      */
     public PartyPanelForm(boolean savePartyOnAction) {
         this(savePartyOnAction, null, false, false);
@@ -75,10 +79,11 @@ public class PartyPanelForm extends ContentPanel {
     /**
      * Form constructor.
      *
-     * @param savePartyOnAction If <code>true</code>, party will be saved into
-     * database. If <code>false</code>, party will be validated and validation
-     * result returned as a value of {@link PartyPanel.PARTY_SAVED} property
-     * change event.
+     * @param savePartyOnAction If
+     * <code>true</code>, party will be saved into database. If
+     * <code>false</code>, party will be validated and validation result
+     * returned as a value of {@link PartyPanel.PARTY_SAVED} property change
+     * event.
      * @param partyBean The party bean instance to show on the panel.
      * @param readOnly Indicates whether to display provided {@link PartyBean}
      * in read only mode or not.
@@ -100,10 +105,11 @@ public class PartyPanelForm extends ContentPanel {
     /**
      * Form constructor.
      *
-     * @param savePartyOnAction If <code>true</code>, party will be saved into
-     * database. If <code>false</code>, party will be validated and validation
-     * result returned as a value of {@link PartyPanel.PARTY_SAVED} property
-     * change event.
+     * @param savePartyOnAction If
+     * <code>true</code>, party will be saved into database. If
+     * <code>false</code>, party will be validated and validation result
+     * returned as a value of {@link PartyPanel.PARTY_SAVED} property change
+     * event.
      * @param partySummaryBean The party summary bean instance to retrieve
      * actual {@link PartyBean} to show on the panel.
      * @param readOnly Indicates whether to display provided {@link PartyBean}
@@ -166,7 +172,7 @@ public class PartyPanelForm extends ContentPanel {
         }
 
         btnSave.setEnabled(!readOnly);
-
+        btnSecurity.setVisible(!readOnly && SecurityBean.isInRole(RolesConstants.CLASSIFICATION_CHANGE_CLASS));
         if (partyBean != null) {
             headerPanel.setTitleText(String.format(resourceBundle.getString("PartyPanelForm.headerPanel.titleText2"),
                     partyBean.getName(), partyBean.getLastName() == null ? "" : partyBean.getLastName()));
@@ -237,6 +243,18 @@ public class PartyPanelForm extends ContentPanel {
         return true;
     }
 
+    private void configureSecurity() {
+        SecurityClassificationDialog form = new SecurityClassificationDialog(EntityTable.PARTY,partyPanel.getPartyBean(),
+                MainForm.getInstance(), true);
+        
+//        if (!btnSave.isEnabled()) {
+            form.setSaveChanges(EntityTable.PARTY);
+            form.entityTable=EntityTable.PARTY;
+//        }
+        WindowUtility.centerForm(form);    
+        form.setVisible(true);
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -244,6 +262,7 @@ public class PartyPanelForm extends ContentPanel {
         headerPanel = new org.sola.clients.swing.ui.HeaderPanel();
         jToolBar1 = new javax.swing.JToolBar();
         btnSave = new javax.swing.JButton();
+        btnSecurity = new javax.swing.JButton();
         partyPanel = createPartyPanel();
 
         setHeaderPanel(headerPanel);
@@ -270,6 +289,18 @@ public class PartyPanelForm extends ContentPanel {
             }
         });
         jToolBar1.add(btnSave);
+
+        btnSecurity.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/lock.png"))); // NOI18N
+        btnSecurity.setText(bundle.getString("PartyPanelForm.btnSecurity.text")); // NOI18N
+        btnSecurity.setFocusable(false);
+        btnSecurity.setName(bundle.getString("PartyPanelForm.btnSecurity.name")); // NOI18N
+        btnSecurity.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSecurity.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSecurityActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnSecurity);
 
         partyPanel.setName("partyPanel"); // NOI18N
 
@@ -299,8 +330,13 @@ public class PartyPanelForm extends ContentPanel {
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         saveParty(false);
     }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void btnSecurityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSecurityActionPerformed
+        configureSecurity();
+    }//GEN-LAST:event_btnSecurityActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnSecurity;
     private org.sola.clients.swing.ui.HeaderPanel headerPanel;
     private javax.swing.JToolBar jToolBar1;
     private org.sola.clients.swing.ui.party.PartyPanel partyPanel;

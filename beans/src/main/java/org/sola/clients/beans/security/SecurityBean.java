@@ -30,8 +30,11 @@ package org.sola.clients.beans.security;
 import java.util.HashMap;
 import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.clients.beans.converters.TypeConverters;
+import org.sola.common.RolesConstants;
 import org.sola.common.SOLAException;
+import org.sola.common.StringUtility;
 import org.sola.common.logging.LogUtility;
+import org.sola.clients.beans.cache.CacheManager;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 import org.sola.services.boundary.wsclients.WSManager;
@@ -179,4 +182,46 @@ public class SecurityBean extends AbstractBindingBean {
         }
         return result;
     }
+   /**
+     * Checks the Security Classification to ensure the user has the appropriate
+     * clearance to view the record details. The security clearance assigned to
+     * a user will grant them access to all records that have the same or lower
+     * security classification. Where a specialty classification is being used,
+     * the user must have that clearance assigned (as a security role) or have a
+     * clearance level of Top Secret.
+     *
+     * @param classificationCode The security classification to check
+     * @return true user has the appropriate security clearance to view the
+     * entity, false otherwise.
+     */
+    public static boolean hasSecurityClearance(String classificationCode) {
+        boolean result;
+        System.out.println("CLASSIFICATION CODE   "+classificationCode);
+        System.out.println("CtringUtility.getMD5   "+StringUtility.getMD5(classificationCode));
+        if (StringUtility.isEmpty(classificationCode)
+                || RolesConstants.CLASSIFICATION_UNRESTRICTED.equals(classificationCode)) {
+            result = true;
+        } else if (RolesConstants.CLASSIFICATION_RESTRICTED.equals(classificationCode)) {
+            result = isInRole(RolesConstants.CLASSIFICATION_RESTRICTED,
+                    RolesConstants.CLASSIFICATION_CONFIDENTIAL,
+                    RolesConstants.CLASSIFICATION_SECRET,
+                    RolesConstants.CLASSIFICATION_TOPSECRET);
+        } else if (RolesConstants.CLASSIFICATION_CONFIDENTIAL.equals(classificationCode)) {
+            result = isInRole(RolesConstants.CLASSIFICATION_CONFIDENTIAL,
+                    RolesConstants.CLASSIFICATION_SECRET,
+                    RolesConstants.CLASSIFICATION_TOPSECRET);
+        } else if (RolesConstants.CLASSIFICATION_SECRET.equals(classificationCode)) {
+            result = isInRole(RolesConstants.CLASSIFICATION_SECRET,
+                    RolesConstants.CLASSIFICATION_TOPSECRET);
+        } else if (RolesConstants.CLASSIFICATION_TOPSECRET.equals(classificationCode)) {
+            result = isInRole(RolesConstants.CLASSIFICATION_TOPSECRET);
+        } else {
+            // Specialty Classification so allow users with that clearance or 
+            // TOP SECRET to view it. 
+            result = isInRole(classificationCode,
+                    RolesConstants.CLASSIFICATION_TOPSECRET);
+        }
+        return result;
+    }
 }
+

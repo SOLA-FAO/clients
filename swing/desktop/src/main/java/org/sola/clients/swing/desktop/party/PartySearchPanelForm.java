@@ -128,9 +128,7 @@ public class PartySearchPanelForm extends ContentPanel {
 
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                System.out.println("EVT IN SEARCH  " + evt.getPropertyName());
-
-                if (evt.getPropertyName().equals(partySearchPanel.SELECT_PARTY_PROPERTY)) {
+               if (evt.getPropertyName().equals(partySearchPanel.SELECT_PARTY_PROPERTY)) {
                     setParty("partyBean");
                 }
             }
