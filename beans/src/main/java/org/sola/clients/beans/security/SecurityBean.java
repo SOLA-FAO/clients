@@ -34,7 +34,6 @@ import org.sola.common.RolesConstants;
 import org.sola.common.SOLAException;
 import org.sola.common.StringUtility;
 import org.sola.common.logging.LogUtility;
-import org.sola.clients.beans.cache.CacheManager;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 import org.sola.services.boundary.wsclients.WSManager;
@@ -196,8 +195,6 @@ public class SecurityBean extends AbstractBindingBean {
      */
     public static boolean hasSecurityClearance(String classificationCode) {
         boolean result;
-        System.out.println("CLASSIFICATION CODE   "+classificationCode);
-        System.out.println("CtringUtility.getMD5   "+StringUtility.getMD5(classificationCode));
         if (StringUtility.isEmpty(classificationCode)
                 || RolesConstants.CLASSIFICATION_UNRESTRICTED.equals(classificationCode)) {
             result = true;

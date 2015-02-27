@@ -244,13 +244,8 @@ public class PartyPanelForm extends ContentPanel {
     }
 
     private void configureSecurity() {
-        SecurityClassificationDialog form = new SecurityClassificationDialog(EntityTable.PARTY,partyPanel.getPartyBean(),
+        SecurityClassificationDialog form = new SecurityClassificationDialog(partyPanel.getPartyBean(),
                 MainForm.getInstance(), true);
-        
-//        if (!btnSave.isEnabled()) {
-            form.setSaveChanges(EntityTable.PARTY);
-            form.entityTable=EntityTable.PARTY;
-//        }
         WindowUtility.centerForm(form);    
         form.setVisible(true);
     }

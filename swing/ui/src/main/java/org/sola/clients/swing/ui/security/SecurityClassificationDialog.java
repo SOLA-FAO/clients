@@ -35,20 +35,17 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.clients.beans.AbstractIdBean;
-import org.sola.clients.beans.administrative.BaUnitBean;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.security.RoleListBean;
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
-//import static org.sola.clients.swing.ui.administrative.PropertyAssignmentDialog.ASSIGNMENT_CHANGED;
 import org.sola.common.RolesConstants;
 import org.sola.common.WindowUtility;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.EntityTable;
-
 /**
  * This dialog form is used to configure the security classification and
  * redaction classification for a data record.
@@ -90,23 +87,6 @@ public class SecurityClassificationDialog extends javax.swing.JDialog {
         initComponents();
         customizeForm();
     }
-    
-    
-     /**
-     * Supports re-classification of an individual bean
-     *
-     * @param bean
-     * @param parent
-     * @param modal
-     */
-    public SecurityClassificationDialog(EntityTable entityTable, AbstractBindingBean bean,
-            java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
-        this.bean = bean;
-        this.entityTable = entityTable;
-        initComponents();
-        customizeForm();
-    }
 
     /**
      * Loads the security role lists
@@ -125,8 +105,7 @@ public class SecurityClassificationDialog extends javax.swing.JDialog {
 
         URL imgURL = this.getClass().getResource("/images/sola/logo_icon.jpg");
         this.setIconImage(new ImageIcon(imgURL).getImage());
-        System.out.println("entityTABLECUSTOMIZE   "+entityTable.value());
-        
+
         WindowUtility.addEscapeListener(this, false);
         java.util.ResourceBundle bundle1 = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/security/Bundle");
         if (entityTable == null) {
@@ -184,14 +163,12 @@ public class SecurityClassificationDialog extends javax.swing.JDialog {
      */
     public void setSaveChanges(EntityTable entityTable) {
         this.entityTable = entityTable;
-        System.out.println("entityTABLE   "+entityTable.value());
     }
 
     /**
      * Assign team to properties
      */
     private void save() {
-System.out.println("entityTABLEBEAN   "+bean);
         final String classificationCode = classificationList.getSelectedRole() == null ? null
                 : classificationList.getSelectedRole().getCode();
         final String redactCode = redactList.getSelectedRole() == null ? null
@@ -288,7 +265,7 @@ System.out.println("entityTABLEBEAN   "+bean);
         pnlTeam.setLayout(pnlTeamLayout);
         pnlTeamLayout.setHorizontalGroup(
             pnlTeamLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
             .addComponent(cbxClassification, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         pnlTeamLayout.setVerticalGroup(
@@ -344,7 +321,7 @@ System.out.println("entityTABLEBEAN   "+bean);
                 .addComponent(pnlTeam, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(43, Short.MAX_VALUE))
         );
 
         bindingGroup.bind();
