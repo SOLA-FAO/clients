@@ -93,6 +93,7 @@ public class ObscurationPanel extends ContentPanel {
     public static final String PARTY_SAVED = "partySaved";
     private ApplicationBean appBean;
     public String serviceId;
+    private boolean readOnly = false;
 
     /**
      * Creates documents table to show paper title documents.
@@ -138,11 +139,11 @@ public class ObscurationPanel extends ContentPanel {
      * Creates new form RecordRelationshipPanel
      */
     public ObscurationPanel(ApplicationBean applicationBean,
-            ApplicationServiceBean applicationService) {
+            ApplicationServiceBean applicationService, Boolean readOnly) {
         this.applicationBean = applicationBean;
         this.appBean = applicationBean;
         this.serviceId = applicationService.getId();
-
+        this.readOnly = readOnly;
         partyBean = PartyBean.getPartyByServiceId(serviceId);
 
         this.applicationPropertyBean = new ApplicationPropertyBean();
@@ -214,9 +215,18 @@ public class ObscurationPanel extends ContentPanel {
 
     private void customizeForm() {
 
-
+        if (readOnly) {
+            btnSelectExisting.setVisible(false);
+            btnSelectExisting.setEnabled(false);
+            btnSecurity.setVisible(false);
+            btnSecurity.setEnabled(false);
+            
+            java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/party/Bundle"); // NOI18N
+            btnSave.setText(bundle.getString("ObscurationPanel.btnClose.text")); // NOI18N
+        }
         partyBean = PartyBean.getPartyByServiceId(serviceId);
-        if (partyBean.getName() != null) {
+
+        if (partyBean != null && partyBean.getName() != null) {
             btnSelectExisting.setVisible(false);
             btnSelectExisting.setEnabled(false);
         }
@@ -310,6 +320,7 @@ public class ObscurationPanel extends ContentPanel {
 
         btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/save.png"))); // NOI18N
         btnSave.setText(bundle.getString("ObscurationPanel.btnSave.text")); // NOI18N
+        btnSave.setActionCommand(bundle.getString("ObscurationPanel.btnSave.text")); // NOI18N
         btnSave.setFocusable(false);
         btnSave.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSave.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
