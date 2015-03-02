@@ -1,28 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.beans.party;
@@ -48,14 +50,13 @@ import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.EntityAction;
 import org.sola.webservices.transferobjects.casemanagement.PartyTO;
 
-/** 
- * Represents party object in the domain model. 
- * Could be populated from the {@link PartyTO} object.<br />
- * For more information see data dictionary <b>Party</b> schema.
+/**
+ * Represents party object in the domain model. Could be populated from the {@link PartyTO}
+ * object.<br /> For more information see data dictionary <b>Party</b> schema.
  * <br />This bean is used as a part of {@link ApplicationBean}.
  */
-@PartyIdTypeCheck(message = ClientMessage.CHECK_PERSON_ID_DOC_NUMBER, payload=Localized.class)
-@PartyAddressCheck(message = ClientMessage.CHECK_PERSON_ADDRESS, payload=Localized.class)
+@PartyIdTypeCheck(message = ClientMessage.CHECK_PERSON_ID_DOC_NUMBER, payload = Localized.class)
+@PartyAddressCheck(message = ClientMessage.CHECK_PERSON_ADDRESS, payload = Localized.class)
 public class PartyBean extends PartySummaryBean {
 
     public static final String EMAIL_PROPERTY = "email";
@@ -76,22 +77,21 @@ public class PartyBean extends PartySummaryBean {
     public static final String BIRTHDATE_PROPERTY = "birthDate";
     public static final String SELECTED_GROUP_PARTY_PROPERTY = "selectedGroupParty";
 //    public static final String SELECTED_PARTY_MEMBER_PROPERTY = "selectedPartyMember";
-    
-    @Length(max = 50, message =  ClientMessage.CHECK_FIELD_INVALID_LENGTH_MAIL, payload=Localized.class)
-    @Email(message = ClientMessage.CHECK_INVALID_EMAIL, payload=Localized.class)
+    @Length(max = 50, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH_MAIL, payload = Localized.class)
+    @Email(message = ClientMessage.CHECK_INVALID_EMAIL, payload = Localized.class)
     private String email;
-    @Length(max = 15, message =  ClientMessage.CHECK_FIELD_INVALID_LENGTH_PHONE, payload=Localized.class)
+    @Length(max = 15, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH_PHONE, payload = Localized.class)
     private String phone;
-    @Length(max = 15, message =  ClientMessage.CHECK_FIELD_INVALID_LENGTH_MOBILE, payload=Localized.class)
+    @Length(max = 15, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH_MOBILE, payload = Localized.class)
     private String mobile;
     private String idNumber;
-    @Length(max = 15, message =  ClientMessage.CHECK_FIELD_INVALID_LENGTH_FAX, payload=Localized.class)
+    @Length(max = 15, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH_FAX, payload = Localized.class)
     private String fax;
-    @Length(max = 50, message =  ClientMessage.CHECK_FIELD_INVALID_LENGTH_FNAME, payload=Localized.class)
+    @Length(max = 50, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH_FNAME, payload = Localized.class)
     private String fathersName;
-    @Length(max = 50, message =  ClientMessage.CHECK_FIELD_INVALID_LENGTH_FLAST, payload=Localized.class)
+    @Length(max = 50, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH_FLAST, payload = Localized.class)
     private String fathersLastName;
-    @Length(max = 50, message =  ClientMessage.CHECK_FIELD_INVALID_LENGTH_ALIAS, payload=Localized.class)
+    @Length(max = 50, message = ClientMessage.CHECK_FIELD_INVALID_LENGTH_ALIAS, payload = Localized.class)
     private String alias;
     private AddressBean addressBean;
     private GenderTypeBean genderTypeBean;
@@ -102,13 +102,11 @@ public class PartyBean extends PartySummaryBean {
     private transient PartyRoleBean selectedRole;
     private SolaList<GroupPartyBean> groupPartyList;
     private transient GroupPartyBean selectedGroupParty;
-//    private SolaList<PartyMemberBean> partyMemberList;
-//    private transient PartyMemberBean selectedPartyMember;
-    
     private SolaList<SourceBean> sourceList;
-   
-    /** 
-     * Default constructor to create party bean. Initializes 
+    private String serviceId;
+
+    /**
+     * Default constructor to create party bean. Initializes
      * {@link CommunicationTypeBean} as a part of this bean.
      */
     public PartyBean() {
@@ -116,7 +114,7 @@ public class PartyBean extends PartySummaryBean {
         roleList = new SolaList();
         sourceList = new SolaList();
         groupPartyList = new SolaList();
-        
+
     }
 
     public void clean() {
@@ -318,6 +316,7 @@ public class PartyBean extends PartySummaryBean {
     public void setRoleList(SolaList<PartyRoleBean> roleList) {
         this.roleList = roleList;
     }
+
     public ObservableList<GroupPartyBean> getFilteredGroupPartyList() {
         return groupPartyList.getFilteredList();
     }
@@ -329,18 +328,17 @@ public class PartyBean extends PartySummaryBean {
     public void setGroupPartyList(SolaList<GroupPartyBean> groupPartyList) {
         this.groupPartyList = groupPartyList;
     }
-    
+
     public void addGroupParty(GroupPartyTypeBean groupPartyTypeBean) {
-        
-       if (groupPartyList != null && groupPartyTypeBean != null) {
+
+        if (groupPartyList != null && groupPartyTypeBean != null) {
             GroupPartyBean newGroupType = new GroupPartyBean();
             newGroupType.setGroupType(groupPartyTypeBean);
             newGroupType.setGroupCode(groupPartyTypeBean.getCode());
             groupPartyList.addAsNew(newGroupType);
-       
+
         }
     }
-
 
     public GroupPartyBean getSelectedGroupParty() {
         return selectedGroupParty;
@@ -351,10 +349,10 @@ public class PartyBean extends PartySummaryBean {
         propertySupport.firePropertyChange(SELECTED_GROUP_PARTY_PROPERTY, null, selectedGroupParty);
     }
 
-    
-    /** 
-     * Sets preferred communication code and retrieves {@link CommunicationTypeBean} 
-     * object related to the given code from the cache. 
+    /**
+     * Sets preferred communication code and retrieves {@link CommunicationTypeBean}
+     * object related to the given code from the cache.
+     *
      * @param value Preferred communication code.
      */
     public void setPreferredCommunicationCode(String value) {
@@ -364,7 +362,9 @@ public class PartyBean extends PartySummaryBean {
         propertySupport.firePropertyChange(PREFERRED_COMMUNICATION_PROPERTY, oldValue, value);
     }
 
-    /** Checks if role already exists in the list. */
+    /**
+     * Checks if role already exists in the list.
+     */
     public boolean checkRoleExists(PartyRoleTypeBean partyRoleTypeBean) {
         if (roleList != null && partyRoleTypeBean != null) {
             for (PartyRoleBean roleBean : roleList) {
@@ -376,8 +376,9 @@ public class PartyBean extends PartySummaryBean {
         return false;
     }
 
-    /** 
+    /**
      * Adds new role ({@link PartyRoleTypeBean}) into party.
+     *
      * @param partyRoleBean Role.
      */
     public void addRole(PartyRoleTypeBean partyRoleTypeBean) {
@@ -388,24 +389,27 @@ public class PartyBean extends PartySummaryBean {
         }
     }
 
-    /** Removes selected role from the list for  party.*/
+    /**
+     * Removes selected role from the list for party.
+     */
     public void removeSelectedRole() {
         if (selectedRole != null && roleList != null) {
             roleList.safeRemove(selectedRole, EntityAction.DELETE);
         }
     }
 
-    /** 
-     * Saves changes to the party into the database. 
+    /**
+     * Saves changes to the party into the database.
+     *
      * @throws Exception
      */
     public boolean saveParty() {
-        
+
         PartyTO party = TypeConverters.BeanToTrasferObject(this, PartyTO.class);
-          if (getGenderCode()==null && getTypeCode().contentEquals("naturalPerson")){
+        if (getGenderCode() == null && getTypeCode().contentEquals("naturalPerson")) {
             MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_GENDER);
             return false;
-          }
+        }
         if (getAddress() != null && getAddress().isNew() && (getAddress().getDescription() == null
                 || getAddress().getDescription().length() < 1)) {
             party.setAddress(null);
@@ -413,51 +417,65 @@ public class PartyBean extends PartySummaryBean {
                 || getAddress().getDescription().length() < 1)) {
             party.getAddress().setEntityAction(EntityAction.DISASSOCIATE);
         }
-        
-        
+
+
         party = WSManager.getInstance().getCaseManagementService().saveParty(party);
-        
+
         TypeConverters.TransferObjectToBean(party, PartyBean.class, this);
         return true;
     }
-    
-    /** Returns party by ID. */
-    public static PartyBean getParty(String partyId){
-        if(partyId == null || partyId.length()<1){
+
+    /**
+     * Returns party by ID.
+     */
+    public static PartyBean getParty(String partyId) {
+        if (partyId == null || partyId.length() < 1) {
             return null;
         }
         PartyTO partyTO = WSManager.getInstance().getCaseManagementService().getParty(partyId);
         return TypeConverters.TransferObjectToBean(partyTO, PartyBean.class, null);
     }
-    
-    /** Removes party. */
-    public static void remove(String partyId){
-        if(partyId == null || partyId.length()<1){
+
+    /**
+     * Returns party by ID.
+     */
+    public static PartyBean getPartyByServiceId(String serviceId) {
+
+        PartyTO partyTO = WSManager.getInstance().getCaseManagementService().getPartyByServiceId(serviceId);
+        return TypeConverters.TransferObjectToBean(partyTO, PartyBean.class, null);
+    }
+
+    /**
+     * Removes party.
+     */
+    public static void remove(String partyId) {
+        if (partyId == null || partyId.length() < 1) {
             return;
         }
         PartyTO partyTO = WSManager.getInstance().getCaseManagementService().getParty(partyId);
         partyTO.setEntityAction(EntityAction.DELETE);
         WSManager.getInstance().getCaseManagementService().saveParty(partyTO);
     }
-    
-   public void createPaperTitle(SourceBean source) {
-       if (source != null) {
+
+    public void createPaperTitle(SourceBean source) {
+        if (source != null) {
             sourceList.addAsNew(source);
             sourceList.filter();
+
         }
     }
-   
+
     public void removePaperTitle(SourceBean source) {
-       if (source != null) {
+        if (source != null) {
             for (SourceBean sourceBean : sourceList) {
-                if (sourceBean.getId().equals(source.getId())){
+                if (sourceBean.getId().equals(source.getId())) {
                     sourceBean.setEntityAction(EntityAction.DISASSOCIATE);
                 }
             }
             sourceList.filter();
         }
     }
-   
+
     public SolaList<SourceBean> getSourceList() {
         return sourceList;
     }
@@ -469,5 +487,12 @@ public class PartyBean extends PartySummaryBean {
     public ObservableList<SourceBean> getFilteredSourceList() {
         return sourceList.getFilteredList();
     }
-   
+
+    public String getServiceId() {
+        return serviceId;
+    }
+
+    public void setServiceId(String serviceId) {
+        this.serviceId = serviceId;
+    }
 }

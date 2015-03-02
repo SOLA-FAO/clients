@@ -564,7 +564,6 @@ public class ApplicationPanel extends ContentPanel {
                     }
                 }
             };
-System.err.println("SERVICE PANEL CODE   "+servicePanelCode);
             if (servicePanelCode == null) {
                 // No service panel code for the request type. Log a message and continue
                 // in case this service is a workflow step that has no associated panel.
@@ -579,6 +578,9 @@ System.err.println("SERVICE PANEL CODE   "+servicePanelCode);
                 // Transactioned Document Services
                 PanelLauncher.launch(servicePanelCode, getMainContentPanel(), null, null, appBean, service);
             } else if (PanelLauncher.isLaunchGroup(PanelLauncherGroupBean.CODE_CANCEL_RELATIONSHIP, servicePanelCode)) {
+                // Transactioned Document Services
+                PanelLauncher.launch(servicePanelCode, getMainContentPanel(), null, null, appBean, service);
+            } else if (PanelLauncher.isLaunchGroup(PanelLauncherGroupBean.CODE_OBSCURATION_REQUEST, servicePanelCode)) {
                 // Transactioned Document Services
                 PanelLauncher.launch(servicePanelCode, getMainContentPanel(), null, null, appBean, service);
             } else if (PanelLauncher.isLaunchGroup(PanelLauncherGroupBean.CODE_CADASTRE_SERVICES, servicePanelCode)) {
