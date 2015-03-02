@@ -53,6 +53,7 @@ public class ConsolidationConsolidatePanel extends ContentPanel {
      */
     public ConsolidationConsolidatePanel() {
         initComponents();
+        txtBackupPath.setText(WSManager.getInstance().getAdminService().getSetting("path-to-backup", ""));
     }
 
     private void run() {
@@ -188,6 +189,7 @@ public class ConsolidationConsolidatePanel extends ContentPanel {
         jLabel1 = new javax.swing.JLabel();
         chkRestoreExtractedFile = new javax.swing.JCheckBox();
         chkMergeConsolidationSchema = new javax.swing.JCheckBox();
+        txtBackupPath = new javax.swing.JTextField();
 
         setHeaderPanel(pnlHeader);
 
@@ -240,6 +242,9 @@ public class ConsolidationConsolidatePanel extends ContentPanel {
         chkMergeConsolidationSchema.setSelected(true);
         chkMergeConsolidationSchema.setText(bundle.getString("ConsolidationConsolidatePanel.chkMergeConsolidationSchema.text")); // NOI18N
 
+        txtBackupPath.setEditable(false);
+        txtBackupPath.setText(bundle.getString("ConsolidationConsolidatePanel.txtBackupPath.text")); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -271,7 +276,9 @@ public class ConsolidationConsolidatePanel extends ContentPanel {
                                 .addGap(12, 12, 12)
                                 .addComponent(jLabel7)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtSourceInServer, javax.swing.GroupLayout.PREFERRED_SIZE, 373, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(txtBackupPath, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtSourceInServer, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap(546, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(cmdShowLog))
@@ -290,8 +297,9 @@ public class ConsolidationConsolidatePanel extends ContentPanel {
                     .addComponent(txtSourceInServer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7)
                     .addComponent(jLabel1)
-                    .addComponent(chkRestoreExtractedFile))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(chkRestoreExtractedFile)
+                    .addComponent(txtBackupPath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(chkMergeConsolidationSchema))
@@ -308,7 +316,7 @@ public class ConsolidationConsolidatePanel extends ContentPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cmdShowLog)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -349,6 +357,7 @@ public class ConsolidationConsolidatePanel extends ContentPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private org.sola.clients.swing.ui.HeaderPanel pnlHeader;
     private javax.swing.JProgressBar progressBarProcess;
+    private javax.swing.JTextField txtBackupPath;
     private javax.swing.JTextArea txtLog;
     private javax.swing.JTextField txtSourceInServer;
     private javax.swing.JTextField txtStatus;

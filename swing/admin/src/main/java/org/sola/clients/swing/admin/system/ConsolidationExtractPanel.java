@@ -41,7 +41,7 @@ import org.sola.services.boundary.wsclients.exception.WebServiceClientException;
 
 /**
  * It is the user interface where the extraction process can be started.
- * 
+ *
  * @author Elton Manoku
  */
 public class ConsolidationExtractPanel extends ContentPanel {
@@ -63,7 +63,6 @@ public class ConsolidationExtractPanel extends ContentPanel {
                 ClientMessage.ADMIN_CONSOLIDATION_RUNNING));
 
         SolaTask taskExtract = new SolaTask<Void, Void>() {
-            
             boolean failed = false;
             //The file name in the documents folder in the server.
             String fileOfExtract = "";
@@ -76,6 +75,7 @@ public class ConsolidationExtractPanel extends ContentPanel {
                             ClientMessage.ADMIN_CONSOLIDATION_EXTRACT));
                     processName = WSManager.getInstance().getAdminService().consolidationExtract(
                             chkGenerateConsolidationSchema.isSelected(), chkEverything.isSelected(), chkDumpToFile.isSelected());
+                    fileOfExtract = processName + ".backup";
                 } catch (WebServiceClientException ex) {
                     failed = true;
                     txtStatus.setText(ex.getMessage());
@@ -87,12 +87,13 @@ public class ConsolidationExtractPanel extends ContentPanel {
             protected void taskDone() {
                 super.taskDone();
                 if (failed) {
-                    txtStatus.setText(String.format("%s:%s",txtStatus.getText(), 
+                    txtStatus.setText(String.format("%s:%s", txtStatus.getText(),
                             MessageUtility.getLocalizedMessageText(ClientMessage.ADMIN_CONSOLIDATION_FAILED)));
-                }else{
+                } else {
                     txtStatus.setText(MessageUtility.getLocalizedMessage(
                             ClientMessage.ADMIN_CONSOLIDATION_EXTRACT_OUTPUT_FILE,
-                            new String[]{FileUtility.getCachePath() + fileOfExtract}).getMessage());                    
+                            new String[]{WSManager.getInstance().getAdminService().getSetting("path-to-backup", "")
+                        + "/" + fileOfExtract}).getMessage());
                 }
                 // It can be that even the process if finished, still the progress bar is not yet 100 percent.
                 // This makes sure. The number 10000 is a number which is the infinite max the 
@@ -109,10 +110,10 @@ public class ConsolidationExtractPanel extends ContentPanel {
             @Override
             public Void doTask() {
                 while (progressValue < 100) {
-                    progressValue = WSManager.getInstance().getAdminService().getProcessProgress(
-                            processName, true);
-                    progressBarProcess.setValue(progressValue);
                     try {
+                        progressValue = WSManager.getInstance().getAdminService().getProcessProgress(
+                                processName, true);
+                        progressBarProcess.setValue(progressValue);
                         TimeUnit.SECONDS.sleep(PROGRESS_CHECK_INTERVAL_SECONDS);
                     } catch (InterruptedException ex) {
                     }
@@ -136,16 +137,19 @@ public class ConsolidationExtractPanel extends ContentPanel {
 
     /**
      * It retrieves the log of the process.
-     * 
+     *
      */
     private void showLog() {
         SolaTask showLog = new SolaTask<Void, Void>() {
             @Override
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.ADMIN_CONSOLIDATION_EXTRACT));
-
-                txtLog.setText(
+                try{
+                    txtLog.setText(
                         WSManager.getInstance().getAdminService().getProcessLog(processName));
+                }catch(WebServiceClientException ex){
+                    
+                }
                 return null;
             }
 
@@ -311,7 +315,7 @@ public class ConsolidationExtractPanel extends ContentPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
-        if (!chkGenerateConsolidationSchema.isSelected() 
+        if (!chkGenerateConsolidationSchema.isSelected()
                 && !chkDumpToFile.isSelected()) {
             MessageUtility.displayMessage(ClientMessage.ADMIN_CONSOLIDATION_NO_ACTION_SELECTED);
             return;
@@ -324,12 +328,11 @@ public class ConsolidationExtractPanel extends ContentPanel {
     }//GEN-LAST:event_cmdShowLogActionPerformed
 
     private void chkGenerateConsolidationSchemaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkGenerateConsolidationSchemaActionPerformed
-                chkEverything.setEnabled(chkGenerateConsolidationSchema.isSelected());
-                if (!chkEverything.isEnabled()){
-                    chkEverything.setSelected(false);
-                }
+        chkEverything.setEnabled(chkGenerateConsolidationSchema.isSelected());
+        if (!chkEverything.isEnabled()) {
+            chkEverything.setSelected(false);
+        }
     }//GEN-LAST:event_chkGenerateConsolidationSchemaActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnStart;
     private javax.swing.JCheckBox chkDumpToFile;
