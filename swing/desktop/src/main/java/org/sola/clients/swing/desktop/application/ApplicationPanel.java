@@ -582,7 +582,7 @@ public class ApplicationPanel extends ContentPanel {
                 PanelLauncher.launch(servicePanelCode, getMainContentPanel(), null, null, appBean, service);
             } else if (PanelLauncher.isLaunchGroup(PanelLauncherGroupBean.CODE_OBSCURATION_REQUEST, servicePanelCode)) {
                 // Transactioned Document Services
-                PanelLauncher.launch(servicePanelCode, getMainContentPanel(), null, null, appBean, service);
+                PanelLauncher.launch(servicePanelCode, getMainContentPanel(), null, null, appBean, service, readOnly);
             } else if (PanelLauncher.isLaunchGroup(PanelLauncherGroupBean.CODE_CADASTRE_SERVICES, servicePanelCode)) {
                 // Cadastre Transaction Services
                 ApplicationPropertyBean propertyBean = null;
