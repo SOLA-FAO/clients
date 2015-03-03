@@ -54,6 +54,8 @@ public class JTableWithDefaultStyles extends JTable {
     private Color scrollPaneBackgroundColor;
     private Color defaultBackground;
     private Color oddRowColor;
+    private Color selectedColor;
+    TableCellRenderer headerRenderer;
 
     /**
      * Class constructor. Initializes default values
@@ -72,30 +74,19 @@ public class JTableWithDefaultStyles extends JTable {
         Object newSelectedRow = "paleSolaGrey";
         Color newSelColor = UIManager.getColor(newSelectedRow);
         this.setSelectionBackground(newSelColor);
-//        
-////        Object newSelForecolor = "TableSelForeColor";
+        selectedColor = newSelColor;
         Object newSelForecolor = "List.foreground";
         Color newSelFore = UIManager.getColor(newSelForecolor);
         this.setSelectionForeground(newSelFore);
         this.setGridColor(newSelFore);
         this.tableHeader.setForeground(UIManager.getColor(newSecondRow));
-        
-//        Object newHeaderBackcolor = "nimbusGreen";
-//        this.tableHeader.setBackground(UIManager.getColor(newHeaderBackcolor));
-    
-//
-//        
-//        
-////        Object newGridcolor = "TableGridColor";
         Object newGrid = "Table.dropLineColor";
         Color newGridColor = UIManager.getColor(newGrid);
-//        this.setGridColor(UIManager.getColor(newGridcolor));
         this.setGridColor(newSelFore);
 
         scrollPaneBackgroundColor = Color.WHITE;
         super.setBackground(defaultBackground);
         this.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-//        this.setFont(new java.awt.Font("Tahoma", 0, 12));
         Object tableFont = "Table.font";
         Font newTableFont = UIManager.getFont(tableFont);
         this.setFont(newTableFont);
@@ -122,7 +113,7 @@ public class JTableWithDefaultStyles extends JTable {
         // Remove the input mapping for the Enter key so that it can be used to fire the default button on the form instead. 
         this.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "none");
     }
-
+    
     /**
      * Used to color alternative(even) rows.
      */
@@ -139,6 +130,7 @@ public class JTableWithDefaultStyles extends JTable {
                         comp.setBackground(oddRowColor);
                     }
                 }
+
             }
             return comp;
         } catch (Exception e) {

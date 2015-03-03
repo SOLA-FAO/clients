@@ -279,10 +279,10 @@ public class LafManager {
                         ret.put("nimbusBlueGrey", new Color(154, 177, 95));
                         ret.put("nimbusInfoBlue", new Color(154, 177, 95));
                         ret.put("nimbusLightBackground", new Color(255, 255, 255));
-                        ret.put("nimbusOrange", new Color(33,124,149));
+                        ret.put("nimbusOrange", new Color(33, 124, 149));
                         ret.put("nimbusRed", new Color(140, 60, 34));
                         ret.put("nimbusSelectedText", new Color(0, 0, 0));
-                        ret.put("nimbusSelectionBackground", new Color(239, 239, 233));
+                        ret.put("nimbusSelectionBackground", new Color(181, 181, 150));
 
                         //      ####  Secondary Colors   #####
                         ret.put("activeCaption", new Color(181, 181, 150));
@@ -304,19 +304,21 @@ public class LafManager {
                         ret.put("SolaGrey", new Color(181, 181, 150));
                         ret.put("SolaGroup", new Color(181, 181, 150));
                         ret.put("SolaHeader", new Color(154, 177, 95));
-                        
-//      ####  Background Colors   #####         
+
+//      ####  Background/Foreground Colors   #####         
                         ret.put("PasswordField.background", new Color(236, 247, 235));
                         ret.put("Table.alternateRowColor", new Color(255, 255, 255));
-                        ret.put("List.background", new Color(185, 227, 185));
+                        ret.put("List.background", new Color(255, 255, 255));
                         ret.put("Table.dropLineColor", new Color(255, 255, 255));
                         ret.put("MenuItem.background", new Color(255, 255, 255));
                         ret.put("List.foreground", new Color(0, 102, 51));
+                        ret.put("List[Selected].textBackground", new Color(154, 177, 95)); 
                         ret.put("TableHeader:\"TableHeader.renderer\"[Enabled].backgroundPainter", new FillPainter(new Color(154, 177, 95)));
                         ret.put("MenuBar:Menu[Enabled].textForeground", new Color(255, 255, 255));
                         ret.put("MenuBar[Enabled].backgroundPainter", new FillPainter(new Color(181, 181, 150)));
-//                        ret.put("ScrollBar:ScrollBarThumb[Disabled].backgroundPainter", painterScrollbar);
-
+                        ret.put("MenuBar:Menu[Selected].backgroundPainter", new FillPainter(new Color(154, 177, 95)));
+                        
+                        
                         //      #### FONTS  ####   
                         ret.put("TextField.font", Font.decode("AppleGothic"));
                         ret.put("TextArea.font", Font.decode("AppleGothic"));
@@ -436,12 +438,12 @@ public class LafManager {
             UIManager.put("textInactiveText", new Color(142, 143, 145));     /*
              * (142,143,145)
              */
-            
+
 //            GROUP PANEL BACKGROUND
-            UIManager.put("SolaGroup", new Color(153,153,153));
+            UIManager.put("SolaGroup", new Color(153, 153, 153));
 //            HEADER PANEL BACKGROUND        
-            UIManager.put("SolaHeader", new Color(51,153,0));
-                        
+            UIManager.put("SolaHeader", new Color(51, 153, 0));
+
 
 //      ####  Background Colors   #####         
             UIManager.put("PasswordField.background", new Color(236, 247, 235));   /*
@@ -464,26 +466,26 @@ public class LafManager {
             UIManager.put("Label.font", Font.decode("AppleGothic"));
             UIManager.put("List.font", Font.decode("AppleGothic"));
             UIManager.put("RadioButton.font", Font.decode("AppleGothic"));
-                          
-              for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-            if ("Nimbus".equals(info.getName())) {
-                try {
-                    UIManager.setLookAndFeel(info.getClassName());
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(LafManager.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InstantiationException ex) {
-                    Logger.getLogger(LafManager.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IllegalAccessException ex) {
-                    Logger.getLogger(LafManager.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (UnsupportedLookAndFeelException ex) {
-                    Logger.getLogger(LafManager.class.getName()).log(Level.SEVERE, null, ex);
+
+            for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    try {
+                        UIManager.setLookAndFeel(info.getClassName());
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(LafManager.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (InstantiationException ex) {
+                        Logger.getLogger(LafManager.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IllegalAccessException ex) {
+                        Logger.getLogger(LafManager.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (UnsupportedLookAndFeelException ex) {
+                        Logger.getLogger(LafManager.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    break;
                 }
-                break;
             }
-        }
 
         }
-        
+
     }
 
     public void setTitleTextProperties(String titleText) {
