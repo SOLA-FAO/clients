@@ -58,6 +58,7 @@ import org.sola.common.RolesConstants;
 import org.sola.common.WindowUtility;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
+import org.sola.services.boundary.wsclients.WSManager;
 
 /**
  * Main form of the Admin application.
@@ -285,6 +286,7 @@ public class MainForm extends javax.swing.JFrame {
         menuBRTechnicalType = new javax.swing.JMenuItem();
         menuTransaction = new javax.swing.JMenu();
         menuRegistrationStatusType = new javax.swing.JMenuItem();
+        menuFlushCache = new javax.swing.JMenuItem();
         menuReports = new javax.swing.JMenu();
         menuLodgementReport = new javax.swing.JMenuItem();
         menuTimeReport = new javax.swing.JMenuItem();
@@ -755,6 +757,15 @@ public class MainForm extends javax.swing.JFrame {
 
         menuRefData.add(menuTransaction);
 
+        menuFlushCache.setText(bundle.getString("MainForm.menuFlushCache.text")); // NOI18N
+        menuFlushCache.setName("menuFlushCache"); // NOI18N
+        menuFlushCache.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuFlushCacheActionPerformed(evt);
+            }
+        });
+        menuRefData.add(menuFlushCache);
+
         mainMenu.add(menuRefData);
 
         menuReports.setText(bundle.getString("MainForm.menuReports.text_1")); // NOI18N
@@ -967,6 +978,12 @@ public class MainForm extends javax.swing.JFrame {
         manageConsolidationConsolidate();
     }//GEN-LAST:event_btnConsolidateActionPerformed
 
+    private void menuFlushCacheActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFlushCacheActionPerformed
+        if (WSManager.getInstance().getAdminService().flushCache()) {
+            MessageUtility.displayMessage(ClientMessage.ADMIN_FLUSH_CACHE);
+        }
+    }//GEN-LAST:event_menuFlushCacheActionPerformed
+
     /**
      * Opens roles management panel.
      */
@@ -1149,6 +1166,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuCommunicationType;
     private javax.swing.JMenuItem menuExit;
     private javax.swing.JMenu menuFile;
+    private javax.swing.JMenuItem menuFlushCache;
     private javax.swing.JMenuItem menuGenders;
     private javax.swing.JMenuItem menuGroups;
     private javax.swing.JMenu menuHelp;
