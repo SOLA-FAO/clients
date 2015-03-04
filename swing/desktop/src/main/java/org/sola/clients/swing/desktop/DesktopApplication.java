@@ -77,10 +77,10 @@ public class DesktopApplication {
                             // Select the Look and Feel Theme based on whether this is 
                             // the production version or the test version of SOLA. 
                             if (LocalizationManager.isProductionHost()) {
-            //                    TO BE CHANGED IF ANY DIFFERENT THEME IS USED IN PRODUCTION;
-                                LafManager.getInstance().setProperties("registry");
+                                LafManager.getInstance().setProperties(LafManager.REGISTRY_THEME);
                             } else {
-                                LafManager.getInstance().setProperties("registry");
+                                // Non production host so display the Green Theme
+                                LafManager.getInstance().setProperties(LafManager.GREEN_THEME);
                             }
 
                             final LoginForm loginForm = new LoginForm();
