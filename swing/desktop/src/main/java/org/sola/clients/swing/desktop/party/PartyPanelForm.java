@@ -244,8 +244,8 @@ public class PartyPanelForm extends ContentPanel {
     }
 
     private void configureSecurity() {
-        SecurityClassificationDialog form = new SecurityClassificationDialog(partyPanel.getPartyBean(),
-                MainForm.getInstance(), true);
+        SecurityClassificationDialog form = new SecurityClassificationDialog(
+                partyPanel.getPartyBean(), true, MainForm.getInstance(), true);
         WindowUtility.centerForm(form);    
         form.setVisible(true);
     }

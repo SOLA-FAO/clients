@@ -46,15 +46,17 @@ import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 import org.sola.services.boundary.wsclients.WSManager;
 import org.sola.webservices.transferobjects.EntityTable;
+
 /**
  * This dialog form is used to configure the security classification and
  * redaction classification for a data record.
  */
 public class SecurityClassificationDialog extends javax.swing.JDialog {
-
+    
     public static final String CLASSIFICATION_CHANGED = "classificationChanged";
     private List<AbstractBindingBean> beanList;
     private AbstractBindingBean bean;
+    private boolean showRedact = false;
     public EntityTable entityTable = null;
 
     /**
@@ -62,12 +64,15 @@ public class SecurityClassificationDialog extends javax.swing.JDialog {
      *
      * @param list List of beans to assign the revised security classification
      * to
+     * @param showRedact Flag to indicate if the redact column should be
+     * displayed or not
      */
     public SecurityClassificationDialog(List<AbstractBindingBean> list,
-            java.awt.Frame parent, boolean modal) {
+            boolean showRedact, java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         this.beanList = list;
         this.entityTable = null;
+        this.showRedact = showRedact;
         initComponents();
         customizeForm();
     }
@@ -76,14 +81,17 @@ public class SecurityClassificationDialog extends javax.swing.JDialog {
      * Supports re-classification of an individual bean
      *
      * @param bean
+     * @param showRedact Flag to indicate if the redact column should be
+     * displayed or not
      * @param parent
      * @param modal
      */
     public SecurityClassificationDialog(AbstractBindingBean bean,
-            java.awt.Frame parent, boolean modal) {
+            boolean showRedact, java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         this.bean = bean;
         this.entityTable = null;
+        this.showRedact = showRedact;
         initComponents();
         customizeForm();
     }
@@ -100,12 +108,12 @@ public class SecurityClassificationDialog extends javax.swing.JDialog {
         list.loadSecurityRoles(filterByClearance);
         return list;
     }
-
+    
     private void customizeForm() {
-
+        
         URL imgURL = this.getClass().getResource("/images/sola/logo_icon.jpg");
         this.setIconImage(new ImageIcon(imgURL).getImage());
-
+        
         WindowUtility.addEscapeListener(this, false);
         java.util.ResourceBundle bundle1 = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/security/Bundle");
         if (entityTable == null) {
@@ -135,20 +143,26 @@ public class SecurityClassificationDialog extends javax.swing.JDialog {
                 }
             }
         }
-
+        
         boolean changeClassification = SecurityBean.isInRole(RolesConstants.CLASSIFICATION_CHANGE_CLASS);
         btnSave.setEnabled(changeClassification);
         cbxClassification.setEnabled(changeClassification);
-        // Don't let the user change the redact settings unless they have clearance to do so. No need to
-        // check the security classification as the user will not be given access to any records they
-        // don't have a classification for. 
-        cbxRedact.setEnabled(changeClassification && SecurityBean.hasSecurityClearance(redactCode));
-
         // Set the default values for the classification code and redact code. 
         classificationList.setSelectedRole(CacheManager.getBeanByCode(classificationList.getRoleListFiltered(),
                 classificationCode));
-        redactList.setSelectedRole(CacheManager.getBeanByCode(redactList.getRoleListFiltered(),
-                redactCode));
+        
+        if (showRedact) {
+            // Don't let the user change the redact settings unless they have clearance to do so. No need to
+            // check the security classification as the user will not be given access to any records they
+            // don't have a classification for. 
+            cbxRedact.setEnabled(changeClassification && SecurityBean.hasSecurityClearance(redactCode));
+
+            // Set the default values for the redact code.
+            redactList.setSelectedRole(CacheManager.getBeanByCode(redactList.getRoleListFiltered(),
+                    redactCode));
+        } else {
+            this.remove(pnlRedact);
+        }
     }
 
     /**
@@ -174,13 +188,13 @@ public class SecurityClassificationDialog extends javax.swing.JDialog {
         final String redactCode = redactList.getSelectedRole() == null ? null
                 : redactList.getSelectedRole().getCode();
         final List<String> entityIds = new ArrayList<String>();
-
+        
         if (bean != null) {
             bean.setClassificationCode(classificationCode);
             bean.setRedactCode(redactCode);
             if (AbstractIdBean.class.isAssignableFrom(bean.getClass())) {
                 entityIds.add(((AbstractIdBean) bean).getId());
-
+                
             }
         } else if (beanList != null && beanList.size() > 0) {
             for (AbstractBindingBean b : beanList) {
@@ -195,7 +209,7 @@ public class SecurityClassificationDialog extends javax.swing.JDialog {
             // Save the changes directly
             final SecurityClassificationDialog dialog = this;
             SolaTask t = new SolaTask<Void, Void>() {
-
+                
                 @Override
                 public Void doTask() {
                     setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_SAVE_SECURITY_CHANGES));
@@ -203,23 +217,23 @@ public class SecurityClassificationDialog extends javax.swing.JDialog {
                             entityTable, classificationCode, redactCode);
                     return null;
                 }
-
+                
                 @Override
                 protected void taskDone() {
                     dialog.firePropertyChange(CLASSIFICATION_CHANGED, false, true);
                     dialog.dispose();
                 }
-
+                
             };
             TaskManager.getInstance().runTask(t);
-
+            
         } else {
             // Allow the calling form to determine when changes to the classification should be saved. 
             this.firePropertyChange(CLASSIFICATION_CHANGED, false, true);
             this.dispose();
         }
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -229,10 +243,10 @@ public class SecurityClassificationDialog extends javax.swing.JDialog {
         redactList = createSecurityRolesList(true);
         jToolBar1 = new javax.swing.JToolBar();
         btnSave = new javax.swing.JButton();
-        pnlTeam = new javax.swing.JPanel();
+        pnlClassification = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         cbxClassification = new javax.swing.JComboBox();
-        jPanel1 = new javax.swing.JPanel();
+        pnlRedact = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         cbxRedact = new javax.swing.JComboBox();
 
@@ -261,16 +275,16 @@ public class SecurityClassificationDialog extends javax.swing.JDialog {
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, classificationList, org.jdesktop.beansbinding.ELProperty.create("${selectedRole}"), cbxClassification, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
-        javax.swing.GroupLayout pnlTeamLayout = new javax.swing.GroupLayout(pnlTeam);
-        pnlTeam.setLayout(pnlTeamLayout);
-        pnlTeamLayout.setHorizontalGroup(
-            pnlTeamLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout pnlClassificationLayout = new javax.swing.GroupLayout(pnlClassification);
+        pnlClassification.setLayout(pnlClassificationLayout);
+        pnlClassificationLayout.setHorizontalGroup(
+            pnlClassificationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
             .addComponent(cbxClassification, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        pnlTeamLayout.setVerticalGroup(
-            pnlTeamLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlTeamLayout.createSequentialGroup()
+        pnlClassificationLayout.setVerticalGroup(
+            pnlClassificationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlClassificationLayout.createSequentialGroup()
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbxClassification, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -285,16 +299,16 @@ public class SecurityClassificationDialog extends javax.swing.JDialog {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, redactList, org.jdesktop.beansbinding.ELProperty.create("${selectedRole}"), cbxRedact, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout pnlRedactLayout = new javax.swing.GroupLayout(pnlRedact);
+        pnlRedact.setLayout(pnlRedactLayout);
+        pnlRedactLayout.setHorizontalGroup(
+            pnlRedactLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(cbxRedact, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        pnlRedactLayout.setVerticalGroup(
+            pnlRedactLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlRedactLayout.createSequentialGroup()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbxRedact, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -309,8 +323,8 @@ public class SecurityClassificationDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlTeam, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(pnlRedact, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnlClassification, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -318,9 +332,9 @@ public class SecurityClassificationDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlTeam, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnlClassification, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnlRedact, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(43, Short.MAX_VALUE))
         );
 
@@ -339,9 +353,9 @@ public class SecurityClassificationDialog extends javax.swing.JDialog {
     private org.sola.clients.beans.security.RoleListBean classificationList;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JToolBar jToolBar1;
-    private javax.swing.JPanel pnlTeam;
+    private javax.swing.JPanel pnlClassification;
+    private javax.swing.JPanel pnlRedact;
     private org.sola.clients.beans.security.RoleListBean redactList;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables

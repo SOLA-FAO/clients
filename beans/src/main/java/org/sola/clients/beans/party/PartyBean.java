@@ -103,7 +103,6 @@ public class PartyBean extends PartySummaryBean {
     private SolaList<GroupPartyBean> groupPartyList;
     private transient GroupPartyBean selectedGroupParty;
     private SolaList<SourceBean> sourceList;
-    private String serviceId;
 
     /**
      * Default constructor to create party bean. Initializes
@@ -437,15 +436,6 @@ public class PartyBean extends PartySummaryBean {
     }
 
     /**
-     * Returns party by ID.
-     */
-    public static PartyBean getPartyByServiceId(String serviceId) {
-
-        PartyTO partyTO = WSManager.getInstance().getCaseManagementService().getPartyByServiceId(serviceId);
-        return TypeConverters.TransferObjectToBean(partyTO, PartyBean.class, null);
-    }
-
-    /**
      * Removes party.
      */
     public static void remove(String partyId) {
@@ -486,13 +476,5 @@ public class PartyBean extends PartySummaryBean {
 
     public ObservableList<SourceBean> getFilteredSourceList() {
         return sourceList.getFilteredList();
-    }
-
-    public String getServiceId() {
-        return serviceId;
-    }
-
-    public void setServiceId(String serviceId) {
-        this.serviceId = serviceId;
     }
 }
