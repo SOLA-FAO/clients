@@ -1,36 +1,43 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.desktop.source;
 
+import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.beans.source.SourceBean;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
+import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.ui.ContentPanel;
+import org.sola.clients.swing.ui.security.SecurityClassificationDialog;
+import org.sola.common.RolesConstants;
+import org.sola.common.WindowUtility;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
@@ -41,7 +48,7 @@ public class DocumentForm extends ContentPanel {
 
     private SourceBean document;
     boolean allowEditing = true;
-    boolean saveDocument  = true;
+    boolean saveDocument = true;
     public static final String DOCUMENT_SAVED = "documentSaved";
 
     /**
@@ -57,7 +64,8 @@ public class DocumentForm extends ContentPanel {
      *
      * @param document Document to edit.
      * @param allowEditing Indicates if document allowed for editing.
-     * @param saveDocument Indicates whether document should be saved in DB or not.
+     * @param saveDocument Indicates whether document should be saved in DB or
+     * not.
      */
     public DocumentForm(SourceBean document, boolean allowEditing, boolean saveDocument) {
         this.document = document;
@@ -86,16 +94,18 @@ public class DocumentForm extends ContentPanel {
         documentPanel.setDocument(document);
         documentPanel.setAllowEditing(allowEditing);
         btnSave.setEnabled(allowEditing);
+        btnSecurity.setVisible(btnSave.isEnabled()
+                && SecurityBean.isInRole(RolesConstants.CLASSIFICATION_CHANGE_CLASS));
     }
 
     private void saveDocument() {
-        if (document.validate(true).size()<1) {
-            
-            if(!saveDocument){
+        if (document.validate(true).size() < 1) {
+
+            if (!saveDocument) {
                 fireDocumentSaved();
                 return;
             }
-            
+
             SolaTask t = new SolaTask<Boolean, Boolean>() {
 
                 @Override
@@ -116,11 +126,19 @@ public class DocumentForm extends ContentPanel {
         }
     }
 
-    private void fireDocumentSaved(){
+    private void fireDocumentSaved() {
         firePropertyChange(DOCUMENT_SAVED, false, true);
         close();
     }
-    
+
+    private void configureSecurity() {
+        SecurityClassificationDialog form = new SecurityClassificationDialog(
+                documentPanel.getDocument(), false, MainForm.getInstance(), true);
+        WindowUtility.centerForm(form);
+        WindowUtility.addEscapeListener(form, false);
+        form.setVisible(true);
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -129,6 +147,7 @@ public class DocumentForm extends ContentPanel {
         documentPanel = new org.sola.clients.swing.ui.source.DocumentPanel();
         jToolBar1 = new javax.swing.JToolBar();
         btnSave = new javax.swing.JButton();
+        btnSecurity = new javax.swing.JButton();
 
         setHeaderPanel(headerPanel);
 
@@ -147,6 +166,17 @@ public class DocumentForm extends ContentPanel {
             }
         });
         jToolBar1.add(btnSave);
+
+        btnSecurity.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/lock.png"))); // NOI18N
+        btnSecurity.setText("Security");
+        btnSecurity.setFocusable(false);
+        btnSecurity.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSecurity.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSecurityActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnSecurity);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -174,8 +204,14 @@ public class DocumentForm extends ContentPanel {
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         saveDocument();
     }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void btnSecurityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSecurityActionPerformed
+        configureSecurity();
+    }//GEN-LAST:event_btnSecurityActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnSecurity;
     private org.sola.clients.swing.ui.source.DocumentPanel documentPanel;
     private org.sola.clients.swing.ui.HeaderPanel headerPanel;
     private javax.swing.JToolBar jToolBar1;

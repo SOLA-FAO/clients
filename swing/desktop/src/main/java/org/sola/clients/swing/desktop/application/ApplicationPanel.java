@@ -76,8 +76,10 @@ import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.clients.swing.ui.PanelLauncher;
 import org.sola.clients.swing.ui.renderers.*;
 import org.sola.clients.swing.ui.reports.ReportViewerForm;
+import org.sola.clients.swing.ui.security.SecurityClassificationDialog;
 import org.sola.clients.swing.ui.validation.ValidationResultForm;
 import org.sola.common.RolesConstants;
+import org.sola.common.WindowUtility;
 import org.sola.common.logging.LogUtility;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
@@ -367,6 +369,8 @@ public class ApplicationPanel extends ContentPanel {
             }
             btnCertificate.setEnabled(false);
         }
+        btnSecurity.setVisible(btnSave.isEnabled()
+                && SecurityBean.isInRole(RolesConstants.CLASSIFICATION_CHANGE_CLASS));
         saveAppState();
     }
 
@@ -574,7 +578,7 @@ public class ApplicationPanel extends ContentPanel {
             } else if (PanelLauncher.isLaunchGroup(PanelLauncherGroupBean.CODE_DOCUMENT_SERVICES, servicePanelCode)) {
                 // Transactioned Document Services
                 PanelLauncher.launch(servicePanelCode, getMainContentPanel(), null, null, appBean, service);
-             } else if (PanelLauncher.isLaunchGroup(PanelLauncherGroupBean.CODE_RECORD_RELATIONSHIP, servicePanelCode)) {
+            } else if (PanelLauncher.isLaunchGroup(PanelLauncherGroupBean.CODE_RECORD_RELATIONSHIP, servicePanelCode)) {
                 // Transactioned Document Services
                 PanelLauncher.launch(servicePanelCode, getMainContentPanel(), null, null, appBean, service);
             } else if (PanelLauncher.isLaunchGroup(PanelLauncherGroupBean.CODE_CANCEL_RELATIONSHIP, servicePanelCode)) {
@@ -775,6 +779,13 @@ public class ApplicationPanel extends ContentPanel {
         return genderTypes;
     }
 
+    private void configureSecurity() {
+        SecurityClassificationDialog form = new SecurityClassificationDialog(
+                appBean, false, MainForm.getInstance(), true);
+        WindowUtility.centerForm(form);
+        form.setVisible(true);
+    }
+
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
@@ -814,6 +825,7 @@ public class ApplicationPanel extends ContentPanel {
         pnlHeader = new org.sola.clients.swing.ui.HeaderPanel();
         jToolBar3 = new javax.swing.JToolBar();
         btnSave = new javax.swing.JButton();
+        btnSecurity = new javax.swing.JButton();
         btnCalculateFee = new javax.swing.JButton();
         btnValidate = new javax.swing.JButton();
         jSeparator6 = new javax.swing.JToolBar.Separator();
@@ -1179,6 +1191,18 @@ public class ApplicationPanel extends ContentPanel {
             }
         });
         jToolBar3.add(btnSave);
+
+        btnSecurity.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/lock.png"))); // NOI18N
+        btnSecurity.setText(bundle.getString("ApplicationPanel.btnSecurity.text_1")); // NOI18N
+        btnSecurity.setFocusable(false);
+        btnSecurity.setName("btnSecurity"); // NOI18N
+        btnSecurity.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSecurity.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSecurityActionPerformed(evt);
+            }
+        });
+        jToolBar3.add(btnSecurity);
 
         LafManager.getInstance().setBtnProperties(btnCalculateFee);
         btnCalculateFee.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/calculate.png"))); // NOI18N
@@ -1839,13 +1863,15 @@ public class ApplicationPanel extends ContentPanel {
         bindingGroup.addBinding(binding);
 
         scrollFeeDetails1.setViewportView(tabServices);
-        tabServices.getColumnModel().getColumn(0).setMinWidth(70);
-        tabServices.getColumnModel().getColumn(0).setPreferredWidth(70);
-        tabServices.getColumnModel().getColumn(0).setMaxWidth(70);
-        tabServices.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("ApplicationPanel.tabFeeDetails1.columnModel.title0")); // NOI18N
-        tabServices.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("ApplicationPanel.tabFeeDetails1.columnModel.title1")); // NOI18N
-        tabServices.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("ApplicationPanel.tabServices.columnModel.title3")); // NOI18N
-        tabServices.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("ApplicationPanel.tabFeeDetails1.columnModel.title2")); // NOI18N
+        if (tabServices.getColumnModel().getColumnCount() > 0) {
+            tabServices.getColumnModel().getColumn(0).setMinWidth(70);
+            tabServices.getColumnModel().getColumn(0).setPreferredWidth(70);
+            tabServices.getColumnModel().getColumn(0).setMaxWidth(70);
+            tabServices.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("ApplicationPanel.tabFeeDetails1.columnModel.title0")); // NOI18N
+            tabServices.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("ApplicationPanel.tabFeeDetails1.columnModel.title1")); // NOI18N
+            tabServices.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("ApplicationPanel.tabServices.columnModel.title3")); // NOI18N
+            tabServices.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("ApplicationPanel.tabFeeDetails1.columnModel.title2")); // NOI18N
+        }
 
         tbServices.setFloatable(false);
         tbServices.setRollover(true);
@@ -2025,12 +2051,14 @@ public class ApplicationPanel extends ContentPanel {
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();
         scrollDocRequired.setViewportView(tblDocTypesHelper);
-        tblDocTypesHelper.getColumnModel().getColumn(0).setMinWidth(20);
-        tblDocTypesHelper.getColumnModel().getColumn(0).setPreferredWidth(20);
-        tblDocTypesHelper.getColumnModel().getColumn(0).setMaxWidth(20);
-        tblDocTypesHelper.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("ApplicationPanel.tblDocTypesHelper.columnModel.title0_1")); // NOI18N
-        tblDocTypesHelper.getColumnModel().getColumn(0).setCellRenderer(new BooleanCellRenderer());
-        tblDocTypesHelper.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("ApplicationPanel.tblDocTypesHelper.columnModel.title1_1")); // NOI18N
+        if (tblDocTypesHelper.getColumnModel().getColumnCount() > 0) {
+            tblDocTypesHelper.getColumnModel().getColumn(0).setMinWidth(20);
+            tblDocTypesHelper.getColumnModel().getColumn(0).setPreferredWidth(20);
+            tblDocTypesHelper.getColumnModel().getColumn(0).setMaxWidth(20);
+            tblDocTypesHelper.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("ApplicationPanel.tblDocTypesHelper.columnModel.title0_1")); // NOI18N
+            tblDocTypesHelper.getColumnModel().getColumn(0).setCellRenderer(new BooleanCellRenderer());
+            tblDocTypesHelper.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("ApplicationPanel.tblDocTypesHelper.columnModel.title1_1")); // NOI18N
+        }
 
         documentsPanel.setName(bundle.getString("ApplicationPanel.documentsPanel.name")); // NOI18N
 
@@ -2113,14 +2141,16 @@ public class ApplicationPanel extends ContentPanel {
         bindingGroup.addBinding(binding);
 
         scrollPropertyDetails.setViewportView(tabPropertyDetails);
-        tabPropertyDetails.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("ApplicationPanel.tabPropertyDetails.columnModel.title0")); // NOI18N
-        tabPropertyDetails.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("ApplicationPanel.tabPropertyDetails.columnModel.title1")); // NOI18N
-        tabPropertyDetails.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("ApplicationPanel.tabPropertyDetails.columnModel.title2")); // NOI18N
-        tabPropertyDetails.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("ApplicationPanel.tabPropertyDetails.columnModel.title3")); // NOI18N
-        tabPropertyDetails.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("ApplicationPanel.tabPropertyDetails.columnModel.title6")); // NOI18N
-        tabPropertyDetails.getColumnModel().getColumn(4).setCellRenderer(new ExistingObjectCellRenderer());
-        tabPropertyDetails.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("ApplicationPanel.tabPropertyDetails.columnModel.title4")); // NOI18N
-        tabPropertyDetails.getColumnModel().getColumn(5).setCellRenderer(new ExistingObjectCellRenderer());
+        if (tabPropertyDetails.getColumnModel().getColumnCount() > 0) {
+            tabPropertyDetails.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("ApplicationPanel.tabPropertyDetails.columnModel.title0")); // NOI18N
+            tabPropertyDetails.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("ApplicationPanel.tabPropertyDetails.columnModel.title1")); // NOI18N
+            tabPropertyDetails.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("ApplicationPanel.tabPropertyDetails.columnModel.title2")); // NOI18N
+            tabPropertyDetails.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("ApplicationPanel.tabPropertyDetails.columnModel.title3")); // NOI18N
+            tabPropertyDetails.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("ApplicationPanel.tabPropertyDetails.columnModel.title6")); // NOI18N
+            tabPropertyDetails.getColumnModel().getColumn(4).setCellRenderer(new ExistingObjectCellRenderer());
+            tabPropertyDetails.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("ApplicationPanel.tabPropertyDetails.columnModel.title4")); // NOI18N
+            tabPropertyDetails.getColumnModel().getColumn(5).setCellRenderer(new ExistingObjectCellRenderer());
+        }
 
         tbPropertyDetails.setFloatable(false);
         tbPropertyDetails.setRollover(true);
@@ -2366,11 +2396,13 @@ public class ApplicationPanel extends ContentPanel {
         bindingGroup.addBinding(binding);
 
         jScrollPane1.setViewportView(tableParcels);
-        tableParcels.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("ApplicationPanel.tableParcels.columnModel.title0")); // NOI18N
-        tableParcels.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("ApplicationPanel.tableParcels.columnModel.title1")); // NOI18N
-        tableParcels.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("ApplicationPanel.tableParcels.columnModel.title4")); // NOI18N
-        tableParcels.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("ApplicationPanel.tableParcels.columnModel.title2")); // NOI18N
-        tableParcels.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("ApplicationPanel.tableParcels.columnModel.title3")); // NOI18N
+        if (tableParcels.getColumnModel().getColumnCount() > 0) {
+            tableParcels.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("ApplicationPanel.tableParcels.columnModel.title0")); // NOI18N
+            tableParcels.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("ApplicationPanel.tableParcels.columnModel.title1")); // NOI18N
+            tableParcels.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("ApplicationPanel.tableParcels.columnModel.title4")); // NOI18N
+            tableParcels.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("ApplicationPanel.tableParcels.columnModel.title2")); // NOI18N
+            tableParcels.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("ApplicationPanel.tableParcels.columnModel.title3")); // NOI18N
+        }
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
@@ -2506,15 +2538,17 @@ public class ApplicationPanel extends ContentPanel {
         jTableBinding.bind();
         scrollFeeDetails.setViewportView(tabFeeDetails);
         tabFeeDetails.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        tabFeeDetails.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("ApplicationPanel.tabFeeDetails.columnModel.title0")); // NOI18N
-        tabFeeDetails.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("ApplicationPanel.tabFeeDetails.columnModel.title1_1")); // NOI18N
-        tabFeeDetails.getColumnModel().getColumn(1).setCellRenderer(new MoneyCellRenderer());
-        tabFeeDetails.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("ApplicationPanel.tabFeeDetails.columnModel.title2_2")); // NOI18N
-        tabFeeDetails.getColumnModel().getColumn(2).setCellRenderer(new MoneyCellRenderer());
-        tabFeeDetails.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("ApplicationPanel.tabFeeDetails.columnModel.title3")); // NOI18N
-        tabFeeDetails.getColumnModel().getColumn(3).setCellRenderer(new MoneyCellRenderer());
-        tabFeeDetails.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("ApplicationPanel.tabFeeDetails.columnModel.title4")); // NOI18N
-        tabFeeDetails.getColumnModel().getColumn(4).setCellRenderer(new DateTimeRenderer(false));
+        if (tabFeeDetails.getColumnModel().getColumnCount() > 0) {
+            tabFeeDetails.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("ApplicationPanel.tabFeeDetails.columnModel.title0")); // NOI18N
+            tabFeeDetails.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("ApplicationPanel.tabFeeDetails.columnModel.title1_1")); // NOI18N
+            tabFeeDetails.getColumnModel().getColumn(1).setCellRenderer(new MoneyCellRenderer());
+            tabFeeDetails.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("ApplicationPanel.tabFeeDetails.columnModel.title2_2")); // NOI18N
+            tabFeeDetails.getColumnModel().getColumn(2).setCellRenderer(new MoneyCellRenderer());
+            tabFeeDetails.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("ApplicationPanel.tabFeeDetails.columnModel.title3")); // NOI18N
+            tabFeeDetails.getColumnModel().getColumn(3).setCellRenderer(new MoneyCellRenderer());
+            tabFeeDetails.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("ApplicationPanel.tabFeeDetails.columnModel.title4")); // NOI18N
+            tabFeeDetails.getColumnModel().getColumn(4).setCellRenderer(new DateTimeRenderer(false));
+        }
 
         jPanel2.setName("jPanel2"); // NOI18N
 
@@ -2709,15 +2743,17 @@ public class ApplicationPanel extends ContentPanel {
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();
         validationsPanel.setViewportView(tabValidations);
-        tabValidations.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("ApplicationPanel.tabValidations.columnModel.title1")); // NOI18N
-        tabValidations.getColumnModel().getColumn(0).setCellRenderer(new TableCellTextAreaRenderer());
-        tabValidations.getColumnModel().getColumn(1).setPreferredWidth(100);
-        tabValidations.getColumnModel().getColumn(1).setMaxWidth(100);
-        tabValidations.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("ApplicationPanel.tabValidations.columnModel.title2")); // NOI18N
-        tabValidations.getColumnModel().getColumn(2).setPreferredWidth(45);
-        tabValidations.getColumnModel().getColumn(2).setMaxWidth(45);
-        tabValidations.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("ApplicationPanel.tabValidations.columnModel.title3")); // NOI18N
-        tabValidations.getColumnModel().getColumn(2).setCellRenderer(new ViolationCellRenderer());
+        if (tabValidations.getColumnModel().getColumnCount() > 0) {
+            tabValidations.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("ApplicationPanel.tabValidations.columnModel.title1")); // NOI18N
+            tabValidations.getColumnModel().getColumn(0).setCellRenderer(new TableCellTextAreaRenderer());
+            tabValidations.getColumnModel().getColumn(1).setPreferredWidth(100);
+            tabValidations.getColumnModel().getColumn(1).setMaxWidth(100);
+            tabValidations.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("ApplicationPanel.tabValidations.columnModel.title2")); // NOI18N
+            tabValidations.getColumnModel().getColumn(2).setPreferredWidth(45);
+            tabValidations.getColumnModel().getColumn(2).setMaxWidth(45);
+            tabValidations.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("ApplicationPanel.tabValidations.columnModel.title3")); // NOI18N
+            tabValidations.getColumnModel().getColumn(2).setCellRenderer(new ViolationCellRenderer());
+        }
         tabValidations.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
 
         javax.swing.GroupLayout validationPanelLayout = new javax.swing.GroupLayout(validationPanel);
@@ -2775,11 +2811,13 @@ public class ApplicationPanel extends ContentPanel {
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();
         actionLogPanel.setViewportView(tabActionLog);
-        tabActionLog.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("ApplicationPanel.tabActionLog.columnModel.title0")); // NOI18N
-        tabActionLog.getColumnModel().getColumn(0).setCellRenderer(new DateTimeRenderer());
-        tabActionLog.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("ApplicationPanel.tabActionLog.columnModel.title1_1")); // NOI18N
-        tabActionLog.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("ApplicationPanel.tabActionLog.columnModel.title2_1")); // NOI18N
-        tabActionLog.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("ApplicationPanel.tabActionLog.columnModel.title3_1")); // NOI18N
+        if (tabActionLog.getColumnModel().getColumnCount() > 0) {
+            tabActionLog.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("ApplicationPanel.tabActionLog.columnModel.title0")); // NOI18N
+            tabActionLog.getColumnModel().getColumn(0).setCellRenderer(new DateTimeRenderer());
+            tabActionLog.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("ApplicationPanel.tabActionLog.columnModel.title1_1")); // NOI18N
+            tabActionLog.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("ApplicationPanel.tabActionLog.columnModel.title2_1")); // NOI18N
+            tabActionLog.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("ApplicationPanel.tabActionLog.columnModel.title3_1")); // NOI18N
+        }
         tabActionLog.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
 
         javax.swing.GroupLayout historyPanelLayout = new javax.swing.GroupLayout(historyPanel);
@@ -3056,6 +3094,10 @@ public class ApplicationPanel extends ContentPanel {
     private void menuTransferActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuTransferActionPerformed
         transferApplication();
     }//GEN-LAST:event_menuTransferActionPerformed
+
+    private void btnSecurityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSecurityActionPerformed
+        configureSecurity();
+    }//GEN-LAST:event_btnSecurityActionPerformed
 
     private void openSysRegCertParamsForm(String nr) {
         SysRegCertParamsForm certificateGenerator = new SysRegCertParamsForm(null, true, nr, null);
@@ -3538,6 +3580,7 @@ public class ApplicationPanel extends ContentPanel {
     private javax.swing.JButton btnRemoveService;
     private javax.swing.JButton btnRevertService;
     private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnSecurity;
     private javax.swing.JButton btnStartService;
     private javax.swing.JButton btnUPService;
     private javax.swing.JButton btnValidate;

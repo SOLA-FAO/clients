@@ -39,6 +39,7 @@ import org.sola.clients.beans.administrative.validation.OwnershipValidationGroup
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationServiceBean;
 import org.sola.clients.beans.referencedata.StatusConstants;
+import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.swing.common.laf.LafManager;
 import org.sola.clients.swing.common.controls.CalendarForm;
 import org.sola.clients.swing.desktop.MainForm;
@@ -47,7 +48,10 @@ import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.ui.MainContentPanel;
 import org.sola.clients.swing.common.utils.FormattersFactory;
 import org.sola.clients.swing.ui.renderers.TableCellListRenderer;
+import org.sola.clients.swing.ui.security.SecurityClassificationDialog;
 import org.sola.clients.swing.ui.source.DocumentsManagementPanel;
+import org.sola.common.RolesConstants;
+import org.sola.common.WindowUtility;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
@@ -187,6 +191,9 @@ public class OwnershipPanel extends ContentPanel {
             txtNotationText.setEditable(false);
             cbxIsPrimary.setEnabled(false);
         }
+
+        btnSecurity.setVisible(btnSave.isEnabled()
+                && SecurityBean.isInRole(RolesConstants.CLASSIFICATION_CHANGE_CLASS));
     }
 
     private void openShareForm(RrrShareBean shareBean, RrrBean.RRR_ACTION rrrAction) {
@@ -222,6 +229,13 @@ public class OwnershipPanel extends ContentPanel {
         calendar.setVisible(true);
     }
 
+    private void configureSecurity() {
+        SecurityClassificationDialog form = new SecurityClassificationDialog(
+                rrrBean, false, MainForm.getInstance(), true);
+        WindowUtility.centerForm(form);
+        form.setVisible(true);
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -241,6 +255,7 @@ public class OwnershipPanel extends ContentPanel {
         headerPanel = new org.sola.clients.swing.ui.HeaderPanel();
         jToolBar2 = new javax.swing.JToolBar();
         btnSave = new javax.swing.JButton();
+        btnSecurity = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JToolBar.Separator();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(7, 0), new java.awt.Dimension(7, 0), new java.awt.Dimension(7, 32767));
         jLabel1 = new javax.swing.JLabel();
@@ -381,6 +396,18 @@ public class OwnershipPanel extends ContentPanel {
         });
         jToolBar2.add(btnSave);
 
+        btnSecurity.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/lock.png"))); // NOI18N
+        btnSecurity.setText(bundle.getString("OwnershipPanel.btnSecurity.text")); // NOI18N
+        btnSecurity.setFocusable(false);
+        btnSecurity.setName("btnSecurity"); // NOI18N
+        btnSecurity.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSecurity.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSecurityActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(btnSecurity);
+
         jSeparator1.setName("jSeparator1"); // NOI18N
         jToolBar2.add(jSeparator1);
 
@@ -485,12 +512,14 @@ public class OwnershipPanel extends ContentPanel {
             }
         });
         jScrollPane1.setViewportView(tableShares);
-        tableShares.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("OwnershipPanel.tableShares.columnModel.title0")); // NOI18N
-        tableShares.getColumnModel().getColumn(0).setCellRenderer(new TableCellListRenderer("getName", "getLastName"));
-        tableShares.getColumnModel().getColumn(1).setMinWidth(150);
-        tableShares.getColumnModel().getColumn(1).setPreferredWidth(150);
-        tableShares.getColumnModel().getColumn(1).setMaxWidth(150);
-        tableShares.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("OwnershipPanel.tableShares.columnModel.title1")); // NOI18N
+        if (tableShares.getColumnModel().getColumnCount() > 0) {
+            tableShares.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("OwnershipPanel.tableShares.columnModel.title0")); // NOI18N
+            tableShares.getColumnModel().getColumn(0).setCellRenderer(new TableCellListRenderer("getName", "getLastName"));
+            tableShares.getColumnModel().getColumn(1).setMinWidth(150);
+            tableShares.getColumnModel().getColumn(1).setPreferredWidth(150);
+            tableShares.getColumnModel().getColumn(1).setMaxWidth(150);
+            tableShares.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("OwnershipPanel.tableShares.columnModel.title1")); // NOI18N
+        }
 
         groupPanel1.setName("groupPanel1"); // NOI18N
         groupPanel1.setTitleText(bundle.getString("OwnershipPanel.groupPanel1.titleText")); // NOI18N
@@ -620,6 +649,10 @@ public class OwnershipPanel extends ContentPanel {
         showCalendar(txtRegDatetime);
     }//GEN-LAST:event_btnRegDateActionPerformed
 
+    private void btnSecurityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSecurityActionPerformed
+        configureSecurity();
+    }//GEN-LAST:event_btnSecurityActionPerformed
+
     private void changeShare() {
         if (rrrBean.getSelectedShare() != null) {
             openShareForm(rrrBean.getSelectedShare(), RrrBean.RRR_ACTION.VARY);
@@ -648,6 +681,7 @@ public class OwnershipPanel extends ContentPanel {
     private javax.swing.JButton btnRegDate;
     private javax.swing.JButton btnRemoveShare;
     private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnSecurity;
     private javax.swing.JButton btnViewShare;
     private javax.swing.JCheckBox cbxIsPrimary;
     private org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel documentsPanel;

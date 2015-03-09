@@ -62,6 +62,7 @@ import org.sola.clients.swing.ui.PanelLauncher;
 import org.sola.clients.swing.ui.cadastre.CadastreObjectsDialog;
 import org.sola.clients.swing.ui.renderers.*;
 import org.sola.clients.swing.ui.reports.ReportViewerForm;
+import org.sola.clients.swing.ui.security.SecurityClassificationDialog;
 import org.sola.clients.swing.ui.source.AddDocumentForm;
 import org.sola.clients.swing.ui.source.DocumentsPanel;
 import org.sola.common.RolesConstants;
@@ -356,6 +357,9 @@ public class PropertyPanel extends ContentPanel {
         customizeChildPropertyButtons();
         customizeTerminationButton();
         customizeHistoricRightsViewButton();
+        
+        btnSecurity.setVisible(btnSave.isEnabled()
+                && SecurityBean.isInRole(RolesConstants.CLASSIFICATION_CHANGE_CLASS));
 
         isBtnNext = false;
 
@@ -1164,6 +1168,13 @@ public class PropertyPanel extends ContentPanel {
         return true;
     }
 
+    private void configureSecurity() {
+        SecurityClassificationDialog form = new SecurityClassificationDialog(
+                baUnitBean1, false, MainForm.getInstance(), true);
+        WindowUtility.centerForm(form);
+        form.setVisible(true);
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -1195,6 +1206,7 @@ public class PropertyPanel extends ContentPanel {
         btnSave = new javax.swing.JButton();
         btnTerminate = new javax.swing.JButton();
         jSeparator4 = new javax.swing.JToolBar.Separator();
+        btnSecurity = new javax.swing.JButton();
         btnPrintBaUnit = new javax.swing.JButton();
         tabsMain = new javax.swing.JTabbedPane();
         jPanel7 = new javax.swing.JPanel();
@@ -1459,6 +1471,18 @@ public class PropertyPanel extends ContentPanel {
 
         jSeparator4.setName("jSeparator4"); // NOI18N
         jToolBar5.add(jSeparator4);
+
+        btnSecurity.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/lock.png"))); // NOI18N
+        btnSecurity.setText(bundle.getString("PropertyPanel.btnSecurity.text_1")); // NOI18N
+        btnSecurity.setFocusable(false);
+        btnSecurity.setName("btnSecurity"); // NOI18N
+        btnSecurity.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSecurity.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSecurityActionPerformed(evt);
+            }
+        });
+        jToolBar5.add(btnSecurity);
 
         btnPrintBaUnit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/print.png"))); // NOI18N
         btnPrintBaUnit.setText(bundle.getString("PropertyPanel.btnPrintBaUnit.text")); // NOI18N
@@ -2836,6 +2860,11 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private void btnAddParcelFromApplicationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddParcelFromApplicationActionPerformed
         openApplicationParcelsForm();
     }//GEN-LAST:event_btnAddParcelFromApplicationActionPerformed
+
+    private void btnSecurityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSecurityActionPerformed
+        configureSecurity();
+    }//GEN-LAST:event_btnSecurityActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel areaPanel;
     private org.sola.clients.beans.administrative.BaUnitAreaBean baUnitAreaBean1;
@@ -2860,6 +2889,7 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private javax.swing.JButton btnRemoveRight;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSearchParcel;
+    private javax.swing.JButton btnSecurity;
     private javax.swing.JButton btnTerminate;
     private javax.swing.JButton btnViewHistoricRight;
     private javax.swing.JButton btnViewPaperTitle;

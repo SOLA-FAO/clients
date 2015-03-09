@@ -27,7 +27,6 @@
  */
 package org.sola.clients.beans.application;
 
-import java.util.ResourceBundle;
 import java.math.BigDecimal;
 import java.util.*;
 import javax.validation.Valid;

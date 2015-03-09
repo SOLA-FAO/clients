@@ -34,13 +34,17 @@ import org.sola.clients.beans.administrative.RrrBean;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.application.ApplicationServiceBean;
 import org.sola.clients.beans.referencedata.StatusConstants;
+import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.swing.common.laf.LafManager;
 import org.sola.clients.swing.common.controls.CalendarForm;
 import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel;
 import org.sola.clients.swing.ui.ContentPanel;
 import org.sola.clients.swing.common.utils.FormattersFactory;
+import org.sola.clients.swing.ui.security.SecurityClassificationDialog;
 import org.sola.clients.swing.ui.source.DocumentsManagementPanel;
+import org.sola.common.RolesConstants;
+import org.sola.common.WindowUtility;
 
 /**
  * Used to create and manage simple types of rights. {@link RrrBean} is used to
@@ -153,6 +157,9 @@ public class SimpleRightPanel extends ContentPanel {
             btnRegDate.setEnabled(false);
             cbxIsPrimary.setEnabled(false);
         }
+
+        btnSecurity.setVisible(btnSave.isEnabled()
+                && SecurityBean.isInRole(RolesConstants.CLASSIFICATION_CHANGE_CLASS));
     }
 
     private boolean saveRrr() {
@@ -181,6 +188,13 @@ public class SimpleRightPanel extends ContentPanel {
         calendar.setVisible(true);
     }
 
+    private void configureSecurity() {
+        SecurityClassificationDialog form = new SecurityClassificationDialog(
+                rrrBean, false, MainForm.getInstance(), true);
+        WindowUtility.centerForm(form);
+        form.setVisible(true);
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -192,6 +206,7 @@ public class SimpleRightPanel extends ContentPanel {
         headerPanel = new org.sola.clients.swing.ui.HeaderPanel();
         jToolBar1 = new javax.swing.JToolBar();
         btnSave = new javax.swing.JButton();
+        btnSecurity = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JToolBar.Separator();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(7, 0), new java.awt.Dimension(7, 0), new java.awt.Dimension(7, 32767));
         jLabel1 = new javax.swing.JLabel();
@@ -236,6 +251,18 @@ public class SimpleRightPanel extends ContentPanel {
             }
         });
         jToolBar1.add(btnSave);
+
+        btnSecurity.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/lock.png"))); // NOI18N
+        btnSecurity.setText(bundle.getString("SimpleRightPanel.btnSecurity.text")); // NOI18N
+        btnSecurity.setFocusable(false);
+        btnSecurity.setName("btnSecurity"); // NOI18N
+        btnSecurity.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSecurity.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSecurityActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnSecurity);
 
         jSeparator1.setName("jSeparator1"); // NOI18N
         jToolBar1.add(jSeparator1);
@@ -362,9 +389,14 @@ public class SimpleRightPanel extends ContentPanel {
         showCalendar(txtRegDatetime);
     }//GEN-LAST:event_btnRegDateActionPerformed
 
+    private void btnSecurityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSecurityActionPerformed
+        configureSecurity();
+    }//GEN-LAST:event_btnSecurityActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegDate;
     private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnSecurity;
     private javax.swing.JCheckBox cbxIsPrimary;
     private org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel documentsPanel;
     private javax.swing.Box.Filler filler1;

@@ -1,28 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.desktop.cadastre;
@@ -33,27 +35,45 @@ import javax.swing.ImageIcon;
 import org.sola.clients.beans.cadastre.CadastreObjectBean;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.clients.beans.referencedata.StatusConstants;
+import org.sola.clients.beans.security.SecurityBean;
+import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.ui.cadastre.ParcelPanel;
+import org.sola.clients.swing.ui.security.SecurityClassificationDialog;
+import org.sola.common.RolesConstants;
+import org.sola.common.WindowUtility;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 import org.sola.services.boundary.wsclients.WSManager;
 
-/** Dialog form to create new parcel or search existing one. */
+/**
+ * Dialog form to create new parcel or search existing one.
+ */
 public class CreateParcelDialog extends javax.swing.JDialog {
 
     public final static String SELECTED_PARCEL = "selectedParcel";
     private CadastreObjectBean cadastreObject;
-    
-    private ParcelPanel createParcelPanel(){
+
+    private ParcelPanel createParcelPanel() {
         return new ParcelPanel(cadastreObject);
     }
-            
-    /** Form constructor. */
+
+    /**
+     * Form constructor.
+     */
     public CreateParcelDialog(CadastreObjectBean cadastreObject, java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         this.cadastreObject = cadastreObject;
         initComponents();
         this.setIconImage(new ImageIcon(CreateParcelDialog.class.getResource("/images/sola/logo_icon.jpg")).getImage());
+        btnSecurity.setVisible(SecurityBean.isInRole(RolesConstants.CLASSIFICATION_CHANGE_CLASS));
+    }
+
+    private void configureSecurity() {
+        SecurityClassificationDialog form = new SecurityClassificationDialog(
+                cadastreObject, false, MainForm.getInstance(), true);
+        WindowUtility.centerForm(form);
+        WindowUtility.addEscapeListener(form, false);
+        form.setVisible(true);
     }
 
     @SuppressWarnings("unchecked")
@@ -63,6 +83,7 @@ public class CreateParcelDialog extends javax.swing.JDialog {
         parcelPanel = createParcelPanel();
         jToolBar1 = new javax.swing.JToolBar();
         btnCreate = new javax.swing.JButton();
+        btnSecurity = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
@@ -85,6 +106,18 @@ public class CreateParcelDialog extends javax.swing.JDialog {
             }
         });
         jToolBar1.add(btnCreate);
+
+        btnSecurity.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/lock.png"))); // NOI18N
+        btnSecurity.setText(bundle1.getString("CreateParcelDialog.btnSecurity.text")); // NOI18N
+        btnSecurity.setFocusable(false);
+        btnSecurity.setName("btnSecurity"); // NOI18N
+        btnSecurity.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSecurity.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSecurityActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnSecurity);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -109,25 +142,30 @@ public class CreateParcelDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
 private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
-    
-    String parcelName = parcelPanel.getCadastreObject().getNameFirstpart()+' ' +parcelPanel.getCadastreObject().getNameLastpart();
+
+    String parcelName = parcelPanel.getCadastreObject().getNameFirstpart() + ' ' + parcelPanel.getCadastreObject().getNameLastpart();
     final List<CadastreObjectBean> searchResult = new LinkedList<CadastreObjectBean>();
-     TypeConverters.TransferObjectListToBeanList(
-                        WSManager.getInstance().getCadastreService().getCadastreObjectByAllParts(parcelName),
-                        CadastreObjectBean.class, (List) searchResult);
+    TypeConverters.TransferObjectListToBeanList(
+            WSManager.getInstance().getCadastreService().getCadastreObjectByAllParts(parcelName),
+            CadastreObjectBean.class, (List) searchResult);
     if (searchResult.size() > 0) {
-      MessageUtility.displayMessage(ClientMessage.BAUNIT_PARCEL_EXISTS);
-      return;
+        MessageUtility.displayMessage(ClientMessage.BAUNIT_PARCEL_EXISTS);
+        return;
     }
-    if(parcelPanel.getCadastreObject().validate(true).size()<=0){
+    if (parcelPanel.getCadastreObject().validate(true).size() <= 0) {
         parcelPanel.getCadastreObject().setStatusCode(StatusConstants.PENDING);
         this.firePropertyChange(SELECTED_PARCEL, null, parcelPanel.getCadastreObject());
         this.dispose();
     }
 }//GEN-LAST:event_btnCreateActionPerformed
 
+    private void btnSecurityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSecurityActionPerformed
+        configureSecurity();
+    }//GEN-LAST:event_btnSecurityActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreate;
+    private javax.swing.JButton btnSecurity;
     private javax.swing.JToolBar jToolBar1;
     private org.sola.clients.swing.ui.cadastre.ParcelPanel parcelPanel;
     // End of variables declaration//GEN-END:variables

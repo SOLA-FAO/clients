@@ -42,7 +42,6 @@ import org.sola.common.RolesConstants;
 import org.sola.common.WindowUtility;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
-import org.sola.webservices.transferobjects.EntityTable;
 
 /**
  * Used to create or edit party object.
@@ -247,6 +246,7 @@ public class PartyPanelForm extends ContentPanel {
         SecurityClassificationDialog form = new SecurityClassificationDialog(
                 partyPanel.getPartyBean(), true, MainForm.getInstance(), true);
         WindowUtility.centerForm(form);    
+        WindowUtility.addEscapeListener(form, false);
         form.setVisible(true);
     }
 
