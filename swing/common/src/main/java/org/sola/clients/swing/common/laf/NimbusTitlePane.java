@@ -38,11 +38,6 @@ import javax.swing.border.*;
 import javax.swing.plaf.*;
 import java.util.Locale;
 import javax.accessibility.*;
-import javax.swing.plaf.synth.Region;
-import javax.swing.plaf.synth.SynthConstants;
-import javax.swing.plaf.synth.SynthContext;
-import javax.swing.plaf.synth.SynthLookAndFeel;
-import sun.awt.SunToolkit;
 import sun.swing.SwingUtilities2;
 
 
@@ -502,10 +497,9 @@ public class NimbusTitlePane extends JComponent {
 //            menuButton.putClientProperty(AccessibleContext.ACCESSIBLE_NAME_PROPERTY,
 //                                           "Menu");
             menuButton.setBackground(new Color (33,90,100));
-            
-            
-            URL imgURL = this.getClass().getResource("/images/common/sola_icon.png");
-            menuButton.setIcon(new ImageIcon(imgURL));
+             
+            // Use the solaTitleBarIcon as the icon for the window.
+            menuButton.setIcon(UIManager.getIcon("solaTitleBarIcon"));
         }
     }
 

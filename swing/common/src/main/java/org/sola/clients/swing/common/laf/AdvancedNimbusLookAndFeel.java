@@ -29,8 +29,6 @@
  */
 package org.sola.clients.swing.common.laf;
 
-import org.sola.clients.swing.common.laf.NimbusFrameBorder;
-import org.sola.clients.swing.common.laf.NimbusRootPaneUI;
 import java.awt.Dimension;
 import javax.swing.UIDefaults;
 import javax.swing.plaf.UIResource;

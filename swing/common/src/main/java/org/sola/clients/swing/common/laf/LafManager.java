@@ -32,11 +32,14 @@ package org.sola.clients.swing.common.laf;
 import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.Font;
+import java.net.URL;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.UIManager.LookAndFeelInfo;
+import org.sola.common.messaging.ClientMessage;
+import org.sola.common.messaging.MessageUtility;
 
 /**
  *
@@ -48,6 +51,7 @@ import javax.swing.UIManager.LookAndFeelInfo;
 public class LafManager {
 
     public static final String REGISTRY_THEME = "registry";
+    public static final String ADMIN_THEME = "admin";
     public static final String GREEN_THEME = "green";
 
     public Object getBgFont() {
@@ -251,11 +255,11 @@ public class LafManager {
     /**
      * sets {@link Look and feel} settings accordingly.
      */
-    public void setProperties(String theme) {
+    public void setProperties(final String theme) {
         UIDefaults defaults = UIManager.getDefaults();
         final Object painterScrollbar = defaults.get("ScrollBar:ScrollBarThumb[Disabled].backgroundPainter");
 
-        if (REGISTRY_THEME.equals(theme)) {
+        if (REGISTRY_THEME.equals(theme) || ADMIN_THEME.equals(theme)) {
             try {
 
                 UIManager.installLookAndFeel("AdvancedNimbus", AdvancedNimbusLookAndFeel.class.getName());
@@ -307,13 +311,12 @@ public class LafManager {
                         ret.put("Table.dropLineColor", new Color(255, 255, 255));
                         ret.put("MenuItem.background", new Color(255, 255, 255));
                         ret.put("List.foreground", new Color(0, 102, 51));
-                        ret.put("List[Selected].textBackground", new Color(154, 177, 95)); 
+                        ret.put("List[Selected].textBackground", new Color(154, 177, 95));
                         ret.put("TableHeader:\"TableHeader.renderer\"[Enabled].backgroundPainter", new FillPainter(new Color(154, 177, 95)));
                         ret.put("MenuBar:Menu[Enabled].textForeground", new Color(255, 255, 255));
                         ret.put("MenuBar[Enabled].backgroundPainter", new FillPainter(new Color(181, 181, 150)));
                         ret.put("MenuBar:Menu[Selected].backgroundPainter", new FillPainter(new Color(154, 177, 95)));
-                        
-                        
+
                         //      #### FONTS  ####   
                         ret.put("TextField.font", Font.decode("AppleGothic"));
                         ret.put("TextArea.font", Font.decode("AppleGothic"));
@@ -326,6 +329,20 @@ public class LafManager {
                         ret.put("List.font", Font.decode("AppleGothic"));
                         ret.put("RadioButton.font", Font.decode("AppleGothic"));
                         ret.put("RootPaneUI", NimbusRootPaneUI.class.getName());
+
+                        URL imgURL = null;
+                        String loginTitle = ""; 
+                        if (ADMIN_THEME.equals(theme)) {
+                            // Use the icon for the admin theme 
+                            imgURL = this.getClass().getResource("/images/common/sola_icon_admin.png");
+                            loginTitle = MessageUtility.getLocalizedMessageText(ClientMessage.SECURITY_LOGIN_TITLE_ADMIN); 
+                        } else {
+                            // Use the icon for the registry theme 
+                            imgURL = this.getClass().getResource("/images/common/sola_icon_registry.png");
+                            loginTitle = MessageUtility.getLocalizedMessageText(ClientMessage.SECURITY_LOGIN_TITLE_REGISTRY); 
+                        }
+                        ret.put("solaTitleBarIcon", new ImageIcon(imgURL));
+                        ret.put("solaLoginTitle", loginTitle); 
                         return ret;
                     }
                 });
@@ -465,7 +482,6 @@ public class LafManager {
             UIManager.put("SolaGroup", new Color(153, 153, 153));
 //            HEADER PANEL BACKGROUND        
             UIManager.put("SolaHeader", new Color(51, 153, 0));
-
 
 //      ####  Background Colors   #####         
             UIManager.put("PasswordField.background", new Color(236, 247, 235));   /*

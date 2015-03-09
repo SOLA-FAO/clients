@@ -29,10 +29,7 @@ package org.sola.clients.swing.ui.security;
 
 import java.awt.ComponentOrientation;
 import java.awt.event.KeyEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.Locale;
-import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 import javax.swing.JRadioButton;
 import org.sola.clients.beans.security.SecurityBean;

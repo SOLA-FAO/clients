@@ -77,7 +77,7 @@ public class MainForm extends javax.swing.JFrame {
         initComponents();
         this.setTitle(this.getTitle() + LocalizationManager.getVersionNumber());
        
-        URL imgURL = this.getClass().getResource("/images/common/admin.png");
+        URL imgURL = this.getClass().getResource("/images/sola/favicon.png");
         this.setIconImage(new ImageIcon(imgURL).getImage());
         lblUserName.setText(SecurityBean.getCurrentUser().getUserName());
 
