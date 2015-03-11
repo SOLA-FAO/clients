@@ -32,12 +32,12 @@ package org.sola.clients.swing.common.laf;
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.*;
-import java.net.URL;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.plaf.*;
 import java.util.Locale;
 import javax.accessibility.*;
+import org.sola.common.WindowUtility;
 import sun.swing.SwingUtilities2;
 
 
@@ -499,7 +499,7 @@ public class NimbusTitlePane extends JComponent {
             menuButton.setBackground(new Color (33,90,100));
              
             // Use the solaTitleBarIcon as the icon for the window.
-            menuButton.setIcon(UIManager.getIcon("solaTitleBarIcon"));
+            menuButton.setIcon(WindowUtility.getTitleBarIcon());
         }
     }
 

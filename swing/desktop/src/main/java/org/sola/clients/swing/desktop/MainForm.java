@@ -178,14 +178,12 @@ public class MainForm extends javax.swing.JFrame {
      * Default constructor.
      */
     private MainForm() {
-         URL imgURL = this.getClass().getResource("/images/sola/sola_icon.png");
-        this.setIconImage(new ImageIcon(imgURL).getImage());
- 
+        this.setIconImage(WindowUtility.getTitleBarImage());
 
         initComponents();
         LocalizationTools.setOrientation(this);
         this.setTitle(this.getTitle() + LocalizationManager.getVersionNumber());
-        
+
         this.addWindowListener(new java.awt.event.WindowAdapter() {
 
             @Override
@@ -198,7 +196,7 @@ public class MainForm extends javax.swing.JFrame {
                 preClose();
             }
         });
-     
+
     }
 
     /**
@@ -229,15 +227,14 @@ public class MainForm extends javax.swing.JFrame {
         menuPersons.setEnabled(btnManageParties.isEnabled());
         menuShowMap.setEnabled(btnOpenMap.isEnabled());
         menuLodgementReport.setEnabled(SecurityBean.isInRole(RolesConstants.REPORTS_VIEW));
-        menuDocumentSearch.setEnabled(btnDocumentSearch.isEnabled()); 
-        
+        menuDocumentSearch.setEnabled(btnDocumentSearch.isEnabled());
+
         menuGenderReport.setEnabled(SecurityBean.isInRole(RolesConstants.REPORTS_GENDER));
         menuGenderReport.setVisible(menuGenderReport.isEnabled());
         menuFeatureEditor.setEnabled(SecurityBean.isInRole(RolesConstants.GIS_FEATURE_EDITOR));
         menuFeatureEditor.setVisible(menuFeatureEditor.isEnabled());
         menuZoneEditor.setEnabled(SecurityBean.isInRole(RolesConstants.GIS_ZONE_EDITOR));
         menuZoneEditor.setVisible(menuZoneEditor.isEnabled());
-        
 
         if (SecurityBean.isPasswordChangeReqd(false)) {
             // Load the user profile page
@@ -250,9 +247,9 @@ public class MainForm extends javax.swing.JFrame {
         }
 
         txtUserName.setText(SecurityBean.getCurrentUser().getUserName());
-        
+
         this.applicationsMain.setBackground(Color.white);
-        
+
     }
 
     /**
@@ -293,10 +290,9 @@ public class MainForm extends javax.swing.JFrame {
         }
         this.setLocation(x, y);
 
-
         this.applicationsMain.setBackground(Color.white);
-        this.applicationsMain.setUI((ToolBarUI)UIManager.getUI(this.applicationsMain));
-         
+        this.applicationsMain.setUI((ToolBarUI) UIManager.getUI(this.applicationsMain));
+
         // shift the title text on the right of the Registry Icon Image
         String pre = "";
         pre = String.format("%" + 8 + "s", pre);
@@ -1309,11 +1305,11 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_menuGenderReportActionPerformed
 
     private void menuFeatureEditorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFeatureEditorActionPerformed
-       openMapSpatialUnitEditor();
+        openMapSpatialUnitEditor();
     }//GEN-LAST:event_menuFeatureEditorActionPerformed
 
     private void menuZoneEditorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuZoneEditorActionPerformed
-       openMapSpatialUnitGroupEditor();
+        openMapSpatialUnitGroupEditor();
     }//GEN-LAST:event_menuZoneEditorActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -331,18 +331,21 @@ public class LafManager {
                         ret.put("RootPaneUI", NimbusRootPaneUI.class.getName());
 
                         URL imgURL = null;
-                        String loginTitle = ""; 
+                        String loginTitle = "";
                         if (ADMIN_THEME.equals(theme)) {
                             // Use the icon for the admin theme 
                             imgURL = this.getClass().getResource("/images/common/sola_icon_admin.png");
-                            loginTitle = MessageUtility.getLocalizedMessageText(ClientMessage.SECURITY_LOGIN_TITLE_ADMIN); 
+                            loginTitle = MessageUtility.getLocalizedMessageText(ClientMessage.SECURITY_LOGIN_TITLE_ADMIN);
                         } else {
                             // Use the icon for the registry theme 
                             imgURL = this.getClass().getResource("/images/common/sola_icon_registry.png");
-                            loginTitle = MessageUtility.getLocalizedMessageText(ClientMessage.SECURITY_LOGIN_TITLE_REGISTRY); 
+                            loginTitle = MessageUtility.getLocalizedMessageText(ClientMessage.SECURITY_LOGIN_TITLE_REGISTRY);
                         }
                         ret.put("solaTitleBarIcon", new ImageIcon(imgURL));
-                        ret.put("solaLoginTitle", loginTitle); 
+                        ret.put("solaLoginTitle", loginTitle);
+                        
+                        // Indicates this is a custom LAF for sola.
+                        ret.put("solaLAF", true); 
                         return ret;
                     }
                 });
@@ -506,6 +509,14 @@ public class LafManager {
             UIManager.put("Label.font", Font.decode("AppleGothic"));
             UIManager.put("List.font", Font.decode("AppleGothic"));
             UIManager.put("RadioButton.font", Font.decode("AppleGothic"));
+
+            // Set the default image Icon
+            URL imgURL = this.getClass().getResource("/images/common/sola_icon_default.jpg");
+            UIManager.put("solaTitleBarIcon", new ImageIcon(imgURL));
+            
+            // Indicates this is not a custom LAF for sola.
+            UIManager.put("solaLAF", false); 
+            
 
             for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {

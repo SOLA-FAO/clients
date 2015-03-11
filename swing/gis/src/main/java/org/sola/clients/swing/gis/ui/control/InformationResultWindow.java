@@ -38,6 +38,7 @@
 package org.sola.clients.swing.gis.ui.control;
 
 import java.util.List;
+import org.sola.common.WindowUtility;
 import org.sola.webservices.search.ResultForSelectionInfo;
 
 /**
@@ -54,6 +55,8 @@ public class InformationResultWindow extends javax.swing.JDialog {
         initComponents();
         this.setAlwaysOnTop(true);
         this.setModalityType(ModalityType.APPLICATION_MODAL);
+        this.setIconImage(WindowUtility.getTitleBarImage());
+        WindowUtility.addEscapeListener(this, true);
     }
 
     /**

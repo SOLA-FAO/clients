@@ -53,6 +53,7 @@ import org.sola.clients.reports.ReportManager;
 import org.sola.clients.swing.common.laf.LafManager;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
+import org.sola.clients.swing.common.utils.FormattersFactory;
 import org.sola.clients.swing.desktop.MainForm;
 import org.sola.clients.swing.desktop.cadastre.SearchParcelDialog;
 import org.sola.clients.swing.gis.ui.controlsbundle.ControlsBundleForBaUnit;
@@ -613,6 +614,7 @@ public class PropertyPanel extends ContentPanel {
         }
         btnAddParcel.setEnabled(!readOnly);
         btnSearchParcel.setEnabled(!readOnly);
+        btnAddParcelFromApplication.setEnabled(!readOnly);
         menuAddParcel.setEnabled(btnAddParcel.isEnabled());
         menuRemoveParcel.setEnabled(btnRemoveParcel.isEnabled());
     }
@@ -1233,7 +1235,7 @@ public class PropertyPanel extends ContentPanel {
         txtBaUnitStatus = new javax.swing.JTextField();
         areaPanel = new javax.swing.JPanel();
         labArea = new javax.swing.JLabel();
-        txtArea = new javax.swing.JTextField();
+        txtArea = new javax.swing.JFormattedTextField();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableParcels = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
@@ -1692,24 +1694,19 @@ public class PropertyPanel extends ContentPanel {
         labArea.setText(bundle.getString("PropertyPanel.labArea.text")); // NOI18N
         labArea.setName(bundle.getString("PropertyPanel.labArea.name")); // NOI18N
 
-        txtArea.setName(bundle.getString("PropertyPanel.txtArea.name")); // NOI18N
+        txtArea.setFormatterFactory(FormattersFactory.getInstance().getMetricAreaFormatterFactory());
+        txtArea.setText(bundle.getString("PropertyPanel.txtArea.text")); // NOI18N
+        txtArea.setName("txtArea"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitAreaBean1, org.jdesktop.beansbinding.ELProperty.create("${size}"), txtArea, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, baUnitAreaBean1, org.jdesktop.beansbinding.ELProperty.create("${size}"), txtArea, org.jdesktop.beansbinding.BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
-
-        if (txtArea.getText().indexOf('.')!= -1){
-            formatSize(txtArea.getText());
-        }
 
         org.jdesktop.layout.GroupLayout areaPanelLayout = new org.jdesktop.layout.GroupLayout(areaPanel);
         areaPanel.setLayout(areaPanelLayout);
         areaPanelLayout.setHorizontalGroup(
             areaPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(txtArea, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)
-            .add(areaPanelLayout.createSequentialGroup()
-                .add(1, 1, 1)
-                .add(labArea)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, labArea, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)
+            .add(txtArea)
         );
         areaPanelLayout.setVerticalGroup(
             areaPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -2979,7 +2976,7 @@ private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
     private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tableRights;
     private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tableRightsHistory;
     private javax.swing.JTabbedPane tabsMain;
-    private javax.swing.JTextField txtArea;
+    private javax.swing.JFormattedTextField txtArea;
     private javax.swing.JTextField txtBaUnitStatus;
     private javax.swing.JTextField txtEstateType;
     private javax.swing.JTextField txtFirstPart;

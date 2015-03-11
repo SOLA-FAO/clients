@@ -79,8 +79,9 @@ public class CustomConditionDialog extends javax.swing.JDialog {
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
-        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/save.png"))); // NOI18N
+        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/confirm-close.png"))); // NOI18N
         btnSave.setText(bundle.getString("CustomConditionDialog.btnSave.text")); // NOI18N
+        btnSave.setToolTipText(bundle.getString("CustomConditionDialog.btnSave.toolTipText")); // NOI18N
         btnSave.setFocusable(false);
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

@@ -111,8 +111,7 @@ public class SecurityClassificationDialog extends javax.swing.JDialog {
     
     private void customizeForm() {
         
-        URL imgURL = this.getClass().getResource("/images/sola/logo_icon.jpg");
-        this.setIconImage(new ImageIcon(imgURL).getImage());
+        this.setIconImage(WindowUtility.getTitleBarImage());
         
         WindowUtility.addEscapeListener(this, false);
         java.util.ResourceBundle bundle1 = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/security/Bundle");

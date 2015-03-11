@@ -152,10 +152,8 @@ public class SimpleRightPanel extends ContentPanel {
         if (rrrAction == RrrBean.RRR_ACTION.VIEW) {
             btnSave.setVisible(false);
             txtNotationText.setEditable(false);
-            cbxIsPrimary.setEnabled(false);
             txtRegDatetime.setEditable(false);
             btnRegDate.setEnabled(false);
-            cbxIsPrimary.setEnabled(false);
         }
 
         btnSecurity.setVisible(btnSave.isEnabled()
@@ -212,7 +210,6 @@ public class SimpleRightPanel extends ContentPanel {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        cbxIsPrimary = new javax.swing.JCheckBox();
         jLabel13 = new javax.swing.JLabel();
         txtRegDatetime = new org.sola.clients.swing.common.controls.WatermarkDate();
         btnRegDate = new javax.swing.JButton();
@@ -241,8 +238,9 @@ public class SimpleRightPanel extends ContentPanel {
         jToolBar1.setRollover(true);
         jToolBar1.setName("jToolBar1"); // NOI18N
 
-        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/save.png"))); // NOI18N
+        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/confirm-close.png"))); // NOI18N
         btnSave.setText(bundle.getString("SimpleRightPanel.btnSave.text")); // NOI18N
+        btnSave.setToolTipText(bundle.getString("SimpleRightPanel.btnSave.toolTipText")); // NOI18N
         btnSave.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSave.setName("btnSave"); // NOI18N
         btnSave.addActionListener(new java.awt.event.ActionListener() {
@@ -284,13 +282,6 @@ public class SimpleRightPanel extends ContentPanel {
 
         jPanel1.setName("jPanel1"); // NOI18N
 
-        cbxIsPrimary.setText(bundle.getString("SimpleRightPanel.cbxIsPrimary.text")); // NOI18N
-        cbxIsPrimary.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        cbxIsPrimary.setName("cbxIsPrimary"); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${primary}"), cbxIsPrimary, org.jdesktop.beansbinding.BeanProperty.create("selected"));
-        bindingGroup.addBinding(binding);
-
         jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         jLabel13.setText(bundle.getString("SimpleRightPanel.jLabel13.text")); // NOI18N
         jLabel13.setName("jLabel13"); // NOI18N
@@ -320,8 +311,6 @@ public class SimpleRightPanel extends ContentPanel {
                 .add(txtRegDatetime, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 93, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(btnRegDate)
-                .add(29, 29, 29)
-                .add(cbxIsPrimary, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 117, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -331,9 +320,8 @@ public class SimpleRightPanel extends ContentPanel {
                     .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                         .add(jLabel13)
                         .add(txtRegDatetime, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(btnRegDate)
-                    .add(cbxIsPrimary))
-                .addContainerGap(12, Short.MAX_VALUE))
+                    .add(btnRegDate))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         groupPanel1.setName("groupPanel1"); // NOI18N
@@ -397,7 +385,6 @@ public class SimpleRightPanel extends ContentPanel {
     private javax.swing.JButton btnRegDate;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSecurity;
-    private javax.swing.JCheckBox cbxIsPrimary;
     private org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel documentsPanel;
     private javax.swing.Box.Filler filler1;
     private org.sola.clients.swing.ui.GroupPanel groupPanel1;

@@ -189,7 +189,6 @@ public class OwnershipPanel extends ContentPanel {
             txtRegDatetime.setEditable(false);
             btnRegDate.setEnabled(false);
             txtNotationText.setEditable(false);
-            cbxIsPrimary.setEnabled(false);
         }
 
         btnSecurity.setVisible(btnSave.isEnabled()
@@ -249,7 +248,6 @@ public class OwnershipPanel extends ContentPanel {
         menuViewShare = new javax.swing.JMenuItem();
         jPanel3 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
-        cbxIsPrimary = new javax.swing.JCheckBox();
         txtRegDatetime = new org.sola.clients.swing.common.controls.WatermarkDate();
         btnRegDate = new javax.swing.JButton();
         headerPanel = new org.sola.clients.swing.ui.HeaderPanel();
@@ -330,17 +328,9 @@ public class OwnershipPanel extends ContentPanel {
         jLabel13.setToolTipText(bundle.getString("OwnershipPanel.jLabel13.toolTipText")); // NOI18N
         jLabel13.setName("jLabel13"); // NOI18N
 
-        cbxIsPrimary.setText(bundle.getString("OwnershipPanel.cbxIsPrimary.text")); // NOI18N
-        cbxIsPrimary.setToolTipText(bundle.getString("OwnershipPanel.cbxIsPrimary.toolTipText")); // NOI18N
-        cbxIsPrimary.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        cbxIsPrimary.setName("cbxIsPrimary"); // NOI18N
-
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${primary}"), cbxIsPrimary, org.jdesktop.beansbinding.BeanProperty.create("selected"));
-        bindingGroup.addBinding(binding);
-
         txtRegDatetime.setName(bundle.getString("OwnershipPanel.txtRegDatetime.name")); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${registrationDate}"), txtRegDatetime, org.jdesktop.beansbinding.BeanProperty.create("value"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${registrationDate}"), txtRegDatetime, org.jdesktop.beansbinding.BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
 
         btnRegDate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/calendar.png"))); // NOI18N
@@ -363,8 +353,6 @@ public class OwnershipPanel extends ContentPanel {
                 .addComponent(txtRegDatetime, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnRegDate)
-                .addGap(29, 29, 29)
-                .addComponent(cbxIsPrimary, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -374,8 +362,7 @@ public class OwnershipPanel extends ContentPanel {
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel13)
                         .addComponent(txtRegDatetime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnRegDate)
-                    .addComponent(cbxIsPrimary))
+                    .addComponent(btnRegDate))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -386,7 +373,7 @@ public class OwnershipPanel extends ContentPanel {
         jToolBar2.setRollover(true);
         jToolBar2.setName("jToolBar2"); // NOI18N
 
-        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/save.png"))); // NOI18N
+        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/confirm-close.png"))); // NOI18N
         btnSave.setText(bundle.getString("OwnershipPanel.btnSave.text")); // NOI18N
         btnSave.setName("btnSave"); // NOI18N
         btnSave.addActionListener(new java.awt.event.ActionListener() {
@@ -683,7 +670,6 @@ public class OwnershipPanel extends ContentPanel {
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSecurity;
     private javax.swing.JButton btnViewShare;
-    private javax.swing.JCheckBox cbxIsPrimary;
     private org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel documentsPanel;
     private javax.swing.Box.Filler filler1;
     private org.sola.clients.swing.ui.GroupPanel groupPanel1;

@@ -417,7 +417,7 @@ public class RrrBean extends AbstractTransactionedBean {
         return conditionsList;
     }
 
-    @Size(min = 1, groups = {SimpleOwnershipValidationGroup.class, LeaseValidationGroup.class},
+    @Size(min = 1, groups = {LeaseValidationGroup.class},
             message = ClientMessage.CHECK_SIZE_CONDITIONS_LIST, payload = Localized.class)
     public ObservableList<ConditionForRrrBean> getConditionsFilteredList() {
         return conditionsList.getFilteredList();

@@ -32,7 +32,6 @@
 package org.sola.clients.swing.gis.tool;
 
 import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.io.WKBWriter;
 import java.util.ArrayList;
 import java.util.List;
 import org.geotools.geometry.DirectPosition2D;

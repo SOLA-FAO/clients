@@ -138,7 +138,6 @@ public class SimpleRightholderPanel extends ContentPanel {
             txtRegDatetime.setEditable(false);
             btnRegDate.setEnabled(false);
             txtNotationText.setEditable(false);
-            cbxIsPrimary.setEnabled(false);
         }
         
         btnSecurity.setVisible(btnSave.isEnabled()
@@ -331,7 +330,6 @@ public class SimpleRightholderPanel extends ContentPanel {
         jLabel1 = new javax.swing.JLabel();
         lblStatus = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        cbxIsPrimary = new javax.swing.JCheckBox();
         jLabel3 = new javax.swing.JLabel();
         txtNotationText = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
@@ -395,7 +393,7 @@ public class SimpleRightholderPanel extends ContentPanel {
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
-        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/save.png"))); // NOI18N
+        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/confirm-close.png"))); // NOI18N
         btnSave.setText(bundle.getString("SimpleOwhershipPanel.btnSave.text")); // NOI18N
         btnSave.setFocusable(false);
         btnSave.addActionListener(new java.awt.event.ActionListener() {
@@ -428,15 +426,10 @@ public class SimpleRightholderPanel extends ContentPanel {
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         jLabel2.setText(bundle.getString("SimpleOwhershipPanel.jLabel2.text")); // NOI18N
 
-        cbxIsPrimary.setText(bundle.getString("SimpleOwhershipPanel.cbxIsPrimary.text")); // NOI18N
-
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${primary}"), cbxIsPrimary, org.jdesktop.beansbinding.BeanProperty.create("selected"));
-        bindingGroup.addBinding(binding);
-
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         jLabel3.setText(bundle.getString("SimpleOwhershipPanel.jLabel3.text")); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${notation.notationText}"), txtNotationText, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rrrBean, org.jdesktop.beansbinding.ELProperty.create("${notation.notationText}"), txtNotationText, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         jPanel1.setLayout(new java.awt.GridLayout(2, 1, 0, 20));
@@ -591,9 +584,7 @@ public class SimpleRightholderPanel extends ContentPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtRegDatetime, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnRegDate)
-                                .addGap(27, 27, 27)
-                                .addComponent(cbxIsPrimary)))
+                                .addComponent(btnRegDate)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -611,8 +602,7 @@ public class SimpleRightholderPanel extends ContentPanel {
                             .addComponent(txtRegDatetime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(21, 21, 21)
                         .addComponent(jLabel3))
-                    .addComponent(btnRegDate)
-                    .addComponent(cbxIsPrimary))
+                    .addComponent(btnRegDate))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtNotationText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -680,7 +670,6 @@ public class SimpleRightholderPanel extends ContentPanel {
     private javax.swing.JButton btnSecurity;
     private javax.swing.JButton btnSelectExisting;
     private javax.swing.JButton btnViewOwner;
-    private javax.swing.JCheckBox cbxIsPrimary;
     private org.sola.clients.swing.desktop.source.DocumentsManagementExtPanel documentsManagementPanel;
     private javax.swing.Box.Filler filler1;
     private org.sola.clients.swing.ui.GroupPanel groupPanel1;
