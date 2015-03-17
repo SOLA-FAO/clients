@@ -17,7 +17,7 @@ $explicitTimestampUTC
 #if($project.Description)
     <description>$project.Description</description>
 #end
-<icon href="../Images/Floss.jpg" width="40" height="26"/>
+<icon href="../Images/admin_icon.png" width="48" height="48"/>
     <icon kind="shortcut" href="../Images/admin_icon.png" width="48" height="48"/>
     <!--icon kind="splash" href="../Images/splash.png" width="413" height="314"/-->
     <shortcut><desktop/><menu submenu="Registry Test"/></shortcut>
