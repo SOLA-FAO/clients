@@ -5,11 +5,11 @@
     <parent>
         <artifactId>sola-clients-swing</artifactId>
         <groupId>org.sola.clients</groupId>
-        <version>1402a-SNAPSHOT</version>
+        <version>1503a</version>
     </parent>
     <groupId>org.sola.clients.swing</groupId>
     <artifactId>sola-geotools-ui</artifactId>
-    <version>1402a-SNAPSHOT</version>
+    <version>1503a</version>
     <name>Clients Geotools UI</name>
     <repositories>
         <repository>
