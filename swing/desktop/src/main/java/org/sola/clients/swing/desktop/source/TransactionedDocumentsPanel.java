@@ -283,11 +283,11 @@ public class TransactionedDocumentsPanel extends ContentPanel {
 
         setCloseOnHide(true);
         setHeaderPanel(headerPanel);
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/source/Bundle"); // NOI18N
-        setHelpTopic(bundle.getString("TransactionedDocumentsPanel.helpTopic")); // NOI18N
+        setHelpTopic("document_registration"); // NOI18N
         setName("Form"); // NOI18N
 
         headerPanel.setName("headerPanel"); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/source/Bundle"); // NOI18N
         headerPanel.setTitleText(bundle.getString("TransactionedDocumentsPanel.headerPanel.titleText")); // NOI18N
 
         jScrollPane1.setBorder(null);
@@ -490,12 +490,14 @@ public class TransactionedDocumentsPanel extends ContentPanel {
         bindingGroup.addBinding(binding);
 
         jScrollPane2.setViewportView(tablePowerOfAttorney);
-        tablePowerOfAttorney.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("TransactionedDocumentsPanel.tablePowerOfAttorney.columnModel.title0")); // NOI18N
-        tablePowerOfAttorney.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("TransactionedDocumentsPanel.tablePowerOfAttorney.columnModel.title1")); // NOI18N
-        tablePowerOfAttorney.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("TransactionedDocumentsPanel.tablePowerOfAttorney.columnModel.title2")); // NOI18N
-        tablePowerOfAttorney.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("TransactionedDocumentsPanel.tablePowerOfAttorney.columnModel.title3")); // NOI18N
-        tablePowerOfAttorney.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("TransactionedDocumentsPanel.tablePowerOfAttorney.columnModel.title4")); // NOI18N
-        tablePowerOfAttorney.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("TransactionedDocumentsPanel.tablePowerOfAttorney.columnModel.title5")); // NOI18N
+        if (tablePowerOfAttorney.getColumnModel().getColumnCount() > 0) {
+            tablePowerOfAttorney.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("TransactionedDocumentsPanel.tablePowerOfAttorney.columnModel.title0")); // NOI18N
+            tablePowerOfAttorney.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("TransactionedDocumentsPanel.tablePowerOfAttorney.columnModel.title1")); // NOI18N
+            tablePowerOfAttorney.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("TransactionedDocumentsPanel.tablePowerOfAttorney.columnModel.title2")); // NOI18N
+            tablePowerOfAttorney.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("TransactionedDocumentsPanel.tablePowerOfAttorney.columnModel.title3")); // NOI18N
+            tablePowerOfAttorney.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("TransactionedDocumentsPanel.tablePowerOfAttorney.columnModel.title4")); // NOI18N
+            tablePowerOfAttorney.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("TransactionedDocumentsPanel.tablePowerOfAttorney.columnModel.title5")); // NOI18N
+        }
 
         javax.swing.GroupLayout cardPowerOfAttorneyLayout = new javax.swing.GroupLayout(cardPowerOfAttorney);
         cardPowerOfAttorney.setLayout(cardPowerOfAttorneyLayout);

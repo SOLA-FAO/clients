@@ -50,6 +50,7 @@ public class RightsExportForm extends ContentPanel {
         rightsExportPanel1 = new org.sola.clients.swing.ui.administrative.RightsExportPanel();
 
         setHeaderPanel(headerPanel1);
+        setHelpTopic("rights_export"); // NOI18N
 
         headerPanel1.setTitleText("Rights export");
 

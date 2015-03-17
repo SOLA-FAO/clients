@@ -10,6 +10,7 @@
     <Property name="headerPanel" type="org.sola.clients.swing.ui.HeaderPanel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
       <Connection code="headerPanel" type="code"/>
     </Property>
+    <Property name="helpTopic" type="java.lang.String" value="user_profile" noResource="true"/>
   </Properties>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="1"/>

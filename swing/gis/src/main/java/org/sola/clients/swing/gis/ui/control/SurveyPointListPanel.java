@@ -89,6 +89,10 @@ public class SurveyPointListPanel extends javax.swing.JPanel {
     public SurveyPointListPanel() {
         initComponents();
     }
+    
+    private void postInit(){
+        
+    }
 
     /**
      * It creates the bean. It is called from the generated code.
@@ -217,17 +221,19 @@ public class SurveyPointListPanel extends javax.swing.JPanel {
         bindingGroup.addBinding(binding);
 
         jScrollPane1.setViewportView(tablePointList);
-        tablePointList.getColumnModel().getColumn(0).setPreferredWidth(5);
-        tablePointList.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("SurveyPointListPanel.tablePointList.columnModel.title0")); // NOI18N
-        tablePointList.getColumnModel().getColumn(1).setPreferredWidth(20);
-        tablePointList.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("SurveyPointListPanel.tablePointList.columnModel.title1")); // NOI18N
-        tablePointList.getColumnModel().getColumn(2).setPreferredWidth(20);
-        tablePointList.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("SurveyPointListPanel.tablePointList.columnModel.title2")); // NOI18N
-        tablePointList.getColumnModel().getColumn(3).setPreferredWidth(20);
-        tablePointList.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("SurveyPointListPanel.tablePointList.columnModel.title3")); // NOI18N
-        tablePointList.getColumnModel().getColumn(4).setPreferredWidth(20);
-        tablePointList.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("SurveyPointListPanel.tablePointList.columnModel.title4")); // NOI18N
-        tablePointList.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("SurveyPointListPanel.tablePointList.columnModel.title5")); // NOI18N
+        if (tablePointList.getColumnModel().getColumnCount() > 0) {
+            tablePointList.getColumnModel().getColumn(0).setPreferredWidth(5);
+            tablePointList.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("SurveyPointListPanel.tablePointList.columnModel.title0")); // NOI18N
+            tablePointList.getColumnModel().getColumn(1).setPreferredWidth(20);
+            tablePointList.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("SurveyPointListPanel.tablePointList.columnModel.title1")); // NOI18N
+            tablePointList.getColumnModel().getColumn(2).setPreferredWidth(20);
+            tablePointList.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("SurveyPointListPanel.tablePointList.columnModel.title2")); // NOI18N
+            tablePointList.getColumnModel().getColumn(3).setPreferredWidth(20);
+            tablePointList.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("SurveyPointListPanel.tablePointList.columnModel.title3")); // NOI18N
+            tablePointList.getColumnModel().getColumn(4).setPreferredWidth(20);
+            tablePointList.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("SurveyPointListPanel.tablePointList.columnModel.title4")); // NOI18N
+            tablePointList.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("SurveyPointListPanel.tablePointList.columnModel.title5")); // NOI18N
+        }
 
         jLabel1.setText(bundle.getString("SurveyPointListPanel.jLabel1.text")); // NOI18N
 
@@ -262,7 +268,7 @@ public class SurveyPointListPanel extends javax.swing.JPanel {
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtAcceptableShift, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 564, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 608, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jLabel3)
@@ -300,7 +306,7 @@ public class SurveyPointListPanel extends javax.swing.JPanel {
                     .addComponent(jLabel3)
                     .addComponent(jLabel4))
                 .addGap(6, 6, 6)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
                 .addContainerGap())
         );
 

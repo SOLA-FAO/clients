@@ -41,6 +41,7 @@ package org.sola.clients.swing.gis.ui.control;
 
 import java.text.DecimalFormat;
 import org.sola.clients.swing.gis.Messaging;
+import org.sola.common.WindowUtility;
 import org.sola.common.messaging.GisMessage;
 
 /**
@@ -72,6 +73,8 @@ public class CadastreRedefinitionNodeModifyForm extends javax.swing.JDialog {
         initComponents();
         this.setAlwaysOnTop(true);
         this.setModalityType(ModalityType.APPLICATION_MODAL);
+        WindowUtility.addEscapeListener(this, false);
+        this.setIconImage(WindowUtility.getTitleBarImage());
     }
 
     /**
@@ -168,6 +171,7 @@ public class CadastreRedefinitionNodeModifyForm extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Modify Node");
         setResizable(false);
 
         txtY.setEnabled(false);

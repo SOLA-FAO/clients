@@ -37,6 +37,7 @@ import java.awt.Component;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.*;
+import javax.swing.JDialog;
 import javax.swing.JPanel;
 import org.geotools.feature.CollectionEvent;
 import org.geotools.feature.CollectionListener;
@@ -51,6 +52,7 @@ import org.sola.clients.beans.controls.SolaObservableList;
 import org.sola.clients.swing.gis.Messaging;
 import org.sola.clients.swing.gis.beans.AbstractListSpatialBean;
 import org.sola.clients.swing.gis.beans.SpatialBean;
+import org.sola.common.WindowUtility;
 import org.sola.common.messaging.GisMessage;
 import org.sola.webservices.transferobjects.EntityAction;
 
@@ -261,7 +263,10 @@ public abstract class AbstractSpatialObjectLayer extends ExtendedLayerEditor {
      * the subclass. It is optional.
      */
     protected void initializeFormHosting(String title, JPanel hostPanel) {
-        this.setHostForm(UiUtil.getInstance().getDialog(title, hostPanel));
+        JDialog form = UiUtil.getInstance().getDialog(title, hostPanel);
+        WindowUtility.addEscapeListener(form, true);
+        form.setIconImage(WindowUtility.getTitleBarImage()); 
+        this.setHostForm(form);
     }
 
     /**

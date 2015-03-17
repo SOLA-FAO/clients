@@ -235,6 +235,9 @@ public class MainForm extends javax.swing.JFrame {
         menuFeatureEditor.setVisible(menuFeatureEditor.isEnabled());
         menuZoneEditor.setEnabled(SecurityBean.isInRole(RolesConstants.GIS_ZONE_EDITOR));
         menuZoneEditor.setVisible(menuZoneEditor.isEnabled());
+        // TODO: Remove these lines once the Map Editing functionality has been revised. 
+        menuZoneEditor.setVisible(false);
+        menuFeatureEditor.setVisible(false);
 
         if (SecurityBean.isPasswordChangeReqd(false)) {
             // Load the user profile page
@@ -1297,7 +1300,7 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_menuExportRightsActionPerformed
 
     private void jmiContextHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiContextHelpActionPerformed
-        HelpUtility.getInstance().showTopic("overview");
+        HelpUtility.getInstance().showTopic("about");
     }//GEN-LAST:event_jmiContextHelpActionPerformed
 
     private void menuGenderReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuGenderReportActionPerformed

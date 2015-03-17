@@ -150,6 +150,7 @@ public class DocumentForm extends ContentPanel {
         btnSecurity = new javax.swing.JButton();
 
         setHeaderPanel(headerPanel);
+        setHelpTopic("document_details"); // NOI18N
 
         headerPanel.setTitleText("Document - %");
 
@@ -182,7 +183,7 @@ public class DocumentForm extends ContentPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(headerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 571, Short.MAX_VALUE)
+            .addComponent(headerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()

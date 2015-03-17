@@ -261,11 +261,11 @@ public class PartyPanelForm extends ContentPanel {
         partyPanel = createPartyPanel();
 
         setHeaderPanel(headerPanel);
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/party/Bundle"); // NOI18N
-        setHelpTopic(bundle.getString("PartyPanelForm.helpTopic")); // NOI18N
+        setHelpTopic("party_details"); // NOI18N
         setName("Form"); // NOI18N
 
         headerPanel.setName("headerPanel"); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/party/Bundle"); // NOI18N
         headerPanel.setTitleText(bundle.getString("PartyPanelForm.headerPanel.titleText")); // NOI18N
 
         jToolBar1.setFloatable(false);

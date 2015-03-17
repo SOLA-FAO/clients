@@ -139,6 +139,8 @@ public class FileBrowserForm extends javax.swing.JDialog {
             }
         }
         customizeRemoteFileButtons();
+        WindowUtility.addEscapeListener(this, false);
+        this.setIconImage(WindowUtility.getTitleBarImage());
     }
 
     /**

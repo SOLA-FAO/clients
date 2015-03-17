@@ -9,9 +9,7 @@
     </Component>
   </NonVisualComponents>
   <Properties>
-    <Property name="helpTopic" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-      <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="BaUnitSearchPanel.helpTopic" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-    </Property>
+    <Property name="helpTopic" type="java.lang.String" value="property_search" noResource="true"/>
     <Property name="name" type="java.lang.String" value="Form" noResource="true"/>
   </Properties>
   <AuxValues>

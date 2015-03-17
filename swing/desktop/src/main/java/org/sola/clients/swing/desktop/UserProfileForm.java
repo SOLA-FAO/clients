@@ -87,6 +87,7 @@ public class UserProfileForm extends ContentPanel {
 
         setCloseOnHide(true);
         setHeaderPanel(headerPanel);
+        setHelpTopic("user_profile"); // NOI18N
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/Bundle"); // NOI18N
         jPanel1.setName(bundle.getString("UserProfileForm.jPanel1.name")); // NOI18N

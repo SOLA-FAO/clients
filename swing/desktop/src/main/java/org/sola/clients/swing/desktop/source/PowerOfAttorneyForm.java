@@ -1,71 +1,79 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.desktop.source;
 
 import org.sola.clients.beans.source.PowerOfAttorneyBean;
 import org.sola.clients.beans.source.SourceBean;
+import org.sola.common.WindowUtility;
 
 /**
  * Captures Power of attorney person name and attorney name.
  */
 public class PowerOfAttorneyForm extends javax.swing.JDialog {
+
     public static final String POWER_OF_ATTORNEY_CAHNGED = "powerOfAttorneyChange";
     private PowerOfAttorneyBean powerOfAttorney;
-    
+
     /**
      * Default form constructor.
      */
     public PowerOfAttorneyForm(java.awt.Frame parent, boolean modal) {
         this(parent, modal, new PowerOfAttorneyBean());
     }
-    
-    
+
     /**
      * Form constructor with {@link PowerOfAttorneyBean} parameter.
-     * @param source {@link SourceBean} to link on the binding Power of attorney.
+     *
+     * @param source {@link SourceBean} to link on the binding Power of
+     * attorney.
      */
     public PowerOfAttorneyForm(java.awt.Frame parent, boolean modal, SourceBean source) {
         super(parent, modal);
         powerOfAttorney = new PowerOfAttorneyBean();
         powerOfAttorney.setSource(source);
         initComponents();
+        postInit();
     }
 
     /**
      * Form constructor with {@link PowerOfAttorneyBean} parameter.
+     *
      * @param powerOfAttorney {@link PowerOfAttorneyBean} to show on the form.
      */
     public PowerOfAttorneyForm(java.awt.Frame parent, boolean modal, PowerOfAttorneyBean powerOfAttorney) {
         super(parent, modal);
         this.powerOfAttorney = powerOfAttorney;
         initComponents();
+        postInit();
     }
-    
+
     public PowerOfAttorneyBean getPowerOfAttorney() {
         return powerOfAttorney;
     }
@@ -74,13 +82,18 @@ public class PowerOfAttorneyForm extends javax.swing.JDialog {
         this.powerOfAttorney = powerOfAttorney;
     }
 
-    private void savePowerOfAttorney(){
-        if(powerOfAttorney.validate(true).size()<1){
+    private void savePowerOfAttorney() {
+        if (powerOfAttorney.validate(true).size() < 1) {
             firePropertyChange(POWER_OF_ATTORNEY_CAHNGED, null, powerOfAttorney);
             this.setVisible(false);
         }
     }
-    
+
+    private void postInit() {
+        WindowUtility.addEscapeListener(this, false);
+        this.setIconImage(WindowUtility.getTitleBarImage());
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -94,8 +107,10 @@ public class PowerOfAttorneyForm extends javax.swing.JDialog {
         txtPersonName = new javax.swing.JTextField();
         btnOk = new javax.swing.JButton();
 
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/source/Bundle"); // NOI18N
         setTitle(bundle.getString("PowerOfAttorneyForm.title")); // NOI18N
+        setResizable(false);
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         jLabel1.setText(bundle.getString("PowerOfAttorneyForm.jLabel1.text")); // NOI18N
@@ -109,7 +124,7 @@ public class PowerOfAttorneyForm extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addGap(0, 323, Short.MAX_VALUE))
+                .addGap(0, 178, Short.MAX_VALUE))
             .addComponent(txtAttorneyName)
         );
         jPanel1Layout.setVerticalGroup(
@@ -173,7 +188,7 @@ public class PowerOfAttorneyForm extends javax.swing.JDialog {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnOk)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         bindingGroup.bind();

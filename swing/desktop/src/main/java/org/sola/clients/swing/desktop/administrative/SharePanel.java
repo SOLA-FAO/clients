@@ -294,7 +294,7 @@ public class SharePanel extends ContentPanel {
         popupOwners.add(menuViewOwner);
 
         setHeaderPanel(headerPanel);
-        setHelpTopic(bundle.getString("SharePanel.helpTopic")); // NOI18N
+        setHelpTopic("ownership_rrr"); // NOI18N
         setName("Form"); // NOI18N
 
         jLabel1.setFont(LafManager.getInstance().getLabFontBold());

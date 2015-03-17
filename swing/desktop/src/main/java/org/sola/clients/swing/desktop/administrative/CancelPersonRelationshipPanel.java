@@ -425,6 +425,7 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
         jPanel13 = new javax.swing.JPanel();
 
         setHeaderPanel(headerPanel);
+        setHelpTopic("person_relationship"); // NOI18N
         setPreferredSize(new java.awt.Dimension(679, 800));
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N

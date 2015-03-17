@@ -443,6 +443,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
         groupPanel4 = new org.sola.clients.swing.ui.GroupPanel();
 
         setHeaderPanel(headerPanel);
+        setHelpTopic("person_relationship"); // NOI18N
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
         headerPanel.setTitleText(bundle.getString("RecordPersonRelationshipPanel.headerPanel.titleText")); // NOI18N

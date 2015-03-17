@@ -218,11 +218,11 @@ public class SimpleRightPanel extends ContentPanel {
 
         setCloseOnHide(true);
         setHeaderPanel(headerPanel);
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
-        setHelpTopic(bundle.getString("SimpleRightPanel.helpTopic")); // NOI18N
+        setHelpTopic("simple_rrr"); // NOI18N
         setName("Form"); // NOI18N
 
         jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
         jLabel15.setText(bundle.getString("SimpleRightPanel.jLabel15.text")); // NOI18N
         jLabel15.setName("jLabel15"); // NOI18N
 

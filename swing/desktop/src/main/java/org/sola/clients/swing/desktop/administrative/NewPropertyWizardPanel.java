@@ -200,10 +200,10 @@ public class NewPropertyWizardPanel extends ContentPanel {
 
         setCloseOnHide(true);
         setHeaderPanel(headerPanel);
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
-        setHelpTopic(bundle.getString("NewPropertyWizardPanel.helpTopic")); // NOI18N
+        setHelpTopic("parent_prop_wizard"); // NOI18N
 
         headerPanel.setName("headerPanel"); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
         headerPanel.setTitleText(bundle.getString("NewPropertyWizardPanel.headerPanel.titleText_1")); // NOI18N
 
         jScrollPane5.setBorder(null);
@@ -241,13 +241,15 @@ public class NewPropertyWizardPanel extends ContentPanel {
         jTableBinding.bind();
         jScrollPane2.setViewportView(tableRights);
         java.util.ResourceBundle bundle1 = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/application/Bundle"); // NOI18N
-        tableRights.getColumnModel().getColumn(0).setPreferredWidth(30);
-        tableRights.getColumnModel().getColumn(0).setMaxWidth(30);
-        tableRights.getColumnModel().getColumn(0).setHeaderValue(bundle1.getString("NewPropertyWizardPanel.tableRights.columnModel.title0")); // NOI18N
-        tableRights.getColumnModel().getColumn(1).setHeaderValue(bundle1.getString("NewPropertyWizardPanel.tableRights.columnModel.title1")); // NOI18N
-        tableRights.getColumnModel().getColumn(2).setPreferredWidth(120);
-        tableRights.getColumnModel().getColumn(2).setMaxWidth(120);
-        tableRights.getColumnModel().getColumn(2).setHeaderValue(bundle1.getString("NewPropertyWizardPanel.tableRights.columnModel.title2")); // NOI18N
+        if (tableRights.getColumnModel().getColumnCount() > 0) {
+            tableRights.getColumnModel().getColumn(0).setPreferredWidth(30);
+            tableRights.getColumnModel().getColumn(0).setMaxWidth(30);
+            tableRights.getColumnModel().getColumn(0).setHeaderValue(bundle1.getString("NewPropertyWizardPanel.tableRights.columnModel.title0")); // NOI18N
+            tableRights.getColumnModel().getColumn(1).setHeaderValue(bundle1.getString("NewPropertyWizardPanel.tableRights.columnModel.title1")); // NOI18N
+            tableRights.getColumnModel().getColumn(2).setPreferredWidth(120);
+            tableRights.getColumnModel().getColumn(2).setMaxWidth(120);
+            tableRights.getColumnModel().getColumn(2).setHeaderValue(bundle1.getString("NewPropertyWizardPanel.tableRights.columnModel.title2")); // NOI18N
+        }
 
         jLabel1.setText(bundle.getString("NewPropertyWizardPanel.jLabel1.text_1")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
@@ -297,12 +299,14 @@ public class NewPropertyWizardPanel extends ContentPanel {
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();
         jScrollPane4.setViewportView(tableNewParcels);
-        tableNewParcels.getColumnModel().getColumn(0).setPreferredWidth(30);
-        tableNewParcels.getColumnModel().getColumn(0).setMaxWidth(30);
-        tableNewParcels.getColumnModel().getColumn(0).setHeaderValue(bundle1.getString("NewPropertyWizardPanel.tableNewParcels.columnModel.title0")); // NOI18N
-        tableNewParcels.getColumnModel().getColumn(1).setHeaderValue(bundle1.getString("NewPropertyWizardPanel.tableNewParcels.columnModel.title1")); // NOI18N
-        tableNewParcels.getColumnModel().getColumn(2).setHeaderValue(bundle1.getString("NewPropertyWizardPanel.tableNewParcels.columnModel.title2")); // NOI18N
-        tableNewParcels.getColumnModel().getColumn(3).setHeaderValue(bundle1.getString("NewPropertyWizardPanel.tableNewParcels.columnModel.title3")); // NOI18N
+        if (tableNewParcels.getColumnModel().getColumnCount() > 0) {
+            tableNewParcels.getColumnModel().getColumn(0).setPreferredWidth(30);
+            tableNewParcels.getColumnModel().getColumn(0).setMaxWidth(30);
+            tableNewParcels.getColumnModel().getColumn(0).setHeaderValue(bundle1.getString("NewPropertyWizardPanel.tableNewParcels.columnModel.title0")); // NOI18N
+            tableNewParcels.getColumnModel().getColumn(1).setHeaderValue(bundle1.getString("NewPropertyWizardPanel.tableNewParcels.columnModel.title1")); // NOI18N
+            tableNewParcels.getColumnModel().getColumn(2).setHeaderValue(bundle1.getString("NewPropertyWizardPanel.tableNewParcels.columnModel.title2")); // NOI18N
+            tableNewParcels.getColumnModel().getColumn(3).setHeaderValue(bundle1.getString("NewPropertyWizardPanel.tableNewParcels.columnModel.title3")); // NOI18N
+        }
 
         jLabel2.setText(bundle.getString("NewPropertyWizardPanel.jLabel2.text_1")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
@@ -352,12 +356,14 @@ public class NewPropertyWizardPanel extends ContentPanel {
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();
         jScrollPane3.setViewportView(tableCurrentParcels);
-        tableCurrentParcels.getColumnModel().getColumn(0).setPreferredWidth(30);
-        tableCurrentParcels.getColumnModel().getColumn(0).setMaxWidth(30);
-        tableCurrentParcels.getColumnModel().getColumn(0).setHeaderValue(bundle1.getString("NewPropertyWizardPanel.tableCurrentParcels.columnModel.title0")); // NOI18N
-        tableCurrentParcels.getColumnModel().getColumn(1).setHeaderValue(bundle1.getString("NewPropertyWizardPanel.tableCurrentParcels.columnModel.title1")); // NOI18N
-        tableCurrentParcels.getColumnModel().getColumn(2).setHeaderValue(bundle1.getString("NewPropertyWizardPanel.tableCurrentParcels.columnModel.title2")); // NOI18N
-        tableCurrentParcels.getColumnModel().getColumn(3).setHeaderValue(bundle1.getString("NewPropertyWizardPanel.tableCurrentParcels.columnModel.title3")); // NOI18N
+        if (tableCurrentParcels.getColumnModel().getColumnCount() > 0) {
+            tableCurrentParcels.getColumnModel().getColumn(0).setPreferredWidth(30);
+            tableCurrentParcels.getColumnModel().getColumn(0).setMaxWidth(30);
+            tableCurrentParcels.getColumnModel().getColumn(0).setHeaderValue(bundle1.getString("NewPropertyWizardPanel.tableCurrentParcels.columnModel.title0")); // NOI18N
+            tableCurrentParcels.getColumnModel().getColumn(1).setHeaderValue(bundle1.getString("NewPropertyWizardPanel.tableCurrentParcels.columnModel.title1")); // NOI18N
+            tableCurrentParcels.getColumnModel().getColumn(2).setHeaderValue(bundle1.getString("NewPropertyWizardPanel.tableCurrentParcels.columnModel.title2")); // NOI18N
+            tableCurrentParcels.getColumnModel().getColumn(3).setHeaderValue(bundle1.getString("NewPropertyWizardPanel.tableCurrentParcels.columnModel.title3")); // NOI18N
+        }
 
         jLabel3.setText(bundle.getString("NewPropertyWizardPanel.jLabel3.text_1")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
@@ -491,10 +497,12 @@ public class NewPropertyWizardPanel extends ContentPanel {
         bindingGroup.addBinding(binding);
 
         jScrollPane1.setViewportView(tableApplicationProperty);
-        tableApplicationProperty.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("NewPropertyWizardPanel.tableApplicationProperty.columnModel.title0")); // NOI18N
-        tableApplicationProperty.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("NewPropertyWizardPanel.tableApplicationProperty.columnModel.title1")); // NOI18N
-        tableApplicationProperty.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("NewPropertyWizardPanel.tableApplicationProperty.columnModel.title2")); // NOI18N
-        tableApplicationProperty.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("NewPropertyWizardPanel.tableApplicationProperty.columnModel.title3")); // NOI18N
+        if (tableApplicationProperty.getColumnModel().getColumnCount() > 0) {
+            tableApplicationProperty.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("NewPropertyWizardPanel.tableApplicationProperty.columnModel.title0")); // NOI18N
+            tableApplicationProperty.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("NewPropertyWizardPanel.tableApplicationProperty.columnModel.title1")); // NOI18N
+            tableApplicationProperty.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("NewPropertyWizardPanel.tableApplicationProperty.columnModel.title2")); // NOI18N
+            tableApplicationProperty.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("NewPropertyWizardPanel.tableApplicationProperty.columnModel.title3")); // NOI18N
+        }
 
         btnSelectFromApplication.setText(bundle1.getString("NewPropertyWizardPanel.btnSelectFromApplication.text")); // NOI18N
         btnSelectFromApplication.setName("btnSelectFromApplication"); // NOI18N

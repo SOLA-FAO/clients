@@ -387,6 +387,7 @@ public class SimpleRightholderPanel extends ContentPanel {
         popUpOwners.add(menuViewOwner);
 
         setHeaderPanel(headerPanel);
+        setHelpTopic("rightholder_rrr"); // NOI18N
 
         headerPanel.setTitleText(bundle.getString("SimpleOwhershipPanel.headerPanel.titleText")); // NOI18N
 

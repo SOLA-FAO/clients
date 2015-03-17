@@ -66,11 +66,11 @@ public class DocumentSearchForm extends ContentPanel {
         powerOfAttorneySearchPanel = new org.sola.clients.swing.desktop.source.PowerOfAttorneySearchPanel();
 
         setHeaderPanel(headerPanel1);
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/source/Bundle"); // NOI18N
-        setHelpTopic(bundle.getString("DocumentSearchForm.helpTopic")); // NOI18N
+        setHelpTopic("document_search"); // NOI18N
         setName("Form"); // NOI18N
 
         headerPanel1.setName("headerPanel1"); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/source/Bundle"); // NOI18N
         headerPanel1.setTitleText(bundle.getString("DocumentSearchForm.headerPanel1.titleText")); // NOI18N
 
         jTabbedPane1.setName(bundle.getString("DocumentSearchForm.jTabbedPane1.name")); // NOI18N
@@ -131,7 +131,7 @@ public class DocumentSearchForm extends ContentPanel {
             .addComponent(headerPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 677, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1)
                 .addContainerGap())
         );
         layout.setVerticalGroup(

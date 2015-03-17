@@ -656,6 +656,7 @@ public class LeasePanel extends ContentPanel {
         leaseConditionsPopUp.add(menuRemoveCondition);
 
         setHeaderPanel(headerPanel);
+        setHelpTopic("lease_rrr"); // NOI18N
 
         headerPanel.setTitleText(bundle.getString("SimpleOwhershipPanel.headerPanel.titleText")); // NOI18N
 
