@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2015 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -34,7 +34,7 @@ import org.jdesktop.observablecollections.ObservableList;
 import org.sola.clients.swing.ui.renderers.TableCellTextAreaRenderer;
 import org.sola.clients.swing.ui.renderers.ViolationCellRenderer;
 import org.sola.clients.beans.validation.ValidationResultBean;
-import org.sola.clients.swing.common.LafManager;
+import org.sola.clients.swing.common.laf.LafManager;
 
 /**
  * Display result of changing status of application or service.

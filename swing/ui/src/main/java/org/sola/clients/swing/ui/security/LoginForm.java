@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2015 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -33,7 +33,10 @@ import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.ImageIcon;
+import javax.swing.UIManager;
 import org.sola.clients.swing.common.utils.LocalizationTools;
+import org.sola.common.StringUtility;
+import org.sola.common.WindowUtility;
 
 /**
  * Login form. Allows to authenticate user.
@@ -52,6 +55,13 @@ public class LoginForm extends javax.swing.JFrame {
         initComponents();
         LocalizationTools.setOrientation(loginPanel);
         this.setIconImage(new ImageIcon(LoginForm.class.getResource("/images/common/key.png")).getImage());
+        
+        String themeTitle = UIManager.getString("solaLoginTitle");
+        if (StringUtility.isEmpty(themeTitle)) {
+            themeTitle = this.getTitle();
+        }
+        this.setTitle(WindowUtility.formatFrameTitle(themeTitle));
+        
         loginPanel.addPropertyChangeListener(new PropertyChangeListener() {
 
             @Override

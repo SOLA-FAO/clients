@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2015 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -38,7 +38,7 @@
 package org.sola.clients.swing.gis.ui.control;
 
 import org.geotools.swing.extended.Map;
-import org.sola.clients.swing.common.LafManager;
+import org.sola.clients.swing.common.laf.LafManager;
 import org.sola.clients.swing.gis.beans.SpatialSearchOptionBean;
 
 /**

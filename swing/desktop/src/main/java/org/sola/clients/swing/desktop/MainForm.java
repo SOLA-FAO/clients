@@ -1,46 +1,45 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations
- * (FAO). All rights reserved.
+ * Copyright (C) 2015 - Food and Agriculture Organization of the United Nations (FAO).
+ * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
  *
- * 1. Redistributions of source code must retain the above copyright notice,this
- * list of conditions and the following disclaimer. 2. Redistributions in binary
- * form must reproduce the above copyright notice,this list of conditions and
- * the following disclaimer in the documentation and/or other materials provided
- * with the distribution. 3. Neither the name of FAO nor the names of its
- * contributors may be used to endorse or promote products derived from this
- * software without specific prior written permission.
+ *    1. Redistributions of source code must retain the above copyright notice,this list
+ *       of conditions and the following disclaimer.
+ *    2. Redistributions in binary form must reproduce the above copyright notice,this list
+ *       of conditions and the following disclaimer in the documentation and/or other
+ *       materials provided with the distribution.
+ *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
+ *       promote products derived from this software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+ * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
+ * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.desktop;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
-import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
 import java.util.prefs.Preferences;
-import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.UIManager;
+import javax.swing.plaf.ToolBarUI;
 import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.cache.CacheManager;
@@ -49,7 +48,7 @@ import org.sola.clients.beans.source.PowerOfAttorneyBean;
 import org.sola.clients.beans.system.LanguageBean;
 import org.sola.clients.beans.system.LanguageListBean;
 import org.sola.clients.swing.common.DefaultExceptionHandler;
-import org.sola.clients.swing.common.LafManager;
+import org.sola.clients.swing.common.laf.LafManager;
 import org.sola.clients.swing.ui.localization.LocalizationManager;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
@@ -179,12 +178,11 @@ public class MainForm extends javax.swing.JFrame {
      * Default constructor.
      */
     private MainForm() {
-        URL imgURL = this.getClass().getResource("/images/sola/logo_icon.jpg");
-        this.setIconImage(new ImageIcon(imgURL).getImage());
+        this.setIconImage(WindowUtility.getTitleBarImage());
 
         initComponents();
         LocalizationTools.setOrientation(this);
-        this.setTitle("SOLA Desktop - " + LocalizationManager.getVersionNumber());
+        this.setTitle(this.getTitle() + LocalizationManager.getVersionNumber());
         this.addWindowListener(new java.awt.event.WindowAdapter() {
 
             @Override
@@ -279,6 +277,11 @@ public class MainForm extends javax.swing.JFrame {
             this.setSize(width, height);
         }
         this.setLocation(x, y);
+
+        this.applicationsMain.setBackground(Color.white);
+        this.applicationsMain.setUI((ToolBarUI) UIManager.getUI(this.applicationsMain));
+
+        this.setTitle(WindowUtility.formatFrameTitle(this.getTitle()));
     }
 
     /**

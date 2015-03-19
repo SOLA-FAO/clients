@@ -4,12 +4,12 @@
     <parent>
     <artifactId>main</artifactId>
     <groupId>org.sola</groupId>
-    <version>v1502a</version>
+    <version>sl_v1503a</version>
     </parent>
     <groupId>org.sola.clients</groupId>
     <artifactId>web</artifactId>
     <packaging>war</packaging>
-    <version>v1502a</version>
+    <version>sl_v1503a</version>
     <name>Web</name>
     <repositories>
         <repository>

@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2015 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -40,7 +40,7 @@ import java.awt.font.TextAttribute;
 import java.awt.geom.Rectangle2D;
 import java.text.AttributedString;
 import javax.swing.*;
-import org.sola.clients.swing.common.LafManager;
+import org.sola.clients.swing.common.laf.LafManager;
 
 /**
  * Browse control has view of text field with browse button to pickup values.

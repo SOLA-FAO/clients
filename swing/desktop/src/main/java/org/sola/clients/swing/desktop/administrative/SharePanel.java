@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2015 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -32,7 +32,7 @@ import java.beans.PropertyChangeListener;
 import org.sola.clients.beans.administrative.RrrBean;
 import org.sola.clients.beans.administrative.RrrShareBean;
 import org.sola.clients.beans.party.PartySummaryBean;
-import org.sola.clients.swing.common.LafManager;
+import org.sola.clients.swing.common.laf.LafManager;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.desktop.MainForm;

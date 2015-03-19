@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2015 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -58,7 +58,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import org.sola.clients.swing.common.LafManager;
+import org.sola.clients.swing.common.laf.LafManager;
 import org.sola.clients.swing.ui.localization.LocalizationManager;
 import org.sola.clients.swing.ui.security.LoginPanel;
 import org.sola.common.WindowUtility;
@@ -111,9 +111,9 @@ public class AdminApplication {
                 // Select the Look and Feel Theme based on whether this is 
                 // the production version or the test version of SOLA. 
                 if (LocalizationManager.isProductionHost()) {
-                    LafManager.getInstance().setProperties("green");
+                    LafManager.getInstance().setProperties(LafManager.ADMIN_THEME);
                 } else {
-                    LafManager.getInstance().setProperties("autumn");
+                    LafManager.getInstance().setProperties(LafManager.GREEN_THEME);
                 }
 
                 final LoginForm loginForm = new LoginForm();

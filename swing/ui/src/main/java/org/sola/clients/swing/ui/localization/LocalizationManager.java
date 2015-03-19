@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2015 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -34,6 +34,8 @@ import java.util.prefs.Preferences;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.common.WindowUtility;
 import org.sola.common.logging.LogUtility;
+import org.sola.common.messaging.ClientMessage;
+import org.sola.common.messaging.MessageUtility;
 
 /**
  * Provides methods to manage languages and locales settings.
@@ -49,7 +51,6 @@ public class LocalizationManager {
     private static final String PRODUCTION_HOST_IP = "46.149.21.37";
     //private static final String PRODUCTION_HOST_NAME = "localhost";
     //private static final String PRODUCTION_HOST_IP = "127.0.0.1";
-    private static final String SOLA_VERSION = "v1502a";
 
     /**
      * Loads default language and country codes and sets {@link Locale} settings
@@ -84,7 +85,7 @@ public class LocalizationManager {
         Locale defaultLocale = Locale.getDefault(Locale.Category.FORMAT);
         return defaultLocale.getLanguage();
     }
-    
+
     /**
      * Returns locale code from default locale.
      *
@@ -143,9 +144,9 @@ public class LocalizationManager {
      * @return
      */
     public static String getVersionNumber() {
-        String result = "State Land Test " + SOLA_VERSION;
+        String result = MessageUtility.getLocalizedMessageText(ClientMessage.ADMIN_TEST_VERSION_NUMBER);
         if (isProductionHost()) {
-            result = "State Land " + SOLA_VERSION;
+            result = MessageUtility.getLocalizedMessageText(ClientMessage.ADMIN_PROD_VERSION_NUMBER);
         }
         return result;
     }

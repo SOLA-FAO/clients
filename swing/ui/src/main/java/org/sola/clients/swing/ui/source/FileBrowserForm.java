@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2015 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -138,6 +138,9 @@ public class FileBrowserForm extends javax.swing.JDialog {
                 localFileChooser.setCurrentDirectory(new File(preferredDir));
             }
         }
+		
+		WindowUtility.addEscapeListener(this, false);
+        this.setIconImage(WindowUtility.getTitleBarImage());
         customizeRemoteFileButtons();
     }
 

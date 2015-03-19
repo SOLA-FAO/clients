@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2015 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -29,6 +29,7 @@ package org.sola.clients.swing.desktop.source;
 
 import org.sola.clients.beans.source.PowerOfAttorneyBean;
 import org.sola.clients.beans.source.SourceBean;
+import org.sola.common.WindowUtility;
 
 /**
  * Captures Power of attorney person name and attorney name.
@@ -54,6 +55,7 @@ public class PowerOfAttorneyForm extends javax.swing.JDialog {
         powerOfAttorney = new PowerOfAttorneyBean();
         powerOfAttorney.setSource(source);
         initComponents();
+		postInit();
     }
 
     /**
@@ -64,6 +66,12 @@ public class PowerOfAttorneyForm extends javax.swing.JDialog {
         super(parent, modal);
         this.powerOfAttorney = powerOfAttorney;
         initComponents();
+		postInit();
+    }
+	
+	private void postInit() {
+        WindowUtility.addEscapeListener(this, false);
+        this.setIconImage(WindowUtility.getTitleBarImage());
     }
     
     public PowerOfAttorneyBean getPowerOfAttorney() {

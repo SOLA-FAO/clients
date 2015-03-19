@@ -1,6 +1,6 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
+ * Copyright (C) 2015 - Food and Agriculture Organization of the United Nations (FAO).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -27,22 +27,17 @@
  */
 package org.sola.clients.swing.desktop.reports;
 import java.awt.ComponentOrientation;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import javax.swing.JFormattedTextField;
 import javax.swing.JTextField;
 import net.sf.jasperreports.engine.JasperPrint;
-import org.sola.clients.beans.systematicregistration.*;
 import org.sola.clients.reports.ReportManager;
-import org.sola.clients.swing.common.LafManager;
 import org.sola.clients.swing.common.controls.CalendarForm;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.ui.reports.ReportViewerForm;
 import org.sola.clients.swing.common.utils.FormattersFactory;
-import org.sola.common.messaging.ClientMessage;
-import org.sola.common.messaging.MessageUtility;
 
 /**
  *
