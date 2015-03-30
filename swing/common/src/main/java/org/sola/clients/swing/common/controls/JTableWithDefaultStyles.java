@@ -42,6 +42,7 @@ import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -51,11 +52,26 @@ import javax.swing.table.TableRowSorter;
  */
 public class JTableWithDefaultStyles extends JTable {
 
+    private static class HeaderRenderer implements TableCellRenderer {
+        DefaultTableCellRenderer renderer;
+
+        public HeaderRenderer(JTable table) {
+            renderer = (DefaultTableCellRenderer) table.getTableHeader().getDefaultRenderer();
+            renderer.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(
+                JTable table, Object value, boolean isSelected,
+                boolean hasFocus, int row, int col) {
+            return renderer.getTableCellRendererComponent(
+                    table, value, isSelected, hasFocus, row, col);
+        }
+    }
+
     private Color scrollPaneBackgroundColor;
     private Color defaultBackground;
     private Color oddRowColor;
-    private Color selectedColor;
-    TableCellRenderer headerRenderer;
 
     /**
      * Class constructor. Initializes default values
@@ -74,14 +90,12 @@ public class JTableWithDefaultStyles extends JTable {
         Object newSelectedRow = "paleSolaGrey";
         Color newSelColor = UIManager.getColor(newSelectedRow);
         this.setSelectionBackground(newSelColor);
-        selectedColor = newSelColor;
         Object newSelForecolor = "List.foreground";
         Color newSelFore = UIManager.getColor(newSelForecolor);
         this.setSelectionForeground(newSelFore);
         this.setGridColor(newSelFore);
         this.tableHeader.setForeground(UIManager.getColor(newSecondRow));
-        Object newGrid = "Table.dropLineColor";
-        Color newGridColor = UIManager.getColor(newGrid);
+        this.tableHeader.setDefaultRenderer(new HeaderRenderer(this));
         this.setGridColor(newSelFore);
 
         scrollPaneBackgroundColor = Color.WHITE;
@@ -113,7 +127,7 @@ public class JTableWithDefaultStyles extends JTable {
         // Remove the input mapping for the Enter key so that it can be used to fire the default button on the form instead. 
         this.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "none");
     }
-    
+
     /**
      * Used to color alternative(even) rows.
      */

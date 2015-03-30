@@ -43,6 +43,7 @@ import org.sola.clients.beans.digitalarchive.FileBinaryBean;
 import org.sola.clients.beans.digitalarchive.FileInfoListBean;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
+import org.sola.clients.swing.common.utils.LocalizationTools;
 import org.sola.clients.swing.ui.ImagePreview;
 import org.sola.clients.swing.ui.renderers.DateTimeRenderer;
 import org.sola.clients.swing.ui.renderers.FileNameCellRenderer;
@@ -117,6 +118,7 @@ public class FileBrowserForm extends javax.swing.JDialog {
         super(parent, modal);
         this.attachAction = attachAction;
         initComponents();
+        LocalizationTools.setOrientation(this);
         postInit();
     }
 

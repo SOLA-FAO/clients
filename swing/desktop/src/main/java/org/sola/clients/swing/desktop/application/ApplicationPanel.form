@@ -727,7 +727,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="labLastName" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="171" max="32767" attributes="0"/>
+                                  <EmptySpace pref="167" max="32767" attributes="0"/>
                               </Group>
                               <Component id="txtLastName" alignment="0" pref="231" max="32767" attributes="0"/>
                           </Group>
@@ -783,7 +783,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
                                   <Component id="labAddress" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="181" max="32767" attributes="0"/>
+                                  <EmptySpace pref="177" max="32767" attributes="0"/>
                               </Group>
                               <Component id="txtAddress" alignment="0" max="32767" attributes="1"/>
                           </Group>
@@ -917,7 +917,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="labPhone" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="201" max="32767" attributes="0"/>
+                                  <EmptySpace pref="197" max="32767" attributes="0"/>
                               </Group>
                               <Component id="txtPhone" alignment="1" max="32767" attributes="1"/>
                           </Group>
@@ -1082,7 +1082,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
                                   <Component id="labPreferredWay" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="112" max="32767" attributes="0"/>
+                                  <EmptySpace pref="108" max="32767" attributes="0"/>
                               </Group>
                               <Component id="cbxCommunicationWay" alignment="0" max="32767" attributes="1"/>
                           </Group>
@@ -1328,7 +1328,7 @@
                           <Component id="cbxAgents" alignment="0" pref="231" max="32767" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="labAgents" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="202" max="32767" attributes="0"/>
+                              <EmptySpace pref="198" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -1383,7 +1383,7 @@
                           <Component id="txtStatus" alignment="0" pref="231" max="32767" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="labStatus" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="200" max="32767" attributes="0"/>
+                              <EmptySpace pref="196" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
