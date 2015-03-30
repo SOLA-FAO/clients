@@ -63,7 +63,7 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jLabel4" pref="151" max="32767" attributes="0"/>
+                  <Component id="jLabel4" max="32767" attributes="0"/>
                   <Component id="cbxDocType" alignment="0" max="32767" attributes="1"/>
               </Group>
             </DimensionLayout>

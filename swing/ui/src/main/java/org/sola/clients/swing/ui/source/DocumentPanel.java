@@ -41,6 +41,7 @@ import org.sola.clients.beans.source.SourceBean;
 import org.sola.clients.swing.common.controls.BrowseControlListener;
 import org.sola.clients.swing.common.controls.CalendarForm;
 import org.sola.clients.swing.common.utils.FormattersFactory;
+import org.sola.clients.swing.common.utils.LocalizationTools;
 import org.sola.clients.swing.ui.renderers.SimpleComboBoxRenderer;
 import org.sola.common.RolesConstants;
 
@@ -70,6 +71,7 @@ public class DocumentPanel extends javax.swing.JPanel {
         this.document = document;
         this.allowEditing = allowEditing;
         initComponents();
+        LocalizationTools.setOrientation(this);
         postInit();
     }
 
@@ -319,7 +321,7 @@ public class DocumentPanel extends javax.swing.JPanel {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
+            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(cbxDocType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
