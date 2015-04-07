@@ -929,6 +929,7 @@ public class PropertyPanel extends ContentPanel {
         if (rrrBean == null) {
             rrrBean = new RrrBean();
             rrrBean.setTypeCode(rrrTypes.getSelectedRrrType().getCode());
+            rrrBean.setPrimary(rrrTypes.getSelectedRrrType().isPrimary());
         }
 
         // Determine the panel to open for the Rrr
