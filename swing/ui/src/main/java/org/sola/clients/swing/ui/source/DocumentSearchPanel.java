@@ -1,32 +1,35 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2015 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2015 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.ui.source;
 
+import java.awt.Font;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.DefaultRowSorter;
@@ -41,13 +44,12 @@ import org.sola.clients.beans.source.SourceBean;
 import org.sola.clients.beans.source.SourceSearchParamsBean;
 import org.sola.clients.beans.source.SourceSearchResultBean;
 import org.sola.clients.beans.source.SourceSearchResultsListBean;
-import org.sola.clients.swing.common.laf.LafManager;
 import org.sola.clients.swing.common.controls.CalendarForm;
+import org.sola.clients.swing.common.laf.LafManager;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.clients.swing.common.utils.InternalNumberComparator;
 import org.sola.clients.swing.ui.renderers.AttachedDocumentCellRenderer;
-import org.sola.clients.swing.common.utils.FormattersFactory;
 import org.sola.common.RolesConstants;
 import org.sola.common.SOLAException;
 import org.sola.common.messaging.ClientMessage;
@@ -55,11 +57,12 @@ import org.sola.common.messaging.MessageUtility;
 
 /**
  * This panel provides parameterized source (documents) search capabilities.
- * <p>The following list of beans is used to bind the data on the form:<br />
+ * <p>
+ * The following list of beans is used to bind the data on the form:<br />
  * {@link SourceSearchResultsListBean},<br />{@link SourceSearchParamsBean}</p>
  */
 public class DocumentSearchPanel extends javax.swing.JPanel {
-
+    
     public static final String SELECTED_SOURCE = "selectedSource";
     public static final String EDIT_SOURCE = "editSource";
     public static final String SELECT_SOURCE = "selectSource";
@@ -72,12 +75,12 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
      */
     public DocumentSearchPanel() {
         initComponents();
+        
         customizeButtons();
         InternalNumberComparator comp = new InternalNumberComparator();
         DefaultRowSorter rowSorter = (DefaultRowSorter) this.tblSearchResults.getRowSorter();
         rowSorter.setComparator(1, comp);
-
-
+        
         cbxSourceType.setSelectedIndex(-1);
         searchResultsList.addPropertyChangeListener(new PropertyChangeListener() {
             @Override
@@ -89,63 +92,63 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
             }
         });
     }
-
+    
     private SourceTypeListBean createSourceTypes() {
         if (sourceTypesList == null) {
             sourceTypesList = new SourceTypeListBean(true);
         }
         return sourceTypesList;
     }
-
+    
     public boolean isShowPrintButton() {
         return btnPrint.isVisible();
     }
-
+    
     public void setShowPrintButton(boolean showPrintButton) {
         btnPrint.setVisible(showPrintButton);
         menuPrint.setVisible(showPrintButton);
     }
-
+    
     public boolean isShowSelectButton() {
         return btnSelect.isVisible();
     }
-
+    
     public void setShowSelectButton(boolean showSelectButton) {
         btnSelect.setVisible(showSelectButton);
         menuSelect.setVisible(showSelectButton);
     }
-
+    
     public boolean isShowAttachButton() {
         return btnAttach.isVisible();
     }
-
+    
     public void setShowAttachButton(boolean showAttachButton) {
         btnAttach.setVisible(showAttachButton);
         menuAttach.setVisible(showAttachButton);
     }
-
+    
     public boolean isShowEditButton() {
         return btnEdit.isVisible();
     }
-
+    
     public void setShowEditButton(boolean showEditButton) {
         btnEdit.setVisible(showEditButton);
         menuEdit.setVisible(showEditButton);
     }
-
+    
     public boolean isShowOpenApplicationButton() {
         return btnSelect.isVisible();
     }
-
+    
     public void setShowOpenApplicationButton(boolean show) {
         btnOpenApplication.setVisible(show);
         menuOpenApplication.setVisible(show);
     }
-
+    
     public boolean isShowViewButton() {
         return btnOpen.isVisible();
     }
-
+    
     public void setShowViewButton(boolean show) {
         btnOpen.setVisible(show);
         menuView.setVisible(show);
@@ -158,7 +161,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         boolean selected = searchResultsList.getSelectedSource() != null;
         boolean enabled = false;
         boolean hasRight = SecurityBean.isInRole(RolesConstants.SOURCE_SAVE);
-
+        
         if (selected
                 && searchResultsList.getSelectedSource().getArchiveDocumentId() != null
                 && !searchResultsList.getSelectedSource().getArchiveDocumentId().isEmpty()) {
@@ -185,7 +188,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         }
         menuOpenApplication.setEnabled(btnOpenApplication.isEnabled());
     }
-
+    
     private void clearForm() {
         cbxSourceType.setSelectedIndex(-1);
         txtDateFrom.setValue(null);
@@ -197,16 +200,16 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         txtOwnerName.setText(null);
         txtDescription.setText(null);
     }
-
+    
     private void showCalendar(JFormattedTextField dateField) {
         CalendarForm calendar = new CalendarForm(null, true, dateField);
         calendar.setVisible(true);
     }
-
+    
     public SourceSearchResultBean getSelectedSource() {
         return searchResultsList.getSelectedSource();
     }
-
+    
     private void print() {
         String titleRequested = null;
         SourceBean selectedSource = SourceBean.getSource(searchResultsList.getSelectedSource().getId());
@@ -217,13 +220,13 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
             openDocument();
         }
     }
-
+    
     private void openDocument() {
         if (searchResultsList.getSelectedSource().getArchiveDocumentId() == null
                 || searchResultsList.getSelectedSource().getArchiveDocumentId().isEmpty()) {
             return;
         }
-
+        
         SolaTask t = new SolaTask<Void, Void>() {
             @Override
             public Void doTask() {
@@ -240,30 +243,30 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         };
         TaskManager.getInstance().runTask(t);
     }
-
+    
     private void fireEditSource() {
         fireSourceEvent(EDIT_SOURCE);
     }
-
+    
     private void fireViewSource() {
         fireSourceEvent(VIEW_SOURCE);
     }
-
+    
     private void fireSourceEvent(final String evtName) {
         if (searchResultsList.getSelectedSource() == null) {
             return;
         }
-
+        
         SolaTask t = new SolaTask<Void, Void>() {
             SourceBean source;
-
+            
             @Override
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_DOCUMENT_GETTING));
                 source = SourceBean.getSource(searchResultsList.getSelectedSource().getId());
                 return null;
             }
-
+            
             @Override
             protected void taskDone() {
                 if (source == null) {
@@ -275,12 +278,12 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         };
         TaskManager.getInstance().runTask(t);
     }
-
+    
     private void fireOpenApplication() {
         if (searchResultsList.getSelectedSource() != null) {
             SolaTask t = new SolaTask<Void, Void>() {
                 ApplicationBean app;
-
+                
                 @Override
                 public Void doTask() {
                     setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_APP_GETTING));
@@ -288,7 +291,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
                             searchResultsList.getSelectedSource().getTransactionId());
                     return null;
                 }
-
+                
                 @Override
                 protected void taskDone() {
                     if (app == null) {
@@ -301,18 +304,18 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
             TaskManager.getInstance().runTask(t);
         }
     }
-
+    
     private void fireAttach() {
         if (searchResultsList.getSelectedSource().getArchiveDocumentId() != null
                 && !searchResultsList.getSelectedSource().getArchiveDocumentId().isEmpty()) {
             fireSourceEvent(ATTACH_SOURCE);
         }
     }
-
+    
     private void fireSelect() {
         fireSourceEvent(SELECT_SOURCE);
     }
-
+    
     public void searchDocuments() {
         SolaTask t = new SolaTask<Void, Void>() {
             @Override
@@ -321,7 +324,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
                 searchResultsList.searchSources(searchParams);
                 return null;
             }
-
+            
             @Override
             public void taskDone() {
                 if (searchResultsList.getSourceSearchResultsList().size() > 100) {
@@ -334,7 +337,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         };
         TaskManager.getInstance().runTask(t);
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -729,7 +732,6 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         jLabel4.setName("jLabel4"); // NOI18N
         jToolBar1.add(jLabel4);
 
-        lblResults.setFont(LafManager.getInstance().getLabFontBold());
         lblResults.setText(bundle.getString("DocumentSearchPanel.lblResults.text")); // NOI18N
         lblResults.setName("lblResults"); // NOI18N
         jToolBar1.add(lblResults);
@@ -879,7 +881,7 @@ public class DocumentSearchPanel extends javax.swing.JPanel {
         jPanel18.add(jPanel21);
 
         jPanel22.setName("jPanel22"); // NOI18N
-        jPanel22.setLayout(new java.awt.GridLayout());
+        jPanel22.setLayout(new java.awt.GridLayout(1, 0));
 
         jPanel12.setName(bundle.getString("DocumentSearchPanel.jPanel12.name")); // NOI18N
 

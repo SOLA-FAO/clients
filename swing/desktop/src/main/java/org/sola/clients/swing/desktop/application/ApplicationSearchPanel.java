@@ -411,7 +411,6 @@ public class ApplicationSearchPanel extends ContentPanel {
         labResults.setHorizontalAlignment(JLabel.LEADING);
         jToolBar1.add(labResults);
 
-        lblSearchResults.setFont(LafManager.getInstance().getLabFontBold());
         lblSearchResults.setText(bundle.getString("ApplicationSearchPanel.lblSearchResults.text")); // NOI18N
         lblSearchResults.setName("lblSearchResults"); // NOI18N
         jToolBar1.add(lblSearchResults);

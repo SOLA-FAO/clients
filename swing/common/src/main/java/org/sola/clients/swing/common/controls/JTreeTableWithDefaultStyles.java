@@ -47,6 +47,7 @@ import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.decorator.CompoundHighlighter;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 import org.jdesktop.swingx.treetable.TreeTableModel;
+import org.sola.clients.swing.common.laf.LafManager;
 
 /**
  * Customized SwingX JXTreeTable intended to look much like the SOLA
@@ -91,13 +92,10 @@ public class JTreeTableWithDefaultStyles extends JXTreeTable {
         selectForeground = UIManager.getColor(newSelForecolor);
         this.setSelectionForeground(selectForeground);
         this.setGridColor(selectForeground);
-
+        
         scrollPaneBackgroundColor = Color.WHITE;
         super.setBackground(scrollPaneBackgroundColor);
         this.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-        Object tableFont = "Table.font";
-        Font newTableFont = UIManager.getFont(tableFont);
-        this.setFont(newTableFont);
         this.setShowGrid(true);
         this.setRowSelectionAllowed(true);
         this.setColumnSelectionAllowed(false);

@@ -28,6 +28,7 @@
 package org.sola.clients.swing.ui;
 
 import java.awt.Color;
+import java.awt.Font;
 import javax.swing.UIManager;
 import org.sola.clients.swing.common.laf.LafManager;
 
@@ -60,11 +61,9 @@ public class GroupPanel extends javax.swing.JPanel {
      */
     private void customizeComponents() {
 //    LABELS    
-        LafManager.getInstance().setLabProperties(lblGroupTitle);
         Object newForeground = "textHighlight";
         Color newForegroundColor = UIManager.getColor(newForeground);
-        lblGroupTitle.setForeground(newForegroundColor);
-        lblGroupTitle.setFont(lblGroupTitle.getFont().deriveFont(lblGroupTitle.getFont().getStyle() | java.awt.Font.BOLD, lblGroupTitle.getFont().getSize()));
+        lblGroupTitle.setFont(LafManager.getUiFont().deriveFont(Font.BOLD)); 
         Object newSelectedRow = "SolaGroup";
         Color newSelColor = UIManager.getColor(newSelectedRow);
         this.setBackground(newSelColor);
@@ -93,7 +92,7 @@ public class GroupPanel extends javax.swing.JPanel {
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/Bundle"); // NOI18N
         setToolTipText(bundle.getString("GroupPanel.toolTipText")); // NOI18N
 
-        lblGroupTitle.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblGroupTitle.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblGroupTitle.setForeground(new java.awt.Color(255, 255, 255));
         lblGroupTitle.setText(bundle.getString("GroupPanel.lblGroupTitle.text")); // NOI18N
         lblGroupTitle.setName("lblGroupTitle"); // NOI18N
@@ -105,7 +104,7 @@ public class GroupPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblGroupTitle)
-                .addContainerGap(305, Short.MAX_VALUE))
+                .addContainerGap(316, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

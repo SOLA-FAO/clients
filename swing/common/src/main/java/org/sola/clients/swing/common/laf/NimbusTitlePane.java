@@ -316,7 +316,7 @@ public class NimbusTitlePane extends JComponent {
      * Installs the fonts and necessary properties on the NimbusTitlePane.
      */
     private void installDefaults() {
-        setFont(UIManager.getFont("InternalFrame.titleFont", getLocale()));
+        setFont(LafManager.getUiFont().deriveFont(Font.BOLD));
 //        setPreferredSize(UIManager.getDimension("FrameTitlePane.dimension"));
         UIManager.getDimension("FrameTitlePane.dimension").setSize(63, 36);
          setPreferredSize(UIManager.getDimension("FrameTitlePane.dimension"));

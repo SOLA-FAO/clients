@@ -447,7 +447,6 @@ public class MainForm extends javax.swing.JFrame {
 
         taskPanel1.setName("taskPanel1"); // NOI18N
 
-        jLabel1.setFont(LafManager.getInstance().getLabFontBold());
         jLabel1.setText(bundle.getString("MainForm.jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
 

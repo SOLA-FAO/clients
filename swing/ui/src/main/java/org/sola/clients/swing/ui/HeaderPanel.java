@@ -28,9 +28,11 @@
 package org.sola.clients.swing.ui;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 import javax.swing.UIManager;
+import org.sola.clients.swing.common.laf.LafManager;
 
 /**
  * Used to display headers.
@@ -55,6 +57,7 @@ public class HeaderPanel extends javax.swing.JPanel {
     public HeaderPanel(String title) {
         initComponents();
         lblHeaderTitle.setText(title);
+        lblHeaderTitle.setFont(LafManager.getUiFont(6).deriveFont(Font.BOLD)); 
         Object newSelectedRow = "SolaHeader";
         Color newSelColor = UIManager.getColor(newSelectedRow);
         this.setBackground(newSelColor);

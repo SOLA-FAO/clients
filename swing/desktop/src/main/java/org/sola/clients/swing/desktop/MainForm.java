@@ -1,34 +1,37 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2015 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2015 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.desktop;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -81,7 +84,7 @@ import org.sola.services.boundary.wsclients.WSManager;
  * Main form of the application.
  */
 public class MainForm extends javax.swing.JFrame {
-
+    
     public static final String MAIN_FORM_HEIGHT = "mainFormHeight";
     public static final String MAIN_FORM_WIDTH = "mainFormWitdh";
     public static final String MAIN_FORM_TOP = "mainFormTop";
@@ -93,7 +96,7 @@ public class MainForm extends javax.swing.JFrame {
     private static MainForm INSTANCE;
     // Create a variable holding the listener
     KeyAdapter keyAdapterAppSearch = new KeyAdapter() {
-
+        
         @Override
         public void keyPressed(KeyEvent e) {
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -103,7 +106,7 @@ public class MainForm extends javax.swing.JFrame {
     };
     // Create a variable holding the listener
     KeyAdapter keyAdapterDocSearch = new KeyAdapter() {
-
+        
         @Override
         public void keyPressed(KeyEvent e) {
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -113,7 +116,7 @@ public class MainForm extends javax.swing.JFrame {
     };
     // Create a variable holding the listener
     KeyAdapter keyAdapterBaUnitSearch = new KeyAdapter() {
-
+        
         @Override
         public void keyPressed(KeyEvent e) {
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -123,7 +126,7 @@ public class MainForm extends javax.swing.JFrame {
     };
     // Create a variable holding the listener
     KeyAdapter keyAdapterPartySearch = new KeyAdapter() {
-
+        
         @Override
         public void keyPressed(KeyEvent e) {
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -131,35 +134,35 @@ public class MainForm extends javax.swing.JFrame {
             }
         }
     };
-
+    
     public ApplicationSearchPanel getSearchApplicationPanel() {
         return searchApplicationPanel;
     }
-
+    
     public void setSearchApplicationPanel(ApplicationSearchPanel searchApplicationPanel) {
         this.searchApplicationPanel = searchApplicationPanel;
     }
-
+    
     public BaUnitSearchPanel getSearchBaUnitPanel() {
         return searchBaUnitPanel;
     }
-
+    
     public void setSearchBaUnitPanel(BaUnitSearchPanel searchBaUnitPanel) {
         this.searchBaUnitPanel = searchBaUnitPanel;
     }
-
+    
     public DocumentSearchForm getSearchDocPanel() {
         return searchDocPanel;
     }
-
+    
     public void setSearchDocPanel(DocumentSearchForm searchDocPanel) {
         this.searchDocPanel = searchDocPanel;
     }
-
+    
     public PartySearchPanelForm getSearchPartyPanel() {
         return searchPartyPanel;
     }
-
+    
     public void setSearchPartyPanel(PartySearchPanelForm searchPartyPanel) {
         this.searchPartyPanel = searchPartyPanel;
     }
@@ -179,17 +182,17 @@ public class MainForm extends javax.swing.JFrame {
      */
     private MainForm() {
         this.setIconImage(WindowUtility.getTitleBarImage());
-
+        
         initComponents();
         LocalizationTools.setOrientation(this);
         this.setTitle(this.getTitle() + LocalizationManager.getVersionNumber());
         this.addWindowListener(new java.awt.event.WindowAdapter() {
-
+            
             @Override
             public void windowOpened(WindowEvent e) {
                 postInit();
             }
-
+            
             @Override
             public void windowClosing(WindowEvent e) {
                 preClose();
@@ -217,7 +220,7 @@ public class MainForm extends javax.swing.JFrame {
         btnOpenBaUnitSearch.setEnabled(SecurityBean.isInRole(RolesConstants.ADMINISTRATIVE_BA_UNIT_SEARCH));
         btnDocumentSearch.setEnabled(SecurityBean.isInRole(RolesConstants.SOURCE_SEARCH));
         btnSetPassword.setEnabled(SecurityBean.isInRole(RolesConstants.ADMIN_CHANGE_PASSWORD));
-
+        
         menuSearchApplication.setEnabled(btnSearchApplications.isEnabled());
         menuNewApplication.setEnabled(btnNewApplication.isEnabled());
         menuBaUnitSearch.setEnabled(btnOpenBaUnitSearch.isEnabled());
@@ -226,7 +229,7 @@ public class MainForm extends javax.swing.JFrame {
         menuLodgementReport.setEnabled(SecurityBean.isInRole(RolesConstants.REPORTS_VIEW));
         menuDocumentSearch.setEnabled(btnDocumentSearch.isEnabled());
         menuFlushCache.setVisible(SecurityBean.isInRole(RolesConstants.ADMIN_MANAGE_REFDATA));
-
+        
         if (SecurityBean.isPasswordChangeReqd(false)) {
             // Load the user profile page
             showPasswordPanel();
@@ -236,8 +239,30 @@ public class MainForm extends javax.swing.JFrame {
                 openDashBoard(true);
             }
         }
-
+        
         txtUserName.setText(SecurityBean.getCurrentUser().getUserName());
+        showTextSize();        
+    }
+    
+    /**
+     * Indicate which text size is currently being used by the application by
+     * checking the appropriate Text Size submenu option.
+     */
+    private void showTextSize() {
+        int size = LafManager.getUiFontSize();
+        switch (size) {
+            case LafManager.FONTSIZE_EXTRA_LARGE:
+                menuExtraLarge.setSelected(true);
+                break;            
+            case LafManager.FONTSIZE_LARGE:
+                menuLarge.setSelected(true);
+                break;
+            case LafManager.FONTSIZE_MEDIUM:
+                menuMedium.setSelected(true);
+                break;
+            default:
+                menuNormal.setSelected(true);
+        }
     }
 
     /**
@@ -245,13 +270,13 @@ public class MainForm extends javax.swing.JFrame {
      * users preferences.
      */
     private void configureForm() {
-
+        
         int height = this.getHeight();
         int width = this.getWidth();
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         int x = ((dim.width) / 2) - (width / 2);
         int y = ((dim.height) / 2) - (height / 2);
-
+        
         if (WindowUtility.hasUserPreferences()) {
             // Set the size of the screen
             Preferences prefs = WindowUtility.getUserPreferences();
@@ -277,10 +302,10 @@ public class MainForm extends javax.swing.JFrame {
             this.setSize(width, height);
         }
         this.setLocation(x, y);
-
+        
         this.applicationsMain.setBackground(Color.white);
         this.applicationsMain.setUI((ToolBarUI) UIManager.getUI(this.applicationsMain));
-
+        
         this.setTitle(WindowUtility.formatFrameTitle(this.getTitle()));
     }
 
@@ -297,22 +322,22 @@ public class MainForm extends javax.swing.JFrame {
             prefs.put(MAIN_FORM_LEFT, Integer.toString(this.getX()));
         }
     }
-
+    
     private void setAllLogLevel() {
         LogUtility.setLogLevel(Level.ALL);
     }
-
+    
     private void setDefaultLogLevel() {
         LogUtility.setLogLevel(Level.INFO);
     }
-
+    
     private void setOffLogLevel() {
         LogUtility.setLogLevel(Level.OFF);
     }
-
+    
     private void openMap() {
         SolaTask t = new SolaTask<Void, Void>() {
-
+            
             @Override
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_MAP));
@@ -326,10 +351,10 @@ public class MainForm extends javax.swing.JFrame {
         };
         TaskManager.getInstance().runTask(t);
     }
-
+    
     private void openMapPublicDisplay() {
         SolaTask t = new SolaTask<Void, Void>() {
-
+            
             @Override
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_MAP));
@@ -343,10 +368,10 @@ public class MainForm extends javax.swing.JFrame {
         };
         TaskManager.getInstance().runTask(t);
     }
-
+    
     private void openMapSpatialUnitGroupEditor() {
         SolaTask t = new SolaTask<Void, Void>() {
-
+            
             @Override
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_MAP));
@@ -360,10 +385,10 @@ public class MainForm extends javax.swing.JFrame {
         };
         TaskManager.getInstance().runTask(t);
     }
-
+    
     private void openMapSpatialUnitEditor() {
         SolaTask t = new SolaTask<Void, Void>() {
-
+            
             @Override
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_MAP));
@@ -377,10 +402,10 @@ public class MainForm extends javax.swing.JFrame {
         };
         TaskManager.getInstance().runTask(t);
     }
-
+    
     private void searchApplications() {
         SolaTask t = new SolaTask<Void, Void>() {
-
+            
             @Override
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_APPSEARCH));
@@ -388,25 +413,25 @@ public class MainForm extends javax.swing.JFrame {
                     ApplicationSearchPanel searchApplicationPanel = new ApplicationSearchPanel();
                     setSearchApplicationPanel(searchApplicationPanel);
                     pnlContent.addPanel(searchApplicationPanel, MainContentPanel.CARD_APPSEARCH);
-
+                    
                 }
-
+                
                 pnlContent.showPanel(MainContentPanel.CARD_APPSEARCH);
                 return null;
             }
-
+            
             @Override
             protected void taskDone() {
                 addKeyListeners(MainContentPanel.CARD_APPSEARCH);
             }
         };
         TaskManager.getInstance().runTask(t);
-
+        
     }
-
+    
     private void searchBaUnit() {
         SolaTask t = new SolaTask<Void, Void>() {
-
+            
             @Override
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PROPERTYSEARCH));
@@ -418,7 +443,7 @@ public class MainForm extends javax.swing.JFrame {
                 pnlContent.showPanel(MainContentPanel.CARD_BAUNIT_SEARCH);
                 return null;
             }
-
+            
             @Override
             protected void taskDone() {
                 addKeyListeners(MainContentPanel.CARD_BAUNIT_SEARCH);
@@ -426,10 +451,10 @@ public class MainForm extends javax.swing.JFrame {
         };
         TaskManager.getInstance().runTask(t);
     }
-
+    
     private void searchDocuments() {
         SolaTask t = new SolaTask<Void, Void>() {
-
+            
             @Override
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_DOCUMENTSEARCH));
@@ -441,7 +466,7 @@ public class MainForm extends javax.swing.JFrame {
                 pnlContent.showPanel(MainContentPanel.CARD_DOCUMENT_SEARCH);
                 return null;
             }
-
+            
             @Override
             protected void taskDone() {
                 addKeyListeners(MainContentPanel.CARD_DOCUMENT_SEARCH);
@@ -449,10 +474,10 @@ public class MainForm extends javax.swing.JFrame {
         };
         TaskManager.getInstance().runTask(t);
     }
-
+    
     private void openSearchParties() {
         SolaTask t = new SolaTask<Void, Void>() {
-
+            
             @Override
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_PERSONSEARCH));
@@ -465,7 +490,7 @@ public class MainForm extends javax.swing.JFrame {
                 }
                 return null;
             }
-
+            
             @Override
             protected void taskDone() {
                 addKeyListeners(MainContentPanel.CARD_SEARCH_PERSONS);
@@ -473,9 +498,9 @@ public class MainForm extends javax.swing.JFrame {
         };
         TaskManager.getInstance().runTask(t);
     }
-
+    
     private void addKeyListeners(final String card) {
-
+        
         if (card.contentEquals(MainContentPanel.CARD_APPSEARCH)) {
             pnlContent.addKeyListener(keyAdapterAppSearch);
             pnlContent.removeKeyListener(keyAdapterDocSearch);
@@ -493,32 +518,32 @@ public class MainForm extends javax.swing.JFrame {
             pnlContent.removeKeyListener(keyAdapterDocSearch);
             pnlContent.removeKeyListener(keyAdapterAppSearch);
             pnlContent.removeKeyListener(keyAdapterPartySearch);
-
+            
         }
         if (card.contentEquals(MainContentPanel.CARD_SEARCH_PERSONS)) {
             pnlContent.addKeyListener(keyAdapterPartySearch);
             pnlContent.removeKeyListener(keyAdapterDocSearch);
             pnlContent.removeKeyListener(keyAdapterBaUnitSearch);
             pnlContent.removeKeyListener(keyAdapterAppSearch);
-
+            
         }
         pnlContent.setFocusable(true);
         pnlContent.requestFocusInWindow();
-
+        
     }
-
+    
     public void launchAppSearchMethod(final ApplicationSearchPanel panel) {
         panel.clickFind();
     }
-
+    
     public void launchDocSearchMethod(DocumentSearchForm panel) {
         panel.clickFind();
     }
-
+    
     public void launchBaUnitSearchMethod(BaUnitSearchPanel panel) {
         panel.clickFind();
     }
-
+    
     public void launchPartySearchMethod(PartySearchPanelForm panel) {
         panel.clickFind();
     }
@@ -535,17 +560,17 @@ public class MainForm extends javax.swing.JFrame {
         }
         pnlContent.showPanel(MainContentPanel.CARD_DASHBOARD);
     }
-
+    
     public MainContentPanel getMainContentPanel() {
         return pnlContent;
     }
-
+    
     private void showAboutBox() {
         AboutForm aboutBox = new AboutForm(this);
         aboutBox.setLocationRelativeTo(this);
         aboutBox.setVisible(true);
     }
-
+    
     private void setLanguage(String code, String country) {
         LocalizationManager.setLanguage(code, country);
         MessageUtility.displayMessage(ClientMessage.GENERAL_UPDATE_LANG);
@@ -610,7 +635,7 @@ public class MainForm extends javax.swing.JFrame {
      */
     public void openApplicationForm(final ApplicationBean app) {
         SolaTask t = new SolaTask<Void, Void>() {
-
+            
             @Override
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_APP));
@@ -629,7 +654,7 @@ public class MainForm extends javax.swing.JFrame {
      */
     public void openApplicationForm(final String id) {
         SolaTask t = new SolaTask<Void, Void>() {
-
+            
             @Override
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_APP));
@@ -646,7 +671,7 @@ public class MainForm extends javax.swing.JFrame {
      */
     public void openApplicationForm() {
         SolaTask t = new SolaTask<Void, Void>() {
-
+            
             @Override
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_APPNEW));
@@ -657,7 +682,7 @@ public class MainForm extends javax.swing.JFrame {
         };
         TaskManager.getInstance().runTask(t);
     }
-
+    
     private void showRightsExportPanel() {
         if (getMainContentPanel().isPanelOpened(MainContentPanel.CARD_RIGHT_EXPORT)) {
             getMainContentPanel().showPanel(MainContentPanel.CARD_RIGHT_EXPORT);
@@ -674,7 +699,7 @@ public class MainForm extends javax.swing.JFrame {
      */
     public void openDocumentViewForm(final PowerOfAttorneyBean powerOfAttorney) {
         SolaTask t = new SolaTask<Void, Void>() {
-
+            
             @Override
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_DOCUMENT_FORM_OPENING));
@@ -692,36 +717,36 @@ public class MainForm extends javax.swing.JFrame {
     private void reloadMainForm() {
         INSTANCE = new MainForm();
         this.dispose();
-
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
-
+            
             @Override
             public void run() {
                 MainForm.getInstance().setVisible(true);
             }
         });
     }
-
+    
     private void openLodgementReportParamsForm() {
         LodgementReportParamsForm reportDateChooser = new LodgementReportParamsForm(this, true);
         reportDateChooser.setVisible(true);
     }
-
+    
     private void openSysRegListingParamsForm(String report) {
         SysRegListingParamsForm reportDateChooser = new SysRegListingParamsForm(this, true, report);
         reportDateChooser.setVisible(true);
     }
-
+    
     private void openSysRegCertificatesParamsForm() {
         SysRegCertParamsForm certificateGenerator = new SysRegCertParamsForm(null, true);
         certificateGenerator.setVisible(true);
     }
-
+    
     private void openSysRegManagementParamsForm(String whichReport) {
         SysRegManagementParamsForm managementGenerator = new SysRegManagementParamsForm(this, true, whichReport);
         managementGenerator.setVisible(true);
     }
-
+    
     private void editPassword() {
         showPasswordPanel();
     }
@@ -731,7 +756,7 @@ public class MainForm extends javax.swing.JFrame {
      */
     private void showPasswordPanel() {
         SolaTask t = new SolaTask<Void, Void>() {
-
+            
             @Override
             public Void doTask() {
 //                setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_OPEN_MAP));
@@ -745,16 +770,18 @@ public class MainForm extends javax.swing.JFrame {
         };
         TaskManager.getInstance().runTask(t);
     }
-
+    
     private void loadLanguages() {
         LanguageListBean langs = new LanguageListBean(false, false);
         menuLanguage.removeAll();
-
+        
         for (LanguageBean lang : langs.getLanguages()) {
             final String langCode = lang.getLanguageCode();
             final String localeCode = lang.getCode();
-
+            
             JCheckBoxMenuItem menuLang = new JCheckBoxMenuItem();
+            menuLang.setFont(Font.decode(LafManager.getUiFontForLanugage(langCode)));
+            
             menuLang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/flags/" + langCode + ".png")));
             menuLang.setText(lang.getDisplayValue());
             if (LocalizationManager.getLanguage().equalsIgnoreCase(langCode)) {
@@ -762,7 +789,7 @@ public class MainForm extends javax.swing.JFrame {
             }
             //menuLang.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/confirm.png")));
             menuLang.addActionListener(new java.awt.event.ActionListener() {
-
+                
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     ((JCheckBoxMenuItem) evt.getSource()).setSelected(true);
                     selectLanguage(localeCode);
@@ -771,19 +798,19 @@ public class MainForm extends javax.swing.JFrame {
             menuLanguage.add(menuLang);
         }
     }
-
+    
     private void selectLanguage(String locale) {
         if (LocalizationManager.getLocaleCode().equals(locale)) {
             return;
         }
-
+        
         if (MessageUtility.displayMessage(ClientMessage.CONFIRM_CHANGE_LANGUAGE) == MessageUtility.BUTTON_ONE) {
             LocalizationManager.setLanguage(LocalizationManager.getLangCode(locale),
                     LocalizationManager.getCountryCode(locale));
             reloadMainForm();
         }
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -815,6 +842,11 @@ public class MainForm extends javax.swing.JFrame {
         menuAllLogLevel = new javax.swing.JMenuItem();
         menuDefaultLogLevel = new javax.swing.JMenuItem();
         menuOffLogLevel = new javax.swing.JMenuItem();
+        menuTextSize = new javax.swing.JMenu();
+        menuNormal = new javax.swing.JCheckBoxMenuItem();
+        menuMedium = new javax.swing.JCheckBoxMenuItem();
+        menuLarge = new javax.swing.JCheckBoxMenuItem();
+        menuExtraLarge = new javax.swing.JCheckBoxMenuItem();
         menuApplications = new javax.swing.JMenu();
         menuNewApplication = new javax.swing.JMenuItem();
         menuSearch = new javax.swing.JMenu();
@@ -836,7 +868,6 @@ public class MainForm extends javax.swing.JFrame {
 
         applicationsMain.setFloatable(false);
         applicationsMain.setRollover(true);
-        applicationsMain.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         applicationsMain.setMaximumSize(new java.awt.Dimension(32769, 32769));
         applicationsMain.setMinimumSize(new java.awt.Dimension(90, 45));
         applicationsMain.setPreferredSize(new java.awt.Dimension(980, 45));
@@ -943,7 +974,6 @@ public class MainForm extends javax.swing.JFrame {
         statusPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         statusPanel.setPreferredSize(new java.awt.Dimension(1024, 24));
 
-        labStatus.setFont(LafManager.getInstance().getLabFontBold());
         labStatus.setText(bundle.getString("MainForm.labStatus.text")); // NOI18N
 
         txtUserName.setText(bundle.getString("MainForm.txtUserName.text")); // NOI18N
@@ -966,8 +996,6 @@ public class MainForm extends javax.swing.JFrame {
             .addComponent(txtUserName, javax.swing.GroupLayout.DEFAULT_SIZE, 20, Short.MAX_VALUE)
             .addComponent(taskPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 20, Short.MAX_VALUE)
         );
-
-        menuBar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
 
         fileMenu.setText(bundle.getString("MainForm.fileMenu.text")); // NOI18N
 
@@ -1022,6 +1050,42 @@ public class MainForm extends javax.swing.JFrame {
         menuLogLevel.add(menuOffLogLevel);
 
         menuView.add(menuLogLevel);
+
+        menuTextSize.setText(bundle.getString("MainForm.menuTextSize.text")); // NOI18N
+
+        menuNormal.setText(bundle.getString("MainForm.menuNormal.text")); // NOI18N
+        menuNormal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuNormalActionPerformed(evt);
+            }
+        });
+        menuTextSize.add(menuNormal);
+
+        menuMedium.setText(bundle.getString("MainForm.menuMedium.text")); // NOI18N
+        menuMedium.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuMediumActionPerformed(evt);
+            }
+        });
+        menuTextSize.add(menuMedium);
+
+        menuLarge.setText(bundle.getString("MainForm.menuLarge.text")); // NOI18N
+        menuLarge.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuLargeActionPerformed(evt);
+            }
+        });
+        menuTextSize.add(menuLarge);
+
+        menuExtraLarge.setText(bundle.getString("MainForm.menuExtraLarge.text")); // NOI18N
+        menuExtraLarge.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuExtraLargeActionPerformed(evt);
+            }
+        });
+        menuTextSize.add(menuExtraLarge);
+
+        menuView.add(menuTextSize);
 
         menuBar.add(menuView);
 
@@ -1207,7 +1271,7 @@ public class MainForm extends javax.swing.JFrame {
     private void btnManagePartiesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManagePartiesActionPerformed
         openSearchParties();
     }//GEN-LAST:event_btnManagePartiesActionPerformed
-
+    
     private void openSysRegGenderReport(java.awt.event.ActionEvent evt) {
         SysRegManagementParamsForm managementGenerator = new SysRegManagementParamsForm(this, true, "sysRegGenderBean");
         managementGenerator.clickView(evt);
@@ -1245,6 +1309,30 @@ public class MainForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_menuFlushCacheActionPerformed
 
+    private void menuExtraLargeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuExtraLargeActionPerformed
+        LafManager.setUiFontSize(LafManager.FONTSIZE_EXTRA_LARGE);
+        LafManager.getInstance().applyTheme();
+        reloadMainForm();
+    }//GEN-LAST:event_menuExtraLargeActionPerformed
+
+    private void menuLargeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuLargeActionPerformed
+        LafManager.setUiFontSize(LafManager.FONTSIZE_LARGE);
+        LafManager.getInstance().applyTheme();
+        reloadMainForm();
+    }//GEN-LAST:event_menuLargeActionPerformed
+
+    private void menuMediumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuMediumActionPerformed
+        LafManager.setUiFontSize(LafManager.FONTSIZE_MEDIUM);
+        LafManager.getInstance().applyTheme();
+        reloadMainForm();
+    }//GEN-LAST:event_menuMediumActionPerformed
+
+    private void menuNormalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuNormalActionPerformed
+        LafManager.setUiFontSize(LafManager.FONTSIZE_NORMAL);
+        LafManager.getInstance().applyTheme();
+        reloadMainForm();
+    }//GEN-LAST:event_menuNormalActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToolBar applicationsMain;
     private javax.swing.JButton btnDocumentSearch;
@@ -1267,18 +1355,23 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem menuDefaultLogLevel;
     private javax.swing.JMenuItem menuDocumentSearch;
+    private javax.swing.JCheckBoxMenuItem menuExtraLarge;
     private javax.swing.JMenuItem menuFlushCache;
     private javax.swing.JMenu menuLanguage;
+    private javax.swing.JCheckBoxMenuItem menuLarge;
     private javax.swing.JMenuItem menuLodgementReport;
     private javax.swing.JMenu menuLogLevel;
     private javax.swing.JMenu menuMap;
+    private javax.swing.JCheckBoxMenuItem menuMedium;
     private javax.swing.JMenuItem menuNewApplication;
+    private javax.swing.JCheckBoxMenuItem menuNormal;
     private javax.swing.JMenuItem menuOffLogLevel;
     private javax.swing.JMenuItem menuPersons;
     private javax.swing.JMenu menuReportsDesktop;
     private javax.swing.JMenu menuSearch;
     private javax.swing.JMenuItem menuSearchApplication;
     private javax.swing.JMenuItem menuShowMap;
+    private javax.swing.JMenu menuTextSize;
     private javax.swing.JMenu menuView;
     private org.sola.clients.swing.ui.MainContentPanel pnlContent;
     private javax.swing.JPanel statusPanel;

@@ -1145,7 +1145,6 @@ public class ApplicationPanel extends ContentPanel {
         jToolBar3.setRollover(true);
         jToolBar3.setName("jToolBar3"); // NOI18N
 
-        LafManager.getInstance().setBtnProperties(btnSave);
         btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/save.png"))); // NOI18N
         btnSave.setText(bundle.getString("ApplicationPanel.btnSave.text")); // NOI18N
         btnSave.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -1158,7 +1157,6 @@ public class ApplicationPanel extends ContentPanel {
         });
         jToolBar3.add(btnSave);
 
-        LafManager.getInstance().setBtnProperties(btnCalculateFee);
         btnCalculateFee.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/calculate.png"))); // NOI18N
         btnCalculateFee.setText(bundle.getString("ApplicationPanel.btnCalculateFee.text")); // NOI18N
         btnCalculateFee.setName("btnCalculateFee"); // NOI18N
@@ -1172,7 +1170,6 @@ public class ApplicationPanel extends ContentPanel {
         btnValidate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/validation.png"))); // NOI18N
         btnValidate.setText(bundle.getString("ApplicationPanel.btnValidate.text")); // NOI18N
         btnValidate.setName("btnValidate"); // NOI18N
-        btnValidate.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
         btnValidate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnValidateActionPerformed(evt);
@@ -1258,9 +1255,6 @@ public class ApplicationPanel extends ContentPanel {
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, appBean, org.jdesktop.beansbinding.ELProperty.create("${contactPerson.name}"), txtFirstName, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        LafManager.getInstance().setTxtProperties(txtFirstName);
-
-        LafManager.getInstance().setLabProperties(labName);
         labName.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         labName.setLabelFor(txtFirstName);
         labName.setText(bundle.getString("ApplicationPanel.labName.text")); // NOI18N
@@ -1289,7 +1283,6 @@ public class ApplicationPanel extends ContentPanel {
 
         jPanel4.setName("jPanel4"); // NOI18N
 
-        LafManager.getInstance().setLabProperties(labLastName);
         labLastName.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         labLastName.setText(bundle.getString("ApplicationPanel.labLastName.text")); // NOI18N
         labLastName.setIconTextGap(1);
@@ -1299,9 +1292,6 @@ public class ApplicationPanel extends ContentPanel {
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, appBean, org.jdesktop.beansbinding.ELProperty.create("${contactPerson.lastName}"), txtLastName, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
-
-        txtLastName.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-        txtLastName.setHorizontalAlignment(JTextField.LEADING);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -1330,10 +1320,6 @@ public class ApplicationPanel extends ContentPanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, appBean, org.jdesktop.beansbinding.ELProperty.create("${contactPerson.address.description}"), txtAddress, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        txtAddress.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-        txtAddress.setHorizontalAlignment(JTextField.LEADING);
-
-        LafManager.getInstance().setLabProperties(labAddress);
         labAddress.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         labAddress.setText(bundle.getString("ApplicationPanel.labAddress.text")); // NOI18N
         labAddress.setIconTextGap(1);
@@ -1400,7 +1386,6 @@ public class ApplicationPanel extends ContentPanel {
 
         jPanel7.setName("jPanel7"); // NOI18N
 
-        LafManager.getInstance().setLabProperties(labPhone);
         labPhone.setText(bundle.getString("ApplicationPanel.labPhone.text")); // NOI18N
         labPhone.setName("labPhone"); // NOI18N
 
@@ -1409,8 +1394,6 @@ public class ApplicationPanel extends ContentPanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, appBean, org.jdesktop.beansbinding.ELProperty.create("${contactPerson.phone}"), txtPhone, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        txtPhone.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-        txtPhone.setHorizontalAlignment(JTextField.LEADING);
         txtPhone.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtPhoneFocusLost(evt);
@@ -1439,7 +1422,6 @@ public class ApplicationPanel extends ContentPanel {
 
         jPanel8.setName("jPanel8"); // NOI18N
 
-        LafManager.getInstance().setLabProperties(labFax);
         labFax.setText(bundle.getString("ApplicationPanel.labFax.text")); // NOI18N
         labFax.setName("labFax"); // NOI18N
 
@@ -1448,8 +1430,6 @@ public class ApplicationPanel extends ContentPanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, appBean, org.jdesktop.beansbinding.ELProperty.create("${contactPerson.fax}"), txtFax, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        txtFax.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-        txtFax.setHorizontalAlignment(JTextField.LEADING);
         txtFax.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtFaxFocusLost(evt);
@@ -1478,7 +1458,6 @@ public class ApplicationPanel extends ContentPanel {
 
         jPanel9.setName("jPanel9"); // NOI18N
 
-        LafManager.getInstance().setLabProperties(labEmail);
         labEmail.setText(bundle.getString("ApplicationPanel.labEmail.text")); // NOI18N
         labEmail.setName("labEmail"); // NOI18N
 
@@ -1487,8 +1466,6 @@ public class ApplicationPanel extends ContentPanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, appBean, org.jdesktop.beansbinding.ELProperty.create("${contactPerson.email}"), txtEmail, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        txtEmail.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-        txtEmail.setHorizontalAlignment(JTextField.LEADING);
         txtEmail.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtEmailFocusLost(evt);
@@ -1517,11 +1494,9 @@ public class ApplicationPanel extends ContentPanel {
 
         jPanel10.setName("jPanel10"); // NOI18N
 
-        LafManager.getInstance().setLabProperties(labPreferredWay);
         labPreferredWay.setText(bundle.getString("ApplicationPanel.labPreferredWay.text")); // NOI18N
         labPreferredWay.setName("labPreferredWay"); // NOI18N
 
-        LafManager.getInstance().setCmbProperties(cbxCommunicationWay);
         cbxCommunicationWay.setMaximumRowCount(9);
         cbxCommunicationWay.setName("cbxCommunicationWay"); // NOI18N
         cbxCommunicationWay.setRenderer(new SimpleComboBoxRenderer("getDisplayValue"));
@@ -1531,8 +1506,6 @@ public class ApplicationPanel extends ContentPanel {
         bindingGroup.addBinding(jComboBoxBinding);
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, appBean, org.jdesktop.beansbinding.ELProperty.create("${contactPerson.preferredCommunication}"), cbxCommunicationWay, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
-
-        cbxCommunicationWay.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
@@ -1618,7 +1591,6 @@ public class ApplicationPanel extends ContentPanel {
         jPanel13.setName("jPanel13"); // NOI18N
         jPanel13.setRequestFocusEnabled(false);
 
-        LafManager.getInstance().setLabProperties(labDate);
         labDate.setText(bundle.getString("ApplicationPanel.labDate.text")); // NOI18N
         labDate.setName("labDate"); // NOI18N
 
@@ -1687,12 +1659,10 @@ public class ApplicationPanel extends ContentPanel {
         jPanel14.setMinimumSize(new java.awt.Dimension(28, 20));
         jPanel14.setName("jPanel14"); // NOI18N
 
-        LafManager.getInstance().setLabProperties(labAgents);
         labAgents.setText(bundle.getString("ApplicationPanel.labAgents.text")); // NOI18N
         labAgents.setIconTextGap(1);
         labAgents.setName("labAgents"); // NOI18N
 
-        LafManager.getInstance().setCmbProperties(cbxAgents);
         cbxAgents.setName("cbxAgents"); // NOI18N
         AutoCompletion.enable(cbxAgents);
         cbxAgents.setRenderer(new SimpleComboBoxRenderer("getFullName"));
@@ -1703,8 +1673,6 @@ public class ApplicationPanel extends ContentPanel {
         bindingGroup.addBinding(jComboBoxBinding);
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, appBean, org.jdesktop.beansbinding.ELProperty.create("${agent}"), cbxAgents, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
-
-        cbxAgents.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
 
         javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
         jPanel14.setLayout(jPanel14Layout);
@@ -1727,7 +1695,6 @@ public class ApplicationPanel extends ContentPanel {
 
         jPanel15.setName("jPanel15"); // NOI18N
 
-        LafManager.getInstance().setLabProperties(labStatus);
         labStatus.setText(bundle.getString("ApplicationPanel.labStatus.text")); // NOI18N
         labStatus.setName("labStatus"); // NOI18N
 
@@ -2136,15 +2103,11 @@ public class ApplicationPanel extends ContentPanel {
 
         jPanel20.setName(bundle.getString("ApplicationPanel.jPanel20.name")); // NOI18N
 
-        LafManager.getInstance().setLabProperties(labFirstPart);
         labFirstPart.setText(bundle.getString("ApplicationPanel.labFirstPart.text")); // NOI18N
         labFirstPart.setName("labFirstPart"); // NOI18N
 
-        LafManager.getInstance().setTxtProperties(txtFirstPart);
         txtFirstPart.setText(bundle.getString("ApplicationPanel.txtFirstPart.text")); // NOI18N
         txtFirstPart.setName("txtFirstPart"); // NOI18N
-        txtFirstPart.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-        txtFirstPart.setHorizontalAlignment(JTextField.LEADING);
 
         javax.swing.GroupLayout jPanel20Layout = new javax.swing.GroupLayout(jPanel20);
         jPanel20.setLayout(jPanel20Layout);
@@ -2167,14 +2130,11 @@ public class ApplicationPanel extends ContentPanel {
 
         jPanel21.setName(bundle.getString("ApplicationPanel.jPanel21.name")); // NOI18N
 
-        LafManager.getInstance().setLabProperties(labLastPart);
         labLastPart.setText(bundle.getString("ApplicationPanel.labLastPart.text")); // NOI18N
         labLastPart.setName("labLastPart"); // NOI18N
 
         txtLastPart.setText(bundle.getString("ApplicationPanel.txtLastPart.text")); // NOI18N
         txtLastPart.setName("txtLastPart"); // NOI18N
-        txtLastPart.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-        txtLastPart.setHorizontalAlignment(JTextField.LEADING);
 
         javax.swing.GroupLayout jPanel21Layout = new javax.swing.GroupLayout(jPanel21);
         jPanel21.setLayout(jPanel21Layout);
@@ -2197,14 +2157,11 @@ public class ApplicationPanel extends ContentPanel {
 
         jPanel17.setName("jPanel17"); // NOI18N
 
-        LafManager.getInstance().setLabProperties(labValue);
         labValue.setText(bundle.getString("ApplicationPanel.labValue.text")); // NOI18N
         labValue.setName("labValue"); // NOI18N
 
         txtValue.setText(bundle.getString("ApplicationPanel.txtValue.text")); // NOI18N
         txtValue.setName("txtValue"); // NOI18N
-        txtValue.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-        txtValue.setHorizontalAlignment(JTextField.LEADING);
 
         javax.swing.GroupLayout jPanel17Layout = new javax.swing.GroupLayout(jPanel17);
         jPanel17.setLayout(jPanel17Layout);
@@ -2227,14 +2184,11 @@ public class ApplicationPanel extends ContentPanel {
 
         jPanel16.setName("jPanel16"); // NOI18N
 
-        LafManager.getInstance().setLabProperties(labArea);
         labArea.setText(bundle.getString("ApplicationPanel.labArea.text")); // NOI18N
         labArea.setName("labArea"); // NOI18N
 
         txtArea.setText(bundle.getString("ApplicationPanel.txtArea.text")); // NOI18N
         txtArea.setName("txtArea"); // NOI18N
-        txtArea.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-        txtArea.setHorizontalAlignment(JTextField.LEADING);
 
         javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
         jPanel16.setLayout(jPanel16Layout);
@@ -2257,7 +2211,6 @@ public class ApplicationPanel extends ContentPanel {
 
         jPanel18.setName("jPanel18"); // NOI18N
 
-        LafManager.getInstance().setBtnProperties(btnAddProperty);
         btnAddProperty.setText(bundle.getString("ApplicationPanel.btnAddProperty.text")); // NOI18N
         btnAddProperty.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnAddProperty.setName("btnAddProperty"); // NOI18N
@@ -2514,9 +2467,6 @@ public class ApplicationPanel extends ContentPanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, appBean, org.jdesktop.beansbinding.ELProperty.create("${servicesFee}"), formTxtServiceFee, org.jdesktop.beansbinding.BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
 
-        formTxtServiceFee.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-        formTxtServiceFee.setHorizontalAlignment(JFormattedTextField.LEADING);
-
         formTxtTaxes.setEditable(false);
         formTxtTaxes.setFormatterFactory(FormattersFactory.getInstance().getMoneyFormatterFactory());
         formTxtTaxes.setInheritsPopupMenu(true);
@@ -2525,9 +2475,6 @@ public class ApplicationPanel extends ContentPanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, appBean, org.jdesktop.beansbinding.ELProperty.create("${tax}"), formTxtTaxes, org.jdesktop.beansbinding.BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
 
-        formTxtTaxes.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-        formTxtTaxes.setHorizontalAlignment(JFormattedTextField.LEADING);
-
         formTxtFee.setEditable(false);
         formTxtFee.setFormatterFactory(FormattersFactory.getInstance().getMoneyFormatterFactory());
         formTxtFee.setName("formTxtFee"); // NOI18N
@@ -2535,23 +2482,16 @@ public class ApplicationPanel extends ContentPanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, appBean, org.jdesktop.beansbinding.ELProperty.create("${totalFee}"), formTxtFee, org.jdesktop.beansbinding.BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
 
-        formTxtFee.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-        formTxtFee.setHorizontalAlignment(JFormattedTextField.LEADING);
-
-        LafManager.getInstance().setLabProperties(labTotalFee2);
         labTotalFee2.setText(bundle.getString("ApplicationPanel.labTotalFee2.text")); // NOI18N
         labTotalFee2.setName("labTotalFee2"); // NOI18N
 
-        LafManager.getInstance().setLabProperties(labTotalFee);
         labTotalFee.setText(bundle.getString("ApplicationPanel.labTotalFee.text")); // NOI18N
         labTotalFee.setName("labTotalFee"); // NOI18N
 
-        LafManager.getInstance().setLabProperties(labTotalFee1);
         labTotalFee1.setText(bundle.getString("ApplicationPanel.labTotalFee1.text")); // NOI18N
         labTotalFee1.setName("labTotalFee1"); // NOI18N
 
         labFixedFee.setBackground(new java.awt.Color(255, 255, 255));
-        LafManager.getInstance().setLabProperties(labFixedFee);
         labFixedFee.setText(bundle.getString("ApplicationPanel.labFixedFee.text")); // NOI18N
         labFixedFee.setName("labFixedFee"); // NOI18N
 

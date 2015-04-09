@@ -1,41 +1,46 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2015 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2015 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.common.laf;
 
 import java.awt.Color;
-import java.awt.ComponentOrientation;
 import java.awt.Font;
 import java.net.URL;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
 import javax.swing.*;
 import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.plaf.FontUIResource;
+import org.sola.common.WindowUtility;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.MessageUtility;
 
@@ -52,176 +57,40 @@ public class LafManager {
     public static final String ADMIN_THEME = "admin";
     public static final String GREEN_THEME = "green";
 
-    public Object getBgFont() {
-        return bgFont;
-    }
+    // Default list of fonts to use for English and common languages. 
+    public static final String[] FONTNAME_DEFAULTS = {"AppleGothic", "Arial"};
+    // Amharic fonts. Nyala is installed on Windows. Kefa is installed on MacOS.
+    // Abyssinica SIL is an open  source font that can be downloaded from 
+    // http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=abyssinicasil_download
+    // for Windows, MacOS and Linux. Users that do not have the Nyala or Kefa fonts should
+    // install Abyssinica SIL. 
+    public static final String[] FONTNAME_AMHARIC = {"Nyala", "Kefa", "Abyssinica SIL"};
+    public static final int FONTSIZE_NORMAL = 12;
+    public static final int FONTSIZE_MEDIUM = 14;
+    public static final int FONTSIZE_LARGE = 16;
+    public static final int FONTSIZE_EXTRA_LARGE = 24;
+    private static final String AMHARIC_LANG_CODE = "am";
+    private static final String FONTSIZE_PREF_DEFAULT = "fontsize";
+    private static final String FONTSIZE_PREF_AMHARIC = "fontsize.am";
 
-    public void setBgFont(Object bgFont) {
-        this.bgFont = bgFont;
-    }
+    public static final String UI_PROP_TEXT_FIELD_BACKGROUND = "TextField.background";
+    public static final String UI_PROP_BTN_DARK_SHADOW = "Button.darkShadow";
+    public static final String UI_PROP_BTN_SHADOW = "Button.shadow";
+    public static final String UI_PROP_BTN_BACKGROUND = "Button.background";
+    public static final String UI_PROP_BTN_FOREGROUND = "Button.foreground";
+    public static final String UI_PROP_BTN_SELECT = "Button.select";
+    public static final String UI_PROP_BTN_DISABLED_TEXT = "Button.disabledText";
+    public static final String UI_PROP_BTN_HIGHLIGHT = "Button.highlight";
+    public static final String UI_PROP_BTN_LIGHT = "Button.light";
 
-    public Object getBtnBackground() {
-        return btnBackground;
-    }
+    public static String uiFont = FONTNAME_DEFAULTS[0]; // Use the default font
 
-    public void setBtnBackground(Object btnBackground) {
-        this.btnBackground = btnBackground;
-    }
-
-    public Object getBtnFont() {
-        return btnFont;
-    }
-
-    public void setBtnFont(Object btnFont) {
-        this.btnFont = btnFont;
-    }
-
-    public Object getBtnDarkShadow() {
-        return btnDarkShadow;
-    }
-
-    public Object getBtnDisabledText() {
-        return btnDisabledText;
-    }
-
-    public Object getBtnForeground() {
-        return btnForeground;
-    }
-
-    public Object getBtnHighlight() {
-        return btnHighlight;
-    }
-
-    public Object getBtnLight() {
-        return btnLight;
-    }
-
-    public Object getBtnSelect() {
-        return btnSelect;
-    }
-
-    public Object getBtnShadow() {
-        return btnShadow;
-    }
-
-    public Object getCmbFont() {
-        return cmbFont;
-    }
-
-    public void setCmbFont(Object cmbFont) {
-        this.cmbFont = cmbFont;
-    }
-
-    public Object getForeFont() {
-        return foreFont;
-    }
-
-    public void setForeFont(Object foreFont) {
-        this.foreFont = foreFont;
-    }
-
-    public Object getLabFont() {
-        return labFont;
-    }
-
-    public Object getTxtFieldBg() {
-        return txtFieldBg;
-    }
-
-    public Font getLabFontBold() {
-        return Font.decode("AppleGothic-BOLD-12");
-    }
-
-    public void setLabFont(Object labFont) {
-        this.labFont = labFont;
-    }
-
-    public Object getTabFont() {
-        return tabFont;
-    }
-
-    public void setTabFont(Object tabFont) {
-        this.tabFont = tabFont;
-    }
-
-    public Object getTxtAreaFont() {
-        return txtAreaFont;
-    }
-
-    public void setTxtAreaFont(Object txtAreaFont) {
-        this.txtAreaFont = txtAreaFont;
-    }
-
-    public Object getTxtFont() {
-        return txtFont;
-    }
-
-    public void setTxtFont(Object txtFont) {
-        this.txtFont = txtFont;
-    }
-
-    public void setLabProperties(JLabel label) {
-        label.setFont(UIManager.getFont(labFont));
-        label.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-        label.setHorizontalAlignment(JLabel.LEADING);
-    }
-
-    public void setTxtProperties(JTextField txt) {
-        txt.setFont(UIManager.getFont(txtFont));
-        txt.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-        txt.setHorizontalAlignment(JTextField.LEADING);
-    }
-
-    public void setFormattedTxtProperties(JFormattedTextField txt) {
-        txt.setFont(UIManager.getFont(txtFont));
-        txt.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-        txt.setHorizontalAlignment(JTextField.LEADING);
-    }
-
-    public void setTxtAreaProperties(JTextArea txtarea) {
-        txtarea.setFont(UIManager.getFont(txtAreaFont));
-        txtarea.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-    }
-
-    public void setCmbProperties(JComboBox combo) {
-        combo.setFont(UIManager.getFont(cmbFont));
-        combo.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-    }
-
-    public void setChkProperties(JCheckBox check) {
-        check.setFont(UIManager.getFont(labFont));
-        check.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-    }
-
-    public void setBtnProperties(JButton button) {
-        button.setFont(UIManager.getFont(btnFont));
-        button.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-        button.setHorizontalAlignment(JButton.CENTER);
-    }
-
-    public void setTabProperties(JTabbedPane tab) {
-        tab.setFont(UIManager.getFont(tabFont));
-        tab.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-    }
-
-    public void setListProperties(JList list) {
-        list.setFont(UIManager.getFont(listFont));
-        list.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-    }
-
-    public void setRadioProperties(JRadioButton radio) {
-        radio.setFont(UIManager.getFont(radioFont));
-        radio.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-    }
-
-    public void setPassProperties(JPasswordField password) {
-        password.setFont(UIManager.getFont(passwordFont));
-        password.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-    }
+    private static LafManager laf = null;
 
     private LafManager() {
     }
-    private static LafManager laf = null;
+
+    private String selectedTheme = GREEN_THEME;
 
     public static LafManager getInstance() {
         if (laf == null) {
@@ -229,35 +98,173 @@ public class LafManager {
         }
         return laf;
     }
-    private Object foreFont = "nimbusBase";
-    private Object labFont = "Label.font";
-    private Object bgFont = "PasswordField.background";
-    private Object txtFont = "TextField.font";
-    private Object txtAreaFont = "TextArea.font";
-    private Object btnFont = "Button.font";
-    private Object tabFont = "TabbedPane.font";
-    private Object cmbFont = "ComboBox.font";
-    private Object listFont = "List.font";
-    private Object radioFont = "RadioButton.font";
-    private Object passwordFont = "PasswordField.font";
-    private Object btnBackground = "Button.background";
-    private Object btnSelect = "Button.select";
-    private Object btnDarkShadow = "Button.darkShadow";
-    private Object btnDisabledText = "Button.disabledText";
-    private Object btnForeground = "Button.foreground";
-    private Object btnHighlight = "Button.highlight";
-    private Object btnLight = "Button.light";
-    private Object btnShadow = "Button.shadow";
-    private Object txtFieldBg = "TextField.background";
 
     /**
-     * sets {@link Look and feel} settings accordingly.
+     * Sets the default font for the application
+     *
+     * @param uiFontStr A font string that must include the font name but can
+     * also include the font size and style. See Font.decode for details.
      */
-    public void setProperties(final String theme) {
-        UIDefaults defaults = UIManager.getDefaults();
-        final Object painterScrollbar = defaults.get("ScrollBar:ScrollBarThumb[Disabled].backgroundPainter");
+    public static void setUiFont(String uiFontStr) {
+        uiFont = uiFontStr;
+    }
 
-        if (STATE_LAND_THEME.equals(theme) || ADMIN_THEME.equals(theme)) {
+    /**
+     * Sets the uiFont to the specified size. ALso saves the font size as a user
+     * preference.
+     *
+     * @param uiFontSize The size of font. Should be one of the FONTSIZE_
+     * constants.
+     */
+    public static void setUiFontSize(int uiFontSize) {
+        Font df = Font.decode(uiFont);
+        uiFont = String.format("%s-%d", df.getFontName(), uiFontSize);
+
+        // Capture the font size as a user preference. 
+        Preferences prefs = WindowUtility.getUserPreferences();
+        if (AMHARIC_LANG_CODE.equals(Locale.getDefault(Locale.Category.FORMAT).getLanguage())) {
+            // The font size preference for the Amharic language. 
+            prefs.put(FONTSIZE_PREF_AMHARIC, String.valueOf(uiFontSize));
+        } else {
+            // The font size preference for the default language. 
+            prefs.put(FONTSIZE_PREF_DEFAULT, String.valueOf(uiFontSize));
+        }
+        try {
+            prefs.flush();
+        } catch (BackingStoreException ex) {
+        }
+    }
+
+    /**
+     * *
+     * Returns the current uiFont size
+     *
+     * @return
+     */
+    public static int getUiFontSize() {
+        Font df = Font.decode(uiFont);
+        return df.getSize();
+    }
+
+    /**
+     * Returns a FontUIResource representing the uiFont. The returned value can
+     * be adjusted using the deriveFont method to create a Bold, Italic or other
+     * styled font.
+     *
+     * @return
+     */
+    public static FontUIResource getUiFont() {
+        return new FontUIResource(Font.decode(uiFont));
+    }
+
+    /**
+     * Returns a FontUIResource representing the uiFont with the size of the
+     * font adjusted by the sizeOffset. The returned value can be adjusted using
+     * the deriveFont method to create a Bold, Italic or other styled font. This
+     * method must be used for any component that requires text that is larger
+     * or smaller than the base text size as it ensures the component text is
+     * resized relatively if the user selects a different base size for the
+     * uiFont.
+     *
+     * @param sizeOffset The number of font points to resize the default font
+     * by. Can be negative, but must be more than -1 * fontSize
+     * @return
+     */
+    public static FontUIResource getUiFont(int sizeOffset) {
+        Font df = Font.decode(uiFont);
+        return new FontUIResource(df.deriveFont(df.getSize() + new Float(sizeOffset)));
+    }
+
+    /**
+     * Determines the font to use for the language code.
+     *
+     * @param languageCode
+     * @return A font string including the font name and size to use for
+     * displaying the language.
+     */
+    public static String getUiFontForLanugage(String languageCode) {
+
+        // Set the default values for the font name and size
+        String font = FONTNAME_DEFAULTS[0];
+        String[] langFonts = FONTNAME_DEFAULTS;
+        String fontSizePref = FONTSIZE_PREF_DEFAULT;
+        int fontSize = FONTSIZE_NORMAL;
+
+        if (AMHARIC_LANG_CODE.equals(languageCode)) {
+            // Displaying the Amharic language, so adjust the default 
+            // font name and size 
+            font = FONTNAME_AMHARIC[0];
+            langFonts = FONTNAME_AMHARIC;
+            fontSizePref = FONTSIZE_PREF_AMHARIC;
+            fontSize = FONTSIZE_MEDIUM;
+        }
+
+        if (WindowUtility.hasUserPreferences()) {
+            // Check if the user has set a font size preference for 
+            // this language/font combination. 
+            Preferences prefs = WindowUtility.getUserPreferences();
+            fontSize = prefs.getInt(fontSizePref, fontSize);
+        }
+
+        // Search the list of fonts suitalble for displaying this language to 
+        // find one installed on this computer. If none of the fonts are installed, the
+        // default Java font will be used automatically. 
+        String[] installedFonts = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+        out:
+        for (String lf : langFonts) {
+            for (String inf : installedFonts) {
+                if (lf.equalsIgnoreCase(inf)) {
+                    font = lf;
+                    System.out.println("Font selected = " + font);
+                    break out;
+                }
+            }
+        }
+        // Format the font name and size to return a font string that can be 
+        // decoded by Font.decode. 
+        return String.format("%s-%d", font, fontSize);
+    }
+
+    /**
+     * Applies the uiFont to all UIDefault font properties to ensure the
+     * application uses the correct font for display.
+     *
+     * @param ret
+     */
+    public void setUIDefaultFonts(UIDefaults ret) {
+        java.util.Enumeration keys = ret.keys();
+        while (keys.hasMoreElements()) {
+            Object key = keys.nextElement();
+            Object value = ret.get(key);
+            if (value != null && (value instanceof javax.swing.plaf.FontUIResource || value instanceof Font)) {
+                ret.put(key, new FontUIResource(Font.decode(uiFont)));
+            }
+        }
+        // Set the font for the messages displayed by SOLA
+        ret.put("OptionPane.messageFont", new FontUIResource(Font.decode(uiFont)));
+        ret.put("OptionPane.buttonFont", new FontUIResource(Font.decode(uiFont)));
+        ret.put("OptionPane.font", new FontUIResource(Font.decode(uiFont)));
+    }
+
+    /**
+     * Sets the specified theme (a.k.a. Look and Feel) for the application. Only
+     * use this method when initializing the application or changing the theme.
+     * To refresh the application to display a new font, use applyTheme.
+     *
+     * @param theme
+     */
+    public void setTheme(String theme) {
+        selectedTheme = theme;
+        uiFont = getUiFontForLanugage(Locale.getDefault(Locale.Category.FORMAT).getLanguage());
+        applyTheme();
+    }
+
+    /**
+     * Applies / refreshes theme selected at startup.This method must be used if
+     * the font is changed.
+     */
+    public void applyTheme() {
+        if (STATE_LAND_THEME.equals(selectedTheme) || ADMIN_THEME.equals(selectedTheme)) {
             try {
 
                 UIManager.installLookAndFeel("AdvancedNimbus", AdvancedNimbusLookAndFeel.class.getName());
@@ -316,21 +323,13 @@ public class LafManager {
                         ret.put("MenuBar:Menu[Selected].backgroundPainter", new FillPainter(new Color(154, 177, 95)));
 
                         //      #### FONTS  ####   
-                        ret.put("TextField.font", Font.decode("AppleGothic"));
-                        ret.put("TextArea.font", Font.decode("AppleGothic"));
-                        ret.put("PasswordField.font", Font.decode("AppleGothic"));
-                        ret.put("ComboBox.font", Font.decode("AppleGothic"));
-                        ret.put("Button.font", Font.decode("AppleGothic"));
-                        ret.put("TabbedPane.font", Font.decode("AppleGothic"));
-                        ret.put("Table.font", Font.decode("AppleGothic"));
-                        ret.put("Label.font", Font.decode("AppleGothic"));
-                        ret.put("List.font", Font.decode("AppleGothic"));
-                        ret.put("RadioButton.font", Font.decode("AppleGothic"));
+                        setUIDefaultFonts(ret);
+
                         ret.put("RootPaneUI", NimbusRootPaneUI.class.getName());
 
                         URL imgURL = null;
                         String loginTitle = "";
-                        if (ADMIN_THEME.equals(theme)) {
+                        if (ADMIN_THEME.equals(selectedTheme)) {
                             // Use the icon for the admin theme 
                             imgURL = this.getClass().getResource("/images/common/sola_icon_admin.png");
                             loginTitle = MessageUtility.getLocalizedMessageText(ClientMessage.SECURITY_LOGIN_TITLE_ADMIN);
@@ -341,9 +340,9 @@ public class LafManager {
                         }
                         ret.put("solaTitleBarIcon", new ImageIcon(imgURL));
                         ret.put("solaLoginTitle", loginTitle);
-                        
+
                         // Indicates this is a custom LAF for sola.
-                        ret.put("solaLAF", true); 
+                        ret.put("solaLAF", true);
                         return ret;
                     }
                 });
@@ -354,7 +353,7 @@ public class LafManager {
             JFrame.setDefaultLookAndFeelDecorated(true);
         }
 
-        if (GREEN_THEME.equals(theme)) {
+        if (GREEN_THEME.equals(selectedTheme)) {
 //      #### Primary Colors  ####        
             UIManager.put("nimbusBase", new Color(107, 160, 35)); /*
              * DEFAULT COLOR USED (51,98,140) 107,142,35 ALEX 185,208,196
@@ -497,24 +496,15 @@ public class LafManager {
             UIManager.put("List.background", new Color(185, 227, 185));
             UIManager.put("Table.dropLineColor", new Color(166, 212, 150));
             UIManager.put("List.foreground", new Color(0, 102, 51));
-            UIManager.put("TextField.font", Font.decode("AppleGothic"));
-            UIManager.put("TextArea.font", Font.decode("AppleGothic"));
-            UIManager.put("PasswordField.font", Font.decode("AppleGothic"));
-            UIManager.put("ComboBox.font", Font.decode("AppleGothic"));
-            UIManager.put("Button.font", Font.decode("AppleGothic"));
-            UIManager.put("TabbedPane.font", Font.decode("AppleGothic"));
-            UIManager.put("Table.font", Font.decode("AppleGothic"));
-            UIManager.put("Label.font", Font.decode("AppleGothic"));
-            UIManager.put("List.font", Font.decode("AppleGothic"));
-            UIManager.put("RadioButton.font", Font.decode("AppleGothic"));
+
+            setUIDefaultFonts(UIManager.getDefaults());
 
             // Set the default image Icon
             URL imgURL = this.getClass().getResource("/images/common/sola_icon_default.jpg");
             UIManager.put("solaTitleBarIcon", new ImageIcon(imgURL));
-            
+
             // Indicates this is not a custom LAF for sola.
-            UIManager.put("solaLAF", false); 
-            
+            UIManager.put("solaLAF", false);
 
             for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -535,9 +525,5 @@ public class LafManager {
 
         }
 
-    }
-
-    public void setTitleTextProperties(String titleText) {
-        throw new UnsupportedOperationException("Not yet implemented");
     }
 }

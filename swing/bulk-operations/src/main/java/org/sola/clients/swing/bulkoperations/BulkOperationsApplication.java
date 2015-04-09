@@ -92,9 +92,9 @@ public class BulkOperationsApplication {
                 // Select the Look and Feel Theme based on whether this is 
                 // the production version or the test version of SOLA. 
                 if (LocalizationManager.isProductionHost()) {
-                    LafManager.getInstance().setProperties("green");
+                    LafManager.getInstance().setTheme(LafManager.GREEN_THEME);
                 } else {
-                    LafManager.getInstance().setProperties("autumn");
+                    LafManager.getInstance().setTheme(LafManager.GREEN_THEME);
                 }
 
                 final LoginForm loginForm = new LoginForm();

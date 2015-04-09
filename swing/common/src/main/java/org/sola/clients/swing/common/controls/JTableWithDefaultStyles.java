@@ -43,6 +43,7 @@ import javax.swing.event.AncestorListener;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import org.sola.clients.swing.common.laf.LafManager;
 
 /**
  * {@link JTable} component with predefined styles
@@ -85,9 +86,6 @@ public class JTableWithDefaultStyles extends JTable {
         scrollPaneBackgroundColor = Color.WHITE;
         super.setBackground(defaultBackground);
         this.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
-        Object tableFont = "Table.font";
-        Font newTableFont = UIManager.getFont(tableFont);
-        this.setFont(newTableFont);
         this.setShowGrid(true);
         this.setRowSelectionAllowed(true);
         this.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);

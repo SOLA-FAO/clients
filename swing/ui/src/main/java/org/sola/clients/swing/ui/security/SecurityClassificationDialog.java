@@ -1,45 +1,44 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2015 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2015 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.ui.security;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.ImageIcon;
 import org.sola.clients.beans.AbstractBindingBean;
 import org.sola.clients.beans.AbstractIdBean;
-import org.sola.clients.beans.administrative.BaUnitBean;
 import org.sola.clients.beans.cache.CacheManager;
 import org.sola.clients.beans.security.RoleListBean;
 import org.sola.clients.beans.security.SecurityBean;
+import org.sola.clients.swing.common.laf.LafManager;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
-import static org.sola.clients.swing.ui.administrative.PropertyAssignmentDialog.ASSIGNMENT_CHANGED;
 import org.sola.common.RolesConstants;
 import org.sola.common.WindowUtility;
 import org.sola.common.messaging.ClientMessage;
@@ -52,7 +51,7 @@ import org.sola.webservices.transferobjects.EntityTable;
  * redaction classification for a data record.
  */
 public class SecurityClassificationDialog extends javax.swing.JDialog {
-
+    
     public static final String CLASSIFICATION_CHANGED = "classificationChanged";
     private List<AbstractBindingBean> beanList;
     private AbstractBindingBean bean;
@@ -101,11 +100,11 @@ public class SecurityClassificationDialog extends javax.swing.JDialog {
         list.loadSecurityRoles(filterByClearance);
         return list;
     }
-
+    
     private void customizeForm() {
-
+        
         this.setIconImage(WindowUtility.getTitleBarImage());
-
+             
         WindowUtility.addEscapeListener(this, false);
         java.util.ResourceBundle bundle1 = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/security/Bundle");
         if (entityTable == null) {
@@ -135,7 +134,7 @@ public class SecurityClassificationDialog extends javax.swing.JDialog {
                 }
             }
         }
-
+        
         boolean changeClassification = SecurityBean.isInRole(RolesConstants.CLASSIFICATION_CHANGE_CLASS);
         btnSave.setEnabled(changeClassification);
         cbxClassification.setEnabled(changeClassification);
@@ -169,19 +168,19 @@ public class SecurityClassificationDialog extends javax.swing.JDialog {
      * Assign team to properties
      */
     private void save() {
-
+        
         final String classificationCode = classificationList.getSelectedRole() == null ? null
                 : classificationList.getSelectedRole().getCode();
         final String redactCode = redactList.getSelectedRole() == null ? null
                 : redactList.getSelectedRole().getCode();
         final List<String> entityIds = new ArrayList<String>();
-
+        
         if (bean != null) {
             bean.setClassificationCode(classificationCode);
             bean.setRedactCode(redactCode);
             if (AbstractIdBean.class.isAssignableFrom(bean.getClass())) {
                 entityIds.add(((AbstractIdBean) bean).getId());
-
+                
             }
         } else if (beanList != null && beanList.size() > 0) {
             for (AbstractBindingBean b : beanList) {
@@ -196,7 +195,7 @@ public class SecurityClassificationDialog extends javax.swing.JDialog {
             // Save the changes directly
             final SecurityClassificationDialog dialog = this;
             SolaTask t = new SolaTask<Void, Void>() {
-
+                
                 @Override
                 public Void doTask() {
                     setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_SAVE_SECURITY_CHANGES));
@@ -204,23 +203,23 @@ public class SecurityClassificationDialog extends javax.swing.JDialog {
                             entityTable, classificationCode, redactCode);
                     return null;
                 }
-
+                
                 @Override
                 protected void taskDone() {
                     dialog.firePropertyChange(CLASSIFICATION_CHANGED, false, true);
                     dialog.dispose();
                 }
-
+                
             };
             TaskManager.getInstance().runTask(t);
-
+            
         } else {
             // Allow the calling form to determine when changes to the classification should be saved. 
             this.firePropertyChange(CLASSIFICATION_CHANGED, false, true);
             this.dispose();
         }
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

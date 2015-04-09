@@ -1,32 +1,35 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2015 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2015 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.clients.swing.ui.party;
 
+import com.lowagie.text.Font;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.JPanel;
@@ -48,7 +51,7 @@ import org.sola.common.messaging.MessageUtility;
  * Allows to search parties and manage them.
  */
 public class PartySearchPanel extends JPanel {
-
+    
     public static final String CREATE_NEW_PARTY_PROPERTY = "createNewParty";
     public static final String EDIT_PARTY_PROPERTY = "editParty";
     public static final String REMOVE_PARTY_PROPERTY = "removeParty";
@@ -60,9 +63,9 @@ public class PartySearchPanel extends JPanel {
      */
     public PartySearchPanel() {
         initComponents();
-
+        
         partySearchResuls.addPropertyChangeListener(new PropertyChangeListener() {
-
+            
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(PartySearchResultListBean.SELECTED_PARTY_SEARCH_RESULT)) {
@@ -70,61 +73,62 @@ public class PartySearchPanel extends JPanel {
                 }
             }
         });
+        lblSearchResultNumber.setFont(LafManager.getUiFont().deriveFont(Font.BOLD));
         customizePartyButtons();
     }
-
+    
     public boolean isShowViewButton() {
         return btnView.isVisible();
     }
-
+    
     public void setShowViewButton(boolean isVisible) {
         btnView.setVisible(isVisible);
         menuView.setVisible(isVisible);
         separator1.setVisible(isVisible);
-       showViewEditSeparator();
+        showViewEditSeparator();
     }
-
+    
     public boolean isShowSelectButton() {
         return btnSelect.isVisible();
     }
-
+    
     public void setShowSelectButton(boolean isVisible) {
         btnSelect.setVisible(isVisible);
         menuSelect.setVisible(isVisible);
         separator1.setVisible(isVisible);
         showViewEditSeparator();
     }
-
+    
     public boolean isShowAddButton() {
         return btnAddParty.isVisible();
     }
-
+    
     public void setShowAddButton(boolean isVisible) {
         btnAddParty.setVisible(isVisible);
         menuAdd.setVisible(isVisible);
         showViewEditSeparator();
     }
-
+    
     public boolean isShowEditButton() {
         return btnEditParty.isVisible();
     }
-
+    
     public void setShowEditButton(boolean isVisible) {
         btnEditParty.setVisible(isVisible);
         menuEdit.setVisible(isVisible);
         showViewEditSeparator();
     }
-
+    
     public boolean isShowRemoveButton() {
         return btnRemoveParty.isVisible();
     }
-
+    
     public void setShowRemoveButton(boolean isVisible) {
         btnRemoveParty.setVisible(isVisible);
         menuRemove.setVisible(isVisible);
-        showViewEditSeparator(); 
+        showViewEditSeparator();        
     }
-
+    
     private void showViewEditSeparator() {
         boolean showSeparator = false;
         if (btnView.isVisible() || btnSelect.isVisible()) {
@@ -133,14 +137,14 @@ public class PartySearchPanel extends JPanel {
         }
         separator1.setVisible(showSeparator);
     }
-
+    
     private PartyTypeListBean createPartyTypes() {
         if (partyTypes == null) {
             partyTypes = new PartyTypeListBean(true);
         }
         return partyTypes;
     }
-
+    
     private PartyRoleTypeListBean createPartyRoleTypes() {
         if (partyRoleTyps == null) {
             partyRoleTyps = new PartyRoleTypeListBean(true);
@@ -154,26 +158,26 @@ public class PartySearchPanel extends JPanel {
     private void customizePartyButtons() {
         boolean hasPartySaveRole = SecurityBean.isInRole(RolesConstants.PARTY_SAVE);
         boolean enabled = partySearchResuls.getSelectedPartySearchResult() != null;
-
+        
         btnView.setEnabled(enabled);
         btnSelect.setEnabled(enabled);
         menuView.setEnabled(btnView.isEnabled());
         menuSelect.setEnabled(btnSelect.isEnabled());
-
+        
         enabled = enabled && hasPartySaveRole;
-
+        
         if (enabled && partySearchResuls.getSelectedPartySearchResult().isRightHolder()) {
             enabled = SecurityBean.isInRole(RolesConstants.PARTY_RIGHTHOLDERS_SAVE);
         }
         btnAddParty.setEnabled(hasPartySaveRole);
         btnEditParty.setEnabled(enabled);
         btnRemoveParty.setEnabled(enabled);
-
+        
         menuAdd.setEnabled(btnAddParty.isEnabled());
         menuEdit.setEnabled(btnEditParty.isEnabled());
         menuRemove.setEnabled(btnRemoveParty.isEnabled());
     }
-
+    
     public void clickFind() {
         search();
     }
@@ -183,14 +187,14 @@ public class PartySearchPanel extends JPanel {
      */
     private void search() {
         SolaTask t = new SolaTask<Void, Void>() {
-
+            
             @Override
             public Void doTask() {
                 setMessage(MessageUtility.getLocalizedMessageText(ClientMessage.PROGRESS_MSG_PERSON_SEARCHING));
                 partySearchResuls.search(partySearchParams);
                 return null;
             }
-
+            
             @Override
             public void taskDone() {
                 lblSearchResultNumber.setText(Integer.toString(partySearchResuls.getPartySearchResults().size()));
@@ -203,22 +207,22 @@ public class PartySearchPanel extends JPanel {
         };
         TaskManager.getInstance().runTask(t);
     }
-
+    
     private void firePartyEvent(String propertyName) {
         if (partySearchResuls.getSelectedPartySearchResult() != null) {
             firePropertyChange(propertyName, null,
                     PartyBean.getParty(partySearchResuls.getSelectedPartySearchResult().getId()));
         }
     }
-
+    
     private void selectParty() {
         firePartyEvent(SELECT_PARTY_PROPERTY);
     }
-
+    
     private void viewParty() {
         firePartyEvent(VIEW_PARTY_PROPERTY);
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -587,7 +591,6 @@ public class PartySearchPanel extends JPanel {
         jLabel5.setName(bundle.getString("PartySearchPanel.jLabel5.name")); // NOI18N
         jToolBar1.add(jLabel5);
 
-        lblSearchResultNumber.setFont(LafManager.getInstance().getLabFontBold());
         lblSearchResultNumber.setText(bundle.getString("PartySearchPanel.lblSearchResultNumber.text")); // NOI18N
         lblSearchResultNumber.setName(bundle.getString("PartySearchPanel.lblSearchResultNumber.name")); // NOI18N
         jToolBar1.add(lblSearchResultNumber);
@@ -681,21 +684,21 @@ public class PartySearchPanel extends JPanel {
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
         clearForm();
     }//GEN-LAST:event_btnClearActionPerformed
-
+    
     private void clearForm() {
         cbxPartyTypes.setSelectedIndex(-1);
         cbxRoles.setSelectedIndex(-1);
         txtName.setText(null);
     }
-
+    
     private void addParty() {
         firePropertyChange(CREATE_NEW_PARTY_PROPERTY, false, true);
     }
-
+    
     private void editParty() {
         firePartyEvent(EDIT_PARTY_PROPERTY);
     }
-
+    
     private void removeParty() {
         if (partySearchResuls.getSelectedPartySearchResult() != null
                 && MessageUtility.displayMessage(ClientMessage.CONFIRM_DELETE_RECORD) == MessageUtility.BUTTON_ONE) {

@@ -290,14 +290,14 @@ public class DashBoardPanel extends ContentPanel {
         unassignedScrollPanel = new javax.swing.JScrollPane();
         tbUnassigned = new org.sola.clients.swing.common.controls.JTableWithDefaultStyles();
         tbUnassignedApplications = new javax.swing.JToolBar();
-        jLabel1 = new javax.swing.JLabel();
+        lblUnassignedApps = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JToolBar.Separator();
         btnAssignApplication = new javax.swing.JButton();
         btnOpenUnassignedApplication = new javax.swing.JButton();
         btnRefreshUnassigned = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         tbAssignedApplications = new javax.swing.JToolBar();
-        jLabel2 = new javax.swing.JLabel();
+        lblAssignedApps = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JToolBar.Separator();
         btnUnassignApplication = new javax.swing.JButton();
         btnOpenAssignedApplication = new javax.swing.JButton();
@@ -471,10 +471,9 @@ public class DashBoardPanel extends ContentPanel {
         tbUnassignedApplications.setRollover(true);
         tbUnassignedApplications.setName("tbUnassignedApplications"); // NOI18N
 
-        jLabel1.setFont(LafManager.getInstance().getLabFontBold());
-        jLabel1.setText(bundle.getString("DashBoardPanel.jLabel1.text")); // NOI18N
-        jLabel1.setName("jLabel1"); // NOI18N
-        tbUnassignedApplications.add(jLabel1);
+        lblUnassignedApps.setText(bundle.getString("DashBoardPanel.lblUnassignedApps.text")); // NOI18N
+        lblUnassignedApps.setName("lblUnassignedApps"); // NOI18N
+        tbUnassignedApplications.add(lblUnassignedApps);
 
         jSeparator1.setName("jSeparator1"); // NOI18N
         tbUnassignedApplications.add(jSeparator1);
@@ -542,10 +541,9 @@ public class DashBoardPanel extends ContentPanel {
         tbAssignedApplications.setRollover(true);
         tbAssignedApplications.setName("tbAssignedApplications"); // NOI18N
 
-        jLabel2.setFont(LafManager.getInstance().getLabFontBold());
-        jLabel2.setText(bundle.getString("DashBoardPanel.jLabel2.text")); // NOI18N
-        jLabel2.setName("jLabel2"); // NOI18N
-        tbAssignedApplications.add(jLabel2);
+        lblAssignedApps.setText(bundle.getString("DashBoardPanel.lblAssignedApps.text")); // NOI18N
+        lblAssignedApps.setName("lblAssignedApps"); // NOI18N
+        tbAssignedApplications.add(lblAssignedApps);
 
         jSeparator2.setName("jSeparator2"); // NOI18N
         tbAssignedApplications.add(jSeparator2);
@@ -845,13 +843,13 @@ public class DashBoardPanel extends ContentPanel {
     private javax.swing.JButton btnUnassignApplication;
     private org.sola.clients.swing.ui.HeaderPanel headerPanel;
     private javax.swing.JScrollPane inprogressScrollPanel;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
+    private javax.swing.JLabel lblAssignedApps;
+    private javax.swing.JLabel lblUnassignedApps;
     private javax.swing.JMenuItem menuAssignApplication;
     private javax.swing.JMenuItem menuOpenAssignedApplication;
     private javax.swing.JMenuItem menuOpenUnassignedApplication;

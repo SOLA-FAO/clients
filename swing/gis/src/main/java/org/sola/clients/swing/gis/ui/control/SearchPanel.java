@@ -39,6 +39,7 @@ package org.sola.clients.swing.gis.ui.control;
 
 import org.geotools.swing.extended.Map;
 import org.sola.clients.swing.common.laf.LafManager;
+import org.sola.clients.swing.common.utils.LocalizationTools;
 import org.sola.clients.swing.gis.beans.SpatialSearchOptionBean;
 
 /**
@@ -74,16 +75,8 @@ public class SearchPanel extends javax.swing.JPanel {
     /**
      * Applies customization of component L&F.
      */
-    private void customizeComponents() {
-
-//    COMBOBOXES
-        LafManager.getInstance().setCmbProperties(cmdSearchBy);
-
-//    LABELS    
-        LafManager.getInstance().setLabProperties(jLabel1);
-        
-        //  BUTTONS    
-        LafManager.getInstance().setBtnProperties(btnClearSelection);
+    private void customizeComponents() {   
+        LocalizationTools.setOrientation(this);
     }
 
     /**

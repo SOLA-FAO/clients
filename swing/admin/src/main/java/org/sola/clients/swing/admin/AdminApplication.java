@@ -111,9 +111,9 @@ public class AdminApplication {
                 // Select the Look and Feel Theme based on whether this is 
                 // the production version or the test version of SOLA. 
                 if (LocalizationManager.isProductionHost()) {
-                    LafManager.getInstance().setProperties(LafManager.ADMIN_THEME);
+                    LafManager.getInstance().setTheme(LafManager.ADMIN_THEME);
                 } else {
-                    LafManager.getInstance().setProperties(LafManager.GREEN_THEME);
+                    LafManager.getInstance().setTheme(LafManager.GREEN_THEME);
                 }
 
                 final LoginForm loginForm = new LoginForm();

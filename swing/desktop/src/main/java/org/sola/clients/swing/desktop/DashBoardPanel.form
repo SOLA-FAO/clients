@@ -365,15 +365,12 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JLabel" name="jLabel1">
+                <Component class="javax.swing.JLabel" name="lblUnassignedApps">
                   <Properties>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="LafManager.getInstance().getLabFontBold()" type="code"/>
-                    </Property>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="org/sola/clients/swing/desktop/Bundle.properties" key="DashBoardPanel.jLabel1.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="org/sola/clients/swing/desktop/Bundle.properties" key="DashBoardPanel.lblUnassignedApps.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
-                    <Property name="name" type="java.lang.String" value="jLabel1" noResource="true"/>
+                    <Property name="name" type="java.lang.String" value="lblUnassignedApps" noResource="true"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JToolBar$Separator" name="jSeparator1">
@@ -471,15 +468,12 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JLabel" name="jLabel2">
+                <Component class="javax.swing.JLabel" name="lblAssignedApps">
                   <Properties>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="LafManager.getInstance().getLabFontBold()" type="code"/>
-                    </Property>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="org/sola/clients/swing/desktop/Bundle.properties" key="DashBoardPanel.jLabel2.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="org/sola/clients/swing/desktop/Bundle.properties" key="DashBoardPanel.lblAssignedApps.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
-                    <Property name="name" type="java.lang.String" value="jLabel2" noResource="true"/>
+                    <Property name="name" type="java.lang.String" value="lblAssignedApps" noResource="true"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JToolBar$Separator" name="jSeparator2">

@@ -28,16 +28,15 @@
 package org.sola.clients.swing.ui.security;
 
 import java.awt.ComponentOrientation;
+import java.awt.Font;
 import java.awt.event.KeyEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.Locale;
-import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 import javax.swing.JRadioButton;
 import org.sola.clients.beans.security.SecurityBean;
 import org.sola.clients.swing.ui.localization.LocalizationManager;
 import org.sola.clients.swing.common.config.ConfigurationManager;
+import org.sola.clients.swing.common.laf.LafManager;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
 import org.sola.common.WindowUtility;
@@ -61,11 +60,16 @@ public class LoginPanel extends javax.swing.JPanel {
         postInit();
     }
 
-    private void postInit() {       
-        txtUsername.requestFocus();
+    private void postInit() {  
+        
+        lblWelcome.setFont(LafManager.getUiFont(6).deriveFont(Font.BOLD)); 
+        lblVersion.setFont(LafManager.getUiFont(-2).deriveFont(Font.BOLD));
+        labDescUp.setFont(LafManager.getUiFont(-2).deriveFont(Font.BOLD));
+        labDescDown.setFont(LafManager.getUiFont(-2).deriveFont(Font.BOLD));
         lblVersion.setText(LocalizationManager.getVersionNumber());
 
         // Make the username sticky
+        txtUsername.requestFocus();
         if (WindowUtility.hasUserPreferences()) {
             Preferences prefs = WindowUtility.getUserPreferences();
             String userName = prefs.get(USER_NAME, "");
@@ -150,7 +154,7 @@ public class LoginPanel extends javax.swing.JPanel {
         labPassword.setText(bundle.getString("LoginPanel.labPassword.text"));
         labUser.setText(bundle.getString("LoginPanel.labUser.text"));
         btnLogin.setText(bundle.getString("LoginPanel.btnLogin.text"));
-        jLabel2.setText(bundle.getString("LoginPanel.jLabel2.text"));
+        lblWelcome.setText(bundle.getString("LoginPanel.jLabel2.text"));
         labDescUp.setText(bundle.getString("LoginPanel.labDescUp.text"));
         labDescDown.setText(bundle.getString("LoginPanel.labDescDown.text"));
     }
@@ -175,7 +179,7 @@ public class LoginPanel extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator3 = new javax.swing.JSeparator();
-        jLabel2 = new javax.swing.JLabel();
+        lblWelcome = new javax.swing.JLabel();
         lblVersion = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         labDescUp = new javax.swing.JLabel();
@@ -288,13 +292,13 @@ public class LoginPanel extends javax.swing.JPanel {
 
         jSeparator3.setName("jSeparator3"); // NOI18N
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(0, 102, 51));
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText(bundle.getString("LoginPanel.jLabel2.text")); // NOI18N
-        jLabel2.setName("jLabel2"); // NOI18N
+        lblWelcome.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        lblWelcome.setForeground(new java.awt.Color(0, 102, 51));
+        lblWelcome.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblWelcome.setText(bundle.getString("LoginPanel.lblWelcome.text")); // NOI18N
+        lblWelcome.setName("lblWelcome"); // NOI18N
 
-        lblVersion.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblVersion.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
         lblVersion.setForeground(new java.awt.Color(0, 102, 51));
         lblVersion.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblVersion.setText(bundle.getString("LoginPanel.lblVersion.text")); // NOI18N
@@ -309,7 +313,7 @@ public class LoginPanel extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblWelcome, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lblVersion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -318,7 +322,7 @@ public class LoginPanel extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
+                .addComponent(lblWelcome)
                 .addGap(5, 5, 5)
                 .addComponent(lblVersion)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -422,7 +426,6 @@ public class LoginPanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bg;
     public javax.swing.JButton btnLogin;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -436,6 +439,7 @@ public class LoginPanel extends javax.swing.JPanel {
     private javax.swing.JLabel labPassword;
     private javax.swing.JLabel labUser;
     private javax.swing.JLabel lblVersion;
+    private javax.swing.JLabel lblWelcome;
     private javax.swing.JPanel mainPanel;
     private org.sola.clients.beans.security.SecurityBean securityBean;
     private org.sola.clients.swing.common.tasks.TaskPanel taskPanel1;

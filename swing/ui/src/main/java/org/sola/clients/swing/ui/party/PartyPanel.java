@@ -376,7 +376,6 @@ public class PartyPanel extends javax.swing.JPanel {
         setMinimumSize(new java.awt.Dimension(300, 200));
         setName("Form"); // NOI18N
 
-        detailsPanel.setFont(new java.awt.Font("Thaoma", 0, 12));
         detailsPanel.setName("detailsPanel"); // NOI18N
 
         basicPanel.setName("basicPanel"); // NOI18N
@@ -399,7 +398,9 @@ public class PartyPanel extends javax.swing.JPanel {
         bindingGroup.addBinding(binding);
 
         roleTableScrollPanel.setViewportView(tablePartyRole);
-        tablePartyRole.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("PartyPanel.tablePartyRole.columnModel.title0_1")); // NOI18N
+        if (tablePartyRole.getColumnModel().getColumnCount() > 0) {
+            tablePartyRole.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("PartyPanel.tablePartyRole.columnModel.title0_1")); // NOI18N
+        }
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
@@ -651,7 +652,6 @@ public class PartyPanel extends javax.swing.JPanel {
 
         jPanel10.add(jPanel7);
 
-        groupPanel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         groupPanel1.setName("groupPanel1"); // NOI18N
         groupPanel1.setTitleText(bundle.getString("PartyPanel.groupPanel1.titleText")); // NOI18N
 
@@ -946,7 +946,6 @@ public class PartyPanel extends javax.swing.JPanel {
 
         jPanel18.add(jPanel15);
 
-        groupPanel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         groupPanel2.setName("groupPanel2"); // NOI18N
         groupPanel2.setTitleText(bundle.getString("PartyPanel.groupPanel2.titleText")); // NOI18N
 
@@ -1004,7 +1003,7 @@ public class PartyPanel extends javax.swing.JPanel {
                 .addComponent(individualButton)
                 .addGap(10, 10, 10)
                 .addComponent(entityButton)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(detailsPanel)
         );
         layout.setVerticalGroup(

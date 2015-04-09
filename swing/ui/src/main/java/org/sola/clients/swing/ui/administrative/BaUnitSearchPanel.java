@@ -38,7 +38,6 @@ import org.sola.clients.beans.administrative.BaUnitSearchResultListBean;
 import org.sola.clients.beans.application.ApplicationBean;
 import org.sola.clients.beans.referencedata.RrrTypeBean;
 import org.sola.clients.beans.security.SecurityBean;
-import org.sola.clients.swing.common.laf.LafManager;
 import org.sola.clients.swing.common.controls.CalendarForm;
 import org.sola.clients.swing.common.tasks.SolaTask;
 import org.sola.clients.swing.common.tasks.TaskManager;
@@ -1416,7 +1415,6 @@ public class BaUnitSearchPanel extends javax.swing.JPanel {
         lblSearchResult.setName("lblSearchResult"); // NOI18N
         jToolBar1.add(lblSearchResult);
 
-        lblSearchResultCount.setFont(LafManager.getInstance().getLabFontBold());
         lblSearchResultCount.setText(bundle.getString("BaUnitSearchPanel.lblSearchResultCount.text")); // NOI18N
         lblSearchResultCount.setName("lblSearchResultCount"); // NOI18N
         jToolBar1.add(lblSearchResultCount);

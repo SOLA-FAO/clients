@@ -77,17 +77,17 @@ public class BrowseControl extends JTextField {
      */
     public BrowseControl() {
         super();
-        this.setBackground(UIManager.getColor(LafManager.getInstance().getTxtFieldBg()));
-        this.setBorder(javax.swing.BorderFactory.createLineBorder(UIManager.getColor(LafManager.getInstance().getBtnDarkShadow())));
+        this.setBackground(UIManager.getColor(LafManager.UI_PROP_TEXT_FIELD_BACKGROUND));
+        this.setBorder(javax.swing.BorderFactory.createLineBorder(UIManager.getColor(LafManager.UI_PROP_BTN_DARK_SHADOW)));
         this.setPreferredSize(new Dimension(185, 23));
 
         deleteButtonIcon = new ImageIcon(BrowseControl.class.getResource("/org/sola/clients/swing/common/controls/resources/delete_icon.gif"));
         textBox = new Rectangle();
         deleteButtonBox = new Rectangle();
         browseBtnBox = new Rectangle();
-        browseBtnOffColor = UIManager.getColor(LafManager.getInstance().getBtnBackground());
+        browseBtnOffColor = UIManager.getColor(LafManager.UI_PROP_BTN_BACKGROUND);
         browseBtnOnColor = new Color(150, 150, 150);
-        browseBtnClickColor = UIManager.getColor(LafManager.getInstance().getBtnShadow());
+        browseBtnClickColor = UIManager.getColor(LafManager.UI_PROP_BTN_SHADOW);
 
 
         browseBtnCurrentColor = browseBtnOffColor;
@@ -335,7 +335,7 @@ public class BrowseControl extends JTextField {
         int textY = (btnRect.getBounds().height / 2) + (getFontMetrics(labelFont).getHeight() / 2) - getFontMetrics(getFont()).getDescent();
         int textX = btnRect.getBounds().x + (btnRect.getBounds().width / 2 - getFontMetrics(labelFont).stringWidth(labelText) / 2);
 
-        g.setPaint(UIManager.getColor(LafManager.getInstance().getBtnForeground()));
+        g.setPaint(UIManager.getColor(LafManager.UI_PROP_BTN_FOREGROUND));
         AttributedString as = new AttributedString(labelText);
         as.addAttribute(TextAttribute.FONT, labelFont);
         g.drawString(as.getIterator(), textX, textY);

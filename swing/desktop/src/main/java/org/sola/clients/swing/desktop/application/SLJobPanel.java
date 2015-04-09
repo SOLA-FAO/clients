@@ -1467,7 +1467,6 @@ public class SLJobPanel extends ContentPanel {
         jToolBar3.setRollover(true);
         jToolBar3.setName("jToolBar3"); // NOI18N
 
-        LafManager.getInstance().setBtnProperties(btnSave);
         btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/save.png"))); // NOI18N
         btnSave.setText(bundle.getString("SLJobPanel.btnSave.text")); // NOI18N
         btnSave.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -1609,7 +1608,6 @@ public class SLJobPanel extends ContentPanel {
         jPanel13.setName("jPanel13"); // NOI18N
         jPanel13.setRequestFocusEnabled(false);
 
-        LafManager.getInstance().setLabProperties(labDate);
         labDate.setText(bundle.getString("SLJobPanel.labDate.text")); // NOI18N
         labDate.setName("labDate"); // NOI18N
 
@@ -1643,7 +1641,6 @@ public class SLJobPanel extends ContentPanel {
         jPanel14.setMinimumSize(new java.awt.Dimension(28, 20));
         jPanel14.setName("jPanel14"); // NOI18N
 
-        LafManager.getInstance().setLabProperties(labAgents);
         labAgents.setText(bundle.getString("SLJobPanel.labAgents.text")); // NOI18N
         labAgents.setIconTextGap(1);
         labAgents.setName("labAgents"); // NOI18N
@@ -1738,7 +1735,6 @@ public class SLJobPanel extends ContentPanel {
 
         jPanel15.setName("jPanel15"); // NOI18N
 
-        LafManager.getInstance().setLabProperties(labStatus);
         labStatus.setText(bundle.getString("SLJobPanel.labStatus.text")); // NOI18N
         labStatus.setName("labStatus"); // NOI18N
 
@@ -2146,7 +2142,6 @@ public class SLJobPanel extends ContentPanel {
         jSeparator8.setName("jSeparator8"); // NOI18N
         tbPropertyDetails.add(jSeparator8);
 
-        LafManager.getInstance().setBtnProperties(btnAddProperty);
         btnAddProperty.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/add.png"))); // NOI18N
         btnAddProperty.setText(bundle.getString("SLJobPanel.btnAddProperty.text")); // NOI18N
         btnAddProperty.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);

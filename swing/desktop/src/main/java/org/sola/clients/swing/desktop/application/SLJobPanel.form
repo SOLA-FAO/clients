@@ -349,7 +349,6 @@
       <SubComponents>
         <Component class="javax.swing.JButton" name="btnSave">
           <Properties>
-            <Property name="font" postCode="LafManager.getInstance().setBtnProperties(btnSave);"/>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/images/common/save.png"/>
             </Property>
@@ -636,7 +635,6 @@
                   <SubComponents>
                     <Component class="javax.swing.JLabel" name="labDate">
                       <Properties>
-                        <Property name="font" postCode="LafManager.getInstance().setLabProperties(labDate);"/>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.labDate.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                         </Property>
@@ -692,7 +690,6 @@
                   <SubComponents>
                     <Component class="javax.swing.JLabel" name="labAgents">
                       <Properties>
-                        <Property name="font" postCode="LafManager.getInstance().setLabProperties(labAgents);"/>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.labAgents.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                         </Property>
@@ -839,7 +836,6 @@
                   <SubComponents>
                     <Component class="javax.swing.JLabel" name="labStatus">
                       <Properties>
-                        <Property name="font" postCode="LafManager.getInstance().setLabProperties(labStatus);"/>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="org/sola/clients/swing/desktop/application/Bundle.properties" key="SLJobPanel.labStatus.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                         </Property>
@@ -1511,7 +1507,6 @@
                     </Component>
                     <Component class="javax.swing.JButton" name="btnAddProperty">
                       <Properties>
-                        <Property name="font" postCode="LafManager.getInstance().setBtnProperties(btnAddProperty);"/>
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                           <Image iconType="3" name="/images/common/add.png"/>
                         </Property>
