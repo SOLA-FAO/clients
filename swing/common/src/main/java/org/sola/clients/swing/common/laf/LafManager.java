@@ -59,12 +59,15 @@ public class LafManager {
 
     // Default list of fonts to use for English and common languages. 
     public static final String[] FONTNAME_DEFAULTS = {"AppleGothic", "Arial"};
-    // Amharic fonts. Nyala is installed on Windows. Kefa is installed on MacOS.
+    // Amharic fonts. Visual Geez Unicode is a free font for Windows that can be
+    // downloaded from https://famdliflc.lingnet.org/products/amharic/font/font.html
+    // Nyala is installed on Windows by default. Kefa is installed on MacOS.
     // Abyssinica SIL is an open  source font that can be downloaded from 
     // http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=abyssinicasil_download
     // for Windows, MacOS and Linux. Users that do not have the Nyala or Kefa fonts should
-    // install Abyssinica SIL. 
-    public static final String[] FONTNAME_AMHARIC = {"Nyala", "Kefa", "Abyssinica SIL"};
+    // install Abyssinica SIL or Visual Geez Unicode. Arial will be used if no other 
+    // Amharic font is installed. 
+    public static final String[] FONTNAME_AMHARIC = {"Nyala", "Visual Geez Unicode", "Kefa", "Abyssinica SIL", "Arial"};
     public static final int FONTSIZE_NORMAL = 12;
     public static final int FONTSIZE_MEDIUM = 14;
     public static final int FONTSIZE_LARGE = 16;
@@ -206,7 +209,7 @@ public class LafManager {
             fontSize = prefs.getInt(fontSizePref, fontSize);
         }
 
-        // Search the list of fonts suitalble for displaying this language to 
+        // Search the list of fonts suitable for displaying this language to 
         // find one installed on this computer. If none of the fonts are installed, the
         // default Java font will be used automatically. 
         String[] installedFonts = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
