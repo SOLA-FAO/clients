@@ -87,7 +87,7 @@ public class HeaderPanel extends javax.swing.JPanel {
 
         setForeground(new java.awt.Color(255, 255, 255));
 
-        lblHeaderTitle.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        lblHeaderTitle.setFont(lblHeaderTitle.getFont().deriveFont(lblHeaderTitle.getFont().getStyle() | java.awt.Font.BOLD, lblHeaderTitle.getFont().getSize()+7));
         lblHeaderTitle.setForeground(new java.awt.Color(255, 255, 255));
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/Bundle"); // NOI18N
         lblHeaderTitle.setText(bundle.getString("HeaderPanel.lblHeaderTitle.text")); // NOI18N

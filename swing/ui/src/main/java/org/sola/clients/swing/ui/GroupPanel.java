@@ -95,7 +95,7 @@ public class GroupPanel extends javax.swing.JPanel {
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/ui/Bundle"); // NOI18N
         setToolTipText(bundle.getString("GroupPanel.toolTipText")); // NOI18N
 
-        lblGroupTitle.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblGroupTitle.setFont(lblGroupTitle.getFont().deriveFont(lblGroupTitle.getFont().getStyle() | java.awt.Font.BOLD, lblGroupTitle.getFont().getSize()+3));
         lblGroupTitle.setForeground(new java.awt.Color(255, 255, 255));
         lblGroupTitle.setText(bundle.getString("GroupPanel.lblGroupTitle.text")); // NOI18N
         lblGroupTitle.setName("lblGroupTitle"); // NOI18N

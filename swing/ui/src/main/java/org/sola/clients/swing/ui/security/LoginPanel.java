@@ -285,7 +285,7 @@ public class LoginPanel extends javax.swing.JPanel {
 
         jSeparator3.setName("jSeparator3"); // NOI18N
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel2.setFont(jLabel2.getFont().deriveFont(jLabel2.getFont().getStyle() | java.awt.Font.BOLD, jLabel2.getFont().getSize()+7));
         jLabel2.setForeground(new java.awt.Color(0, 102, 51));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText(bundle.getString("LoginPanel.jLabel2.text")); // NOI18N
@@ -326,13 +326,13 @@ public class LoginPanel extends javax.swing.JPanel {
         jPanel4.setOpaque(false);
 
         labDescUp.setBackground(new java.awt.Color(153, 153, 153));
-        labDescUp.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        labDescUp.setFont(labDescUp.getFont().deriveFont(labDescUp.getFont().getStyle() | java.awt.Font.BOLD, labDescUp.getFont().getSize()-1));
         labDescUp.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         labDescUp.setText(bundle.getString("LoginPanel.labDescUp.text")); // NOI18N
         labDescUp.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         labDescUp.setName("labDescUp"); // NOI18N
 
-        labDescDown.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        labDescDown.setFont(labDescDown.getFont().deriveFont(labDescDown.getFont().getStyle() | java.awt.Font.BOLD, labDescDown.getFont().getSize()-1));
         labDescDown.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         labDescDown.setText(bundle.getString("LoginPanel.labDescDown.text")); // NOI18N
         labDescDown.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
