@@ -186,7 +186,12 @@ public class RequestTypeListBean extends AbstractBindingListBean {
                 if (bean1 != null && bean2 == null) {
                     return 1;
                 }
-                // Sort by Category Display Value
+                // If one of the beans has a non zero display order, then use that 
+                // to order the beans. 
+                if (bean1.getDisplayOrder() != 0 || bean2.getDisplayOrder() != 0) {
+                    return Integer.compare(bean1.getDisplayOrder(), bean2.getDisplayOrder());
+                }
+                // Use the Category Display Value to determine how these beans should be listed. 
                 if (bean1.getCategoryDisplayValue() != null
                         && !bean1.getCategoryDisplayValue().equals(bean2.getCategoryDisplayValue())) {
                     return bean1.getCategoryDisplayValue().compareTo(bean2.getCategoryDisplayValue());

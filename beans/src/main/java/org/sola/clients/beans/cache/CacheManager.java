@@ -75,20 +75,20 @@ public final class CacheManager {
      * Cache key of the {@link GenderTypeBean} collection.
      */
     public static final String GENDER_TYPES_KEY = GenderTypeBean.class.getName() + LIST_POSTFIX;
-    
+
     /**
      * Cache key of the {@link GroupPartyTypeBean} collection.
      */
     public static final String GROUP_PARTY_TYPES_KEY = GroupPartyTypeBean.class.getName() + LIST_POSTFIX;
-    
+
     /**
      * Cache key of the code/displayValue map based on {@link GenderTypeBean}
      * collection.
      */
     public static final String GENDER_TYPES_MAP_KEY = GenderTypeBean.class.getName() + MAP_POSTFIX;
     /**
-     * Cache key of the code/displayValue map based on {@link GroupPartyTypeBean}
-     * collection.
+     * Cache key of the code/displayValue map based on
+     * {@link GroupPartyTypeBean} collection.
      */
     public static final String GROUP_PARTY_TYPES_MAP_KEY = GroupPartyTypeBean.class.getName() + MAP_POSTFIX;
     /**
@@ -220,13 +220,16 @@ public final class CacheManager {
      * {@link org.sola.clients.beans.system.ConfigPanelLauncherBean} collection.
      */
     public static final String CONFIG_PANEL_LAUNCHER_KEY = ConfigPanelLauncherBean.class.getName() + LIST_POSTFIX;
-    
-        /**
+    /**
+     * Cache key of the {@link RequestDisplayGroupBean} collection.
+     */
+    public static final String GET_REQUEST_DISPLAY_GROUP_KEY = RequestDisplayGroupBean.class.getName() + LIST_POSTFIX;
+
+    /**
      * Cache key of the
      * {@link org.sola.clients.beans.system.PanelLauncherGroupBean} collection.
      */
     public static final String CONFIG_PANEL_LAUNCHER_GROUP_KEY = PanelLauncherGroupBean.class.getName() + LIST_POSTFIX;
-    
 
     private static final String GET_APPLICATION_STATUS_TYPES = "getApplicationStatusTypes";
     private static final String GET_SOURCE_TYPES = "getSourceTypes";
@@ -262,6 +265,7 @@ public final class CacheManager {
     private static final String GET_HIERARCHY_LEVELS = "getHierarchyLevels";
     private static final String GET_PANEL_LAUNCHER_CONFIG = "getPanelLauncherConfiguration";
     private static final String GET_PANEL_LAUNCHER_GROUPS = "getPanelLauncherGroups";
+    private static final String GET_REQUEST_DISPLAY_GROUPS = "getRequestDisplayGroups";
 
     public static List<BrValidationTargetTypeBean> getBrValidationTargetTypes() {
         return getCachedBeanList(BrValidationTargetTypeBean.class,
@@ -388,15 +392,12 @@ public final class CacheManager {
                 WSManager.getInstance().getReferenceDataService(),
                 GET_PARTY_ROLES, PARTY_ROLE_TYPE_CODES_KEY);
     }
-    
-    
+
 //    public static List<GroupPartyTypeBean> getPartyGroups() {
 //        return getCachedBeanList(GroupPartyTypeBean.class,
 //                WSManager.getInstance().getReferenceDataService(),
 //                GET_PARTY_GROUP, GROUP_PARTY_TYPES_KEY);
 //    }
-
-    
     public static List<ServiceStatusTypeBean> getAppServiceStatusTypes() {
         return getCachedBeanList(ServiceStatusTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
@@ -470,9 +471,8 @@ public final class CacheManager {
                         GET_GENDER_TYPES, GENDER_TYPES_KEY),
                 GENDER_TYPES_MAP_KEY);
     }
-    
-    
-     public static List<GroupPartyTypeBean> getGroupPartyTypes() {
+
+    public static List<GroupPartyTypeBean> getGroupPartyTypes() {
         return getCachedBeanList(GroupPartyTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_GROUP_PARTY_TYPES, GROUP_PARTY_TYPES_KEY);
@@ -511,11 +511,17 @@ public final class CacheManager {
                 WSManager.getInstance().getAdminService(),
                 GET_PANEL_LAUNCHER_CONFIG, CONFIG_PANEL_LAUNCHER_KEY);
     }
-    
-        public static List<PanelLauncherGroupBean> getPanelLauncherGroups() {
+
+    public static List<PanelLauncherGroupBean> getPanelLauncherGroups() {
         return getCachedBeanList(PanelLauncherGroupBean.class,
                 WSManager.getInstance().getAdminService(),
                 GET_PANEL_LAUNCHER_GROUPS, CONFIG_PANEL_LAUNCHER_GROUP_KEY);
+    }
+
+    public static List<RequestDisplayGroupBean> getRequestDisplayGroups() {
+        return getCachedBeanList(RequestDisplayGroupBean.class,
+                WSManager.getInstance().getReferenceDataService(),
+                GET_REQUEST_DISPLAY_GROUPS, GET_REQUEST_DISPLAY_GROUP_KEY);
     }
 
     /**

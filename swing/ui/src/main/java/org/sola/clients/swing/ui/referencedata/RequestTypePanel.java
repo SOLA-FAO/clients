@@ -109,7 +109,7 @@ public class RequestTypePanel extends javax.swing.JPanel {
     public boolean save(boolean showMessage){
         requestTypeBean.setDisplayValue(displayValues.buildMultilingualString());
         requestTypeBean.setDescription(descriptionValues.buildMultilingualString());
-        requestTypeBean.setDisplayGroupName(displayGroupNameValues.buildMultilingualString());
+       // requestTypeBean.setDisplayGroupName(displayGroupNameValues.buildMultilingualString());
         if(validateRequestType(showMessage)){
             AbstractCodeBean.saveRefData(requestTypeBean, RequestTypeTO.class);
             return true;
