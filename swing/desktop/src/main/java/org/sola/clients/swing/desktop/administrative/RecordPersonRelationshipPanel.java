@@ -37,11 +37,11 @@ import java.util.Iterator;
 import java.util.Locale;
 import javax.swing.JFormattedTextField;
 import javax.swing.JTextField;
-import org.sola.clients.beans.administrative.NotifiablePartyForBaUnitBean;
+import org.sola.clients.beans.administrative.BaUnitBean;
+import org.sola.clients.beans.application.NotifiablePartyForBaUnitBean;
 import org.sola.clients.beans.administrative.RrrBean;
-import org.sola.clients.beans.application.ApplicationBean;
-import org.sola.clients.beans.application.ApplicationPropertyBean;
-import org.sola.clients.beans.application.ApplicationServiceBean;
+import org.sola.clients.beans.application.*;
+import org.sola.clients.beans.controls.SolaList;
 import org.sola.clients.beans.party.*;
 import org.sola.clients.beans.referencedata.*;
 import org.sola.clients.beans.source.SourceBean;
@@ -76,16 +76,17 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
     public static final String VIEW_PARTY_PROPERTY = "viewParty";
     public static final String VIEW_DOCUMENT = "viewDocument";
     private PartySummaryBean partyTargetSummary = new PartySummaryBean();
-    private PartyMemberBean partyMemberTargetBean = new PartyMemberBean();
+    private PartyBean partyTarget = new PartyBean();
     private ApplicationBean appBean;
     private PartyBean partyAppBean;
-    private PartyBean partyAppBeanForGroup;
-    private GroupPartyBean groupAppPartyBean;
     private ApplicationServiceBean appService;
+    private BaUnitBean baUnitSelected;
     private Boolean isContactPerson;
     private String targetName;
     public String serviceId;
     public Boolean setRole = true;
+    private String notifyId;
+    private Boolean isSelected = true;
 
     /**
      * Creates documents table to show paper title documents.
@@ -112,28 +113,6 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
         return partyBean;
     }
 
-    private PartyBean CreatePartyBeanForGroup() {
-
-        if (partyAppBeanForGroup != null) {
-            partyBeanforGroup = partyAppBeanForGroup;
-
-        } else {
-            partyBeanforGroup = new PartyBean();
-        }
-        return partyBeanforGroup;
-    }
-
-    private GroupPartyBean CreateGroupPartyBean() {
-
-        if (groupAppPartyBean != null) {
-            groupPartyBean = groupAppPartyBean;
-
-        } else {
-            groupPartyBean = new GroupPartyBean();
-        }
-        return groupPartyBean;
-    }
-
     private ApplicationBean CreateApplicationBean() {
 
         if (appBean != null) {
@@ -158,7 +137,8 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
         this.appBean = applicationBean;
         this.appService = applicationService;
         this.serviceId = applicationService.getId();
-
+        notifyBean1 = new NotifyBean();
+        notifyBean2 = new NotifyBean();
         notifiablePartyForBaUnitBean = NotifiablePartyForBaUnitBean.getNotifiableParty("", "", "", applicationBean.getId(), this.serviceId);
 
         if (notifiablePartyForBaUnitBean == null) {
@@ -180,20 +160,15 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
                 isContactPerson = false;
                 partyBean = new PartyBean();
             }
-            this.partyBeanforGroup = new PartyBean();
-            this.partyMemberBean = new PartyMemberBean();
-            this.groupPartyBean = new GroupPartyBean();
             this.partyTargetSummary = new PartySummaryBean();
-            this.partyMemberTargetBean = new PartyMemberBean();
+            this.partyTarget = new PartyBean();
             this.applicationPropertyBean = new ApplicationPropertyBean();
         } else {
+            notifyId = notifiablePartyForBaUnitBean.getNotifyId();
             isContactPerson = false;
             partyBean = PartyBean.getParty(notifiablePartyForBaUnitBean.getPartyId());
-            this.partyBeanforGroup = new PartyBean();
-            this.partyMemberBean = new PartyMemberBean();
-            this.groupPartyBean = new GroupPartyBean();
             this.partyTargetSummary = new PartySummaryBean();
-            this.partyMemberTargetBean = new PartyMemberBean();
+            this.partyTarget = PartyBean.getParty(notifiablePartyForBaUnitBean.getTargetPartyId());
             this.applicationPropertyBean = new ApplicationPropertyBean();
         }
 
@@ -206,16 +181,11 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
         if (notifiablePartyForBaUnitBean.getTargetPartyId()
                 != null) {
             targetName = PartyBean.getParty(notifiablePartyForBaUnitBean.getTargetPartyId()).getName() + " " + PartyBean.getParty(notifiablePartyForBaUnitBean.getTargetPartyId()).getLastName();
+            partyTarget = PartyBean.getParty(notifiablePartyForBaUnitBean.getTargetPartyId());
 
             partyBean = PartyBean.getParty(notifiablePartyForBaUnitBean.getPartyId());
             partyAppBean = partyBean;
 
-            partyBeanforGroup = PartyBean.getParty(notifiablePartyForBaUnitBean.getGroupId());
-            partyAppBeanForGroup = partyBeanforGroup;
-
-            groupPartyBean = (GroupPartyBean.getGroupParty(notifiablePartyForBaUnitBean.getGroupId()));
-
-            groupAppPartyBean = groupPartyBean;
         }
 
         initComponents();
@@ -319,19 +289,15 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
             this.txtName.setEditable(false);
             partyBean = partyAppBean;
             partySearchResuls.search(partySearchParams, partyBean.getId());
-            partyBeanforGroup = partyAppBeanForGroup;
-
-            groupPartyBean = groupAppPartyBean;
-            groupPartyTypeListBean1.setSelectedGroupPartyType(groupPartyBean.getGroupType());
-            this.cbxGroupType.setSelectedItem(groupPartyBean.getGroupType());
-            this.cbxGroupType.setEnabled(false);
-            this.txtGroup.setEnabled(false);
             this.txtAddress.setEditable(false);
             this.txtAddress.setEnabled(false);
             this.txtFirstName.setEnabled(false);
             this.txtLastName.setEnabled(false);
             this.cbxGender.setEnabled(false);
         }
+
+        this.jPanel2.setVisible(false);
+        this.jPanel9.setVisible(false);
     }
 
     /**
@@ -350,9 +316,9 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
     @Override
     protected boolean panelClosing() {
 
-        if (btnSave.isEnabled() && MainForm.checkSaveBeforeClose(partyBean)) {
-            return savePersonRelationship();
-        }
+//        if (btnSave.isEnabled() && MainForm.checkSaveBeforeClose(partyBean)) {
+//            return savePersonRelationship();
+//        }
         return true;
     }
 
@@ -367,16 +333,16 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         genderTypeListBean = new org.sola.clients.beans.referencedata.GenderTypeListBean();
-        partyMemberBean = new org.sola.clients.beans.party.PartyMemberBean();
-        groupPartyBean = new org.sola.clients.beans.party.GroupPartyBean();
-        groupPartyTypeListBean1 = new org.sola.clients.beans.referencedata.GroupPartyTypeListBean();
-        partyBeanforGroup = CreatePartyBeanForGroup();
         partySearchParams = new org.sola.clients.beans.party.PartySearchParamsBean();
         partySearchResuls = new org.sola.clients.beans.party.PartyPropertySearchResultListBean();
         applicationPropertyBean = new org.sola.clients.beans.application.ApplicationPropertyBean();
         applicationBean = CreateApplicationBean();
         partyBean = CreatePartyBean();
-        notifiablePartyForBaUnitBean = new org.sola.clients.beans.administrative.NotifiablePartyForBaUnitBean();
+        notifiablePartyForBaUnitBean = new org.sola.clients.beans.application.NotifiablePartyForBaUnitBean();
+        notifyBean1 = new org.sola.clients.beans.application.NotifyBean();
+        notifyListBean1 = new org.sola.clients.beans.application.NotifyListBean();
+        notifyBean2 = new org.sola.clients.beans.application.NotifyBean();
+        notifyListBean2 = new org.sola.clients.beans.application.NotifyListBean();
         headerPanel = new org.sola.clients.swing.ui.HeaderPanel();
         jToolBar1 = new javax.swing.JToolBar();
         btnSave = new javax.swing.JButton();
@@ -479,7 +445,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(txtFirstName)
-            .addComponent(labName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(labName, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -507,7 +473,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(txtLastName)
-            .addComponent(labLastName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(labLastName, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -535,7 +501,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(txtAddress)
-            .addComponent(labAddress, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(labAddress, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -596,7 +562,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(txtPhone, javax.swing.GroupLayout.Alignment.TRAILING)
-            .addComponent(labPhone, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(labPhone, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -628,7 +594,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(txtEmail)
-            .addComponent(labEmail, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(labEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -722,16 +688,13 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
 
         groupChoicePanel.setLayout(new java.awt.GridLayout(1, 3, 15, 0));
 
+        jPanel2.setEnabled(false);
+        jPanel2.setOpaque(false);
+
         labGroupType.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         labGroupType.setText(bundle.getString("RecordPersonRelationshipPanel.labGroupType.text")); // NOI18N
 
         cbxGroupType.setRenderer(new SimpleComboBoxRenderer("getDisplayValue"));
-
-        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${groupPartyTypeList}");
-        jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, groupPartyTypeListBean1, eLProperty, cbxGroupType);
-        bindingGroup.addBinding(jComboBoxBinding);
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, groupPartyTypeListBean1, org.jdesktop.beansbinding.ELProperty.create("${selectedGroupPartyType}"), cbxGroupType, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -753,8 +716,8 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
 
         groupChoicePanel.add(jPanel2);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, partyBeanforGroup, org.jdesktop.beansbinding.ELProperty.create("${name}"), txtGroup, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
+        jPanel9.setEnabled(false);
+        jPanel9.setOpaque(false);
 
         labGroupName.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         labGroupName.setText(bundle.getString("RecordPersonRelationshipPanel.labGroupName.text")); // NOI18N
@@ -838,6 +801,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
         });
         jToolBar2.add(btnView);
 
+        btnRemove1.setToolTipText(bundle.getString("RecordPersonRelationshipPanel.btnRemove.toolTipText")); // NOI18N
         btnRemove1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnRemove1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -878,12 +842,10 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
             }
         });
         jScrollPane2.setViewportView(tableSearchResults);
-        if (tableSearchResults.getColumnModel().getColumnCount() > 0) {
-            tableSearchResults.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("RecordPersonRelationshipPanel.tableSearchResults.columnModel.title0")); // NOI18N
-            tableSearchResults.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("RecordPersonRelationshipPanel.tableSearchResults.columnModel.title1")); // NOI18N
-            tableSearchResults.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("RecordPersonRelationshipPanel.tableSearchResults.columnModel.title2")); // NOI18N
-            tableSearchResults.getColumnModel().getColumn(2).setCellRenderer(new BooleanCellRenderer());
-        }
+        tableSearchResults.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("RecordPersonRelationshipPanel.tableSearchResults.columnModel.title0")); // NOI18N
+        tableSearchResults.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("RecordPersonRelationshipPanel.tableSearchResults.columnModel.title1")); // NOI18N
+        tableSearchResults.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("RecordPersonRelationshipPanel.tableSearchResults.columnModel.title2")); // NOI18N
+        tableSearchResults.getColumnModel().getColumn(2).setCellRenderer(new BooleanCellRenderer());
 
         javax.swing.GroupLayout pnlSearchLayout = new javax.swing.GroupLayout(pnlSearch);
         pnlSearch.setLayout(pnlSearchLayout);
@@ -959,7 +921,7 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pnlSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel14, javax.swing.GroupLayout.DEFAULT_SIZE, 635, Short.MAX_VALUE)
-            .addComponent(groupPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(groupPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
         jPanel16Layout.setVerticalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1045,10 +1007,6 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
      */
     private void viewDocument() {
         firePropertyChange(VIEW_DOCUMENT, null, documentsPanel1.getSourceListBean().getSelectedSource());
-
-//        if (documentsPanel1.getSourceListBean().getSelectedSource() != null) {
-//            documentsPanel1.getSourceListBean().getSelectedSource().openDocument();
-//        }
     }
 
     /**
@@ -1116,8 +1074,12 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
     }
 
     private boolean savePersonRelationship() {
-
         if ((this.partySearchResuls.getSelectedPartySearchResult() == null && targetName == null)) {
+            if (isSelected == false) {
+                this.close();
+                return false;
+            }
+            
             java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
             MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_FIELDS,
                     new Object[]{bundle.getString("RecordPersonRelationshipPanel.groupPanel4.titleText")});
@@ -1126,35 +1088,27 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
 
 
         if (partyTargetSummary.getLastName() == null && jLabel5.isVisible()) {
+            if (isSelected == false) {
+                this.close();
+                return false;
+            }
             java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
             MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_FIELDS,
                     new Object[]{bundle.getString("RecordPersonRelationshipPanel.groupPanel4.titleText")});
             return false;
         }
-        if (this.txtGroup.getText().contentEquals("")
-                || this.cbxGroupType.getSelectedIndex() == -1) {
 
-            java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
-            MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_FIELDS,
-                    new Object[]{bundle.getString("RecordPersonRelationshipPanel.groupPanel2.titleText")});
-            return false;
-        }
-
-        if (this.txtEmail.getText().contentEquals("")
-                || this.cbxGroupType.getSelectedIndex() == -1) {
+        if (this.txtEmail.getText().contentEquals("") 
+                ) {
 
             java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/sola/clients/swing/desktop/administrative/Bundle"); // NOI18N
             MessageUtility.displayMessage(ClientMessage.CHECK_NOTNULL_FIELDS,
                     new Object[]{bundle.getString("RecordPersonRelationshipPanel.labEmail.text")});
             return false;
         }
-
-        for (Iterator<ApplicationPropertyBean> it = applicationBean.getPropertyList().iterator(); it.hasNext();) {
-            ApplicationPropertyBean appProperty = it.next();
-            if ((appProperty.getNameFirstpart() + appProperty.getNameLastpart()).equals(applicationPropertyBean.getNameFirstpart() + applicationPropertyBean.getNameLastpart())) {
-                MessageUtility.displayMessage(ClientMessage.APPLICATION_PROPERTY_ALREADY_SELECTED);
-                return false;
-            }
+        if (this.partySearchResuls.getSelectedPartySearchResult() != null && this.partySearchResuls.getSelectedPartySearchResult().isSelProperties()) {
+            MessageUtility.displayMessage(ClientMessage.APPLICATION_PROPERTY_ALREADY_SELECTED);
+            return false;
         }
 
         SolaTask t = new SolaTask<Void, Void>() {
@@ -1193,97 +1147,37 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
                         return null;
 
                     }
-                    try {
-                        if (targetName == null) {
-
-                            partyBeanforGroup.setTypeCode("naturalPerson");
-                            partyBeanforGroup.setGenderCode("na");
-                            partyBeanforGroup.saveParty();
-                        }
-                    } catch (Exception e) {
-                        LogUtility.log("Error saving PARTY FOR GROUP 2: "
-                                + e);
-                        return null;
-
-                    }
-                    try {
-                        if (targetName == null) {
-                            groupPartyBean.setId(partyBeanforGroup.getId());
-                            groupPartyBean.setGroupCode(groupPartyTypeListBean1.getSelectedGroupPartyType().getCode());
-                            groupPartyBean.saveGroupParty();
-                        }
-                    } catch (Exception e) {
-                        LogUtility.log("Error saving GROUP 3 "
-                                + e);
-                        return null;
-                    }
 
                     try {
                         if (partySearchResuls.getSelectedPartySearchResult() != null) {
-                            if (targetName == null && getnotifiablePartyExists() == null) {
-                                partyMemberBean.setGroupId(groupPartyBean.getId());
-                                partyMemberBean.setPartyId(partyBean.getId());
-                                partyMemberBean.savePartyMember(serviceId);
-                                partyMemberTargetBean.setPartyId(partyTargetSummary.getId());
-                                partyMemberTargetBean.setGroupId(groupPartyBean.getId());
-                                partyMemberTargetBean.savePartyMember(serviceId);
-                            }
-                            if (targetName != null && getnotifiablePartyExists() == null) {
-                                partyMemberBean.setGroupId(groupPartyBean.getId());
-                                partyMemberBean.setPartyId(partyBean.getId());
-                                partyMemberBean.savePartyMember(serviceId);
-                                partyMemberTargetBean.setPartyId(partyTargetSummary.getId());
-                                partyMemberTargetBean.setGroupId(groupPartyBean.getId());
-                                partyMemberTargetBean.savePartyMember(serviceId);
+                            if (targetName == null || getnotifiablePartyExists() == null || notifyBean1.getNotifyParty(serviceId, partyBean.getId(), "safeguard") == null) {
+                                notifyBean1.setServiceId(appService.getId());
+                                notifyBean1.setParty(partyBean);
+                                notifyBean1.setRelationshipTypeCode("safeguard");
+                                notifyListBean1.addOrUpdateItem(notifyBean1);
+                                notifyListBean1.saveList();
                             }
 
-                            if (targetName != null && getnotifiablePartyExists(partyBean.getId(), partyTargetSummary.getId(), notifiablePartyForBaUnitBean.getBaunitName()) == null) {
-                                partyMemberTargetBean.setPartyId(partyTargetSummary.getId());
-                                partyMemberTargetBean.setGroupId(groupPartyBean.getId());
-                                partyMemberTargetBean.savePartyMember(serviceId);
-                            }
-                        }
-                    } catch (Exception e) {
-                        LogUtility.log("Error saving PARTY MEMBER 4 "
-                                + e);
-                        return null;
-                    }
+                            NotifyPropertyBean notifyPropertyBean = new NotifyPropertyBean();
+                            notifyBean2.setServiceId(appService.getId());
+                            notifyBean2.setParty(partyTarget);
+                            notifyBean2.setRelationshipTypeCode("owner");
+                            notifyListBean2.addOrUpdateItem(notifyBean2);
+                            notifyListBean2.saveList();
 
 
-                    try {
-                        if (partySearchResuls.getSelectedPartySearchResult() != null) {
-                            if (notifiablePartyForBaUnitBean == null) {
-                                notifiablePartyForBaUnitBean = new NotifiablePartyForBaUnitBean();
-                            }
-                            if (targetName == null || getnotifiablePartyExists() == null) {
+                            notifyPropertyBean.setNotifyId(notifyBean1.getId());
+                            notifyPropertyBean.setBaUnitId(baUnitSelected.getId());
+                            notifyPropertyBean.saveNotifyProperty(notifyBean1.getId(), notifyBean1.getPropertyList().get(0).getId());
 
-                                notifiablePartyForBaUnitBean.setApplicationId(applicationBean.getId());
-                                notifiablePartyForBaUnitBean.setServiceId(appService.getId());
-                                notifiablePartyForBaUnitBean.setPartyId(partyBean.getId());
-                                notifiablePartyForBaUnitBean.setTargetPartyId(partyTargetSummary.getId());
-                                notifiablePartyForBaUnitBean.saveNotifiableParty();
-                            }
-                            if (getnotifiablePartyExists(partyBean.getId(), partyTargetSummary.getId(), notifiablePartyForBaUnitBean.getBaunitName()) == null) {
 
-                                notifiablePartyForBaUnitBean.setApplicationId(applicationBean.getId());
-                                notifiablePartyForBaUnitBean.setServiceId(appService.getId());
-                                notifiablePartyForBaUnitBean.setPartyId(partyBean.getId());
-                                notifiablePartyForBaUnitBean.setTargetPartyId(partyTargetSummary.getId());
-                                notifiablePartyForBaUnitBean.saveNotifiableParty();
-                            }
+
                         }
                     } catch (Exception e) {
                         LogUtility.log("Error saving NOTIFIABLE PARTY FOR BAUNIT 6 "
                                 + e);
                         return null;
                     }
-//   TODO VERIFY IF NOTIFICATION NEEDED IN THIS CASE   
-//                    String recepientFullName = partyBean.getName();
-//                    String emailAddress = partyBean.getEmail();
-//                    String messageText = "SCRIVO BLA BLA BLA";
-//                    String messageSubject = "NOTIFIABLE NOTIFICATION";
-//                    WSManager.getInstance().getCaseManagementService().sendEmail(recepientFullName, emailAddress, messageText, messageSubject);
-////          systemEjb.sendEmail(recepientFullName, emailAddress, messageText, messageSubject) 
 
                 } catch (Exception e) {
                     LogUtility.log("Error saving notifiable party at the end 7: "
@@ -1332,11 +1226,19 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
 
     private void selectParty() {
         if (this.partySearchResuls.getSelectedPartySearchResult() != null) {
+            if (this.partySearchResuls.getSelectedPartySearchResult().isSelProperties()) {
+                MessageUtility.displayMessage(ClientMessage.APPLICATION_PROPERTY_ALREADY_SELECTED);
+                return;
+            }
+            isSelected = true;
             this.partyTargetSummary = this.partySearchResuls.getSelectedPartySearchResult();
+            this.partyTarget = PartyBean.getParty(this.partyTargetSummary.getId());
             this.txtName.setText(this.partySearchResuls.getSelectedPartySearchResult().getFullName());
-            notifiablePartyForBaUnitBean.setBaunitName(this.partySearchResuls.getSelectedPartySearchResult().getNameFirstPart() + "/" + this.partySearchResuls.getSelectedPartySearchResult().getNameLastPart());
+            this.baUnitSelected = BaUnitBean.getBaUnitsById(this.partySearchResuls.getSelectedPartySearchResult().getPropertyId());
+            notifyBean1.addOrUpdateProperty(BaUnitBean.getBaUnitsById(this.partySearchResuls.getSelectedPartySearchResult().getPropertyId()));
+            notifyBean2.addOrUpdateProperty(BaUnitBean.getBaUnitsById(this.partySearchResuls.getSelectedPartySearchResult().getPropertyId()));
 
-            //            TODO QUI VEDERE IN CASO LASCIARE POSSIBILITA SEARCH
+
             this.txtName.setEditable(false);
             this.txtName.setEnabled(false);
             this.btnSearch.setEnabled(false);
@@ -1350,31 +1252,27 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
     private void removeParty() {
         if (partySearchResuls.getSelectedPartySearchResult() != null
                 && MessageUtility.displayMessage(ClientMessage.CONFIRM_DELETE_RECORD) == MessageUtility.BUTTON_ONE) {
+            if (!this.partySearchResuls.getSelectedPartySearchResult().isSelProperties()) {
+                MessageUtility.displayMessage(ClientMessage.APPLICATION_PROPERTY_ALREADY_SELECTED);
+                return;
+            }
 
             firePropertyChange(REMOVE_PARTY_PROPERTY, false, true);
-            NotifiablePartyForBaUnitBean.remove(partyBean.getId(), partySearchResuls.getSelectedPartySearchResult().getId(), partySearchResuls.getSelectedPartySearchResult().getProperties(), applicationBean.getId(), this.serviceId);
 
-            String groupId = groupPartyBean.getId();
-            String targetId = partySearchResuls.getSelectedPartySearchResult().getId();
-            if (this.partySearchResuls.getSelectedPartySearchResult().getTotal() == 1) {
-                PartyMemberBean.remove(targetId, groupId, serviceId);
-            }
+
+            notifyBean1 = notifyBean1.getNotifyParty(serviceId, partyBean.getId(), "safeguard");
+
+            NotifyPropertyBean.remove(notifyId, this.partySearchResuls.getSelectedPartySearchResult().getPropertyId());
             search();
-
+            
+            notifyBean2 = notifyBean2.getNotifyParty(serviceId, this.partySearchResuls.getSelectedPartySearchResult().getId(), "owner");
             NotifiablePartyForBaUnitBean notifiablePartyExist = NotifiablePartyForBaUnitBean.getNotifiableParty("", "", "", applicationBean.getId(), this.serviceId);
-
+            notifyBean2.deleteItem(notifyBean2);
             if (notifiablePartyExist == null) {
-                PartyMemberBean.remove(partyBean.getId(), groupId, serviceId);
-                txtName.setText(null);
-                txtName.setEditable(true);
-                txtName.setEnabled(true);
-                jPanel17.setVisible(true);
-                btnSearch.setEnabled(true);
-                btnSearch.setVisible(true);
-                btnClear.setEnabled(true);
-                btnClear.setVisible(true);
+                notifyBean1.deleteItem(notifyBean1);
             }
-
+            
+            isSelected = false;
         }
     }
 
@@ -1424,7 +1322,6 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
     private void btnRemovePaperTitleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemovePaperTitleActionPerformed
         removeDocument();
     }//GEN-LAST:event_btnRemovePaperTitleActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.sola.clients.beans.application.ApplicationBean applicationBean;
     private org.sola.clients.beans.application.ApplicationPropertyBean applicationPropertyBean;
@@ -1446,8 +1343,6 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
     private javax.swing.JPanel groupChoicePanel;
     private org.sola.clients.swing.ui.GroupPanel groupPanel3;
     private org.sola.clients.swing.ui.GroupPanel groupPanel4;
-    private org.sola.clients.beans.party.GroupPartyBean groupPartyBean;
-    private org.sola.clients.beans.referencedata.GroupPartyTypeListBean groupPartyTypeListBean1;
     private org.sola.clients.swing.ui.HeaderPanel headerPanel;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1485,10 +1380,12 @@ public class RecordPersonRelationshipPanel extends ContentPanel {
     private javax.swing.JLabel labPhone;
     private javax.swing.JLabel lblGender;
     private javax.swing.JLabel lblSearchResultNumber;
-    private org.sola.clients.beans.administrative.NotifiablePartyForBaUnitBean notifiablePartyForBaUnitBean;
+    private org.sola.clients.beans.application.NotifiablePartyForBaUnitBean notifiablePartyForBaUnitBean;
+    private org.sola.clients.beans.application.NotifyBean notifyBean1;
+    private org.sola.clients.beans.application.NotifyBean notifyBean2;
+    private org.sola.clients.beans.application.NotifyListBean notifyListBean1;
+    private org.sola.clients.beans.application.NotifyListBean notifyListBean2;
     private org.sola.clients.beans.party.PartyBean partyBean;
-    private org.sola.clients.beans.party.PartyBean partyBeanforGroup;
-    private org.sola.clients.beans.party.PartyMemberBean partyMemberBean;
     private org.sola.clients.beans.party.PartySearchParamsBean partySearchParams;
     private org.sola.clients.beans.party.PartyPropertySearchResultListBean partySearchResuls;
     private javax.swing.JPanel pnlSearch;

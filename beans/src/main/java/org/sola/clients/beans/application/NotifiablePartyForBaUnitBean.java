@@ -27,12 +27,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-package org.sola.clients.beans.administrative;
+package org.sola.clients.beans.application;
 
 import org.sola.clients.beans.AbstractTransactionedBean;
 import org.sola.clients.beans.converters.TypeConverters;
 import org.sola.services.boundary.wsclients.WSManager;
-import org.sola.webservices.transferobjects.administrative.NotifiablePartyForBaUnitTO;
+import org.sola.webservices.transferobjects.casemanagement.NotifiablePartyForBaUnitTO;
 import org.sola.webservices.transferobjects.EntityAction;
 
 /**
@@ -51,20 +51,20 @@ public class NotifiablePartyForBaUnitBean extends AbstractTransactionedBean {
     public static final String NOTIFIABLE_PARTY_PROPERTY = "notifiableParty";
     private String partyId;
     private String targetPartyId;
+    private String notifyId;
+    private String notifyTargetId;
     private String baunitName;
     private String statusParty;
     private String baunitId;
     private String applicationId;
-    private String groupId;
     private String serviceId;
     private String cancelServiceId;
-
 
     /**
      * Returns notifiable party by parameters.
      */
     public static NotifiablePartyForBaUnitBean getNotifiableParty(String partyId, String targetPartyId, String banunitName, String application, String service) {
-        NotifiablePartyForBaUnitTO partyTO = WSManager.getInstance().getAdministrative().getNotifiableParty(partyId, targetPartyId, banunitName, application, service);
+        NotifiablePartyForBaUnitTO partyTO = WSManager.getInstance().getCaseManagementService().getNotifiableParty(partyId, targetPartyId, banunitName, application, service);
         return TypeConverters.TransferObjectToBean(partyTO, NotifiablePartyForBaUnitBean.class, null);
     }
 
@@ -75,43 +75,48 @@ public class NotifiablePartyForBaUnitBean extends AbstractTransactionedBean {
      */
     public boolean saveNotifiableParty() {
         NotifiablePartyForBaUnitTO notifiableParty = TypeConverters.BeanToTrasferObject(this, NotifiablePartyForBaUnitTO.class);
-        notifiableParty = WSManager.getInstance().getAdministrative().saveNotifiableParty(notifiableParty);
+        notifiableParty = WSManager.getInstance().getCaseManagementService().saveNotifiableParty(notifiableParty);
         TypeConverters.TransferObjectToBean(notifiableParty, NotifiablePartyForBaUnitBean.class, this);
         return true;
     }
-    
-    
-    /** Removes notifiable row. */
+
+    /**
+     * Removes notifiable row.
+     */
     public static void remove(String partyId, String targetPartyId, String banunitName, String application, String service) {
-        if(partyId == null || partyId.length()<1){
+        if (partyId == null || partyId.length() < 1) {
             return;
         }
-        NotifiablePartyForBaUnitTO notifiableParty = WSManager.getInstance().getAdministrative().getNotifiableParty(partyId, targetPartyId, banunitName, application,service);
+        NotifiablePartyForBaUnitTO notifiableParty = WSManager.getInstance().getCaseManagementService().getNotifiableParty(partyId, targetPartyId, banunitName, application, service);
         notifiableParty.setEntityAction(EntityAction.DELETE);
-        WSManager.getInstance().getAdministrative().saveNotifiableParty(notifiableParty);
+        WSManager.getInstance().getCaseManagementService().saveNotifiableParty(notifiableParty);
     }
-    
-       /** Removes notifiable row. */
+
+    /**
+     * Removes notifiable row.
+     */
     public static void removeCancelNotification(String partyId, String targetPartyId, String banunitName, String application, String service) {
-        if(partyId == null || partyId.length()<1){
+        if (partyId == null || partyId.length() < 1) {
             return;
         }
-        NotifiablePartyForBaUnitTO notifiableParty = WSManager.getInstance().getAdministrative().getNotifiableParty(partyId, targetPartyId, banunitName, "","");
+        NotifiablePartyForBaUnitTO notifiableParty = WSManager.getInstance().getCaseManagementService().getNotifiableParty(partyId, targetPartyId, banunitName, "", "");
         notifiableParty.setCancelServiceId(null);
-        WSManager.getInstance().getAdministrative().saveNotifiableParty(notifiableParty);
+        WSManager.getInstance().getCaseManagementService().saveNotifiableParty(notifiableParty);
     }
-    
-    
-    /** Cancels notification. */
+
+    /**
+     * Cancels notification.
+     */
     public static void cancelNotification(String partyId, String targetPartyId, String banunitName, String application, String service) {
-        if(partyId == null || partyId.length()<1){
+        if (partyId == null || partyId.length() < 1) {
             return;
         }
-        NotifiablePartyForBaUnitTO notifiableParty = WSManager.getInstance().getAdministrative().getNotifiableParty(partyId, targetPartyId, banunitName, "","");
+        NotifiablePartyForBaUnitTO notifiableParty = WSManager.getInstance().getCaseManagementService().getNotifiableParty(partyId, targetPartyId, banunitName, "", "");
         notifiableParty.setCancelServiceId(service);
-        
-        WSManager.getInstance().getAdministrative().saveNotifiableParty(notifiableParty);
+
+        WSManager.getInstance().getCaseManagementService().saveNotifiableParty(notifiableParty);
     }
+
     public String getApplicationId() {
         return applicationId;
     }
@@ -173,14 +178,6 @@ public class NotifiablePartyForBaUnitBean extends AbstractTransactionedBean {
         propertySupport.firePropertyChange(TARGET_PARTY_ID_PROPERTY, oldValue, targetPartyId);
     }
 
-    public String getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(String groupId) {
-        this.groupId = groupId;
-    }
-
     public String getServiceId() {
         return serviceId;
     }
@@ -198,5 +195,20 @@ public class NotifiablePartyForBaUnitBean extends AbstractTransactionedBean {
     public void setCancelServiceId(String cancelServiceId) {
         this.cancelServiceId = cancelServiceId;
     }
-     
+
+    public String getNotifyId() {
+        return notifyId;
+    }
+
+    public void setNotifyId(String notifyId) {
+        this.notifyId = notifyId;
+    }
+
+    public String getNotifyTargetId() {
+        return notifyTargetId;
+    }
+
+    public void setNotifyTargetId(String notifyTargetId) {
+        this.notifyTargetId = notifyTargetId;
+    }
 }

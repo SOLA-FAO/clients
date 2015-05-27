@@ -4,17 +4,6 @@
   <NonVisualComponents>
     <Component class="org.sola.clients.beans.referencedata.GenderTypeListBean" name="genderTypeListBean">
     </Component>
-    <Component class="org.sola.clients.beans.party.PartyMemberBean" name="partyMemberBean">
-    </Component>
-    <Component class="org.sola.clients.beans.party.GroupPartyBean" name="groupPartyBean">
-    </Component>
-    <Component class="org.sola.clients.beans.referencedata.GroupPartyTypeListBean" name="groupPartyTypeListBean1">
-    </Component>
-    <Component class="org.sola.clients.beans.party.PartyBean" name="partyBeanforGroup">
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="CreatePartyBeanForGroup()"/>
-      </AuxValues>
-    </Component>
     <Component class="org.sola.clients.beans.party.PartySearchParamsBean" name="partySearchParams">
     </Component>
     <Component class="org.sola.clients.beans.party.PartyPropertySearchResultListBean" name="partySearchResuls">
@@ -31,7 +20,15 @@
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="CreatePartyBean()"/>
       </AuxValues>
     </Component>
-    <Component class="org.sola.clients.beans.administrative.NotifiablePartyForBaUnitBean" name="notifiablePartyForBaUnitBean">
+    <Component class="org.sola.clients.beans.application.NotifiablePartyForBaUnitBean" name="notifiablePartyForBaUnitBean">
+    </Component>
+    <Component class="org.sola.clients.beans.application.NotifyBean" name="notifyBean1">
+    </Component>
+    <Component class="org.sola.clients.beans.application.NotifyListBean" name="notifyListBean1">
+    </Component>
+    <Component class="org.sola.clients.beans.application.NotifyBean" name="notifyBean2">
+    </Component>
+    <Component class="org.sola.clients.beans.application.NotifyListBean" name="notifyListBean2">
     </Component>
   </NonVisualComponents>
   <Properties>
@@ -182,7 +179,7 @@
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="txtFirstName" alignment="0" max="32767" attributes="0"/>
-                          <Component id="labName" alignment="0" max="32767" attributes="0"/>
+                          <Component id="labName" alignment="0" pref="201" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
@@ -227,7 +224,7 @@
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="txtLastName" alignment="0" max="32767" attributes="0"/>
-                          <Component id="labLastName" alignment="0" max="32767" attributes="0"/>
+                          <Component id="labLastName" alignment="0" pref="201" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
@@ -272,7 +269,7 @@
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="txtAddress" alignment="0" max="32767" attributes="1"/>
-                          <Component id="labAddress" alignment="0" max="32767" attributes="0"/>
+                          <Component id="labAddress" alignment="0" pref="201" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
@@ -367,7 +364,7 @@
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="txtPhone" alignment="1" max="32767" attributes="1"/>
-                          <Component id="labPhone" alignment="0" max="32767" attributes="0"/>
+                          <Component id="labPhone" alignment="0" pref="201" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
@@ -411,7 +408,7 @@
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="txtEmail" alignment="0" max="32767" attributes="1"/>
-                          <Component id="labEmail" alignment="0" max="32767" attributes="0"/>
+                          <Component id="labEmail" alignment="0" pref="201" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
@@ -602,6 +599,10 @@
               </Layout>
               <SubComponents>
                 <Container class="javax.swing.JPanel" name="jPanel2">
+                  <Properties>
+                    <Property name="enabled" type="boolean" value="false"/>
+                    <Property name="opaque" type="boolean" value="false"/>
+                  </Properties>
 
                   <Layout>
                     <DimensionLayout dim="0">
@@ -641,14 +642,14 @@
                           <Connection code="new SimpleComboBoxRenderer(&quot;getDisplayValue&quot;)" type="code"/>
                         </Property>
                       </Properties>
-                      <BindingProperties>
-                        <BindingProperty name="elements" source="groupPartyTypeListBean1" sourcePath="${groupPartyTypeList}" target="cbxGroupType" targetPath="elements" updateStrategy="0" immediately="false"/>
-                        <BindingProperty name="selectedItem" source="groupPartyTypeListBean1" sourcePath="${selectedGroupPartyType}" target="cbxGroupType" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
-                      </BindingProperties>
                     </Component>
                   </SubComponents>
                 </Container>
                 <Container class="javax.swing.JPanel" name="jPanel9">
+                  <Properties>
+                    <Property name="enabled" type="boolean" value="false"/>
+                    <Property name="opaque" type="boolean" value="false"/>
+                  </Properties>
 
                   <Layout>
                     <DimensionLayout dim="0">
@@ -670,11 +671,6 @@
                   </Layout>
                   <SubComponents>
                     <Component class="javax.swing.JTextField" name="txtGroup">
-                      <BindingProperties>
-                        <BindingProperty name="text" source="partyBeanforGroup" sourcePath="${name}" target="txtGroup" targetPath="text" updateStrategy="0" immediately="false">
-                          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-                        </BindingProperty>
-                      </BindingProperties>
                     </Component>
                     <Component class="javax.swing.JLabel" name="labGroupName">
                       <Properties>
@@ -712,7 +708,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="pnlSearch" max="32767" attributes="0"/>
                       <Component id="jPanel14" pref="635" max="32767" attributes="0"/>
-                      <Component id="groupPanel4" alignment="0" max="32767" attributes="0"/>
+                      <Component id="groupPanel4" alignment="0" pref="0" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
@@ -823,6 +819,9 @@
                         </Component>
                         <Component class="org.sola.clients.swing.common.buttons.BtnRemove" name="btnRemove1">
                           <Properties>
+                            <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                              <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="RecordPersonRelationshipPanel.btnRemove.toolTipText" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                            </Property>
                             <Property name="verticalTextPosition" type="int" value="3"/>
                           </Properties>
                           <Events>

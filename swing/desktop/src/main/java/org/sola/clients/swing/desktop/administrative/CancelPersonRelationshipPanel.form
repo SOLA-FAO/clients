@@ -4,17 +4,6 @@
   <NonVisualComponents>
     <Component class="org.sola.clients.beans.referencedata.GenderTypeListBean" name="genderTypeListBean">
     </Component>
-    <Component class="org.sola.clients.beans.party.PartyMemberBean" name="partyMemberBean">
-    </Component>
-    <Component class="org.sola.clients.beans.party.GroupPartyBean" name="groupPartyBean">
-    </Component>
-    <Component class="org.sola.clients.beans.referencedata.GroupPartyTypeListBean" name="groupPartyTypeListBean1">
-    </Component>
-    <Component class="org.sola.clients.beans.party.PartyBean" name="partyBeanforGroup">
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="CreatePartyBeanForGroup()"/>
-      </AuxValues>
-    </Component>
     <Component class="org.sola.clients.beans.party.PartySearchParamsBean" name="partySearchParams">
     </Component>
     <Component class="org.sola.clients.beans.application.ApplicationPropertyBean" name="applicationPropertyBean">
@@ -29,13 +18,17 @@
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="CreatePartyBean()"/>
       </AuxValues>
     </Component>
-    <Component class="org.sola.clients.beans.administrative.NotifiablePartyForBaUnitBean" name="notifiablePartyForBaUnitBeanOLD">
-    </Component>
-    <Component class="org.sola.clients.beans.administrative.NotifiablePartySearchResultBean" name="notifiablePartySearchResultBean1">
-    </Component>
-    <Component class="org.sola.clients.beans.administrative.NotifiablePartySearchResultListBean" name="partySearchResuls">
-    </Component>
     <Component class="org.sola.clients.beans.application.CancelNotificationBean" name="notifiablePartyForBaUnitBean">
+    </Component>
+    <Component class="org.sola.clients.beans.application.NotifyBean" name="notifyBean1">
+    </Component>
+    <Component class="org.sola.clients.beans.application.NotifyListBean" name="notifyListBean1">
+    </Component>
+    <Component class="org.sola.clients.beans.application.NotifyBean" name="notifyBean2">
+    </Component>
+    <Component class="org.sola.clients.beans.application.NotifyListBean" name="notifyListBean2">
+    </Component>
+    <Component class="org.sola.clients.beans.application.NotifiablePartySearchResultListBean" name="partySearchResuls">
     </Component>
   </NonVisualComponents>
   <Properties>
@@ -67,7 +60,7 @@
               <Component id="jTabbedPane1" pref="0" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
-          <Component id="headerPanel" pref="619" max="32767" attributes="0"/>
+          <Component id="headerPanel" pref="679" max="32767" attributes="0"/>
           <Component id="jToolBar1" alignment="0" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
@@ -78,7 +71,7 @@
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="jToolBar1" min="-2" pref="25" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jTabbedPane1" pref="424" max="32767" attributes="0"/>
+              <Component id="jTabbedPane1" pref="722" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -157,7 +150,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Person Requesting Cancelation">
+              <JTabbedPaneConstraints tabName="Person Requesting Cancellation">
                 <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                   <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="CancelPersonRelationshipPanel.jPanel12.TabConstraints.tabTitle" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                 </Property>
@@ -171,7 +164,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jPanel11" pref="574" max="32767" attributes="1"/>
+                          <Component id="jPanel11" pref="634" max="32767" attributes="1"/>
                           <Component id="jPanel3" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -205,7 +198,7 @@
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="txtFirstName" alignment="0" pref="181" max="32767" attributes="0"/>
-                          <Component id="labName" alignment="0" max="32767" attributes="0"/>
+                          <Component id="labName" alignment="0" pref="201" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
@@ -221,11 +214,6 @@
                   </Layout>
                   <SubComponents>
                     <Component class="javax.swing.JTextField" name="txtFirstName">
-                      <BindingProperties>
-                        <BindingProperty name="text" source="partyBean" sourcePath="${name}" target="txtFirstName" targetPath="text" updateStrategy="0" immediately="false">
-                          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-                        </BindingProperty>
-                      </BindingProperties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="LafManager.getInstance().setTxtProperties(txtFirstName);"/>
                         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
@@ -250,7 +238,7 @@
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="txtLastName" alignment="0" pref="181" max="32767" attributes="0"/>
-                          <Component id="labLastName" alignment="0" max="32767" attributes="0"/>
+                          <Component id="labLastName" alignment="0" pref="201" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
@@ -277,11 +265,6 @@
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtLastName">
-                      <BindingProperties>
-                        <BindingProperty name="text" source="partyBean" sourcePath="${lastName}" target="txtLastName" targetPath="text" updateStrategy="0" immediately="false">
-                          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-                        </BindingProperty>
-                      </BindingProperties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="txtLastName.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));&#xa;txtLastName.setHorizontalAlignment(JTextField.LEADING);"/>
                         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
@@ -295,7 +278,7 @@
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="txtAddress" alignment="0" pref="181" max="32767" attributes="1"/>
-                          <Component id="labAddress" alignment="0" max="32767" attributes="0"/>
+                          <Component id="labAddress" alignment="0" pref="201" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
@@ -304,18 +287,13 @@
                               <Component id="labAddress" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                               <Component id="txtAddress" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
+                              <EmptySpace pref="13" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
                   </Layout>
                   <SubComponents>
                     <Component class="javax.swing.JTextField" name="txtAddress">
-                      <BindingProperties>
-                        <BindingProperty name="text" source="partyBean" sourcePath="${address.description}" target="txtAddress" targetPath="text" updateStrategy="0" immediately="false">
-                          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-                        </BindingProperty>
-                      </BindingProperties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="txtAddress.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));&#xa;txtAddress.setHorizontalAlignment(JTextField.LEADING);"/>
                         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
@@ -340,7 +318,7 @@
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="cbxGender" alignment="0" pref="181" max="32767" attributes="0"/>
-                          <Component id="lblGender" alignment="0" max="32767" attributes="0"/>
+                          <Component id="lblGender" alignment="0" pref="201" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
@@ -374,10 +352,6 @@
                           <Connection code="new SimpleComboBoxRenderer(&quot;getDisplayValue&quot;)" type="code"/>
                         </Property>
                       </Properties>
-                      <BindingProperties>
-                        <BindingProperty name="elements" source="genderTypeListBean" sourcePath="${genderTypeList}" target="cbxGender" targetPath="elements" updateStrategy="0" immediately="false"/>
-                        <BindingProperty name="selectedItem" source="partyBean" sourcePath="${genderType}" target="cbxGender" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
-                      </BindingProperties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
                       </AuxValues>
@@ -390,7 +364,7 @@
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="txtPhone" alignment="1" pref="181" max="32767" attributes="1"/>
-                          <Component id="labPhone" alignment="0" max="32767" attributes="0"/>
+                          <Component id="labPhone" alignment="0" pref="201" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
@@ -413,11 +387,6 @@
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtPhone">
-                      <BindingProperties>
-                        <BindingProperty name="text" source="partyBean" sourcePath="${mobile}" target="txtPhone" targetPath="text" updateStrategy="0" immediately="false">
-                          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-                        </BindingProperty>
-                      </BindingProperties>
                       <Events>
                         <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtPhoneFocusLost"/>
                       </Events>
@@ -434,7 +403,7 @@
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="txtEmail" alignment="0" pref="181" max="32767" attributes="1"/>
-                          <Component id="labEmail" alignment="0" max="32767" attributes="0"/>
+                          <Component id="labEmail" alignment="0" pref="201" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
@@ -460,11 +429,6 @@
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtEmail">
-                      <BindingProperties>
-                        <BindingProperty name="text" source="partyBean" sourcePath="${email}" target="txtEmail" targetPath="text" updateStrategy="0" immediately="false">
-                          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-                        </BindingProperty>
-                      </BindingProperties>
                       <Events>
                         <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtEmailFocusLost"/>
                       </Events>
@@ -494,7 +458,7 @@
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Component id="jToolBar4" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
-                          <Component id="docTableScrollPanel" pref="211" max="32767" attributes="0"/>
+                          <Component id="docTableScrollPanel" pref="509" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -617,7 +581,7 @@
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="pnlSearch" alignment="1" max="32767" attributes="0"/>
-                      <Component id="jPanel2" alignment="0" pref="574" max="32767" attributes="0"/>
+                      <Component id="jPanel2" alignment="0" pref="634" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
@@ -650,7 +614,7 @@
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jToolBar2" min="-2" pref="25" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jScrollPane2" pref="287" max="32767" attributes="0"/>
+                              <Component id="jScrollPane2" pref="585" max="32767" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -751,35 +715,28 @@
                               <TableColumnModel selectionModel="0">
                                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                                   <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                                    <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="CancelPersonRelationshipPanel.tableSearchResults.columnModel.title4" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                                    <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="CancelPersonRelationshipPanel.tableSearchResults.columnModel.title0_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                                   </Title>
                                   <Editor/>
                                   <Renderer/>
                                 </Column>
                                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                                   <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                                    <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="CancelPersonRelationshipPanel.tableSearchResults.columnModel.title0" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                                    <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="CancelPersonRelationshipPanel.tableSearchResults.columnModel.title3_2" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                                   </Title>
                                   <Editor/>
                                   <Renderer/>
                                 </Column>
                                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                                   <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                                    <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="CancelPersonRelationshipPanel.tableSearchResults.columnModel.title3" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                                    <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="CancelPersonRelationshipPanel.tableSearchResults.columnModel.title1_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                                   </Title>
                                   <Editor/>
                                   <Renderer/>
                                 </Column>
                                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                                   <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                                    <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="CancelPersonRelationshipPanel.tableSearchResults.columnModel.title1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                                  </Title>
-                                  <Editor/>
-                                  <Renderer/>
-                                </Column>
-                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                  <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                                    <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="CancelPersonRelationshipPanel.tableSearchResults.columnModel.title2" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                                    <ResourceString bundle="org/sola/clients/swing/desktop/administrative/Bundle.properties" key="CancelPersonRelationshipPanel.tableSearchResults.columnModel.title2_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                                   </Title>
                                   <Editor/>
                                   <Renderer editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -794,9 +751,6 @@
                           </Properties>
                           <BindingProperties>
                             <BindingProperty name="elements" source="partySearchResuls" sourcePath="${partySearchResults}" target="tableSearchResults" targetPath="elements" updateStrategy="0" immediately="true">
-                              <Subbinding sourcePath="${groupPartyName}  ${groupPartyLastName}">
-                                <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
-                              </Subbinding>
                               <Subbinding sourcePath="${fullName}">
                                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
                                 <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
@@ -839,7 +793,7 @@
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="txtName" max="32767" attributes="0"/>
-                              <Component id="jLabel4" alignment="0" pref="181" max="32767" attributes="0"/>
+                              <Component id="jLabel4" alignment="0" pref="201" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                         <DimensionLayout dim="1">
@@ -875,7 +829,7 @@
                       <Layout>
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <EmptySpace min="0" pref="181" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="201" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                         <DimensionLayout dim="1">
@@ -890,7 +844,7 @@
                       <Layout>
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <EmptySpace min="0" pref="181" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="201" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                         <DimensionLayout dim="1">

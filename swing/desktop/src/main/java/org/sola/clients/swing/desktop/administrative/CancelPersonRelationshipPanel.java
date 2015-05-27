@@ -33,15 +33,15 @@ import java.awt.ComponentOrientation;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Iterator;
 import java.util.Locale;
 import javax.swing.JFormattedTextField;
 import javax.swing.JTextField;
-import org.sola.clients.beans.administrative.NotifiablePartyForBaUnitBean;
+import org.sola.clients.beans.administrative.BaUnitBean;
+import org.sola.clients.beans.application.NotifiablePartyForBaUnitBean;
+import org.sola.clients.beans.application.NotifiablePartySearchResultBean;
 import org.sola.clients.beans.administrative.RrrBean;
-import org.sola.clients.beans.application.ApplicationBean;
-import org.sola.clients.beans.application.ApplicationPropertyBean;
-import org.sola.clients.beans.application.ApplicationServiceBean;
-import org.sola.clients.beans.application.CancelNotificationBean;
+import org.sola.clients.beans.application.*;
 import org.sola.clients.beans.party.*;
 import org.sola.clients.beans.referencedata.*;
 import org.sola.clients.beans.source.SourceBean;
@@ -76,16 +76,14 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
     public static final String VIEW_PARTY_PROPERTY = "viewParty";
     public static final String VIEW_DOCUMENT = "viewDocument";
     private PartySummaryBean partyTargetSummary = new PartySummaryBean();
-    private PartyMemberBean partyMemberTargetBean = new PartyMemberBean();
     private ApplicationBean appBean;
     private PartyBean partyAppBean;
-    private PartyBean partyAppBeanForGroup;
-    private GroupPartyBean groupAppPartyBean;
     private ApplicationServiceBean appService;
     private Boolean isContactPerson;
     private String targetName;
     public String serviceId;
     public Boolean setRole = true;
+    public Boolean doesExists = false;
 
     /**
      * Creates documents table to show paper title documents.
@@ -112,28 +110,6 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
         return partyBean;
     }
 
-    private PartyBean CreatePartyBeanForGroup() {
-
-        if (partyAppBeanForGroup != null) {
-            partyBeanforGroup = partyAppBeanForGroup;
-
-        } else {
-            partyBeanforGroup = new PartyBean();
-        }
-        return partyBeanforGroup;
-    }
-
-    private GroupPartyBean CreateGroupPartyBean() {
-
-        if (groupAppPartyBean != null) {
-            groupPartyBean = groupAppPartyBean;
-
-        } else {
-            groupPartyBean = new GroupPartyBean();
-        }
-        return groupPartyBean;
-    }
-
     private ApplicationBean CreateApplicationBean() {
 
         if (appBean != null) {
@@ -153,14 +129,15 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
      * Creates new form RecordRelationshipPanel
      */
     public CancelPersonRelationshipPanel(ApplicationBean applicationBean,
-        ApplicationServiceBean applicationService) {
+            ApplicationServiceBean applicationService) {
         this.applicationBean = applicationBean;
         this.appBean = applicationBean;
         this.appService = applicationService;
         this.serviceId = applicationService.getId();
-//        TODO VERIFY THIS WHEN THERE IS MORE THAN ONE TARGET PARTY FOR THE NOTIFIABLE PERSON APPLICATION 
-//        notifiablePartyForBaUnitBean = NotifiablePartyForBaUnitBean.getNotifiableParty("", "", "", applicationBean.getId(),this.serviceId);
+        notifyBean1 = new NotifyBean();
+        notifyBean2 = new NotifyBean();
 
+//        notifiablePartyForBaUnitBean = NotifiablePartyForBaUnitBean.getNotifiableParty("", "", "", applicationBean.getId(), this.serviceId);
         notifiablePartyForBaUnitBean = CancelNotificationBean.getCancelNotification(applicationBean.getContactPersonId(), applicationBean.getContactPersonId(), "", applicationBean.getId(), this.serviceId);
 
 
@@ -183,20 +160,12 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
             isContactPerson = false;
             partyBean = new PartyBean();
 //            }
-            this.partyBeanforGroup = new PartyBean();
-            this.partyMemberBean = new PartyMemberBean();
-            this.groupPartyBean = new GroupPartyBean();
             this.partyTargetSummary = new PartySummaryBean();
-            this.partyMemberTargetBean = new PartyMemberBean();
             this.applicationPropertyBean = new ApplicationPropertyBean();
         } else {
             isContactPerson = false;
             partyBean = PartyBean.getParty(notifiablePartyForBaUnitBean.getPartyId());
-            this.partyBeanforGroup = new PartyBean();
-            this.partyMemberBean = new PartyMemberBean();
-            this.groupPartyBean = new GroupPartyBean();
             this.partyTargetSummary = new PartySummaryBean();
-            this.partyMemberTargetBean = new PartyMemberBean();
             this.applicationPropertyBean = new ApplicationPropertyBean();
         }
 
@@ -213,8 +182,6 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
             partyBean = PartyBean.getParty(notifiablePartyForBaUnitBean.getPartyId());
             partyAppBean = partyBean;
 
-            partyAppBeanForGroup = partyBeanforGroup;
-            groupAppPartyBean = groupPartyBean;
         }
 
         initComponents();
@@ -317,9 +284,6 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
 //            this.jLabel5.setVisible(false);
             this.txtName.setEnabled(false);
             partyBean = partyAppBean;
-            partyBeanforGroup = partyAppBeanForGroup;
-            groupPartyBean = groupAppPartyBean;
-            groupPartyTypeListBean1.setSelectedGroupPartyType(groupPartyBean.getGroupType());
             this.txtAddress.setEnabled(false);
             this.txtFirstName.setEnabled(false);
             this.txtLastName.setEnabled(false);
@@ -357,18 +321,16 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         genderTypeListBean = new org.sola.clients.beans.referencedata.GenderTypeListBean();
-        partyMemberBean = new org.sola.clients.beans.party.PartyMemberBean();
-        groupPartyBean = new org.sola.clients.beans.party.GroupPartyBean();
-        groupPartyTypeListBean1 = new org.sola.clients.beans.referencedata.GroupPartyTypeListBean();
-        partyBeanforGroup = CreatePartyBeanForGroup();
         partySearchParams = new org.sola.clients.beans.party.PartySearchParamsBean();
         applicationPropertyBean = new org.sola.clients.beans.application.ApplicationPropertyBean();
         applicationBean = CreateApplicationBean();
         partyBean = CreatePartyBean();
-        notifiablePartyForBaUnitBeanOLD = new org.sola.clients.beans.administrative.NotifiablePartyForBaUnitBean();
-        notifiablePartySearchResultBean1 = new org.sola.clients.beans.administrative.NotifiablePartySearchResultBean();
-        partySearchResuls = new org.sola.clients.beans.administrative.NotifiablePartySearchResultListBean();
         notifiablePartyForBaUnitBean = new org.sola.clients.beans.application.CancelNotificationBean();
+        notifyBean1 = new org.sola.clients.beans.application.NotifyBean();
+        notifyListBean1 = new org.sola.clients.beans.application.NotifyListBean();
+        notifyBean2 = new org.sola.clients.beans.application.NotifyBean();
+        notifyListBean2 = new org.sola.clients.beans.application.NotifyListBean();
+        partySearchResuls = new org.sola.clients.beans.application.NotifiablePartySearchResultListBean();
         headerPanel = new org.sola.clients.swing.ui.HeaderPanel();
         jToolBar1 = new javax.swing.JToolBar();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
@@ -460,9 +422,6 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
 
         jPanel11.setLayout(new java.awt.GridLayout(2, 3, 15, 0));
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, partyBean, org.jdesktop.beansbinding.ELProperty.create("${name}"), txtFirstName, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
         LafManager.getInstance().setTxtProperties(txtFirstName);
 
         labName.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
@@ -474,7 +433,7 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(txtFirstName, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
-            .addComponent(labName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(labName, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -491,9 +450,6 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
         labLastName.setText(bundle.getString("CancelPersonRelationshipPanel.labLastName.text")); // NOI18N
         labLastName.setIconTextGap(1);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, partyBean, org.jdesktop.beansbinding.ELProperty.create("${lastName}"), txtLastName, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
         txtLastName.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
         txtLastName.setHorizontalAlignment(JTextField.LEADING);
 
@@ -502,7 +458,7 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(txtLastName, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
-            .addComponent(labLastName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(labLastName, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -514,9 +470,6 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
         );
 
         jPanel11.add(jPanel5);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, partyBean, org.jdesktop.beansbinding.ELProperty.create("${address.description}"), txtAddress, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
 
         txtAddress.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
         txtAddress.setHorizontalAlignment(JTextField.LEADING);
@@ -530,7 +483,7 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(txtAddress, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
-            .addComponent(labAddress, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(labAddress, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -538,7 +491,7 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
                 .addComponent(labAddress)
                 .addGap(4, 4, 4)
                 .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         jPanel11.add(jPanel7);
@@ -549,18 +502,12 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
         cbxGender.setBackground(new java.awt.Color(226, 244, 224));
         cbxGender.setRenderer(new SimpleComboBoxRenderer("getDisplayValue"));
 
-        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${genderTypeList}");
-        org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, genderTypeListBean, eLProperty, cbxGender);
-        bindingGroup.addBinding(jComboBoxBinding);
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, partyBean, org.jdesktop.beansbinding.ELProperty.create("${genderType}"), cbxGender, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
-
         javax.swing.GroupLayout jPanel19Layout = new javax.swing.GroupLayout(jPanel19);
         jPanel19.setLayout(jPanel19Layout);
         jPanel19Layout.setHorizontalGroup(
             jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(cbxGender, 0, 181, Short.MAX_VALUE)
-            .addComponent(lblGender, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(lblGender, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
         );
         jPanel19Layout.setVerticalGroup(
             jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -575,9 +522,6 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
 
         labPhone.setText(bundle.getString("CancelPersonRelationshipPanel.labPhone.text")); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, partyBean, org.jdesktop.beansbinding.ELProperty.create("${mobile}"), txtPhone, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
         txtPhone.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
         txtPhone.setHorizontalAlignment(JTextField.LEADING);
         txtPhone.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -591,7 +535,7 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(txtPhone, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
-            .addComponent(labPhone, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(labPhone, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -607,9 +551,6 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
         labEmail.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/common/red_asterisk.gif"))); // NOI18N
         labEmail.setText(bundle.getString("CancelPersonRelationshipPanel.labEmail.text")); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, partyBean, org.jdesktop.beansbinding.ELProperty.create("${email}"), txtEmail, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
         txtEmail.setComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
         txtEmail.setHorizontalAlignment(JTextField.LEADING);
         txtEmail.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -623,7 +564,7 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(txtEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
-            .addComponent(labEmail, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(labEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -687,7 +628,7 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jToolBar4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(docTableScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE))
+                .addComponent(docTableScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 509, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
@@ -697,7 +638,7 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
             .addGroup(jPanel12Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
+                    .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, 634, Short.MAX_VALUE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -768,12 +709,9 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
         lblSearchResultNumber.setText(bundle.getString("CancelPersonRelationshipPanel.lblSearchResultNumber.text")); // NOI18N
         jToolBar2.add(lblSearchResultNumber);
 
-        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${partySearchResults}");
+        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${partySearchResults}");
         org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, partySearchResuls, eLProperty, tableSearchResults);
-        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${groupPartyName}  ${groupPartyLastName}"));
-        columnBinding.setColumnName("Group Party Name}  ${group Party Last Name");
-        columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${fullName}"));
+        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${fullName}"));
         columnBinding.setColumnName("Full Name");
         columnBinding.setColumnClass(String.class);
         columnBinding.setEditable(false);
@@ -789,7 +727,7 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
         columnBinding.setColumnClass(Boolean.class);
         columnBinding.setEditable(false);
         bindingGroup.addBinding(jTableBinding);
-        jTableBinding.bind();binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, partySearchResuls, org.jdesktop.beansbinding.ELProperty.create("${selectedPartySearchResult}"), tableSearchResults, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
+        jTableBinding.bind();org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, partySearchResuls, org.jdesktop.beansbinding.ELProperty.create("${selectedPartySearchResult}"), tableSearchResults, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
         bindingGroup.addBinding(binding);
 
         tableSearchResults.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -798,14 +736,11 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
             }
         });
         jScrollPane2.setViewportView(tableSearchResults);
-        if (tableSearchResults.getColumnModel().getColumnCount() > 0) {
-            tableSearchResults.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("CancelPersonRelationshipPanel.tableSearchResults.columnModel.title4")); // NOI18N
-            tableSearchResults.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("CancelPersonRelationshipPanel.tableSearchResults.columnModel.title0")); // NOI18N
-            tableSearchResults.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("CancelPersonRelationshipPanel.tableSearchResults.columnModel.title3")); // NOI18N
-            tableSearchResults.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("CancelPersonRelationshipPanel.tableSearchResults.columnModel.title1")); // NOI18N
-            tableSearchResults.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("CancelPersonRelationshipPanel.tableSearchResults.columnModel.title2")); // NOI18N
-            tableSearchResults.getColumnModel().getColumn(4).setCellRenderer(new BooleanCellRenderer());
-        }
+        tableSearchResults.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("CancelPersonRelationshipPanel.tableSearchResults.columnModel.title0_1")); // NOI18N
+        tableSearchResults.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("CancelPersonRelationshipPanel.tableSearchResults.columnModel.title3_2")); // NOI18N
+        tableSearchResults.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("CancelPersonRelationshipPanel.tableSearchResults.columnModel.title1_1")); // NOI18N
+        tableSearchResults.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("CancelPersonRelationshipPanel.tableSearchResults.columnModel.title2_1")); // NOI18N
+        tableSearchResults.getColumnModel().getColumn(3).setCellRenderer(new BooleanCellRenderer());
 
         javax.swing.GroupLayout pnlSearchLayout = new javax.swing.GroupLayout(pnlSearch);
         pnlSearch.setLayout(pnlSearchLayout);
@@ -819,7 +754,7 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
             .addGroup(pnlSearchLayout.createSequentialGroup()
                 .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 585, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
         );
 
@@ -835,7 +770,7 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(txtName)
-            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
+            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -852,7 +787,7 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 181, Short.MAX_VALUE)
+            .addGap(0, 201, Short.MAX_VALUE)
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -865,7 +800,7 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
         jPanel13.setLayout(jPanel13Layout);
         jPanel13Layout.setHorizontalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 181, Short.MAX_VALUE)
+            .addGap(0, 201, Short.MAX_VALUE)
         );
         jPanel13Layout.setVerticalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -879,7 +814,7 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
         jPanel16Layout.setHorizontalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pnlSearch, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 634, Short.MAX_VALUE)
         );
         jPanel16Layout.setVerticalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -916,7 +851,7 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
                 .addContainerGap()
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addContainerGap())
-            .addComponent(headerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
+            .addComponent(headerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 679, Short.MAX_VALUE)
             .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
@@ -926,7 +861,7 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 424, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 722, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1004,7 +939,6 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
         return notifiablePartyExist;
     }
 
-
     /**
      * Searches parties with given criteria.
      */
@@ -1038,31 +972,72 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
         if (partySearchResuls.getSelectedPartySearchResult() != null
                 && MessageUtility.displayMessage(ClientMessage.CONFIRM_DELETE_RECORD) == MessageUtility.BUTTON_ONE) {
 
-            firePropertyChange(REMOVE_PARTY_PROPERTY, false, true);
-            NotifiablePartyForBaUnitBean.cancelNotification(partySearchResuls.getSelectedPartySearchResult().getId(), partySearchResuls.getSelectedPartySearchResult().getTargetPartyId(), partySearchResuls.getSelectedPartySearchResult().getProperties(), applicationBean.getId(), this.serviceId);
+            NotifiablePartyForBaUnitBean notifiable = NotifiablePartyForBaUnitBean.getNotifiableParty(partySearchResuls.getSelectedPartySearchResult().getId(), partySearchResuls.getSelectedPartySearchResult().getTargetPartyId(), partySearchResuls.getSelectedPartySearchResult().getProperties(), "", "");
+
+            NotifyPropertyBean notifyPropertyBean = new NotifyPropertyBean();
+            notifyPropertyBean.setNotifyId(notifiable.getNotifyId());
+            notifyPropertyBean.setBaUnitId(notifiable.getBaunitId());
+            notifyPropertyBean.setStatus("c");
+            notifyPropertyBean.setCancelServiceId(serviceId);
+            notifyPropertyBean.cancelNotifyProperty(notifiable.getNotifyId(), notifiable.getBaunitId(), notifyPropertyBean);
+
+            NotifyBean notifyBean1 = new NotifyBean();
+            notifyBean1 = notifyBean1.getNotifyParty(notifiable.getServiceId(), notifiable.getPartyId(), "safeguard");
 
             search();
-            
+            doesExists = false; 
+            for (Iterator<NotifiablePartySearchResultBean> it = partySearchResuls.getPartySearchResults().iterator(); it.hasNext();) {
+                NotifiablePartySearchResultBean notifiableProperty = it.next();
+                if (notifiableProperty.isSelProperties()== true) {
+                    doesExists = true;
+                }
+            }
+
+            if (doesExists) {
+                notifyBean1.setStatus("c");
+                notifyBean1.setCancelServiceId(serviceId);
+                notifyBean1.cancelNotify(notifyBean1);
+            }
+
             MessageUtility.displayMessage(ClientMessage.GENERAL_RECORD_SAVED);
-            
+
         }
         close();
     }
-    
-    
+
     private void removeCancelNotification() {
         if (partySearchResuls.getSelectedPartySearchResult() != null) {
 
-            firePropertyChange(REMOVE_PARTY_PROPERTY, false, true);
-            NotifiablePartyForBaUnitBean.removeCancelNotification(partySearchResuls.getSelectedPartySearchResult().getId(), partySearchResuls.getSelectedPartySearchResult().getTargetPartyId(), partySearchResuls.getSelectedPartySearchResult().getProperties(), applicationBean.getId(), this.serviceId);
+//            firePropertyChange(REMOVE_PARTY_PROPERTY, false, true);
+            NotifiablePartyForBaUnitBean notifiable = NotifiablePartyForBaUnitBean.getNotifiableParty(partySearchResuls.getSelectedPartySearchResult().getId(), partySearchResuls.getSelectedPartySearchResult().getTargetPartyId(), partySearchResuls.getSelectedPartySearchResult().getProperties(), "", "");
+            NotifyPropertyBean notifyPropertyBean = new NotifyPropertyBean();
+            notifyPropertyBean.setNotifyId(notifiable.getNotifyId());
+            notifyPropertyBean.setBaUnitId(notifiable.getBaunitId());
+            notifyPropertyBean.setStatus("c");
+            notifyPropertyBean.setCancelServiceId(null);
+            notifyPropertyBean.removeCancelNotification(notifiable.getNotifyId(), notifiable.getBaunitId(), notifyPropertyBean);
             
+            NotifyBean notifyBean1 = new NotifyBean();
+            notifyBean1 = notifyBean1.getNotifyParty(notifiable.getServiceId(), notifiable.getPartyId(), "safeguard");
+
             search();
-            
+             doesExists = false;
+             for (Iterator<NotifiablePartySearchResultBean> it = partySearchResuls.getPartySearchResults().iterator(); it.hasNext();) {
+                NotifiablePartySearchResultBean notifiableProperty = it.next();
+                if (notifiableProperty.isSelProperties()== true) {
+                    doesExists = true;
+                }
+            }
+
+            if (doesExists) {
+                notifyBean1.setStatus("c");
+                notifyBean1.setCancelServiceId(null);
+                notifyBean1.cancelNotify(notifyBean1);
+            }  
             partySearchResuls.setSelectedPartySearchResult(null);
 
         }
     }
-
 
     private void clearForm() {
         txtName.setText(null);
@@ -1185,7 +1160,6 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
     private void btnRemove2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemove2ActionPerformed
         removeCancelNotification();
     }//GEN-LAST:event_btnRemove2ActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.sola.clients.beans.application.ApplicationBean applicationBean;
     private org.sola.clients.beans.application.ApplicationPropertyBean applicationPropertyBean;
@@ -1204,8 +1178,6 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
     private javax.swing.Box.Filler filler1;
     private org.sola.clients.beans.referencedata.GenderTypeListBean genderTypeListBean;
     private org.sola.clients.swing.ui.GroupPanel groupPanel3;
-    private org.sola.clients.beans.party.GroupPartyBean groupPartyBean;
-    private org.sola.clients.beans.referencedata.GroupPartyTypeListBean groupPartyTypeListBean1;
     private org.sola.clients.swing.ui.HeaderPanel headerPanel;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1238,13 +1210,13 @@ public class CancelPersonRelationshipPanel extends ContentPanel {
     private javax.swing.JLabel lblGender;
     private javax.swing.JLabel lblSearchResultNumber;
     private org.sola.clients.beans.application.CancelNotificationBean notifiablePartyForBaUnitBean;
-    private org.sola.clients.beans.administrative.NotifiablePartyForBaUnitBean notifiablePartyForBaUnitBeanOLD;
-    private org.sola.clients.beans.administrative.NotifiablePartySearchResultBean notifiablePartySearchResultBean1;
+    private org.sola.clients.beans.application.NotifyBean notifyBean1;
+    private org.sola.clients.beans.application.NotifyBean notifyBean2;
+    private org.sola.clients.beans.application.NotifyListBean notifyListBean1;
+    private org.sola.clients.beans.application.NotifyListBean notifyListBean2;
     private org.sola.clients.beans.party.PartyBean partyBean;
-    private org.sola.clients.beans.party.PartyBean partyBeanforGroup;
-    private org.sola.clients.beans.party.PartyMemberBean partyMemberBean;
     private org.sola.clients.beans.party.PartySearchParamsBean partySearchParams;
-    private org.sola.clients.beans.administrative.NotifiablePartySearchResultListBean partySearchResuls;
+    private org.sola.clients.beans.application.NotifiablePartySearchResultListBean partySearchResuls;
     private javax.swing.JPanel pnlSearch;
     private javax.swing.JToolBar.Separator separator1;
     private org.sola.clients.swing.common.controls.JTableWithDefaultStyles tableSearchResults;

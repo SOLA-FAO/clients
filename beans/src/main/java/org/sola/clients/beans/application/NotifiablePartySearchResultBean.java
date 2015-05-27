@@ -25,7 +25,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-package org.sola.clients.beans.administrative;
+package org.sola.clients.beans.application;
 
 import org.sola.clients.beans.party.PartySummaryBean;
 

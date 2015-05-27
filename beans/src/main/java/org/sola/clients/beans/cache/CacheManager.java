@@ -230,7 +230,13 @@ public final class CacheManager {
      * {@link org.sola.clients.beans.system.PanelLauncherGroupBean} collection.
      */
     public static final String CONFIG_PANEL_LAUNCHER_GROUP_KEY = PanelLauncherGroupBean.class.getName() + LIST_POSTFIX;
-
+    
+    public static final String GET_NOTIFY_RELATIONSHIP_TYPE_KEY = NotifyRelationshipTypeBean.class.getName() + LIST_POSTFIX;
+ 
+    
+    
+    
+    
     private static final String GET_APPLICATION_STATUS_TYPES = "getApplicationStatusTypes";
     private static final String GET_SOURCE_TYPES = "getSourceTypes";
     private static final String GET_COMMUNICATION_TYPES = "getCommunicationTypes";
@@ -266,7 +272,10 @@ public final class CacheManager {
     private static final String GET_PANEL_LAUNCHER_CONFIG = "getPanelLauncherConfiguration";
     private static final String GET_PANEL_LAUNCHER_GROUPS = "getPanelLauncherGroups";
     private static final String GET_REQUEST_DISPLAY_GROUPS = "getRequestDisplayGroups";
-
+    private static final String GET_NOTIFY_RELATIONSHIP_TYPES = "getNotifyRelationshipTypes";
+    
+    
+    
     public static List<BrValidationTargetTypeBean> getBrValidationTargetTypes() {
         return getCachedBeanList(BrValidationTargetTypeBean.class,
                 WSManager.getInstance().getReferenceDataService(),
@@ -522,6 +531,13 @@ public final class CacheManager {
         return getCachedBeanList(RequestDisplayGroupBean.class,
                 WSManager.getInstance().getReferenceDataService(),
                 GET_REQUEST_DISPLAY_GROUPS, GET_REQUEST_DISPLAY_GROUP_KEY);
+    }
+    
+    
+     public static List<NotifyRelationshipTypeBean> getNotifyRelationshipTypes() {
+        return getCachedBeanList(NotifyRelationshipTypeBean.class,
+                WSManager.getInstance().getReferenceDataService(),
+                GET_NOTIFY_RELATIONSHIP_TYPES, GET_NOTIFY_RELATIONSHIP_TYPE_KEY);
     }
 
     /**
