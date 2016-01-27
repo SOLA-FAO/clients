@@ -128,7 +128,7 @@ public class GeometryUtility {
                     case MULTILINESTRING:
                         // Use recursion to check each linestring. 
                         List<LineString> lines = new ArrayList<LineString>();
-                        for (int i = 1; i <= geometry.getNumGeometries(); i++) {
+                        for (int i = 0; i < geometry.getNumGeometries(); i++) {
                             LineString lineN = (LineString) removeCoordinates(
                                     geometry.getGeometryN(i), targetCoordinates);
                             if (lineN != null) {
@@ -145,7 +145,7 @@ public class GeometryUtility {
                         List<LinearRing> interiorRings = new ArrayList<LinearRing>();
                         // Don't bother processing interior rings if the exterior ring is now invalid. 
                         if (exteriorRing != null) {
-                            for (int i = 1; i <= poly.getNumInteriorRing(); i++) {
+                            for (int i = 0; i < poly.getNumInteriorRing(); i++) {
                                 LinearRing interiorRing = removeCoordinatesFromRing(
                                         poly.getInteriorRingN(i), targetCoordinates);
                                 if (interiorRing != null) {
@@ -299,7 +299,7 @@ public class GeometryUtility {
                 case MULTILINESTRING:
                     // Use recursion to check each linestring. 
                     List<LineString> lines = new ArrayList<LineString>();
-                    for (int i = 1; i <= geometry.getNumGeometries(); i++) {
+                    for (int i = 0; i < geometry.getNumGeometries(); i++) {
                         LineString lineN = (LineString) insertCoordinate(
                                 geometry.getGeometryN(i), newCoordinate, maxProjectionDistance);
                         if (lineN != null) {
@@ -317,7 +317,7 @@ public class GeometryUtility {
                             poly.getExteriorRing(), newCoordinate, maxProjectionDistance);
                     List<LinearRing> interiorRings = new ArrayList<LinearRing>();
                     if (exteriorRing != null) {
-                        for (int i = 1; i <= poly.getNumInteriorRing(); i++) {
+                        for (int i = 0; i < poly.getNumInteriorRing(); i++) {
                             LineString interiorRing = (LineString) insertCoordinate(
                                     poly.getInteriorRingN(i), newCoordinate, maxProjectionDistance);
                             if (interiorRing != null) {
