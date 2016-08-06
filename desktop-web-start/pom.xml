@@ -157,6 +157,10 @@
                         <alias>${webstart.codesigning.alias}</alias>
                         <storepass>${webstart.codesigning.storepass}</storepass>
                         <keypass>${webstart.codesigning.keypass}</keypass>
+                        <!-- 7 Aug 2016 - See http://certhelp.ksoftware.net/support/solutions/articles/17164-how-do-i-sign-and-timestamp-a-java-jar-file- 
+                             Adding a timestamp to the signed jars will ensure they are still runnable after the code signing certificate
+                             expires. SOLA is currently using a Comodo code signing certificate due to expire on 14 Feb 2019.-->
+                        <tsaLocation>http://timestamp.comodoca.com/rfc3161</tsaLocation>
                     </sign>
                     <!-- Use verbose setting to monitor progress during build -->
                     <verbose>true</verbose>
